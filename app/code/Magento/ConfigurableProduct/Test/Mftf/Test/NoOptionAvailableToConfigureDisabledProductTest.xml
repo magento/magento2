@@ -10,6 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="NoOptionAvailableToConfigureDisabledProductTest">
         <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Admin order configurable product"/>
             <title value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <description value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <severity value="AVERAGE"/>
@@ -51,8 +53,8 @@
             <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
-            <!-- Create the 2 children that will be a part of the configurable product -->
-            <comment userInput="Create the 2 children that will be a part of the configurable product" stepKey="createTwoChildrenProducts"/>
+            <!-- Create the 3 children that will be a part of the configurable product -->
+            <comment userInput="Create the 3 children that will be a part of the configurable product" stepKey="createTwoChildrenProducts"/>
             <createData entity="ApiSimpleProductWithPrice50" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
@@ -65,8 +67,8 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption3"/>
             </createData>
-            <!-- Assign two products to the configurable product -->
-            <comment userInput="Assign two products to the configurable product" stepKey="assignToConfigurableProduct"/>
+            <!-- Assign 3 products to the configurable product -->
+            <comment userInput="Assign 3 products to the configurable product" stepKey="assignToConfigurableProduct"/>
             <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -86,12 +88,12 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
-            <!--Create Customer-->
+            <!-- Create Customer -->
             <comment userInput="Create customer" stepKey="commentCreateCustomer"/>
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
         </before>
         <after>
-            <!--Delete created data-->
+            <!-- Delete created data -->
             <comment userInput="Delete created data" stepKey="deleteData"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory2"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -102,26 +104,57 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!--Disable child product -->
+        <!-- Disable child product -->
         <comment userInput="Disable child product" stepKey="disableChildProduct"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToEditPage"/>
         <waitForPageLoad stepKey="waitForChildProductPageLoad"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
-        <!--Go to created customer page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!-- Set the second product out of stock -->
+        <comment userInput="Set the second product out of stock" stepKey="outOfStockChildProduct"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToSecondProductEditPage"/>
+        <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="outOfStockStatus"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
+        <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
         <waitForPageLoad stepKey="waitForProductsOpened"/>
-        <!--Find created configurable product and click on "Configure" link-->
+        <!-- Find created configurable product and click on "Configure" link -->
         <comment userInput="Find created configurable product and click on Configure link" stepKey="goToConfigurableLink"/>
         <click selector="{{AdminOrderFormConfigureProductSection.configure($$createConfigProduct.id$$)}}" stepKey="clickOnConfigure"/>
-        <!--Click on attribute drop-down and check no option 1 is available-->
+        <!-- Click on attribute drop-down and check no option 1 is available -->
         <comment userInput="Click on attribute drop-down and check no option 1 is available" stepKey="commentNoOptionIsAvailable"/>
         <waitForElement selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="waitForShippingSectionLoaded"/>
         <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickToSelectOption"/>
         <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" stepKey="dontSeeOption1"/>
+        <!-- Go to created customer page again -->
+        <comment userInput="Go to created customer page again" stepKey="goToCreatedCustomerPageAgain"/>
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderAgain">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProductAgain"/>
+        <waitForPageLoad stepKey="waitForProductsOpenedAgain"/>
+        <fillField selector="{{AdminOrderFormItemsSection.idFilter}}" userInput="$$createConfigChildProduct2.id$$" stepKey="idFilter"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectConfigurableProduct"/>
+        <!-- Add product to order -->
+        <comment userInput="Add product to order" stepKey="addProductToOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickToAddProductToOrder"/>
+        <waitForPageLoad stepKey="waitForNewOrderPageLoad"/>
+        <see userInput="This product is out of stock." stepKey="seeTheErrorMessageDisplayed"/>
+        <!-- Select shipping method -->
+        <comment userInput="Select shipping method" stepKey="selectShippingMethod"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
     </test>
 </tests>

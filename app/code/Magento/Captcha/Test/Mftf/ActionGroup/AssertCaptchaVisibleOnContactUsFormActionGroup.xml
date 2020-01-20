@@ -9,11 +9,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCaptchaVisibleOnContactUsFormActionGroup">
+        <annotations>
+            <description>Validate that the Captcha IS present on the Storefront Contact Us page.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaField}}" stepKey="waitToSeeCaptchaField"/>
         <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaImg}}" stepKey="waitToSeeCaptchaImage"/>
         <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButton"/>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageReloaded" />
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
         <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaField}}" stepKey="waitToSeeCaptchaFieldAfterPageReload"/>
         <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaImg}}" stepKey="waitToSeeCaptchaImageAfterPageReload"/>
         <waitForElementVisible selector="{{StorefrontContactUsFormSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButtonAfterPageReload"/>

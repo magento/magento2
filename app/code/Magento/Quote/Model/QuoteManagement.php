@@ -298,22 +298,28 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
         }
         try {
-            $this->quoteRepository->getForCustomer($customerId);
-            throw new StateException(
-                __("The customer can't be assigned to the cart because the customer already has an active cart.")
-            );
+            $customerActiveQuote = $this->quoteRepository->getForCustomer($customerId);
+
+            $quote->merge($customerActiveQuote);
+            $customerActiveQuote->setIsActive(0);
+            $this->quoteRepository->save($customerActiveQuote);
+
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
+        $quote->setIsActive(1);
+
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'quote_id');
         if ($quoteIdMask->getId()) {
             $quoteIdMask->delete();
         }
+
         $this->quoteRepository->save($quote);
+
         return true;
     }
 
@@ -688,7 +694,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
-        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",

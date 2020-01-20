@@ -10,12 +10,15 @@ namespace Magento\AuthorizenetCardinal\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetCardinal\Model\Config;
-use Magento\CardinalCommerce\Model\Response\JwtParser;
+use Magento\CardinalCommerce\Model\Response\JwtParserInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
  * Adds the cardholder authentication information to the request
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class Authorize3DSecureBuilder implements BuilderInterface
 {
@@ -30,19 +33,19 @@ class Authorize3DSecureBuilder implements BuilderInterface
     private $config;
 
     /**
-     * @var JwtParser
+     * @var JwtParserInterface
      */
     private $jwtParser;
 
     /**
      * @param SubjectReader $subjectReader
      * @param Config $config
-     * @param JwtParser $jwtParser
+     * @param JwtParserInterface $jwtParser
      */
     public function __construct(
         SubjectReader $subjectReader,
         Config $config,
-        JwtParser $jwtParser
+        JwtParserInterface $jwtParser
     ) {
         $this->subjectReader = $subjectReader;
         $this->config = $config;

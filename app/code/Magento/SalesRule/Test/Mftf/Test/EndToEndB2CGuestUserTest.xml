@@ -9,11 +9,45 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CGuestUserTest">
-        <annotations>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
-        </annotations>
+        <before>
+            <createData entity="ApiSalesRule" stepKey="createSalesRule"/>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+        </after>
+
+        <!-- Step 5: User uses coupon codes -->
+        <comment userInput="Start of using coupon code" stepKey="startOfUsingCouponCode" after="endOfComparingProducts" />
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="couponOpenCart" after="startOfUsingCouponCode"/>
+
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="couponApplyCoupon" after="couponOpenCart">
+            <argument name="coupon" value="$$createSalesRuleCoupon$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCheckCouponAppliedActionGroup" stepKey="couponCheckAppliedDiscount" after="couponApplyCoupon">
+            <argument name="rule" value="$$createSalesRule$$"/>
+            <argument name="discount" value="48.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="couponCheckCartWithDiscount" after="couponCheckAppliedDiscount">
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shipping" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="447.00"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCancelCouponActionGroup" stepKey="couponCancelCoupon" after="couponCheckCartWithDiscount"/>
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCartAfterCancelCoupon" after="couponCancelCoupon">
+            <argument name="subtotal" value="480.00"/>
+            <argument name="shipping" value="15.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="495.00"/>
+        </actionGroup>
+        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="cartAssertCartAfterCancelCoupon" />
+    </test>
+    <test name="EndToEndB2CGuestUserMysqlTest">
         <before>
             <createData entity="ApiSalesRule" stepKey="createSalesRule"/>
             <createData entity="ApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">

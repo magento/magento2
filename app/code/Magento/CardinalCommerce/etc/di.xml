@@ -7,4 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CardinalCommerce\Model\Response\JwtPayloadValidatorInterface" type="Magento\CardinalCommerce\Model\Response\JwtPayloadValidator" />
+    <preference for="Magento\CardinalCommerce\Model\Response\JwtParserInterface" type="Magento\CardinalCommerce\Model\Response\JwtParser" />
 </config>

@@ -66,78 +66,106 @@ use Psr\Log\LoggerInterface as PsrLogger;
 class AccountManagement implements AccountManagementInterface
 {
     /**
-     * Configuration paths for email templates and identities
+     * Configuration paths for create account email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
     /**
-     * @deprecated
+     * Configuration paths for register no password email template
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
 
     /**
-     * @deprecated
+     * Configuration paths for remind email identity
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
     /**
-     * @deprecated
+     * Configuration paths for remind email template
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
     /**
-     * @deprecated
+     * Configuration paths for forgot email email template
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
     /**
-     * @deprecated
+     * Configuration paths for forgot email identity
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
     /**
-     * @deprecated
+     * Configuration paths for account confirmation required
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
      * @see AccountConfirmation::XML_PATH_IS_CONFIRM
      */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
-     * @deprecated
+     * Configuration paths for account confirmation email template
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     /**
-     * @deprecated
+     * Configuration paths for confirmation confirmed email template
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
     /**
      * Constants for the type of new account email to be sent
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
     const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
     /**
      * Welcome email, when password setting is required
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
     const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
 
     /**
      * Welcome email, when confirmation is enabled
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
     const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
 
     /**
      * Confirmation email, when account is confirmed
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
     const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
 
@@ -161,12 +189,17 @@ class AccountManagement implements AccountManagementInterface
     const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
 
     /**
-     * @deprecated
+     * Configuration path to customer reset password email template
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see Magento/Customer/Model/EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
-     * @deprecated
+     * Minimum password length
+     *
+     * @deprecated Get rid of Helpers in Password Security Management
      */
     const MIN_PASSWORD_LENGTH = 6;
 
@@ -506,6 +539,7 @@ class AccountManagement implements AccountManagementInterface
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
         }
+        return true;
     }
 
     /**
@@ -579,7 +613,6 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             $this->getAuthentication()->authenticate($customerId, $password);
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
@@ -652,17 +685,16 @@ class AccountManagement implements AccountManagementInterface
      */
     private function handleUnknownTemplate($template)
     {
-        throw new InputException(
-            __(
-                'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
-                [
-                    'value' => $template,
-                    'fieldName' => 'template',
-                    'template1' => AccountManagement::EMAIL_REMINDER,
-                    'template2' => AccountManagement::EMAIL_RESET
-                ]
-            )
+        $phrase = __(
+            'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+            [
+                'value' => $template,
+                'fieldName' => 'template',
+                'template1' => AccountManagement::EMAIL_REMINDER,
+                'template2' => AccountManagement::EMAIL_RESET
+            ]
         );
+        throw new InputException($phrase);
     }
 
     /**
@@ -694,12 +726,6 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
-        if ($this->sessionManager->isSessionExists()) {
-            //delete old session and move data to the new session
-            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            session_regenerate_id(true);
-        }
         $this->customerRepository->save($customer);
 
         return true;
@@ -890,7 +916,6 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException(
                 __('A customer with the same email address already exists in an associated website.')
             );
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException $e) {
             throw $e;
         }
@@ -910,7 +935,6 @@ class AccountManagement implements AccountManagementInterface
                 }
             }
             $this->customerRegistry->remove($customer->getId());
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -961,6 +985,7 @@ class AccountManagement implements AccountManagementInterface
                 $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
             $this->getEmailNotification()->newAccount($customer, $templateType, $redirectUrl, $customer->getStoreId());
+            $customer->setConfirmation(null);
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -1017,7 +1042,6 @@ class AccountManagement implements AccountManagementInterface
     {
         try {
             $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(
                 __("The password doesn't match this account. Verify the password and try again.")
@@ -1549,7 +1573,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function getPasswordHash($password)
     {
-        return $this->encryptor->getHash($password);
+        return $this->encryptor->getHash($password, true);
     }
 
     /**

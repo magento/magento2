@@ -5,21 +5,25 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFillUserRoleFormActionGroup">
+        <annotations>
+            <description>Fills in the provided Role and Current Admin Password on the Admin Roles creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="role" type="entity" />
             <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
         </arguments>
 
-        <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{role.name}}" stepKey="fillRoleName"/>
+        <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{role.rolename}}" stepKey="fillRoleName"/>
         <fillField selector="{{AdminCreateRoleSection.password}}" userInput="{{currentAdminPassword}}" stepKey="fillCurrentUserPassword"/>
 
         <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
         <waitForPageLoad stepKey="waitForRoleResourceTab" />
         
         <selectOption userInput="{{role.resourceAccess}}" selector="{{AdminCreateRoleSection.resourceAccess}}" stepKey="selectResourceAccess" />
-        <performOn stepKey="checkNeededResources" selector="{{AdminCreateRoleSection.resourceTree}}" function="function($I,$userRoles={{role.resources}}){foreach($userRoles as $userRole){$I->conditionalClick('//li[@data-id=\'' . $userRole . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $userRole . '\' and contains(@class, \'jstree-checked\')]',false);}}" />
+        <performOn stepKey="checkNeededResources" selector="{{AdminCreateRoleSection.resourceTree}}" function="function($I,$userRoles={{role.resource}}){foreach($userRoles as $userRole){$I->conditionalClick('//li[@data-id=\'' . $userRole . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $userRole . '\' and contains(@class, \'jstree-checked\')]',false);}}" />
     </actionGroup>
 </actionGroups>

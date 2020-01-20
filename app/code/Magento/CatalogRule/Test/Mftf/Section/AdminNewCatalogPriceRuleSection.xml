@@ -17,20 +17,28 @@
         <element name="successMessage" type="text" selector="#messages"/>
 
         <element name="ruleName" type="input" selector="[name='name']"/>
+        <element name="ruleNameNew" type="input" selector="[name='staging[name]']"/>
         <element name="description" type="textarea" selector="[name='description']"/>
         <element name="status" type="select" selector="[name='is_active']"/>
+        <element name="isActive" type="select" selector="input[name='is_active']+label"/>
 
         <element name="websites" type="select" selector="[name='website_ids']"/>
+        <element name="active" type="checkbox" selector="//div[contains(@class, 'admin__actions-switch')]/input[@name='is_active']/../label"/>
+        <element name="activeIsEnabled" type="checkbox" selector="(//div[contains(@class, 'admin__actions-switch')])[1]/input[@value='1']"/>
+        <element name="activePosition" type="checkbox" selector="fieldset[class='admin__fieldset'] div[class*='_required']:nth-of-type(4)"/>
         <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
         <element name="customerGroups" type="select" selector="[name='customer_group_ids']"/>
         <element name="customerGroupsOptions" type="select" selector="[name='customer_group_ids'] option"/>
 
         <element name="fromDateButton" type="button" selector="[name='from_date'] + button" timeout="15"/>
+        <element name="startDateButton" type="button" selector="[name='staging[start_time]'] + button" timeout="15"/>
         <element name="toDateButton" type="button" selector="[name='to_date'] + button" timeout="15"/>
         <element name="todayDate" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
         <element name="priority" type="input" selector="[name='sort_order']"/>
         <element name="conditionsTab" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions']"/>
         <element name="actionsTab" type="block" selector="[data-index='actions']"/>
+
+        <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
     </section>
 
     <section name="AdminNewCatalogPriceRuleActions">
@@ -40,8 +48,9 @@
     </section>
 
     <section name="AdminNewCatalogPriceRuleConditions">
-        <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child"/>
-        <element name="conditionSelect" type="select" selector="select#conditions__{{var}}__new_child" parameterized="true"/>
+        <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child" timeout="30"/>
+        <element name="conditionsDropdown" type="select" selector="select[data-form-part='catalog_rule_form'][data-ui-id='newchild-0-select-rule-conditions-1-new-child']"/>
+        <element name="conditionSelect" type="select" selector="select#conditions__{{var}}__new_child" parameterized="true" timeout="30"/>
         <element name="targetEllipsis" type="button" selector="//li[{{var}}]//a[@class='label'][text() = '...']" parameterized="true"/>
         <element name="targetEllipsisValue" type="button" selector="//ul[@id='conditions__{{var}}__children']//a[contains(text(), '{{var1}}')]" parameterized="true" timeout="30"/>
         <element name="ellipsisValue" type="button" selector="//ul[@id='conditions__{{var}}__children']//a[contains(text(), '...')]" parameterized="true" timeout="30"/>
@@ -49,6 +58,10 @@
         <element name="targetSelect" type="select" selector="//ul[@id='conditions__{{var}}__children']//select" parameterized="true" timeout="30"/>
         <element name="targetInput" type="input" selector="input#conditions__{{var1}}--{{var2}}__value" parameterized="true"/>
         <element name="applyButton" type="button" selector="#conditions__{{var1}}__children li:nth-of-type({{var2}}) a.rule-param-apply" parameterized="true"/>
+        <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{condition}}']" parameterized="true"/>
+        <element name="activeOperatorSelect" type="select" selector=".rule-param-edit select[name*='[operator]']"/>
+        <element name="activeValueInput" type="input" selector=".rule-param-edit [name*='[value]']"/>
+        <element name="activeConditionApplyButton" type="button" selector=".rule-param-edit .rule-param-apply" timeout="30"/>
     </section>
 
     <section name="AdminCatalogPriceRuleGrid">

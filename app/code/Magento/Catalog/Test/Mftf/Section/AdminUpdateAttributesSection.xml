@@ -36,6 +36,7 @@
         <element name="toggleWeight" type="checkbox" selector="#toggle_weight"/>
         <element name="toggleColor" type="checkbox" selector="#toggle_color"/>
 
+        <element name="name" type="input" selector="#name"/>
         <element name="description" type="input" selector="#description"/>
     </section>
     <section name="AdminUpdateAttributesWebsiteSection">

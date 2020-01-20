@@ -11,10 +11,12 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\PaypalGraphQl\Model\Resolver\Store\Url;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\Validation\ValidationException;
 
 /**
  * Resolver for generating PayflowProToken
@@ -27,28 +29,28 @@ class PayflowProToken implements ResolverInterface
     private $getCartForUser;
 
     /**
-     * @var UrlValidator
-     */
-    private $urlValidator;
-
-    /**
      * @var SecureToken
      */
     private $secureTokenService;
 
     /**
+     * @var Url
+     */
+    private $urlService;
+
+    /**
      * @param GetCartForUser $getCartForUser
-     * @param UrlValidator $urlValidator
      * @param SecureToken $secureTokenService
+     * @param Url $urlService
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        UrlValidator $urlValidator,
-        SecureToken $secureTokenService
+        SecureToken $secureTokenService,
+        Url $urlService
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->urlValidator = $urlValidator;
         $this->secureTokenService = $secureTokenService;
+        $this->urlService = $urlService;
     }
 
     /**
@@ -65,10 +67,16 @@ class PayflowProToken implements ResolverInterface
         $urls = $args['input']['urls'] ?? null ;
 
         $customerId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($cartId, $customerId);
 
-        if (!empty($args['input']['urls'])) {
-            $this->validateUrls($args['input']['urls']);
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+
+        $storeId = (int)$store->getId();
+
+        $cart = $this->getCartForUser->execute($cartId, $customerId, $storeId);
+
+        if (!empty($urls)) {
+            $urls = $this->validateAndConvertPathsToUrls($urls, $store);
         }
 
         try {
@@ -87,20 +95,23 @@ class PayflowProToken implements ResolverInterface
     }
 
     /**
-     * Validate redirect Urls
+     * Validate and convert to redirect urls from given paths
      *
-     * @param array $urls
-     * @return boolean
+     * @param string $paths
+     * @param StoreInterface $store
+     * @return array
      * @throws GraphQlInputException
      */
-    private function validateUrls(array $urls): bool
+    private function validateAndConvertPathsToUrls(array $paths, StoreInterface $store): array
     {
-        foreach ($urls as $url) {
-            if (!$this->urlValidator->isValid($url)) {
-                $errorMessage = $this->urlValidator->getMessages()['invalidUrl'] ?? "Invalid Url.";
-                throw new GraphQlInputException(__($errorMessage));
+        $urls = [];
+        foreach ($paths as $key => $path) {
+            try {
+                $urls[$key] = $this->urlService->getUrlFromPath($path, $store);
+            } catch (ValidationException $e) {
+                throw new GraphQlInputException(__($e->getMessage()), $e);
             }
         }
-        return true;
+        return $urls;
     }
 }

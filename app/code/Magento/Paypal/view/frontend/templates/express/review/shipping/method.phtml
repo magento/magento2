@@ -4,23 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /** @var $block \Magento\Paypal\Block\Express\Review */
 ?>
 <div id="shipping-method-container">
-    <?php if ($block->getCanEditShippingMethod() || !$block->getCurrentShippingRate()): ?>
-        <?php if ($groups = $block->getShippingRateGroups()): ?>
+    <?php if ($block->getCanEditShippingMethod() || !$block->getCurrentShippingRate()) : ?>
+        <?php if ($groups = $block->getShippingRateGroups()) : ?>
             <?php $currentRate = $block->getCurrentShippingRate(); ?>
             <select name="shipping_method" id="shipping_method" class="required-entry">
-                <?php if (!$currentRate): ?>
+                <?php if (!$currentRate) : ?>
                     <option value="">
                         <?= $block->escapeHtml(__('Please select a shipping method...')) ?>
                     </option>
                 <?php endif; ?>
-                <?php foreach ($groups as $code => $rates): ?>
+                <?php foreach ($groups as $code => $rates) : ?>
                     <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)) ?>"
                               style="font-style:normal;">
-                        <?php foreach ($rates as $rate): ?>
+                        <?php foreach ($rates as $rate) : ?>
                             <option
                                 value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
                                     <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
@@ -30,14 +29,14 @@
                     </optgroup>
                 <?php endforeach; ?>
             </select>
-        <?php else: ?>
+        <?php else : ?>
             <p>
                 <strong>
                     <?= $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?>
                 </strong>
             </p>
         <?php endif; ?>
-    <?php else: ?>
+    <?php else : ?>
         <p>
             <strong>
                 <?= /* @noEscape */ $block->renderShippingRateOption($block->getCurrentShippingRate()) ?>

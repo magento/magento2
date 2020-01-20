@@ -16,22 +16,19 @@
             <severity value="CRITICAL"/>
             <group value="SalesRule"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
 
         <before>
             <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+            <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
                 <argument name="category" value="$$createCategory$$"/>
                 <argument name="simpleProduct" value="_defaultProduct"/>
             </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCategory"/>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
@@ -97,7 +94,7 @@
         <!--Go to storefront page and verify created product-->
         <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="productName" value="_defaultProduct.name"/>
         </actionGroup>
 
@@ -113,7 +110,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsApplied if condition category id is matching-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">

@@ -20,30 +20,32 @@
             <resource>Magento_Catalog::config_catalog</resource>
             <group id="fields_masks" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Product Fields Auto-Generation</label>
-                <field id="sku" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="sku" translate="label comment" type="text" sortOrder="10" showInDefault="1" canRestore="1">
                     <label>Mask for SKU</label>
                     <comment>Use {{name}} as Product Name placeholder</comment>
                 </field>
-                <field id="meta_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="meta_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" canRestore="1">
                     <label>Mask for Meta Title</label>
                     <comment>Use {{name}} as Product Name placeholder</comment>
                 </field>
-                <field id="meta_keyword" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="meta_keyword" translate="label comment" type="text" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Mask for Meta Keywords</label>
                     <comment>Use {{name}} as Product Name or {{sku}} as Product SKU placeholders</comment>
                 </field>
-                <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" canRestore="1">
                     <label>Mask for Meta Description</label>
                     <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
                 </field>
             </group>
-            <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1">
                 <label>Recently Viewed/Compared Products</label>
-                <field id="recently_viewed_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="recently_viewed_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" canRestore="1">
                     <label>Lifetime of products in Recently Viewed Widget</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
-                <field id="recently_compared_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="recently_compared_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" canRestore="1">
                     <label>Lifetime of products in Recently Compared Widget</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
                     <label>Synchronize widget products with backend storage</label>
@@ -63,7 +65,7 @@
                 </field>
                 <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Default Value</label>
-                    <comment>Must be in the allowed values list</comment>
+                    <comment>Must be in the allowed values list.</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
                 <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -73,30 +75,30 @@
                 </field>
                 <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Default Value</label>
-                    <comment>Must be in the allowed values list</comment>
+                    <comment>Must be in the allowed values list.</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
-                <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" canRestore="1">
                     <label>Use Flat Catalog Category</label>
                     <backend_model>Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="flat_catalog_product" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="flat_catalog_product" translate="label" type="select" sortOrder="100" showInDefault="1" canRestore="1">
                     <label>Use Flat Catalog Product</label>
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
-                    <comment>Applies to category pages</comment>
+                    <comment>Applies to category pages.</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
-                <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow All Products per Page</label>
-                    <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
+                    <comment>Whether to show "All" option in the "Show X Per Page" dropdown.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="remember_pagination" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="remember_pagination" translate="label comment" type="select" sortOrder="7" showInDefault="1" canRestore="1">
                     <label>Remember Category Pagination</label>
                     <comment>Changing may affect SEO and cache storage consumption.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -126,9 +128,9 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="price" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="price" translate="label" type="text" sortOrder="400" showInDefault="1">
                 <label>Price</label>
-                <field id="scope" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="scope" translate="label comment" type="select" sortOrder="1" showInDefault="1">
                     <label>Catalog Price Scope</label>
                     <comment><![CDATA[This defines the base currency scope ("Currency Setup" > "Currency Options" > "Base Currency").]]></comment>
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope</backend_model>
@@ -140,6 +142,7 @@
                 <label>Category Top Navigation</label>
                 <field id="max_depth" translate="label" type="text" sortOrder="1" showInDefault="1" canRestore="1">
                     <label>Maximal Depth</label>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
             </group>
             <group id="custom_options" translate="label" type="text" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -158,6 +161,7 @@
                 </field>
                 <field id="year_range" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Year Range</label>
+                    <validate>validate-digits validate-zero-or-greater validate-number-range number-range-1000-9999</validate>
                     <comment>Please use a four-digit year format.</comment>
                     <frontend_model>Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\YearRange</frontend_model>
                 </field>
@@ -165,10 +169,13 @@
         </section>
         <section id="cms">
             <group id="wysiwyg">
-                <field id="use_static_urls_in_catalog" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_static_urls_in_catalog" translate="label comment" type="select" sortOrder="10" showInDefault="1">
                     <label>Use Static URLs for Media Content in WYSIWYG</label>
                     <comment>Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled" negative="1">disabled</field>
+                    </depends>
                 </field>
             </group>
         </section>
@@ -209,7 +216,7 @@
             <resource>Magento_Config::config_system</resource>
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
-                <field id="jpeg_quality" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="jpeg_quality" translate="label comment" type="text" sortOrder="100" showInDefault="1" canRestore="1">
                     <label>Quality</label>
                     <validate>validate-digits validate-digits-range digits-range-1-100 required-entry</validate>
                     <comment>Jpeg quality for resized images 1-100%.</comment>

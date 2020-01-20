@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Error Message appears on the Storefront Checkout page after an invalid Email Addressed is inputted.</description>
+        </annotations>
         <arguments>
-            <argument name="message" type="string" defaultValue="Please enter a valid email address (Ex: johndoe@domain.com)." />
+            <argument name="message" type="string" defaultValue="Please enter a valid email address (Ex: johndoe@domain.com)."/>
         </arguments>
+
         <waitForElementVisible selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailErrorMessage}}" stepKey="waitForFormValidation"/>
         <see selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailErrorMessage}}" userInput="{{message}}" stepKey="seeTheErrorMessageIsDisplayed"/>
     </actionGroup>

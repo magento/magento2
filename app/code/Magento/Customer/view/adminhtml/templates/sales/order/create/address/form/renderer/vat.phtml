@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat $block */
 
 $_element = $block->getElement();
@@ -13,16 +11,16 @@ $_note = $_element->getNote();
 $_class = $_element->getFieldsetHtmlClass();
 $_validateButton = $block->getValidateButton();
 ?>
-<?php if (!$_element->getNoDisplay()): ?>
+<?php if (!$_element->getNoDisplay()) : ?>
 <div class="admin__field field-vat-number">
-    <?php if ($_element->getType() == 'hidden'): ?>
+    <?php if ($_element->getType() == 'hidden') : ?>
     <div class="hidden"><?= $_element->getElementHtml() ?></div>
-    <?php else: ?>
+    <?php else : ?>
     <?= $_element->getLabelHtml() ?>
     <div class="admin__field-control <?= /* @noEscape */ $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value' ?><?= $_class ? $block->escapeHtmlAttr($_class) . '-value' : '' ?>">
         <?= $_element->getElementHtml() ?>
-        <?php if ($_note): ?>
-            <div class="admin__field-note<?= $_class ? " {$_class}-note" : '' ?>" id="note_<?= $block->escapeHtmlAttr($_element->getId()) ?>">
+        <?php if ($_note) : ?>
+            <div class="admin__field-note<?= /* @noEscape */ $_class ? " {$block->escapeHtmlAttr($_class)}-note" : '' ?>" id="note_<?= $block->escapeHtmlAttr($_element->getId()) ?>">
                 <span><?= $block->escapeHtml($_note) ?></span>
             </div>
         <?php endif; ?>

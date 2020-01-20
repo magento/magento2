@@ -29,11 +29,13 @@ class AttributeOptions
     }
 
     /**
-     * @param int $entityType
+     * Get attribute options data
+     *
+     * @param string $entityType
      * @param string $attributeCode
      * @return array
      */
-    public function getData(int $entityType, string $attributeCode): array
+    public function getData(string $entityType, string $attributeCode): array
     {
         $options = $this->optionManager->getItems($entityType, $attributeCode);
 

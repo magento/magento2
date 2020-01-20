@@ -222,7 +222,7 @@ abstract class AbstractAction
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
                     ['entity_table.entity_id', $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
                 )->join(
-                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    ['entity_table' => $this->_productIndexerHelper->getTable('catalog_product_entity')],
                     "entity_table.{$metadata->getLinkField()} = t.{$relation->getParentFieldName()}",
                     []
                 )->join(
@@ -254,10 +254,12 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _cleanRelationProducts($storeId)
     {
-        if (!$this->_productIndexerHelper->isAddChildData()) {
+        if (!$this->_productIndexerHelper->isAddChildData() || !$this->_isFlatTableExists($storeId)) {
             return $this;
         }
 
