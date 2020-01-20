@@ -38,7 +38,7 @@
                     <label>Autocomplete Limit</label>
                     <validate>validate-digits</validate>
                 </field>
-                <field id="enable_eav_indexer" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_eav_indexer" translate="label" type="select" sortOrder="18" showInDefault="1" canRestore="1">
                     <label>Enable EAV Indexer</label>
                     <comment>Enable/Disable Product EAV indexer to improve indexation speed. Make sure that indexer is not used by 3rd party extensions.</comment>
                     <depends>
