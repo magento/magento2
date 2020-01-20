@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\LoginAsCustomer\Controller\Login;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * LoginAsCustomer login action
@@ -34,18 +38,18 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $login = $this->_initLogin();
-        if (!$login) {
-            $this->_redirect('/');
-            return;
-        }
-
         try {
+            $login = $this->_initLogin();
+
             /* Log in */
             $login->authenticateCustomer();
             $this->messageManager->addSuccessMessage(
                 __('You are logged in as customer: %1', $login->getCustomer()->getName())
             );
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->_redirect('/');
+            return;
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
@@ -55,14 +59,13 @@ class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * Init login info
-     * @return false || \Magento\LoginAsCustomer\Model\Login
+     * @return \Magento\LoginAsCustomer\Model\Login
      */
-    private function _initLogin()
+    private function _initLogin(): \Magento\LoginAsCustomer\Model\Login
     {
         $secret = $this->getRequest()->getParam('secret');
         if (!$secret) {
-            $this->messageManager->addErrorMessage(__('Cannot login to account. No secret key provided.'));
-            return false;
+            throw LocalizedException(__('Cannot login to account. No secret key provided.'));
         }
 
         $login = $this->loginModel->loadNotUsed($secret);
@@ -70,8 +73,7 @@ class Index extends \Magento\Framework\App\Action\Action
         if ($login->getId()) {
             return $login;
         } else {
-            $this->messageManager->addErrorMessage(__('Cannot login to account. Secret key is not valid.'));
-            return false;
+            throw LocalizedException(__('Cannot login to account. Secret key is not valid'));
         }
     }
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Observer;
 
@@ -15,8 +16,10 @@ class WbsiterestrictionFrontendObserver implements ObserverInterface
 {
     /**
      * Disable website stub or private sales restriction for loginascustomer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer): void
     {
         $controller = $observer->getController();
         if ($controller->getRequest()->getModuleName() == 'loginascustomer') {

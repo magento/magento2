@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model\ResourceModel\Login\Grid;
 
@@ -28,7 +29,7 @@ class Collection extends \Magento\LoginAsCustomer\Model\ResourceModel\Login\Coll
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _initSelect(): self
     {
         parent::_initSelect();
         $this->getSelect()

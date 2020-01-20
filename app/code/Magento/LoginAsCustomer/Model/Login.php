@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model;
 
@@ -137,7 +138,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param  string $secret
      * @return self
      */
-    public function loadNotUsed($secret)
+    public function loadNotUsed($secret): self
     {
         return $this->getCollection()
             ->addFieldToFilter('secret', $secret)
@@ -151,7 +152,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * Delete not used credentials
      * @return void
      */
-    public function deleteNotUsed()
+    public function deleteNotUsed(): void
     {
         $resource = $this->getResource();
         $resource->getConnection()->delete(
@@ -165,9 +166,9 @@ class Login extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Retrieve login datetime point
-     * @return [type] [description]
+     * @return string
      */
-    private function getDateTimePoint()
+    private function getDateTimePoint(): string
     {
         return date('Y-m-d H:i:s', $this->_dateTime->gmtTimestamp() - self::TIME_FRAME);
     }
@@ -176,7 +177,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * Retrieve customer
      * @return \Magento\Customer\Model\Customer
      */
-    public function getCustomer()
+    public function getCustomer(): \Magento\Customer\Model\Customer
     {
         if (is_null($this->_customer)) {
             $this->_customer = $this->_customerFactory->create()
@@ -187,9 +188,9 @@ class Login extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Login Customer
-     * @return false || \Magento\Customer\Model\Customer
+     * @return \Magento\Customer\Model\Customer
      */
-    public function authenticateCustomer()
+    public function authenticateCustomer(): \Magento\Customer\Model\Customer
     {
         if ($this->_customerSession->getId()) {
             /* Logout if logged in */
@@ -244,7 +245,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param  int $adminId
      * @return $this
      */
-    public function generate($adminId)
+    public function generate($adminId): self
     {
         return $this->setData([
             'customer_id' => $this->getCustomerId(),

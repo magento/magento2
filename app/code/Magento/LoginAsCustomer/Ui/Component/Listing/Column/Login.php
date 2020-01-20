@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Ui\Component\Listing\Column;
 
@@ -52,7 +53,7 @@ class Login extends \Magento\Ui\Component\Listing\Columns\Column
      * @param array $dataSource
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
             $hidden = !$this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');

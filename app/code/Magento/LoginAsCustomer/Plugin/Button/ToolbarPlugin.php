@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Plugin\Button;
 
@@ -49,7 +50,7 @@ class ToolbarPlugin
         Interceptor $subject,
         AbstractBlock $context,
         ButtonList $buttonList
-    ) {
+    ):void {
         $order = false;
         $nameInLayout = $context->getNameInLayout();
 
@@ -83,8 +84,8 @@ class ToolbarPlugin
      *
      * @return bool
      */
-    private function isAllowed()
+    private function isAllowed(): bool
     {
-        return $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+        return (bool)$this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }

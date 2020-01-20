@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model\PageCache;
 
@@ -44,7 +45,7 @@ class ConfigPlugin
      * @param bool $result
      * @return bool
      */
-    public function afterIsEnabled(\Magento\PageCache\Model\Config $subject, $result)
+    public function afterIsEnabled(\Magento\PageCache\Model\Config $subject, $result): bool
     {
         if ($result) {
             $disable = $this->_scopeConfig->getValue(

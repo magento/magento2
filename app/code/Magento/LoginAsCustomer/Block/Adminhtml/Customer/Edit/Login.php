@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Block\Adminhtml\Customer\Edit;
 
@@ -37,7 +38,7 @@ class Login extends GenericButton implements ButtonProviderInterface
     /**
      * @return array
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $customerId = $this->getCustomerId();
         $data = [];
@@ -57,7 +58,7 @@ class Login extends GenericButton implements ButtonProviderInterface
     /**
      * @return string
      */
-    public function getInvalidateTokenUrl()
+    public function getInvalidateTokenUrl(): string
     {
         return $this->getUrl('loginascustomer/login/login', ['customer_id' => $this->getCustomerId()]);
     }

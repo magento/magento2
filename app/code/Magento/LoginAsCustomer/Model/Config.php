@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model;
 
@@ -61,19 +62,19 @@ class Config
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function isEnabled()
+    public function isEnabled():bool
     {
-        return $this->getConfig(
+        return (bool)$this->getConfig(
             self::XML_PATH_EXTENSION_ENABLED
         );
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function isKeyMissing()
+    public function isKeyMissing(): bool
     {
         return !$this->getConfig(
             self::XML_PATH_KEY
@@ -81,11 +82,11 @@ class Config
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getStoreViewLogin()
+    public function getStoreViewLogin(): bool
     {
-        return $this->getConfig(
+        return (bool)$this->getConfig(
             self::STORE_VIEW_TO_LOGIN_IN
         );
     }
