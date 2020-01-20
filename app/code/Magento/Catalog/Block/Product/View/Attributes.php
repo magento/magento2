@@ -115,6 +115,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
         array $excludeAttr
     ) {
-        return ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr));
+        return ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr) &&
+            (!empty($attribute->getApplyTo()) && in_array($this->getProduct()->getTypeId(), $attribute->getApplyTo())));
     }
 }
