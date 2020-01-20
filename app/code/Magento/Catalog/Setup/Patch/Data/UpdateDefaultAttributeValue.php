@@ -53,6 +53,8 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
             'default_value',
             1
         );
+
+        return $this;
     }
 
     /**
