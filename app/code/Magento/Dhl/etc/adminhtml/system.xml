@@ -10,39 +10,39 @@
         <section id="carriers">
             <group id="dhl" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>DHL</label>
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="id" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="id" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1">
                     <label>Access ID</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="password" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="password" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1">
                     <label>Password</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="account" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="account" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Account Number</label>
                 </field>
-                <field id="content_type" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="content_type" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Content Type (Non Domestic)</label>
                     <comment>Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)</comment>
                     <source_model>Magento\Dhl\Model\Source\Contenttype</source_model>
                 </field>
-                <field id="handling_type" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="handling_type" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Calculate Handling Fee</label>
                     <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
                 </field>
-                <field id="handling_action" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="handling_action" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Handling Applied</label>
                     <comment>"Per Order" allows a single handling fee for the entire order. "Per Package" allows an individual handling fee for each package.</comment>
                     <source_model>Magento\Shipping\Model\Source\HandlingAction</source_model>
                 </field>
-                <field id="handling_fee" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="handling_fee" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1">
                     <label>Handling Fee</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
@@ -78,22 +78,22 @@
                         <field id="size">1</field>
                     </depends>
                 </field>
-                <field id="doc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="doc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Documents Allowed Methods</label>
                     <source_model>Magento\Dhl\Model\Source\Method\Doc</source_model>
                 </field>
-                <field id="nondoc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="nondoc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Non Documents Allowed Methods</label>
                     <source_model>Magento\Dhl\Model\Source\Method\Nondoc</source_model>
                 </field>
-                <field id="ready_time" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="ready_time" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Ready time</label>
                     <comment>Package ready time after order submission (in hours).</comment>
                 </field>
                 <field id="specificerrmsg" translate="label" type="textarea" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Displayed Error Message</label>
                 </field>
-                <field id="free_method_doc" translate="label" type="select" sortOrder="1200" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="free_method_doc" translate="label" type="select" sortOrder="1200" showInDefault="1" showInWebsite="1">
                     <label>Free Method</label>
                     <frontend_class>free-method</frontend_class>
                     <source_model>Magento\Dhl\Model\Source\Method\Freedoc</source_model>
@@ -101,7 +101,7 @@
                         <field id="content_type">D</field>
                     </depends>
                 </field>
-                <field id="free_method_nondoc" translate="label" type="select" sortOrder="1200" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="free_method_nondoc" translate="label" type="select" sortOrder="1200" showInDefault="1" showInWebsite="1">
                     <label>Free Method</label>
                     <frontend_class>free-method</frontend_class>
                     <source_model>Magento\Dhl\Model\Source\Method\Freenondoc</source_model>
@@ -109,41 +109,41 @@
                         <field id="content_type">N</field>
                     </depends>
                 </field>
-                <field id="free_shipping_enable" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="free_shipping_enable" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="1">
                     <label>Enable Free Shipping Threshold</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
-                <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="1220" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="1220" showInDefault="1" showInWebsite="1">
                     <label>Free Shipping Amount Threshold</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                     <depends>
                         <field id="free_shipping_enable">1</field>
                     </depends>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="1900" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="sallowspecific" translate="label" type="select" sortOrder="1900" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Ship to Applicable Countries</label>
                     <frontend_class>shipping-applicable-country</frontend_class>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="1910" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="1910" showInDefault="1" showInWebsite="1">
                     <label>Ship to Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="showmethod" translate="label" type="select" sortOrder="1940" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="showmethod" translate="label" type="select" sortOrder="1940" showInDefault="1" showInWebsite="1">
                     <label>Show Method if Not Applicable</label>
                     <frontend_class>shipping-skip-hide</frontend_class>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1">
                     <label>Sort Order</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
-                <field id="debug" translate="label" type="select" sortOrder="1950" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="debug" translate="label" type="select" sortOrder="1950" showInDefault="1" showInWebsite="1">
                     <label>Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sandbox_mode" translate="label" type="select" sortOrder="1960" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sandbox_mode" translate="label" type="select" sortOrder="1960" showInDefault="1" showInWebsite="1">
                     <label>Sandbox Mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
