@@ -57,11 +57,9 @@
         <fillField selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" userInput="5.5" stepKey="fillThePrice"/>
 
         <!--Search the products and select the category products-->
-        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
-        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct"/>
-        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
-        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+        <actionGroup ref="AdminAddProductToCategoryActionGroup" stepKey="addProductToCategory">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
