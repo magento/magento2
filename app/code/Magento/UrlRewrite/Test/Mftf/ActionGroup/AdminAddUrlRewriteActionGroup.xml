@@ -26,7 +26,7 @@
         <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="clickOnCustonUrlRewrite"/>
         <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewriteValue('customUrlRewriteValue')}}" stepKey="selectForCategory"/>
         <waitForPageLoad stepKey="waitForCategoryEditSectionToLoad"/>
-        <click selector="{{AdminUrlRewriteEditSection.categoryInTree($$category.name$$)}}"  stepKey="selectCategoryInTree"/>
+        <click selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}"  stepKey="selectCategoryInTree"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
         <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
