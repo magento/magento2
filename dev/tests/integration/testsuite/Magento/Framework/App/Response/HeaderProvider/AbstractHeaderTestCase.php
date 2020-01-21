@@ -13,7 +13,9 @@ use Zend\Http\Header\HeaderInterface;
  */
 abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\AbstractController
 {
-    /** @var  HttpResponse */
+    /**
+     * @var HttpResponse
+     */
     private $interceptedResponse;
 
     /**

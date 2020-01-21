@@ -303,7 +303,7 @@
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-29937"/>
+                <issueId value="MC-30161"/>
             </skip>
         </annotations>
         <before>

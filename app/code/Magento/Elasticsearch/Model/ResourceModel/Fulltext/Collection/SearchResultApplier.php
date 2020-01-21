@@ -88,31 +88,16 @@ class SearchResultApplier implements SearchResultApplierInterface
         if ($size !== 0) {
             // Check that current page is in a range of allowed page numbers, based on items count and items per page,
             // than calculate offset for slicing items array.
-            $itemsCount = count($items);
-            $maxAllowedPageNumber = ceil($itemsCount/$size);
-            if ($currentPage < 1) {
-                $currentPage = 1;
-            }
-            if ($currentPage > $maxAllowedPageNumber) {
-                $currentPage = $maxAllowedPageNumber;
+            $totalPages = (int) ceil(count($items)/$size);
+            $currentPage = min($currentPage, $totalPages);
+            $offset = ($currentPage - 1) * $size;
+            if ($offset < 0) {
+                $offset = 0;
             }
 
-            $offset = $this->getOffset($currentPage, $size);
             $items = array_slice($items, $offset, $size);
         }
 
         return $items;
-    }
-
-    /**
-     * Get offset for given page.
-     *
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @return int
-     */
-    private function getOffset(int $pageNumber, int $pageSize): int
-    {
-        return ($pageNumber - 1) * $pageSize;
     }
 }
