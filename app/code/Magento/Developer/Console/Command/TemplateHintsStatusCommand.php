@@ -67,6 +67,6 @@ class TemplateHintsStatusCommand extends Command
         $templateHintsMessage = __(self::SUCCESS_MESSAGE, ['status' => $templateHintsStatus]);
         $output->writeln("<info>" . $templateHintsMessage . "</info>");
 
-        return;
+        return 0;
     }
 }
