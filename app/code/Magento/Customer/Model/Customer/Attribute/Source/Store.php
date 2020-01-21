@@ -85,12 +85,18 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
         if ($isMultiple) {
             $values = [];
-            foreach ($value as $val) {
-                $values[] = $this->_options[$val];
+            foreach ($options as $item) {
+                if (in_array($item['value'], $value)) {
+                    $values[] = $item['label'];
+                }
             }
             return $values;
-        } else {
-            return $this->_options[$value];
+        }
+
+        foreach ($options as $item) {
+            if ($item['value'] == $value) {
+                return $item['label'];
+            }
         }
     }
 
