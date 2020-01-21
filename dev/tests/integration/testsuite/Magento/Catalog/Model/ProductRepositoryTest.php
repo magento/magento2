@@ -233,4 +233,24 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         }
         $this->assertTrue($caughtException);
     }
+
+    /**
+     * Tests product repository update should use provided store code.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductUpdate(): void
+    {
+        $sku = 'simple';
+        $nameUpdated = 'updated';
+
+        $product = $this->productRepository->get($sku, false, 0);
+        $product->setName($nameUpdated);
+        $this->productRepository->save($product);
+        $product = $this->productRepository->get($sku, false, 0);
+        self::assertEquals(
+            $nameUpdated,
+            $product->getName()
+        );
+    }
 }
