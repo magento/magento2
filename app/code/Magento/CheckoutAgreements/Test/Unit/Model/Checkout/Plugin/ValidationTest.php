@@ -10,6 +10,7 @@ use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Class ValidationTest validates the agreement based on the payment method
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidationTest extends \PHPUnit\Framework\TestCase
@@ -59,12 +60,24 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
      */
     private $agreementsFilterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteRepositoryMock;
+
     protected function setUp()
     {
         $this->agreementsValidatorMock = $this->createMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
         $this->subjectMock = $this->createMock(\Magento\Checkout\Api\PaymentInformationManagementInterface::class);
         $this->paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $this->addressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getIsMultiShipping']);
+        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->extensionAttributesMock = $this->createPartialMock(
             \Magento\Quote\Api\Data\PaymentExtension::class,
             ['getAgreementIds']
@@ -81,7 +94,8 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
             $this->checkoutAgreementsListMock,
-            $this->agreementsFilterMock
+            $this->agreementsFilterMock,
+            $this->quoteRepositoryMock
         );
     }
 
@@ -95,6 +109,15 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('getIsMultiShipping')
+            ->willReturn(false);
+        $this->quoteRepositoryMock
+            ->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quoteMock);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);
@@ -128,6 +151,15 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('getIsMultiShipping')
+            ->willReturn(false);
+        $this->quoteRepositoryMock
+            ->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quoteMock);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);
@@ -150,5 +182,39 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage(
             "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
         );
+    }
+
+    public function testBeforeSavePaymentInformation()
+    {
+        $cartId = 100;
+        $agreements = [1, 2, 3];
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('getIsMultiShipping')
+            ->willReturn(false);
+        $this->quoteRepositoryMock
+            ->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quoteMock);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
+        $this->checkoutAgreementsListMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn([1]);
+        $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
+        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
+        $this->paymentMock->expects(static::atLeastOnce())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->extensionAttributesMock);
+        $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
     }
 }
