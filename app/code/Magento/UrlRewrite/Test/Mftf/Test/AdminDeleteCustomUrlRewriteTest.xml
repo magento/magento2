@@ -27,17 +27,17 @@
         </after>
 
         <!--Delete created custom url rewrite and verify AssertUrlRewriteDeletedMessage-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteUrlRewrite">
             <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
         </actionGroup>
 
         <!--Search and verify AssertUrlRewriteNotInGrid-->
-        <actionGroup ref="AdminSearchDeletedUrlRewrite" stepKey="searchDeletedUrlRewriteInGrid">
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
             <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
         </actionGroup>
 
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="amOnPage">
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
             <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
         </actionGroup>
     </test>

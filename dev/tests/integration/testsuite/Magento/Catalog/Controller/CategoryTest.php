@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry as Registry;
+use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
@@ -23,16 +25,24 @@ use Magento\TestFramework\TestCase\AbstractController;
  */
 class CategoryTest extends AbstractController
 {
-    /** @var ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var Registry */
+    /**
+     * @var Registry
+     */
     private $registry;
 
-    /** @var Session */
+    /**
+     * @var Session
+     */
     private $session;
 
-    /** @var LayoutInterface */
+    /**
+     * @var LayoutInterface
+     */
     private $layout;
 
     /**
@@ -158,5 +168,35 @@ class CategoryTest extends AbstractController
         $this->dispatch('catalog/category/view/id/111');
 
         $this->assert404NotFound();
+    }
+
+    /**
+     * Check that custom layout update files is employed.
+     *
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
+     * @return void
+     */
+    public function testViewWithCustomUpdate(): void
+    {
+        //Setting a fake file for the category.
+        $file = 'test-file';
+        $categoryId = 5;
+        /** @var CategoryLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
+        $layoutManager->setCategoryFakeFiles($categoryId, [$file]);
+        /** @var CategoryRepositoryInterface $categoryRepo */
+        $categoryRepo = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
+        $category = $categoryRepo->get($categoryId);
+        //Updating the custom attribute.
+        $category->setCustomAttribute('custom_layout_update_file', $file);
+        $categoryRepo->save($category);
+
+        //Viewing the category
+        $this->dispatch("catalog/category/view/id/$categoryId");
+        //Layout handles must contain the file.
+        $handles = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class)
+            ->getUpdate()
+            ->getHandles();
+        $this->assertContains("catalog_category_view_selectable_{$categoryId}_{$file}", $handles);
     }
 }

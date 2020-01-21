@@ -30,6 +30,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * Testing for saving an existing or creating a new attribute set.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppArea adminhtml
  */
 class SaveTest extends AbstractBackendController
 {

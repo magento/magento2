@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateConfigurationsForTwoAttributeActionGroup" extends="GenerateConfigurationsByAttributeCodeActionGroup">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Generates the Product Configurations for the 2 provided Attribute Codes on the Configurable Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="secondAttributeCode" type="string"/>
+        </arguments>
+
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <remove keyForRemoval="clickFilters"/>
+        <remove keyForRemoval="fillFilterAttributeCodeField"/>
+        <remove keyForRemoval="clickApplyFiltersButton"/>
+        <remove keyForRemoval="clickOnFirstCheckbox"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attributeCode)}}" stepKey="clickOnFirstAttributeCheckbox" after="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(secondAttributeCode)}}" stepKey="clickOnSecondAttributeCheckbox" after="clickOnFirstAttributeCheckbox"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(attributeCode)}}" stepKey="grabFirstAttributeDefaultLabel" after="clickOnSecondAttributeCheckbox"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(secondAttributeCode)}}" stepKey="grabSecondAttributeDefaultLabel" after="grabFirstAttributeDefaultLabel"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabFirstAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForFirstAttribute" after="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabSecondAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForSecondAttribute" after="clickOnSelectAllForFirstAttribute"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+    </actionGroup>
+</actionGroups>

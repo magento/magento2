@@ -50,6 +50,8 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
         self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
+        self::assertArrayHasKey('id', $response['addSimpleProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addSimpleProductsToCart']['cart']['id']);
 
         self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
         $price = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price'];
@@ -81,31 +83,6 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @expectedException Exception
      * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
-    public function testAddSimpleProductToCartIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
     public function testAddSimpleProductToCartIfCartIdIsEmpty()
     {
         $query = <<<QUERY
@@ -114,31 +91,6 @@ mutation {
     input: {
       cart_id: "",
       cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
-     */
-    public function testAddSimpleProductToCartIfCartItemsAreMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "cart_id"
     }
   ) {
     cart {
@@ -254,6 +206,7 @@ mutation {
     }
   ) {
     cart {
+    id
       items {
         quantity
         product {

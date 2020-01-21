@@ -148,7 +148,7 @@ define([
             var selectedShippingRate = checkoutData.getSelectedShippingRate(),
                 availableRate = false;
 
-            if (ratesData.length === 1) {
+            if (ratesData.length === 1 && !quote.shippingMethod()) {
                 //set shipping rate if we have only one available shipping rate
                 selectShippingMethodAction(ratesData[0]);
 
@@ -169,7 +169,12 @@ define([
             }
 
             if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
-                availableRate = window.checkoutConfig.selectedShippingMethod;
+                availableRate = _.find(ratesData, function (rate) {
+                    var selectedShippingMethod = window.checkoutConfig.selectedShippingMethod;
+
+                    return rate['carrier_code'] == selectedShippingMethod['carrier_code'] && //eslint-disable-line
+                        rate['method_code'] == selectedShippingMethod['method_code']; //eslint-disable-line eqeqeq
+                });
             }
 
             //Unset selected shipping method if not available

@@ -79,6 +79,7 @@ class LinksTest extends AbstractBackendController
                 'name' => 'Simple Product',
                 'sku' => 'simple',
                 'url_key' => 'simple-product',
+                'type_id' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
             ],
             'links' => [
                 'upsell' => [

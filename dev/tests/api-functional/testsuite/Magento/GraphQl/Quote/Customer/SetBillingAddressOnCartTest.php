@@ -96,7 +96,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -174,7 +174,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -370,7 +370,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -451,7 +451,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -644,7 +644,7 @@ mutation {
 QUERY;
 
         $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -653,15 +653,54 @@ QUERY;
     public function dataProviderSetWithoutRequiredParameters(): array
     {
         return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
+            'missed_region' => [
+                'cart_id: "cart_id_value"
+                 billing_address: {
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        city: "test city"
+                        postcode: "887766"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }',
+                '"regionId" is required. Enter and try again.'
             ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Required parameter "cart_id" is missing'
-            ]
+            'missed_multiple_fields' => [
+                'cart_id: "cart_id_value"
+                 billing_address: {
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        city: "test city"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }',
+                '"postcode" is required. Enter and try again.
+"regionId" is required. Enter and try again.'
+            ],
+            'wrong_required_region' => [
+                'cart_id: "cart_id_value"
+                 billing_address: {
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        region: "wrong region"
+                        city: "test city"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }',
+                'Region is not available for the selected country'
+            ],
         ];
     }
 
@@ -687,7 +726,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2", "test street 3"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -729,7 +768,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "us"
           telephone: "88776655"
@@ -786,7 +825,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -853,7 +892,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -921,7 +960,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "USS"
           telephone: "88776655"
@@ -948,8 +987,57 @@ mutation {
   }
 }
 QUERY;
-        $this->expectExceptionMessage('The address failed to save. Verify the address and try again.');
+        $this->expectExceptionMessage('Country is not available');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressesWithNotRequiredRegion()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+          address: {
+            firstname: "Vasyl"
+            lastname: "Doe"
+            street: ["1 Svobody"]
+            city: "Lviv"
+            region: "Lviv"
+            postcode: "00000"
+            country_code: "UA"
+            telephone: "555-555-55-55"
+          }
+        }
+    }
+  ) {
+    cart {
+      billing_address {
+        region {
+          label
+        }
+        country {
+          code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        self::assertEquals('UA', $cartResponse['billing_address']['country']['code']);
+        self::assertEquals('Lviv', $cartResponse['billing_address']['region']['label']);
     }
 
     /**

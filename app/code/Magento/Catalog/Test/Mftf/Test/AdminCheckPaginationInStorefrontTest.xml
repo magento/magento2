@@ -16,9 +16,6 @@
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
             <group value="Catalog"/>
-            <skip>
-                <issueId value="MC-21962"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1 "/>
@@ -118,7 +115,7 @@
         <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <selectOption selector="{{AdminProductGridFilterSection.productPerPage}}" userInput="30" stepKey="selectPagePerView"/>
-        <wait stepKey="waitFroPageToLoad1" time="30"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProductPerPage" time="30"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="pagi"  stepKey="selectProduct1"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitFroPageToLoad2"/>

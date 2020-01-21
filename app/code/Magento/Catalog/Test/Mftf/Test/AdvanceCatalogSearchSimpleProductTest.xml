@@ -19,10 +19,13 @@
             <group value="Catalog"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchSimpleProductBySkuTest">
@@ -88,7 +91,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
 
             <createData entity="ApiProductWithDescription" stepKey="product"/>
             <getData entity="GetProduct" stepKey="arg1">
