@@ -8,13 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SaveCategoryFormActionGroup">
+    <actionGroup name="AdminSaveCategoryFormActionGroup">
         <annotations>
-            <description>DEPRECATED. Use AdminSaveCategoryFormActionGroup instead. Requires navigation to the Category creation/edit page. Checks that the url contains the AdminCategoryPage url. Saves the Category.</description>
+            <description>Save category edit form in Admin and check success message.</description>
         </annotations>
 
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
-        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccess"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
+        <see userInput="" selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
     </actionGroup>
 </actionGroups>
