@@ -42,11 +42,11 @@
         </after>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
-        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage"/>
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addFirstProductToOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -61,20 +61,20 @@
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!-- Select Free shipping -->
-        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
 
         <!--Click *Submit Order* button-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
 
         <!--Click *Invoice* button-->
-        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
-        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
         <!--Verify that *Credit Memo* button is displayed-->
         <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
