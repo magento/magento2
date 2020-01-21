@@ -3,59 +3,81 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layout;
 
+use Magento\Catalog\Model\Layout\DepersonalizePlugin;
+use Magento\Catalog\Model\Session as CatalogSession;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
+use Magento\PageCache\Model\DepersonalizeChecker;
+use PHPUnit\Framework\TestCase;
 
-class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
+/**
+ * Tests Magento\Catalog\Model\Layout\DepersonalizePlugin.
+ */
+class DepersonalizePluginTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Layout\DepersonalizePlugin
+     * @var DepersonalizePlugin
      */
-    protected $plugin;
+    private $plugin;
 
     /**
-     * @var \Magento\Catalog\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogSession|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $catalogSessionMock;
+    private $catalogSessionMock;
 
     /**
-     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $depersonalizeCheckerMock;
+    private $depersonalizeCheckerMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $resultLayout;
+    private $layoutMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
-        $this->catalogSessionMock = $this->createPartialMock(\Magento\Catalog\Model\Session::class, ['clearStorage']);
-        $this->resultLayout = $this->createMock(\Magento\Framework\View\Layout::class);
-        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)->setMethods([])->getMockForAbstractClass();
+        $this->catalogSessionMock = $this->createPartialMock(CatalogSession::class, ['clearStorage']);
+        $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
         $this->plugin = (new ObjectManager($this))->getObject(
-            \Magento\Catalog\Model\Layout\DepersonalizePlugin::class,
-            ['catalogSession' => $this->catalogSessionMock, 'depersonalizeChecker' => $this->depersonalizeCheckerMock]
+            DepersonalizePlugin::class,
+            [
+                'catalogSession' => $this->catalogSessionMock,
+                'depersonalizeChecker' => $this->depersonalizeCheckerMock,
+            ]
         );
     }
 
-    public function testAfterGenerateXml()
+    /**
+     * Tests afterGenerateElements method when depersonalization is needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElements(): void
     {
         $this->catalogSessionMock->expects($this->once())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
-        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);
-        $this->assertEquals($this->resultLayout, $actualResult);
+        $this->plugin->afterGenerateElements($this->layoutMock);
     }
 
-    public function testAfterGenerateXmlNoDepersonalize()
+    /**
+     * Tests afterGenerateElements method when depersonalization is not needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElementsNoDepersonalize(): void
     {
         $this->catalogSessionMock->expects($this->never())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
-        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);
-        $this->assertEquals($this->resultLayout, $actualResult);
+        $this->plugin->afterGenerateElements($this->layoutMock);
     }
 }
