@@ -46,8 +46,8 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class ProductRepositoryTest
- * @package Magento\Catalog\Test\Unit\Model
+ * Test for \Magento\Catalog\Model\ProductRepository.
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -291,6 +291,7 @@ class ProductRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
+        $storeMock->method('getId')->willReturn('1');
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
         $storeMock->expects($this->any())->method('getCode')->willReturn(Store::ADMIN_CODE);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
@@ -343,6 +344,66 @@ class ProductRepositoryTest extends TestCase
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'mediaProcessor', $mediaProcessor);
+    }
+
+    /**
+     * Test save product with store id 0
+     *
+     * @param array $productData
+     * @return void
+     * @dataProvider getProductData
+     */
+    public function testSaveForAllStoreViewScope(array $productData): void
+    {
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->product->method('getSku')->willReturn($productData['sku']);
+        $this->extensibleDataObjectConverter
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn($productData);
+        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
+        $this->product->expects($this->at(14))->method('setData')->with('store_id', $productData['store_id']);
+
+        $this->model->save($this->product);
+    }
+
+    /**
+     * Product data provider
+     *
+     * @return array
+     */
+    public function getProductData(): array
+    {
+        return [
+            [
+                [
+                    'sku' => 'sku',
+                    'name' => 'product',
+                    'store_id' => 0,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test save product without store
+     *
+     * @return void
+     */
+    public function testSaveWithoutStoreId(): void
+    {
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->product->method('getSku')->willReturn($this->productData['sku']);
+        $this->extensibleDataObjectConverter
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn($this->productData);
+        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
+        $this->product->expects($this->at(15))->method('setData')->with('store_id', 1);
+
+        $this->model->save($this->product);
     }
 
     /**
