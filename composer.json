@@ -291,7 +291,8 @@
         "twbs/bootstrap": "3.1.0",
         "tinymce/tinymce": "3.4.7",
         "magento/module-tinymce-3": "*",
-        "magento/module-csp": "*"
+        "magento/module-csp": "*",
+        "magento/module-graph-ql-playground": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"

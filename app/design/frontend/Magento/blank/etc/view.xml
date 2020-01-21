@@ -305,5 +305,7 @@
         <item type="directory">Lib::less</item>
         <item type="directory">Lib::mage/adminhtml</item>
         <item type="directory">Lib::mage/backend</item>
+        <item type="file">Magento_GraphQlPlayground::js/playground.min.js</item>
+        <item type="file">Magento_GraphQlPlayground::js/playground.min.js.map</item>
     </exclude>
 </view>
