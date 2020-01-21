@@ -22,12 +22,12 @@
         </before>
         <after>
             <!-- Delete configurable product with children products -->
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProducts">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProducts">
                 <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
             </actionGroup>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="ProductAttribute" value="colorProductAttribute"/>
             </actionGroup>
 
@@ -38,12 +38,12 @@
         <!-- Create configurable product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!-- Fill configurable product values -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
@@ -52,29 +52,29 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
         <!--Create new attribute with two option -->
-        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Change product configurations except sku -->
-        <actionGroup ref="changeProductConfigurationsInGridExceptSku" stepKey="changeProductConfigurationsInGridExceptSku">
+        <actionGroup ref="ChangeProductConfigurationsInGridExceptSkuActionGroup" stepKey="changeProductConfigurationsInGridExceptSku">
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Save product -->
-        <actionGroup ref="saveConfigurableProductAddToCurrentAttributeSet" stepKey="saveProduct"/>
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert child products generated sku in grid -->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageLoad"/>
-        <actionGroup ref="filterProductGridByName2" stepKey="filterFirstProductByNameInGrid">
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterFirstProductByNameInGrid">
             <argument name="name" value="{{colorConfigurableProductAttribute1.name}}"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute1.name}}"  stepKey="seeFirstProductSkuInGrid"/>
-        <actionGroup ref="filterProductGridByName2" stepKey="filterSecondProductByNameInGrid">
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterSecondProductByNameInGrid">
             <argument name="name" value="{{colorConfigurableProductAttribute2.name}}"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute2.name}}"  stepKey="seeSecondProductSkuInGrid"/>
