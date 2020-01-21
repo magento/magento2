@@ -9,10 +9,10 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\CatalogRule\Model\ResourceModel\Rule $catalogRuleResource */
 $catalogRuleResource = $objectManager->create(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
 
-//Retrieve second rule by name
+//Retrieve rule id by name
 $select = $catalogRuleResource->getConnection()->select();
 $select->from($catalogRuleResource->getMainTable(), 'rule_id');
-$select->where('name = ?', 'Test Catalog Rule 50% off');
+$select->where('name = ?', 'test_category_rule');
 $ruleId = $catalogRuleResource->getConnection()->fetchOne($select);
 
 try {
@@ -22,7 +22,6 @@ try {
 } catch (\Exception $ex) {
     //Nothing to remove
 }
-
 /** @var \Magento\CatalogRule\Model\Indexer\IndexBuilder $indexBuilder */
 $indexBuilder = $objectManager->get(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
 $indexBuilder->reindexFull();

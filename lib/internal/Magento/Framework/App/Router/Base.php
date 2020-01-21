@@ -374,6 +374,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected function _shouldRedirectToSecure()
     {
-        return $this->_url->getUseSession();
+        return false;
     }
 }

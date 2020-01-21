@@ -73,7 +73,10 @@
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryEntity.name_lwr}}" stepKey="enterURLKey"/>
     </actionGroup>
 
-    <!-- Save category form -->
+    <!--
+    NOTICE: saveCategoryForm is deprecated.
+            Please use SaveCategoryFormActionGroup instead.
+    -->
     <actionGroup name="saveCategoryForm">
         <annotations>
             <description>Requires navigation to the Category creation/edit page. Checks that the url contains the AdminCategoryPage url. Saves the Category.</description>
@@ -139,7 +142,10 @@
         </assertRegExp>
     </actionGroup>
 
-    <!-- Action to navigate to Media Gallery. Used in tests to cleanup uploaded images -->
+    <!--
+    NOTICE: navigateToMediaGallery is deprecated.
+            Please use NavigateToMediaGalleryActionGroup instead.
+    -->
     <actionGroup name="navigateToMediaGallery">
         <annotations>
             <description>Navigates to the category page and Opens the Media Gallery.</description>
@@ -170,7 +176,10 @@
         <seeInTitle userInput="{{categoryEntity.name}}" stepKey="seeCategoryNameInTitle"/>
     </actionGroup>
 
-    <!--Actions to delete category-->
+    <!--
+    NOTICE: DeleteCategory is deprecated.
+            Please use DeleteCategoryActionGroup instead.
+    -->
     <actionGroup name="DeleteCategory">
         <annotations>
             <description>Navigates to the category page and deletes the specified category.</description>
@@ -321,6 +330,10 @@
         <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
     </actionGroup>
 
+    <!--
+    NOTICE: navigateToCreatedCategory is deprecated.
+            Please use NavigateToCreatedCategoryActionGroup instead.
+    -->
     <actionGroup name="navigateToCreatedCategory">
         <annotations>
             <description>Navigates to category page, selects a category by specified category.</description>
@@ -345,7 +358,7 @@
             <argument name="value" type="string"/>
         </arguments>
 
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSeoSection"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
@@ -359,7 +372,7 @@
             <argument name="value" type="string"/>
         </arguments>
 
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSeoSection"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckDefaultValue"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
@@ -409,7 +422,7 @@
 
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}" stepKey="enterCategoryName"/>
         <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSearchEngineOptimization"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSEO"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryUrlKey}}" stepKey="enterURLKey"/>
         <scrollToTopOfPage stepKey="scrollToTheTopOfPage"/>

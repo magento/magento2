@@ -57,23 +57,6 @@
                 <aspect name="update" />
             </field>
         </fieldset>
-        <fieldset id="customer_address">
-            <field name="vat_id">
-                <aspect name="to_quote_address" />
-            </field>
-            <field name="vat_is_valid">
-                <aspect name="to_quote_address" />
-            </field>
-            <field name="vat_request_id">
-                <aspect name="to_quote_address" />
-            </field>
-            <field name="vat_request_date">
-                <aspect name="to_quote_address" />
-            </field>
-            <field name="vat_request_success">
-                <aspect name="to_quote_address" />
-            </field>
-        </fieldset>
         <fieldset id="sales_convert_order_address">
             <field name="vat_id">
                 <aspect name="to_quote_address" />
