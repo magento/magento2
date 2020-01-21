@@ -16,16 +16,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class TemplateHintsStatusCommand extends Command
 {
-
-    /**
-     * command name
-     */
+    
     const COMMAND_NAME = 'dev:template-hints:status';
-
-    /**
-     * Success message
-     */
-    const SUCCESS_MESSAGE = "Template hints are %status";
 
     /**
      * @var ScopeConfigInterface
@@ -64,7 +56,7 @@ class TemplateHintsStatusCommand extends Command
             ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default'))
                 ? 'enabled'
                 : 'disabled';
-        $templateHintsMessage = __(self::SUCCESS_MESSAGE, ['status' => $templateHintsStatus]);
+        $templateHintsMessage = __("Template hints are %status", ['status' => $templateHintsStatus]);
         $output->writeln("<info>" . $templateHintsMessage . "</info>");
 
         return 0;
