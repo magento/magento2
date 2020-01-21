@@ -130,7 +130,12 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
+        $this->model->beforeSavePaymentInformation(
+            $this->subjectMock,
+            $cartId,
+            $this->paymentMock,
+            $this->addressMock
+        );
     }
 
     /**
@@ -167,7 +172,12 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
+        $this->model->beforeSavePaymentInformation(
+            $this->subjectMock,
+            $cartId,
+            $this->paymentMock,
+            $this->addressMock
+        );
 
         $this->expectExceptionMessage(
             "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."

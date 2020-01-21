@@ -19,12 +19,12 @@ class Validation
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfiguration;
+    private $scopeConfiguration;
 
     /**
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
-    protected $agreementsValidator;
+    private $agreementsValidator;
 
     /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
@@ -65,7 +65,7 @@ class Validation
     }
 
     /**
-     * Check validation before saving the payment information and place order
+     * Validates agreements before save payment information and  order placing.
      *
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $subject
      * @param int $cartId
@@ -134,11 +134,11 @@ class Validation
     }
 
     /**
-     * Verify if agreement validation needed
+     * Verify if agreement validation needed.
      *
      * @return bool
      */
-    protected function isAgreementEnabled()
+    private function isAgreementEnabled()
     {
         $isAgreementsEnabled = $this->scopeConfiguration->isSetFlag(
             AgreementsProvider::PATH_ENABLED,
