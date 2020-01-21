@@ -395,6 +395,8 @@ class DefaultType extends \Magento\Framework\DataObject
     }
 
     /**
+     * Return final chargeable price for option
+     *
      * @param float $price Price of option
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type

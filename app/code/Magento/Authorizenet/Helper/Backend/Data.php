@@ -64,7 +64,7 @@ class Data extends FrontendDataHelper
      * Retrieve place order url
      *
      * @param array $params
-     * @return  string
+     * @return string
      */
     public function getSuccessOrderUrl($params)
     {

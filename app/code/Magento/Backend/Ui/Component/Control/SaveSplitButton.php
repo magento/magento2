@@ -10,6 +10,7 @@ use Magento\Ui\Component\Control\Container;
 
 /**
  * Represents split-button with pre-configured options
+ *
  * Provide an ability to show drop-down list with options clicking on the "Save" button
  *
  * @api
@@ -31,7 +32,8 @@ class SaveSplitButton implements ButtonProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function getButtonData()
@@ -62,6 +64,8 @@ class SaveSplitButton implements ButtonProviderInterface
     }
 
     /**
+     * Get button options
+     *
      * @return array
      */
     private function getOptions(): array

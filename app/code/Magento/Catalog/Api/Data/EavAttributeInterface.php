@@ -335,6 +335,8 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
     public function setScope($scope);
 
     /**
+     * Get extension attributes
+     *
      * @return \Magento\Catalog\Api\Data\EavAttributeExtensionInterface|null
      */
     public function getExtensionAttributes();

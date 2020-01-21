@@ -42,7 +42,7 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated
+     * @deprecated only used by getMainTmpTable which is deprecated.
      */
     const TEMPORARY_TABLE_SUFFIX = '_tmp';
 

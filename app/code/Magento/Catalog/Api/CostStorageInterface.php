@@ -14,7 +14,9 @@ namespace Magento\Catalog\Api;
 interface CostStorageInterface
 {
     /**
-     * Return product prices. In case of at least one of skus is not found exception will be thrown.
+     * Return product prices.
+     *
+     * In case of at least one of skus is not found exception will be thrown.
      *
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\CostInterface[]
@@ -25,6 +27,7 @@ interface CostStorageInterface
 
     /**
      * Add or update product cost.
+     *
      * Input item should correspond to \Magento\Catalog\Api\Data\CostInterface.
      * If any items will have invalid cost, store id or sku, they will be marked as failed and excluded from
      * update list and \Magento\Catalog\Api\Data\PriceUpdateResultInterface[] with problem description will be returned.
@@ -38,7 +41,9 @@ interface CostStorageInterface
     public function update(array $prices);
 
     /**
-     * Delete product cost. In case of at least one of skus is not found exception will be thrown.
+     * Delete product cost.
+     *
+     * In case of at least one of skus is not found exception will be thrown.
      * If error occurred during the delete exception will be thrown.
      *
      * @param string[] $skus

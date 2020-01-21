@@ -77,6 +77,8 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     }
 
     /**
+     * Set item
+     *
      * @param ItemInterface $item
      * @return $this
      */

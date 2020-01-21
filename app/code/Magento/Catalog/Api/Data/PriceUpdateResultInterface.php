@@ -56,6 +56,7 @@ interface PriceUpdateResultInterface extends \Magento\Framework\Api\ExtensibleDa
 
     /**
      * Retrieve existing extension attributes object.
+     *
      * If extension attributes do not exist return null.
      *
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultExtensionInterface|null

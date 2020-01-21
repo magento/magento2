@@ -355,6 +355,7 @@ abstract class AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and then prepare options belonging to specific product type.
      *
      * @param  \Magento\Framework\DataObject $buyRequest
@@ -440,6 +441,7 @@ abstract class AbstractType
 
     /**
      * Initialize product(s) for add to cart process.
+     *
      * Advanced version of func to prepare product for cart - processMode can be specified there.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -532,6 +534,7 @@ abstract class AbstractType
 
     /**
      * Add file to File Queue
+     *
      * @param array $queueOptions Array of File Queue
      *                              (eg. ['operation'=>'move',
      *                                    'src_name'=>'filename',

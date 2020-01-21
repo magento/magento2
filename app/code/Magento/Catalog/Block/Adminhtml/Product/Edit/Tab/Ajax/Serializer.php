@@ -36,6 +36,8 @@ class Serializer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return $this
      */
     public function _construct()
@@ -46,6 +48,8 @@ class Serializer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve product data as JSON
+     *
      * @return string
      * @deprecated 102.0.0
      */

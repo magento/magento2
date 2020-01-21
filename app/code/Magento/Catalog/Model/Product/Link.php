@@ -99,6 +99,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set link type id for related links
+     *
      * @return $this
      */
     public function useRelatedLinks()
@@ -108,6 +110,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set link type id for upsell links
+     *
      * @return $this
      */
     public function useUpSellLinks()
@@ -117,6 +121,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set link type id for cross sell links
+     *
      * @return $this
      */
     public function useCrossSellLinks()
@@ -159,6 +165,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve attributes
+     *
      * @param int $type
      * @return array
      */
@@ -187,6 +195,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve product link save handler
+     *
      * @return Link\SaveHandler
      */
     private function getProductLinkSaveHandler()

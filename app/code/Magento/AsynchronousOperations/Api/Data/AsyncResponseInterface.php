@@ -56,6 +56,8 @@ interface AsyncResponseInterface
     public function setRequestItems($requestItems);
 
     /**
+     * Sets errors that occured during processing bulk
+     *
      * @param bool $isErrors
      * @return $this
      * @since 100.2.3
