@@ -18,6 +18,7 @@
             <testCaseId value="MC-6325"/>
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

@@ -33,7 +33,7 @@
         </before>
         <after>
             <!-- Delete created virtual product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="defaultVirtualProduct"/>
             </actionGroup>
 
@@ -51,15 +51,15 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+        <comment userInput="remove me" stepKey="disableWYSIWYG"/>
 
         <!-- Create new virtual product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createVirtualProduct">
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createVirtualProduct">
             <argument name="productType" value="virtual"/>
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
 
@@ -70,10 +70,10 @@
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{ApiProductShortDescription.value}}" stepKey="fillShortDescription"/>
 
         <!-- Add two related products -->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addFirstRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addFirstRelatedProduct">
             <argument name="sku" value="$$createFirstRelatedProduct.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addSecondRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addSecondRelatedProduct">
             <argument name="sku" value="$$createSecondRelatedProduct.sku$$"/>
         </actionGroup>
 
@@ -93,7 +93,7 @@
         </actionGroup>
 
         <!-- Save product form-->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
@@ -139,12 +139,12 @@
         </actionGroup>
 
         <!-- Edit related products -->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addThirdRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addThirdRelatedProduct">
             <argument name="sku" value="$$createThirdRelatedProduct.sku$$"/>
         </actionGroup>
 
         <!-- Assert product in assigned to websites -->
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="$createWebsite.website[name]$"/>
         </actionGroup>
 
@@ -162,7 +162,7 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
@@ -185,6 +185,6 @@
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
 
-        <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+        <comment userInput="remove me" stepKey="enableWYSIWYG"/>
     </test>
 </tests>

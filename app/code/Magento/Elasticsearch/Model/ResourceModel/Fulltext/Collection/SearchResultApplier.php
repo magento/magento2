@@ -68,7 +68,6 @@ class SearchResultApplier implements SearchResultApplierInterface
         foreach ($items as $item) {
             $ids[] = (int)$item->getId();
         }
-        $this->collection->setPageSize(null);
         $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
         $orderList = join(',', $ids);
         $this->collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
@@ -86,6 +85,8 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function sliceItems(array $items, int $size, int $currentPage): array
     {
         if ($size !== 0) {
+            $totalPages = (int) ceil(count($items)/$size);
+            $currentPage = min($currentPage, $totalPages);
             $offset = ($currentPage - 1) * $size;
             if ($offset < 0) {
                 $offset = 0;

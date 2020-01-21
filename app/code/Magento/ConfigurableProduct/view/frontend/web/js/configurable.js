@@ -139,7 +139,12 @@ define([
             });
 
             $.each(queryParams, $.proxy(function (key, value) {
-                this.options.values[key] = value;
+                if (this.options.spConfig.attributes[key] !== undefined &&
+                    _.find(this.options.spConfig.attributes[key].options, function (element) {
+                        return element.id === value;
+                    })) {
+                    this.options.values[key] = value;
+                }
             }, this));
         },
 
@@ -155,7 +160,13 @@ define([
 
                 if (element.value) {
                     attributeId = element.id.replace(/[a-z]*/, '');
-                    this.options.values[attributeId] = element.value;
+
+                    if (this.options.spConfig.attributes[attributeId] !== undefined &&
+                        _.find(this.options.spConfig.attributes[attributeId].options, function (optionElement) {
+                            return optionElement.id === element.value;
+                        })) {
+                        this.options.values[attributeId] = element.value;
+                    }
                 }
             }, this));
         },
@@ -443,6 +454,10 @@ define([
                 }
 
                 for (i = 0; i < options.length; i++) {
+                    if (prevConfig && typeof allowedProductsByOption[i] === 'undefined') {
+                        continue; //jscs:ignore disallowKeywords
+                    }
+
                     allowedProducts = prevConfig ? allowedProductsByOption[i] : options[i].products.slice(0);
                     optionPriceDiff = 0;
 

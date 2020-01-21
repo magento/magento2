@@ -18,7 +18,7 @@
             <group value="search"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory1"/>
             <createData entity="SimpleProduct" stepKey="createProduct1">
@@ -44,7 +44,7 @@
         <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery1">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery1">
             <argument name="searchQuery" value="$$createProduct1.name$$"/>
         </actionGroup>
 
@@ -58,7 +58,7 @@
         <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage2"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
 
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery2">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery2">
             <argument name="searchQuery" value="{{UpdatedSearchTermData1.query_text}}"/>
         </actionGroup>
 
