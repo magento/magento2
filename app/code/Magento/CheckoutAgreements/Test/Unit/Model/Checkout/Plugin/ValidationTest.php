@@ -130,7 +130,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformationAndPlaceOrder(
+        $this->model->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $this->paymentMock,
@@ -172,7 +172,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
-        $this->model->beforeSavePaymentInformationAndPlaceOrder(
+        $this->model->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $this->paymentMock,
