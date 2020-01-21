@@ -11,6 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Command to show frontend template hints status
+ */
 class TemplateHintsStatusCommand extends Command
 {
 
@@ -57,8 +60,13 @@ class TemplateHintsStatusCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $templateHintsStatus = ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default')) ? 'enabled' : 'disabled';
+        $templateHintsStatus =
+            ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default'))
+                ? 'enabled'
+                : 'disabled';
         $templateHintsMessage = __(self::SUCCESS_MESSAGE, ['status' => $templateHintsStatus]);
         $output->writeln("<info>" . $templateHintsMessage . "</info>");
+
+        return;
     }
 }
