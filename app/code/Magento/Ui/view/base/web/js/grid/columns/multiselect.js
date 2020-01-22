@@ -241,6 +241,10 @@ define([
             if (this.isPageSelected() && selected !== total) {
                 return this.selectPage();
             }
+
+            if (this.indetermine() && selected === total) {
+                return this.selectPage();
+            }
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
@@ -458,12 +462,6 @@ define([
 
             this.allSelected(allSelected);
             this.indetermine(totalSelected && !allSelected);
-
-            if (pageTotal !== pageSelected) {
-                this.allSelected(false);
-            } else if (pageTotal === pageSelected) {
-                this.allSelected(true);
-            }
             
             return this;
         },
@@ -500,9 +498,6 @@ define([
                 newSelections = _.union(this.getIds(true), this.selected());
 
                 this.selected(newSelections);
-            } else {
-                this.countSelected()
-                    .updateState();
             }
         },
 
