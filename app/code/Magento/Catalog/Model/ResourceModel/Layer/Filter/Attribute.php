@@ -42,7 +42,10 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
             // exclude children of configurable products
-            $connection->quoteInto("(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)", 'configurable'),
+            $connection->quoteInto(
+                "(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)",
+                'configurable'
+            ),
             $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
             $connection->quoteInto("{$tableAlias}.store_id = ?", $collection->getStoreId()),
             $connection->quoteInto("{$tableAlias}.value = ?", $value),
@@ -80,7 +83,10 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
             // exclude children of configurable products
-            $connection->quoteInto("(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)", 'configurable'),
+            $connection->quoteInto(
+                "(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)",
+                'configurable'
+            ),
             $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
             $connection->quoteInto("{$tableAlias}.store_id = ?", $filter->getStoreId()),
         ];
