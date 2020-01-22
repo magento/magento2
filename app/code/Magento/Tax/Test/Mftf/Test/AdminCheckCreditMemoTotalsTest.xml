@@ -15,7 +15,7 @@
             <title value="Checking Credit memo Totals"/>
             <description value="Checking Credit memo Totals"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-6159"/>
+            <testCaseId value="MC-25752"/>
             <group value="tax"/>
             <group value="sales"/>
         </annotations>
@@ -23,7 +23,6 @@
             <!-- Create productTaxClass -->
             <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
             <!--Set configs-->
-            <magentoCLI command="config:set {{DisableGenerateCategoryProductUrlRewritesConfigData.path}} {{DisableGenerateCategoryProductUrlRewritesConfigData.value}}" stepKey="disableGenerateUrlRewrite"/>
             <magentoCLI command="config:set {{DefaultProductTaxClass.path}} $createProductTaxClass.return$" stepKey="setDefaultProductTaxClass"/>
             <!--Create category and product-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -42,7 +41,6 @@
         </before>
         <after>
             <!--Set configs-->
-            <magentoCLI command="config:set {{EnableGenerateCategoryProductUrlRewritesConfigData.path}} {{EnableGenerateCategoryProductUrlRewritesConfigData.value}}" stepKey="enableGenerateUrlRewrite"/>
             <magentoCLI command="config:set {{DefaultProductTaxClass.path}} {{DefaultProductTaxClass.value}}" stepKey="setDefaultProductTaxClass"/>
             <!--Delete category and product-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
