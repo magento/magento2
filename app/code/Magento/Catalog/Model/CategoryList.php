@@ -14,7 +14,6 @@ use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -105,7 +104,7 @@ class CategoryList implements CategoryListInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                FilterProcessor::class
+                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
             );
         }
         return $this->collectionProcessor;
