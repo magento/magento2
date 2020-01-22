@@ -448,7 +448,7 @@ define([
                 excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 totalRecords    = this.totalRecords(),
-                allSelected     = totalRecords && totalSelected === totalRecords,
+                allSelected     = totalRecords && totalSelected === totalRecords;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
