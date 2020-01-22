@@ -12,7 +12,7 @@
             <description>Create new product SKU based condition in Catalog Price Rule form.</description>
         </annotations>
         <arguments>
-            <argument name="productSku"/>
+            <argument name="productSku" type="string" defaultValue="{{ApiSimpleTwo.sku}}"/>
         </arguments>
 
         <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTabTitle}}" dependentSelector="{{AdminNewCatalogPriceRule.conditionsTabBody}}" visible="false" stepKey="openConditionsSectionIfNeeded"/>
