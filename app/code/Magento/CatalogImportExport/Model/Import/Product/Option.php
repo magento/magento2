@@ -1251,12 +1251,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
             $optionsToRemove = [];
             foreach ($bunch as $rowNumber => $rowData) {
-                if (isset($optionId, $valueId) && empty($rowData[PRODUCT::COL_STORE_VIEW_CODE])) {
+                if (isset($optionId, $valueId)) {
                     $nextOptionId = $optionId;
                     $nextValueId = $valueId;
+                } else {
+                    $optionId = $nextOptionId;
+                    $valueId = $nextValueId;
                 }
-                $optionId = $nextOptionId;
-                $valueId = $nextValueId;
                 $multiRowData = $this->_getMultiRowFormat($rowData);
                 if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
