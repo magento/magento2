@@ -109,9 +109,9 @@ class Bootstrap
     private $factory;
 
     /**
-     * Application Object
+     * HTTP web application
      *
-     * @var ObjectManagerFactory
+     * @var \Magento\Framework\AppInterface
      */
     private $app;
 

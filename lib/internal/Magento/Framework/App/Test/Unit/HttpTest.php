@@ -173,6 +173,17 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->responseMock);
     }
 
+    public function testHandleTerminateError()
+    {
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')->with('500');
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')->with('Content-Type', 'text/html; charset=UTF-8');
+        $this->responseMock->expects($this->once())->method('sendResponse');
+
+        $this->assertTrue($this->http->handleTerminateError());
+    }
+
     public function testLaunchSuccess()
     {
         $this->setUpLaunch();

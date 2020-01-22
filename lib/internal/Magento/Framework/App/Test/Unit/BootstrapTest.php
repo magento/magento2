@@ -96,7 +96,15 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $filesystem->expects($this->any())->method('getDirectoryRead')
             ->will(($this->returnValue($this->configDir)));
 
-        $this->application = $this->getMockForAbstractClass(\Magento\Framework\AppInterface::class);
+        $this->application = $this->getMockForAbstractClass(
+            \Magento\Framework\AppInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['handleTerminateError']
+        );
 
         $this->objectManager->expects($this->any())->method('create')
             ->will(($this->returnValue($this->application)));
@@ -201,6 +209,33 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             [null, State::MODE_DEVELOPER, true],
             [null, State::MODE_PRODUCTION, false]
         ];
+    }
+
+    /**
+     * Test bootstrap run application which throws Exception
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Terminate exception
+     */
+    public function testRunApplicationWithException()
+    {
+        $exception = new \Exception('Exception');
+        $terminateException = new \Exception('Terminate exception');
+
+        $bootstrapMock = $this->getMockBuilder(\Magento\Framework\App\Bootstrap::class)
+            ->setMethods(['assertMaintenance'])
+            ->setConstructorArgs([$this->objectManagerFactory, '', ['value1', 'value2']])
+            ->getMock();
+
+        $this->objectManager->method('create')->willReturn($this->application);
+        $this->application->method('launch')->willThrowException($exception);
+        $this->application->method('catchException')->willReturn(false);
+
+        $bootstrapMock->createApplication('someApplicationType', []);
+        $this->application->expects($this->once())
+            ->method('handleTerminateError')
+            ->willThrowException($terminateException);
+        $bootstrapMock->run($this->application);
     }
 
     public function testRunNoErrors()
