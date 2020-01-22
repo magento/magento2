@@ -94,7 +94,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      */
     public function getCreatedIn()
     {
-        return $this->_get(self::CREATED_IN);
+        return (string)$this->_get(self::CREATED_IN);
     }
 
     /**
@@ -150,7 +150,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     /**
      * Get group id
      *
-     * @return string|null
+     * @return int|null
      */
     public function getGroupId()
     {
