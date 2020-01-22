@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable max-nested-callbacks */
 define([
     'mage/gallery/gallery',
     'jquery'
@@ -83,12 +84,14 @@ define([
     describe('"initGallery" method', function () {
         it('Verify gallery initialization', function () {
             originSpy = $.fn.data;
-            jqueryDataMock = {                        
+            jqueryDataMock = {
                 setOptions: jasmine.createSpy().and.returnValue(true),
                 updateOptions: jasmine.createSpy().and.returnValue(true)
-            }
-            spyOn($.fn, 'data').and.callFake(function () { return jqueryDataMock });
-           
+            };
+            spyOn($.fn, 'data').and.callFake(function () {
+                return jqueryDataMock;
+            });
+
             gallery = new Gallery(options, element);
             expect(gallery.settings.$elementF.class).toBe(element[1]);
             expect(gallery.settings.fullscreenConfig).toBeDefined();
@@ -96,7 +99,7 @@ define([
             expect(gallery.settings.data).toBeDefined();
             expect(gallery.settings.api).toBeDefined();
 
-            $.fn.data = originSpy; 
+            $.fn.data = originSpy;
         });
     });
 });
