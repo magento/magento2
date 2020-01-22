@@ -94,7 +94,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
      */
     public function getCreatedIn()
     {
-        return (string)$this->_get(self::CREATED_IN);
+        return $this->_get(self::CREATED_IN);
     }
 
     /**
