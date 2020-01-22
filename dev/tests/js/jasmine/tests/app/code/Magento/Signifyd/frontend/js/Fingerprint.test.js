@@ -10,6 +10,16 @@ define([
 
     /*eslint max-nested-callbacks: ["error", 5]*/
     describe('Signifyd device fingerprint client script', function () {
+        var originalTimeout;
+
+        beforeEach(function () {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000;
+        });
+
+        afterEach(function () {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+        });
 
         it('SIGNIFYD_GLOBAL object initialization check', function (done) {
             var script = document.createElement('script');
@@ -32,7 +42,6 @@ define([
                 expect(signifyd.scriptTagHasLoaded()).toBe(true);
                 done();
             }, 10000);
-
-        }, 12000);
+        });
     });
 });
