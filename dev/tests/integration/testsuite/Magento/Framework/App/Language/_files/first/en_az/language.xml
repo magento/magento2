@@ -6,9 +6,9 @@
 */
 -->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/Language/package.xsd">
-    <code>en_US</code>
+    <code>en_AZ</code>
     <vendor>first</vendor>
-    <package>en_us</package>
+    <package>en_az</package>
     <sort_order>0</sort_order>
     <use package="en_gb" vendor="second"/>
 </language>

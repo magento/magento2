@@ -195,6 +195,10 @@ class Dictionary
      */
     private function addInheritedPacks($packs, $pack, &$sortedPacks)
     {
+        if (isset($sortedPacks[$pack['key']])) {
+            return;
+        }
+
         $sortedPacks[$pack['key']] = $pack;
         foreach ($pack['language']->getUses() as $reuse) {
             $packKey = implode('|', [$reuse['vendor'], $reuse['package']]);
