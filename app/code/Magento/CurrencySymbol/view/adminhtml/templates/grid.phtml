@@ -22,7 +22,8 @@
                        class="required-entry admin__control-text <?= $data['inherited'] ? 'disabled' : '' ?>"
                        type="text"
                        value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
-                       name="custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
+                       name="custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]"
+                        <?= $data['inherited'] ? 'disabled' : '' ?>>
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
