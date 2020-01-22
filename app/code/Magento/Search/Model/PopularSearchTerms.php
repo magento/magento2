@@ -7,7 +7,7 @@
 namespace Magento\Search\Model;
 
 /**
- * Popular search terms
+ * Finds top search results in search
  */
 class PopularSearchTerms
 {

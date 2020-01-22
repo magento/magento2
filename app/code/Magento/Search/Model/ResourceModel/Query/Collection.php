@@ -5,15 +5,25 @@
  */
 namespace Magento\Search\Model\ResourceModel\Query;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Helper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Search query collection
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Store for filter
@@ -25,36 +35,38 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Search resource helper
      *
-     * @var \Magento\Framework\DB\Helper
+     * @var Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * Constructor
+     *
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
+     * @param Helper $resourceHelper
+     * @param AdapterInterface $connection
+     * @param AbstractDb $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
+        Helper $resourceHelper,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
@@ -178,7 +190,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         return $this->getSize() > 0;
     }
-    
+
     /**
      * Set Recent Queries Order
      *
