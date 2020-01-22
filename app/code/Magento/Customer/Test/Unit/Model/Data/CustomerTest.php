@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Customer\Test\Unit\Model\Data;
 
@@ -45,12 +49,15 @@ class CustomerTest extends TestCase
      * @dataProvider getCreatedInDataProvider
      *
      * @return void
-    */
+     */
     public function testGetCreatedIn($options, $expectedResult)
     {
-        for ($i = 0; $i < count($options); $i++) {
+        $optionsCount = count($options);
+        $expectedCount = count($expectedResult);
+
+        for ($i = 0; $i < $optionsCount; $i++) {
             $this->model->setCreatedIn($options[$i]);
-            for ($j = $i; $j < count($expectedResult); $j++) {
+            for ($j = $i; $j < $expectedCount; $j++) {
                 $this->assertEquals($expectedResult[$j], $this->model->getCreatedIn());
                 break;
             }
