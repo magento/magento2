@@ -16,6 +16,6 @@
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
-        <see userInput="" selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
+        <see userInput="You saved the category." selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
     </actionGroup>
 </actionGroups>
