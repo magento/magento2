@@ -34,8 +34,8 @@ class PriceFilterTest extends CategoryPriceFilterTest
         $this->getSearchFiltersAndAssert(
             $products,
             [
-            'is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
-            'is_filterable_in_search' => 1,
+                'is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
+                'is_filterable_in_search' => 1,
             ],
             $expectation
         );

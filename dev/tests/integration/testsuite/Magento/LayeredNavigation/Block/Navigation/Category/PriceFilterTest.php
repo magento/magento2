@@ -64,7 +64,7 @@ class PriceFilterTest extends AbstractFiltersTest
     public function getFiltersDataProvider(): array
     {
         return [
-            'auto_calculation_variation_1' => [
+            'auto_calculation_variation_with_small_price_difference' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple2' => 50.00],
                 'expectation' => [
@@ -73,7 +73,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     ['label' => '$50.00 and above', 'value' => '50-', 'count' => 1],
                 ],
             ],
-            'auto_calculation_variation_2' => [
+            'auto_calculation_variation_with_big_price_difference' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple2' => 300.00],
                 'expectation' => [
@@ -81,7 +81,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     ['label' => '$300.00 and above', 'value' => '300-', 'count' => 1],
                 ],
             ],
-            'auto_calculation_variation_3' => [
+            'auto_calculation_variation_with_fixed_price_step' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
                 'products_data' => ['simple1000' => 300.00, 'simple1001' => 400.00, 'simple2' => 500.00],
                 'expectation' => [
@@ -90,7 +90,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     ['label' => '$500.00 and above', 'value' => '500-', 'count' => 1],
                 ],
             ],
-            'improved_calculation_variation_1' => [
+            'improved_calculation_variation_with_small_price_difference' => [
                 'config' => [
                     'catalog/layered_navigation/price_range_calculation' => 'improved',
                     'catalog/layered_navigation/interval_division_limit' => 3,
@@ -101,7 +101,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     ['label' => '$50.00 and above', 'value' => '50-', 'count' => 1],
                 ],
             ],
-            'improved_calculation_variation_2' => [
+            'improved_calculation_variation_with_big_price_difference' => [
                 'config' => [
                     'catalog/layered_navigation/price_range_calculation' => 'improved',
                     'catalog/layered_navigation/interval_division_limit' => 3,
@@ -115,7 +115,8 @@ class PriceFilterTest extends AbstractFiltersTest
             'manual_calculation_with_price_step_200' => [
                 'config' => [
                     'catalog/layered_navigation/price_range_calculation' => 'manual',
-                    'catalog/layered_navigation/price_range_step' => 200],
+                    'catalog/layered_navigation/price_range_step' => 200,
+                ],
                 'products_data' => ['simple1000' => 300.00, 'simple1001' => 300.00, 'simple2' => 500.00],
                 'expectation' => [
                     ['label' => '$200.00 - $399.99', 'value' => '200-400', 'count' => 2],
@@ -125,7 +126,8 @@ class PriceFilterTest extends AbstractFiltersTest
             'manual_calculation_with_price_step_10' => [
                 'config' => [
                     'catalog/layered_navigation/price_range_calculation' => 'manual',
-                    'catalog/layered_navigation/price_range_step' => 10],
+                    'catalog/layered_navigation/price_range_step' => 10,
+                ],
                 'products_data' => ['simple1000' => 300.00, 'simple1001' => 300.00, 'simple2' => 500.00],
                 'expectation' => [
                     ['label' => '$300.00 - $309.99', 'value' => '300-310', 'count' => 2],
@@ -184,34 +186,14 @@ class PriceFilterTest extends AbstractFiltersTest
         $items = [];
         /** @var Item $item */
         foreach ($filter->getItems() as $item) {
-            $item = [
+            $items[] = [
                 'label' => strip_tags(__($item->getData('label'))->render()),
                 'value' => $item->getData('value'),
                 'count' => $item->getData('count'),
             ];
-            $items[] = $item;
         }
 
         return $items;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function updateProducts(
-        array $products,
-        string $attributeCode,
-        int $storeId = Store::DEFAULT_STORE_ID
-    ): void {
-        $attribute = $this->attributeRepository->get($attributeCode);
-
-        foreach ($products as $productSku => $value) {
-            $product = $this->productRepository->get($productSku, false, $storeId, true);
-            $product->addData(
-                [$attribute->getAttributeCode() => $value]
-            );
-            $this->productRepository->save($product);
-        }
     }
 
     /**
@@ -220,7 +202,7 @@ class PriceFilterTest extends AbstractFiltersTest
      * @param array $config
      * @return void
      */
-    protected function applyCatalogConfig(array $config)
+    protected function applyCatalogConfig(array $config): void
     {
         foreach ($config as $path => $value) {
             $this->scopeConfig->setValue($path, $value, StoreScope::SCOPE_STORE, ScopeInterface::SCOPE_DEFAULT);

@@ -15,4 +15,3 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->get(CategoryLinkManagementInterface::class);
 $categoryLinkManagement->assignProductToCategories('simple2', [$category->getId()]);
-
