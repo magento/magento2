@@ -59,6 +59,7 @@ class PriceFilterTest extends AbstractFiltersTest
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function getFiltersDataProvider(): array
