@@ -162,6 +162,8 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Price Render
+     *
      * @return \Magento\Framework\Pricing\Render
      */
     protected function getPriceRender()
