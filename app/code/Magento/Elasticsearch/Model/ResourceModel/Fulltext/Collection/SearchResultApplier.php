@@ -7,8 +7,8 @@
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Data\Collection;
 
 /**
  * Resolve specific attributes for search criteria.
@@ -72,7 +72,7 @@ class SearchResultApplier implements SearchResultApplierInterface
         $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
         $orderList = join(',', $ids);
         $this->collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
-        $this->collection->getSelect()->order("FIELD(e.entity_id,$orderList)");
+        $this->collection->getSelect()->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
     }
 
     /**
