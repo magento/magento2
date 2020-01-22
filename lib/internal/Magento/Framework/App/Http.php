@@ -155,4 +155,17 @@ class Http implements \Magento\Framework\AppInterface
     {
         return $this->exceptionHandler->handle($bootstrap, $exception, $this->_response, $this->_request);
     }
+
+    /**
+     * Error Handler for Application Termination
+     *
+     * @return bool
+     */
+    public function handleTerminateError()
+    {
+        $this->_response->setHttpResponseCode(500);
+        $this->_response->setHeader('Content-Type', 'text/html; charset=UTF-8');
+        $this->_response->sendResponse();
+        return true;
+    }
 }
