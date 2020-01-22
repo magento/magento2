@@ -98,7 +98,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             /** @var Store $fromStore */
             $fromStore = $this->storeRepository->get($fromStoreCode);
         } catch (NoSuchEntityException $e) {
-            $error = __('Requested store is not found');
+            $error = __("Requested store is not found ({$fromStoreCode})");
         }
 
         if ($error !== null) {
