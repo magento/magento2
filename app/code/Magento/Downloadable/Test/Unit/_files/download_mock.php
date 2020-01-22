@@ -22,3 +22,13 @@ function mime_content_type()
 {
     return DownloadTest::$mimeContentType;
 }
+
+/**
+ * Override standard function
+ *
+ * @return array
+ */
+function get_headers()
+{
+    return DownloadTest::$headers;
+}

@@ -14,7 +14,7 @@ use Magento\Catalog\Helper\Catalog;
 use Magento\Catalog\Helper\Data;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
 use Magento\Framework\Translate\InlineInterface;
 
@@ -65,7 +65,7 @@ class Tabs extends WidgetTabs
     protected $_collectionFactory;
 
     /**
-     * @var ModuleManagerInterface
+     * @var Manager
      */
     protected $_moduleManager;
 
@@ -78,7 +78,7 @@ class Tabs extends WidgetTabs
      * @param Context $context
      * @param EncoderInterface $jsonEncoder
      * @param Session $authSession
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      * @param CollectionFactory $collectionFactory
      * @param Catalog $helperCatalog
      * @param Data $catalogData
@@ -91,7 +91,7 @@ class Tabs extends WidgetTabs
         Context $context,
         EncoderInterface $jsonEncoder,
         Session $authSession,
-        ModuleManagerInterface $moduleManager,
+        Manager $moduleManager,
         CollectionFactory $collectionFactory,
         Catalog $helperCatalog,
         Data $catalogData,

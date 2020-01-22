@@ -249,23 +249,6 @@ class DeployPackage
      */
     private function register(Package $package, PackageFile $file = null, $skipLogging = false)
     {
-        $logMessage = '.';
-        if ($file) {
-            $logMessage = "Processing file '{$file->getSourcePath()}'";
-            if ($file->getArea()) {
-                $logMessage .= "  for area '{$file->getArea()}'";
-            }
-            if ($file->getTheme()) {
-                $logMessage .= ", theme '{$file->getTheme()}'";
-            }
-            if ($file->getLocale()) {
-                $logMessage .= ", locale '{$file->getLocale()}'";
-            }
-            if ($file->getModule()) {
-                $logMessage .= "module '{$file->getModule()}'";
-            }
-        }
-
         $info = [
             'count' => $this->count,
             'last' => $file ? $file->getSourcePath() : ''
@@ -273,6 +256,23 @@ class DeployPackage
         $this->deployStaticFile->writeTmpFile('info.json', $package->getPath(), json_encode($info));
 
         if (!$skipLogging) {
+            $logMessage = '.';
+            if ($file) {
+                $logMessage = "Processing file '{$file->getSourcePath()}'";
+                if ($file->getArea()) {
+                    $logMessage .= "  for area '{$file->getArea()}'";
+                }
+                if ($file->getTheme()) {
+                    $logMessage .= ", theme '{$file->getTheme()}'";
+                }
+                if ($file->getLocale()) {
+                    $logMessage .= ", locale '{$file->getLocale()}'";
+                }
+                if ($file->getModule()) {
+                    $logMessage .= "module '{$file->getModule()}'";
+                }
+            }
+
             $this->logger->info($logMessage);
         }
     }

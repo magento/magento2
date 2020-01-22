@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -186,7 +189,8 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
                 'invoiceCommentSender' => $this->commentSenderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'resultRawFactory' => $this->resultRawFactoryMock,
-                'resultJsonFactory' => $this->resultJsonFactoryMock
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'invoiceRepository' => $this->invoiceRepository
             ]
         );
 
@@ -230,8 +234,9 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $invoiceMock->expects($this->once())
             ->method('addComment')
             ->with($data['comment'], false, false);
-        $invoiceMock->expects($this->once())
-            ->method('save');
+        $this->invoiceRepository->expects($this->once())
+            ->method('save')
+            ->with($invoiceMock);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -307,11 +312,11 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
     public function testExecuteException()
     {
         $response = ['error' => true, 'message' => 'Cannot add new comment.'];
-        $e = new \Exception('test');
+        $error = new \Exception('test');
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->will($this->throwException($e));
+            ->will($this->throwException($error));
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')

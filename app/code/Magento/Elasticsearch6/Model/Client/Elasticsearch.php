@@ -5,8 +5,9 @@
  */
 namespace Magento\Elasticsearch6\Model\Client;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldsMappingPreprocessorInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Elasticsearch client
@@ -29,17 +30,23 @@ class Elasticsearch implements ClientInterface
      * @var bool
      */
     private $pingResult;
+    /**
+     * @var FieldsMappingPreprocessorInterface[]
+     */
+    private $fieldsMappingPreprocessors;
 
     /**
      * Initialize Elasticsearch Client
      *
      * @param array $options
      * @param \Elasticsearch\Client|null $elasticsearchClient
+     * @param FieldsMappingPreprocessorInterface[] $fieldsMappingPreprocessors
      * @throws LocalizedException
      */
     public function __construct(
         $options = [],
-        $elasticsearchClient = null
+        $elasticsearchClient = null,
+        $fieldsMappingPreprocessors = []
     ) {
         if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
                     ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
@@ -54,6 +61,17 @@ class Elasticsearch implements ClientInterface
         }
         $this->client[getmypid()] = $elasticsearchClient;
         $this->clientOptions = $options;
+        foreach ($fieldsMappingPreprocessors as $preprocessor) {
+            if (!$preprocessor instanceof FieldsMappingPreprocessorInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Instance of FieldsMappingPreprocessorInterface is expected, got %s instead.',
+                        get_class($preprocessor)
+                    )
+                );
+            }
+        }
+        $this->fieldsMappingPreprocessors = $fieldsMappingPreprocessors;
     }
 
     /**
@@ -103,21 +121,28 @@ class Elasticsearch implements ClientInterface
      */
     private function buildConfig($options = [])
     {
-        $host = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
+        $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
         // @codingStandardsIgnoreStart
         $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
         // @codingStandardsIgnoreEnd
         if (!$protocol) {
             $protocol = 'http';
         }
-        if (!empty($options['port'])) {
-            $host .= ':' . $options['port'];
-        }
-        if (!empty($options['enableAuth']) && ($options['enableAuth'] == 1)) {
-            $host = sprintf('%s://%s:%s@%s', $protocol, $options['username'], $options['password'], $host);
+
+        $authString = '';
+        if (!empty($options['enableAuth']) && (int)$options['enableAuth'] === 1) {
+            $authString = "{$options['username']}:{$options['password']}@";
         }
 
+        $portString = '';
+        if (!empty($options['port'])) {
+            $portString = ':' . $options['port'];
+        }
+
+        $host = $protocol . '://' . $authString . $hostname . $portString;
+
         $options['hosts'] = [$host];
+
         return $options;
     }
 
@@ -249,11 +274,7 @@ class Elasticsearch implements ClientInterface
             'type' => $entityType,
             'body' => [
                 $entityType => [
-                    'properties' => [
-                        '_search' => [
-                            'type' => 'text'
-                        ],
-                    ],
+                    'properties' => [],
                     'dynamic_templates' => [
                         [
                             'price_mapping' => [
@@ -291,7 +312,7 @@ class Elasticsearch implements ClientInterface
             ],
         ];
 
-        foreach ($fields as $field => $fieldInfo) {
+        foreach ($this->applyFieldsMappingPreprocessors($fields) as $field => $fieldInfo) {
             $params['body'][$entityType]['properties'][$field] = $fieldInfo;
         }
 
@@ -335,5 +356,19 @@ class Elasticsearch implements ClientInterface
     public function suggest($query)
     {
         return $this->getClient()->suggest($query);
+    }
+
+    /**
+     * Apply fields mapping preprocessors
+     *
+     * @param array $properties
+     * @return array
+     */
+    private function applyFieldsMappingPreprocessors(array $properties): array
+    {
+        foreach ($this->fieldsMappingPreprocessors as $preprocessor) {
+            $properties = $preprocessor->process($properties);
+        }
+        return $properties;
     }
 }

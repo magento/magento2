@@ -8,6 +8,8 @@ namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 /**
+ * Tests for Grouped product
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupedTest extends \PHPUnit\Framework\TestCase
@@ -42,6 +44,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -74,12 +79,22 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testHasWeightFalse()
+    /**
+     * Verify has weight is false
+     *
+     * @return void
+     */
+    public function testHasWeightFalse(): void
     {
         $this->assertFalse($this->_model->hasWeight(), 'This product has weight, but it should not');
     }
 
-    public function testGetChildrenIds()
+    /**
+     * Verify children ids.
+     *
+     * @return void
+     */
+    public function testGetChildrenIds(): void
     {
         $parentId = 12345;
         $childrenIds = [100, 200, 300];
@@ -96,7 +111,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($childrenIds, $this->_model->getChildrenIds($parentId));
     }
 
-    public function testGetParentIdsByChild()
+    /**
+     * Verify get parents by child products
+     *
+     * @return void
+     */
+    public function testGetParentIdsByChild(): void
     {
         $childId = 12345;
         $parentIds = [100, 200, 300];
@@ -113,7 +133,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($parentIds, $this->_model->getParentIdsByChild($childId));
     }
 
-    public function testGetAssociatedProducts()
+    /**
+     * Verify get associated products
+     *
+     * @return void
+     */
+    public function testGetAssociatedProducts(): void
     {
         $cached = true;
         $associatedProducts = [5, 7, 11, 13, 17];
@@ -123,12 +148,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify able to set status filter
+     *
      * @param int $status
      * @param array $filters
      * @param array $result
      * @dataProvider addStatusFilterDataProvider
      */
-    public function testAddStatusFilter($status, $filters, $result)
+    public function testAddStatusFilter($status, $filters, $result): void
     {
         $this->product->expects($this->once())->method('getData')->will($this->returnValue($filters));
         $this->product->expects($this->once())->method('setData')->with('_cache_instance_status_filters', $result);
@@ -136,14 +163,21 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data Provider for Status Filter
+     *
      * @return array
      */
-    public function addStatusFilterDataProvider()
+    public function addStatusFilterDataProvider(): array
     {
         return [[1, [], [1]], [1, false, [1]]];
     }
 
-    public function testSetSaleableStatus()
+    /**
+     * Verify able to set salable status
+     *
+     * @return void
+     */
+    public function testSetSaleableStatus(): void
     {
         $key = '_cache_instance_status_filters';
         $saleableIds = [300, 800, 500];
@@ -159,7 +193,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_model, $this->_model->setSaleableStatus($this->product));
     }
 
-    public function testGetStatusFiltersNoData()
+    /**
+     * Verify status filter with no data.
+     *
+     * @return void
+     */
+    public function testGetStatusFiltersNoData(): void
     {
         $result = [
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
@@ -169,7 +208,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->_model->getStatusFilters($this->product));
     }
 
-    public function testGetStatusFiltersWithData()
+    /**
+     * Verify status filter with data
+     *
+     * @return void
+     */
+    public function testGetStatusFiltersWithData(): void
     {
         $result = [
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
@@ -180,7 +224,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->_model->getStatusFilters($this->product));
     }
 
-    public function testGetAssociatedProductIdsCached()
+    /**
+     * Verify AssociatedProducts Ids with cache
+     *
+     * @return void
+     */
+    public function testGetAssociatedProductIdsCached(): void
     {
         $key = '_cache_instance_associated_product_ids';
         $cachedData = [300, 303, 306];
@@ -192,7 +241,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($cachedData, $this->_model->getAssociatedProductIds($this->product));
     }
 
-    public function testGetAssociatedProductIdsNonCached()
+    /**
+     * Verify AssociatedProducts Ids with no cached.
+     *
+     * @return void
+     */
+    public function testGetAssociatedProductIdsNonCached(): void
     {
         $args = $this->objectHelper->getConstructArguments(
             \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
@@ -236,7 +290,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($associatedIds, $model->getAssociatedProductIds($this->product));
     }
 
-    public function testGetAssociatedProductCollection()
+    /**
+     * Verify Associated Product collection
+     *
+     * @return void
+     */
+    public function testGetAssociatedProductCollection(): void
     {
         $link = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Link::class,
@@ -261,6 +320,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify Proccess buy request
+     *
      * @param array $superGroup
      * @param array $result
      * @dataProvider processBuyRequestDataProvider
@@ -274,9 +335,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * dataProvider for buy request
+     *
      * @return array
      */
-    public function processBuyRequestDataProvider()
+    public function processBuyRequestDataProvider(): array
     {
         return [
             'positive' => [[1, 2, 3], ['super_group' => [1, 2, 3]]],
@@ -285,9 +348,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get Children Msrp when children product with Msrp
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testGetChildrenMsrpWhenNoChildrenWithMsrp()
+    public function testGetChildrenMsrpWhenNoChildrenWithMsrp(): void
     {
         $key = '_cache_instance_associated_products';
 
@@ -298,7 +364,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $this->_model->getChildrenMsrp($this->product));
     }
 
-    public function testPrepareForCartAdvancedEmpty()
+    /**
+     * Prepare for card method with advanced empty
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedEmpty(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $buyRequest = new \Magento\Framework\DataObject();
@@ -381,7 +452,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedNoProductsStrictTrue()
+    /**
+     * Prepare for card with no products set strict option true
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedNoProductsStrictTrue(): void
     {
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([0 => 0]);
@@ -404,7 +480,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedNoProductsStrictFalse()
+    /**
+     * Prepare for card with no products and set strict to false
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedNoProductsStrictFalse(): void
     {
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([0 => 0]);
@@ -429,7 +510,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedWithProductsStrictFalseStringResult()
+    /**
+     * Verify Prepare for cart product with Product strict flase and string result
+     *
+     * @return false
+     */
+    public function testPrepareForCartAdvancedWithProductsStrictFalseStringResult(): void
     {
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
@@ -463,7 +549,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult()
+    /**
+     * Verify prepare for cart with strict option set to false and empty array
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult(): void
     {
         $expectedMsg = "Cannot process the item.";
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -498,7 +589,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedWithProductsStrictFalse()
+    /**
+     * Prepare for cart product with Product strict option st to false.
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedWithProductsStrictFalse(): void
     {
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
@@ -541,7 +637,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedWithProductsStrictTrue()
+    /**
+     * Verify prepare for cart with Product strict option true
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedWithProductsStrictTrue(): void
     {
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
@@ -587,15 +688,20 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPrepareForCartAdvancedZeroQty()
+    /**
+     * Verify prepare for card with sold out option
+     *
+     * @return void
+     */
+    public function testPrepareForCartAdvancedZeroQtyAndSoldOutOption(): void
     {
         $expectedMsg = "Please specify the quantity of product(s).";
-        $associatedId = 9384;
+        $associatedId = 91;
         $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
-
+        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(90));
+        $associatedProduct->expects($this->once())->method('isSalable')->willReturn(true);
         $buyRequest = new \Magento\Framework\DataObject();
-        $buyRequest->setSuperGroup([$associatedId => 0]);
+        $buyRequest->setSuperGroup([$associatedId => 90]);
 
         $cached = true;
         $this->product
@@ -609,7 +715,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedMsg, $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
     }
 
-    public function testFlushAssociatedProductsCache()
+    /**
+     * Verify flush cache for associated products
+     *
+     * @return void
+     */
+    public function testFlushAssociatedProductsCache(): void
     {
         $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['unsetData']);
         $productMock->expects($this->once())
