@@ -35,7 +35,6 @@
             <!-- Click Save And Activate Button -->
             <actionGroup ref="AdminIntegrationSaveAndActivateActionGroup" stepKey="clickSaveAndActivateButton"/>
             <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="allowAccess"/>
-            <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickDoneButton"/>
         </before>
         <after>
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="returnToIntegrationsPage">
@@ -48,17 +47,21 @@
             <actionGroup ref="AdminDeleteIntegrationEntityActionGroup" stepKey="deleteCreatedIntegration"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
             <!-- TEST BODY -->
+            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabConsumerKey"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabConsumerSecret"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabAccessToken"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabAccessTokenSecret"/>
+            <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickDoneButton"/>
             <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findCreatedIntegration">
                 <argument name="name" value="{{defaultIntegrationData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminIntegrationClickReauthoriseLinkOnGridActionGroup" stepKey="clickReauthoriseLink"/>
             <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickReauthoriseButton"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabConsumerKey"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabConsumerSecret"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabAccessToken"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabAccessTokenSecret"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabAfterReauthorizeConsumerKey"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabAfterReauthorizeConsumerSecret"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabReauthorizedAccessToken"/>
+            <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabReauthorizedAccessTokenSecret"/>
             <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="finishTheProcess"/>
             <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
                 <argument name="message" value="The integration '{{defaultIntegrationData.name}}' has been re-authorized."/>
@@ -67,11 +70,10 @@
                 <argument name="name" value="{{defaultIntegrationData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminIntegrationOpenExistingEntityActionGroup" stepKey="openIntegrationEntity"/>
-            <actionGroup ref="AssertAdminIntegrationTokensAfterReauthoriseActionGroup" stepKey="assertTokens">
-                <argument name="consumerKey" value="{$grabConsumerKey}"/>
-                <argument name="consumerSecret" value="{$grabConsumerSecret}"/>
-                <argument name="accessToken" value="{$grabAccessToken}"/>
-                <argument name="accessTokenSecret" value="{$grabAccessTokenSecret}"/>
-            </actionGroup>
+            <!-- Compare Tokens After Reauthorizing -->
+            <assertEquals stepKey="assertConsumerKey" expected="($grabConsumerKey)" actual="$grabAfterReauthorizeConsumerKey" actualType="string"/>
+            <assertEquals stepKey="assertConsumerSecret" expected="($grabConsumerSecret)" actual="$grabAfterReauthorizeConsumerSecret" actualType="string"/>
+            <assertNotEquals stepKey="assertNotEqualsToken" expected="($grabAccessToken)" actual="$grabReauthorizedAccessToken" actualType="string"/>
+            <assertNotEquals stepKey="assertNotEqualsTokenSecret" expected="($grabAccessTokenSecret)" actual="$grabReauthorizedAccessTokenSecret" actualType="string"/>
     </test>
 </tests>
