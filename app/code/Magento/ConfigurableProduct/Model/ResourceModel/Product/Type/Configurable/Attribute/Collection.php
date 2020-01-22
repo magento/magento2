@@ -14,6 +14,8 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Catalog Configurable Product Attribute Collection
@@ -78,6 +80,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     private $products;
 
     /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
+     * @var Status
+     */
+    private $status;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -88,6 +100,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param Attribute $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param ConfigurableResource $configurableResource
+     * @param ProductRepository $productRepository
+     * @param Status $status
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,12 +114,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Catalog\Helper\Data $catalogData,
         Attribute $resource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ConfigurableResource $configurableResource = null
+        ConfigurableResource $configurableResource = null,
+        ProductRepository $productRepository,
+        Status $status
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
         $this->configurableResource = $configurableResource;
+        $this->productRepository = $productRepository;
+        $this->status = $status;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -328,13 +346,29 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     'product_super_attribute_id' => $itemId,
                     'default_label' => $option['default_title'],
                     'store_label' => $option['default_title'],
-                    'use_default_value' => true
+                    'use_default_value' => true,
+                    'product_status' => $this->getStatusBySku($option['sku'])
                 ];
             }
             $item->setOptionsMap($values);
             $values = array_values($values);
             $item->setOptions($values);
         }
+    }
+
+    /**
+     * Get Product Status By Sku
+     *
+     * @param $sku
+     * @return string
+     */
+    protected function getStatusBySku($sku)
+    {
+        $product = $this->productRepository->get($sku);
+        $statusVal = $product->getStatus();
+
+        $statusText = $this->status->getOptionText($statusVal);
+        return $statusText;
     }
 
     /**
