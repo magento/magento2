@@ -182,34 +182,6 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing.
-     */
-    public function testUpdateWithMissedCartItemId()
-    {
-        $query = <<<QUERY
-mutation {
-  updateCartItems(input: {
-    cart_items: [
-      {
-        cart_item_id: 1
-        quantity: 2
-      }
-    ]  
-  }) {
-    cart {
-      items {
-        id
-        quantity
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlMutation($query);
-    }
-
-    /**
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
@@ -246,14 +218,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_cart_items' => [
-                '',
-                'Required parameter "cart_items" is missing.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_items: [{ quantity: 2 }]',
-                'Required parameter "cart_item_id" for "cart_items" is missing.'
-            ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
                 'Required parameter "quantity" for "cart_items" is missing.'
