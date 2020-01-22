@@ -592,7 +592,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      */
-    public function getLinkedProductCollection($product)
+    protected function getLinkedProductCollection($product)
     {
         $collection = $this->_productCollectionFactory->create()->setFlag(
             'product_children',
@@ -767,8 +767,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $storeId = $storeId->getId();
         }
 
-        if (isset($this->isSaleableBySku[$storeId][$product->getSku()])) {
-            return $this->isSaleableBySku[$storeId][$product->getSku()];
+        $sku = $product->getSku();
+        if (isset($this->isSaleableBySku[$storeId][$sku])) {
+            return $this->isSaleableBySku[$storeId][$sku];
         }
 
         $salable = parent::isSalable($product);
@@ -780,7 +781,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $salable = 0 !== $collection->getSize();
         }
 
-        $this->isSaleableBySku[$storeId][$product->getSku()] = $salable;
+        $this->isSaleableBySku[$storeId][$sku] = $salable;
 
         return $salable;
     }

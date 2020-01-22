@@ -567,12 +567,18 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testIsSalable()
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['__wakeup', 'getStatus', 'hasData', 'getData', 'getStoreId', 'setData'])
+            ->setMethods(['__wakeup', 'getStatus', 'hasData', 'getData', 'getStoreId', 'setData', 'getSku'])
             ->disableOriginalConstructor()
             ->getMock();
+        $productMock
+            ->expects($this->at(0))
+            ->method('getData')
+            ->with('_cache_instance_store_filter')
+            ->willReturn(0);
         $productMock->expects($this->once())->method('getStatus')->willReturn(1);
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
-        $productMock->expects($this->at(2))->method('getData')->with('is_salable')->willReturn(true);
+        $productMock->expects($this->at(1))->method('getSku')->willReturn('SKU-CODE');
+        $productMock->expects($this->at(4))->method('getData')->with('is_salable')->willReturn(true);
         $productCollection = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class
         )
