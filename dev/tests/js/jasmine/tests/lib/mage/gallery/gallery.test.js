@@ -11,7 +11,9 @@ define([
 
     var gallery,
         options,
-        element;
+        element,
+        jqueryDataMock,
+        originSpy;
 
     beforeEach(function () {
         options = {
@@ -76,25 +78,25 @@ define([
             ' _block-content-loading" data-gallery-role="gallery-placeholder">' +
             '<img alt="main product photo" class="gallery-placeholder__image" src="">' +
             '</div>');
-
-        spyOn($.fn, 'data').and.callFake(function () {
-            return {
-                        setOptions: jasmine.createSpy().and.returnValue(true),
-                        updateOptions: jasmine.createSpy().and.returnValue(true)
-                    };
-        });
-        expect();
-        gallery = new Gallery(options, element);
-
     });
 
     describe('"initGallery" method', function () {
         it('Verify gallery initialization', function () {
+            originSpy = $.fn.data;
+            jqueryDataMock = {                        
+                setOptions: jasmine.createSpy().and.returnValue(true),
+                updateOptions: jasmine.createSpy().and.returnValue(true)
+            }
+            spyOn($.fn, 'data').and.callFake(function () { return jqueryDataMock });
+           
+            gallery = new Gallery(options, element);
             expect(gallery.settings.$elementF.class).toBe(element[1]);
             expect(gallery.settings.fullscreenConfig).toBeDefined();
             expect(gallery.settings.fotoramaApi).toBeDefined();
             expect(gallery.settings.data).toBeDefined();
             expect(gallery.settings.api).toBeDefined();
+
+            $.fn.data = originSpy; 
         });
     });
 });
