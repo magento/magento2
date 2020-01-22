@@ -13,6 +13,7 @@
         <element name="rowEditAction" type="button" selector="//*[@data-role='grid']//tbody//tr[{{row}}+1]//td[count(//*[@data-role='grid']//th[contains(., 'Action')]/preceding-sibling::th)+1]//a[contains(., 'Edit')]" parameterized="true" timeout="30"/>
         <element name="gridCellByColumnRowNumber" type="text" selector="//*[@data-role='grid']//tbody//tr[{{row}}+1]//td[count(//*[@data-role='grid']//th[contains(., '{{column}}')]/preceding-sibling::th)+1]" parameterized="true"/>
         <element name="gridCellByColumnValue" type="text" selector="//*[@data-role='grid']//tbody//td[count(//*[@data-role='grid']//th[contains(., '{{column}}')]/preceding-sibling::th)+1][normalize-space(.)='{{columnValue}}']" parameterized="true"/>
+        <element name="select" type="button" selector="//*[@data-role='grid']//tbody//tr[{{row}}+1]//button[@class='action-select']" timeout="30"  parameterized="true"/>
         <element name="activeEdit" type="button" selector="//*[@data-role='grid']//tbody//ul[@class='action-menu _active']//a[@data-action='item-edit']" timeout="30"/>
     </section>
 </sections>
