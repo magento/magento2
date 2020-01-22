@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\Category\PriceFilterTest as CategoryPriceFilterTest;
 
 /**
- * Provides price filter tests with different price ranges calculation in navigation block on category page.
+ * Provides price filter tests with different price ranges calculation in navigation block on search page.
  *
  * @magentoAppArea frontend
  * @magentoAppIsolation enabled
@@ -22,7 +22,7 @@ class PriceFilterTest extends CategoryPriceFilterTest
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getFiltersWithDataProvider
+     * @dataProvider getFiltersDataProvider
      * @param array $config
      * @param array $products
      * @param array $expectation

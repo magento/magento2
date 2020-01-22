@@ -41,7 +41,7 @@ class PriceFilterTest extends AbstractFiltersTest
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
-     * @dataProvider getFiltersWithDataProvider
+     * @dataProvider getFiltersDataProvider
      * @param array $config
      * @param array $products
      * @param array $expectation
@@ -61,7 +61,7 @@ class PriceFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithDataProvider(): array
+    public function getFiltersDataProvider(): array
     {
         return [
             'auto_calculation_variation_1' => [
