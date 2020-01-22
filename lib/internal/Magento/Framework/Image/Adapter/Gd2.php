@@ -442,6 +442,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_getCallback('create', $watermarkFileType, 'Unsupported watermark image format.'),
             $imagePath
         );
+        //$watermark = $this->prepareWatermark($watermark, $watermarkFileType);
 
         $merged = false;
 
@@ -597,6 +598,49 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
         imagedestroy($watermark);
         $this->refreshImageDimensions();
+    }
+
+    /**
+     * @param resource $watermark
+     * @param string $watermarkFileType
+     * @return resource
+     */
+    private function prepareWatermark($watermark, $watermarkFileType)
+    {
+        if (imagesx($watermark) > $this->_imageSrcWidth
+            || imagesy($watermark) > $this->_imageSrcHeight) {
+            $widthRatio = imagesx($watermark)/$this->_imageSrcWidth;
+            $heightRatio = imagesy($watermark)/$this->_imageSrcHeight;
+            $newWidth = ($widthRatio > $heightRatio)
+                ? round(imagesx($watermark)/$widthRatio) : round(imagesx($watermark)/$heightRatio);
+            $newHeight = ($widthRatio > $heightRatio)
+                ? round(imagesy($watermark)/$widthRatio) : round(imagesy($watermark)/$heightRatio);
+            $isAlpha = false;
+            $isTrueColor = false;
+            $this->_getTransparency($watermark, $watermarkFileType, $isAlpha, $isTrueColor);
+            if ($isTrueColor) {
+                $newImage = imagecreatetruecolor($newWidth, $newHeight);
+            } else {
+                $newImage = imagecreate($newWidth, $newHeight);
+            }
+            if ($isAlpha) {
+                $this->_saveAlpha($newImage);
+            }
+            imagecopyresampled(
+                $newImage,
+                $watermark,
+                0,
+                0,
+                0,
+                0,
+                $newWidth,
+                $newHeight,
+                imagesx($watermark),
+                imagesy($watermark)
+            );
+            $watermark = $newImage;
+        }
+        return $watermark;
     }
 
     /**
@@ -859,12 +903,24 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             return false;
         }
 
+        if (false === imagesavealpha($tmpImg, true)) {
+            return false;
+        }
+
         if (false === imagecopy($tmpImg, $src_im, 0, 0, 0, 0, $sizeX, $sizeY)) {
             return false;
         }
 
         $transparancy = 127 - (($pct*127)/100);
         if (false === imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparancy)) {
+            return false;
+        }
+
+        if (false === imagealphablending($dst_im, true)) {
+            return false;
+        }
+
+        if (false === imagesavealpha($dst_im, true)) {
             return false;
         }
 
