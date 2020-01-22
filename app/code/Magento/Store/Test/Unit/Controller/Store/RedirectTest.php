@@ -227,6 +227,7 @@ class RedirectTest extends TestCase
         $this->messageManagerMock
             ->expects($this->once())
             ->method('addErrorMessage')
+            ->with("Requested store is not found ({$defaultStoreViewCode})")
             ->willReturnSelf();
         $this->currentStoreMock
             ->expects($this->once())
