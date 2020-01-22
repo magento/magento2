@@ -18,13 +18,15 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Url;
 use Magento\Framework\UrlFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SessionTest extends \PHPUnit\Framework\TestCase
+class SessionTest extends TestCase
 {
     /**
      * @var ResourceCustomer|MockObject
@@ -85,11 +87,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->urlFactoryMock = $this->createMock(UrlFactory::class);
         $this->customerFactoryMock = $this->getMockBuilder(CustomerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['create', 'save'])
             ->getMock();
         $this->_customerResourceMock = $this->getMockBuilder(ResourceCustomer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->setMethods(['load', 'save'])
             ->getMock();
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $helper = new ObjectManagerHelper($this);
@@ -164,7 +166,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAuthenticate()
     {
-        $urlMock = $this->createMock(\Magento\Framework\Url::class);
+        $urlMock = $this->createMock(Url::class);
         $urlMock->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturn('');
@@ -216,15 +218,12 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $customerMock = $this->createPartialMock(
             Customer::class,
-            ['getId', 'isConfirmationRequired', 'getConfirmation', 'updateData', 'getGroupId']
+            ['getId', 'getConfirmation', 'updateData', 'getGroupId']
         );
-        $customerMock->expects($this->once())
+        $customerMock->expects($this->exactly(3))
             ->method('getId')
             ->will($this->returnValue($customerId));
         $customerMock->expects($this->once())
-            ->method('isConfirmationRequired')
-            ->will($this->returnValue(true));
-        $customerMock->expects($this->never())
             ->method('getConfirmation')
             ->will($this->returnValue($customerId));
 
@@ -290,6 +289,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->_storageMock->expects($this->once())->method('unsIsCustomerEmulated');
         $this->_model->setCustomer($customerMock);
     }
+
     /**
      * Test "getCustomer()" for guest user
      *
