@@ -2614,7 +2614,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function isTableExists($tableName, $schemaName = null)
     {
-        return $this->showTableStatus($tableName, $schemaName) !== false;
+        return $this->getCreateTable($tableName, $schemaName) !== false;
     }
 
     /**
