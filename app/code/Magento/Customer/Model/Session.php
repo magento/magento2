@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
  * @method string getNoReferer()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
@@ -97,6 +98,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
+
+    /**
+     * @var AccountConfirmation
+     */
+    protected $accountConfirmation;
 
     /**
      * @var GroupManagementInterface
@@ -304,7 +310,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getCustomer()
     {
         if ($this->_customerModel === null) {
-            $this->_customerModel = $this->_customerFactory->create()->load($this->getCustomerId());
+            $this->_customerModel = $this->_customerFactory->create();
+
+            if ($this->getCustomerId()) {
+                $this->_customerResource->load($this->_customerModel, $this->getCustomerId());
+            }
         }
 
         return $this->_customerModel;
