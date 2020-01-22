@@ -47,7 +47,7 @@
         <!-- Search for the product by sku and name on the product page -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndex"/>
         <waitForPageLoad stepKey="waitForAdminProductIndex"/>
-        <actionGroup ref="filterProductGridBySkuAndName" stepKey="filerProductsBySkuAndName">
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="filerProductsBySkuAndName">
             <argument name="product" value="SimpleProductWithCustomAttributeSet"/>
         </actionGroup>
         <!-- Should not see the product -->

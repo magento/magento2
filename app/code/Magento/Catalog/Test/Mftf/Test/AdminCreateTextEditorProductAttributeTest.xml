@@ -30,12 +30,12 @@
         </before>
         <after>
             <!-- Delete attribute -->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productTextEditorAttribute"/>
             </actionGroup>
 
             <!-- Delete product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
 
@@ -71,7 +71,7 @@
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{productTextEditorAttribute.frontend_input}}" stepKey="returnInputType"/>
 
         <!-- Save Product Attribute -->
-        <actionGroup ref="saveProductAttribute" stepKey="saveAttribute"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
 
         <!-- Go to Store > Attribute Set -->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
@@ -80,20 +80,20 @@
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
 
         <!-- Add Product Attribute to Default attribute by dragging and dropping this to the 'Project Details' folder. Then Save. -->
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{productTextEditorAttribute.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
 
         <!-- Go Catalog > Product to create new product page -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
         <!-- On product page, select Attribute Set: "Default" -->
-        <actionGroup ref="AdminProductPageSelectAttributeSet" stepKey="selectAttributeSet">
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet">
             <argument name="attributeSetName" value="Default"/>
         </actionGroup>
 
@@ -115,8 +115,8 @@
         <fillField selector="{{ProductDescriptionWysiwygSection.attributeEditArea(productTextEditorAttribute.attribute_code)}}" userInput="This content from product page" stepKey="setContent"/>
 
         <!-- Fill up all required fields for product form -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
         <!-- Assert product attribute on Storefront -->
         <actionGroup ref="OpenStorefrontProductPageByProductNameActionGroup" stepKey="openProductPage"/>

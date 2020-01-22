@@ -5,15 +5,16 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
+use Magento\Framework\App\Action\Redirect;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\App\Action\Redirect;
-use Magento\Framework\App\ActionInterface;
 
 /**
  * UrlRewrite Controller Router
@@ -73,11 +74,12 @@ class Router implements \Magento\Framework\App\RouterInterface
      *
      * @param RequestInterface|HttpRequest $request
      * @return ActionInterface|null
+     * @throws NoSuchEntityException
      */
     public function match(RequestInterface $request)
     {
         $rewrite = $this->getRewrite(
-            $this->getNormalizedPathInfo($request),
+            $request->getPathInfo(),
             $this->storeManager->getStore()->getId()
         );
 
@@ -116,7 +118,7 @@ class Router implements \Magento\Framework\App\RouterInterface
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
             || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
-            $target = $this->url->getUrl('', ['_direct' => $target]);
+            $target = $this->url->getUrl('', ['_direct' => $target, '_query' => $request->getParams()]);
         }
         return $this->redirect($request, $target, $rewrite->getRedirectType());
     }
@@ -152,31 +154,5 @@ class Router implements \Magento\Framework\App\RouterInterface
                 UrlRewrite::STORE_ID => $storeId,
             ]
         );
-    }
-
-    /**
-     * Get normalized request path
-     *
-     * @param RequestInterface|HttpRequest $request
-     * @return string
-     */
-    private function getNormalizedPathInfo(RequestInterface $request): string
-    {
-        $path = $request->getPathInfo();
-        /**
-         * If request contains query params then we need to trim a slash in end of the path.
-         * For example:
-         * the original request is: http://my-host.com/category-url-key.html/?color=black
-         * where the original path is: category-url-key.html/
-         * and the result path will be: category-url-key.html
-         *
-         * It need to except a redirect like this:
-         * http://my-host.com/category-url-key.html/?color=black => http://my-host.com/category-url-key.html
-         */
-        if (!empty($path) && $request->getQuery()->count()) {
-            $path = rtrim($path, '/');
-        }
-
-        return (string)$path;
     }
 }

@@ -60,7 +60,7 @@
             <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenWebsiteSection"/>
             <waitForPageLoad stepKey="waitForToOpenedWebsiteSection"/>
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
             <!-- Set filter to product name and product2 in website 2 only -->
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
@@ -73,7 +73,7 @@
                 <argument name="website" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite1"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct2"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
 
             <!-- Set filter to product name and product12 assigned to both websites 1 and 2 -->
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct12">
@@ -85,7 +85,7 @@
             <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectProductInWebsites1">
                 <argument name="website" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct3"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
@@ -131,7 +131,6 @@
              userInput="$$createProduct1.name$$" stepKey="seeProductName4"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
              userInput="$$createProduct12.name$$" stepKey="seeProductName5"/>
-        <waitForText userInput="$$createCategory.name$$ (2)" stepKey="seeCorrectProductCount"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
                  userInput="$$createProduct0.name$$" stepKey="dontSeeProductName"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
@@ -151,7 +150,6 @@
              userInput="$$createProduct2.name$$" stepKey="seeProductName6"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
              userInput="$$createProduct12.name$$" stepKey="seeProductName7"/>
-        <waitForText userInput="$$createCategory.name$$ (2)" stepKey="seeCorrectProductCount2"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
                  userInput="$$createProduct0.name$$" stepKey="dontSeeProductName2"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"

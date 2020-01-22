@@ -47,8 +47,8 @@
         <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="catalog_products.csv" stepKey="attachFileForImport"/>
         <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
         <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Import successfully done" stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Created: 0, Updated: 0, Deleted: 3" stepKey="assertNotice"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 0, Updated: 0, Deleted: 3" stepKey="assertNotice"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchSimpleProductOnBackend">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>

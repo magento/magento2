@@ -54,7 +54,7 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--Add the created product to the shopping cart-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!--Proceed to Checkout from the mini cart-->

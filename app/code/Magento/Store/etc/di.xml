@@ -436,7 +436,7 @@
                 <item name="cleanTargetUrl" xsi:type="object">Magento\Store\Model\StoreSwitcher\CleanTargetUrl</item>
                 <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
                 <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
-                <item name="hashGenerator" xsi:type="object">Magento\Store\Model\StoreSwitcher\HashGenerator</item>
+                <item name="hashProcessor" xsi:type="object" sortOrder="1000">Magento\Store\Model\StoreSwitcher\HashProcessor</item>
             </argument>
         </arguments>
     </type>

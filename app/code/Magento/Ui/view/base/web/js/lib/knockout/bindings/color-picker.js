@@ -71,6 +71,11 @@ define([
         update: function (element, valueAccessor, allBindings, viewModel) {
             var config = valueAccessor();
 
+            /** Initialise value as empty if it is undefined when color picker input is reset **/
+            if (config.value() === undefined) {
+                config.value('');
+            }
+
             if (tinycolor(config.value()).isValid() || config.value() === '') {
                 $(element).spectrum('set', config.value());
 
