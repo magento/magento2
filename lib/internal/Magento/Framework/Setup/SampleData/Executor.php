@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
+/**
+ * Performs sample data installations.
+ */
 class Executor
 {
     /**
@@ -39,6 +42,7 @@ class Executor
 
     /**
      * Execute SampleData module installation.
+     *
      * Catch exception if it appeared and continue installation
      *
      * @param InstallerInterface $installer
@@ -49,7 +53,7 @@ class Executor
         try {
             $this->appState->emulateAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL, [$installer, 'install']);
             $this->state->setInstalled();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->state->setError();
             $this->logger->error('Sample Data error: ' . $e->getMessage());
         }

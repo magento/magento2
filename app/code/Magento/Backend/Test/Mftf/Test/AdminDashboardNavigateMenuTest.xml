@@ -25,6 +25,7 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminMenuSection.menuItem(AdminMenuDashboard.dataUiId)}}" stepKey="clickOnMenuItem"/>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuDashboard.pageTitle}}"/>
