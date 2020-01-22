@@ -301,7 +301,7 @@ define([
          * @param {Object} prices
          * @param {Object|undefined} $priceBox
          */
-        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices, $priceBox = undefined) {
+        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices, $priceBox) {
 
             var defaultMsrp,
                 defaultPrice,
