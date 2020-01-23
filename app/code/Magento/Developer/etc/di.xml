@@ -18,6 +18,7 @@
         <arguments>
             <argument name="formats" xsi:type="array">
                 <item name="phpstorm" xsi:type="object">Magento\Developer\Model\XmlCatalog\Format\PhpStorm</item>
+                <item name="vscode" xsi:type="object">Magento\Developer\Model\XmlCatalog\Format\VsCode</item>
             </argument>
         </arguments>
     </type>
