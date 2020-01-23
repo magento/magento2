@@ -15,7 +15,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Framework\Phrase\Renderer\Translate;
 
 /**
- * Class DataProviderTest
+ * Verify data provider translation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
