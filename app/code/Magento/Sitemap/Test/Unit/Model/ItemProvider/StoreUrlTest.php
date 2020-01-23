@@ -11,8 +11,10 @@ use Magento\Sitemap\Model\ItemProvider\ConfigReaderInterface;
 use Magento\Sitemap\Model\ItemProvider\StoreUrl as StoreUrlItemResolver;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreUrlTest extends \PHPUnit\Framework\TestCase
+class StoreUrlTest extends TestCase
 {
     /**
      * test for getItems method
@@ -24,7 +26,7 @@ class StoreUrlTest extends \PHPUnit\Framework\TestCase
         $resolver = new StoreUrlItemResolver($configReaderMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
         
-        $this->assertTrue(count($items) == 1);
+        $this->assertCount(1, $items);
         foreach ($items as $item) {
             $this->assertSame('daily', $item->getChangeFrequency());
             $this->assertSame('1.0', $item->getPriority());
@@ -32,7 +34,7 @@ class StoreUrlTest extends \PHPUnit\Framework\TestCase
     }
     
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return SitemapItemInterfaceFactory|MockObject
      */
     private function getItemFactoryMock()
     {
@@ -53,7 +55,7 @@ class StoreUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return ConfigReaderInterface|MockObject
      */
     private function getConfigReaderMock()
     {

@@ -36,7 +36,7 @@ class StoreUrlConfigReader implements ConfigReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriority($storeId)
     {
@@ -48,7 +48,7 @@ class StoreUrlConfigReader implements ConfigReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getChangeFrequency($storeId)
     {
