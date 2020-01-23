@@ -155,6 +155,7 @@ EXPECTED_RESULT;
 
     public function testNonDataObjectVariableParsing()
     {
+        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -168,11 +169,33 @@ EXPECTED_RESULT;
 
         $template = '{{var address.format(\'html\')}}';
         $expected = '<foo>html</foo>';
-        self::assertEquals($expected, $this->templateFilter->filter($template));
+        try {
+            self::assertEquals($expected, $this->templateFilter->filter($template));
+        } finally {
+            $this->templateFilter->setStrictMode($previous);
+        }
+    }
+
+    public function testStrictModeByDefault()
+    {
+        $this->templateFilter->setVariables(
+            [
+                'address' => new class {
+                    public function format()
+                    {
+                        throw new \Exception('Should not run');
+                    }
+                }
+            ]
+        );
+
+        $template = '{{var address.format(\'html\')}}';
+        self::assertEquals('', $this->templateFilter->filter($template));
     }
 
     public function testComplexVariableArguments()
     {
+        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -187,11 +210,16 @@ EXPECTED_RESULT;
 
         $template = '{{var address.format($arg1,\'bar\',[param1:baz])}}';
         $expected = 'foo bar baz';
-        self::assertEquals($expected, $this->templateFilter->filter($template));
+        try {
+            self::assertEquals($expected, $this->templateFilter->filter($template));
+        } finally {
+            $this->templateFilter->setStrictMode($previous);
+        }
     }
 
     public function testComplexVariableGetterArguments()
     {
+        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class extends DataObject {
@@ -206,7 +234,11 @@ EXPECTED_RESULT;
 
         $template = '{{var address.getFoo($arg1,\'bar\',[param1:baz])}}';
         $expected = 'foo bar baz';
-        self::assertEquals($expected, $this->templateFilter->filter($template));
+        try {
+            self::assertEquals($expected, $this->templateFilter->filter($template));
+        } finally {
+            $this->templateFilter->setStrictMode($previous);
+        }
     }
 
     public function testNonDataObjectRendersBlankInStrictMode()
