@@ -786,16 +786,13 @@ class Eav extends AbstractModifier
      */
     private function getAttributeDefaultValue(ProductAttributeInterface $attribute)
     {
-        if ($attribute->getAttributeCode() === 'page_layout') {
-            $defaultValue = $attribute->getDefaultValue();
-            if (!$defaultValue) {
-                $defaultValue = $this->scopeConfig->getValue(
-                    'web/default_layouts/default_product_layout',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $this->storeManager->getStore()
-                );
-                $attribute->setDefaultValue($defaultValue);
-            }
+        if ($attribute->getAttributeCode() === 'page_layout' && !$attribute->getDefaultValue()) {
+            $defaultValue = $this->scopeConfig->getValue(
+                'web/default_layouts/default_product_layout',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore()
+            );
+            $attribute->setDefaultValue($attribute->getDefaultValue());
         }
         return $attribute->getDefaultValue();
     }
