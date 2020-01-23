@@ -425,19 +425,19 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $this->assertEquals(
                 $expectedOptions,
                 $actualOptions,
-                'Expected and actual options arrays doesnt match'
+                'Expected and actual options arrays does not match'
             );
 
             // assert of options data
             $this->assertCount(
                 count($expectedData['data']),
                 $actualData['data'],
-                'Expected and actual data count doesnt match'
+                'Expected and actual data count does not match'
             );
             $this->assertCount(
                 count($expectedData['values']),
                 $actualData['values'],
-                'Expected and actual values count doesnt match'
+                'Expected and actual values count does not match'
             );
 
             foreach ($expectedData['options'] as $expectedId => $expectedOption) {
@@ -449,13 +449,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         $this->assertEquals(
                             $expectedData['data'][$expectedId],
                             $actualData['data'][$actualId],
-                            'Expected data doesnt match actual data'
+                            'Expected data does not match actual data'
                         );
                         if (array_key_exists($expectedId, $expectedData['values'])) {
                             $this->assertEquals(
                                 $expectedData['values'][$expectedId],
                                 $actualData['values'][$actualId],
-                                'Expected values doesnt match actual data'
+                                'Expected values does not match actual data'
                             );
                         }
                         unset($actualData['options'][$actualId]);
