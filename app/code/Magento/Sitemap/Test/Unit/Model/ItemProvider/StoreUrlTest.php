@@ -25,9 +25,9 @@ class StoreUrlTest extends \PHPUnit\Framework\TestCase
         $items = $resolver->getItems(1);
         
         $this->assertTrue(count($items) == 1);
-        foreach ($items as $index => $item) {
-            $this->assertSame('daily', $items[$index]->getChangeFrequency());
-            $this->assertSame('1.0', $items[$index]->getPriority());
+        foreach ($items as $item) {
+            $this->assertSame('daily', $item->getChangeFrequency());
+            $this->assertSame('1.0', $item->getPriority());
         }
     }
     
