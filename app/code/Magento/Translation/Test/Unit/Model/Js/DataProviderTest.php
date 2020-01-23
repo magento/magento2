@@ -105,24 +105,31 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             'hello1' => 'hello1translated',
             'hello2' => 'hello2translated',
             'hello3' => 'hello3translated',
-            'hello4' => 'hello4translated'
+            'hello4' => 'hello4translated',
+            'ko i18' => 'ko i18 translated',
+            'underscore i18' => 'underscore i18 translated',
         ];
 
         $contentsMap = [
             'content1$.mage.__("hello1")content1',
             'content2$.mage.__("hello2")content2',
-            'content2$.mage.__("hello4")content4', // this value should be last after running data provider
-            'content2$.mage.__("hello3")content3',
+            'content2$.mage.__("hello4")content4 <!-- ko i18n: "ko i18" --><!-- /ko -->',
+            'content2$.mage.__("hello3")content3 <% _.i18n("underscore i18") %>',
         ];
 
         $translateMap = [
             [['hello1'], [], 'hello1translated'],
             [['hello2'], [], 'hello2translated'],
             [['hello3'], [], 'hello3translated'],
-            [['hello4'], [], 'hello4translated']
+            [['hello4'], [], 'hello4translated'],
+            [['ko i18'], [], 'ko i18 translated'],
+            [['underscore i18'], [], 'underscore i18 translated'],
         ];
 
-        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+        $patterns = [
+            '~\$\.mage\.__\(([\'"])(.+?)\1\)~',
+            '~(?:i18n\:|_\.i18n\()\s*(["\'])(.*?)(?<!\\\\)\1~',
+        ];
 
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
