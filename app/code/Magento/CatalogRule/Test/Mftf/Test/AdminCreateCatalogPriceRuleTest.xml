@@ -31,8 +31,8 @@
 
             <!-- log in and create the price rule -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
-            <actionGroup stepKey="selectNotLoggedInCustomerGroup" ref="selectNotLoggedInCustomerGroup"/>
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
+            <actionGroup stepKey="selectNotLoggedInCustomerGroup" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
             <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule."/>
         </before>
@@ -80,7 +80,7 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup">
                 <argument name="catalogRule" value="CatalogRuleByFixed"/>
             </actionGroup>
         </before>
@@ -103,7 +103,7 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup">
                 <argument name="catalogRule" value="CatalogRuleToPercent"/>
             </actionGroup>
         </before>
@@ -126,7 +126,7 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup">
                 <argument name="catalogRule" value="CatalogRuleToFixed"/>
             </actionGroup>
         </before>
@@ -172,8 +172,8 @@
         </after>
 
         <!-- Create a catalog rule for the NOT LOGGED IN customer group -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createNewPriceRule"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
@@ -213,7 +213,7 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
-        <actionGroup ref="newCatalogPriceRuleWithInvalidData" stepKey="createNewPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleWithInvalidDataActionGroup" stepKey="createNewPriceRule">
             <argument name="catalogRule" value="catalogRuleWithInvalid"/>
         </actionGroup>
 

@@ -56,7 +56,7 @@
                         "
                         translate="'Proceed to Checkout'"
                 />
-                <div data-bind="html: getCartParam('extra_actions')"></div>
+                <div data-bind="html: getCartParamUnsanitizedHtml('extra_actions')"></div>
             </div>
         </div>
     </if>
@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    <div id="minicart-widgets" class="minicart-widgets" if="getRegion('promotion').length">
+    <div id="minicart-widgets" class="minicart-widgets" if="regionHasElements('promotion')">
         <each args="getRegion('promotion')" render=""/>
     </div>
 </div>
