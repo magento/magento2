@@ -22,7 +22,7 @@ class TemplateHintsStatusCommand extends Command
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Initialize dependencies.
@@ -53,12 +53,23 @@ class TemplateHintsStatusCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $templateHintsStatus =
-            ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default'))
+            ($this->isTemplateHintsEnabled())
                 ? 'enabled'
                 : 'disabled';
         $templateHintsMessage = __("Template hints are %status", ['status' => $templateHintsStatus]);
         $output->writeln("<info>" . $templateHintsMessage . "</info>");
 
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isTemplateHintsEnabled()
+    {
+        $result = ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default'))
+            ? true
+            : false;
+        return $result;
     }
 }
