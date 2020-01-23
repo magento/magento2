@@ -41,7 +41,7 @@ module.exports = function (grunt) {
          * ToDo: define default tasks.
          */
         default: function () {
-            grunt.log.subhead('I\'m default task and at the moment I\'m empty, sorry :/');
+            grunt.log.subhead('Usage: grunt <task> - tasks can be found in dev/tools/grunt/tasks');
         },
 
         /**
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
             });
 
             if (typeof component === 'undefined') {
-                grunt.log.subhead('Tip: Please make sure that u specify prod subtask. By default prod task do nothing');
+                grunt.log.subhead('Tip: Please make sure that u specify prod subtask. By default the prod task does nothing.');
             } else {
                 grunt.task.run(tasks);
             }
