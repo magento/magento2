@@ -1258,8 +1258,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
             $optionsToRemove = [];
             foreach ($bunch as $rowNumber => $rowData) {
-                if (
-                    isset($optionId, $valueId) &&
+                if (isset($optionId, $valueId) &&
                     (empty($rowData[PRODUCT::COL_STORE_VIEW_CODE]) || empty($rowData['custom_options']))
                 ) {
                     $nextOptionId = $optionId;
