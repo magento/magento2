@@ -6,6 +6,7 @@
 
 namespace Magento\Fedex\Test\Unit\Plugin\Block\Tracking;
 
+use Magento\Fedex\Model\Carrier;
 use Magento\Fedex\Plugin\Block\Tracking\PopupDeliveryDate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Block\Tracking\Popup;
@@ -44,7 +45,7 @@ class PopupDeliveryDateTest extends TestCase
             ->getMock();
         $trackingStatusMock->expects($this::once())
             ->method('getCarrier')
-            ->willReturn(\Magento\Fedex\Model\Carrier::CODE);
+            ->willReturn(Carrier::CODE);
 
         /** @var Popup|MockObject $subjectMock */
         $subjectMock = $this->getMockBuilder(Popup::class)
