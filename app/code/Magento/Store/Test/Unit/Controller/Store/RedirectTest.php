@@ -268,7 +268,7 @@ class RedirectTest extends TestCase
     }
 
     /**
-     * @inheritDoc
+     * Data provider
      *
      * @return array
      */
