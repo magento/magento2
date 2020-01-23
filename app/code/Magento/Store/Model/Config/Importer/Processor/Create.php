@@ -272,7 +272,7 @@ class Create implements ProcessorInterface
             }
         }
 
-        throw new NotFoundException(__("The group wasn't found. Verify the group and try again."));
+        throw new NotFoundException(__('The group ID "%1" wasn\'t found. Verify the group and try again.', $groupId));
     }
 
     /**
@@ -294,6 +294,6 @@ class Create implements ProcessorInterface
             }
         }
 
-        throw new NotFoundException(__("The store wasn't found. Verify the store and try again."));
+        throw new NotFoundException(__('The store ID "%1" wasn\'t found. Verify the store and try again.', $storeId));
     }
 }
