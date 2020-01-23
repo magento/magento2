@@ -12,7 +12,8 @@ interface LinkedProductSelectBuilderInterface
 {
     /**
      * @param int $productId
+     * @param int $storeId
      * @return \Magento\Framework\DB\Select[]
      */
-    public function build($productId);
+    public function build(int $productId, int $storeId) : array;
 }

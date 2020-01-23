@@ -193,6 +193,7 @@ class Observer
     protected function _processPrice(\Magento\ProductAlert\Model\Email $email)
     {
         $email->setType('price');
+        echo('price ');
         foreach ($this->_getWebsites() as $website) {
             /* @var $website \Magento\Store\Model\Website */
             if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {
@@ -242,7 +243,6 @@ class Observer
                     );
 
                     $product->setCustomerGroupId($customer->getGroupId());
-                    $this->_storeManager->getStore()->setWebsiteId($website->getId());
                     if ($alert->getPrice() > $product->getFinalPrice()) {
                         $productPrice = $product->getFinalPrice();
                         $product->setFinalPrice($this->_catalogData->getTaxPrice($product, $productPrice));

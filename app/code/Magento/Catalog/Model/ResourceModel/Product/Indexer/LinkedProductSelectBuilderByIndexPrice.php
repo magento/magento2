@@ -85,11 +85,11 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build(int $productId, int $storeId) : array
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
         $customerGroupId = $this->customerSession->getCustomerGroupId();
 
         $priceSelect = $this->resource->getConnection()->select()

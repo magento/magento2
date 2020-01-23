@@ -24,11 +24,11 @@ class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderI
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build(int $productId, int $storeId) : array
     {
         $selects = [];
         foreach ($this->linkedProductSelectBuilder as $productSelectBuilder) {
-            $selects = array_merge($selects, $productSelectBuilder->build($productId));
+            $selects = array_merge($selects, $productSelectBuilder->build($productId, $storeId));
         }
 
         return $selects;

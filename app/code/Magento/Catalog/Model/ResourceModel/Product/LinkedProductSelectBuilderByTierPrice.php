@@ -74,7 +74,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build(int $productId, int $storeId) : array
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
@@ -103,7 +103,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
 
         if (!$this->catalogHelper->isPriceGlobal()) {
             $priceSelectStore = clone $priceSelect;
-            $priceSelectStore->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
+            $priceSelectStore->where('t.website_id = ?', $this->storeManager->getStore($storeId)->getWebsiteId());
             $selects[] = $priceSelectStore;
         }
 
