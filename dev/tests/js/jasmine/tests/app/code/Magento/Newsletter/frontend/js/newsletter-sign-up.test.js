@@ -24,38 +24,38 @@ define([
             'Magento_Newsletter/js/subscription-status-resolver': resolverMock
         };
 
+    beforeEach(function (done) {
+        checkbox = $('<input type="checkbox" class="checkbox" name="is_subscribed" id="is_subscribed"/>');
+        emailElem = $('<input type="email" name="email" id="email_address"/>');
+        button = $('<button type="submit" id="button"/>');
+        $(document.body).append(checkbox).append(emailElem).append(button);
+
+        injector.mock(mocks);
+        injector.require(['Magento_Newsletter/js/newsletter-sign-up'], function (Constr) {
+            obj = new Constr({
+                provider: 'provName',
+                name: '',
+                index: '',
+                submitButton: '#button',
+                signUpElement: '#is_subscribed'
+            }, '#email_address');
+            done();
+        });
+    });
+
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+
+        checkbox.remove();
+        emailElem.remove();
+        button.remove();
+    });
+
     describe('Magento_Newsletter/js/newsletter-sign-up', function () {
-        beforeEach(function (done) {
-            checkbox = $('<input type="checkbox" class="checkbox" name="is_subscribed" id="is_subscribed"/>');
-            emailElem = $('<input type="email" name="email" id="email_address"/>');
-            button = $('<button type="submit" id="button"/>');
-            $(document.body).append(checkbox).append(emailElem).append(button);
-
-            injector.mock(mocks);
-            injector.require(['Magento_Newsletter/js/newsletter-sign-up'], function (Constr) {
-                obj = new Constr({
-                    provider: 'provName',
-                    name: '',
-                    index: '',
-                    submitButton: '#button',
-                    signUpElement: '#is_subscribed'
-                }, '#email_address');
-                done();
-            });
-        });
-
-        afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {}
-
-            checkbox.remove();
-            emailElem.remove();
-            button.remove();
-        });
-
-        it('Check for properties defined', function() {
+        it('Check for properties defined', function () {
             expect(obj.hasOwnProperty('submitButton')).toBeDefined();
             expect(typeof obj.submitButton).toEqual('string');
             expect(obj.hasOwnProperty('signUpElement')).toBeDefined();
@@ -64,7 +64,7 @@ define([
             expect(typeof obj.element).toEqual('string');
         });
 
-        it('Verify Subscription is checked', function() {
+        it('Verify Subscription is checked', function () {
             emailElem.val('email@example.com');
             checkbox.prop('checked', true);
             expect(checkbox.is(':checked')).toBeTruthy();
@@ -76,7 +76,7 @@ define([
             expect(checkbox.is(':checked')).toBeTruthy();
         });
 
-        it('Verify sign-up process without email', function() {
+        it('Verify sign-up process without email', function () {
             checkbox.prop('checked', false);
             expect(checkbox.is(':checked')).toBeFalsy();
 
@@ -86,7 +86,7 @@ define([
             expect(checkbox.is(':checked')).toBeFalsy();
         });
 
-        it('Verify sign-up process with incorrect email', function() {
+        it('Verify sign-up process with incorrect email', function () {
             emailElem.val('emailexample.com');
             checkbox.prop('checked', false);
             expect(checkbox.is(':checked')).toBeFalsy();
@@ -97,7 +97,7 @@ define([
             expect(checkbox.is(':checked')).toBeFalsy();
         });
 
-        it('Verify Subscription with correct data', function() {
+        it('Verify Subscription with correct data', function () {
             emailElem.val('email@example.com');
             checkbox.prop('checked', false);
             expect(checkbox.is(':checked')).toBeFalsy();
@@ -109,7 +109,7 @@ define([
             expect(button.is(':disabled')).toBeFalsy();
         });
 
-        it('Verify sign-up process with non-subscribed email', function() {
+        it('Verify sign-up process with non-subscribed email', function () {
             resolveStatus(false);
             emailElem.val('email@example.com');
             checkbox.prop('checked', false);
