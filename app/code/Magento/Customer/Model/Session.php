@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
  * @method string getNoReferer()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
@@ -107,6 +108,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var \Magento\Framework\App\Response\Http
      */
     protected $response;
+
+    /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
 
     /**
      * Session constructor.
@@ -511,13 +517,6 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->response->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerUrl->getLoginUrlParams();
-            if ($this->_createUrl()->getUseSession()) {
-                $arguments += [
-                    '_query' => [
-                        $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
-                    ]
-                ];
-            }
             $this->response->setRedirect(
                 $this->_createUrl()->getUrl(\Magento\Customer\Model\Url::ROUTE_ACCOUNT_LOGIN, $arguments)
             );
@@ -535,8 +534,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     protected function _setAuthUrl($key, $url)
     {
-        $url = $this->_coreUrl->removeRequestParam($url, $this->sidResolver->getSessionIdQueryParam($this));
-        // Add correct session ID to URL if needed
         $url = $this->_createUrl()->getRebuiltUrl($url);
         return $this->storage->setData($key, $url);
     }
