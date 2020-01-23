@@ -24,12 +24,12 @@
         </before>
         <after>
             <!-- Delete product -->
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{SimpleProduct.sku}}"/>
             </actionGroup>
 
             <!-- Delete category -->
-            <actionGroup ref="DeleteCategory" stepKey="deleteCreatedNewRootCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="_defaultCategory"/>
             </actionGroup>
 
@@ -40,20 +40,20 @@
         <!-- Create Simple Product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
 
         <!-- Create new category for product -->
-        <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
         <!-- Click on the magnifying glass to start searching -->
         <click selector="{{AdminGlobalSearchSection.globalSearch}}" stepKey="clickSearchBtn"/>

@@ -218,3 +218,4 @@ Magento/InventoryReservationCli/Test/Integration
 Magento/InventoryAdminUi/Controller/Adminhtml
 Magento/Newsletter/Model/Queue
 Magento/Framework/Mail/Template
+Magento/CheckoutAgreements/Model/Checkout/Plugin
