@@ -248,7 +248,9 @@ class Create implements ProcessorInterface
             }
         }
 
-        throw new NotFoundException(__("The website wasn't found. Verify the website and try again."));
+        throw new NotFoundException(
+            __('The website ID "%1" wasn\'t found. Verify the website and try again.', $websiteId)
+        );
     }
 
     /**
