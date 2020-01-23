@@ -101,6 +101,19 @@ class ProductInCategoriesViewTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
+     * @magentoDataFixture Magento/Catalog/_files/out_of_stock_product_with_category.php
+     * @return void
+     */
+    public function testCategoryOutOfStockProductView(): void
+    {
+        $collection = $this->getCategoryProductCollection(333);
+
+        $this->assertEquals(1, $collection->getSize());
+        $this->assertEquals('out-of-stock-product', $collection->getFirstItem()->getSku());
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @dataProvider productVisibilityProvider
      * @param array $data
