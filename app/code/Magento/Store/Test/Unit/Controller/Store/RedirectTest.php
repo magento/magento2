@@ -146,20 +146,14 @@ class RedirectTest extends TestCase
     public function testRedirect(string $defaultStoreViewCode, string $storeCode): void
     {
         $this->requestMock
-            ->expects($this->at(0))
-            ->method('getParam')
-            ->with(StoreResolver::PARAM_NAME)
-            ->willReturn($storeCode);
-        $this->requestMock
-            ->expects($this->at(1))
-            ->method('getParam')
-            ->with('___from_store')
-            ->willReturn($defaultStoreViewCode);
-        $this->requestMock
-            ->expects($this->at(2))
-            ->method('getParam')
-            ->with(ActionInterface::PARAM_NAME_URL_ENCODED)
-            ->willReturn($defaultStoreViewCode);
+            ->expects($this->any())
+            ->method('getParam')->willReturnMap(
+                [
+                    [StoreResolver::PARAM_NAME, null, $storeCode],
+                    ['___from_store', null, $defaultStoreViewCode],
+                    [ActionInterface::PARAM_NAME_URL_ENCODED, null, $defaultStoreViewCode]
+                ]
+            );
         $this->storeRepositoryMock
             ->expects($this->once())
             ->method('get')
