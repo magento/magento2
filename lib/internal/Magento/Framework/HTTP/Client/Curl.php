@@ -423,7 +423,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     public function doError($string)
     {
-        //  hpcs:ignore Magento2.Exceptions.DirectThrow
+        //  phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
     }
 
