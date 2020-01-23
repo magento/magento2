@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-79"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="MC-30384"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -24,8 +27,8 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
-            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
             <scrollToTopOfPage stepKey="scrollToTop"/>
             <click stepKey="setInactive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>

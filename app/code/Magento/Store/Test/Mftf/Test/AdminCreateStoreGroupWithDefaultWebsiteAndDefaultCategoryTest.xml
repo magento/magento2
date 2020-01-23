@@ -36,12 +36,12 @@
         </actionGroup>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
-        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeCreatedStoreGroupInGrid">
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
         </actionGroup>
 
         <!--Go to store group form page and verify AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm-->
-        <actionGroup ref="AssertStoreGroupForm" stepKey="seeCreatedStoreGroupForm">
+        <actionGroup ref="AssertStoreGroupFormActionGroup" stepKey="seeCreatedStoreGroupForm">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
             <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>

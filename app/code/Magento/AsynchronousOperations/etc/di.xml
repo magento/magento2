@@ -80,6 +80,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\AsynchronousOperations\Model\OperationStatusPool">
+        <arguments>
+            <argument name="statuses" xsi:type="array">
+                <item name="complete" xsi:type="string">1</item>
+                <item name="retriablyFailed" xsi:type="string">2</item>
+                <item name="notRetriablyFailed" xsi:type="string">3</item>
+                <item name="open" xsi:type="string">4</item>
+                <item name="rejected" xsi:type="string">5</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType
             name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
             type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
