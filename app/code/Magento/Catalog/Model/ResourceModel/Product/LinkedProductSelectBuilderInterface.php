@@ -11,6 +11,8 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 interface LinkedProductSelectBuilderInterface
 {
     /**
+     * Build Select objects
+     *
      * @param int $productId
      * @param int $storeId
      * @return \Magento\Framework\DB\Select[]

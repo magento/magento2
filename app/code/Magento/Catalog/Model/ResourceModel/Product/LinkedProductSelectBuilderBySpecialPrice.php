@@ -12,6 +12,10 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
+ * LinkedProductSelectBuilderBySpecialPrice
+ *
+ * Provide Select object for retrieve product id by special price
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBuilderInterface
@@ -88,7 +92,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(int $productId, int $storeId) : array
     {

@@ -193,7 +193,6 @@ class Observer
     protected function _processPrice(\Magento\ProductAlert\Model\Email $email)
     {
         $email->setType('price');
-        echo('price ');
         foreach ($this->_getWebsites() as $website) {
             /* @var $website \Magento\Store\Model\Website */
             if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {

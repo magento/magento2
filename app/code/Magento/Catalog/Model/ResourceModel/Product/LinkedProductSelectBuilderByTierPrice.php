@@ -9,10 +9,19 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 
+/**
+ * LinkedProductSelectBuilderByTierPrice
+ *
+ * Provide Select object for retrieve product id by tier price
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * Default website id
+     *
+     * Constant represents default website id
      */
     const DEFAULT_WEBSITE_ID = 0;
 
@@ -72,7 +81,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(int $productId, int $storeId) : array
     {

@@ -39,7 +39,7 @@ class LinkedProductSelectBuilder implements LinkedProductSelectBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(int $productId, int $storeId) : array
     {

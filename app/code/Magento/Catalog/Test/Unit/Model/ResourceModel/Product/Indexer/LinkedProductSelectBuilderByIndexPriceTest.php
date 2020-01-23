@@ -85,6 +85,7 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
     public function testBuild()
     {
         $productId = 10;
+        $storeId = 1;
         $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -108,6 +109,6 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
         $metadata->expects($this->once())->method('getLinkField')->willReturn('row_id');
         $this->resourceMock->expects($this->any())->method('getTableName');
         $this->baseSelectProcessorMock->expects($this->once())->method('process')->willReturnSelf();
-        $this->model->build($productId);
+        $this->model->build($productId, $storeId);
     }
 }
