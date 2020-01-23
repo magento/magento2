@@ -14,11 +14,11 @@
      attribute-code="<?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
      attribute-id="<?= $block->escapeHtmlAttr($swatchData['attribute_id']) ?>">
     <div class="swatch-attribute-options clearfix">
-        <?php foreach ($swatchData['options'] as $option => $label) : ?>
+        <?php foreach ($swatchData['options'] as $option => $label) :?>
             <a href="<?= $block->escapeUrl($label['link']) ?>" rel="nofollow"
                aria-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                class="swatch-option-link-layered">
-                <?php if (isset($swatchData['swatches'][$option]['type'])) : ?>
+                <?php if (isset($swatchData['swatches'][$option]['type'])) :?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
@@ -33,8 +33,16 @@
                             <?php break;
                         case '2':
                             ?>
-                            <?php $swatchThumbPath = $block->getSwatchPath('swatch_thumb', $swatchData['swatches'][$option]['value']); ?>
-                            <?php $swatchImagePath = $block->getSwatchPath('swatch_image', $swatchData['swatches'][$option]['value']); ?>
+                            <?php $swatchThumbPath = $block->getSwatchPath(
+                                      'swatch_thumb', 
+                                      $swatchData['swatches'][$option]['value']
+                                      ); ?>
+                            <?php $swatchImagePath = $block->getSwatchPath(
+                                      'swatch_image', 
+                                      $swatchData['swatches'][$option]['value']
+                            );
+                           $escapedUrl = $block->escapeUrl($swatchImagePath); 
+                            ?>
                             <div class="swatch-option image <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  option-type="2"
@@ -42,7 +50,10 @@
                                  option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
                                  option-tooltip-value=""
-                                 style="background: url(<?= $block->escapeUrl($swatchImagePath) ?>) no-repeat center; background-size: initial;"></div>
+                                 style="background: url(<?= 
+                                                             $escapedUrl 
+                                                        ?>) no-repeat center; background-size: initial;">
+                            </div>
                             <?php break;
                         case '1':
                             ?>
@@ -52,8 +63,12 @@
                                  option-id="<?= $block->escapeHtmlAttr($option) ?>"
                                  option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  option-tooltip-thumb=""
-                                 option-tooltip-value="<?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>"
-                                 style="background: <?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?> no-repeat center; background-size: initial;"></div>
+                                 option-tooltip-value="<?= $block->escapeHtmlAttr(
+                                                               $swatchData['swatches'][$option]['value']
+                                                               ) ?>"
+                                 style="background: <?= $block->escapeHtmlAttr(
+                                                            $swatchData['swatches'][$option]['value']
+                                                            ) ?> no-repeat center; background-size: initial;"></div>
                             <?php break;
                         case '0':
                         default:

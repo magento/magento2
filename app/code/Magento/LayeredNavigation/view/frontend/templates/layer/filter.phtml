@@ -7,20 +7,18 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php
-/**
- * Template for filter items block
- *
- * @var $block \Magento\LayeredNavigation\Block\Navigation\FilterRenderer
- */
+/** @var $block \Magento\LayeredNavigation\Block\Navigation\FilterRenderer */
+/** @var \Magento\LayeredNavigation\ViewModel\Layer\Filter $viewModel */
+$viewModel = $block->getData('product_layer_view_model');
 ?>
 
 <ol class="items">
-    <?php foreach ($filterItems as $filterItem) : ?>
+    <?php foreach ($filterItems as $filterItem) :?>
         <li class="item">
-            <?php if ($filterItem->getCount() > 0) : ?>
+            <?php if ($filterItem->getCount() > 0) :?>
                 <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>" rel="nofollow">
                     <?= /* @noEscape */ $filterItem->getLabel() ?>
-                    <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
+                    <?php if ($viewModel->shouldDisplayProductCountOnLayer()) : ?>
                         <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
                             <?php if ($filterItem->getCount() == 1) :
                                 ?> <?= $block->escapeHtml(__('item')) ?><?php
@@ -31,11 +29,11 @@
                 </a>
             <?php else :?>
                 <?= /* @noEscape */ $filterItem->getLabel() ?>
-                <?php if ($this->helper(\Magento\Catalog\Helper\Data::class)->shouldDisplayProductCountOnLayer()) : ?>
+                <?php if ($viewModel->shouldDisplayProductCountOnLayer()) : ?>
                     <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
                         <?php if ($filterItem->getCount() == 1) :
                             ?><?= $block->escapeHtml(__('items')) ?><?php
-                        else :
+                        else:
                             ?><?= $block->escapeHtml(__('items')) ?><?php
                         endif;?></span></span>
                 <?php endif; ?>
