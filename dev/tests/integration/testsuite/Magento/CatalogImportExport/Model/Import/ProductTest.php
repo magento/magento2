@@ -33,9 +33,9 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 /**
  * Class ProductTest
@@ -403,7 +403,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $importModel = $this->createImportModel($pathToFile);
         $errors = $importModel->validateData();
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() == 0, 'Import File Validation Failed');
         $importModel->importData();
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -422,20 +422,41 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $actualOptions = $actualData['options'];
             sort($expectedOptions);
             sort($actualOptions);
-            $this->assertEquals($expectedOptions, $actualOptions);
+            $this->assertEquals(
+                $expectedOptions,
+                $actualOptions,
+                'Expected and actual options arrays doesnt match'
+            );
 
             // assert of options data
-            $this->assertCount(count($expectedData['data']), $actualData['data']);
-            $this->assertCount(count($expectedData['values']), $actualData['values']);
+            $this->assertCount(
+                count($expectedData['data']),
+                $actualData['data'],
+                'Expected and actual data count doesnt match'
+            );
+            $this->assertCount(
+                count($expectedData['values']),
+                $actualData['values'],
+                'Expected and actual values count doesnt match'
+            );
+
             foreach ($expectedData['options'] as $expectedId => $expectedOption) {
                 $elementExist = false;
                 // find value in actual options and values
                 foreach ($actualData['options'] as $actualId => $actualOption) {
                     if ($actualOption == $expectedOption) {
                         $elementExist = true;
-                        $this->assertEquals($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
+                        $this->assertEquals(
+                            $expectedData['data'][$expectedId],
+                            $actualData['data'][$actualId],
+                            'Expected data doesnt match actual data'
+                        );
                         if (array_key_exists($expectedId, $expectedData['values'])) {
-                            $this->assertEquals($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
+                            $this->assertEquals(
+                                $expectedData['values'][$expectedId],
+                                $actualData['values'][$actualId],
+                                'Expected values doesnt match actual data'
+                            );
                         }
                         unset($actualData['options'][$actualId]);
                         // remove value in case of duplicating key values
@@ -448,7 +469,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             // Make sure that after importing existing options again, option IDs and option value IDs are not changed
             $customOptionValues = $this->getCustomOptionValues($sku);
             $this->createImportModel($pathToFile)->importData();
-            $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+            $this->assertEquals(
+                $customOptionValues,
+                $this->getCustomOptionValues($sku),
+                'Option IDs changed after second import'
+            );
         }
     }
 
