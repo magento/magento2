@@ -13,25 +13,27 @@ $viewModel = $block->getData('product_layer_view_model');
 ?>
 
 <ol class="items">
-    <?php foreach ($filterItems as $filterItem) :?>
+    <?php foreach ($filterItems as $filterItem): ?>
         <li class="item">
-            <?php if ($filterItem->getCount() > 0) :?>
+            <?php if ($filterItem->getCount() > 0): ?>
                 <a href="<?= $block->escapeUrl($filterItem->getUrl()) ?>" rel="nofollow">
                     <?= /* @noEscape */ $filterItem->getLabel() ?>
-                    <?php if ($viewModel->shouldDisplayProductCountOnLayer()) : ?>
-                        <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
-                            <?php if ($filterItem->getCount() == 1) :
+                    <?php if ($viewModel->shouldDisplayProductCountOnLayer()): ?>
+                        <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?>
+                          <span class="filter-count-label">
+                            <?php if ($filterItem->getCount() == 1):
                                 ?> <?= $block->escapeHtml(__('item')) ?><?php
-                            else :
+                            else:
                                 ?> <?= $block->escapeHtml(__('item')) ?><?php
                             endif;?></span></span>
                     <?php endif; ?>
                 </a>
-            <?php else :?>
+            <?php else: ?>
                 <?= /* @noEscape */ $filterItem->getLabel() ?>
-                <?php if ($viewModel->shouldDisplayProductCountOnLayer()) : ?>
-                    <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?><span class="filter-count-label">
-                        <?php if ($filterItem->getCount() == 1) :
+                <?php if ($viewModel->shouldDisplayProductCountOnLayer()): ?>
+                    <span class="count"><?= /* @noEscape */ (int)$filterItem->getCount() ?>
+                      <span class="filter-count-label">
+                        <?php if ($filterItem->getCount() == 1):
                             ?><?= $block->escapeHtml(__('items')) ?><?php
                         else:
                             ?><?= $block->escapeHtml(__('items')) ?><?php
