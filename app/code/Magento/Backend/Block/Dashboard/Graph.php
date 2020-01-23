@@ -300,6 +300,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $miny = 0;
         $maxy = 0;
         $yorigin = 0;
+        $xAxis = 'x';
+        $xAxisIndex = 0;
         $yAxisIndex = 1;
 
         if ($minvalue >= 0 && $maxvalue >= 0) {
@@ -339,20 +341,11 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $params['chd'] .= $buffer;
 
-        $valueBuffer = [];
-
         if (count($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
-            $indexid = 0;
-            foreach ($this->_axisLabels as $idx => $labels) {
-                if ($idx == 'x') {
-                    $this->formatAxisLabelDate((string)$idx, (string)$timezoneLocal);
-                    $tmpstring = implode('|', $this->_axisLabels[$idx]);
-                    $valueBuffer[] = $indexid . ":|" . $tmpstring;
-                }
-                $indexid++;
-            }
-            $params['chxl'] = implode('|', $valueBuffer);
+            $this->formatAxisLabelDate($xAxis, (string)$timezoneLocal);
+            $customAxisLabels = $xAxisIndex . ":|" . implode('|', $this->_axisLabels[$xAxis]);
+            $params['chxl'] = $customAxisLabels . $dataSetdelimiter;
         }
 
         // chart size
