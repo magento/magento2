@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Autoload;
 
+use InvalidArgumentException;
 use Magento\Framework\Autoload\AutoloaderInterface;
 
 /**
@@ -23,7 +24,7 @@ class AutoloaderRegistry
      * @param AutoloaderInterface $newAutoloader
      * @return void
      */
-    public static function registerAutoloader(AutoloaderInterface $newAutoloader)
+    public static function registerAutoloader(AutoloaderInterface $newAutoloader): void
     {
         self::$autoloader = $newAutoloader;
     }
@@ -31,13 +32,13 @@ class AutoloaderRegistry
     /**
      * Returns the registered autoloader
      *
-     * @throws \Exception
+     * @throws InvalidArgumentException
      * @return AutoloaderInterface
      */
     public static function getAutoloader(): AutoloaderInterface
     {
         if (!self::$autoloader instanceof AutoloaderInterface) {
-            throw new \Exception('Autoloader is not registered, cannot be retrieved.');
+            throw new InvalidArgumentException('Autoloader is not registered, cannot be retrieved.');
         }
 
         return self::$autoloader;
