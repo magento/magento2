@@ -63,28 +63,6 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage Field RemoveCouponFromCartInput.cart_id of required type String! was not provided.
-     */
-    public function testRemoveCouponFromCartIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  removeCouponFromCart(input: {}) {
-    cart {
-      applied_coupon {
-        code
-      }
-    }
-  }
-}
-
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testRemoveCouponFromNonExistentCart()
