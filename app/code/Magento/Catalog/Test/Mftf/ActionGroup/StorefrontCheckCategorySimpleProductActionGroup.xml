@@ -19,9 +19,7 @@
         <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="waitForProduct"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
-        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
-        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
         <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart"/>
     </actionGroup>
 </actionGroups>
