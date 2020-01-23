@@ -128,7 +128,7 @@ class StoreValidatorTest extends TestCase
     }
 
     /**
-     * @inheritDoc
+     * Data provider
      *
      * @return array
      */
