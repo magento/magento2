@@ -80,8 +80,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function getUrlPathDataProvider(): array
     {
         return [
-            'path based on url key uppercase' => ['Url-Key', null, 0, 'url-key'],
-            'path based on url key' => ['url-key', null, 0, 'url-key'],
+            'path based on url key uppercase' => ['Url-Key', null, 1, 'url-key'],
+            'path based on url key' => ['url-key', null, 1, 'url-key'],
             'path based on product name 1' => ['', 'product-name', 1, 'product-name'],
             'path based on product name 2' => [null, 'product-name', 1, 'product-name'],
             'path based on product name 3' => [false, 'product-name', 1, 'product-name']
