@@ -173,6 +173,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     {
         $this->etcDirectory->delete(self::$configFile);
         $this->etcDirectory->copyFile(self::$backupFile, self::$configFile);
+        $this->deploymentConfig->resetData();
     }
 
     /**
