@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Console\Cli;
 
 /**
  * Command to show frontend template hints status
@@ -59,7 +60,7 @@ class TemplateHintsStatusCommand extends Command
         $templateHintsMessage = __("Template hints are %status", ['status' => $templateHintsStatus]);
         $output->writeln("<info>" . $templateHintsMessage . "</info>");
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -67,9 +68,6 @@ class TemplateHintsStatusCommand extends Command
      */
     private function isTemplateHintsEnabled()
     {
-        $result = ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default'))
-            ? true
-            : false;
-        return $result;
+        return ($this->scopeConfig->isSetFlag('dev/debug/template_hints_storefront', 'default'));
     }
 }
