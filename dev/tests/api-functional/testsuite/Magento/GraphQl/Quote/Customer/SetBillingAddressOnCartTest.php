@@ -653,15 +653,6 @@ QUERY;
     public function dataProviderSetWithoutRequiredParameters(): array
     {
         return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
-            ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Field SetBillingAddressOnCartInput.cart_id of required type String! was not provided.'
-            ],
             'missed_region' => [
                 'cart_id: "cart_id_value"
                  billing_address: {
