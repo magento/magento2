@@ -2521,7 +2521,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->addRowError(
                         ValidatorInterface::ERROR_DUPLICATE_URL_KEY,
                         $rowNum,
-                        $rowData[self::URL_KEY],
+                        $urlKey,
                         $message,
                         $errorLevel
                     )
