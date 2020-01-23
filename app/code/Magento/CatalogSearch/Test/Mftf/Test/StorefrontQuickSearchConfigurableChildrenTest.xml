@@ -15,6 +15,7 @@
             <description value="Use Quick Search to find a configurable product with enabled/disable children"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-28374"/>
+            <useCaseId value="MAGETWO-69181"/>
             <group value="catalogSearch"/>
             <group value="mtf_migrated"/>
         </annotations>
