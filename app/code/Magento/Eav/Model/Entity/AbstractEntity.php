@@ -1573,7 +1573,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
-            $connection->insertOnDuplicate($table, $data, ['value']);
+            $connection->insertOnDuplicate($table, $data, array_keys($data[0]));
         }
 
         foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
@@ -1607,7 +1607,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             self::$_attributeBackendTables[$backendTable] = $this->getConnection()->describeTable($backendTable);
         }
         $describe = self::$_attributeBackendTables[$backendTable];
-        return $this->getConnection()->prepareColumnValue($describe['value'], $value);
+        $columnName = $attribute->isStatic() ? $attribute->getAttributeCode() : 'value';
+
+        return $this->getConnection()->prepareColumnValue($describe[$columnName], $value);
     }
 
     /**
