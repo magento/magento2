@@ -477,6 +477,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check that SID is removed from URL.
+     *
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
      *
@@ -485,11 +487,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testSessionUrlVar()
     {
-        $sessionId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Session\Generic::class
-        )->getSessionId();
         $sessionUrl = $this->model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>');
-        $this->assertEquals('<a href="http://example.com/?SID=' . $sessionId . '">www.example.com</a>', $sessionUrl);
+        $this->assertEquals('<a href="http://example.com/">www.example.com</a>', $sessionUrl);
     }
 
     public function testUseSessionIdForUrl()
