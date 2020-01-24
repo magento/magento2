@@ -16,6 +16,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Store\ExecuteInStoreContext;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,9 +35,6 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /** @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var Configurable */
-    private $block;
-
     /** @var LayoutInterface */
     private $layout;
 
@@ -45,6 +43,9 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
 
     /** @var ProductResource */
     private $productResource;
+
+    /** @var ExecuteInStoreContext */
+    private $executeInStoreContext;
 
     /**
      * @inheritdoc
@@ -58,9 +59,9 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
         $this->productRepository->cleanCache();
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $this->block = $this->layout->createBlock(Configurable::class);
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
+        $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
     }
 
     /**
@@ -74,8 +75,12 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      */
     public function testMultiStoreLabelView(array $expectedStoreData, array $expectedSecondStoreData): void
     {
-        $this->assertProductLabelConfigDataPerStore($expectedStoreData);
-        $this->assertProductLabelConfigDataPerStore($expectedSecondStoreData, 'fixturestore', true);
+        $this->executeInStoreContext->execute([$this, 'assertProductLabel'], [$expectedStoreData]);
+        $this->executeInStoreContext->execute(
+            [$this, 'assertProductLabel'],
+            [$expectedSecondStoreData],
+            'fixturestore'
+        );
     }
 
     /**
@@ -112,6 +117,20 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     }
 
     /**
+     * Assert configurable product labels config
+     *
+     * @param $expectedStoreData
+     * @return void
+     */
+    public function assertProductLabel($expectedStoreData): void
+    {
+        $product = $this->productRepository->get('configurable', false, null, true);
+        $config = $this->getBlockConfig($product)['attributes'] ?? null;
+        $this->assertNotNull($config);
+        $this->assertAttributeConfig($expectedStoreData, reset($config));
+    }
+
+    /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_two_websites.php
      *
      * @dataProvider expectedProductDataProvider
@@ -123,8 +142,12 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     public function testMultiStoreOptionsView(array $expectedProducts, array $expectedSecondStoreProducts): void
     {
         $this->prepareConfigurableProduct('configurable', 'fixture_second_store');
-        $this->assertProductConfigPerStore($expectedProducts);
-        $this->assertProductConfigPerStore($expectedSecondStoreProducts, 'fixture_second_store', true);
+        $this->executeInStoreContext->execute([$this, 'assertProductConfig'], [$expectedProducts]);
+        $this->executeInStoreContext->execute(
+            [$this, 'assertProductConfig'],
+            [$expectedSecondStoreProducts],
+            'fixture_second_store'
+        );
     }
 
     /**
@@ -141,6 +164,20 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     }
 
     /**
+     * Assert configurable product config
+     *
+     * @param $expectedProducts
+     * @return void
+     */
+    public function assertProductConfig($expectedProducts): void
+    {
+        $product = $this->productRepository->get('configurable', false, null, true);
+        $config = $this->getBlockConfig($product)['index'] ?? null;
+        $this->assertNotNull($config);
+        $this->assertProducts($expectedProducts, $config);
+    }
+
+    /**
      * Prepare configurable product to test
      *
      * @param string $sku
@@ -150,9 +187,10 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     private function prepareConfigurableProduct(string $sku, string $storeCode): void
     {
         $product = $this->productRepository->get($sku, false, null, true);
-        $productToUpdate = $product->getTypeInstance()->getUsedProductCollection($product)->getFirstItem();
+        $productToUpdate = $product->getTypeInstance()->getUsedProductCollection($product)
+            ->setPageSize(1)->getFirstItem();
         $this->assertNotEmpty($productToUpdate->getData(), 'Configurable product does not have a child');
-        $this->setProductDisabledPerStore($productToUpdate, $storeCode);
+        $this->executeInStoreContext->execute([$this, 'setProductDisabled'], [$productToUpdate], $storeCode);
     }
 
     /**
@@ -162,7 +200,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      * @param array $config
      * @return void
      */
-    private function assertProductConfig(array $expectedProducts, array $config): void
+    private function assertProducts(array $expectedProducts, array $config): void
     {
         $this->assertCount(count($expectedProducts), $config);
         $idsBySkus = $this->productResource->getProductsIdsBySkus($expectedProducts);
@@ -179,102 +217,24 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      * @param string $storeCode
      * @return void
      */
-    private function setProductDisabledPerStore(ProductInterface $product, string $storeCode): void
+    public function setProductDisabled(ProductInterface $product): void
     {
-        $currentStore = $this->storeManager->getStore();
-        try {
-            $this->storeManager->setCurrentStore($storeCode);
-            $product->setStatus(Status::STATUS_DISABLED);
-            $this->productRepository->save($product);
-        } finally {
-            $this->storeManager->setCurrentStore($currentStore);
-        }
-    }
-
-    /**
-     * Assert configurable product config per stores
-     *
-     * @param array $expectedProducts
-     * @param string $storeCode
-     * @param bool $refreshBlock
-     * @return void
-     */
-    private function assertProductConfigPerStore(
-        array $expectedProducts,
-        string $storeCode = 'default',
-        bool $refreshBlock = false
-    ): void {
-        $currentStore = $this->storeManager->getStore();
-        try {
-            if ($currentStore->getCode() !== $storeCode) {
-                $this->storeManager->setCurrentStore($storeCode);
-            }
-            $product = $this->productRepository->get('configurable', false, null, true);
-            $config = $this->getBlockConfig($product, $refreshBlock)['index'] ?? null;
-            $this->assertNotNull($config);
-            $this->assertProductConfig($expectedProducts, $config);
-        } finally {
-            if ($currentStore->getCode() !== $storeCode) {
-                $this->storeManager->setCurrentStore($currentStore);
-            }
-        }
-    }
-
-    /**
-     * Assert configurable product labels config per stores
-     *
-     * @param array $expectedStoreData
-     * @param string $storeCode
-     * @param bool $refreshBlock
-     * @return void
-     */
-    private function assertProductLabelConfigDataPerStore(
-        array $expectedStoreData,
-        string $storeCode = 'default',
-        bool $refreshBlock = false
-    ): void {
-        $currentStore = $this->storeManager->getStore();
-        try {
-            if ($currentStore->getCode() !== $storeCode) {
-                $this->storeManager->setCurrentStore($storeCode);
-            }
-            $product = $this->productRepository->get('configurable', false, null, true);
-            $config = $this->getBlockConfig($product, $refreshBlock)['attributes'] ?? null;
-            $this->assertNotNull($config);
-            $this->assertAttributeConfig($expectedStoreData, reset($config));
-        } finally {
-            if ($currentStore->getCode() !== $storeCode) {
-                $this->storeManager->setCurrentStore($currentStore);
-            }
-        }
-    }
-
-    /**
-     * Get view block
-     *
-     * @param bool $refresh
-     * @return Configurable
-     */
-    private function getBlock(bool $refresh = false): Configurable
-    {
-        if ($refresh) {
-            $this->block = $this->layout->createBlock(Configurable::class);
-        }
-        return $this->block;
+        $product->setStatus(Status::STATUS_DISABLED);
+        $this->productRepository->save($product);
     }
 
     /**
      * Get block config
      *
      * @param ProductInterface $product
-     * @param bool $refreshBlock
      * @return array
      */
-    private function getBlockConfig(ProductInterface $product, bool $refreshBlock): array
+    private function getBlockConfig(ProductInterface $product): array
     {
-        $this->getBlock($refreshBlock)->setProduct($product);
+        $block = $this->layout->createBlock(Configurable::class);
+        $block->setProduct($product);
 
-        return $this->serializer->unserialize($this->getBlock()->getJsonConfig());
+        return $this->serializer->unserialize($block->getJsonConfig());
     }
 
     /**
