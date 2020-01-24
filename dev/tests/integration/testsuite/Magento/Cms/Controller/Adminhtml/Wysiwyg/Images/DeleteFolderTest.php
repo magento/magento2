@@ -7,6 +7,7 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\HttpFactory as ResponseFactory;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder class.
@@ -39,6 +40,11 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     private $filesystem;
 
     /**
+     * @var HttpFactory
+     */
+    private $responseFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -49,6 +55,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+        $this->responseFactory = $objectManager->get(ResponseFactory::class);
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder::class);
     }
 
@@ -83,6 +90,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
      * can be removed.
      *
      * @magentoDataFixture Magento/Cms/_files/linked_media.php
+     * @magentoAppIsolation enabled
      */
     public function testExecuteWithLinkedMedia()
     {
@@ -106,6 +114,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
      * under media directory.
      *
      * @return void
+     * @magentoAppIsolation enabled
      */
     public function testExecuteWithWrongDirectoryName()
     {
@@ -113,6 +122,31 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
         $this->model->execute();
 
+        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+    }
+
+    /**
+     * Execute method to check that there is no ability to remove folder which is in excluded directories list.
+     *
+     * @return void
+     * @magentoAppIsolation enabled
+     */
+    public function testExecuteWithExcludedDirectoryName()
+    {
+        $directoryName = 'downloadable';
+        $expectedResponseMessage = 'We cannot delete directory /downloadable.';
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->create($directoryName);
+        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->getRequest()->setMethod('POST');
+        $jsonResponse = $this->model->execute();
+        $jsonResponse->renderResult($response = $this->responseFactory->create());
+        $data = json_decode($response->getBody(), true);
+
+        $this->assertTrue($data['error']);
+        $this->assertEquals($expectedResponseMessage, $data['message']);
         $this->assertFileExists($this->fullDirectoryPath . $directoryName);
     }
 
@@ -127,6 +161,9 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($directory->isExist('wysiwyg')) {
             $directory->delete('wysiwyg');
+        }
+        if ($directory->isExist('downloadable')) {
+            $directory->delete('downloadable');
         }
     }
 }

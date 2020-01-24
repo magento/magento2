@@ -15,7 +15,7 @@
             <title value="Admin should be able to sell products with different variants of their own"/>
             <description value="Admin should be able to sell products with different variants of their own"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-58184"/>
+            <testCaseId value="MC-16476"/>
             <group value="product"/>
         </annotations>
 
@@ -63,12 +63,12 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView2">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearWebsitesGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
 
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </after>
@@ -196,7 +196,7 @@
 
         <!-- Open Order -->
 
-        <actionGroup ref="filterOrderGridById" stepKey="openOrdersGrid">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="openOrdersGrid">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>

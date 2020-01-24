@@ -48,6 +48,8 @@ class Price extends Extended
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -63,6 +65,8 @@ class Price extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -80,6 +84,8 @@ class Price extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -116,6 +122,8 @@ class Price extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return string
      */
     public function getGridUrl()

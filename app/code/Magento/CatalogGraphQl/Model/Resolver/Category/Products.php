@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -27,27 +30,46 @@ class Products implements ResolverInterface
 
     /**
      * @var Builder
+     * @deprecated
      */
     private $searchCriteriaBuilder;
 
     /**
      * @var Filter
+     * @deprecated
      */
     private $filterQuery;
+
+    /**
+     * @var Search
+     */
+    private $searchQuery;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchApiCriteriaBuilder;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param Builder $searchCriteriaBuilder
      * @param Filter $filterQuery
+     * @param Search $searchQuery
+     * @param SearchCriteriaBuilder $searchApiCriteriaBuilder
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         Builder $searchCriteriaBuilder,
-        Filter $filterQuery
+        Filter $filterQuery,
+        Search $searchQuery = null,
+        SearchCriteriaBuilder $searchApiCriteriaBuilder = null
     ) {
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterQuery = $filterQuery;
+        $this->searchQuery = $searchQuery ?? ObjectManager::getInstance()->get(Search::class);
+        $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder ??
+            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -60,15 +82,20 @@ class Products implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if ($args['currentPage'] < 1) {
+            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+        }
+        if ($args['pageSize'] < 1) {
+            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
+        }
+
         $args['filter'] = [
             'category_id' => [
                 'eq' => $value['id']
             ]
         ];
-        $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
-        $searchCriteria->setCurrentPage($args['currentPage']);
-        $searchCriteria->setPageSize($args['pageSize']);
-        $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
+        $searchCriteria = $this->searchApiCriteriaBuilder->build($args, false);
+        $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
 
         //possible division by 0
         if ($searchCriteria->getPageSize()) {

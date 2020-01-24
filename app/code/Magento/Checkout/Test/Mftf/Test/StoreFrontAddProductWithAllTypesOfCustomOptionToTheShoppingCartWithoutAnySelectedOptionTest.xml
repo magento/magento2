@@ -31,12 +31,13 @@
         </after>
 
         <!-- Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
         <!--Click on Add To Cart button-->
-        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
 
         <!--Assert all types of product options field displayed Required message -->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertRequiredProductOptionField">

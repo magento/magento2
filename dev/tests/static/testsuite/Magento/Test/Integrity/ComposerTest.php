@@ -326,24 +326,15 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertPhpVersionInSync($name, $phpVersion)
     {
         if (isset(self::$rootJson['require']['php'])) {
-            if ($this->isVendorMagento($name)) {
-                $this->assertEquals(
-                    self::$rootJson['require']['php'],
-                    $phpVersion,
-                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-                    . self::$rootJson['require']['php'] . ' in root composer.json'
-                );
-            } else {
-                $composerVersionsPattern = '{\s*\|\|?\s*}';
-                $rootPhpVersions = preg_split($composerVersionsPattern, self::$rootJson['require']['php']);
-                $modulePhpVersions = preg_split($composerVersionsPattern, $phpVersion);
+            $composerVersionsPattern = '{\s*\|\|?\s*}';
+            $rootPhpVersions = preg_split($composerVersionsPattern, self::$rootJson['require']['php']);
+            $modulePhpVersions = preg_split($composerVersionsPattern, $phpVersion);
 
-                $this->assertEmpty(
-                    array_diff($rootPhpVersions, $modulePhpVersions),
-                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-                    . self::$rootJson['require']['php'] . ' in root composer.json'
-                );
-            }
+            $this->assertEmpty(
+                array_diff($rootPhpVersions, $modulePhpVersions),
+                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                . self::$rootJson['require']['php'] . ' in root composer.json'
+            );
         }
     }
 

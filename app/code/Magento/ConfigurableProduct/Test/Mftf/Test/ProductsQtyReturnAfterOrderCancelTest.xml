@@ -49,7 +49,7 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="4" stepKey="fillQuantity"/>
 
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
@@ -66,11 +66,12 @@
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
@@ -82,7 +83,7 @@
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
         <waitForPageLoad stepKey="waitShipmentSectionToLoad"/>
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOption">
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOption">
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
 
@@ -90,7 +91,7 @@
 
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
 
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>

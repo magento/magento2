@@ -35,7 +35,7 @@ class LandingInstaller extends AbstractActionController
     {
         $welcomeMsg = "Welcome to Magento Admin, your online store headquarters.<br>"
             . "Click 'Agree and Set Up Magento' or read ";
-        $docRef = "https://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
+        $docRef = "https://devdocs.magento.com/guides/v2.3/install-gde/install/web/install-web.html";
         $agreeButtonText = "Agree and Setup Magento";
         $view = new ViewModel;
         $view->setTerminal(true);

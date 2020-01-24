@@ -12,8 +12,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 
 /**
@@ -27,27 +27,24 @@ class EntityUrl implements ResolverInterface
     private $urlFinder;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var CustomUrlLocatorInterface
      */
     private $customUrlLocator;
 
     /**
+     * @var int
+     */
+    private $redirectType;
+
+    /**
      * @param UrlFinderInterface $urlFinder
-     * @param StoreManagerInterface $storeManager
      * @param CustomUrlLocatorInterface $customUrlLocator
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        StoreManagerInterface $storeManager,
         CustomUrlLocatorInterface $customUrlLocator
     ) {
         $this->urlFinder = $urlFinder;
-        $this->storeManager = $storeManager;
         $this->customUrlLocator = $customUrlLocator;
     }
 
@@ -65,49 +62,84 @@ class EntityUrl implements ResolverInterface
             throw new GraphQlInputException(__('"url" argument should be specified and not empty'));
         }
 
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $result = null;
         $url = $args['url'];
         if (substr($url, 0, 1) === '/' && $url !== '/') {
             $url = ltrim($url, '/');
         }
+        $this->redirectType = 0;
         $customUrl = $this->customUrlLocator->locateUrl($url);
         $url = $customUrl ?: $url;
-        $urlRewrite = $this->findCanonicalUrl($url);
-        if ($urlRewrite) {
-            if (!$urlRewrite->getEntityId()) {
+        $finalUrlRewrite = $this->findFinalUrl($url, $storeId);
+        if ($finalUrlRewrite) {
+            $relativeUrl = $finalUrlRewrite->getRequestPath();
+            $resultArray = $this->rewriteCustomUrls($finalUrlRewrite, $storeId) ?? [
+                'id' => $finalUrlRewrite->getEntityId(),
+                'canonical_url' => $relativeUrl,
+                'relative_url' => $relativeUrl,
+                'redirectCode' => $this->redirectType,
+                'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
+            ];
+
+            if (empty($resultArray['id'])) {
                 throw new GraphQlNoSuchEntityException(
                     __('No such entity found with matching URL key: %url', ['url' => $url])
                 );
             }
-            $result = [
-                'id' => $urlRewrite->getEntityId(),
-                'canonical_url' => $urlRewrite->getTargetPath(),
-                'relative_url' => $urlRewrite->getTargetPath(),
-                'type' => $this->sanitizeType($urlRewrite->getEntityType())
-            ];
+
+            $result = $resultArray;
         }
         return $result;
     }
 
     /**
-     * Find the canonical url passing through all redirects if any
+     * Handle custom urls with and without redirects
+     *
+     * @param UrlRewrite $finalUrlRewrite
+     * @param int $storeId
+     * @return array|null
+     */
+    private function rewriteCustomUrls(UrlRewrite $finalUrlRewrite, int $storeId): ?array
+    {
+        if ($finalUrlRewrite->getEntityType() === 'custom' || !($finalUrlRewrite->getEntityId() > 0)) {
+            $finalCustomUrlRewrite = clone $finalUrlRewrite;
+            $finalUrlRewrite = $this->findFinalUrl($finalCustomUrlRewrite->getTargetPath(), $storeId, true);
+            $relativeUrl =
+                $finalCustomUrlRewrite->getRedirectType() == 0
+                    ? $finalCustomUrlRewrite->getRequestPath() : $finalUrlRewrite->getRequestPath();
+            return [
+                'id' => $finalUrlRewrite->getEntityId(),
+                'canonical_url' => $relativeUrl,
+                'relative_url' => $relativeUrl,
+                'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),
+                'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
+            ];
+        }
+        return null;
+    }
+
+    /**
+     * Find the final url passing through all redirects if any
      *
      * @param string $requestPath
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @param int $storeId
+     * @param bool $findCustom
+     * @return UrlRewrite|null
      */
-    private function findCanonicalUrl(string $requestPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
     {
-        $urlRewrite = $this->findUrlFromRequestPath($requestPath);
-        if ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
+        $urlRewrite = $this->findUrlFromRequestPath($requestPath, $storeId);
+        if ($urlRewrite) {
+            $this->redirectType = $urlRewrite->getRedirectType();
             while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
-                $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath());
+                $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath(), $storeId);
             }
+        } else {
+            $urlRewrite = $this->findUrlFromTargetPath($requestPath, $storeId);
         }
-        if (!$urlRewrite) {
-            $urlRewrite = $this->findUrlFromTargetPath($requestPath);
-        }
-        if ($urlRewrite && !$urlRewrite->getEntityId() && !$urlRewrite->getIsAutogenerated()) {
-            $urlRewrite = $this->findUrlFromTargetPath($urlRewrite->getTargetPath());
+        if ($urlRewrite && ($findCustom && !$urlRewrite->getEntityId() && !$urlRewrite->getIsAutogenerated())) {
+            $urlRewrite = $this->findUrlFromTargetPath($urlRewrite->getTargetPath(), $storeId);
         }
 
         return $urlRewrite;
@@ -117,14 +149,15 @@ class EntityUrl implements ResolverInterface
      * Find a url from a request url on the current store
      *
      * @param string $requestPath
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @param int $storeId
+     * @return UrlRewrite|null
      */
-    private function findUrlFromRequestPath(string $requestPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function findUrlFromRequestPath(string $requestPath, int $storeId): ?UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
                 'request_path' => $requestPath,
-                'store_id' => $this->storeManager->getStore()->getId()
+                'store_id' => $storeId
             ]
         );
     }
@@ -133,14 +166,15 @@ class EntityUrl implements ResolverInterface
      * Find a url from a target url on the current store
      *
      * @param string $targetPath
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @param int $storeId
+     * @return UrlRewrite|null
      */
-    private function findUrlFromTargetPath(string $targetPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function findUrlFromTargetPath(string $targetPath, int $storeId): ?UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
                 'target_path' => $targetPath,
-                'store_id' => $this->storeManager->getStore()->getId()
+                'store_id' => $storeId
             ]
         );
     }

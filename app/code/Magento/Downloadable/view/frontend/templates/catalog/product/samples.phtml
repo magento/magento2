@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Downloadable product links
  *
@@ -13,11 +11,11 @@
  */
 ?>
 
-<?php if ($block->hasSamples()): ?>
+<?php if ($block->hasSamples()) : ?>
     <dl class="items samples">
         <dt class="item-title samples-item-title"><?= $block->escapeHtml($block->getSamplesTitle()) ?></dt>
         <?php $_samples = $block->getSamples() ?>
-        <?php foreach ($_samples as $_sample): ?>
+        <?php foreach ($_samples as $_sample) : ?>
             <dd class="item samples-item">
                 <a href="<?= $block->escapeHtml($block->getSampleUrl($_sample)) ?>" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
                    class="item-link samples-item-link">

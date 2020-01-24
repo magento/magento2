@@ -279,6 +279,7 @@ class Full extends AbstractAction
         $select = $connection->select();
         $select->distinct(true);
         $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
+        $select->where('type_id = ?', $typeId);
 
         return $this->batchQueryGenerator->generate(
             $this->getProductMetaData()->getIdentifierField(),

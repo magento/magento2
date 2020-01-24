@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Start each property declaration in a new line
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-line-break
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#properties-line-break
  */
 class PropertiesLineBreakSniff implements Sniff
 {

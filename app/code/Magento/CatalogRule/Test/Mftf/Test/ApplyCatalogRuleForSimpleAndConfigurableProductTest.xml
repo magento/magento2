@@ -17,6 +17,9 @@
             <testCaseId value="MC-14770"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-24172"/>
+            </skip>
          </annotations>
         <before>
             <!-- Login as Admin -->
@@ -98,12 +101,12 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
         </after>
         <!-- Begin creating a new catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
                 <argument name ="categoryId" value="$createCategory.id$"/>
         </actionGroup>
 
         <!-- Select not logged in customer group -->
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>

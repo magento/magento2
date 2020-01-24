@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSwitchWebsiteActionGroup">
+        <annotations>
+            <description>Selects the provided Website from the 'Store View' dropdown menu on the Admin Grid pages.</description>
+        </annotations>
         <arguments>
             <argument name="website"/>
         </arguments>
+
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickWebsiteSwitchDropdown"/>
         <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName('Main Website')}}" stepKey="waitForWebsiteAreVisible"/>

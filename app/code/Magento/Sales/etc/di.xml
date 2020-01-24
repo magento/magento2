@@ -116,6 +116,7 @@
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
+    <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -815,14 +816,6 @@
                 <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</item>
                 <item name="shipment_grid" xsi:type="object">ShipmentGridAggregator</item>
                 <item name="creditmemo_grid" xsi:type="object">CreditmemoGridAggregator</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
             </argument>
         </arguments>
     </type>

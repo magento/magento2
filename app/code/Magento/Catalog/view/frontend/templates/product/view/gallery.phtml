@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Product media data template
  *
@@ -14,19 +12,19 @@
 ?>
 
 <?php
-    $images = $block->getGalleryImages()->getItems();
-    $mainImage = current(array_filter($images, function ($img) use ($block) {
-        return $block->isMainImage($img);
-    }));
+$images = $block->getGalleryImages()->getItems();
+$mainImage = current(array_filter($images, function ($img) use ($block) {
+    return $block->isMainImage($img);
+}));
 
-    if (!empty($images) && empty($mainImage)) {
-        $mainImage = $block->getGalleryImages()->getFirstItem();
-    }
+if (!empty($images) && empty($mainImage)) {
+    $mainImage = $block->getGalleryImages()->getFirstItem();
+}
 
-    $helper = $block->getData('imageHelper');
-    $mainImageData = $mainImage ?
-        $mainImage->getData('medium_image_url') :
-        $helper->getDefaultPlaceholderUrl('image');
+$helper = $block->getData('imageHelper');
+$mainImageData = $mainImage ?
+    $mainImage->getData('medium_image_url') :
+    $helper->getDefaultPlaceholderUrl('image');
 
 ?>
 
@@ -43,11 +41,11 @@
         "[data-gallery-role=gallery-placeholder]": {
             "mage/gallery/gallery": {
                 "mixins":["magnifier/magnify"],
-                "magnifierOpts": <?= /* @escapeNotVerified */ $block->getMagnifier() ?>,
-                "data": <?= /* @escapeNotVerified */ $block->getGalleryImagesJson() ?>,
+                "magnifierOpts": <?= /* @noEscape */ $block->getMagnifier() ?>,
+                "data": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
                 "options": <?= /* @noEscape */ $block->getGalleryOptions()->getOptionsJson() ?>,
                 "fullscreen": <?= /* @noEscape */ $block->getGalleryOptions()->getFSOptionsJson() ?>,
-                "breakpoints": <?= /* @escapeNotVerified */ $block->getBreakpoints() ?>
+                 "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
             }
         }
     }

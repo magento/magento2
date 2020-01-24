@@ -12,11 +12,14 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Admin"/>
-            <title value="Customer Checkout"/>
+            <title value="Customer Checkout via the Admin"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5922"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-30111"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -72,6 +75,7 @@
         <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}" />
         <waitForPageLoad stepKey="s831"/>
         <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}" />
+        <waitForPageLoad stepKey="waitForOrderToLoad"/>
         <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
         <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
         <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
@@ -115,15 +119,19 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <!--TODO: REMOVE AFTER FIX MC-21717 -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush full_page" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -147,7 +155,7 @@
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="multiple_address_customer" stepKey="deleteCustomer"/>
@@ -220,6 +228,10 @@
             <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"  />
             <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue" />
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -252,7 +264,7 @@
         <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}" />
         <waitForPageLoad stepKey="waitBillingForm"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
-        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
         <uncheckOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>

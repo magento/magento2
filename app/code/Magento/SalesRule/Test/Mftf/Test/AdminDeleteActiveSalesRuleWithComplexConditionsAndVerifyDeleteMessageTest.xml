@@ -57,6 +57,8 @@
             <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
                 <argument name="rule" value="ActiveSalesRuleWithComplexConditions"/>
             </actionGroup>
+            <generateDate date="+1 minute" format="m/d/Y" stepKey="generateStartDate"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$generateStartDate}" stepKey="fillStartDate"/>
             <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertVerifyCartPriceRuleSuccessSaveMessage"/>
         </before>
         <after>

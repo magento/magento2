@@ -5,16 +5,21 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Admin creates new Store group -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreGroupFormActionGroup">
+        <!-- Admin creates new Store group -->
+        <annotations>
+            <description>Clicks on the 1st row of the Admin Store grid page. Validates that the provided Website, Store Group Name/Code and Root Category are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="website" type="string"/>
             <argument name="storeGroupName" type="string"/>
             <argument name="storeGroupCode" type="string"/>
             <argument name="rootCategory" type="string"/>
         </arguments>
+
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitTillAdminSystemStoreGroupPage"/>
         <seeInField selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website}}" stepKey="seeAssertWebsite"/>

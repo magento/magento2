@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
@@ -11,6 +13,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  * Layer price filter based on Search API
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Price extends AbstractFilter
 {
@@ -138,7 +141,7 @@ class Price extends AbstractFilter
         list($from, $to) = $filter;
 
         $this->getLayer()->getProductCollection()->addFieldToFilter(
-            'price',
+            $this->getAttributeModel()->getAttributeCode(),
             ['from' => $from, 'to' =>  empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA]
         );
 

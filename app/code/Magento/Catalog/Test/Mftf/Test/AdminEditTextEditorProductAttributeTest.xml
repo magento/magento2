@@ -12,21 +12,21 @@
             <features value="Catalog"/>
             <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
             <group value="Catalog"/>
-            <title value="Admin should be able to switch between two versions of TinyMCE"/>
-            <description value="Admin should be able to switch between two versions of TinyMCE"/>
+            <title value="Admin are able to change Input Type of Text Editor product attribute"/>
+            <description value="Admin are able to change Input Type of Text Editor product attribute"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-85745"/>
+            <testCaseId value="MC-6215"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
             <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>
         </before>
-        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
             <argument name="ProductAttribute" value="productAttributeWysiwyg"/>
         </actionGroup>
         <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor" stepKey="seeTextEditorSelected" />
@@ -75,7 +75,7 @@
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="seePoweredBy"/>
         <after>
             <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

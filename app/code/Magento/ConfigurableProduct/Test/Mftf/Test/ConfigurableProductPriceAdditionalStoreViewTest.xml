@@ -19,7 +19,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            
+
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -73,14 +73,14 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+        <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addNewWebsite">
             <argument name="newWebsiteName" value="Second Website"/>
             <argument name="websiteCode" value="second_website"/>
@@ -207,6 +207,6 @@
         <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <see userInput="$$createConfigProduct.name$$" stepKey="assertProductPresent"/>
-        <See userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
+        <see userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
     </test>
 </tests>

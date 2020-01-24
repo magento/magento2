@@ -108,6 +108,13 @@
                 .actions-primary {
                     display: inline-block;
                     vertical-align: middle;
+                    
+                    > .stock.unavailable {
+                        line-height: 1;
+                        padding-bottom: @indent__s;
+                        padding-right: 24px;
+                        padding-top: @indent__s;
+                    }
                 }
             }
 
@@ -123,7 +130,6 @@
                 .reviews-actions {
                     font-size: @font-size__s;
                     margin-top: 5px;
-                    text-transform: lowercase;
                 }
             }
 
@@ -280,6 +286,12 @@
             }
         }
     }
+    
+    .product-item-actions {
+        .actions-primary {
+            display: block;
+        }
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
@@ -293,7 +305,7 @@
                 margin: -10px;
                 padding: 9px;
                 position: relative;
-                z-index: 2;
+                z-index: 9;
 
                 .product-item-inner {
                     display: block;
@@ -361,13 +373,12 @@
                     position: absolute;
                     top: -2px;
                     width: 100%;
-                    z-index: 1;
+                    z-index: -1;
                 }
             }
         }
 
         .product-item-actions {
-            position: relative;
             z-index: 1;
         }
     }
