@@ -5,8 +5,10 @@
  */
 namespace Magento\Catalog\Model\Attribute\Backend;
 
+use Magento\Catalog\Model\AbstractModel;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
-use Magento\Eav\Model\Entity\Attribute\Exception;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 
 /**
  * Layout update attribute backend
@@ -16,18 +18,15 @@ use Magento\Eav\Model\Entity\Attribute\Exception;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
-class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Customlayoutupdate extends AbstractBackend
 {
     /**
-     * Layout update validator factory
-     *
      * @var ValidatorFactory
+     * @deprecated Is not used anymore.
      */
     protected $_layoutUpdateValidatorFactory;
 
     /**
-     * Construct the custom layout update class
-     *
      * @param ValidatorFactory $layoutUpdateValidatorFactory
      */
     public function __construct(ValidatorFactory $layoutUpdateValidatorFactory)
@@ -36,31 +35,95 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     }
 
     /**
-     * Validate the custom layout update
+     * Extract an attribute value.
      *
-     * @param \Magento\Framework\DataObject $object
-     * @return bool
-     * @throws Exception
+     * @param AbstractModel $object
+     * @return mixed
+     */
+    private function extractValue(AbstractModel $object)
+    {
+        $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
+        $value = $object->getData($attributeCode);
+        if (!$value || !is_string($value)) {
+            $value = null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Extract old attribute value.
+     *
+     * @param AbstractModel $object
+     * @return mixed Old value or null.
+     */
+    private function extractOldValue(AbstractModel $object)
+    {
+        if (!empty($object->getId())) {
+            $attr = $this->getAttribute()->getAttributeCode();
+
+            if ($object->getOrigData()) {
+                return $object->getOrigData($attr);
+            }
+
+            $oldObject = clone $object;
+            $oldObject->unsetData();
+            $oldObject->load($object->getId());
+
+            return $oldObject->getData($attr);
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param AbstractModel $object
      */
     public function validate($object)
     {
-        $attributeName = $this->getAttribute()->getName();
-        $xml = trim($object->getData($attributeName));
-
-        if (!$this->getAttribute()->getIsRequired() && empty($xml)) {
-            return true;
+        if (parent::validate($object)) {
+            if ($object instanceof AbstractModel) {
+                $value = $this->extractValue($object);
+                $oldValue = $this->extractOldValue($object);
+                if ($value && $oldValue !== $value) {
+                    throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+                }
+            }
         }
 
-        /** @var $validator \Magento\Framework\View\Model\Layout\Update\Validator */
-        $validator = $this->_layoutUpdateValidatorFactory->create();
-        if (!$validator->isValid($xml)) {
-            $messages = $validator->getMessages();
-            //Add first message to exception
-            $message = array_shift($messages);
-            $eavExc = new Exception(__($message));
-            $eavExc->setAttributeCode($attributeName);
-            throw $eavExc;
-        }
         return true;
+    }
+
+    /**
+     * Put an attribute value.
+     *
+     * @param AbstractModel $object
+     * @param string|null $value
+     * @return void
+     */
+    private function putValue(AbstractModel $object, ?string $value): void
+    {
+        $attributeCode = $this->getAttribute()->getName();
+        if ($object->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {
+            $object->setCustomAttribute($attributeCode, $value);
+        }
+        $object->setData($attributeCode, $value);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param AbstractModel $object
+     * @throws LocalizedException
+     */
+    public function beforeSave($object)
+    {
+        //Validate first, validation might have been skipped.
+        $this->validate($object);
+        $this->putValue($object, $this->extractValue($object));
+
+        return parent::beforeSave($object);
     }
 }

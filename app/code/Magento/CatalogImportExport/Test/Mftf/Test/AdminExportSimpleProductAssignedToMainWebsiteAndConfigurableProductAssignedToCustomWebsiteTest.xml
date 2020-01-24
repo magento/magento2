@@ -77,7 +77,7 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
         </before>
         <after>
             <!-- Delete simple product -->
@@ -91,7 +91,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+            <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
                 <argument name="rowIndex" value="0"/>
             </actionGroup>
             <!-- Log out -->
@@ -103,14 +103,14 @@
         <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Export created below products -->
-        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+        <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
         <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>
         </actionGroup>
     </test>

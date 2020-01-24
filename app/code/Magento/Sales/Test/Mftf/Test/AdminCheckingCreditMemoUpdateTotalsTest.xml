@@ -18,9 +18,6 @@
             <testCaseId value="MC-18159"/>
             <useCaseId value="MC-17003"/>
             <group value="sales"/>
-            <skip>
-                <issueId value="MC-17003"/>
-            </skip>
         </annotations>
         <before>
             <!--Create product-->
@@ -44,9 +41,9 @@
         </actionGroup>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <!--Create invoice-->
-        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
         <!--Submit invoice-->
-        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
         <!--Create Credit Memo-->
         <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">

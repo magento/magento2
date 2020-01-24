@@ -12,12 +12,25 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Resolve data for product canonical URL
  */
 class CanonicalUrl implements ResolverInterface
 {
+    /** @var ProductHelper */
+    private $productHelper;
+
+    /**
+     * @param Product $productHelper
+     */
+    public function __construct(ProductHelper $productHelper)
+    {
+        $this->productHelper = $productHelper;
+    }
+
     /**
      * @inheritdoc
      */
@@ -32,10 +45,14 @@ class CanonicalUrl implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /* @var $product Product */
+        /* @var Product $product */
         $product = $value['model'];
-        $url = $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
-        
-        return $url;
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        if ($this->productHelper->canUseCanonicalTag($store)) {
+            $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
+            return $product->getRequestPath();
+        }
+        return null;
     }
 }
