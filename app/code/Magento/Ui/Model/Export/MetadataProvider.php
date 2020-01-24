@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Model\Export;
 
@@ -83,10 +84,11 @@ class MetadataProvider
      * Returns Columns component
      *
      * @param UiComponentInterface $component
+     *
      * @return UiComponentInterface
      * @throws Exception
      */
-    protected function getColumnsComponent(UiComponentInterface $component)
+    protected function getColumnsComponent(UiComponentInterface $component): UiComponentInterface
     {
         foreach ($component->getChildComponents() as $childComponent) {
             if ($childComponent instanceof Columns) {
@@ -104,7 +106,7 @@ class MetadataProvider
      * @return UiComponentInterface[]
      * @throws Exception
      */
-    protected function getColumns(UiComponentInterface $component)
+    protected function getColumns(UiComponentInterface $component): array
     {
         if (!isset($this->columns[$component->getName()])) {
             $columns = $this->getColumnsComponent($component);
@@ -114,6 +116,7 @@ class MetadataProvider
                 }
             }
         }
+
         return $this->columns[$component->getName()];
     }
 
@@ -125,7 +128,7 @@ class MetadataProvider
      * @return string[]
      * @throws Exception
      */
-    public function getHeaders(UiComponentInterface $component)
+    public function getHeaders(UiComponentInterface $component): array
     {
         $row = [];
         foreach ($this->getColumns($component) as $column) {
@@ -140,15 +143,16 @@ class MetadataProvider
      *
      * @param UiComponentInterface $component
      *
-     * @return array
+     * @return string[]
      * @throws Exception
      */
-    public function getFields(UiComponentInterface $component)
+    public function getFields(UiComponentInterface $component): array
     {
         $row = [];
         foreach ($this->getColumns($component) as $column) {
             $row[] = $column->getName();
         }
+
         return $row;
     }
 
@@ -158,9 +162,10 @@ class MetadataProvider
      * @param DocumentInterface $document
      * @param array $fields
      * @param array $options
-     * @return array
+     *
+     * @return string[]
      */
-    public function getRowData(DocumentInterface $document, $fields, $options)
+    public function getRowData(DocumentInterface $document, $fields, $options): array
     {
         $row = [];
         foreach ($fields as $column) {
@@ -175,6 +180,7 @@ class MetadataProvider
                 $row[] = $document->getCustomAttribute($column)->getValue();
             }
         }
+
         return $row;
     }
 
@@ -184,9 +190,10 @@ class MetadataProvider
      * @param array $list
      * @param string $label
      * @param array $output
+     *
      * @return void
      */
-    protected function getComplexLabel($list, $label, &$output)
+    protected function getComplexLabel($list, $label, &$output): void
     {
         foreach ($list as $item) {
             if (!is_array($item['value'])) {
@@ -228,7 +235,7 @@ class MetadataProvider
      * @return array
      * @throws LocalizedException
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return array_merge(
             $this->getColumnOptions(),
@@ -243,7 +250,7 @@ class MetadataProvider
      * @throws LocalizedException
      * @throws Exception
      */
-    protected function getColumnOptions()
+    protected function getColumnOptions(): array
     {
         $options = [];
         $component = $this->filter->getComponent();
@@ -264,7 +271,7 @@ class MetadataProvider
      * @return array
      * @throws LocalizedException
      */
-    protected function getFilterOptions()
+    protected function getFilterOptions(): array
     {
         $options = [];
         $component = $this->filter->getComponent();
@@ -279,6 +286,7 @@ class MetadataProvider
                 }
             }
         }
+
         return $options;
     }
 
@@ -287,10 +295,11 @@ class MetadataProvider
      *
      * @param DocumentInterface $document
      * @param string $componentName
+     *
      * @return void
      * @throws Exception
      */
-    public function convertDate($document, $componentName)
+    public function convertDate($document, $componentName): void
     {
         if (!isset($this->data[$componentName])) {
             return;
