@@ -326,6 +326,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
 
                 // Save customer
                 if ($customerId) {
+                    $this->customerAccountManagement->validateCustomerStoreIdByWebsiteId($customer);
                     $this->_customerRepository->save($customer);
 
                     $this->getEmailNotification()->credentialsChanged($customer, $currentCustomer->getEmail());
