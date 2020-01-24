@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassProductPriceUpdateTest">
         <annotations>
-            <stories value="Mass product update "/>
+            <stories value="Mass product update"/>
             <features value="Catalog"/>
             <title value="Mass update simple product price"/>
             <description value="Login as admin and update mass product price"/>
@@ -24,8 +24,8 @@
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct2"/>
         </before>
         <after>
-            <deleteData  createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -34,12 +34,12 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!--Search products using keyword -->
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="Testp"/>
         </actionGroup>
 
         <!--Sort Products by ID in descending order-->
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
 
         <!--Select products-->
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct1.sku$$)}}" stepKey="selectFirstProduct"/>
@@ -54,7 +54,13 @@
         <fillField stepKey="fillPrice" selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="90.99"/>
         <click stepKey="clickOnSaveButton" selector="{{AdminEditProductAttributesSection.Save}}"/>
         <waitForPageLoad stepKey="waitForUpdatedProductToSave" />
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 2 record(s) were updated." stepKey="seeAttributeUpateSuccessMsg"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+
+        <!-- Run cron twice -->
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
 
         <!--Verify product name, sku and updated price-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerChangeEmailActionGroup">
+        <annotations>
+            <description>Change the Customer Email Address for a Customer Account via the Storefront Customer Dashboard page.</description>
+        </annotations>
+        <arguments>
+            <argument name="email" type="string"/>
+            <argument name="password" type="string"/>
+        </arguments>
+        
+        <conditionalClick selector="{{StorefrontCustomerSidebarSection.sidebarTab('Account Information')}}" dependentSelector="{{StorefrontCustomerSidebarSection.sidebarTab('Account Information')}}" visible="true" stepKey="openAccountInfoTab"/>
+        <waitForPageLoad stepKey="waitForAccountInfoTabOpened"/>
+        <checkOption selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.email}}" userInput="{{email}}" stepKey="fillEmail"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="{{password}}" stepKey="fillCurrentPassword"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+    </actionGroup>
+</actionGroups>

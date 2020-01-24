@@ -126,6 +126,7 @@
     .box-information,
     .box-newsletter {
         .box-content {
+            .lib-wrap-words();
             &:extend(.abs-account-block-line-height all);
         }
     }
@@ -200,7 +201,7 @@
 
     //  Checkout address (create shipping address)
     .field.street {
-        .field.additional {
+        .field {
             .label {
                 &:extend(.abs-visually-hidden all);
             }

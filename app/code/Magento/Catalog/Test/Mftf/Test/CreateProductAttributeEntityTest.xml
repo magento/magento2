@@ -24,7 +24,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{textProductAttribute.attribute_code}}"/>
             </actionGroup>
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
@@ -37,12 +37,12 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
-        <actionGroup ref="createProductAttributeWithTextField" stepKey="createAttribute">
+        <actionGroup ref="CreateProductAttributeWithTextFieldActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="textProductAttribute"/>
         </actionGroup>
 
         <!--Navigate to Product Attribute.-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
             <argument name="ProductAttribute" value="{{textProductAttribute.attribute_code}}"/>
         </actionGroup>
 
@@ -55,7 +55,7 @@
 
         <!--Go to New Product page, add Attribute and check values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{textProductAttribute.attribute_code}}"/>
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
@@ -83,7 +83,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{dateProductAttribute.attribute_code}}"/>
             </actionGroup>
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
@@ -99,13 +99,13 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
-        <actionGroup ref="createProductAttributeWithDateField" stepKey="createAttribute">
+        <actionGroup ref="CreateProductAttributeWithDateFieldActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="dateProductAttribute"/>
             <argument name="date" value="{$generateDefaultDate}"/>
         </actionGroup>
 
         <!--Navigate to Product Attribute.-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
             <argument name="ProductAttribute" value="{{dateProductAttribute.attribute_code}}"/>
         </actionGroup>
 
@@ -118,7 +118,7 @@
 
         <!--Go to New Product page, add Attribute and check values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{dateProductAttribute.attribute_code}}"/>
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
@@ -143,7 +143,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{priceProductAttribute.attribute_code}}"/>
             </actionGroup>
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
@@ -156,12 +156,12 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute with Price-->
-        <actionGroup ref="createProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="priceProductAttribute"/>
         </actionGroup>
 
         <!--Navigate to Product Attribute.-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
             <argument name="ProductAttribute" value="{{priceProductAttribute.attribute_code}}"/>
         </actionGroup>
 
@@ -173,7 +173,7 @@
 
         <!--Go to New Product page, add Attribute and check values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{priceProductAttribute.attribute_code}}"/>
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
@@ -197,7 +197,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
             </actionGroup>
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
@@ -210,25 +210,25 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
-        <actionGroup ref="createProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="dropdownProductAttribute"/>
         </actionGroup>
 
         <!--Navigate to Product Attribute, add Product Options and Save - 1-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage1">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage1">
             <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOption" stepKey="createOption1">
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption1">
             <argument name="adminName" value="{{dropdownProductAttribute.option1_admin}}"/>
             <argument name="frontName" value="{{dropdownProductAttribute.option1_frontend}}"/>
             <argument name="row" value="1"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOption" stepKey="createOption2">
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption2">
             <argument name="adminName" value="{{dropdownProductAttribute.option2_admin}}"/>
             <argument name="frontName" value="{{dropdownProductAttribute.option2_frontend}}"/>
             <argument name="row" value="2"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOptionAsDefault" stepKey="createOption3">
+        <actionGroup ref="CreateAttributeDropdownNthOptionAsDefaultActionGroup" stepKey="createOption3">
             <argument name="adminName" value="{{dropdownProductAttribute.option3_admin}}"/>
             <argument name="frontName" value="{{dropdownProductAttribute.option3_frontend}}"/>
             <argument name="row" value="3"/>
@@ -236,7 +236,7 @@
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
 
         <!--Perform appropriate assertions against dropdownProductAttribute entity-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPageForAssertions">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPageForAssertions">
             <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
         </actionGroup>
         <seeInField stepKey="assertLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{dropdownProductAttribute.attribute_code}}"/>
@@ -257,15 +257,15 @@
 
         <!--Go to New Product page, add Attribute and check dropdown values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{dropdownProductAttribute.attribute_code}}"/>
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" stepKey="waitforLabel"/>
-        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_frontend}}" stepKey="seeDefaultIsCorrect"/>
-        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option1_frontend}}"/>
-        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option2_frontend}}"/>
-        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_frontend}}"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option1_admin}}"/>
+        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option2_admin}}"/>
+        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_admin}}"/>
     </test>
 
     <test name="CreateProductAttributeEntityDropdownWithSingleQuoteTest">
@@ -284,7 +284,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{dropdownProductAttributeWithQuote.attribute_code}}"/>
             </actionGroup>
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
@@ -297,15 +297,15 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
-        <actionGroup ref="createProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="dropdownProductAttributeWithQuote"/>
         </actionGroup>
 
         <!--Navigate to Product Attribute, add Product Option and Save - 1-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage1">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage1">
             <argument name="ProductAttribute" value="{{dropdownProductAttributeWithQuote.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOptionAsDefault" stepKey="createOption1">
+        <actionGroup ref="CreateAttributeDropdownNthOptionAsDefaultActionGroup" stepKey="createOption1">
             <argument name="adminName" value="{{dropdownProductAttributeWithQuote.option1_admin}}"/>
             <argument name="frontName" value="{{dropdownProductAttributeWithQuote.option1_frontend}}"/>
             <argument name="row" value="1"/>
@@ -313,7 +313,7 @@
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
 
         <!--Perform appropriate assertions against dropdownProductAttribute entity-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPageForAssertions">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPageForAssertions">
             <argument name="ProductAttribute" value="{{dropdownProductAttributeWithQuote.attribute_code}}"/>
         </actionGroup>
         <seeInField stepKey="assertLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{dropdownProductAttributeWithQuote.attribute_code}}"/>
@@ -328,13 +328,13 @@
 
         <!--Go to New Product page, add Attribute and check dropdown values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{dropdownProductAttributeWithQuote.attribute_code}}"/>
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" stepKey="waitforLabel"/>
-        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_frontend}}" stepKey="seeDefaultIsCorrect"/>
-        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_frontend}}"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttributeWithQuote.attribute_code)}}" userInput="{{dropdownProductAttributeWithQuote.option1_admin}}"/>
     </test>
 
     <test name="CreateProductAttributeEntityMultiSelectTest">
@@ -352,7 +352,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage">
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
             </actionGroup>
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
@@ -365,25 +365,25 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
-        <actionGroup ref="createProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="multiselectProductAttribute"/>
         </actionGroup>
 
         <!--Navigate to Product Attribute, add Product Options and Save - 1-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPage1">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage1">
             <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOption" stepKey="createOption1">
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption1">
             <argument name="adminName" value="{{multiselectProductAttribute.option1_admin}}"/>
             <argument name="frontName" value="{{multiselectProductAttribute.option1_frontend}}"/>
             <argument name="row" value="1"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOption" stepKey="createOption2">
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption2">
             <argument name="adminName" value="{{multiselectProductAttribute.option2_admin}}"/>
             <argument name="frontName" value="{{multiselectProductAttribute.option2_frontend}}"/>
             <argument name="row" value="2"/>
         </actionGroup>
-        <actionGroup ref="createAttributeDropdownNthOptionAsDefault" stepKey="createOption3">
+        <actionGroup ref="CreateAttributeDropdownNthOptionAsDefaultActionGroup" stepKey="createOption3">
             <argument name="adminName" value="{{multiselectProductAttribute.option3_admin}}"/>
             <argument name="frontName" value="{{multiselectProductAttribute.option3_frontend}}"/>
             <argument name="row" value="3"/>
@@ -391,7 +391,7 @@
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
 
         <!--Perform appropriate assertions against multiselectProductAttribute entity-->
-        <actionGroup ref="navigateToEditProductAttribute" stepKey="goToEditPageForAssertions">
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPageForAssertions">
             <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
         </actionGroup>
         <seeInField stepKey="assertLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{multiselectProductAttribute.attribute_code}}"/>
@@ -412,14 +412,14 @@
 
         <!--Go to New Product page, add Attribute and check multiselect values-->
         <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
-        <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{multiselectProductAttribute.attribute_code}}"/>
         </actionGroup>
         <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" stepKey="waitforLabel"/>
-        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_frontend}}" stepKey="seeDefaultIsCorrect"/>
-        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option1_frontend}}"/>
-        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option2_frontend}}"/>
-        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_frontend}}"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option1_admin}}"/>
+        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option2_admin}}"/>
+        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option3_admin}}"/>
     </test>
 </tests>

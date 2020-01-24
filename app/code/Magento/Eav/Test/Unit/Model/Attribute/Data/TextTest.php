@@ -9,6 +9,9 @@ namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\StringUtils;
 
+/**
+ * Eav text attribute model test
+ */
 class TextTest extends \PHPUnit\Framework\TestCase
 {
     /**

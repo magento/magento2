@@ -29,17 +29,20 @@
         <!--Create product via admin-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToProductCreatePage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToProductCreatePage">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
-        <actionGroup ref="addProductImage" stepKey="addImageToProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!--Check product in category listing-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
@@ -58,7 +61,7 @@
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectBreadCrumbProduct"/>
 
         <!--Remove product-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
     </test>
@@ -88,6 +91,9 @@
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategory"/>
         </after>
 
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Check product in category listing-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategoryOne.name$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitforCategoryPageToLoad"/>
@@ -111,11 +117,10 @@
         <waitForPageLoad stepKey="waitforCategoryPageToLoad2"/>
 
         <!--Open product display page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="goToProduct2DisplayPage"/>
-        <!--<click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" stepKey="clickProductToGoProductPage"/>-->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityTwo.name)}}" stepKey="clickProductToGoSecondProductPage"/>
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad3"/>
 
-        <!--Veriy the breadcrumbs on Product Display page-->
+        <!--Verify the breadcrumbs on Product Display page-->
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs2"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategoryOne.name$$" stepKey="seeCorrectBreadCrumbCategory2"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productTwo.name$$" stepKey="seeCorrectBreadCrumbProduct2"/>

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,7 +10,7 @@
  */
 ?>
 <div class="admin__field">
-    <label class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Import Service') ?></span></label>
+    <label class="admin__field-label"><span><?= $block->escapeHtml(__('Import Service')) ?></span></label>
     <div class="admin__field-control">
         <?= $block->getChildHtml('import_services') ?>
     </div>

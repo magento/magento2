@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Grouped product data template
  *
@@ -22,55 +20,55 @@
     <table class="table data grouped"
            id="super-product-table"
            data-mage-init='{ "Magento_GroupedProduct/js/product-ids-resolver": {} }'>
-        <caption class="table-caption"><?= /* @escapeNotVerified */ __('Grouped product items') ?></caption>
+        <caption class="table-caption"><?= $block->escapeHtml(__('Grouped product items')) ?></caption>
         <thead>
         <tr>
-            <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
-            <?php if ($_product->isSaleable()): ?>
-                <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
+            <th class="col item" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+            <?php if ($_product->isSaleable()) : ?>
+                <th class="col qty" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
             <?php endif; ?>
         </tr>
         </thead>
 
-        <?php if ($_hasAssociatedProducts): ?>
+        <?php if ($_hasAssociatedProducts) : ?>
         <tbody>
-        <?php foreach ($_associatedProducts as $_item): ?>
+            <?php foreach ($_associatedProducts as $_item) : ?>
             <tr>
                 <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
                     <strong class="product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
-                    <?php if ($block->getCanShowProductPrice($_product)): ?>
-                        <?php if ($block->getCanShowProductPrice($_item)): ?>
-                            <?= /* @escapeNotVerified */ $block->getProductPrice($_item) ?>
+                    <?php if ($block->getCanShowProductPrice($_product)) : ?>
+                        <?php if ($block->getCanShowProductPrice($_item)) : ?>
+                            <?= /* @noEscape */ $block->getProductPrice($_item) ?>
                         <?php endif; ?>
-                     <?php endif; ?>
+                        <?php endif; ?>
                 </td>
-                <?php if ($_product->isSaleable()): ?>
+                <?php if ($_product->isSaleable()) : ?>
                 <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty">
-                <?php if ($_item->isSaleable()) : ?>
+                    <?php if ($_item->isSaleable()) : ?>
                     <div class="control qty">
                         <input type="number"
-                               name="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]"
-                               data-selector="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]"
-                               value="<?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>"
-                               title="<?= /* @escapeNotVerified */ __('Qty') ?>"
+                               name="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
+                               data-selector="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
+                               value="<?= $block->escapeHtmlAttr($_item->getQty() * 1) ?>"
+                               title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
                                class="input-text qty"
                                data-validate="{'validate-grouped-qty':'#super-product-table'}"
                                data-errors-message-box="#validation-message-box"/>
                     </div>
-                <?php else: ?>
-                    <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-                        <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+                <?php else : ?>
+                    <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
                     </div>
                 <?php endif; ?>
                 </td>
                 <?php endif; ?>
             </tr>
-            <?php if ($block->getCanShowProductPrice($_product)
+                <?php if ($block->getCanShowProductPrice($_product)
                 && $block->getCanShowProductPrice($_item)
                 && trim($block->getProductPriceHtml(
                     $_item,
                     \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
-                ))): ?>
+                ))) : ?>
                 <tr class="row-tier-price">
                     <td colspan="2">
                         <?= $block->getProductPriceHtml(
@@ -82,12 +80,12 @@
             <?php endif; ?>
         <?php endforeach; ?>
         </tbody>
-        <?php else: ?>
+        <?php else : ?>
         <tbody>
             <tr>
                 <td class="unavailable"
-                    colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
-                    <?= /* @escapeNotVerified */ __('No options of this product are available.') ?>
+                    colspan="<?php if ($_product->isSaleable()) : ?>4<?php else : ?>3<?php endif; ?>">
+                    <?= $block->escapeHtml(__('No options of this product are available.')) ?>
                 </td>
             </tr>
         </tbody>

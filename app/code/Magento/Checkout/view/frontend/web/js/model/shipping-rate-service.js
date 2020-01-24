@@ -10,7 +10,7 @@ define([
 ], function (quote, defaultProcessor, customerAddressProcessor) {
     'use strict';
 
-    var processors = [];
+    var processors = {};
 
     processors.default =  defaultProcessor;
     processors['customer-address'] = customerAddressProcessor;

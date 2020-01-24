@@ -348,7 +348,7 @@ class CommonTaxCollector extends AbstractTotal
         $useBaseCurrency
     ) {
         $items = $shippingAssignment->getItems();
-        if (!count($items)) {
+        if (empty($items)) {
             return [];
         }
 
@@ -383,6 +383,7 @@ class CommonTaxCollector extends AbstractTotal
                         $priceIncludesTax,
                         $useBaseCurrency
                     );
+                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
                 }
             } else {
@@ -394,6 +395,7 @@ class CommonTaxCollector extends AbstractTotal
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
             }
         }
@@ -478,7 +480,7 @@ class CommonTaxCollector extends AbstractTotal
     {
         $items = $shippingAssignment->getItems();
         $address = $shippingAssignment->getShipping()->getAddress();
-        if (!count($items)) {
+        if (empty($items)) {
             return $this->quoteDetailsDataObjectFactory->create();
         }
 
@@ -592,6 +594,7 @@ class CommonTaxCollector extends AbstractTotal
         $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
         $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
         $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $shippingAssignment->getShipping()->getAddress()->setBaseTaxAmount($baseTax);
 
         return $this;
     }
@@ -688,6 +691,9 @@ class CommonTaxCollector extends AbstractTotal
     {
         //The price should be base price
         $quoteItem->setPrice($baseItemTaxDetails->getPrice());
+        if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
+            $quoteItem->setCustomPrice($baseItemTaxDetails->getPrice());
+        }
         $quoteItem->setConvertedPrice($itemTaxDetails->getPrice());
         $quoteItem->setPriceInclTax($itemTaxDetails->getPriceInclTax());
         $quoteItem->setRowTotal($itemTaxDetails->getRowTotal());
@@ -796,6 +802,7 @@ class CommonTaxCollector extends AbstractTotal
                 'rates' => $rates,
             ];
             if (!empty($extraInfo)) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $appliedTaxArray = array_merge($appliedTaxArray, $extraInfo);
             }
 

@@ -30,7 +30,7 @@
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductEnabledFlat.sku}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -40,7 +40,7 @@
         <!-- Search default simple product in the grid page -->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGrid">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
@@ -62,8 +62,10 @@
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{simpleProductEnabledFlat.weightSelect}}" stepKey="selectProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <waitForPageLoad stepKey="waitForCategory1"/>
         <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductEnabledFlat.visibility}}" stepKey="selectVisibility"/>

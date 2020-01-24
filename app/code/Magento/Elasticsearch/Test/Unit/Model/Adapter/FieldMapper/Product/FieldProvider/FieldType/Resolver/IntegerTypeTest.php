@@ -52,15 +52,18 @@ class IntegerTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getFieldTypeProvider
-     * @param $attributeCode
-     * @param $isIntegerType
-     * @param $isBooleanType
-     * @param $isUserDefined
-     * @param $expected
+     * @param string $attributeCode
+     * @param bool $isIntegerType
+     * @param bool $isBooleanType
+     * @param string|null $expected
      * @return void
      */
-    public function testGetFieldType($attributeCode, $isIntegerType, $isBooleanType, $isUserDefined, $expected)
-    {
+    public function testGetFieldType(
+        string $attributeCode,
+        bool $isIntegerType,
+        bool $isBooleanType,
+        $expected
+    ): void {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'isIntegerType', 'isBooleanType', 'isUserDefined'])
@@ -74,9 +77,6 @@ class IntegerTypeTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())
             ->method('isBooleanType')
             ->willReturn($isBooleanType);
-        $attributeMock->expects($this->any())
-            ->method('isUserDefined')
-            ->willReturn($isUserDefined);
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
             ->willReturn('something');
@@ -93,12 +93,12 @@ class IntegerTypeTest extends \PHPUnit\Framework\TestCase
     public function getFieldTypeProvider()
     {
         return [
-            ['category_ids', true, true, true, null],
-            ['category_ids', false, false, false, null],
-            ['type', true, false, false, 'something'],
-            ['type', false, true, false, 'something'],
-            ['type', true, true, true, ''],
-            ['type', false, false, true, ''],
+            ['category_ids', true, true, 'something'],
+            ['category_ids', false, false, null],
+            ['type', true, false, 'something'],
+            ['type', false, true, 'something'],
+            ['type', true, true, 'something'],
+            ['type', false, false, ''],
         ];
     }
 }

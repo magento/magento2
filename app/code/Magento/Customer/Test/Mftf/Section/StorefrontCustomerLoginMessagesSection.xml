@@ -11,5 +11,6 @@
     <section name="StorefrontCustomerLoginMessagesSection">
         <element name="successMessage" type="text" selector=".message-success"/>
         <element name="errorMessage" type="text" selector=".message-error"/>
+        <element name="messageByType" type="block" selector="#maincontent .message-{{messageType}}" parameterized="true"/>
     </section>
 </sections>

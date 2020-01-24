@@ -26,12 +26,14 @@
 
             <!-- Admin Login-->
             <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- go to bundle product creation page-->
@@ -53,11 +55,11 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
         <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
@@ -66,7 +68,7 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
         <!--Create a basic bundle product-->
-        <actionGroup ref="CreateBasicBundleProduct" stepKey="createBundledProductForTwoSimpleProducts">
+        <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
 

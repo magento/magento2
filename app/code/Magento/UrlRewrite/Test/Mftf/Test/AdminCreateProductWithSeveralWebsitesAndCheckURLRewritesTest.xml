@@ -51,7 +51,7 @@
         </actionGroup>
 
         <!-- Create second store -->
-        <actionGroup ref="CreateCustomStore" stepKey="createCustomStore">
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="$$rootCategory.name$$"/>
@@ -65,15 +65,17 @@
         <!-- Create simple product with categories created in create data -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>
+        <waitForPageLoad stepKey="waitForCategory1"/>
         <click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>
+        <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
@@ -83,12 +85,12 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Grab category Id -->
-        <actionGroup ref="OpenCategoryFromCategoryTree" stepKey="grabCategoryId">
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="grabCategoryId">
             <argument name="category" value="$$category.name$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed category Id -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchPath">
             <argument name="redirectPath" value="$$category.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
@@ -97,12 +99,12 @@
         <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStoreEN.name}}" stepKey="seeStoreViewValueForCategoryId"/>
 
         <!-- Grab product Id -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="grabProductId">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="grabProductId">
             <argument name="productSku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed product Id -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchPath1">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchPath1">
             <argument name="redirectPath" value="$$createProduct.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>

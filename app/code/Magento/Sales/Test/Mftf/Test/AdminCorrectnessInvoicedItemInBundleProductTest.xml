@@ -11,6 +11,7 @@
     <test name="AdminCorrectnessInvoicedItemInBundleProductTest">
         <annotations>
             <features value="Sales"/>
+            <stories value="Product invoice"/>
             <title value="Check correctness of invoiced items in a Bundle Product"/>
             <description value="Check correctness of invoiced items in a Bundle Product"/>
             <severity value="CRITICAL"/>
@@ -52,7 +53,10 @@
 
         <!--Complete Bundle product creation-->
         <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!--Go to bundle product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createCategory.name$$)}}" stepKey="navigateToBundleProductPage"/>
@@ -72,16 +76,16 @@
         <!--Go to order page submit invoice-->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
-        <actionGroup ref="goToInvoiceIntoOrder" stepKey="goToInvoiceIntoOrderPage"/>
+        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="5" stepKey="ChangeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
-        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
         <!--Verify invoiced items qty in ship tab-->
         <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"/>

@@ -160,7 +160,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['websiteRepository' => $websiteRepository,]
+            ['websiteRepository' => $websiteRepository]
         );
         $model->setWebsiteId($websiteId);
 
@@ -181,7 +181,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['websiteRepository' => $websiteRepository,]
+            ['websiteRepository' => $websiteRepository]
         );
         $model->setWebsiteId(null);
 
@@ -207,7 +207,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['groupRepository' => $groupRepository,]
+            ['groupRepository' => $groupRepository]
         );
         $model->setGroupId($groupId);
 
@@ -228,7 +228,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['groupRepository' => $groupRepository,]
+            ['groupRepository' => $groupRepository]
         );
         $model->setGroupId(null);
 
@@ -377,30 +377,31 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $configMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->will($this->returnCallback(
-                function ($path, $scope, $scopeCode) use ($expectedPath) {
-                    return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
-                }
-            ));
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
+                return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
+            });
+        $this->requestMock->expects($this->once())
+            ->method('getServer')
+            ->with('SCRIPT_FILENAME')
+            ->willReturn('test_script.php');
+
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
             [
                 'config' => $configMock,
                 'isCustomEntryPoint' => false,
+                'request' => $this->requestMock
             ]
         );
         $model->setCode('scopeCode');
 
         $this->setUrlModifier($model);
 
-        $server = $_SERVER;
-        $_SERVER['SCRIPT_FILENAME'] = 'test_script.php';
         $this->assertEquals(
             $expectedBaseUrl,
             $model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false)
         );
-        $_SERVER = $server;
     }
 
     /**
@@ -592,7 +593,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['config' => $configMock, 'currencyInstalled' => $currencyPath,]
+            ['config' => $configMock, 'currencyInstalled' => $currencyPath]
         );
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());

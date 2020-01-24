@@ -53,7 +53,7 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode"/>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
@@ -85,6 +85,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">

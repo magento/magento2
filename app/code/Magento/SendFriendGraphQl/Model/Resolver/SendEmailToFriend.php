@@ -7,18 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\SendFriendGraphQl\Model\Resolver;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\DataObjectFactory;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\SendFriend\Model\SendFriend;
-use Magento\SendFriend\Model\SendFriendFactory;
+use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\SendFriend\Helper\Data as SendFriendHelper;
+use Magento\SendFriendGraphQl\Model\SendFriend\SendEmail;
 
 /**
  * @inheritdoc
@@ -26,41 +22,25 @@ use Magento\SendFriend\Model\SendFriendFactory;
 class SendEmailToFriend implements ResolverInterface
 {
     /**
-     * @var SendFriendFactory
+     * @var SendFriendHelper
      */
-    private $sendFriendFactory;
+    private $sendFriendHelper;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var SendEmail
      */
-    private $productRepository;
+    private $sendEmail;
 
     /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $eventManager;
-
-    /**
-     * @param SendFriendFactory $sendFriendFactory
-     * @param ProductRepositoryInterface $productRepository
-     * @param DataObjectFactory $dataObjectFactory
-     * @param ManagerInterface $eventManager
+     * @param SendEmail $sendEmail
+     * @param SendFriendHelper $sendFriendHelper
      */
     public function __construct(
-        SendFriendFactory $sendFriendFactory,
-        ProductRepositoryInterface $productRepository,
-        DataObjectFactory $dataObjectFactory,
-        ManagerInterface $eventManager
+        SendEmail $sendEmail,
+        SendFriendHelper $sendFriendHelper
     ) {
-        $this->sendFriendFactory = $sendFriendFactory;
-        $this->productRepository = $productRepository;
-        $this->dataObjectFactory = $dataObjectFactory;
-        $this->eventManager = $eventManager;
+        $this->sendEmail = $sendEmail;
+        $this->sendFriendHelper = $sendFriendHelper;
     }
 
     /**
@@ -68,75 +48,22 @@ class SendEmailToFriend implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        /** @var SendFriend $sendFriend */
-        $sendFriend = $this->sendFriendFactory->create();
-
-        if ($sendFriend->getMaxSendsToFriend() && $sendFriend->isExceedLimit()) {
-            throw new GraphQlInputException(
-                __('You can\'t send messages more than %1 times an hour.', $sendFriend->getMaxSendsToFriend())
-            );
+        /** @var ContextInterface $context */
+        if (!$this->sendFriendHelper->isAllowForGuest()
+            && false === $context->getExtensionAttributes()->getIsCustomer()
+        ) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-
-        $product = $this->getProduct($args['input']['product_id']);
-        $this->eventManager->dispatch('sendfriend_product', ['product' => $product]);
-        $sendFriend->setProduct($product);
 
         $senderData = $this->extractSenderData($args);
-        $sendFriend->setSender($senderData);
-
         $recipientsData = $this->extractRecipientsData($args);
-        $sendFriend->setRecipients($recipientsData);
 
-        $this->validateSendFriendModel($sendFriend, $senderData, $recipientsData);
-        $sendFriend->send();
-
+        $this->sendEmail->execute(
+            $args['input']['product_id'],
+            $senderData,
+            $recipientsData
+        );
         return array_merge($senderData, $recipientsData);
-    }
-
-    /**
-     * Validate send friend model
-     *
-     * @param SendFriend $sendFriend
-     * @param array $senderData
-     * @param array $recipientsData
-     * @return void
-     * @throws GraphQlInputException
-     */
-    private function validateSendFriendModel(SendFriend $sendFriend, array $senderData, array $recipientsData): void
-    {
-        $sender = $this->dataObjectFactory->create()->setData($senderData['sender']);
-        $sendFriend->setData('_sender', $sender);
-
-        $emails = array_column($recipientsData['recipients'], 'email');
-        $recipients = $this->dataObjectFactory->create()->setData('emails', $emails);
-        $sendFriend->setData('_recipients', $recipients);
-
-        $validationResult = $sendFriend->validate();
-        if ($validationResult !== true) {
-            throw new GraphQlInputException(__(implode($validationResult)));
-        }
-    }
-
-    /**
-     * Get product
-     *
-     * @param int $productId
-     * @return ProductInterface
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getProduct(int $productId): ProductInterface
-    {
-        try {
-            $product = $this->productRepository->getById($productId);
-            if (!$product->isVisibleInCatalog()) {
-                throw new GraphQlNoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
-                );
-            }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        }
-        return $product;
     }
 
     /**

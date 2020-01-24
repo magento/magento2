@@ -19,11 +19,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteVirtualProduct">
+                <argument name="sku" value="{{virtualProductCustomImportOptions.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetOrderFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -113,6 +117,8 @@
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Verify customer see created virtual product with custom options suite and import options(from above step) on storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(virtualProductCustomImportOptions.urlKey)}}" stepKey="goToProductPage"/>
@@ -139,7 +145,7 @@
         </assertEquals>
 
         <!--Verify we see customizable options are Required -->
-        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFistCustomOptionIsRequired" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption1.title)}}" stepKey="verifyFirstCustomOptionIsRequired" />
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomInput(virtualProductCustomizableOption2.title)}}" stepKey="verifySecondCustomOptionIsRequired" />
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption3.title)}}" stepKey="verifyThirdCustomOptionIsRequired" />
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(virtualProductCustomizableOption4.title)}}" stepKey="verifyFourthCustomOptionIsRequired" />

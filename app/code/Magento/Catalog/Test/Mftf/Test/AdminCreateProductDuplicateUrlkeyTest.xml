@@ -23,7 +23,7 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
 
@@ -58,7 +58,7 @@
         </before>
         <after>
             <!--Delete all products by filtering grid and using mass delete action-->
-            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCatalog" />

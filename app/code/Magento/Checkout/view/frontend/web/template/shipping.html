@@ -16,12 +16,14 @@
 
         <!-- Address form pop up -->
         <if args="!isFormInline">
-            <button type="button"
-                    class="action action-show-popup"
-                    click="showFormPopUp"
-                    visible="!isNewAddressAdded()">
-                <span translate="'New Address'" />
-            </button>
+            <div class="new-address-popup">
+                <button type="button"
+                        class="action action-show-popup"
+                        click="showFormPopUp"
+                        visible="!isNewAddressAdded()">
+                    <span translate="'New Address'" />
+                </button>
+            </div>
             <div id="opc-new-shipping-address"
                  visible="isFormPopUpVisible()"
                  render="shippingFormTemplate" />

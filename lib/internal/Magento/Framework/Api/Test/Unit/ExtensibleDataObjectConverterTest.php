@@ -10,6 +10,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\AttributeValue;
 
+/**
+ * Class ExtensibleDataObjectConverterTest
+ */
 class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\Api\ExtensibleDataObjectConverter */
@@ -83,6 +86,17 @@ class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
                     AttributeValue::VALUE => 'custom_attribute_value_skip',
                 ],
             ],
+            'test' => [
+                0 => [
+                    '3rd_attribute_key' => '3rd_attribute_value',
+                    AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY => [
+                        [
+                            AttributeValue::ATTRIBUTE_CODE => 'another_custom_attribute_code',
+                            AttributeValue::VALUE => 'another_custom_attribute_value',
+                        ]
+                    ]
+                ]
+            ]
         ];
 
         $resultArray = [
@@ -92,6 +106,12 @@ class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
                 'custom_attribute_value_multi_1',
                 'custom_attribute_value_multi_2',
             ],
+            'test' => [
+                0 => [
+                    '3rd_attribute_key' => '3rd_attribute_value',
+                    'another_custom_attribute_code' => 'another_custom_attribute_value',
+                ]
+            ]
         ];
 
         $this->processor->expects($this->any())

@@ -117,6 +117,7 @@ class Totals extends Block
      */
     public function getGrandTotalIncludingTax()
     {
+        $this->waitForGrandTotal();
         $priceElement = $this->_rootElement->find($this->grandTotalInclTax, Locator::SELECTOR_CSS);
         return $priceElement->isVisible() ? $this->escapeCurrency($priceElement->getText()) : null;
     }

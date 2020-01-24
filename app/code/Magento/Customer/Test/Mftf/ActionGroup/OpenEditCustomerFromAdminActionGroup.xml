@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="OpenEditCustomerFromAdminActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page. Filters the grid based on the provided Customer. Clicks on Edit.</description>
+        </annotations>
         <arguments>
             <argument name="customer"/>
         </arguments>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
@@ -21,10 +26,15 @@
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
     </actionGroup>
+
     <actionGroup name="OpenEditCustomerAddressFromAdminActionGroup">
+        <annotations>
+            <description>Filters the Admin Customers Addresses based on the provided Address. Clicks on Edit.</description>
+        </annotations>
         <arguments>
             <argument name="address"/>
         </arguments>
+
         <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="openAddressesTab"/>
         <waitForElementVisible selector="{{AdminCustomerAddressFiltersSection.filtersButton}}" stepKey="waitForComponentLoad"/>
         <click selector="{{AdminCustomerAddressFiltersSection.filtersButton}}" stepKey="openAddressesFilter"/>
@@ -36,12 +46,17 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <click selector="{{AdminCustomerAddressGridSection.firstRowSelectActionLink}}" stepKey="clickAction"/>
         <click selector="{{AdminCustomerAddressGridSection.firstRowEditActionLink}}" stepKey="clickEdit"/>
-        <waitForPageLoad stepKey="waitForModalWindow" />
+        <waitForPageLoad stepKey="waitForModalWindow"/>
     </actionGroup>
+
     <actionGroup name="DeleteCustomerFromAdminActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page. Deletes the provided Customer from the grid. Validates that the Success message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="customer" defaultValue="CustomerEntityOne"/>
         </arguments>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{customer.email}}" stepKey="fillSearch"/>
@@ -52,9 +67,14 @@
         <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
         <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
     </actionGroup>
+
     <actionGroup name="AdminClearCustomersFiltersActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page. Clicks on 'Clear Filters'.</description>
+        </annotations>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="amOnCustomersPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>

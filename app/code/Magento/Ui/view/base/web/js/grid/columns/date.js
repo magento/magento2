@@ -9,24 +9,27 @@
 define([
     'mageUtils',
     'moment',
-    './column'
-], function (utils, moment, Column) {
+    './column',
+    'underscore',
+    'moment-timezone-with-data'
+], function (utils, moment, Column, _) {
     'use strict';
 
     return Column.extend({
         defaults: {
-            dateFormat: 'MMM d, YYYY h:mm:ss A'
+            dateFormat: 'MMM d, YYYY h:mm:ss A',
+            calendarConfig: []
         },
 
         /**
-         * Overrides base method to normalize date format.
+         * Overrides base method to normalize date format
          *
-         * @returns {DateColumn} Chainable.
+         * @returns {DateColumn} Chainable
          */
         initConfig: function () {
             this._super();
 
-            this.dateFormat = utils.normalizeDate(this.dateFormat);
+            this.dateFormat = utils.normalizeDate(this.dateFormat ? this.dateFormat : this.options.dateFormat);
 
             return this;
         },
@@ -37,7 +40,17 @@ define([
          * @returns {String} Formatted date.
          */
         getLabel: function (value, format) {
-            var date = moment(this._super());
+            var date;
+
+            if (this.storeLocale !== undefined) {
+                moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
+            }
+
+            date = moment.utc(this._super());
+
+            if (!_.isUndefined(this.timezone)) {
+                date = date.tz(this.timezone);
+            }
 
             date = date.isValid() && value[this.index] ?
                 date.format(format || this.dateFormat) :

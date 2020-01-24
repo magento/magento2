@@ -10,11 +10,13 @@ namespace Magento\GraphQl\Bundle;
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test querying Bundle products
+ */
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
@@ -55,7 +57,7 @@ class BundleProductViewTest extends GraphQlAbstract
               sku              
               options {
                 id
-                qty
+                quantity
                 position
                 is_default
                 price
@@ -80,12 +82,7 @@ QUERY;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
-        $bundleProduct->setId(
-            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         if ((bool)$bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
@@ -108,7 +105,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_not_visible_children.php
      */
-    public function testBundleProdutWithNotVisibleChildren()
+    public function testBundleProductWithNotVisibleChildren()
     {
         $productSku = 'bundle-product-1';
         $query
@@ -140,7 +137,7 @@ QUERY;
               sku              
               options {
                 id
-                qty
+                quantity
                 position
                 is_default
                 price
@@ -179,12 +176,7 @@ QUERY;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
-        $bundleProduct->setId(
-            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         if ((bool)$bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
@@ -235,7 +227,6 @@ QUERY;
             $actualResponse['items'],
             "Precondition failed: 'bundle product items' must not be empty"
         );
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         /** @var OptionList $optionList */
         $optionList = ObjectManager::getInstance()->get(\Magento\Bundle\Model\Product\OptionList::class);
         $options = $optionList->getItems($product);
@@ -246,10 +237,6 @@ QUERY;
         $childProductSku = $bundleProductLink->getSku();
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct = $productRepository->get($childProductSku);
-        /** @var MetadataPool $metadataPool */
-        $childProduct->setId(
-            $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $this->assertEquals(1, count($options));
         $this->assertResponseFields(
             $actualResponse['items'][0],
@@ -266,7 +253,7 @@ QUERY;
             $actualResponse['items'][0]['options'][0],
             [
                 'id' => $bundleProductLink->getId(),
-                'qty' => (int)$bundleProductLink->getQty(),
+                'quantity' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
@@ -425,8 +412,9 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Cannot'. ' ' .
-            'query field "qty" on type "ProductInterface".');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Cannot query field "qty" on type "ProductInterface".'
+        );
         $this->graphQlQuery($query);
     }
 }

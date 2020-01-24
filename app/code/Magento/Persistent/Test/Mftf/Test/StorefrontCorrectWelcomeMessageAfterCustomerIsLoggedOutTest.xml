@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomerForPersistent" stepKey="deleteCustomerForPersistent"/>
         </after>
         <!--Login as a Customer with remember me unchecked-->
-        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeUnChecked" stepKey="loginToStorefrontAccountWithRememberMeUnchecked">
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeUnCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeUnchecked">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
@@ -54,13 +54,13 @@
              stepKey="seeLoggedInCustomerWelcomeMessage"/>
         <!--Logout and check default welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" wait="5" stepKey="seeCustomerSignOutPageUrl"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl"/>
         <see userInput="Default welcome msg!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeDefaultWelcomeMessage"/>
 
         <!--Login as a Customer with remember me checked-->
-        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeChecked" stepKey="loginToStorefrontAccountWithRememberMeChecked">
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeChecked">
             <argument name="Customer" value="$$createCustomerForPersistent$$"/>
         </actionGroup>
         <!--Check customer name and last name in welcome message-->
@@ -71,7 +71,7 @@
 
         <!--Logout and check persistent customer welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout1"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" wait="5" stepKey="seeCustomerSignOutPageUrl1"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl1"/>
         <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seePersistentWelcomeMessage"/>

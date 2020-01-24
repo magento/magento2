@@ -17,11 +17,12 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Helper\Data;
 
 /**
  * Catalog product custom option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Value extends AbstractDb
 {
@@ -52,6 +53,11 @@ class Value extends AbstractDb
     private $localeFormat;
 
     /**
+     * @var Data
+     */
+    private $dataHelper;
+
+    /**
      * Class constructor
      *
      * @param Context $context
@@ -59,17 +65,21 @@ class Value extends AbstractDb
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $config
      * @param string $connectionName
+     * @param Data $dataHelper
      */
     public function __construct(
         Context $context,
         CurrencyFactory $currencyFactory,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $config,
-        $connectionName = null
+        $connectionName = null,
+        Data $dataHelper = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
+        $this->dataHelper = $dataHelper ?: ObjectManager::getInstance()
+            ->get(Data::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -131,7 +141,7 @@ class Value extends AbstractDb
             $optionTypeId = $this->getConnection()->fetchOne($select);
 
             if ($optionTypeId) {
-                if ($object->getStoreId() == '0') {
+                if ($object->getStoreId() == '0' || $this->dataHelper->isPriceGlobal()) {
                     $bind = ['price' => $price, 'price_type' => $priceType];
                     $where = [
                         'option_type_id = ?' => $optionTypeId,

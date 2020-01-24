@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Review\Block\Customer\ListCustomer $block */
 ?>
-<?php if ($block->getReviews() && count($block->getReviews())): ?>
+<?php if ($block->getReviews() && count($block->getReviews())) : ?>
     <div class="table-wrapper reviews">
         <table class="data table table-reviews" id="my-reviews-table">
             <caption class="table-caption"><?= $block->escapeHtml(__('Product Reviews')) ?></caption>
@@ -22,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($block->getReviews() as $review): ?>
+                <?php foreach ($block->getReviews() as $review) : ?>
                 <tr>
                     <td data-th="<?= $block->escapeHtml(__('Created')) ?>" class="col date"><?= $block->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
@@ -31,7 +29,7 @@
                         </strong>
                     </td>
                     <td data-th="<?= $block->escapeHtml(__('Rating')) ?>" class="col summary">
-                    <?php if ($review->getSum()): ?>
+                    <?php if ($review->getSum()) : ?>
                         <div class="rating-summary">
                             <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
                             <div class="rating-result" title="<?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%">
@@ -41,7 +39,7 @@
                     <?php endif; ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Review')) ?>" class="col description">
-                        <?= $this->helper('Magento\Review\Helper\Data')->getDetailHtml($review->getDetail()) ?>
+                        <?= $this->helper(\Magento\Review\Helper\Data::class)->getDetailHtml($review->getDetail()) ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
                         <a href="<?= $block->escapeUrl($block->getReviewUrl($review)) ?>" class="action more">
@@ -53,12 +51,12 @@
             </tbody>
         </table>
     </div>
-    <?php if ($block->getToolbarHtml()): ?>
+    <?php if ($block->getToolbarHtml()) : ?>
         <div class="toolbar products-reviews-toolbar bottom">
             <?= $block->getToolbarHtml() ?>
         </div>
     <?php endif; ?>
-<?php else: ?>
+<?php else : ?>
     <div class="message info empty"><span><?= $block->escapeHtml(__('You have submitted no reviews.')) ?></span></div>
 <?php endif; ?>
 <div class="actions-toolbar">

@@ -105,7 +105,7 @@ class Create extends Block
      *
      * @var string
      */
-    protected $orderMethodsSelector = '#shipping-methods';
+    protected $orderMethodsSelector = '#order-methods';
 
     /**
      * Page header.
