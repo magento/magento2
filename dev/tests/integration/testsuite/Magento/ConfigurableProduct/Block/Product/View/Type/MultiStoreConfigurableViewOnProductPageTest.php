@@ -55,6 +55,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $this->layout->createBlock(Configurable::class);
@@ -68,13 +69,13 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      * @dataProvider expectedLabelsDataProvider
      *
      * @param array $expectedStoreData
-     * @param array $expectedSecondSoreData
+     * @param array $expectedSecondStoreData
      * @return void
      */
-    public function testMultiStoreLabelView(array $expectedStoreData, array $expectedSecondSoreData): void
+    public function testMultiStoreLabelView(array $expectedStoreData, array $expectedSecondStoreData): void
     {
         $this->assertProductLabelConfigDataPerStore($expectedStoreData);
-        $this->assertProductLabelConfigDataPerStore($expectedSecondSoreData, 'fixturestore', true);
+        $this->assertProductLabelConfigDataPerStore($expectedSecondStoreData, 'fixturestore', true);
     }
 
     /**
@@ -85,31 +86,25 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
         return [
             [
                 'options_first_store' => [
-                    [
+                    'simple_option_1_default_store' => [
                         'label' => 'Option 1 Default Store',
-                        'sku' => 'simple_option_1_default_store',
                     ],
-                    [
+                    'simple_option_2_default_store' => [
                         'label' => 'Option 2 Default Store',
-                        'sku' => 'simple_option_2_default_store',
                     ],
-                    [
+                    'simple_option_3_default_store' => [
                         'label' => 'Option 3 Default Store',
-                        'sku' => 'simple_option_3_default_store',
                     ],
                 ],
                 'options_second_store' => [
-                    [
+                    'simple_option_1_default_store' => [
                         'label' => 'Option 1 Second Store',
-                        'sku' => 'simple_option_1_default_store',
                     ],
-                    [
+                    'simple_option_2_default_store' => [
                         'label' => 'Option 2 Second Store',
-                        'sku' => 'simple_option_2_default_store',
                     ],
-                    [
+                    'simple_option_3_default_store' => [
                         'label' => 'Option 3 Second Store',
-                        'sku' => 'simple_option_3_default_store',
                     ],
                 ],
             ],
@@ -184,7 +179,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      * @param string $storeCode
      * @return void
      */
-    private function setProductDisabledPerStore(ProductInterface $product, string $storeCode)
+    private function setProductDisabledPerStore(ProductInterface $product, string $storeCode): void
     {
         $currentStore = $this->storeManager->getStore();
         try {
@@ -291,22 +286,14 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      */
     private function assertAttributeConfig(array $expectedData, array $actualOptions): void
     {
-        $skus = array_column($expectedData, 'sku');
+        $skus = array_keys($expectedData);
         $idBySkuMap = $this->productResource->getProductsIdsBySkus($skus);
-        foreach ($expectedData as &$option) {
-            $sku = $option['sku'];
-            unset($option['sku']);
+        array_walk($actualOptions['options'], function (&$option) {
+            unset($option['id']);
+        });
+        foreach ($expectedData as $sku => &$option) {
             $option['products'] = [$idBySkuMap[$sku]];
-            $found = false;
-            foreach ($actualOptions['options'] as $actualOption) {
-                if ($option['label'] === $actualOption['label']) {
-                    unset($actualOption['id']);
-                    $this->assertEquals($option, $actualOption);
-                    $found = true;
-                    break;
-                }
-            }
-            $this->assertTrue($found, sprintf('The option with %s label is not loaded', $option['label']));
         }
+        $this->assertEquals(array_values($expectedData), $actualOptions['options']);
     }
 }

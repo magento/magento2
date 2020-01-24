@@ -6,21 +6,26 @@
 declare(strict_types=1);
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Registry;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
+/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 /** @var ProductAttributeRepositoryInterface $attributeRepository */
-$attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
+$attributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
 
 try {
-    $attributeRepository->deleteById('different_labels_dropdown_attribute');
+    $attributeRepository->deleteById('different_labels_attribute');
 } catch (NoSuchEntityException $e) {
+    //already deleted
 }
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 

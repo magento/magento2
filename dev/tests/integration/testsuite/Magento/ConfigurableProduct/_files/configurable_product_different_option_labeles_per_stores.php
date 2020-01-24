@@ -23,14 +23,15 @@ require __DIR__ . '/configurable_attribute_different_labels_per_stores.php';
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
-$productAttributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
-$attribute = $productAttributeRepository->get('different_labels_dropdown_attribute');
+$productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
+$attribute = $productAttributeRepository->get('different_labels_attribute');
 $options = $attribute->getOptions();
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var ProductFactory $productFactory */
 $productFactory = $objectManager->get(ProductFactory::class);
 $attributeValues = [];
@@ -46,7 +47,7 @@ foreach ($options as $option) {
         ->setName('Configurable Option ' . $option->getLabel())
         ->setSku(strtolower(str_replace(' ', '_', 'simple ' . $option->getLabel())))
         ->setPrice(150)
-        ->setDifferentLabelsDropdownAttribute($option->getValue())
+        ->setDifferentLabelsAttribute($option->getValue())
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
         ->setCategoryIds([$rootCategoryId])

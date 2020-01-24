@@ -7,24 +7,28 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../Store/_files/core_fixturestore.php';
 
+/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-$storeManager = $objectManager->get(StoreManagerInterface::class);
 $defaultInstalledStoreId = $storeManager->getStore('default')->getId();
 $secondStoreId = $storeManager->getStore('fixturestore')->getId();
-$installer = $objectManager->create(CategorySetup::class);
-$attribute = $objectManager->create(AttributeFactory::class)->create();
-$attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
+/** @var CategorySetup $installer */
+$installer = $objectManager->get(CategorySetup::class);
+/** @var Attribute $attribute */
+$attribute = $objectManager->get(AttributeFactory::class)->create();
+/** @var ProductAttributeRepositoryInterface $attributeRepository */
+$attributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
 $entityType = $installer->getEntityTypeId(ProductAttributeInterface::ENTITY_TYPE_CODE);
-if (!$attribute->loadByCode($entityType, 'different_labels_dropdown_attribute')->getAttributeId()) {
+if (!$attribute->loadByCode($entityType, 'different_labels_attribute')->getAttributeId()) {
     $attribute->setData(
         [
             'frontend_label' => ['Different option labels dropdown attribute'],
@@ -32,7 +36,7 @@ if (!$attribute->loadByCode($entityType, 'different_labels_dropdown_attribute')-
             'frontend_input' => 'select',
             'backend_type' => 'int',
             'is_required' => '0',
-            'attribute_code' => 'different_labels_dropdown_attribute',
+            'attribute_code' => 'different_labels_attribute',
             'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
             'is_user_defined' => 1,
             'is_unique' => '0',
@@ -44,7 +48,7 @@ if (!$attribute->loadByCode($entityType, 'different_labels_dropdown_attribute')-
             'is_html_allowed_on_front' => '1',
             'used_in_product_listing' => '1',
             'used_for_sort_by' => '0',
-            'option'                        => [
+            'option' => [
                 'value' => [
                     'option_1' => [
                         Store::DEFAULT_STORE_ID => 'Option 1',
@@ -70,7 +74,7 @@ if (!$attribute->loadByCode($entityType, 'different_labels_dropdown_attribute')-
             ],
         ]
     );
-    $attribute->save();
+    $attributeRepository->save($attribute);
     $installer->addAttributeToGroup(
         ProductAttributeInterface::ENTITY_TYPE_CODE,
         'Default',

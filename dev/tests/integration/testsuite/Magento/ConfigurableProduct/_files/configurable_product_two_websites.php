@@ -24,7 +24,7 @@ require __DIR__ . '/configurable_attribute.php';
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
-$productAttributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
+$productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
 $attribute = $productAttributeRepository->get('test_configurable');
 $options = $attribute->getOptions();
 /** @var WebsiteRepositoryInterface $websiteRepository */
@@ -32,7 +32,8 @@ $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
 $secondWebsite = $websiteRepository->get('test');
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var ProductFactory $productFactory */
 $productFactory = $objectManager->get(ProductFactory::class);
 $attributeValues = [];
