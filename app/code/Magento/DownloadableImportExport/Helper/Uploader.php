@@ -8,7 +8,7 @@ namespace Magento\DownloadableImportExport\Helper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class Uploader
+ * Uploader helper for downloadable products
  */
 class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -103,6 +103,17 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         return $this->fileUploader;
+    }
+
+    /**
+     * Check a file or directory exists
+     *
+     * @param string $fileName
+     * @return bool
+     */
+    public function isFileExist(string $fileName): bool
+    {
+        return $this->mediaDirectory->isExist($this->fileUploader->getDestDir().$fileName);
     }
 
     /**
