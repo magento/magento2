@@ -378,12 +378,13 @@ class Email extends AbstractModel
                 'customerName' => $customerName,
                 'alertGrid' => $alertGrid,
             ]
-        )->setFrom(
+        )->setFromByScope(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            )
+            ),
+            $storeId
         )->addTo(
             $this->_customer->getEmail(),
             $customerName
