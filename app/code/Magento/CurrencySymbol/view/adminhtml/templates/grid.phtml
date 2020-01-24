@@ -31,7 +31,9 @@
                     ?>
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
+                           <?php //@codingStandardsIgnoreStart ?>
                            onclick="toggleUseDefault(<?= '\'' . $escapedCode . '\',\'' . $escapedSymbol . '\'' ?>)"
+                            <?php //@codingStandardsIgnoreEnd ?>
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
