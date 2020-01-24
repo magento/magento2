@@ -38,6 +38,21 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
     private $baseSelectProcessorMock;
 
     /**
+     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $indexScopeResolverMock;
+
+    /**
+     * @var \Magento\Framework\Indexer\Dimension|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $dimensionMock;
+
+    /**
+     * @var \Magento\Framework\Indexer\DimensionFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $dimensionFactoryMock;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice
      */
     private $model;
