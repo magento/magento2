@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Fedex\Test\Unit\Plugin\Block\Tracking;
 
 use Magento\Fedex\Model\Carrier;
