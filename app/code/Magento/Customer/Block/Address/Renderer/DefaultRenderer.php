@@ -167,7 +167,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
                     $addressAttributes['country_id']
                 )->getName();
             } elseif ($attributeCode == 'region' && isset($addressAttributes['region'])) {
-                $data['region'] = __($addressAttributes['region']);
+                $data['region'] = (string)__($addressAttributes['region']);
             } elseif (isset($addressAttributes[$attributeCode])) {
                 $value = $addressAttributes[$attributeCode];
                 $dataModel = $this->_elementFactory->create($attributeMetadata, $value, 'customer_address');
