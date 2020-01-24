@@ -67,7 +67,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
     public function getProducts(ProductInterface $product)
     {
         $productId = $product->getId();
-        $storeId = $product->getStoreId();
+        $storeId = $product->getStoreId() ?: $this->storeManager->getStore()->getId();
         $key = $storeId . '-' . $productId;
         if (!isset($this->linkedProductMap[$key])) {
             $productIds = $this->resource->getConnection()->fetchCol(
