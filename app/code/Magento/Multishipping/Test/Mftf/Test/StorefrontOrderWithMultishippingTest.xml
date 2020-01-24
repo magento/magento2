@@ -93,14 +93,14 @@
             <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
         </actionGroup>
         <!-- Check status -->
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeFirstOrderPendingStatus"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeFirstOrderPendingStatus"/>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="validateOrderTotalsForFirstOrder"/>
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openSecondOrderPage">
             <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
         </actionGroup>
         <!-- Check status -->
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeSecondOrderPendingStatus"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeSecondOrderPendingStatus"/>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="validateOrderTotalsForSecondOrder"/>
     </test>
 </tests>
