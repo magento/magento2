@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Fedex\Test\Unit\Plugin\Block\DataProviders\Tracking;
 
+use Magento\Fedex\Model\Carrier;
 use Magento\Fedex\Plugin\Block\DataProviders\Tracking\ChangeTitle;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -15,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit Test for @see \Magento\Fedex\Plugin\Block\DataProviders\Tracking\ChangeTitle
+ * Unit Test for @see ChangeTitle
  */
 class ChangeTitleTest extends TestCase
 {
@@ -41,7 +44,7 @@ class ChangeTitleTest extends TestCase
      * @param Phrase|string $finalResult
      * @dataProvider testAfterGetTitleDataProvider
      */
-    public function testAfterGetTitle($carrierCode, $originalResult, $finalResult)
+    public function testAfterGetTitle(string $carrierCode, string $originalResult, $finalResult)
     {
         /** @var DeliveryDateTitle|MockObject $subjectMock */
         $subjectMock = $this->getMockBuilder(DeliveryDateTitle::class)
@@ -67,10 +70,10 @@ class ChangeTitleTest extends TestCase
      *
      * @return array
      */
-    public function testAfterGetTitleDataProvider()
+    public function testAfterGetTitleDataProvider(): array
     {
         return [
-            [\Magento\Fedex\Model\Carrier::CODE, 'Original Title', __('Expected Delivery:')],
+            [Carrier::CODE, 'Original Title', __('Expected Delivery:')],
             ['not-fedex', 'Original Title', 'Original Title'],
         ];
     }
