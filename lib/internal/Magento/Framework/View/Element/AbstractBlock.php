@@ -55,6 +55,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * SID Resolver
      *
      * @var \Magento\Framework\Session\SidResolverInterface
+     * @deprecated Not used anymore.
      */
     protected $_sidResolver;
 
@@ -995,10 +996,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape quotes in java scripts
+     * Escape single quotes/apostrophes ('), or other specified $quote character in javascript
      *
-     * @param string|array $data
+     * @param string|string[]|array $data
      * @param string $quote
+     *
      * @return string|array
      * @deprecated 100.2.0
      */
@@ -1116,18 +1118,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             return $html;
         }
         $loadAction = function () {
-            $cacheKey = $this->getCacheKey();
-            $cacheData = $this->_cache->load($cacheKey);
-            if ($cacheData) {
-                $cacheData = str_replace(
-                    $this->_getSidPlaceholder($cacheKey),
-                    $this->_sidResolver->getSessionIdQueryParam($this->_session)
-                    . '='
-                    . $this->_session->getSessionId(),
-                    $cacheData
-                );
-            }
-            return $cacheData;
+            return $this->_cache->load($this->getCacheKey());
         };
 
         $saveAction = function ($data) {
@@ -1157,11 +1148,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             return false;
         }
         $cacheKey = $this->getCacheKey();
-        $data = str_replace(
-            $this->_sidResolver->getSessionIdQueryParam($this->_session) . '=' . $this->_session->getSessionId(),
-            $this->_getSidPlaceholder($cacheKey),
-            $data
-        );
 
         $this->_cache->save($data, $cacheKey, array_unique($this->getCacheTags()), $this->getCacheLifetime());
         return $this;
