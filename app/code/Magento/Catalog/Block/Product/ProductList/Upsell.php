@@ -232,7 +232,7 @@ class Upsell extends AbstractProduct implements IdentityInterface
      *
      * @param string $type
      * @param int $limit
-     * @return Upsell
+     * @return $this
      */
     public function setItemLimit($type, $limit)
     {
