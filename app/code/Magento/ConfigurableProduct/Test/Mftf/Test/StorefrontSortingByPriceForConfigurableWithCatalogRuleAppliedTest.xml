@@ -12,11 +12,14 @@
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="View soting by price in storefront"/>
-            <title value="Sorting by price for Configurable with Catalog Rule applied"/>
+            <title value="DEPRECATED. Sorting by price for Configurable with Catalog Rule applied"/>
             <description value="Sort by price should be correct if the apply Catalog Rule to child product of configurable product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69988"/>
             <group value="configurable_product"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontCheckSortingByPriceForConfigurableWithCatalogRuleAppliedTest instead.</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
