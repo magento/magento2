@@ -5,11 +5,9 @@
  */
 declare(strict_types=1);
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\ConfigurableProduct\Model\DeleteConfigurableProduct;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var DeleteConfigurableProduct $deleteConfigurableProduct */
 $deleteConfigurableProduct = $objectManager->get(DeleteConfigurableProduct::class);

@@ -14,14 +14,12 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
 require __DIR__ . '/configurable_attribute.php';
 
-/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
 $productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);

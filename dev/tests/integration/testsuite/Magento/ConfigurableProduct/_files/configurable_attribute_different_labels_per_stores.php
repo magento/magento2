@@ -11,13 +11,11 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../Store/_files/core_fixturestore.php';
 
-/** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 $defaultInstalledStoreId = $storeManager->getStore('default')->getId();
 $secondStoreId = $storeManager->getStore('fixturestore')->getId();
