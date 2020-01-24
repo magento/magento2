@@ -44,3 +44,5 @@ Layouts,Layouts
 "Compiled Config","Compiled Config"
 "Compilation configuration","Compilation configuration"
 "The website ID "%1" wasn't found. Verify the website and try again.","The website ID "%1" wasn't found. Verify the website and try again."
+"The group ID "%1" wasn't found. Verify the group and try again.","The group ID "%1" wasn't found. Verify the group and try again."
+"The store ID "%1" wasn't found. Verify the store and try again.","The store ID "%1" wasn't found. Verify the store and try again."
