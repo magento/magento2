@@ -27,12 +27,6 @@
             <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.enabled}}" stepKey="enableFreeShippingMethod" />
             <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.hundred}}" stepKey="setFreeShippingMethodMinimumOrderAmountToBe100" />
 
-            <!--Set Fedex configs data-->
-            <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} {{AdminFedexEnableForCheckoutConfigData.value}}" stepKey="enableCheckout"/>
-            <magentoCLI command="config:set {{AdminFedexEnableSandboxModeConfigData.path}} {{AdminFedexEnableSandboxModeConfigData.value}}" stepKey="enableSandbox"/>
-            <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
-            <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
-
             <!--Set StoreInformation configs data-->
             <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
             <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.telephone}}" stepKey="setStoreInformationPhone"/>
@@ -75,10 +69,6 @@
             <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault" />
             <magentoCLI command="config:set {{AdminFreeshippingActiveConfigData.path}} {{AdminFreeshippingActiveConfigData.disabled}}" stepKey="disableFreeShippingMethod" />
             <!--Reset configs-->
-            <magentoCLI command="config:set {{AdminFedexDisableForCheckoutConfigData.path}} {{AdminFedexDisableForCheckoutConfigData.value}}" stepKey="disableCheckout"/>
-            <magentoCLI command="config:set {{AdminFedexDisableSandboxModeConfigData.path}} {{AdminFedexDisableSandboxModeConfigData.value}}" stepKey="disableSandbox"/>
-            <magentoCLI command="config:set {{AdminFedexDisableDebugConfigData.path}} {{AdminFedexDisableDebugConfigData.value}}" stepKey="disableDebug"/>
-            <magentoCLI command="config:set {{AdminFedexDisableShowMethodConfigData.path}} {{AdminFedexDisableShowMethodConfigData.value}}" stepKey="disableShowMethod"/>
             <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} ''" stepKey="setStoreInformationName"/>
             <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} ''" stepKey="setStoreInformationPhone"/>
             <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} ''" stepKey="setStoreInformationCity"/>
@@ -187,7 +177,7 @@
         <!-- Assert Shipping total is not yet calculated -->
         <actionGroup ref="AssertStorefrontNotCalculatedValueInShippingTotalInOrderSummaryActionGroup" stepKey="assertNotYetCalculated2"/>
 
-        <!--  Assert order cannot be placed and error message will shown. -->
+        <!-- Assert order cannot be placed and error message will shown. -->
         <actionGroup ref="AssertStorefrontOrderCannotBePlacedActionGroup" stepKey="assertOrderCannotBePlaced2">
             <argument name="error" value="The shipping method is missing. Select the shipping method and try again."/>
         </actionGroup>
