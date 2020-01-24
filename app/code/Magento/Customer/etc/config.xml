@@ -12,6 +12,7 @@
                 <scope>1</scope>
             </account_share>
             <create_account>
+                <auto_group_assign>0</auto_group_assign>
                 <confirm>0</confirm>
                 <default_group>1</default_group>
                 <tax_calculation_address_type>billing</tax_calculation_address_type>
@@ -20,7 +21,9 @@
                 <email_no_password_template>customer_create_account_email_no_password_template</email_no_password_template>
                 <email_confirmation_template>customer_create_account_email_confirmation_template</email_confirmation_template>
                 <email_confirmed_template>customer_create_account_email_confirmed_template</email_confirmed_template>
+                <viv_disable_auto_group_assign_default>0</viv_disable_auto_group_assign_default>
                 <vat_frontend_visibility>0</vat_frontend_visibility>
+                <generate_human_friendly_id>0</generate_human_friendly_id>
             </create_account>
             <default>
                 <group>1</group>
@@ -49,6 +52,7 @@
                 <suffix_show />
                 <suffix_options />
                 <dob_show />
+                <taxvat_show />
                 <gender_show />
                 <telephone_show>req</telephone_show>
                 <company_show>opt</company_show>
