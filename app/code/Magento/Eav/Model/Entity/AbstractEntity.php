@@ -1021,6 +1021,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected function loadAttributesMetadata($attributes)
     {
         $this->loadAttributesForObject($attributes);
+
+        return $this;
     }
 
     /**
@@ -1433,8 +1435,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $insertEntity = true;
         $entityTable = $this->getEntityTable();
         $entityIdField = $this->getEntityIdField();
+        // phpstan:ignore "Undefined variable"
         $entityId = $newObject->getId();
 
+        // phpstan:ignore "Undefined variable"
         unset($entityRow[$entityIdField]);
         if (!empty($entityId) && is_numeric($entityId)) {
             $bind = ['entity_id' => $entityId];
@@ -1450,6 +1454,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Process base row
          */
+        // phpstan:ignore "Undefined variable"
         $entityObject = new DataObject($entityRow);
         $entityRow = $this->_prepareDataForTable($entityObject, $entityTable);
         if ($insertEntity) {
@@ -1460,6 +1465,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $connection->insert($entityTable, $entityRow);
                 $entityId = $connection->lastInsertId($entityTable);
             }
+            // phpstan:ignore "Undefined variable"
             $newObject->setId($entityId);
         } else {
             $where = sprintf('%s=%d', $connection->quoteIdentifier($entityIdField), $entityId);
@@ -1472,6 +1478,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!empty($insert)) {
             foreach ($insert as $attributeId => $value) {
                 $attribute = $this->getAttribute($attributeId);
+                // phpstan:ignore "Undefined variable"
                 $this->_insertAttribute($newObject, $attribute, $value);
             }
         }
@@ -1482,6 +1489,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!empty($update)) {
             foreach ($update as $attributeId => $v) {
                 $attribute = $this->getAttribute($attributeId);
+                // phpstan:ignore "Undefined variable"
                 $this->_updateAttribute($newObject, $attribute, $v['value_id'], $v['value']);
             }
         }
@@ -1491,12 +1499,14 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
          */
         if (!empty($delete)) {
             foreach ($delete as $table => $values) {
+                // phpstan:ignore "Undefined variable"
                 $this->_deleteAttributes($newObject, $table, $values);
             }
         }
 
         $this->_processAttributeValues();
 
+        // phpstan:ignore "Undefined variable"
         $newObject->isObjectNew(false);
 
         return $this;
