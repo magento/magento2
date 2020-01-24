@@ -38,7 +38,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var Page
@@ -166,11 +166,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 5.99,
                 10,
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 1,
-                        'value' => 9
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 9],
                 ],
                 null
             ],
@@ -178,43 +174,23 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 5.99,
                 10,
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 2,
-                        'value' => 5
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'value' => 5],
                 ],
-                [
-                    'qty' => 2,
-                    'price' => 5.00,
-                    'percent' => 17,
-                ],
+                ['qty' => 2, 'price' => 5.00, 'percent' => 17],
             ],
             'percent_tier_price_with_qty_2' => [
                 5.99,
                 10,
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 2,
-                        'percent_value' => 70
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70],
                 ],
-                [
-                    'qty' => 2,
-                    'price' => 3.00,
-                    'percent' => 70,
-                ],
+                ['qty' => 2, 'price' => 3.00, 'percent' => 70],
             ],
             'fixed_tier_price_with_qty_1_is_lower_than_special' => [
                 5,
                 10,
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 1,
-                        'value' => 5
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 5],
                 ],
                 null
             ],
@@ -222,11 +198,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 3,
                 10,
                 [
-                    [
-                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
-                        'qty' => 1,
-                        'percent_value' => 70
-                    ],
+                    ['customer_group_id' => Group::NOT_LOGGED_IN_ID, 'qty' => 1, 'percent_value' => 70],
                 ],
                 null
             ],
@@ -276,11 +248,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 5.99,
                 10,
                 [
-                    [
-                        'customer_group_id' => 1,
-                        'qty' => 1,
-                        'value' => 9
-                    ],
+                    ['customer_group_id' => 1, 'qty' => 1, 'value' => 9],
                 ],
                 null
             ],
@@ -288,11 +256,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 5.99,
                 10,
                 [
-                    [
-                        'customer_group_id' => 1,
-                        'qty' => 1,
-                        'percent_value' => 30
-                    ],
+                    ['customer_group_id' => 1, 'qty' => 1, 'percent_value' => 30],
                 ],
                 null
             ],
@@ -329,8 +293,6 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     /**
      * Data provider with expect special and regular price, catalog rule data and tier price.
      *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
      * @return array
      */
     public function catalogRulesDataProvider(): array
@@ -340,9 +302,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 5.99,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 2,
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 2],
                 ],
                 [],
                 null
@@ -351,9 +311,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 2,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 8,
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 8],
                 ],
                 [],
                 null
@@ -362,37 +320,21 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 4,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 6,
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 6],
                 ],
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 2,
-                        'percent_value' => 70
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70],
                 ],
-                [
-                    'qty' => 2,
-                    'price' => 3.00,
-                    'percent' => 70,
-                ],
+                ['qty' => 2, 'price' => 3.00, 'percent' => 70],
             ],
             'fixed_catalog_rule_price_lower_than_tier_price' => [
                 2,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 7,
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 7],
                 ],
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 1,
-                        'value' => 2
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 2],
                 ],
                 null
             ],
@@ -400,10 +342,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 4.50,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 45,
-                        RuleInterface::SIMPLE_ACTION => 'to_percent',
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 45, RuleInterface::SIMPLE_ACTION => 'to_percent'],
                 ],
                 [],
                 null
@@ -412,17 +351,10 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 3,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 30,
-                        RuleInterface::SIMPLE_ACTION => 'to_percent',
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 30, RuleInterface::SIMPLE_ACTION => 'to_percent'],
                 ],
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 1,
-                        'value' => 3.50
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 3.50],
                 ],
                 null
             ],
@@ -430,10 +362,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 2,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 2,
-                        RuleInterface::SIMPLE_ACTION => 'to_fixed',
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 2, RuleInterface::SIMPLE_ACTION => 'to_fixed'],
                 ],
                 [],
                 null
@@ -442,17 +371,10 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 1,
                 10,
                 [
-                    [
-                        RuleInterface::DISCOUNT_AMOUNT => 1,
-                        RuleInterface::SIMPLE_ACTION => 'to_fixed',
-                    ],
+                    [RuleInterface::DISCOUNT_AMOUNT => 1, RuleInterface::SIMPLE_ACTION => 'to_fixed'],
                 ],
                 [
-                    [
-                        'customer_group_id' => Group::CUST_GROUP_ALL,
-                        'qty' => 1,
-                        'value' => 3
-                    ],
+                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 3],
                 ],
                 null
             ],
@@ -465,6 +387,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param string $priceHtml
      * @param float $specialPrice
      * @param float $regularPrice
+     * @return void
      */
     private function checkPrices(string $priceHtml, float $specialPrice, float $regularPrice): void
     {
@@ -490,6 +413,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      *
      * @param string $priceHtml
      * @param array $tierMessageConfig
+     * @return void
      */
     private function checkTierPriceMessage(string $priceHtml, array $tierMessageConfig): void
     {
@@ -529,6 +453,8 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Add product to the registry.
+     *
      * @param ProductInterface $product
      * @return void
      */
@@ -539,6 +465,8 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Create provided tier prices for product.
+     *
      * @param ProductInterface $product
      * @param array $tierPrices
      * @return ProductInterface
@@ -549,11 +477,10 @@ class CombinationWithDifferentTypePricesTest extends TestCase
             return $product;
         }
 
-        $adminWebsite = $this->websiteRepository->get('admin');
         $createdTierPrices = [];
         foreach ($tierPrices as $tierPrice) {
             $tierPriceExtensionAttribute = $this->productTierPriceExtensionFactory->create();
-            $tierPriceExtensionAttribute->setWebsiteId($adminWebsite->getId());
+            $tierPriceExtensionAttribute->setWebsiteId(0);
 
             if (isset($tierPrice['percent_value'])) {
                 $tierPriceExtensionAttribute->setPercentageValue($tierPrice['percent_value']);
@@ -618,6 +545,9 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Return tier price message xpath. Message must contain expected quantity,
+     * price and discount percent.
+     *
      * @param array $expectedMessage
      * @return string
      */
@@ -640,6 +570,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param float $regularPrice
      * @param array $tierPrices
      * @param array|null $tierMessageConfig
+     * @return void
      */
     private function processCheckRenderedPrices(
         float $specialPrice,
@@ -657,6 +588,8 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Create provided catalog rules.
+     *
      * @param array $catalogRules
      * @return void
      */
