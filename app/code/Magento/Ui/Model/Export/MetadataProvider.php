@@ -256,9 +256,11 @@ class MetadataProvider
         $component = $this->filter->getComponent();
         /** @var Column $columnComponent */
         foreach ($this->getColumns($component) as $columnComponent) {
-            /** @var OptionSourceInterface $options */
-            if ($optionSource = $columnComponent->getData('options')) {
-                $options[$columnComponent->getName()] = $this->getOptionsArray($optionSource->toOptionArray());
+            if ($columnComponent->hasData('options')) {
+                $optionSource = $columnComponent->getData('options');
+                $optionsArray = $optionSource instanceof OptionSourceInterface ?
+                    $optionSource->toOptionArray() : $optionSource;
+                $options[$columnComponent->getName()] = $this->getOptionsArray($optionsArray);
             }
         }
 
