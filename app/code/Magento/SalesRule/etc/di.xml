@@ -13,7 +13,7 @@
     <preference for="Magento\SalesRule\Api\Data\ConditionInterface"
                 type="Magento\SalesRule\Model\Data\Condition" />
     <preference for="Magento\SalesRule\Api\Data\RuleSearchResultInterface"
-                type="Magento\SalesRule\Model\RuleSearchResult" />
+                type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\SalesRule\Api\Data\RuleLabelInterface"
                 type="Magento\SalesRule\Model\Data\RuleLabel" />
     <preference for="Magento\SalesRule\Api\Data\CouponInterface"
@@ -23,7 +23,7 @@
     <preference for="Magento\SalesRule\Model\Spi\CouponResourceInterface"
                 type="Magento\SalesRule\Model\ResourceModel\Coupon" />
     <preference for="Magento\SalesRule\Api\Data\CouponSearchResultInterface"
-                type="Magento\SalesRule\Model\CouponSearchResult" />
+                type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\SalesRule\Api\Data\CouponGenerationSpecInterface"
                 type="Magento\SalesRule\Model\Data\CouponGenerationSpec" />
     <preference for="Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface"
@@ -34,6 +34,8 @@
                 type="Magento\SalesRule\Model\Data\RuleDiscount" />
     <preference for="Magento\SalesRule\Api\Data\DiscountDataInterface"
                 type="Magento\SalesRule\Model\Data\DiscountData" />
+    <preference for="Magento\SalesRule\Model\Spi\RuleQuoteRecollectTotalsInterface"
+                type="\Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsOnDemand" />
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">
