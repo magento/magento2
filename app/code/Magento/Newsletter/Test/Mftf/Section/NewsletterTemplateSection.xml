@@ -9,7 +9,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="BasicFrontendNewsletterFormSection">
         <element name="newsletterEmail" type="input" selector="#newsletter"/>
-        <element name="subscribeButton" type="button" selector=".subscribe"/>
+        <element name="subscribeButton" type="button" selector=".subscribe" timeout="30"/>
+        <element name="subscribeForm" type="input" selector="#newsletter-validate-detail" timeout="30"/>
     </section>
     <section name="BasicFieldNewsletterSection">
         <element name="templateName" type="input" selector="#code"/>

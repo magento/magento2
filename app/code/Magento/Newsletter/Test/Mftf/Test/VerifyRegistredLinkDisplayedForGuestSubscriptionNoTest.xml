@@ -17,10 +17,6 @@
             <!--Log out from Magento admin.-->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </before>
-
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <fillField selector="{{BasicFrontendNewsletterFormSection.newsletterEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillTemplateEmail" />
-        <click selector="{{BasicFrontendNewsletterFormSection.subscribeButton}}" stepKey="subscribe"/>
-        <waitForElement selector=".messages" stepKey="waitMessage"/>
+        <actionGroup ref="StorefrontCreateNewSubscriberActionGroup" stepKey="createSubscriber"/>
     </test>
 </tests>

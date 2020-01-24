@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewsletterConfigPageSubscriptionOptionsSection">
-        <element name="allowGuestSubscription" type="input" selector="#newsletter_subscription_allow_guest_subscribe_inherit"/>
+        <element name="allowGuestSubscription" type="checkbox" selector="input[name='groups[subscription][fields][allow_guest_subscribe][inherit]']" timeout="30"/>
         <element name="guestSubscription" type="select" selector="#newsletter_subscription_allow_guest_subscribe" timeout="30"/>
     </section>
 </sections>
