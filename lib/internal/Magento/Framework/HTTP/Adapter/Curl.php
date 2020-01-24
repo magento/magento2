@@ -177,7 +177,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
         } elseif ($method == \Zend_Http_Client::DELETE) {
-            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         }
 
