@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ */
+?>
+<div class="dashboard-diagram">
+    <div class="dashboard-diagram-graph">
+        <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"
+                style="display: none;"></canvas>
+        <div class="dashboard-diagram-nodata">
+            <span><?= $escaper->escapeHtml(__('No Data Found')) ?></span>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "#chart_<?= $escaper->escapeJs($block->getData('html_id')) ?>_period": {
+            "Magento_Backend/js/dashboard/chart": {
+                "updateUrl": "<?= $escaper->escapeUrl($block->getUrl($block->getData('update_url'), [
+                    '_current' => true
+                ])) ?>",
+                "periodSelect": "#dashboard_chart_period",
+                "type": "<?= $escaper->escapeJs($block->getData('html_id')) ?>"
+            }
+        }
+    }
+    </script>
+</div>
