@@ -14,4 +14,7 @@
         <data key="content">Here is a block test. Yeah!</data>
         <data key="active">true</data>
     </entity>
+    <entity name="BlockDataWithMarginalSpace" extends="_defaultBlock">
+        <data key="identifier" unique="suffix"> block </data>
+    </entity>
 </entities>

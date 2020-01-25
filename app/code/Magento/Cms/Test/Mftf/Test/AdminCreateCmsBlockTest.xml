@@ -49,4 +49,30 @@
         <see userInput="You saved the block." stepKey="seeSavedBlockMsgOnGrid"/>
         <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
     </test>
+    <test name="AdminCreateCmsBlockWithMarginalSpaceTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Block Identifier with marginal space"/>
+            <title value="Admin can not able create a CMS block with marginal space in identifier field"/>
+            <description value="Admin can not able create a CMS block with marginal space in identifier field"/>
+            <severity value="CRITICAL"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Verify Save&Duplicate button and Save&Close button-->
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
+        <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
+        <!--Create new CMS Block page with marginal space in identifier field-->
+        <actionGroup ref="FillOutBlockContentWithMarginalSpace" stepKey="FillOutBlockContent"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clicksaveAndClose" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="No marginal white space please" stepKey="seeNoMarginalSpaceMsgOnIdentifierField"/>
+    </test>
 </tests>
