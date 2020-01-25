@@ -14,7 +14,7 @@ class UpgradeInsecureTest extends AbstractHeaderTestCase
      */
     public function testHeaderPresent()
     {
-        $this->assertHeaderPresent('Content-Security-Policy', 'upgrade-insecure-requests');
+        $this->assertHeaderPresent('Content-Security-Policy', 'upgrade-insecure-requests;');
     }
 
     /**
