@@ -2614,7 +2614,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function isTableExists($tableName, $schemaName = null)
     {
-        return $this->getCreateTable($tableName, $schemaName) !== false;
+        $isDdlCacheAllowed = $this->_isDdlCacheAllowed;
+        $this->_isDdlCacheAllowed = false;
+        $tableExists = $this->getCreateTable($tableName, $schemaName) !== false;
+        $this->_isDdlCacheAllowed = $isDdlCacheAllowed;
+        return $tableExists;
     }
 
     /**
