@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveAndCloseCmsBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Block Creation and Reset Removal"/>
+            <title value="Admin should be able to create a CMS block"/>
+            <description value="Admin should be able to create a CMS block using save and close"/>
+            <severity value="CRITICAL"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteBlock" stepKey="deleteCreatedBlock">
+                <argument name="Block" value="_defaultBlock"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Navigate to create cms block page and verify save split button -->
+        <actionGroup ref="VerifyCmsBlockSaveSplitButtonActionGroup" stepKey="verifyCmsBlockSaveSplitButton" />
+        <!--Create new CMS Block page-->
+        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
+        <actionGroup ref="SaveAndCloseCMSBlockWithSplitButtonActionGroup" stepKey="saveCmsBlockContent" />
+    </test>
+</tests>
