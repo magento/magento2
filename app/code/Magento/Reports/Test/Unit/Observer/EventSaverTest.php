@@ -116,41 +116,30 @@ class EventSaverTest extends TestCase
     }
 
     /**
-     * Test save with no subject ID provided
-     *
-     * @param bool $isLoggedIn
-     * @dataProvider dataProviderTestSaveWithoutSubject
+     * Test save with no subject ID provided and customer is logged in
      */
-    public function testSaveWithoutSubject(bool $isLoggedIn)
+    public function testSaveWithoutSubjectWhenLoggedIn()
     {
-        if ($isLoggedIn) {
-            $this->customerSessionMock->expects($this->once())
-                ->method('isLoggedIn')
-                ->willReturn(true);
-            $this->customerSessionMock->expects($this->once())
-                ->method('getCustomerId')
-                ->willReturn(1);
-        } else {
-            $this->customerSessionMock->expects($this->once())
-                ->method('isLoggedIn')
-                ->willReturn(false);
-            $this->customerVisitorMock->expects($this->once())
-                ->method('getId')
-                ->willReturn(2);
-        }
+        $this->customerSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn(1);
         $this->eventSaver->save(1, 1, null);
     }
 
     /**
-     * Data provider for a case without subjectId provided
-     *
-     * @return array
+     * Test save with no subject ID provided and customer is not logged in
      */
-    public function dataProviderTestSaveWithoutSubject()
+    public function testSaveWithoutSubjectForGuest()
     {
-        return [
-            [true],
-            [false]
-        ];
+        $this->customerSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+        $this->customerVisitorMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(2);
+        $this->eventSaver->save(1, 1, null);
     }
 }
