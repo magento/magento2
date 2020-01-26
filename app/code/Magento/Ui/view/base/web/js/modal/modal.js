@@ -182,7 +182,7 @@ define([
             var key = keyCodes[event.keyCode];
 
             if (this.options.keyEventHandlers.hasOwnProperty(key)) {
-                this.options.keyEventHandlers[key].apply(this, arguments, event);
+                this.options.keyEventHandlers[key].apply(this, arguments);
             }
         },
 
@@ -308,7 +308,7 @@ define([
          * Close modal.
          * * @return {Element} - current element.
          */
-        closeModal: function () {
+        closeModal: function (event, result) {
             var that = this;
 
             this._removeKeyListener();

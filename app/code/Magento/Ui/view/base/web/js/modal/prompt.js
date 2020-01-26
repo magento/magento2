@@ -51,8 +51,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal();
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }, {
                 text: $.mage.__('OK'),
@@ -61,8 +61,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal(true);
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }]
         },
@@ -152,7 +152,7 @@ define([
         /**
          * Close modal window
          */
-        closeModal: function (result) {
+        closeModal: function (event, result) {
             var value;
             if (result && !(result instanceof $.Event)) {
                 if (this.options.validation && !this.validate()) {
