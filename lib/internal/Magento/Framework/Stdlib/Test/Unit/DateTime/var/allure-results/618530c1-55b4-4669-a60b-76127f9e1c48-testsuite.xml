@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1580046290235" stop="1580046290276" version="1.4.0">
+  <name>Magento\Framework\Stdlib\Test\Unit\DateTime\DateTimeTest</name>
+  <test-cases>
+    <test-case start="1580046290237" stop="1580046290275" status="broken">
+      <name>testGtmOffset</name>
+      <failure>
+        <message>Too few arguments to function PHPUnit\Framework\TestCase::getMockBuilder(), 0 passed in /Users/tjitse/sites/magentolive/lib/internal/Magento/Framework/Stdlib/Test/Unit/DateTime/DateTimeTest.php on line 56 and exactly 1 expected</message>
+        <stack-trace>#0 /Users/tjitse/sites/magentolive/vendor/phpunit/phpunit/src/Framework/TestCase.php(894): PHPUnit\Framework\TestResult-&gt;run(Object(Magento\Framework\Stdlib\Test\Unit\DateTime\DateTimeTest))
+#1 /Users/tjitse/sites/magentolive/vendor/phpunit/phpunit/src/Framework/TestSuite.php(755): PHPUnit\Framework\TestCase-&gt;run(Object(PHPUnit\Framework\TestResult))
+#2 /Users/tjitse/sites/magentolive/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(545): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#3 /Users/tjitse/sites/magentolive/vendor/phpunit/phpunit/src/TextUI/Command.php(195): PHPUnit\TextUI\TestRunner-&gt;doRun(Object(PHPUnit\Framework\TestSuite), Array, true)
+#4 /Users/tjitse/sites/magentolive/vendor/phpunit/phpunit/src/TextUI/Command.php(148): PHPUnit\TextUI\Command-&gt;run(Array, true)
+#5 /Users/tjitse/sites/magentolive/vendor/phpunit/phpunit/phpunit(53): PHPUnit\TextUI\Command::main()
+#6 {main}</stack-trace>
+      </failure>
+    </test-case>
+  </test-cases>
+</alr:test-suite>
