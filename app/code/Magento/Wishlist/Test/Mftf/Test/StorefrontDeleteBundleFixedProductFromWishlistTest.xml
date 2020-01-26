@@ -83,6 +83,6 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.removeProduct}}" stepKey="clickRemoveButton"/>
 
         <!-- Assert Wishlist is empty -->
-        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="assertWishlistIsEmpty"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="assertWishlistIsEmpty"/>
     </test>
 </tests>

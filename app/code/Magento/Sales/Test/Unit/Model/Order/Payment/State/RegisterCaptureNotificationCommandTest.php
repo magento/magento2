@@ -81,6 +81,22 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
                 'Registered notification about captured amount of %1.',
             ],
             [
+                false,
+                false,
+                Order::STATE_NEW,
+                Order::STATE_PROCESSING,
+                $this->newOrderStatus,
+                'Registered notification about captured amount of %1.',
+            ],
+            [
+                false,
+                false,
+                Order::STATE_PENDING_PAYMENT,
+                Order::STATE_PROCESSING,
+                $this->newOrderStatus,
+                'Registered notification about captured amount of %1.',
+            ],
+            [
                 true,
                 false,
                 Order::STATE_PROCESSING,
