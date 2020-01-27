@@ -67,20 +67,12 @@ class TemplateHintsStatusCommand extends Command
     {
         $this->reinitableConfig->reinit();
         $templateHintsStatus =
-            ($this->isTemplateHintsEnabled())
+            $this->scopeConfig->isSetFlag(self::TEMPLATE_HINTS_STOREFRONT_PATH, 'default')
                 ? 'enabled'
                 : 'disabled';
         $templateHintsMessage = __("Template hints are %status", ['status' => $templateHintsStatus]);
         $output->writeln("<info>" . $templateHintsMessage . "</info>");
 
         return Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isTemplateHintsEnabled(): bool
-    {
-        return $this->scopeConfig->isSetFlag(self::TEMPLATE_HINTS_STOREFRONT_PATH, 'default');
     }
 }
