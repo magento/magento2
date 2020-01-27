@@ -46,8 +46,8 @@
 
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
-        <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"/>
-        <actionGroup ref="submitShipmentIntoOrder" stepKey="submitShipment"/>
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipment"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
 
         <!--Create Credit Memo-->
         <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
