@@ -128,4 +128,19 @@ class Coupon extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
 
         return $this;
     }
+
+    /**
+     * @param int $quoteId
+     *
+     * @return string|null
+     */
+    public function getCouponCodeByQuoteId($quoteId): ?string
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select();
+        $select->from($this->getTable('quote'), 'coupon_code');
+        $select->where('entity_id = :entity_id');
+
+        return $connection->fetchOne($select, ['entity_id' => $quoteId]);
+    }
 }

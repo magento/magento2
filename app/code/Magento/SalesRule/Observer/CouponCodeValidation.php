@@ -23,33 +23,27 @@ use Magento\SalesRule\Model\Spi\CodeLimitManagerInterface;
 class CouponCodeValidation implements ObserverInterface
 {
     /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
-
-    /**
      * @var CodeLimitManagerInterface
      */
     private $codeLimitManager;
 
     /**
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon
+     */
+    private $couponResource;
+
+    /**
+     * CouponCodeValidation constructor.
+     *
      * @param CodeLimitManagerInterface $codeLimitManager
-     * @param CartRepositoryInterface $cartRepository
-     * @param SearchCriteriaBuilder $criteriaBuilder
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon $couponResource
      */
     public function __construct(
         CodeLimitManagerInterface $codeLimitManager,
-        CartRepositoryInterface $cartRepository,
-        SearchCriteriaBuilder $criteriaBuilder
+        \Magento\SalesRule\Model\ResourceModel\Coupon $couponResource
     ) {
         $this->codeLimitManager = $codeLimitManager;
-        $this->cartRepository = $cartRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
+        $this->couponResource = $couponResource;
     }
 
     /**
@@ -59,17 +53,13 @@ class CouponCodeValidation implements ObserverInterface
     {
         /** @var Quote $quote */
         $quote = $observer->getData('quote');
-        $code = $quote->getCouponCode();
-        if ($code) {
-            //Only validating the code if it's a new code.
-            /** @var Quote[] $found */
-            $found = $this->cartRepository->getList(
-                $this->criteriaBuilder->addFilter('main_table.' . CartInterface::KEY_ENTITY_ID, $quote->getId())
-                    ->create()
-            )->getItems();
-            if (!$found || ((string)array_shift($found)->getCouponCode()) !== (string)$code) {
+        $newCode = $quote->getCouponCode();
+        if ($newCode) {
+            // Only validating the code if it's a new code.
+            $oldCode = $this->couponResource->getCouponCodeByQuoteId($quote->getId());
+            if (!$oldCode || (string)$oldCode !== (string)$newCode) {
                 try {
-                    $this->codeLimitManager->checkRequest($code);
+                    $this->codeLimitManager->checkRequest($newCode);
                 } catch (CodeRequestLimitException $exception) {
                     $quote->setCouponCode('');
                     throw $exception;
