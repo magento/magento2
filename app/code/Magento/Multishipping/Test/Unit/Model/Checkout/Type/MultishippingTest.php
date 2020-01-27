@@ -282,7 +282,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testSetShippingItemsInformation():void
+    public function testSetShippingItemsInformation(): void
     {
         $info = [
             [
@@ -333,10 +333,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * Verefi set shipping items information for address leak
      *
      * @return void
-     * @expectedException LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
+     * @throws LocalizedException
      */
-    public function testSetShippingItemsInformationForAddressLeak():void
+    public function testSetShippingItemsInformationForAddressLeak(): void
     {
         $info = [
             [
@@ -360,6 +359,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())->method('getMaximumQty')->willReturn(500);
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
 
+        $this->expectExceptionMessage('Verify the shipping address information and continue.');
+
         $this->assertEquals($this->model, $this->model->setShippingItemsInformation($info));
     }
 
@@ -369,7 +370,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testUpdateQuoteCustomerShippingAddress():void
+    public function testUpdateQuoteCustomerShippingAddress(): void
     {
         $addressId = 42;
         $customerAddressId = 42;
@@ -388,10 +389,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * Verify update quote customer shipping address for address leak
      *
      * @return void
-     * @expectedException LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
+     * @throws LocalizedException
      */
-    public function testUpdateQuoteCustomerShippingAddressForAddressLeak():void
+    public function testUpdateQuoteCustomerShippingAddressForAddressLeak(): void
     {
         $addressId = 43;
         $customerAddressId = 42;
@@ -400,6 +400,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $this->getCustomerAddressMock($customerAddressId)
         ];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
+        $this->expectExceptionMessage('Verify the shipping address information and continue.');
 
         $this->assertEquals($this->model, $this->model->updateQuoteCustomerShippingAddress($addressId));
     }
@@ -410,7 +411,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testSetQuoteCustomerBillingAddress():void
+    public function testSetQuoteCustomerBillingAddress(): void
     {
         $addressId = 42;
         $customerAddressId = 42;
@@ -427,10 +428,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * Verify set quote customer billing address for address leak.
      *
      * @return void
-     * @expectedException LocalizedException
-     * @expectedExceptionMessage Verify the billing address information and continue.
+     * @throws LocalizedException
      */
-    public function testSetQuoteCustomerBillingAddressForAddressLeak():void
+    public function testSetQuoteCustomerBillingAddressForAddressLeak(): void
     {
         $addressId = 43;
         $customerAddressId = 42;
@@ -439,6 +439,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $this->getCustomerAddressMock($customerAddressId)
         ];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
+        $this->expectExceptionMessage('Verify the billing address information and continue.');
 
         $this->assertEquals($this->model, $this->model->setQuoteCustomerBillingAddress($addressId));
     }
@@ -448,7 +449,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGetQuoteShippingAddressesItems():void
+    public function testGetQuoteShippingAddressesItems(): void
     {
         $quoteItem = $this->getMockBuilder(AddressItem::class)
             ->disableOriginalConstructor()
@@ -464,7 +465,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testSetShippingMethods():void
+    public function testSetShippingMethods(): void
     {
         $methodsArray = [1 => 'flatrate_flatrate', 2 => 'tablerate_bestway'];
         $addressId = 1;
@@ -603,24 +604,20 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->willReturn($config['infoBuyRequest']);
         $quoteItemMock = $this->getQuoteItemMock($config['productType'], $productMock);
         $quoteAddressItemMock =
-            $this->getQuoteAddressItemMock($quoteItemMock, $config['productType'], $config['infoBuyRequest']);
+            $this->getQuoteAddressItemMock(
+                $quoteItemMock,
+                $config['productType'],
+                $config['infoBuyRequest']
+            );
         list($shippingAddressMock, $billingAddressMock) =
             $this->getQuoteAddressesMock($quoteAddressItemMock, $config['addressTotal']);
-        $this->setQuoteMockData($config['paymentProviderCode'], $shippingAddressMock, $billingAddressMock);
-        $currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->setMethods([ 'convert' ])
-            ->getMock();
-        $currencyMock->method('convert')
-            ->willReturn($config['shippingPrice']);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency','getCurrentCurrencyCode' ])
-            ->getMock();
-        $storeMock->method('getBaseCurrency')
-            ->willReturn($currencyMock);
-        $storeMock->method('getCurrentCurrencyCode')
-            ->willReturn($config['currencyCode']);
+        $this->setQuoteMockData(
+            $config['paymentProviderCode'],
+            $shippingAddressMock,
+            $billingAddressMock
+        );
+        $currencyMock = $this->getCurrencyMock($config['shippingPrice']);
+        $storeMock = $this->getStoreMock($currencyMock, $config['currencyCode']);
         $orderAddressMock = $this->createSimpleMock(OrderAddressInterface::class);
         $orderPaymentMock = $this->createSimpleMock(OrderPaymentInterface::class);
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
@@ -629,17 +626,12 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $orderItemMock->method('getQuoteItemId')
             ->willReturn($config['quoteItemId']);
-        $orderMock = $this->getOrderMock($orderAddressMock, $orderPaymentMock, $orderItemMock);
-        $orderMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($storeMock);
-        $orderMock->expects($this->once())
-            ->method('setBaseShippingAmount')
-            ->with($config['shippingPrice'])->willReturnSelf();
-        $orderMock->expects($this->once())
-            ->method('setShippingAmount')
-            ->with($config['shippingPrice'])
-            ->willReturnSelf();
+        $orderMock = $this->getOrderMock(
+            $orderAddressMock,
+            $orderPaymentMock,
+            $orderItemMock
+        );
+        $this->getOrderMockData($orderMock, $storeMock, $config['shippingPrice']);
         $this->orderFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($orderMock);
@@ -658,7 +650,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($shippingAddressMock)
             ->willReturn($orderMock);
-        $this->toOrderAddressMock->expects($this->exactly(2))->method('convert')
+        $this->toOrderAddressMock->expects($this->exactly(2))
+            ->method('convert')
             ->withConsecutive(
                 [$billingAddressMock, []],
                 [$shippingAddressMock, []]
@@ -688,7 +681,55 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->quoteMock);
         $this->expectExceptionMessage('Quote address for failed order ID "1" not found.');
+
         $this->model->createOrders();
+    }
+
+    /**
+     * Return Store Mock.
+     *
+     * @param PHPUnit_Framework_MockObject_MockObject $currencyMock
+     * @param string $currencyCode
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStoreMock($currencyMock, string $currencyCode): PHPUnit_Framework_MockObject_MockObject
+    {
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getBaseCurrency','getCurrentCurrencyCode' ])
+            ->getMock();
+        $storeMock->method('getBaseCurrency')
+            ->willReturn($currencyMock);
+        $storeMock->method('getCurrentCurrencyCode')
+            ->willReturn($currencyCode);
+
+        return $storeMock;
+    }
+
+    /**
+     * Return Order Mock with data
+     *
+     * @param PHPUnit_Framework_MockObject_MockObject $orderMock
+     * @param PHPUnit_Framework_MockObject_MockObject $storeMock
+     * @param string $shippingPrice
+     * @return void
+     */
+    private function getOrderMockData(
+        PHPUnit_Framework_MockObject_MockObject $orderMock,
+        PHPUnit_Framework_MockObject_MockObject $storeMock,
+        string $shippingPrice
+    ): void {
+        $orderMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $orderMock->expects($this->once())
+            ->method('setBaseShippingAmount')
+            ->with($shippingPrice)
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('setShippingAmount')
+            ->with($shippingPrice)
+            ->willReturnSelf();
     }
 
     /**
@@ -898,12 +939,12 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * Tests exception for addresses with country id not in the allowed countries list.
      *
      * @return void
-     * @expectedException LocalizedException
-     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      * @throws \Exception
      */
-    public function testCreateOrdersCountryNotPresentInAllowedListException():void
+    public function testCreateOrdersCountryNotPresentInAllowedListException(): void
     {
+        $ExceptionMessage = 'Some addresses can\'t be used due to the configurations for specific countries.';
+
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAvailable'])
@@ -935,8 +976,52 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->willReturn($paymentMock);
         $this->quoteMock->method('getAllShippingAddresses')
             ->willReturn([$shippingAddressMock]);
+        $this->expectExceptionMessage($ExceptionMessage);
 
         $this->model->createOrders();
+    }
+
+    /**
+     * Verify validate minimum amount multi address is false.
+     *
+     * @return void
+     */
+    public function testValidateMinimumAmountMultiAddressFalse(): void
+    {
+        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
+            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(true, false);
+
+        $this->scopeConfigMock->expects($this->exactly(2))->method('getValue')->withConsecutive(
+            ['sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/tax_including', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(100, false);
+
+        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('getAllAddresses')->willReturn([$addressMock]);
+        $addressMock->expects($this->once())->method('getBaseSubtotalWithDiscount')->willReturn(101);
+
+        $this->assertTrue($this->model->validateMinimumAmount());
+    }
+
+    /**
+     * Verify validate minimum amount multi address is true.
+     *
+     * @return void
+     */
+    public function testValidateMinimumAmountMultiAddressTrue(): void
+    {
+        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
+            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(true, true);
+
+        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->willReturn(false);
+        $this->assertFalse($this->model->validateMinimumAmount());
     }
 
     /**
@@ -945,8 +1030,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param ShippingAssignment $shippingAssignmentMock
      * @return CartExtension|PHPUnit_Framework_MockObject_MockObject
      */
-    private function getExtensionAttributesMock(ShippingAssignment $shippingAssignmentMock)
-    {
+    private function getExtensionAttributesMock(
+        ShippingAssignment $shippingAssignmentMock
+    ): PHPUnit_Framework_MockObject_MockObject {
         $extensionAttributesMock = $this->getMockBuilder(CartExtension::class)
             ->setMethods(['setShippingAssignments'])
             ->getMock();
@@ -965,7 +1051,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      *
      * @return ShippingAssignment | PHPUnit_Framework_MockObject_MockObject
      */
-    private function getShippingAssignmentMock()
+    private function getShippingAssignmentMock(): PHPUnit_Framework_MockObject_MockObject
     {
         $shippingAssignmentMock = $this->getMockBuilder(ShippingAssignment::class)
             ->disableOriginalConstructor()
@@ -988,7 +1074,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    private function mockShippingAssignment():void
+    private function mockShippingAssignment(): void
     {
         $shippingAssignmentMock = $this->getShippingAssignmentMock();
 
@@ -1017,7 +1103,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param $customerAddressId
      * @return Address | PHPUnit_Framework_MockObject_MockObject
      */
-    private function getCustomerAddressMock($customerAddressId)
+    private function getCustomerAddressMock($customerAddressId): PHPUnit_Framework_MockObject_MockObject
     {
         $customerAddressMock = $this->getMockBuilder(Address::class)
             ->setMethods(['getId'])
@@ -1036,7 +1122,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    private function createSimpleMock($className)
+    private function createSimpleMock($className): PHPUnit_Framework_MockObject_MockObject
     {
         return $this->getMockBuilder($className)
             ->disableOriginalConstructor()
@@ -1044,46 +1130,19 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify validate minimum amount multi address is true.
+     * Return Currency Mock.
      *
-     * @return void
+     * @param $shippingPrice
+     * @return PHPUnit_Framework_MockObject_MockObject
      */
-    public function testValidateMinimumAmountMultiAddressTrue():void
+    private function getCurrencyMock($shippingPrice): PHPUnit_Framework_MockObject_MockObject
     {
-        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
-            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
-        )->willReturnOnConsecutiveCalls(true, true);
-
-        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->willReturn(false);
-        $this->assertFalse($this->model->validateMinimumAmount());
-    }
-
-    /**
-     * Verify validate minimum amount multi address is false.
-     *
-     * @return void
-     */
-    public function testValidateMinimumAmountMultiAddressFalse():void
-    {
-        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
-        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
-            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
-        )->willReturnOnConsecutiveCalls(true, false);
-
-        $this->scopeConfigMock->expects($this->exactly(2))->method('getValue')->withConsecutive(
-            ['sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-            ['sales/minimum_order/tax_including', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
-        )->willReturnOnConsecutiveCalls(100, false);
-
-        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn(1);
-        $this->quoteMock->expects($this->once())->method('getAllAddresses')->willReturn([$addressMock]);
-        $addressMock->expects($this->once())->method('getBaseSubtotalWithDiscount')->willReturn(101);
-
-        $this->assertTrue($this->model->validateMinimumAmount());
+        $currencyMock = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->setMethods([ 'convert' ])
+            ->getMock();
+        $currencyMock->method('convert')->willReturn($shippingPrice);
+        return $currencyMock;
     }
 
     /**
