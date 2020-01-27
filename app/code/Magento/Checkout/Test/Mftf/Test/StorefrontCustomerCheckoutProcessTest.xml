@@ -24,6 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- TODO: remove after MC-29942 delivered-->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
