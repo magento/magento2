@@ -98,9 +98,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
-        $this->getRequest()->setPostValue([
-            'form_key' => $formKey->getFormKey(),
-        ]);
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setPostValue(
+            [
+                'form_key' => $formKey->getFormKey(),
+            ]
+        );
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -138,7 +141,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertEquals(0, $quoteCount);
         $this->assertSessionMessages(
-            $this->contains('You can buy this product only in quantities of 5 at a time for "Simple Product".'),
+            $this->contains(
+                htmlspecialchars(
+                    'You can buy this product only in quantities of 5 at a time for "Simple Product".'
+                )
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -172,7 +179,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
         );
 
-        $actualResult = quoted_printable_decode($transportBuilder->getSentMessage()->getRawMessage());
+        $actualResult = $transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
 
         $this->assertStringMatchesFormat(
             '%A' . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject())

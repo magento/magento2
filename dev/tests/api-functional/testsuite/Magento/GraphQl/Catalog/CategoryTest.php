@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -476,7 +477,7 @@ QUERY;
 {
   category(id: {$categoryId}) {
     name
-    products(sort: {sku: ASC}) {
+    products(sort: {name: DESC}) {
       total_count
       items {
         sku
@@ -493,13 +494,112 @@ QUERY;
                     'total_count' => 3,
                     'items' => [
                         ['sku' => '12345'],
-                        ['sku' => 'simple'],
-                        ['sku' => 'simple-4']
+                        ['sku' => 'simple-4'],
+                        ['sku' => 'simple']
                     ]
                 ]
             ]
         ];
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testBreadCrumbs()
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->create(CategoryCollection::class);
+        $categoryCollection->addFieldToFilter('name', 'Category 1.1.1');
+        /** @var CategoryInterface $category */
+        $category = $categoryCollection->getFirstItem();
+        $categoryId = $category->getId();
+        $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+    name
+    breadcrumbs {
+      category_id
+      category_name
+      category_level
+      category_url_key
+      category_url_path
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = [
+            'category' => [
+                'name' => 'Category 1.1.1',
+                'breadcrumbs' => [
+                    [
+                        'category_id' => 3,
+                        'category_name' => "Category 1",
+                        'category_level' => 2,
+                        'category_url_key' => "category-1",
+                        'category_url_path' => "category-1"
+                    ],
+                    [
+                        'category_id' => 4,
+                        'category_name' => "Category 1.1",
+                        'category_level' => 3,
+                        'category_url_key' => "category-1-1",
+                        'category_url_path' => "category-1/category-1-1"
+                    ],
+                ]
+            ]
+        ];
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * Test category image is returned as full url (not relative path)
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_image.php
+     */
+    public function testCategoryImage()
+    {
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+
+        $query = <<<QUERY
+    {
+categoryList(filters: {ids: {in: ["$categoryId"]}}) {
+    id
+  name
+  url_key
+  image
+  children {
+    id
+    name
+    url_key
+    image
+  }
+
+ }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['categoryList']);
+        $categoryList = $response['categoryList'];
+        $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl('media');
+        $expectedImageUrl = rtrim($storeBaseUrl, '/'). '/' . ltrim($categoryModel->getImage(), '/');
+
+        $this->assertEquals($categoryId, $categoryList[0]['id']);
+        $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
+        $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
+
+        $childCategory = $categoryList[0]['children'][0];
+        $this->assertEquals('Child Image Category', $childCategory['name']);
+        $this->assertEquals($expectedImageUrl, $childCategory['image']);
     }
 
     /**

@@ -11,6 +11,8 @@ use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 use Magento\Catalog\Model\Indexer\Product\Flat\State;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -34,6 +36,22 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass()
+    {
+        /*
+         * Due to insufficient search engine isolation for Elasticsearch, this class must explicitly perform
+         * a fulltext reindex prior to running its tests.
+         *
+         * This should be removed upon completing MC-19455.
+         */
+        $indexRegistry = Bootstrap::getObjectManager()->get(IndexerRegistry::class);
+        $fulltextIndexer = $indexRegistry->get(Fulltext::INDEXER_ID);
+        $fulltextIndexer->reindexAll();
+    }
 
     /**
      * @inheritdoc

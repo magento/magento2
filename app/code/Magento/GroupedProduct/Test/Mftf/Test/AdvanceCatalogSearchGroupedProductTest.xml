@@ -17,6 +17,42 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-141"/>
             <group value="GroupedProduct"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+        <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByNameMysqlTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Grouped product with product name using the MySQL search engine"/>
+            <description value="Guest customer should be able to advance search Grouped product with product name using the MySQL search engine"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-20464"/>
+            <group value="GroupedProduct"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
@@ -51,7 +87,7 @@
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
-            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="ApiGroupedProductAndUnderscoredSku" stepKey="product"/>
             <createData entity="OneSimpleProductLink" stepKey="addProductOne">
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple1"/>
@@ -77,6 +113,42 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-282"/>
             <group value="GroupedProduct"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+        <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByDescriptionMysqlTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Grouped product with product description using the MySQL search engine"/>
+            <description value="Guest customer should be able to advance search Grouped product with product description using the MYSQL search engine"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-20468"/>
+            <group value="GroupedProduct"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
@@ -107,6 +179,42 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-283"/>
             <group value="GroupedProduct"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+        <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByShortDescriptionMysqlTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Grouped product with product short description using the MySQL search engine"/>
+            <description value="Guest customer should be able to advance search Grouped product with product short description using the MySQL search engine"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-20469"/>
+            <group value="GroupedProduct"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
@@ -137,6 +245,51 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-284"/>
             <group value="GroupedProduct"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <getData entity="GetProduct3" stepKey="arg1">
+                <requiredEntity createDataKey="product"/>
+            </getData>
+            <getData entity="GetProduct" stepKey="arg2">
+                <requiredEntity createDataKey="simple1"/>
+            </getData>
+            <getData entity="GetProduct" stepKey="arg3">
+                <requiredEntity createDataKey="simple2"/>
+            </getData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+        <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchGroupedProductByPriceMysqlTest" extends="AdvanceCatalogSearchSimpleProductByPriceTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Grouped product with product price using the MySQL search engine"/>
+            <description value="Guest customer should be able to advance search Grouped product with product price using the MySQL search engine"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-20470"/>
+            <group value="GroupedProduct"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
