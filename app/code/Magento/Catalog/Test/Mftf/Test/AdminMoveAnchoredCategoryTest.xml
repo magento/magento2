@@ -32,6 +32,7 @@
             <createData entity="_defaultProduct" stepKey="productTwo">
                 <requiredEntity createDataKey="simpleSubCategoryOne"/>
             </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="runIndexerCron"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
