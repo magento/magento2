@@ -15,7 +15,6 @@ use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Api\Data\RuleInterfaceFactory;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
-use Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Registry;
@@ -61,11 +60,6 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     private $customerSession;
 
     /**
-     * @var RuleInterface[]
-     */
-    private $createdRules = [];
-
-    /**
      * @var WebsiteRepositoryInterface
      */
     private $websiteRepository;
@@ -91,11 +85,6 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     private $productTierPriceFactory;
 
     /**
-     * @var Price
-     */
-    private $catalogRuleProductPriceResource;
-
-    /**
      * @var ProductTierPriceExtensionFactory
      */
     private $productTierPriceExtensionFactory;
@@ -116,7 +105,6 @@ class CombinationWithDifferentTypePricesTest extends TestCase
         $this->catalogRuleFactory = $this->objectManager->get(RuleInterfaceFactory::class);
         $this->catalogRuleRepository = $this->objectManager->get(CatalogRuleRepositoryInterface::class);
         $this->productTierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
-        $this->catalogRuleProductPriceResource = $this->objectManager->get(Price::class);
         $this->productTierPriceExtensionFactory = $this->objectManager->get(ProductTierPriceExtensionFactory::class);
         $this->productRepository->cleanCache();
     }
@@ -128,7 +116,6 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     {
         parent::tearDown();
         $this->registry->unregister('product');
-        $this->cleanCatalogRuleData();
     }
 
     /**
@@ -145,13 +132,13 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param array|null $tierMessageConfig
      * @return void
      */
-    public function testRenderSpecialPriceWithCombinationWithTierPrice(
+    public function testRenderSpecialPriceInCombinationWithTierPrice(
         float $specialPrice,
         float $regularPrice,
         array $tierPrices,
         ?array $tierMessageConfig
     ): void {
-        $this->processCheckRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
+        $this->assertRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
     }
 
     /**
@@ -222,7 +209,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param array|null $tierMessageConfig
      * @return void
      */
-    public function testRenderSpecialPriceWithCombinationWithTierPriceWithLoggedUser(
+    public function testRenderSpecialPriceInCombinationWithTierPriceForLoggedInUser(
         float $specialPrice,
         float $regularPrice,
         array $tierPrices,
@@ -230,7 +217,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     ): void {
         try {
             $this->customerSession->setCustomerId(1);
-            $this->processCheckRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
+            $this->assertRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
         } finally {
             $this->customerSession->setCustomerId(null);
         }
@@ -268,6 +255,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * product has catalog rule price with different type of prices.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
+     * @magentoDataFixture Magento/CatalogRule/_files/delete_catalog_rule_data.php
      *
      * @dataProvider catalogRulesDataProvider
      *
@@ -278,7 +266,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param array|null $tierMessageConfig
      * @return void
      */
-    public function testRenderCatalogRulePriceWithCombinationWithDifferentTypePrices(
+    public function testRenderCatalogRulePriceInCombinationWithDifferentPriceTypes(
         float $specialPrice,
         float $regularPrice,
         array $catalogRules,
@@ -287,7 +275,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     ): void {
         $this->createCatalogRulesForProduct($catalogRules);
         $this->indexBuilder->reindexFull();
-        $this->processCheckRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
+        $this->assertRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
     }
 
     /**
@@ -409,7 +397,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
-     * Assert that  tier price message.
+     * Assert that tier price message.
      *
      * @param string $priceHtml
      * @param array $tierMessageConfig
@@ -505,9 +493,9 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     private function getSpecialPriceXpath(float $specialPrice): string
     {
         $pathsForSearch = [
-            "//div[@class='price-box price-final_price']",
-            "//span[@class='special-price']",
-            sprintf("//span[@class='price' and text()='$%01.2f']", $specialPrice),
+            "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
+            "//span[contains(@class, 'special-price')]",
+            sprintf("//span[contains(@class, 'price') and text()='$%01.2f']", $specialPrice),
         ];
 
         return implode('', $pathsForSearch);
@@ -520,10 +508,10 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     private function getRegularPriceXpath(float $regularPrice): string
     {
         $pathsForSearch = [
-            "//div[@class='price-box price-final_price']",
-            "//span[@class='old-price']",
+            "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
+            "//span[contains(@class, 'old-price')]",
             "//span[contains(@class, 'price-container')]",
-            sprintf("//span[@class='price' and text()='$%01.2f']", $regularPrice),
+            sprintf("//span[contains(@class, 'price') and text()='$%01.2f']", $regularPrice),
         ];
 
         return implode('', $pathsForSearch);
@@ -535,8 +523,8 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     private function getRegularPriceLabelXpath(): string
     {
         $pathsForSearch = [
-            "//div[@class='price-box price-final_price']",
-            "//span[@class='old-price']",
+            "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
+            "//span[contains(@class, 'old-price')]",
             "//span[contains(@class, 'price-container')]",
             "//span[text()='Regular Price']",
         ];
@@ -555,12 +543,15 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     {
         [$qty, $price, $percent] = array_values($expectedMessage);
         $liPaths = [
-            "@class='item' and contains(text(), 'Buy {$qty} for')",
-            sprintf("//span[@class='price' and text()='$%01.2f']", $price),
+            "contains(@class, 'item') and contains(text(), 'Buy {$qty} for')",
+            sprintf("//span[contains(@class, 'price') and text()='$%01.2f']", $price),
             "//span[contains(@class, 'percent') and contains(text(), '{$percent}')]",
         ];
 
-        return sprintf("//ul[@class='prices-tier items']//li[%s]", implode(' and ', $liPaths));
+        return sprintf(
+            "//ul[contains(@class, 'prices-tier') and contains(@class, 'items')]//li[%s]",
+            implode(' and ', $liPaths)
+        );
     }
 
     /**
@@ -572,7 +563,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param array|null $tierMessageConfig
      * @return void
      */
-    private function processCheckRenderedPrices(
+    private function assertRenderedPrices(
         float $specialPrice,
         float $regularPrice,
         array $tierPrices,
@@ -611,21 +602,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
         foreach ($catalogRules as $catalogRule) {
             $catalogRule = array_replace($staticRuleData, $catalogRule);
             $catalogRule = $this->catalogRuleFactory->create(['data' => $catalogRule]);
-            $this->createdRules[] = $this->catalogRuleRepository->save($catalogRule);
+            $this->catalogRuleRepository->save($catalogRule);
         }
-    }
-
-    /**
-     * Clean data in DB which created during catalog rule create.
-     *
-     * @return void
-     */
-    private function cleanCatalogRuleData(): void
-    {
-        foreach ($this->createdRules as $createdRule) {
-            $this->catalogRuleRepository->delete($createdRule);
-        }
-        $this->catalogRuleProductPriceResource->getConnection()
-            ->delete($this->catalogRuleProductPriceResource->getMainTable());
     }
 }
