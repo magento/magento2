@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Controller\Store;
 
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -117,18 +118,23 @@ class RedirectTest extends TestCase
             ->willReturnSelf();
 
         $objectManager = new ObjectManagerHelper($this);
-
+        $context = $objectManager->getObject(
+            Context::class,
+            [
+                '_request' => $this->requestMock,
+                '_redirect' => $this->redirectMock,
+                '_response' => $this->responseMock,
+            ]
+        );
         $this->redirectController = $objectManager->getObject(
             Redirect::class,
             [
-              'storeRepository' => $this->storeRepositoryMock,
-              'storeResolver'   => $this->storeResolverMock,
-              'messageManager'  => $this->messageManagerMock,
-              '_request'        => $this->requestMock,
-              '_redirect'       => $this->redirectMock,
-              '_response'       => $this->responseMock,
-              'sidResolver'     => $this->sidResolverMock,
-              'hashGenerator'   => $this->hashGeneratorMock
+                'storeRepository' => $this->storeRepositoryMock,
+                'storeResolver' => $this->storeResolverMock,
+                'messageManager' => $this->messageManagerMock,
+                'sidResolver' => $this->sidResolverMock,
+                'hashGenerator' => $this->hashGeneratorMock,
+                'context' => $context,
             ]
         );
     }
@@ -146,13 +152,16 @@ class RedirectTest extends TestCase
     public function testRedirect(string $defaultStoreViewCode, string $storeCode): void
     {
         $this->requestMock
-            ->expects($this->any())
-            ->method('getParam')->willReturnMap(
-                [
-                    [StoreResolver::PARAM_NAME, null, $storeCode],
-                    ['___from_store', null, $defaultStoreViewCode],
-                    [ActionInterface::PARAM_NAME_URL_ENCODED, null, $defaultStoreViewCode]
-                ]
+            ->expects($this->exactly(3))
+            ->method('getParam')
+            ->withConsecutive(
+                [StoreResolver::PARAM_NAME],
+                ['___from_store'],
+                [ActionInterface::PARAM_NAME_URL_ENCODED]
+            )->willReturnOnConsecutiveCalls(
+                $storeCode,
+                $defaultStoreViewCode,
+                $defaultStoreViewCode
             );
         $this->storeRepositoryMock
             ->expects($this->once())
@@ -162,7 +171,7 @@ class RedirectTest extends TestCase
         $this->formStoreMock
             ->expects($this->once())
             ->method('getCode')
-            ->willReturnSelf();
+            ->willReturn($defaultStoreViewCode);
         $this->sidResolverMock
             ->expects($this->once())
             ->method('getUseSessionInUrl')
@@ -172,7 +181,6 @@ class RedirectTest extends TestCase
             ->method('generateHash')
             ->with($this->formStoreMock)
             ->willReturn([]);
-
         $this->redirectMock
             ->expects($this->once())
             ->method('redirect')
@@ -182,12 +190,11 @@ class RedirectTest extends TestCase
                 ['_nosid' => true,
                     '_query' => [
                         'uenc' => $defaultStoreViewCode,
-                        '___from_store' => $this->formStoreMock,
+                        '___from_store' => $defaultStoreViewCode,
                         '___store' => $storeCode
                     ]
                 ]
-            )
-            ->willReturnSelf();
+            );
 
         $this->assertEquals(null, $this->redirectController->execute());
     }
@@ -204,15 +211,13 @@ class RedirectTest extends TestCase
     public function testRedirectWithThrowsException(string $defaultStoreViewCode, string $storeCode): void
     {
         $this->requestMock
-            ->expects($this->at(0))
-            ->method('getParam')
-            ->with(StoreResolver::PARAM_NAME)
-            ->willReturn($storeCode);
-        $this->requestMock
-            ->expects($this->at(1))
-            ->method('getParam')
-            ->with('___from_store')
-            ->willReturn($defaultStoreViewCode);
+            ->expects($this->exactly(2))
+            ->method('getParam')->willReturnMap(
+                [
+                    [StoreResolver::PARAM_NAME, null, $storeCode],
+                    ['___from_store', null, $defaultStoreViewCode]
+                ]
+            );
         $this->storeRepositoryMock
             ->expects($this->once())
             ->method('get')
@@ -269,7 +274,7 @@ class RedirectTest extends TestCase
     public function getConfigDataProvider(): array
     {
         return [
-            [ self::DEFAULT_STORE_VIEW_CODE, self::STORE_CODE ]
+            [self::DEFAULT_STORE_VIEW_CODE, self::STORE_CODE]
         ];
     }
 }
