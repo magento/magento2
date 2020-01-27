@@ -97,22 +97,6 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Test comparing a product.
-     *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testIndexActionAddProducts()
-    {
-        $this->_requireVisitorWithNoProducts();
-        $product = $this->productRepository->get('simple_product_2');
-        $this->dispatch('catalog/product_compare/index/items/' . $product->getEntityId());
-
-        $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/catalog/product_compare/index/'));
-
-        $this->_assertCompareListEquals([$product->getEntityId()]);
-    }
-
-    /**
      * Test removing a product from compare list.
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
