@@ -11,13 +11,12 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search request generator.
  */
 class General implements GeneratorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilterData(Attribute $attribute, $filterName)
     {
@@ -30,7 +29,7 @@ class General implements GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAggregationData(Attribute $attribute, $bucketName)
     {

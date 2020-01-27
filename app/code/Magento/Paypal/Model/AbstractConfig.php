@@ -9,7 +9,6 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Paypal\Model\Config;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -293,11 +292,15 @@ abstract class AbstractConfig implements ConfigInterface
                 break;
             case Config::METHOD_WPS_BML:
             case Config::METHOD_WPP_BML:
-                $isEnabled = $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPS_BML .'/active',
+                $disabledFunding = $this->_scopeConfig->getValue(
+                    'paypal/style/disable_funding_options',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
-                )
+                );
+                $isExpressCreditEnabled = $disabledFunding
+                    ? strpos($disabledFunding, 'CREDIT') === false
+                    : true;
+                $isEnabled = $isExpressCreditEnabled
                 || $this->_scopeConfig->isSetFlag(
                     'payment/' . Config::METHOD_WPP_BML .'/active',
                     ScopeInterface::SCOPE_STORE,

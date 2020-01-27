@@ -9,13 +9,15 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\Escaper;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use \Magento\Framework\View\Element\Messages;
-
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Unit test for \Magento\Framework\View\Element\Messages
+ */
 class MessagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -38,6 +40,11 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
      */
     protected $messageInterpretationStrategy;
 
+    /**
+     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
     protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder(\Magento\Framework\Message\CollectionFactory::class)
@@ -52,13 +59,18 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\Message\InterpretationStrategyInterface::class
         );
 
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messages = $objectManager->getObject(
             \Magento\Framework\View\Element\Messages::class,
             [
                 'collectionFactory' => $this->collectionFactory,
                 'messageFactory' => $this->messageFactory,
-                'interpretationStrategy' => $this->messageInterpretationStrategy
+                'interpretationStrategy' => $this->messageInterpretationStrategy,
+                'escaper' => $this->escaperMock,
             ]
         );
     }
@@ -315,6 +327,14 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
                     [MessageInterface::TYPE_NOTICE, [$noticeMock, $noticeMock, $noticeMock]],
                     [MessageInterface::TYPE_SUCCESS, [$successMock, $successMock, $successMock, $successMock]],
                 ]
+            );
+
+        $this->escaperMock->expects($this->any())
+            ->method('escapeHtmlAttr')
+            ->willReturnCallback(
+                function ($string) {
+                    return $string;
+                }
             );
 
         $this->assertEquals($resultHtml, $this->messages->getGroupedHtml());

@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer attribute filter
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Attribute extends AbstractFilter
 {
@@ -58,12 +58,18 @@ class Attribute extends AbstractFilter
         if (empty($attributeValue) && !is_numeric($attributeValue)) {
             return $this;
         }
+
         $attribute = $this->getAttributeModel();
         /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
-        $label = $this->getOptionText($attributeValue);
+
+        $labels = [];
+        foreach ((array) $attributeValue as $value) {
+            $labels[] = (array) $this->getOptionText($value);
+        }
+        $label = implode(',', array_unique(array_merge(...$labels)));
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));
@@ -93,12 +99,10 @@ class Attribute extends AbstractFilter
             return $this->itemDataBuilder->build();
         }
 
-        $productSize = $productCollection->getSize();
-
         $options = $attribute->getFrontend()
             ->getSelectOptions();
         foreach ($options as $option) {
-            $this->buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize);
+            $this->buildOptionData($option, $isAttributeFilterable, $optionsFacetedData);
         }
 
         return $this->itemDataBuilder->build();
@@ -110,17 +114,16 @@ class Attribute extends AbstractFilter
      * @param array $option
      * @param boolean $isAttributeFilterable
      * @param array $optionsFacetedData
-     * @param int $productSize
      * @return void
      */
-    private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize)
+    private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData)
     {
         $value = $this->getOptionValue($option);
         if ($value === false) {
             return;
         }
         $count = $this->getOptionCount($value, $optionsFacetedData);
-        if ($isAttributeFilterable && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)) {
+        if ($isAttributeFilterable && $count === 0) {
             return;
         }
 
@@ -157,5 +160,13 @@ class Attribute extends AbstractFilter
         return isset($optionsFacetedData[$value]['count'])
             ? (int)$optionsFacetedData[$value]['count']
             : 0;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isOptionReducesResults($optionCount, $totalSize)
+    {
+        return $optionCount <= $totalSize;
     }
 }

@@ -28,13 +28,14 @@ class ArrayPool
      *
      * @param string $model
      * @throws \InvalidArgumentException
-     * @return \Magento\Framework\Option\ArrayInterface
+     * @return \Magento\Framework\Data\OptionSourceInterface
      */
     public function get($model)
     {
         $modelInstance = $this->_objectManager->get($model);
-        if (false == $modelInstance instanceof \Magento\Framework\Option\ArrayInterface) {
-            throw new \InvalidArgumentException($model . 'doesn\'t implement \Magento\Framework\Option\ArrayInterface');
+        if (false == $modelInstance instanceof \Magento\Framework\Data\OptionSourceInterface) {
+            throw new \InvalidArgumentException($model
+                . 'doesn\'t implement \Magento\Framework\Data\OptionSourceInterface');
         }
         return $modelInstance;
     }

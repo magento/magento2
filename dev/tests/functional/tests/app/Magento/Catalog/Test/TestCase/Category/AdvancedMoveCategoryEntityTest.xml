@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Category\AdvancedMoveCategoryEntityTest" summary="Move category from one to another" ticketId="MAGETWO-27319">
         <variation name="AdvancedMoveCategoryEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="childCategory/dataset" xsi:type="string">three_nested_categories</data>
             <data name="parentCategory/dataset" xsi:type="string">default</data>
             <data name="moveLevel" xsi:type="number">1</data>

@@ -8,6 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <sales>
+            <general>
+                <hide_customer_ip>0</hide_customer_ip>
+            </general>
             <totals_sort>
                 <discount>20</discount>
                 <grand_total>100</grand_total>
@@ -22,6 +25,7 @@
                 <allow_zero_grandtotal>1</allow_zero_grandtotal>
             </zerograndtotal_creditmemo>
             <minimum_order>
+                <include_discount_amount>1</include_discount_amount>
                 <tax_including>1</tax_including>
             </minimum_order>
             <orders>

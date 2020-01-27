@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Tax\Test\TestCase\UpdateTaxRateEntityTest" summary="Edit Tax Rate" ticketId="MAGETWO-23299">
         <variation name="UpdateTaxRateEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialTaxRate/dataset" xsi:type="string">default</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
@@ -20,6 +21,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation2">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialTaxRate/dataset" xsi:type="string">default</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">Yes</data>
@@ -33,6 +35,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation3">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialTaxRate/dataset" xsi:type="string">default</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
@@ -44,6 +47,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation4">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
@@ -56,6 +60,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation5">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">Yes</data>
@@ -67,6 +72,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation6">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>

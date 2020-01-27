@@ -11,7 +11,7 @@ define([
     'underscore',
     'mage/template',
     'text!ui/template/modal/modal-prompt-content.html',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Ui/js/modal/modal',
     'mage/translate'
 ], function ($, _, template, promptContentTmpl) {

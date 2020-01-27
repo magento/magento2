@@ -154,17 +154,14 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
 
         if ($getViewIsEnabled && $getViewGetUpdated) {
-            if (!$getStateGetUpdated) {
-                $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-            } else {
-                if ($getViewGetUpdated == $getStateGetUpdated) {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-                } else {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-                }
-            }
+            $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
         } else {
-            $this->assertEquals($getStateGetUpdated, $this->model->getLatestUpdated());
+            $getLatestUpdated = $this->model->getLatestUpdated();
+            $this->assertEquals($getStateGetUpdated, $getLatestUpdated);
+
+            if ($getStateGetUpdated === null) {
+                $this->assertNotNull($getLatestUpdated);
+            }
         }
     }
 
@@ -182,7 +179,8 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
             [true, '', '06-Jan-1944'],
             [true, '06-Jan-1944', ''],
             [true, '', ''],
-            [true, '06-Jan-1944', '05-Jan-1944']
+            [true, '06-Jan-1944', '05-Jan-1944'],
+            [false, null, null],
         ];
     }
 

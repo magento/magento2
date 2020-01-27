@@ -13,7 +13,6 @@ define([
     'moment',
     'tinycolor',
     'jquery/validate',
-    'jquery/ui',
     'mage/translate'
 ], function ($, _, utils, moment, tinycolor) {
     'use strict';
@@ -115,6 +114,12 @@ define([
                 return utils.isEmpty(value) || /^\S+$/i.test(value);
             },
             $.mage.__('No white space please')
+        ],
+        'no-marginal-whitespace': [
+            function (value) {
+                return !/^\s+|\s+$/i.test(value);
+            },
+            $.mage.__('No marginal white space please')
         ],
         'zip-range': [
             function (value) {
@@ -646,7 +651,8 @@ define([
         'validate-number': [
             function (value) {
                 return utils.isEmptyNoTrim(value) ||
-                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(,\d*)*(\.\d*)?\s*$/.test(value);
+                    !isNaN(utils.parseNumber(value)) &&
+                    /^\s*-?\d*(?:[.,|'|\s]\d+)*(?:[.,|'|\s]\d{2})?-?\s*$/.test(value);
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
@@ -685,6 +691,24 @@ define([
                 return result;
             },
             $.mage.__('The value is not within the specified range.')
+        ],
+        'validate-positive-percent-decimal': [
+            function (value) {
+                var numValue;
+
+                if (utils.isEmptyNoTrim(value) || !/^\s*-?\d*(\.\d*)?\s*$/.test(value)) {
+                    return false;
+                }
+
+                numValue = utils.parseNumber(value);
+
+                if (isNaN(numValue)) {
+                    return false;
+                }
+
+                return utils.isBetween(numValue, 0.01, 100);
+            },
+            $.mage.__('Please enter a valid percentage discount value greater than 0.')
         ],
         'validate-digits': [
             function (value) {
@@ -757,7 +781,7 @@ define([
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z]+[a-z0-9_]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
+            $.mage.__('Please use only lowercase letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
         ],
         'validate-alphanum': [
             function (value) {
@@ -779,6 +803,14 @@ define([
             },
             $.mage.__('Please enter a valid date.')
         ],
+        'validate-date-range': [
+            function (value, params) {
+                var fromDate = $('input[name*="' + params + '"]').val();
+
+                return moment.utc(value).unix() >= moment.utc(fromDate).unix() || isNaN(moment.utc(value).unix());
+            },
+            $.mage.__('Make sure the To Date is later than or the same as the From Date.')
+        ],
         'validate-identifier': [
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/.test(value);
@@ -798,7 +830,7 @@ define([
         ],
         'validate-state': [
             function (value) {
-                return value !== 0 || value === '';
+                return value !== 0;
             },
             $.mage.__('Please select State/Province.')
         ],
@@ -896,12 +928,12 @@ define([
         ],
         'validate-per-page-value-list': [
             function (value) {
-                var isValid = utils.isEmpty(value),
+                var isValid = true,
                     values = value.split(','),
                     i;
 
-                if (isValid) {
-                    return true;
+                if (utils.isEmpty(value)) {
+                    return isValid;
                 }
 
                 for (i = 0; i < values.length; i++) {
@@ -1035,6 +1067,16 @@ define([
                 return new RegExp(param).test(value);
             },
             $.mage.__('This link is not allowed.')
+        ],
+        'validate-dob': [
+            function (value) {
+                if (value === '') {
+                    return true;
+                }
+
+                return moment(value).isBefore(moment());
+            },
+            $.mage.__('The Date of Birth should not be greater than today.')
         ]
     }, function (data) {
         return {

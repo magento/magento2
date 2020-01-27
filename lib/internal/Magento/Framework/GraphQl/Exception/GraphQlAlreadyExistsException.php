@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Phrase;
 
 /**
- * Class GraphQlAlreadyExistsException
+ * Exception for GraphQL to be thrown when data already exists
  */
 class GraphQlAlreadyExistsException extends AlreadyExistsException implements ClientAware
 {

@@ -174,9 +174,9 @@
             width: 100%;
 
             .price-box {
-                display: table-cell;
+                display: inline-block;
                 vertical-align: top;
-                width: 1px;
+                width: auto;
 
                 .price-container {
                     > span {
@@ -228,7 +228,8 @@
         }
 
         .product-info-stock-sku {
-            display: table-cell;
+            display: inline-block;
+            float: right;
             padding-bottom: @indent__s;
             padding-left: 10%;
             text-align: right;
@@ -294,6 +295,12 @@
     }
 
     .product-options-wrapper {
+        .fieldset {
+            &:focus {
+                box-shadow: none;
+            }
+        }
+
         .fieldset-product-options-inner {
             .legend {
                 .lib-css(font-weight, @font-weight__semibold);
@@ -391,6 +398,7 @@
 
     .box-tocart {
         &:extend(.abs-box-tocart all);
+
         .field.qty {
         }
 
@@ -534,6 +542,15 @@
             }
         }
 
+        .block-compare {
+            .action {
+                &.delete {
+                    &:extend(.abs-remove-button-for-blocks all);
+                    right: initial;
+                }
+            }
+        }
+
         .action.tocart {
             border-radius: 0;
         }
@@ -563,6 +580,7 @@
 
         .product-items-names {
             .product-item {
+                display: flex;
                 margin-bottom: @indent__s;
             }
 
@@ -970,10 +988,37 @@
         }
     }
 }
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .sidebar {
+        .product-items {
+            .action {
+                &.delete {
+                    &:extend(.abs-remove-button-for-blocks all);
+                    line-height: unset;
+                    position: absolute;
+                    right: 0;
+                    top: -1px;
+                    width: auto;
+                }
+            }
+        }
+    }
+}
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .compare.wrapper,
     [class*='block-compare'] {
         display: none;
+    }
+    .catalog-product_compare-index {
+        .columns {
+            .column {
+                &.main {
+                    flex-basis: inherit;
+                }
+            }
+        }
     }
 }
 

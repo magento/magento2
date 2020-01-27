@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\UnionExpression;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -25,6 +28,16 @@ class Source extends AbstractEav
     protected $_resourceHelper;
 
     /**
+     * @var \Magento\Eav\Api\AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -33,6 +46,8 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param null|string $connectionName
+     * @param \Magento\Eav\Api\AttributeRepositoryInterface|null $attributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $criteriaBuilder
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -40,7 +55,9 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder = null
     ) {
         parent::__construct(
             $context,
@@ -50,6 +67,12 @@ class Source extends AbstractEav
             $connectionName
         );
         $this->_resourceHelper = $resourceHelper;
+        $this->attributeRepository = $attributeRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Eav\Api\AttributeRepositoryInterface::class);
+        $this->criteriaBuilder = $criteriaBuilder
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
     }
 
     /**
@@ -178,13 +201,52 @@ class Source extends AbstractEav
                 'dd.attribute_id',
                 's.store_id',
                 'value' => new \Zend_Db_Expr('COALESCE(ds.value, dd.value)'),
-                'cpe.entity_id',
+                'cpe.entity_id AS source_id',
             ]
         );
 
         if ($entityIds !== null) {
             $ids = implode(',', array_map('intval', $entityIds));
+            $selectWithoutDefaultStore = $connection->select()->from(
+                ['wd' => $this->getTable('catalog_product_entity_int')],
+                [
+                    'cpe.entity_id',
+                    'attribute_id',
+                    'store_id',
+                    'value',
+                    'cpe.entity_id',
+                ]
+            )->joinLeft(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                "cpe.{$productIdField} = wd.{$productIdField}",
+                []
+            )->joinLeft(
+                ['d2d' => $this->getTable('catalog_product_entity_int')],
+                sprintf(
+                    "d2d.store_id = 0 AND d2d.{$productIdField} = wd.{$productIdField} AND d2d.attribute_id = %s",
+                    $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId()
+                ),
+                []
+            )->joinLeft(
+                ['d2s' => $this->getTable('catalog_product_entity_int')],
+                "d2s.store_id != 0 AND d2s.attribute_id = d2d.attribute_id AND " .
+                "d2s.{$productIdField} = d2d.{$productIdField}",
+                []
+            )
+                ->where((new \Zend_Db_Expr('COALESCE(d2s.value, d2d.value)')) . ' = ' . ProductStatus::STATUS_ENABLED)
+                ->where("wd.attribute_id IN({$attrIdsFlat})")
+                ->where('wd.value IS NOT NULL')
+                ->where('wd.store_id != 0')
+                ->where("cpe.entity_id IN({$ids})");
             $select->where("cpe.entity_id IN({$ids})");
+            $selects = new UnionExpression(
+                [$select, $selectWithoutDefaultStore],
+                Select::SQL_UNION,
+                '( %s )'
+            );
+
+            $select = $connection->select();
+            $select->from(['u' => $selects]);
         }
 
         /**
@@ -233,6 +295,10 @@ class Source extends AbstractEav
         while ($row = $query->fetch()) {
             $options[$row['attribute_id']][$row['option_id']] = true;
         }
+
+        // Retrieve any custom source model options
+        $sourceModelOptions = $this->getMultiSelectAttributeWithSourceModels($attrIds);
+        $options = array_replace_recursive($options, $sourceModelOptions);
 
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
@@ -295,6 +361,39 @@ class Source extends AbstractEav
         $this->saveDataFromSelect($select, $options);
 
         return $this;
+    }
+
+    /**
+     * Get options for multiselect attributes using custom source models
+     * Based on @maderlock's fix from:
+     * https://github.com/magento/magento2/issues/417#issuecomment-265146285
+     *
+     * @param array $attrIds
+     *
+     * @return array
+     */
+    private function getMultiSelectAttributeWithSourceModels($attrIds)
+    {
+        // Add options from custom source models
+        $this->criteriaBuilder
+                ->addFilter('attribute_id', $attrIds, 'in')
+                ->addFilter('source_model', true, 'notnull');
+        $criteria = $this->criteriaBuilder->create();
+        $attributes = $this->attributeRepository->getList(
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            $criteria
+        )->getItems();
+
+        $options = [];
+        foreach ($attributes as $attribute) {
+            $sourceModelOptions = $attribute->getOptions();
+            // Add options to list used below
+            foreach ($sourceModelOptions as $option) {
+                $options[$attribute->getAttributeId()][$option->getValue()] = true;
+            }
+        }
+
+        return $options;
     }
 
     /**

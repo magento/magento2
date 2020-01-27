@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\CreateVirtualProductEntityTest" summary="Create Virtual Product" ticketId="MAGETWO-23417">
         <variation name="CreateVirtualProductEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create product with required fields</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -17,7 +18,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation2" summary="Create product with tier price">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
@@ -51,6 +52,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create product with tier price for "General" group</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -71,6 +73,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPageWithCustomer" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create product with custom options suite and import options</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -86,6 +89,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation6">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create product without manage stock</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -102,6 +106,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation7">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create product out of stock with tier price</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>

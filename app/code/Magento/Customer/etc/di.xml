@@ -28,11 +28,11 @@
     <preference for="Magento\Customer\Api\Data\ValidationResultsInterface"
                 type="Magento\Customer\Model\Data\ValidationResults" />
     <preference for="Magento\Customer\Api\Data\GroupSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Customer\Model\GroupSearchResults" />
     <preference for="Magento\Customer\Api\Data\CustomerSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Customer\Model\CustomerSearchResults" />
     <preference for="Magento\Customer\Api\Data\AddressSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Customer\Model\AddressSearchResults" />
     <preference for="Magento\Customer\Api\AccountManagementInterface"
                 type="Magento\Customer\Model\AccountManagement" />
     <preference for="Magento\Customer\Api\CustomerMetadataInterface"
@@ -127,6 +127,13 @@
             <argument name="groupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Metadata\CustomerMetadata">
+        <arguments>
+            <argument name="systemAttributes" xsi:type="array">
+                <item name="disable_auto_group_change" xsi:type="string">disable_auto_group_change</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="SectionInvalidationConfigReader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="idAttributes" xsi:type="array">
@@ -146,6 +153,11 @@
         </arguments>
     </virtualType>
     <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\SectionNamesProvider">
         <arguments>
             <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
         </arguments>
@@ -223,6 +235,7 @@
                 <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>
                 <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Online\Grid\Collection</item>
                 <item name="customer_group_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Group\Grid\Collection</item>
+                <item name="customer_address_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Address\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -449,7 +462,69 @@
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\ResourceModel\Address\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_address_entity</argument>
+            <argument name="eventPrefix" xsi:type="string">customer_address_entity_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_address_entity_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Address</argument>
+        </arguments>
+    </type>
     <preference
             for="Magento\Customer\Api\AccountDelegationInterface"
             type="Magento\Customer\Model\Delegation\AccountDelegation" />
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="customer" xsi:type="array">
+                    <item name="confirmation" xsi:type="string">customer</item>
+                    <item name="created_at" xsi:type="string">customer</item>
+                    <item name="created_in" xsi:type="string">customer</item>
+                    <item name="default_billing" xsi:type="string">customer</item>
+                    <item name="default_shipping" xsi:type="string">customer</item>
+                    <item name="disable_auto_group_change" xsi:type="string">customer</item>
+                    <item name="dob" xsi:type="string">customer</item>
+                    <item name="email" xsi:type="string">customer</item>
+                    <item name="failures_num" xsi:type="string">customer</item>
+                    <item name="firstname" xsi:type="string">customer</item>
+                    <item name="first_failure" xsi:type="string">customer</item>
+                    <item name="gender" xsi:type="string">customer</item>
+                    <item name="group_id" xsi:type="string">customer</item>
+                    <item name="lastname" xsi:type="string">customer</item>
+                    <item name="lock_expires" xsi:type="string">customer</item>
+                    <item name="middlename" xsi:type="string">customer</item>
+                    <item name="password_hash" xsi:type="string">customer</item>
+                    <item name="prefix" xsi:type="string">customer</item>
+                    <item name="rp_token" xsi:type="string">customer</item>
+                    <item name="rp_token_created_at" xsi:type="string">customer</item>
+                    <item name="store_id" xsi:type="string">customer</item>
+                    <item name="suffix" xsi:type="string">customer</item>
+                    <item name="taxvat" xsi:type="string">customer</item>
+                    <item name="updated_at" xsi:type="string">customer</item>
+                    <item name="website_id" xsi:type="string">customer</item>
+                </item>
+                <item name="customer_address" xsi:type="array">
+                    <item name="city" xsi:type="string">customer_address</item>
+                    <item name="company" xsi:type="string">customer_address</item>
+                    <item name="country_id" xsi:type="string">customer_address</item>
+                    <item name="fax" xsi:type="string">customer_address</item>
+                    <item name="firstname" xsi:type="string">customer_address</item>
+                    <item name="lastname" xsi:type="string">customer_address</item>
+                    <item name="middlename" xsi:type="string">customer_address</item>
+                    <item name="postcode" xsi:type="string">customer_address</item>
+                    <item name="prefix" xsi:type="string">customer_address</item>
+                    <item name="region" xsi:type="string">customer_address</item>
+                    <item name="region_id" xsi:type="string">customer_address</item>
+                    <item name="street" xsi:type="string">customer_address</item>
+                    <item name="suffix" xsi:type="string">customer_address</item>
+                    <item name="telephone" xsi:type="string">customer_address</item>
+                    <item name="vat_id" xsi:type="string">customer_address</item>
+                    <item name="vat_is_valid" xsi:type="string">customer_address</item>
+                    <item name="vat_request_date" xsi:type="string">customer_address</item>
+                    <item name="vat_request_id" xsi:type="string">customer_address</item>
+                    <item name="vat_request_success" xsi:type="string">customer_address</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

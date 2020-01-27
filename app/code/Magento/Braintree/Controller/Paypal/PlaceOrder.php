@@ -9,6 +9,7 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -17,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class PlaceOrder
  */
-class PlaceOrder extends AbstractAction
+class PlaceOrder extends AbstractAction implements HttpPostActionInterface
 {
     /**
      * @var Helper\OrderPlace
@@ -54,6 +55,7 @@ class PlaceOrder extends AbstractAction
 
     /**
      * @inheritdoc
+     *
      * @throws LocalizedException
      */
     public function execute()
@@ -71,7 +73,10 @@ class PlaceOrder extends AbstractAction
             return $resultRedirect->setPath('checkout/onepage/success', ['_secure' => true]);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            $this->messageManager->addExceptionMessage($e, $e->getMessage());
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('The order #%1 cannot be processed.', $quote->getReservedOrderId())
+            );
         }
 
         return $resultRedirect->setPath('checkout/cart', ['_secure' => true]);

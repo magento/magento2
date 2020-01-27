@@ -19,16 +19,16 @@
             a {
                 position: relative;
                 .lib-icon-font(
-                @_icon-font-content: @icon-down,
-                @_icon-font-size: @font-size__base,
-                @_icon-font-line-height: @icon-font__line-height,
-                @_icon-font-color: @icon-font__color,
-                @_icon-font-color-hover: @icon-font__color-hover,
-                @_icon-font-color-active: @icon-font__color-active,
-                @_icon-font-margin: @icon-font__margin,
-                @_icon-font-vertical-align: @icon-font__vertical-align,
-                @_icon-font-position: after,
-                @_icon-font-display: false
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: @font-size__base,
+                    @_icon-font-line-height: @icon-font__line-height,
+                    @_icon-font-color: @icon-font__color,
+                    @_icon-font-color-hover: @icon-font__color-hover,
+                    @_icon-font-color-active: @icon-font__color-active,
+                    @_icon-font-margin: @icon-font__margin,
+                    @_icon-font-vertical-align: @icon-font__vertical-align,
+                    @_icon-font-position: after,
+                    @_icon-font-display: false
                 );
 
                 &:after {
@@ -72,6 +72,20 @@
             &:after {
                 display: none;
             }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .product.data.items {
+        .item.title {
+            > .switch {
+                padding: 1px 15px 1px;
+            }
+        }
+
+        > .item.content {
+            padding: 10px 15px 30px;
         }
     }
 }

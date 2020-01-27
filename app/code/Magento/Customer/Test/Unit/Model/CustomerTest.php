@@ -13,9 +13,13 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Math\Random;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -68,6 +72,29 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private $accountConfirmation;
 
+    /**
+     * @var AddressCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $addressesFactory;
+
+    /**
+     * @var CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerDataFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataObjectHelper;
+
+    /**
+     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mathRandom;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_website = $this->createMock(\Magento\Store\Model\Website::class);
@@ -100,6 +127,20 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
+        $this->addressesFactory = $this->getMockBuilder(AddressCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->customerDataFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['populateWithArray'])
+            ->getMock();
+        $this->mathRandom = $this->createMock(Random::class);
+
         $this->_model = $helper->getObject(
             \Magento\Customer\Model\Customer::class,
             [
@@ -112,7 +153,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 'registry' => $this->registryMock,
                 'resource' => $this->resourceMock,
                 'dataObjectProcessor' => $this->dataObjectProcessor,
-                'accountConfirmation' => $this->accountConfirmation
+                'accountConfirmation' => $this->accountConfirmation,
+                '_addressesFactory' => $this->addressesFactory,
+                'customerDataFactory' => $this->customerDataFactory,
+                'dataObjectHelper' => $this->dataObjectHelper,
+                'mathRandom' => $this->mathRandom,
             ]
         );
     }
@@ -185,15 +230,17 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->method('getTransport')
             ->will($this->returnValue($transportMock));
 
-        $this->_model->setData([
+        $this->_model->setData(
+            [
                 'website_id' => 1,
-                'store_id'   => 1,
-                'email'      => 'email@example.com',
-                'firstname'  => 'FirstName',
-                'lastname'   => 'LastName',
+                'store_id' => 1,
+                'email' => 'email@example.com',
+                'firstname' => 'FirstName',
+                'lastname' => 'LastName',
                 'middlename' => 'MiddleName',
-                'prefix'     => 'Name Prefix',
-        ]);
+                'prefix' => 'Name Prefix',
+            ]
+        );
         $this->_model->sendNewAccountEmail('registered');
     }
 
@@ -307,9 +354,62 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         }
 
         $expectedResult[$attribute->getAttributeCode()] = $attribute->getValue();
-        $expectedResult['attribute_set_id'] =
-            \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
 
         $this->assertEquals($this->_model->getData(), $expectedResult);
+    }
+
+    /**
+     * Test for the \Magento\Customer\Model\Customer::getDataModel() method
+     */
+    public function testGetDataModel()
+    {
+        $customerId = 1;
+        $this->_model->setEntityId($customerId);
+        $this->_model->setId($customerId);
+        $addressDataModel = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setCustomer', 'getDataModel'])
+            ->getMock();
+        $address->expects($this->atLeastOnce())->method('getDataModel')->willReturn($addressDataModel);
+        $addresses = new \ArrayIterator([$address, $address]);
+        $addressCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
+            ->getMock();
+        $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->willReturnSelf();
+        $addressCollection->expects($this->atLeastOnce())->method('addAttributeToSelect')->willReturnSelf();
+        $addressCollection->expects($this->atLeastOnce())->method('getIterator')
+            ->willReturn($addresses);
+        $addressCollection->expects($this->atLeastOnce())->method('getItems')
+            ->willReturn($addresses);
+        $this->addressesFactory->expects($this->atLeastOnce())->method('create')->willReturn($addressCollection);
+        $customerDataObject = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $this->customerDataFactory->expects($this->atLeastOnce())->method('create')->willReturn($customerDataObject);
+        $this->dataObjectHelper->expects($this->atLeastOnce())->method('populateWithArray')
+            ->with($customerDataObject, $this->_model->getData(), \Magento\Customer\Api\Data\CustomerInterface::class)
+            ->willReturnSelf();
+        $customerDataObject->expects($this->atLeastOnce())->method('setAddresses')
+            ->with([$addressDataModel, $addressDataModel])
+            ->willReturnSelf();
+        $customerDataObject->expects($this->atLeastOnce())->method('setId')->with($customerId)->willReturnSelf();
+        $this->_model->getDataModel();
+        $this->assertEquals($customerDataObject, $this->_model->getDataModel());
+    }
+
+    /**
+     * Check getRandomConfirmationKey use cryptographically secure function
+     *
+     * @return void
+     */
+    public function testGetRandomConfirmationKey() : void
+    {
+        $this->mathRandom
+            ->expects($this->once())
+            ->method('getRandomString')
+            ->with(32)
+            ->willReturn('random_string');
+
+        $this->_model->getRandomConfirmationKey();
     }
 }

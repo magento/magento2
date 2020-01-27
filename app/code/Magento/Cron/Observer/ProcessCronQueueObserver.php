@@ -7,12 +7,13 @@
 /**
  * Handling cron jobs
  */
+
 namespace Magento\Cron\Observer;
 
+use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Cron\Model\Schedule;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
 
@@ -69,6 +70,11 @@ class ProcessCronQueueObserver implements ObserverInterface
      * Static lock prefix for cron group locking
      */
     const LOCK_PREFIX = 'CRON_GROUP_';
+
+    /**
+     * Cron Job name pattern for Profiling
+     */
+    const CRON_TIMERID = 'job %s';
 
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
@@ -204,7 +210,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-
         $currentTime = $this->dateTime->gmtTimestamp();
         $jobGroupsRoot = $this->_config->getJobs();
         // sort jobs groups to start from used in separated process
@@ -258,7 +263,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function lockGroup($groupId, callable $callback)
     {
-
         if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
             $this->logger->warning(
                 sprintf(
@@ -293,17 +297,20 @@ class ProcessCronQueueObserver implements ObserverInterface
         $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
         if ($scheduledTime < $currentTime - $scheduleLifetime) {
             $schedule->setStatus(Schedule::STATUS_MISSED);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(sprintf('Cron Job %s is missed at %s', $jobCode, $schedule->getScheduledAt()));
         }
 
         if (!isset($jobConfig['instance'], $jobConfig['method'])) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
-            throw new \Exception('No callbacks found');
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception(sprintf('No callbacks found for cron job %s', $jobCode));
         }
         $model = $this->_objectManager->create($jobConfig['instance']);
         $callback = [$model, $jobConfig['method']];
         if (!is_callable($callback)) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(
                 sprintf('Invalid callback: %s::%s can\'t be called', $jobConfig['instance'], $jobConfig['method'])
             );
@@ -311,18 +318,21 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))->save();
 
-        $this->startProfiling();
+        $this->startProfiling($jobCode);
         try {
             $this->logger->info(sprintf('Cron Job %s is run', $jobCode));
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             call_user_func_array($callback, [$schedule]);
         } catch (\Throwable $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
-            $this->logger->error(sprintf(
-                'Cron Job %s has an error: %s. Statistics: %s',
-                $jobCode,
-                $e->getMessage(),
-                $this->getProfilingStat()
-            ));
+            $this->logger->error(
+                sprintf(
+                    'Cron Job %s has an error: %s. Statistics: %s',
+                    $jobCode,
+                    $e->getMessage(),
+                    $this->getProfilingStat($jobCode)
+                )
+            );
             if (!$e instanceof \Exception) {
                 $e = new \RuntimeException(
                     'Error when running a cron job',
@@ -332,50 +342,71 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
             throw $e;
         } finally {
-            $this->stopProfiling();
+            $this->stopProfiling($jobCode);
         }
 
-        $schedule->setStatus(Schedule::STATUS_SUCCESS)->setFinishedAt(strftime(
-            '%Y-%m-%d %H:%M:%S',
-            $this->dateTime->gmtTimestamp()
-        ));
+        $schedule->setStatus(
+            Schedule::STATUS_SUCCESS
+        )->setFinishedAt(
+            strftime(
+                '%Y-%m-%d %H:%M:%S',
+                $this->dateTime->gmtTimestamp()
+            )
+        );
 
-        $this->logger->info(sprintf(
-            'Cron Job %s is successfully finished. Statistics: %s',
-            $jobCode,
-            $this->getProfilingStat()
-        ));
+        $this->logger->info(
+            sprintf(
+                'Cron Job %s is successfully finished. Statistics: %s',
+                $jobCode,
+                $this->getProfilingStat($jobCode)
+            )
+        );
     }
 
     /**
      * Starts profiling
      *
+     * @param string $jobName
      * @return void
      */
-    private function startProfiling()
+    private function startProfiling(string $jobName = '')
     {
         $this->statProfiler->clear();
-        $this->statProfiler->start('job', microtime(true), memory_get_usage(true), memory_get_usage());
+        $this->statProfiler->start(
+            sprintf(self::CRON_TIMERID, $jobName),
+            microtime(true),
+            memory_get_usage(true),
+            memory_get_usage()
+        );
     }
 
     /**
      * Stops profiling
      *
+     * @param string $jobName
      * @return void
      */
-    private function stopProfiling()
+    private function stopProfiling(string $jobName = '')
     {
-        $this->statProfiler->stop('job', microtime(true), memory_get_usage(true), memory_get_usage());
+        $this->statProfiler->stop(
+            sprintf(self::CRON_TIMERID, $jobName),
+            microtime(true),
+            memory_get_usage(true),
+            memory_get_usage()
+        );
     }
 
     /**
      * Retrieves statistics in the JSON format
      *
+     * @param string $jobName
      * @return string
      */
-    private function getProfilingStat()
+    private function getProfilingStat(string $jobName): string
     {
-        $stat = $this->statProfiler->get('job');
+        $stat = $this->statProfiler->get(
+            sprintf(self::CRON_TIMERID, $jobName)
+        );
         unset($stat[Stat::START]);
         return json_encode($stat);
     }
@@ -391,6 +422,30 @@ class ProcessCronQueueObserver implements ObserverInterface
         $jobs = $this->_config->getJobs();
         $pendingJobs = $this->_scheduleFactory->create()->getCollection();
         $pendingJobs->addFieldToFilter('status', Schedule::STATUS_PENDING);
+        $pendingJobs->addFieldToFilter('job_code', ['in' => array_keys($jobs[$groupId])]);
+        return $pendingJobs;
+    }
+
+    /**
+     * Return job collection from database with status 'pending', 'running' or 'success'
+     *
+     * @param string $groupId
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     */
+    private function getNonExitedSchedules($groupId)
+    {
+        $jobs = $this->_config->getJobs();
+        $pendingJobs = $this->_scheduleFactory->create()->getCollection();
+        $pendingJobs->addFieldToFilter(
+            'status',
+            [
+                'in' => [
+                    Schedule::STATUS_PENDING,
+                    Schedule::STATUS_RUNNING,
+                    Schedule::STATUS_SUCCESS
+                ]
+            ]
+        );
         $pendingJobs->addFieldToFilter('job_code', ['in' => array_keys($jobs[$groupId])]);
         return $pendingJobs;
     }
@@ -426,7 +481,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             null
         );
 
-        $schedules = $this->getPendingSchedules($groupId);
+        $schedules = $this->getNonExitedSchedules($groupId);
         $exists = [];
         /** @var Schedule $schedule */
         foreach ($schedules as $schedule) {
@@ -447,10 +502,10 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * Generate jobs for config information
      *
-     * @param   array $jobs
-     * @param   array $exists
-     * @param   string $groupId
-     * @return  void
+     * @param array $jobs
+     * @param array $exists
+     * @param string $groupId
+     * @return void
      */
     protected function _generateJobs($jobs, $exists, $groupId)
     {
@@ -669,11 +724,14 @@ class ProcessCronQueueObserver implements ObserverInterface
         /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
         $scheduleResource = $this->_scheduleFactory->create()->getResource();
         foreach ($this->invalid as $jobCode => $scheduledAtList) {
-            $scheduleResource->getConnection()->delete($scheduleResource->getMainTable(), [
-                'status = ?' => Schedule::STATUS_PENDING,
-                'job_code = ?' => $jobCode,
-                'scheduled_at in (?)' => $scheduledAtList,
-            ]);
+            $scheduleResource->getConnection()->delete(
+                $scheduleResource->getMainTable(),
+                [
+                    'status = ?' => Schedule::STATUS_PENDING,
+                    'job_code = ?' => $jobCode,
+                    'scheduled_at in (?)' => $scheduledAtList,
+                ]
+            );
         }
         return $this;
     }

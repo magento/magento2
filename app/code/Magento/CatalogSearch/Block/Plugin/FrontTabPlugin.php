@@ -11,9 +11,7 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
- * Plugin for Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Add Search Weight field to the product attribute add/edit tab
  */
 class FrontTabPlugin
 {

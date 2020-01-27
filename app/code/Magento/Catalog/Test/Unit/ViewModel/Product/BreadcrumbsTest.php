@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\ViewModel\Product\Breadcrumbs;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
  * Unit test for Magento\Catalog\ViewModel\Product\Breadcrumbs.
@@ -39,6 +40,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var JsonHexTag|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
      * @inheritdoc
      */
     protected function setUp() : void
@@ -55,12 +61,15 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
 
         $escaper = $this->getObjectManager()->getObject(\Magento\Framework\Escaper::class);
 
+        $this->serializer = $this->createMock(JsonHexTag::class);
+
         $this->viewModel = $this->getObjectManager()->getObject(
             Breadcrumbs::class,
             [
                 'catalogData' => $this->catalogHelper,
                 'scopeConfig' => $this->scopeConfig,
-                'escaper' => $escaper
+                'escaper' => $escaper,
+                'jsonSerializer' => $this->serializer
             ]
         );
     }
@@ -141,6 +150,8 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/seo/category_url_suffix', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn('."html');
 
+        $this->serializer->expects($this->once())->method('serialize')->willReturn($expectedJson);
+
         $this->assertEquals($expectedJson, $this->viewModel->getJsonConfiguration());
     }
 
@@ -152,21 +163,21 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test ™']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":"Test \u2122"}}',
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test \u2122"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test "']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":"Test &quot;"}}',
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &quot;"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test <b>x</b>']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":'
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":'
                 . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
                 '{"breadcrumbs":'
-                . '{"categoryUrlSuffix":".&quot;html","userCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
+                . '{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
             ],
         ];
     }

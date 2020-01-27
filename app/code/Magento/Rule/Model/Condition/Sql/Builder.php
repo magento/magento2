@@ -32,9 +32,13 @@ class Builder
         '=='    => ':field = ?',
         '!='    => ':field <> ?',
         '>='    => ':field >= ?',
+        '&gt;=' => ':field >= ?',
         '>'     => ':field > ?',
+        '&gt;'  => ':field > ?',
         '<='    => ':field <= ?',
+        '&lt;=' => ':field <= ?',
         '<'     => ':field < ?',
+        '&lt;'  => ':field < ?',
         '{}'    => ':field IN (?)',
         '!{}'   => ':field NOT IN (?)',
         '()'    => ':field IN (?)',
@@ -148,9 +152,11 @@ class Builder
     ): string {
         $argument = $condition->getMappedSqlField();
 
-        // If rule hasn't valid argument - create negative expression to prevent incorrect rule behavior.
+        // If rule hasn't valid argument - prevent incorrect rule behavior.
         if (empty($argument)) {
             return $this->_expressionFactory->create(['expression' => '1 = -1']);
+        } elseif (preg_match('/[^a-z0-9\-_\.\`]/i', $argument) > 0) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid field'));
         }
 
         $conditionOperator = $condition->getOperatorForValidate();
@@ -191,7 +197,6 @@ class Builder
                 );
             }
         }
-
         return $this->_expressionFactory->create(
             ['expression' => $expression]
         );
@@ -237,6 +242,7 @@ class Builder
      * @param AbstractCollection $collection
      * @param Combine $combine
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function attachConditionToCollection(
         AbstractCollection $collection,
@@ -246,8 +252,43 @@ class Builder
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
-            // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
+            $this->buildConditions($collection, $combine);
+        }
+    }
+
+    /**
+     * Build sql conditions from combination.
+     *
+     * @param AbstractCollection $collection
+     * @param Combine $combine
+     * @return void
+     */
+    private function buildConditions(AbstractCollection $collection, Combine $combine) : void
+    {
+        if (!empty($combine->getConditions())) {
+            $conditions = '';
+            $attributeField = '';
+            foreach ($combine->getConditions() as $condition) {
+                if ($condition->getData('attribute') === \Magento\Catalog\Api\Data\ProductInterface::SKU
+                    && $condition->getData('operator') === '()'
+                ) {
+                    $conditions = $condition->getData('value');
+                    $attributeField = $this->_connection->quoteIdentifier($condition->getMappedSqlField());
+                }
+            }
+
+            if (!empty($conditions) && !empty($attributeField)) {
+                $conditions = $this->_connection->quote(
+                    array_map('trim', explode(',', $conditions))
+                );
+                $collection->getSelect()->reset(Select::ORDER);
+                $collection->getSelect()->order(
+                    $this->_expressionFactory->create(
+                        ['expression' => "FIELD($attributeField, $conditions)"]
+                    )
+                );
+            }
         }
     }
 }

@@ -12,15 +12,18 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInt
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Magento\Framework\Lock\LockManagerInterface;
 
+/**
+ * Unit tests for ConsumersRunner.
+ */
 class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PidConsumerManager|MockObject
+     * @var LockManagerInterface|MockObject
      */
-    private $pidConsumerManagerMock;
+    private $lockManagerMock;
 
     /**
      * @var ShellInterface|MockObject
@@ -62,9 +65,8 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->phpExecutableFinderMock = $this->getMockBuilder(phpExecutableFinder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pidConsumerManagerMock = $this->getMockBuilder(PidConsumerManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
+            ->getMockForAbstractClass();
         $this->shellBackgroundMock = $this->getMockBuilder(ShellInterface::class)
             ->getMockForAbstractClass();
         $this->consumerConfigMock = $this->getMockBuilder(ConsumerConfigInterface::class)
@@ -82,7 +84,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             $this->consumerConfigMock,
             $this->deploymentConfigMock,
             $this->shellBackgroundMock,
-            $this->pidConsumerManagerMock,
+            $this->lockManagerMock,
             $this->connectionTypeResover
         );
     }
@@ -91,16 +93,18 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
-            ->willReturnMap([
-                ['cron_consumers_runner/cron_run', true, false],
-                ['cron_consumers_runner/max_messages', 10000, 10000],
-                ['cron_consumers_runner/consumers', [], []],
-            ]);
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, false],
+                    ['cron_consumers_runner/max_messages', 10000, 10000],
+                    ['cron_consumers_runner/consumers', [], []],
+                ]
+            );
 
         $this->consumerConfigMock->expects($this->never())
             ->method('getConsumers');
-        $this->pidConsumerManagerMock->expects($this->never())
-            ->method('isRun');
+        $this->lockManagerMock->expects($this->never())
+            ->method('isLocked');
         $this->shellBackgroundMock->expects($this->never())
             ->method('execute');
 
@@ -109,7 +113,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $maxMessages
-     * @param bool $isRun
+     * @param bool $isLocked
      * @param string $php
      * @param string $command
      * @param array $arguments
@@ -120,7 +124,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
      */
     public function testRun(
         $maxMessages,
-        $isRun,
+        $isLocked,
         $php,
         $command,
         $arguments,
@@ -129,15 +133,16 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $isRunExpects
     ) {
         $consumerName = 'consumerName';
-        $pidFilePath = 'consumerName-myHostName.pid';
 
         $this->deploymentConfigMock->expects($this->exactly(3))
             ->method('get')
-            ->willReturnMap([
-                ['cron_consumers_runner/cron_run', true, true],
-                ['cron_consumers_runner/max_messages', 10000, $maxMessages],
-                ['cron_consumers_runner/consumers', [], $allowedConsumers],
-            ]);
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, $maxMessages],
+                    ['cron_consumers_runner/consumers', [], $allowedConsumers],
+                ]
+            );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
         $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
@@ -154,10 +159,10 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             ->method('getConsumers')
             ->willReturn([$consumer]);
 
-        $this->pidConsumerManagerMock->expects($this->exactly($isRunExpects))
-            ->method('isRun')
-            ->with($pidFilePath)
-            ->willReturn($isRun);
+        $this->lockManagerMock->expects($this->exactly($isRunExpects))
+            ->method('isLocked')
+            ->with(md5($consumerName)) //phpcs:ignore
+            ->willReturn($isLocked);
 
         $this->shellBackgroundMock->expects($this->exactly($shellBackgroundExpects))
             ->method('execute')
@@ -174,80 +179,80 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'maxMessages' => 20000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=20000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=20000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 0,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => true,
+                'isLocked' => true,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 0,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => true,
+                'isLocked' => true,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => true,
+                'isLocked' => true,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 0,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '/bin/php',
                 'command' => '/bin/php '. BP . '/bin/magento queue:consumers:start %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid'],
+                'arguments' => ['consumerName', '--single-thread'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,

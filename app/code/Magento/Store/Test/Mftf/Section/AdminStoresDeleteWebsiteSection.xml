@@ -8,6 +8,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminStoresDeleteWebsiteSection">
         <element name="createDbBackup" type="select" selector="#store_create_backup"/>
-        <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
+        <element name="deleteButton" type="button" selector="#delete" timeout="120"/>
     </section>
 </sections>

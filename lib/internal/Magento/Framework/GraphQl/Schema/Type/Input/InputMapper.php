@@ -9,27 +9,15 @@ namespace Magento\Framework\GraphQl\Schema\Type\Input;
 
 use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
 use Magento\Framework\GraphQl\Config\Element\Argument;
-use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
-use Magento\Framework\GraphQl\Schema\TypeFactory;
+use Magento\Framework\GraphQl\Schema\Type\TypeRegistry;
 
+/**
+ * Prepare argument's metadata for GraphQL schema generation
+ */
 class InputMapper
 {
-    /**
-     * @var InputFactory
-     */
-    private $inputFactory;
-
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     /**
      * @var ScalarTypes
      */
@@ -41,24 +29,23 @@ class InputMapper
     private $wrappedTypeProcessor;
 
     /**
-     * @param InputFactory $inputFactory
-     * @param ConfigInterface $config
-     * @param TypeFactory $typeFactory
+     * @var TypeRegistry
+     */
+    private $typeRegistry;
+
+    /**
      * @param ScalarTypes $scalarTypes
      * @param WrappedTypeProcessor $wrappedTypeProcessor
+     * @param TypeRegistry $typeRegistry
      */
     public function __construct(
-        InputFactory $inputFactory,
-        ConfigInterface $config,
-        TypeFactory $typeFactory,
         ScalarTypes $scalarTypes,
-        WrappedTypeProcessor $wrappedTypeProcessor
+        WrappedTypeProcessor $wrappedTypeProcessor,
+        TypeRegistry $typeRegistry
     ) {
-        $this->inputFactory = $inputFactory;
-        $this->config = $config;
-        $this->typeFactory = $typeFactory;
         $this->scalarTypes = $scalarTypes;
         $this->wrappedTypeProcessor = $wrappedTypeProcessor;
+        $this->typeRegistry = $typeRegistry;
     }
 
     /**
@@ -66,6 +53,7 @@ class InputMapper
      *
      * @param Argument $argument
      * @return array
+     * @throws GraphQlInputException
      */
     public function getRepresentation(Argument $argument) : array
     {
@@ -73,8 +61,7 @@ class InputMapper
         if ($this->scalarTypes->isScalarType($typeName)) {
             $instance = $this->wrappedTypeProcessor->processScalarWrappedType($argument);
         } else {
-            $configElement = $this->config->getConfigElement($typeName);
-            $instance = $this->inputFactory->create($configElement);
+            $instance = $this->typeRegistry->get($typeName);
             $instance = $this->wrappedTypeProcessor->processWrappedType($argument, $instance);
         }
 

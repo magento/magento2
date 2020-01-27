@@ -10,8 +10,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search plugin for search collection filter in layered navigation.
  */
 class CollectionFilter
 {

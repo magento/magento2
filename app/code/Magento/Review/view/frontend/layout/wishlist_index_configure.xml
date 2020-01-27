@@ -9,7 +9,7 @@
     <update handle="catalog_product_view"/>
     <body>
         <referenceBlock name="reviews.tab">
-            <block class="Magento\Review\Block\Form\Configure" name="product.review.form" as="review_form">
+            <block class="Magento\Review\Block\Form\Configure" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">

@@ -65,17 +65,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     }
 
     /**
-     * Construct block
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setShowGlobalIcon(true);
-    }
-
-    /**
      * Prepares form
      *
      * @return void

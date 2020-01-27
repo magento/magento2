@@ -15,7 +15,7 @@
             <title value="Customer Checkout"/>
             <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-60345"/>
+            <testCaseId value="MC-16488"/>
             <group value="checkout"/>
         </annotations>
 
@@ -28,9 +28,9 @@
 
         <after>
             <!--Logout from customer account-->
-            <amOnPage url="customer/account/logout/" stepKey="logoutCustomerOne"/>
+            <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>
@@ -45,7 +45,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -55,8 +55,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest3"/>
-
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
@@ -71,7 +71,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -81,7 +81,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton2"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext2"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest4"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
@@ -95,7 +96,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad3"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage3">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage3">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -105,7 +106,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton3"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext3"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest5"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment3"/>
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder3"/>
@@ -132,10 +135,10 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Success page elements are presented for placed order as Guest"/>
-            <title value="Customer Checkout"/>
-            <description value="To be sure that other elements of Success page are presented for placed order as Guest."/>
+            <title value="Guest Checkout - elements of success page are presented for placed order as guest"/>
+            <description value="To be sure that other elements of Success page are presented for placed order as Guest"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-60346"/>
+            <testCaseId value="MC-16490"/>
             <group value="checkout"/>
         </annotations>
 
@@ -144,7 +147,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
         </after>
 
@@ -153,7 +156,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -164,6 +167,9 @@
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
@@ -187,7 +193,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -197,6 +203,9 @@
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>

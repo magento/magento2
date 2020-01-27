@@ -45,6 +45,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private static $moduleNameBlacklist;
 
+    /**
+     * @var string
+     */
+    private static $magentoFrameworkLibraryName = 'magento/framework';
+
     public static function setUpBeforeClass()
     {
         self::$root = BP;
@@ -68,6 +73,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $blacklist = [];
         foreach (glob($pattern) as $list) {
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $blacklist = array_merge($blacklist, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
         return $blacklist;
@@ -311,9 +317,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertDependsOnFramework(\StdClass $json)
     {
         $this->assertObjectHasAttribute(
-            'magento/framework',
+            self::$magentoFrameworkLibraryName,
             $json,
-            'This component is expected to depend on magento/framework'
+            'This component is expected to depend on ' . self::$magentoFrameworkLibraryName
         );
     }
 
@@ -326,24 +332,15 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertPhpVersionInSync($name, $phpVersion)
     {
         if (isset(self::$rootJson['require']['php'])) {
-            if ($this->isVendorMagento($name)) {
-                $this->assertEquals(
-                    self::$rootJson['require']['php'],
-                    $phpVersion,
-                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-                    . self::$rootJson['require']['php'] . ' in root composer.json'
-                );
-            } else {
-                $composerVersionsPattern = '{\s*\|\|?\s*}';
-                $rootPhpVersions = preg_split($composerVersionsPattern, self::$rootJson['require']['php']);
-                $modulePhpVersions = preg_split($composerVersionsPattern, $phpVersion);
+            $composerVersionsPattern = '{\s*\|\|?\s*}';
+            $rootPhpVersions = preg_split($composerVersionsPattern, self::$rootJson['require']['php']);
+            $modulePhpVersions = preg_split($composerVersionsPattern, $phpVersion);
 
-                $this->assertEmpty(
-                    array_diff($rootPhpVersions, $modulePhpVersions),
-                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-                    . self::$rootJson['require']['php'] . ' in root composer.json'
-                );
-            }
+            $this->assertEmpty(
+                array_diff($rootPhpVersions, $modulePhpVersions),
+                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                . self::$rootJson['require']['php'] . ' in root composer.json'
+            );
         }
     }
 
@@ -504,5 +501,43 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 . join(', ', $nonexistentDependencies)
             );
         }
+    }
+
+    /**
+     * Check the correspondence between the root composer file and magento/framework composer file.
+     */
+    public function testConsistencyOfDeclarationsInComposerFiles()
+    {
+        if (strpos(self::$rootJson['name'], 'magento/project-') !== false) {
+            // The Dependency test is skipped for vendor/magento build
+            self::markTestSkipped(
+                'The build is running for composer installation. Consistency test for composer files is skipped.'
+            );
+        }
+
+        $componentRegistrar = new ComponentRegistrar();
+        $magentoFrameworkLibraryDir =
+            $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, self::$magentoFrameworkLibraryName);
+        $magentoFrameworkComposerFile =
+            json_decode(
+                file_get_contents($magentoFrameworkLibraryDir . DIRECTORY_SEPARATOR . 'composer.json'),
+                true
+            );
+
+        $inconsistentDependencies = [];
+        foreach ($magentoFrameworkComposerFile['require'] as $dependency => $constraint) {
+            if (isset(self::$rootJson['require'][$dependency])
+                && self::$rootJson['require'][$dependency] !== $constraint
+            ) {
+                $inconsistentDependencies[] = $dependency;
+            }
+        }
+
+        $this->assertEmpty(
+            $inconsistentDependencies,
+            'There is a discrepancy between the declared versions of the following modules in "'
+            . self::$magentoFrameworkLibraryName . '" and the root composer.json: '
+            . implode(', ', $inconsistentDependencies)
+        );
     }
 }

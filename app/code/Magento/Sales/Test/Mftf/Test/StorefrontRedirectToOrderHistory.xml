@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontRedirectToOrderHistory">
         <annotations>
             <features value="Redirection Rules"/>
@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 1 -->
-        <actionGroup ref="CreateOrderToPrintPageActionGroup" stepKey="createOrderToPrint">
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint">
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
 
@@ -64,7 +64,7 @@
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 2 -->
-        <actionGroup ref="CreateOrderToPrintPageActionGroup" stepKey="createOrderToPrint2">
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint2">
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
 

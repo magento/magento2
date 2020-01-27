@@ -53,9 +53,11 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!--  Step 3: Go to Shopping Cart -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA" />
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>

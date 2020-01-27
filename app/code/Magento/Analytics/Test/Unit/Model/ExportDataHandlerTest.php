@@ -191,7 +191,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
             ->with(
                 $archiveSource,
                 $archiveAbsolutePath,
-                $isArchiveSourceDirectory ? true : false
+                $isArchiveSourceDirectory
             );
 
         $fileContent = 'Some text';
@@ -222,7 +222,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Data source for archive is directory' => [true],
-            'Data source for archive doesn\'t directory' => [false],
+            'Data source for archive isn\'t directory' => [false],
         ];
     }
 

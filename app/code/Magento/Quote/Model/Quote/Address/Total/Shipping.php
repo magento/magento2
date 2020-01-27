@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\Address\Total;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 
+/**
+ * Collect totals for shipping.
+ */
 class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -109,17 +115,21 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $amount = $total->getShippingAmount();
-        $shippingDescription = $total->getShippingDescription();
-        $title = ($amount != 0 && $shippingDescription)
-            ? __('Shipping & Handling (%1)', $shippingDescription)
-            : __('Shipping & Handling');
+        if (!$quote->getIsVirtual()) {
+            $amount = $total->getShippingAmount();
+            $shippingDescription = $total->getShippingDescription();
+            $title = ($shippingDescription)
+                ? __('Shipping & Handling (%1)', $shippingDescription)
+                : __('Shipping & Handling');
 
-        return [
-            'code' => $this->getCode(),
-            'title' => $title,
-            'value' => $amount
-        ];
+            return [
+                'code' => $this->getCode(),
+                'title' => $title,
+                'value' => $amount
+            ];
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -227,7 +237,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param bool $addressFreeShipping
      * @param float $itemWeight
      * @param float $itemQty
-     * @param $freeShipping
+     * @param bool $freeShipping
      * @return float
      */
     private function getItemRowWeight(

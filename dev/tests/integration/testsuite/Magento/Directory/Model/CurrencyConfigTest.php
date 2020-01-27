@@ -56,7 +56,7 @@ class CurrencyConfigTest extends TestCase
     }
 
     /**
-     * Test get currency config for admin and storefront areas.
+     * Test get currency config for admin, crontab and storefront areas.
      *
      * @dataProvider getConfigCurrenciesDataProvider
      * @magentoDataFixture Magento/Store/_files/store.php
@@ -77,7 +77,7 @@ class CurrencyConfigTest extends TestCase
         $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $storeManager->setCurrentStore($store->getId());
 
-        if ($areaCode === Area::AREA_ADMINHTML) {
+        if (in_array($areaCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
             self::assertEquals($expected['allowed'], $this->currency->getConfigAllowCurrencies());
             self::assertEquals($expected['base'], $this->currency->getConfigBaseCurrencies());
             self::assertEquals($expected['default'], $this->currency->getConfigDefaultCurrencies());
@@ -112,6 +112,14 @@ class CurrencyConfigTest extends TestCase
         return [
             [
                 'areaCode' => Area::AREA_ADMINHTML,
+                'expected' => [
+                    'allowed' => ['BDT', 'BNS', 'BTD', 'EUR', 'USD'],
+                    'base' => ['BDT', 'USD'],
+                    'default' => ['BDT', 'USD'],
+                ],
+            ],
+            [
+                'areaCode' => Area::AREA_CRONTAB,
                 'expected' => [
                     'allowed' => ['BDT', 'BNS', 'BTD', 'EUR', 'USD'],
                     'base' => ['BDT', 'USD'],

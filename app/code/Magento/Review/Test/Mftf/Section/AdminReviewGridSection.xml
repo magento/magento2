@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminReviewGridSection">
+        <element name="nickname" type="input" selector="#reviewGrid_filter_nickname"/>
+        <element name="status" type="select" selector="#reviewGrid_filter_status"/>
+        <element name="firstRow" type="block" selector=".data-grid tbody tr:nth-of-type(1)"/>
+        <element name="massActions" type="button" selector="#reviewGrid_massaction-mass-select"/>
+        <element name="massActionsSelect" type="button" selector="#reviewGrid_massaction-select"/>
+        <element name="submit" type="button" selector=".admin__grid-massaction-form .action-default.scalable"/>
+        <element name="acceptModal" type="button" selector=".modal-popup.confirm button.action-accept"/>
+    </section>
+</sections>

@@ -11,6 +11,9 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class ProductUrlPathGeneratorTest
+ */
 class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
@@ -77,10 +80,11 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function getUrlPathDataProvider(): array
     {
         return [
-            'path based on url key' => ['url-key', null, 'url-key'],
-            'path based on product name 1' => ['', 'product-name', 'product-name'],
-            'path based on product name 2' => [null, 'product-name', 'product-name'],
-            'path based on product name 3' => [false, 'product-name', 'product-name']
+            'path based on url key uppercase' => ['Url-Key', null, 0, 'url-key'],
+            'path based on url key' => ['url-key', null, 0, 'url-key'],
+            'path based on product name 1' => ['', 'product-name', 1, 'product-name'],
+            'path based on product name 2' => [null, 'product-name', 1, 'product-name'],
+            'path based on product name 3' => [false, 'product-name', 1, 'product-name']
         ];
     }
 
@@ -88,16 +92,18 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getUrlPathDataProvider
      * @param string|null|bool $urlKey
      * @param string|null|bool $productName
+     * @param int $formatterCalled
      * @param string $result
      * @return void
      */
-    public function testGetUrlPath($urlKey, $productName, $result): void
+    public function testGetUrlPath($urlKey, $productName, $formatterCalled, $result): void
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->will($this->returnValue(null));
         $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($urlKey));
         $this->product->expects($this->any())->method('getName')->will($this->returnValue($productName));
-        $this->product->expects($this->once())->method('formatUrlKey')->will($this->returnArgument(0));
+        $this->product->expects($this->exactly($formatterCalled))
+            ->method('formatUrlKey')->will($this->returnArgument(0));
 
         $this->assertEquals($result, $this->productUrlPathGenerator->getUrlPath($this->product, null));
     }

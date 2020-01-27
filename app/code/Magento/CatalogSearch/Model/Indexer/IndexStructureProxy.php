@@ -8,8 +8,7 @@ namespace Magento\CatalogSearch\Model\Indexer;
 use Magento\Framework\Indexer\IndexStructureInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search index structure proxy.
  */
 class IndexStructureProxy implements IndexStructureInterface
 {
@@ -33,7 +32,7 @@ class IndexStructureProxy implements IndexStructureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(
         $index,
@@ -43,7 +42,7 @@ class IndexStructureProxy implements IndexStructureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(
         $index,

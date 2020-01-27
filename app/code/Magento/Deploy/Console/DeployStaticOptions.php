@@ -6,6 +6,7 @@
 
 namespace Magento\Deploy\Console;
 
+use Magento\Deploy\Process\Queue;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -58,6 +59,11 @@ class DeployStaticOptions
     const JOBS_AMOUNT = 'jobs';
 
     /**
+     * Key for max execution time option
+     */
+    const MAX_EXECUTION_TIME = 'max-execution-time';
+
+    /**
      * Force run of static deploy
      */
     const FORCE_RUN = 'force';
@@ -71,6 +77,11 @@ class DeployStaticOptions
      * Key for javascript option
      */
     const NO_JAVASCRIPT = 'no-javascript';
+
+    /**
+     * Key for js-bundle option
+     */
+    const NO_JS_BUNDLE = 'no-js-bundle';
 
     /**
      * Key for css option
@@ -116,9 +127,6 @@ class DeployStaticOptions
      */
     const NO_LESS = 'no-less';
 
-    /**
-     * Default jobs amount
-     */
     const DEFAULT_JOBS_AMOUNT = 0;
 
     /**
@@ -150,6 +158,7 @@ class DeployStaticOptions
      * Basic options
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getBasicOptions()
     {
@@ -217,6 +226,13 @@ class DeployStaticOptions
                 self::DEFAULT_JOBS_AMOUNT
             ),
             new InputOption(
+                self::MAX_EXECUTION_TIME,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The maximum expected execution time of deployment static process (in seconds).',
+                Queue::DEFAULT_MAX_EXEC_TIME
+            ),
+            new InputOption(
                 self::SYMLINK_LOCALE,
                 null,
                 InputOption::VALUE_NONE,
@@ -240,7 +256,7 @@ class DeployStaticOptions
             new InputArgument(
                 self::LANGUAGES_ARGUMENT,
                 InputArgument::IS_ARRAY,
-                'Space-separated list of ISO-636 language codes for which to output static view files.'
+                'Space-separated list of ISO-639 language codes for which to output static view files.'
             ),
         ];
     }
@@ -260,6 +276,12 @@ class DeployStaticOptions
                 null,
                 InputOption::VALUE_NONE,
                 'Do not deploy JavaScript files.'
+            ),
+            new InputOption(
+                self::NO_JS_BUNDLE,
+                null,
+                InputOption::VALUE_NONE,
+                'Do not deploy JavaScript bundle files.'
             ),
             new InputOption(
                 self::NO_CSS,

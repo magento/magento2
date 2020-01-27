@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\ReleaseNotification\Model\ContentProviderInterface" type="Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider" />
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>

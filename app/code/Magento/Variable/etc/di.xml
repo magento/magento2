@@ -21,6 +21,10 @@
                     <item name="trans_email/ident_sales/name" xsi:type="string">1</item>
                     <item name="trans_email/ident_sales/email" xsi:type="string">1</item>
                 </item>
+                <item name="trans_email/ident_support" xsi:type="array">
+                    <item name="trans_email/ident_support/name" xsi:type="string">1</item>
+                    <item name="trans_email/ident_support/email" xsi:type="string">1</item>
+                </item>
                 <item name="trans_email/ident_custom1" xsi:type="array">
                     <item name="trans_email/ident_custom1/name" xsi:type="string">1</item>
                     <item name="trans_email/ident_custom1/email" xsi:type="string">1</item>
@@ -42,6 +46,7 @@
                     <item name="general/store_information/merchant_vat_number" xsi:type="string">1</item>
                 </item>
             </argument>
+            <argument name="configStructure" xsi:type="object">Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
     </type>
 </config>

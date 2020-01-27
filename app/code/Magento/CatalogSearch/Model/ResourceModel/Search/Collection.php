@@ -10,10 +10,9 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Search;
  * Search collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements
     \Magento\Search\Model\SearchCollectionInterface
@@ -62,7 +61,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -271,6 +269,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $sql = $this->_getSearchInOptionSql($query);
         if ($sql) {
+            // phpcs:ignore Magento2.SQL.RawQuery
             $selects[] = "SELECT * FROM ({$sql}) AS inoptionsql"; // inherent unions may be inside
         }
 

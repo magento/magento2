@@ -23,7 +23,7 @@
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -32,11 +32,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -66,8 +66,8 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <!-- Ensure tax won't be shown in the cart -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
@@ -92,9 +92,10 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="GuestCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
+        <actionGroup ref="GuestCheckoutSelectPaymentAndFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="customerVar" value="Simple_US_Customer_NY"/>
             <argument name="customerAddressVar" value="US_Address_NY"/>
+            <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
         <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
 
@@ -126,7 +127,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -135,11 +136,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -178,8 +179,8 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <!-- Ensure tax won't be shown in the cart -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -246,7 +247,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -255,11 +256,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -289,8 +290,8 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <!-- Ensure tax won't be shown in the cart -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -312,6 +313,9 @@
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>
         <click stepKey="clickNext" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForAddressToLoad"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
         <see stepKey="seeShipTo" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxCA.state}}"/>
 
@@ -329,6 +333,9 @@
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <click stepKey="clickNext2" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForShippingToLoad"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeShipTo2" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxNY.state}}"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
@@ -355,7 +362,7 @@
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -364,11 +371,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -407,8 +414,8 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <!-- Ensure tax won't be shown in the cart -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
@@ -424,6 +431,8 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForShippingSection"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxNY.state}}"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
@@ -445,6 +454,8 @@
         <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
 
         <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
 
         <!-- Assert that taxes are applied correctly for CA -->

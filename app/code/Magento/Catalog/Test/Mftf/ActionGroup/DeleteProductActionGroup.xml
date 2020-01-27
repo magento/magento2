@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteProductActionGroup">
+        <annotations>
+            <description>Deletes the provided Product Name from the Product grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" defaultValue=""/>
+        </arguments>
+
+        <click stepKey="openCatalog" selector="{{AdminMenuSection.catalog}}"/>
+        <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>
+        <click stepKey="clickOnProducts" selector="{{CatalogSubmenuSection.products}}"/>
+        <waitForPageLoad stepKey="waitForProductsPage" time="10"/>
+        <click stepKey="TickCheckbox" selector="{{ProductsPageSection.checkboxForProduct(productName)}}"/>
+        <click stepKey="OpenActions" selector="{{ProductsPageSection.actions}}"/>
+        <waitForAjaxLoad stepKey="waitForDelete" time="5"/>
+        <click stepKey="ChooseDelete" selector="{{ProductsPageSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForDeleteItemPopup" time="10"/>
+        <click stepKey="clickOnOk" selector="{{ProductsPageSection.ok}}"/>
+        <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{ProductsPageSection.deletedSuccessMessage}}" time="10"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
+    </actionGroup>
+</actionGroups>

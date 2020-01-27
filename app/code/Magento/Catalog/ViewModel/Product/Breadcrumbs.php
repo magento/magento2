@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Escaper;
 
@@ -37,23 +38,31 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     private $escaper;
 
     /**
+     * @var JsonHexTag
+     */
+    private $jsonSerializer;
+
+    /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
      * @param Json|null $json
      * @param Escaper|null $escaper
+     * @param JsonHexTag|null $jsonSerializer
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
         Json $json = null,
-        Escaper $escaper = null
+        Escaper $escaper = null,
+        JsonHexTag $jsonSerializer = null
     ) {
         parent::__construct();
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(JsonHexTag::class);
     }
 
     /**
@@ -101,15 +110,14 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      */
     public function getJsonConfigurationHtmlEscaped() : string
     {
-        return json_encode(
+        return $this->jsonSerializer->serialize(
             [
                 'breadcrumbs' => [
                     'categoryUrlSuffix' => $this->escaper->escapeHtml($this->getCategoryUrlSuffix()),
-                    'userCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
+                    'useCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
                     'product' => $this->escaper->escapeHtml($this->getProductName())
                 ]
-            ],
-            JSON_HEX_TAG
+            ]
         );
     }
 

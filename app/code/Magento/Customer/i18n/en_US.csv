@@ -47,7 +47,7 @@ Sending,Sending
 Paused,Paused
 View,View
 Unknown,Unknown
-Order,Order
+"Order #","Order #"
 Purchased,Purchased
 "Bill-to Name","Bill-to Name"
 "Ship-to Name","Ship-to Name"
@@ -500,16 +500,17 @@ Strong,Strong
 "Address Templates","Address Templates"
 "Online Customers Options","Online Customers Options"
 "Online Minutes Interval","Online Minutes Interval"
+"Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed","Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed"
 "Leave empty for default (15 minutes).","Leave empty for default (15 minutes)."
 "Customer Notification","Customer Notification"
 "Customer Grid","Customer Grid"
 "Rebuild Customer grid index","Rebuild Customer grid index"
 Group,Group
 "Add New Customer","Add New Customer"
-"Are you sure to delete selected customers?","Are you sure to delete selected customers?"
+"Are you sure you want to delete the selected customers?","Are you sure you want to delete the selected customers?"
 "Delete items","Delete items"
 "Subscribe to Newsletter","Subscribe to Newsletter"
-"Are you sure to unsubscribe selected customers from newsletter?","Are you sure to unsubscribe selected customers from newsletter?"
+"Are you sure you want to unsubscribe the selected customers from the newsletter?","Are you sure you want to unsubscribe the selected customers from the newsletter?"
 "Unsubscribe from Newsletter","Unsubscribe from Newsletter"
 "Assign a Customer Group","Assign a Customer Group"
 Phone,Phone
@@ -538,3 +539,4 @@ Addresses,Addresses
 "Prefix","Prefix"
 "Middle Name/Initial","Middle Name/Initial"
 "Suffix","Suffix"
+"The Date of Birth should not be greater than today.","The Date of Birth should not be greater than today."

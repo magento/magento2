@@ -9,22 +9,25 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerPassword;
-use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
+use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
- * @inheritdoc
+ * Change customer password resolver
  */
 class ChangePassword implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
+     * @var GetCustomer
      */
-    private $checkCustomerAccount;
+    private $getCustomer;
 
     /**
      * @var CheckCustomerPassword
@@ -37,26 +40,26 @@ class ChangePassword implements ResolverInterface
     private $accountManagement;
 
     /**
-     * @var CustomerDataProvider
+     * @var ExtractCustomerData
      */
-    private $customerDataProvider;
+    private $extractCustomerData;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param GetCustomer $getCustomer
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param AccountManagementInterface $accountManagement
-     * @param CustomerDataProvider $customerDataProvider
+     * @param ExtractCustomerData $extractCustomerData
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
+        GetCustomer $getCustomer,
         CheckCustomerPassword $checkCustomerPassword,
         AccountManagementInterface $accountManagement,
-        CustomerDataProvider $customerDataProvider
+        ExtractCustomerData $extractCustomerData
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->getCustomer = $getCustomer;
         $this->checkCustomerPassword = $checkCustomerPassword;
         $this->accountManagement = $accountManagement;
-        $this->customerDataProvider = $customerDataProvider;
+        $this->extractCustomerData = $extractCustomerData;
     }
 
     /**
@@ -69,24 +72,29 @@ class ChangePassword implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['currentPassword'])) {
-            throw new GraphQlInputException(__('"currentPassword" value should be specified'));
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
-        if (!isset($args['newPassword'])) {
-            throw new GraphQlInputException(__('"newPassword" value should be specified'));
+        if (!isset($args['currentPassword']) || '' == trim($args['currentPassword'])) {
+            throw new GraphQlInputException(__('Specify the "currentPassword" value.'));
         }
 
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
+        if (!isset($args['newPassword']) || '' == trim($args['newPassword'])) {
+            throw new GraphQlInputException(__('Specify the "newPassword" value.'));
+        }
 
-        $currentUserId = (int)$currentUserId;
-        $this->checkCustomerPassword->execute($args['currentPassword'], $currentUserId);
+        $customerId = $context->getUserId();
+        $this->checkCustomerPassword->execute($args['currentPassword'], $customerId);
 
-        $this->accountManagement->changePasswordById($currentUserId, $args['currentPassword'], $args['newPassword']);
+        try {
+            $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        }
 
-        $data = $this->customerDataProvider->getCustomerById($currentUserId);
-        return $data;
+        $customer = $this->getCustomer->execute($context);
+        return $this->extractCustomerData->execute($customer);
     }
 }

@@ -6,10 +6,14 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
-class Update extends \Magento\Wishlist\Controller\AbstractIndex
+/**
+ * Controller for updating wishlists
+ */
+class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -66,7 +70,12 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $post = $this->getRequest()->getPostValue();
-        if ($post && isset($post['description']) && is_array($post['description'])) {
+        $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
+        if (!$post) {
+            return $resultRedirect;
+        }
+
+        if (isset($post['description']) && is_array($post['description'])) {
             $updatedItems = 0;
 
             foreach ($post['description'] as $itemId => $description) {
@@ -83,8 +92,6 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                 )->defaultCommentString()
                 ) {
                     $description = '';
-                } elseif (!strlen($description)) {
-                    $description = $item->getDescription();
                 }
 
                 $qty = null;
@@ -101,7 +108,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                         $item->delete();
                     } catch (\Exception $e) {
                         $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                        $this->messageManager->addError(__('We can\'t delete item from Wish List right now.'));
+                        $this->messageManager->addErrorMessage(__('We can\'t delete item from Wish List right now.'));
                     }
                 }
 
@@ -116,7 +123,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                     );
                     $updatedItems++;
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'Can\'t save description %1',
                             $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($description)
@@ -131,16 +138,15 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                     $wishlist->save();
                     $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(__('Can\'t update wish list'));
+                    $this->messageManager->addErrorMessage(__('Can\'t update wish list'));
                 }
             }
-
-            if (isset($post['save_and_share'])) {
-                $resultRedirect->setPath('*/*/share', ['wishlist_id' => $wishlist->getId()]);
-                return $resultRedirect;
-            }
         }
-        $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
+
+        if (isset($post['save_and_share'])) {
+            $resultRedirect->setPath('*/*/share', ['wishlist_id' => $wishlist->getId()]);
+        }
+
         return $resultRedirect;
     }
 }

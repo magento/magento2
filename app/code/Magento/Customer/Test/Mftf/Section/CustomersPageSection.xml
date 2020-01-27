@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CustomersPageSection">
+        <element name="addNewCustomerButton" type="button" selector="//*[@id='add']"/>
+        <element name="customerCheckbox" type="button" selector="//*[contains(text(),'{{args}}')]/parent::td/preceding-sibling::td/label[@class='data-grid-checkbox-cell-inner']" parameterized="true"/>
+        <element name="actions" type="button" selector="//div[@class='col-xs-2']/div[@class='action-select-wrap']/button[@class='action-select']" timeout="30"/>
+        <element name="delete" type="button" selector="//*[contains(@class,'admin__data-grid-header-row row row-gutter')]//*[text()='Delete']" timeout="30"/>
+        <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']" timeout="30"/>
+        <element name="actionItem" type="button" selector="//div[@class='admin__data-grid-outer-wrap']/div[@class='admin__data-grid-header']//span[text()='{{actionItem}}']" parameterized="true" timeout="30"/>
+        <element name="assignGroup" type="button" selector="//div[@class='admin__data-grid-outer-wrap']/div[@class='admin__data-grid-header']//ul[@class='action-submenu _active']//span[text()='{{groupName}}']" parameterized="true"/>
+        <element name="deletedSuccessMessage" type="button" selector="//*[@class='message message-success success']"/>
+    </section>
+</sections>

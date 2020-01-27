@@ -139,7 +139,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -148,6 +149,7 @@ class AdvancedPricing extends AbstractModifier
 
         $this->specialPriceDataToInline();
         $this->customizeTierPrice();
+        $this->customizePrice();
 
         if (isset($this->meta['advanced-pricing'])) {
             $this->addAdvancedPriceLink();
@@ -158,7 +160,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -189,6 +192,29 @@ class AdvancedPricing extends AbstractModifier
                 $pricePath . '/arguments/data/config',
                 $this->meta,
                 ['validation' => ['validate-zero-or-greater' => true]]
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Customize price field.
+     *
+     * @return $this
+     */
+    private function customizePrice(): AdvancedPricing
+    {
+        $pathFrom = $this->arrayManager->findPath('price', $this->meta, null, 'children');
+
+        if ($pathFrom) {
+            $this->meta = $this->arrayManager->merge(
+                $this->arrayManager->slicePath($pathFrom, 0, -2) . '/arguments/data/config',
+                $this->meta,
+                [
+                    'label' => false,
+                    'required' => false,
+                ]
             );
         }
 
@@ -381,11 +407,15 @@ class AdvancedPricing extends AbstractModifier
             );
 
             $advancedPricingButton['arguments']['data']['config'] = [
+                'dataScope' => 'advanced_pricing_button',
                 'displayAsLink' => true,
                 'formElement' => Container::NAME,
                 'componentType' => Container::NAME,
                 'component' => 'Magento_Ui/js/form/components/button',
                 'template' => 'ui/form/components/button/container',
+                'imports' => [
+                    'childError' => $this->scopeName . '.advanced_pricing_modal.advanced-pricing:error',
+                ],
                 'actions' => [
                     [
                         'targetName' => $this->scopeName . '.advanced_pricing_modal',
@@ -567,12 +597,11 @@ class AdvancedPricing extends AbstractModifier
                 $this->arrayManager->slicePath($pathFrom, 0, -2) . '/arguments/data/config',
                 $this->meta,
                 [
-                    'label' => __('Special Price From'),
+                    'label' => false,
+                    'required' => false,
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' =>
-                        $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
                 ]
             );
             $this->meta = $this->arrayManager->merge(
@@ -580,8 +609,9 @@ class AdvancedPricing extends AbstractModifier
                 $this->meta,
                 [
                     'label' => __('Special Price From'),
-                    'scopeLabel' => null,
-                    'additionalClasses' => 'admin__field-date'
+                    'scopeLabel' =>
+                        $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
+                    'additionalClasses' => 'admin__field-date',
                 ]
             );
             $this->meta = $this->arrayManager->merge(

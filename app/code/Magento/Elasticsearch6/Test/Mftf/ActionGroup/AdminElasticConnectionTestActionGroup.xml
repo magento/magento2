@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminElasticConnectionTestActionGroup">
+        <annotations>
+            <description>Check ElasticSearch connection after enabling.</description>
+        </annotations>
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="openAdminCatalogSearchConfigPage"/>
+        <waitForPageLoad stepKey="waitPageToLoad"/>
+        <conditionalClick selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" dependentSelector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" visible="false" stepKey="expandCatalogSearchTab"/>
+        <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="waitForConnectionButton"/>
+        <click selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="clickOnTestConnectionButton"/>
+        <waitForPageLoad stepKey="waitForConnectionEstablishment"/>
+        <grabTextFrom selector="{{AdminCatalogSearchConfigurationSection.connectionStatus}}" stepKey="grabConnectionStatus"/>
+        <assertEquals expected="{{AdminElasticsearch6TestConnectionMessageData.successMessage}}" expectedType="string" actual="$grabConnectionStatus"  stepKey="assertThatConnectionSuccessful"/>
+    </actionGroup>
+</actionGroups>

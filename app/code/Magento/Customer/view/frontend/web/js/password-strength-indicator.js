@@ -83,7 +83,7 @@ define([
                 } else {
                     isValid = $.validator.validateSingleElement(this.options.cache.input);
                     zxcvbnScore = zxcvbn(password).score;
-                    displayScore = isValid ? zxcvbnScore : 1;
+                    displayScore = isValid && zxcvbnScore > 0 ? zxcvbnScore : 1;
                 }
             }
 

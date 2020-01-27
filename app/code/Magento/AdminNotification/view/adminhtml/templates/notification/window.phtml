@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @see \Magento\AdminNotification\Block\Window
  */
@@ -19,11 +15,13 @@
             "autoOpen": true,
             "buttons": false,
             "modalClass": "modal-system-messages",
-            "title": "<?= /* @escapeNotVerified */ $block->getHeaderText() ?>"
+            "title": "<?= $block->escapeHtmlAttr($block->getHeaderText()) ?>"
         }
     }'>
     <li class="message message-warning warning">
-        <?= /* @escapeNotVerified */ $block->getNoticeMessageText() ?><br/>
-        <a href="<?= /* @escapeNotVerified */ $block->getNoticeMessageUrl() ?>"><?= /* @escapeNotVerified */ $block->getReadDetailsText() ?></a>
+        <?= $block->escapeHtml($block->getNoticeMessageText()) ?><br/>
+        <a href="<?= $block->escapeUrl($block->getNoticeMessageUrl()) ?>">
+            <?= $block->escapeHtml($block->getReadDetailsText()) ?>
+        </a>
     </li>
 </ul>

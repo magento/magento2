@@ -17,16 +17,19 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94338"/>
             <group value="Tax"/>
+            <skip>
+                <issueId value="MAGETWO-96193"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!-- Go to tax rule page -->
-            <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="TaxRule1"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxWithZipCode"/>
             </actionGroup>
 
@@ -40,10 +43,10 @@
             <waitForPageLoad stepKey="waitForNewTaxRuleCreated"/>
 
             <!-- Go to tax rule page to create second Tax Rule-->
-            <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
             <fillField stepKey="fillSecondRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="TaxRule2"/>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleSecondTaxWithZipCode"/>
             </actionGroup>
 
@@ -69,11 +72,11 @@
         <!--Open Created products. In Tax Class select new created Product Tax classes.-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$firstProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openFirstProductForEdit"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openFirstProductForEdit"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" stepKey="selectTexClassForFirstProduct" userInput="TaxClasses1"/>
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveFirstProduct"/>
@@ -81,11 +84,11 @@
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="againGoToProductIndex"/>
         <waitForPageLoad stepKey="wait2"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetSecondProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterSecondProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSecondProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterSecondProductGridBySku">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openSecondProductForEdit"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openSecondProductForEdit"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" stepKey="selectTexClassForSecondProduct" userInput="TaxClasses2"/>
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveSecondProduct"/>
@@ -101,10 +104,10 @@
         <waitForPageLoad stepKey="waitForPage" time="60"/>
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seeNewOrderPageTitle"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
             <argument name="product" value="$$firstProduct$$"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProductToOrder" after="addFirstProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProductToOrder" after="addFirstProductToOrder">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
 
@@ -113,16 +116,17 @@
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="fillCustomerEmail">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!-- Select shipping -->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
-
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" after="selectFlatRateShipping" stepKey="selectCheckMoneyPayment"/>
         <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="selectFlatRateShipping"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" after="selectCheckMoneyPayment" stepKey="clickSubmitOrder"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
 
@@ -132,9 +136,8 @@
         <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
 
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceSaved"/>
 
-        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="waitForInvoiceSaved"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl" after="clickShipAction"/>
         <!--Submit Shipment-->
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="seeOrderShipmentUrl"/>
@@ -208,11 +211,11 @@
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <actionGroup ref="deleteProductTaxClass" stepKey="deleteFirstProductTaxClass">
+            <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteFirstProductTaxClass">
                 <argument name="taxClassName" value="TaxClasses1"/>
             </actionGroup>
 
-            <actionGroup ref="deleteProductTaxClass" stepKey="deleteSecondProductTaxClass">
+            <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteSecondProductTaxClass">
                 <argument name="taxClassName" value="TaxClasses2"/>
             </actionGroup>
 

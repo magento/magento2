@@ -2,12 +2,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+
 define([
-    'jquery',
     'Magento_Vault/js/view/payment/method-renderer/vault'
-], function ($, VaultComponent) {
+], function (VaultComponent) {
     'use strict';
 
     return VaultComponent.extend({

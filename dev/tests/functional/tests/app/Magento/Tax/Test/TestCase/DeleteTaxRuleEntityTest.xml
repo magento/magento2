@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Tax\Test\TestCase\DeleteTaxRuleEntityTest" summary="Delete Tax Rule" ticketId="MAGETWO-20924">
         <variation name="DeleteTaxRuleEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="taxRule/dataset" xsi:type="string">tax_rule_with_custom_tax_classes</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">California</data>

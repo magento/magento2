@@ -49,7 +49,9 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
+        <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon"/>
@@ -61,7 +63,7 @@
 
         <!--Proceed to store front and place an order with free shipping using created coupon-->
         <!--Add product to card-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="AddProductToCard">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
             <argument name="product" value="$$simpleproduct$$"/>
         </actionGroup>
 
@@ -88,7 +90,7 @@
         <waitForPageLoad stepKey="waitForSalesOrderPageLoaded"/>
 
         <!-- Open Order -->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
@@ -96,5 +98,6 @@
 
         <!--Verify that Created order is in Processing status-->
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
     </test>
 </tests>

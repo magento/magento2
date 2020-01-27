@@ -11,12 +11,10 @@
     <section name="AdminProductCategoryCreationSection">
         <element name="firstExampleProduct" type="button" selector=".data-row:nth-of-type(1)"/>
         <element name="newCategory" type="button" selector="//button/span[text()='New Category']"/>
-
         <element name="nameInput" type="input" selector="input[name='name']"/>
-
         <element name="parentCategory" type="block" selector=".product_form_product_form_create_category_modal div[data-role='selected-option']"/>
         <element name="parentSearch" type="input" selector="aside input[data-role='advanced-select-text']"/>
         <element name="parentSearchResult" type="block" selector="aside .admin__action-multiselect-menu-inner"/>
-        <element name="createCategory" type="button" selector="#save"/>
+        <element name="createCategory" type="button" selector="#save" timeout="30"/>
     </section>
 </sections>

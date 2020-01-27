@@ -15,7 +15,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Paypal/payment/paypal-express-bml',
+            template: 'Magento_Paypal/payment/payflow-express-bml',
             billingAgreement: ''
         },
 

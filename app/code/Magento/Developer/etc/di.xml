@@ -18,6 +18,7 @@
         <arguments>
             <argument name="formats" xsi:type="array">
                 <item name="phpstorm" xsi:type="object">Magento\Developer\Model\XmlCatalog\Format\PhpStorm</item>
+                <item name="vscode" xsi:type="object">Magento\Developer\Model\XmlCatalog\Format\VsCode</item>
             </argument>
         </arguments>
     </type>
@@ -238,6 +239,14 @@
             <argument name="environment" xsi:type="array">
                 <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
             </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints">
+        <arguments>
+            <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_storefront</argument>
+            <argument name="debugHintsWithParam" xsi:type="string">dev/debug/template_hints_storefront_show_with_parameter</argument>
+            <argument name="debugHintsParameter" xsi:type="string">dev/debug/template_hints_parameter_value</argument>
         </arguments>
     </type>
 </config>

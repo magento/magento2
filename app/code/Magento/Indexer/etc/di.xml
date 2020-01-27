@@ -42,7 +42,7 @@
         <plugin name="page-cache-indexer-reindex-clean-cache"
                 type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
     </type>
-    <type name="\Magento\Indexer\Model\ProcessManager">
+    <type name="Magento\Indexer\Model\ProcessManager">
         <arguments>
             <argument name="threadsCount" xsi:type="init_parameter">Magento\Indexer\Model\ProcessManager::THREADS_COUNT</argument>
         </arguments>
@@ -66,5 +66,8 @@
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Indexer\ActionInterface">
+        <plugin name="cache_cleaner_after_reindex" type="Magento\Indexer\Model\Indexer\CacheCleaner" />
     </type>
 </config>

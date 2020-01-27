@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="OpenCategoryFromCategoryTreeActionGroup">
+        <annotations>
+            <description>Navigates to category page, selects a category by specified category. Replicates actionGroup:navigateToCreatedCategory.</description>
+        </annotations>
+        <arguments>
+            <argument name="category" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(category)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.categoryPageTitle}}" stepKey="waitForCategoryTitle"/>
+    </actionGroup>
+</actionGroups>

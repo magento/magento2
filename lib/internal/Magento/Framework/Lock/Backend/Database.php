@@ -11,14 +11,22 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
+use Magento\Framework\DB\ExpressionConverter;
 
 /**
- * LockManager using the DB locks
+ * Implementation of the lock manager on the basis of MySQL.
  */
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
+    /**
+     * Max time for lock is 1 week
+     *
+     * MariaDB does not support negative timeout value to get infinite timeout,
+     * so we set 1 week for lock timeout
+     */
+    private const MAX_LOCK_TIME = 604800;
+
     /**
      * @var ResourceConnection
      */
@@ -60,11 +68,14 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @param int $timeout How long to wait lock acquisition in seconds, negative value means infinite timeout
      * @return bool
-     * @throws InputException
      * @throws AlreadyExistsException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function lock(string $name, int $timeout = -1): bool
     {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return true;
+        }
         $name = $this->addPrefix($name);
 
         /**
@@ -75,7 +86,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         if ($this->currentLock) {
             throw new AlreadyExistsException(
                 new Phrase(
-                    'Current connection is already holding lock for $1, only single lock allowed',
+                    'Current connection is already holding lock for %1, only single lock allowed',
                     [$this->currentLock]
                 )
             );
@@ -83,7 +94,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
 
         $result = (bool)$this->resource->getConnection()->query(
             "SELECT GET_LOCK(?, ?);",
-            [(string)$name, (int)$timeout]
+            [$name, $timeout < 0 ? self::MAX_LOCK_TIME : $timeout]
         )->fetchColumn();
 
         if ($result === true) {
@@ -98,10 +109,14 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      *
      * @param string $name lock name
      * @return bool
-     * @throws InputException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function unlock(string $name): bool
     {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return true;
+        }
+
         $name = $this->addPrefix($name);
 
         $result = (bool)$this->resource->getConnection()->query(
@@ -121,15 +136,19 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      *
      * @param string $name lock name
      * @return bool
-     * @throws InputException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function isLocked(string $name): bool
     {
+        if (!$this->deploymentConfig->isDbAvailable()) {
+            return false;
+        }
+
         $name = $this->addPrefix($name);
 
         return (bool)$this->resource->getConnection()->query(
             "SELECT IS_USED_LOCK(?);",
-            [(string)$name]
+            [$name]
         )->fetchColumn();
     }
 
@@ -139,16 +158,12 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * Limited to 64 characters in MySQL.
      *
      * @param string $name
-     * @return string $name
-     * @throws InputException
+     * @return string
      */
     private function addPrefix(string $name): string
     {
-        $name = $this->getPrefix() . '|' . $name;
-
-        if (strlen($name) > 64) {
-            throw new InputException(new Phrase('Lock name too long: %1...', [substr($name, 0, 64)]));
-        }
+        $prefix = $this->getPrefix() ? $this->getPrefix() . '|' : '';
+        $name = ExpressionConverter::shortenEntityName($prefix . $name, $prefix);
 
         return $name;
     }

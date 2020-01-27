@@ -151,7 +151,11 @@ class DirectiveTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->actionContextMock,
                 'urlDecoder' => $this->urlDecoderMock,
-                'resultRawFactory' => $this->rawFactoryMock
+                'resultRawFactory' => $this->rawFactoryMock,
+                'adapterFactory' => $this->imageAdapterFactoryMock,
+                'logger' => $this->loggerMock,
+                'config' => $this->wysiwygConfigMock,
+                'filter' => $this->templateFilterMock
             ]
         );
     }
@@ -228,7 +232,7 @@ class DirectiveTest extends \PHPUnit\Framework\TestCase
             ->method('getImage')
             ->willReturn($imageBody);
         $this->loggerMock->expects($this->once())
-            ->method('critical')
+            ->method('warning')
             ->with($exception);
         $this->rawFactoryMock->expects($this->any())
             ->method('create')
@@ -253,25 +257,46 @@ class DirectiveTest extends \PHPUnit\Framework\TestCase
             ->method('decode')
             ->with($directiveParam)
             ->willReturn($directive);
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(\Magento\Cms\Model\Template\Filter::class)
-            ->willReturn($this->templateFilterMock);
+
         $this->templateFilterMock->expects($this->once())
             ->method('filter')
             ->with($directive)
             ->willReturn(self::IMAGE_PATH);
-        $this->objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap(
-                [
-                    [\Magento\Framework\Image\AdapterFactory::class, $this->imageAdapterFactoryMock],
-                    [\Magento\Cms\Model\Wysiwyg\Config::class, $this->wysiwygConfigMock],
-                    [\Psr\Log\LoggerInterface::class, $this->loggerMock]
-                ]
-            );
+
         $this->imageAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->imageAdapterMock);
+    }
+
+    /**
+     * Test Execute With Deleted Image
+     *
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     */
+    public function testExecuteWithDeletedImage()
+    {
+        $exception = new \Exception('epic fail');
+        $placeholderPath = 'pub/static/adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
+        $this->prepareExecuteTest();
+
+        $this->imageAdapterMock->expects($this->any())
+            ->method('open')
+            ->with(self::IMAGE_PATH)
+            ->willThrowException($exception);
+
+        $this->wysiwygConfigMock->expects($this->once())
+            ->method('getSkinImagePlaceholderPath')
+            ->willReturn($placeholderPath);
+
+        $this->imageAdapterMock->expects($this->any())
+            ->method('open')
+            ->with($placeholderPath)
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())
+            ->method('warning')
+            ->with($exception);
+
+        $this->wysiwygDirective->execute();
     }
 }

@@ -7,14 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\DataObject;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test products query output
+ */
 class ProductViewTest extends GraphQlAbstract
 {
     /**
@@ -44,7 +48,6 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            description
             gift_message_available
             id
             categories {
@@ -53,8 +56,7 @@ class ProductViewTest extends GraphQlAbstract
                available_sort_by
                level
             }
-            image
-            image_label
+            image { url, label }
             meta_description
             meta_keyword
             meta_title
@@ -92,6 +94,7 @@ class ProductViewTest extends GraphQlAbstract
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -130,6 +133,26 @@ class ProductViewTest extends GraphQlAbstract
                 }
                 ... on CustomizableRadioOption {
                   radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableCheckboxOption {
+                  checkbox_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableMultipleOption {
+                  multiple_option: value {
                     option_type_id
                     sku
                     price
@@ -203,18 +226,13 @@ class ProductViewTest extends GraphQlAbstract
                 position
                 sku
             }
-            short_description
             sku
-            small_image {
-                path
-            }
-            small_image_label
+            small_image{ url, label }
+            thumbnail { url, label }
             special_from_date
             special_price
             special_to_date
-            swatch_image
-            thumbnail
-            thumbnail_label
+            swatch_image            
             tier_price
             tier_prices
             {
@@ -251,11 +269,6 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
@@ -263,22 +276,18 @@ QUERY;
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
-        $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
-            $responseObject->getData('products/items/0/categories/1/name')
+            $responseObject->getData('products/items/0/categories/0/name')
         );
         self::assertEquals(
             'Filter category',
-            $responseObject->getData('products/items/0/categories/2/name')
+            $responseObject->getData('products/items/0/categories/1/name')
         );
-        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
-            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
-            $responseObject->getData('products/items/0/canonical_url')
-        );
+        //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
+        self::assertNull($responseObject->getData('products/items/0/canonical_url'));
     }
 
     /**
@@ -287,7 +296,6 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -302,11 +310,9 @@ QUERY;
             }
             country_of_manufacture
             created_at
-            description
             gift_message_available
             id
-            image
-            image_label
+            image {url, label}
             meta_description
             meta_keyword
             meta_title
@@ -344,6 +350,7 @@ QUERY;
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -453,16 +460,13 @@ QUERY;
                 position
                 sku
             }
-            short_description
             sku
-            small_image
-            small_image_label
+            small_image { url, label }
             special_from_date
             special_price
             special_to_date
             swatch_image
-            thumbnail
-            thumbnail_label
+            thumbnail { url, label }
             tier_price
             tier_prices
             {
@@ -578,7 +582,7 @@ QUERY;
         $secondProductSku = 'simple-156';
         $query = <<<QUERY
        {
-           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
                    attribute_set_id
@@ -646,15 +650,7 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $firstProduct->setId(
-            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
-        $secondProduct->setId(
-            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
         $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
@@ -709,24 +705,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-
-    /**
-     * @param ProductInterface $product
-     * @param $actualResponse
-     */
-    private function assertTierPrices($product, $actualResponse)
-    {
-        $tierPrices = $product->getTierPrices();
-        $this->assertNotEmpty($actualResponse['tier_prices'], "Precondition failed: 'tier_prices' must not be empty");
-        foreach ($actualResponse['tier_prices'] as $tierPriceIndex => $tierPriceArray) {
-            foreach ($tierPriceArray as $key => $value) {
-                /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
-                $tierPrice = $tierPrices[$tierPriceIndex];
-                $this->assertEquals($value, $tierPrice->getData($key));
-            }
-        }
-    }
-
+    
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -747,7 +726,7 @@ QUERY;
                         $values = $option->getValues();
                         /** @var \Magento\Catalog\Model\Product\Option\Value $value */
                         $value = current($values);
-                        $findValueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                        $findValueKeyName = $option->getType() . '_option';
                         if ($value->getTitle() === $optionsArray[$findValueKeyName][0]['title']) {
                             $match = true;
                         }
@@ -762,11 +741,12 @@ QUERY;
             $assertionMap = [
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
-                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()]
+                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()],
+                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()]
             ];
 
             if (!empty($option->getValues())) {
-                $valueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                $valueKeyName = $option->getType() . '_option';
                 $value = current($optionsArray[$valueKeyName]);
                 /** @var \Magento\Catalog\Model\Product\Option\Value $productValue */
                 $productValue = current($option->getValues());
@@ -780,13 +760,14 @@ QUERY;
                 ];
                 $this->assertResponseFields($value, $assertionMapValues);
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $assertionMap = array_merge(
                     $assertionMap,
                     [
                         ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
                     ]
                 );
-                $valueKeyName = "";
+
                 if ($option->getType() === 'file') {
                     $valueKeyName = 'file_option';
                     $valueAssertionMap = [
@@ -808,7 +789,7 @@ QUERY;
                     $valueKeyName = 'date_option';
                     $valueAssertionMap = [];
                 }
-
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $valueAssertionMap = array_merge(
                     $valueAssertionMap,
                     [
@@ -917,11 +898,9 @@ QUERY;
     {
         $eavAttributes = [
             'url_key',
-            'description',
             'meta_description',
             'meta_keyword',
             'meta_title',
-            'short_description',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
@@ -958,5 +937,166 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testProductInAllAnchoredCategories()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {in: ["12345"]}})
+    {
+        items
+        {
+            sku
+            name
+            categories {
+            id
+            name
+            is_anchor
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        $categoryIds  = [3, 4, 5];
+
+        $productItemsInResponse = $response['products']['items'];
+        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(3, $productItemsInResponse[0]['categories']);
+        $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
+        foreach ($categoriesInResponse as $key => $categoryData) {
+            $this->assertNotEmpty($categoryData);
+            /** @var Category | Category $category */
+            $category = $categoryRepository->get($categoriesInResponse[$key][0]);
+            $this->assertResponseFields(
+                $categoriesInResponse[$key][1],
+                [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'is_anchor' => $category->getIsAnchor()
+                ]
+            );
+        }
+    }
+
+    /**
+     * Set one of the categories directly assigned to the product as non -anchored.
+     * Verify that the non-anchored category still shows in the response
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testProductWithNonAnchoredParentCategory()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {in: ["12345"]}})
+    {
+        items
+        {
+            sku
+            name
+            categories {
+            id
+            name
+            is_anchor
+            }
+        }
+    }
+}
+QUERY;
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        /** @var Category $nonAnchorCategory */
+        $nonAnchorCategory = $categoryRepository->get(4);
+        $nonAnchorCategory->setIsAnchor(false);
+        $categoryRepository->save($nonAnchorCategory);
+        $categoryIds  = [3, 4, 5];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+
+        $productItemsInResponse = $response['products']['items'];
+        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(3, $productItemsInResponse[0]['categories']);
+        $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
+        foreach ($categoriesInResponse as $key => $categoryData) {
+            $this->assertNotEmpty($categoryData);
+            /** @var Category | Category $category */
+            $category = $categoryRepository->get($categoriesInResponse[$key][0]);
+            $this->assertResponseFields(
+                $categoriesInResponse[$key][1],
+                [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'is_anchor' => $category->getIsAnchor()
+                ]
+            );
+        }
+    }
+    /**
+     * Set as non-anchored, one of the categories not directly assigned to the product
+     * Verify that the category doesn't show in the response
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testProductInNonAnchoredSubCategories()
+    {
+        $query = <<<QUERY
+{
+    products(filter: 
+             {
+             sku: {in:["12345"]}
+             }
+          )
+    {
+        items
+        {
+            sku
+            name
+            categories {
+            id
+            name
+            is_anchor
+            }
+        }
+    }
+}
+QUERY;
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        /** @var Category $nonAnchorCategory */
+        $nonAnchorCategory = $categoryRepository->get(3);
+        //Set the parent category as non-anchored
+        $nonAnchorCategory->setIsAnchor(false);
+        $categoryRepository->save($nonAnchorCategory);
+        $categoryIds  = [4, 5];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+
+        $productItemsInResponse = $response['products']['items'];
+        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(2, $productItemsInResponse[0]['categories']);
+        $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
+        foreach ($categoriesInResponse as $key => $categoryData) {
+            $this->assertNotEmpty($categoryData);
+            /** @var Category | Category $category */
+            $category = $categoryRepository->get($categoriesInResponse[$key][0]);
+            $this->assertResponseFields(
+                $categoriesInResponse[$key][1],
+                [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'is_anchor' => $category->getIsAnchor()
+                ]
+            );
+        }
     }
 }

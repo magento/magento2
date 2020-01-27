@@ -19,7 +19,7 @@
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
                 <item name="behavior" xsi:type="string">Add/Update</item>
                 <item name="validation_strategy" xsi:type="string">Stop on Error</item>
-                <item name="allowed_error_count" xsi:type="string">10</item>
+                <item name="allowed_error_count" xsi:type="string">1</item>
                 <item name="import_field_separator" xsi:type="string">,</item>
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">

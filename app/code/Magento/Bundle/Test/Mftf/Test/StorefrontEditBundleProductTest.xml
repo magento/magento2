@@ -32,11 +32,11 @@
         <!-- Create a bundle product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
         <waitForPageLoad stepKey="waitForProductPageLoadBundle"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillBundleProductNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
@@ -50,11 +50,11 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
         <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
@@ -86,7 +86,7 @@
         <waitForPageLoad stepKey="waitForElementAdded2"/>
 
         <!-- Go to the shopping cart page and edit the first product -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <waitForElementVisible stepKey="waitForInfoDropdown" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad3"/>
@@ -94,9 +94,8 @@
         <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
 
-        <!-- Choose both of the options on the storefront -->
-        <click stepKey="selectFirstBundleOption2" selector="{{StorefrontBundledSection.nthBundledOption('1','1')}}"/>
-        <click stepKey="selectSecondBundleOption2" selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}"/>
+        <!-- Check second one option to choose both of the options on the storefront -->
+        <click selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}" stepKey="selectSecondBundleOption2"/>
 
         <waitForPageLoad stepKey="waitForPriceUpdate3"/>
         <see stepKey="seeDoublePrice" selector="{{StorefrontBundledSection.configuredPrice}}" userInput="2,460.00"/>
@@ -105,7 +104,7 @@
         <waitForPageLoad stepKey="waitForElementAdded3"/>
 
         <!-- Go to the shopping cart page -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart2"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart2"/>
         <waitForPageLoad stepKey="waitForCartPageLoad2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->
@@ -117,7 +116,7 @@
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
 
         <!-- Delete the bundled product -->
-        <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+        <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>

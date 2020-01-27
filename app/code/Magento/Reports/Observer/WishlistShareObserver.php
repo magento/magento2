@@ -25,6 +25,7 @@ class WishlistShareObserver implements ObserverInterface
 
     /**
      * @param EventSaver $eventSaver
+     * @param \Magento\Reports\Model\ReportStatus $reportStatus
      */
     public function __construct(
         EventSaver $eventSaver,

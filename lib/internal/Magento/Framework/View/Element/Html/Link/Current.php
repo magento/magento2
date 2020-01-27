@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Element\Html\Link;
 
+use Magento\Framework\App\DefaultPathInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+
 /**
  * Block representing link with two possible states.
  * "Current" state means link leads to URL equivalent to URL of currently displayed page.
@@ -17,25 +21,30 @@ namespace Magento\Framework\View\Element\Html\Link;
  * @method null|bool                       getCurrent()
  * @method \Magento\Framework\View\Element\Html\Link\Current setCurrent(bool $value)
  */
-class Current extends \Magento\Framework\View\Element\Template
+class Current extends Template
 {
+    /**
+     * Search redundant /index and / in url
+     */
+    private const REGEX_INDEX_URL_PATTERN = '/(\/index|(\/))+($|\/$)/';
+
     /**
      * Default path
      *
-     * @var \Magento\Framework\App\DefaultPathInterface
+     * @var DefaultPathInterface
      */
     protected $_defaultPath;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
+     * @param Context $context
+     * @param DefaultPathInterface $defaultPath
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\DefaultPathInterface $defaultPath,
+        Context $context,
+        DefaultPathInterface $defaultPath,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -56,18 +65,20 @@ class Current extends \Magento\Framework\View\Element\Template
      * Get current mca
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     private function getMca()
     {
         $routeParts = [
-            'module' => $this->_request->getModuleName(),
-            'controller' => $this->_request->getControllerName(),
-            'action' => $this->_request->getActionName(),
+            (string)$this->_request->getModuleName(),
+            (string)$this->_request->getControllerName(),
+            (string)$this->_request->getActionName(),
         ];
 
         $parts = [];
+        $pathParts = explode('/', trim($this->_request->getPathInfo(), '/'));
         foreach ($routeParts as $key => $value) {
-            if (!empty($value) && $value != $this->_defaultPath->getPart($key)) {
+            if (isset($pathParts[$key]) && $pathParts[$key] === $value) {
                 $parts[] = $value;
             }
         }
@@ -81,7 +92,9 @@ class Current extends \Magento\Framework\View\Element\Template
      */
     public function isCurrent()
     {
-        return $this->getCurrent() || $this->getUrl($this->getPath()) == $this->getUrl($this->getMca());
+        return $this->getCurrent() ||
+            preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()))
+            == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()));
     }
 
     /**

@@ -5,14 +5,16 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
-use Magento\CustomerImportExport\Test\Unit\Model\Import\CustomerCompositeTest;
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
-use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 
+/**
+ * Storage to check existing customers.
+ */
 class Storage
 {
     /**
@@ -49,6 +51,25 @@ class Storage
     private $customerCollectionFactory;
 
     /**
+     * @var CustomerCollection
+     */
+    public $_customerCollection;
+
+    /**
+     * Existing customers store IDs. In form of:
+     *
+     * [customer email] => array(
+     *    [website id 1] => store id 1,
+     *    [website id 2] => store id 2,
+     *           ...       =>     ...      ,
+     *    [website id n] => store id n,
+     * )
+     *
+     * @var array
+     */
+    private $customerStoreIds = [];
+
+    /**
      * @param CustomerCollectionFactory $collectionFactory
      * @param CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
@@ -83,7 +104,7 @@ class Storage
         $select = $collection->getSelect();
         $customerTableId = array_keys($select->getPart(Select::FROM))[0];
         $select->where(
-            $customerTableId .'.email in (?)',
+            $customerTableId . '.email in (?)',
             array_map(
                 function (array $customer) {
                     return $customer['email'];
@@ -112,16 +133,22 @@ class Storage
     }
 
     /**
+     * Add a customer by an array
+     *
      * @param array $customer
      * @return $this
      */
     public function addCustomerByArray(array $customer): Storage
     {
-        $email = strtolower(trim($customer['email']));
+        $email = mb_strtolower(trim($customer['email']));
         if (!isset($this->_customerIds[$email])) {
             $this->_customerIds[$email] = [];
         }
+        if (!isset($this->customerStoreIds[$email])) {
+            $this->customerStoreIds[$email] = [];
+        }
         $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
+        $this->customerStoreIds[$email][$customer['website_id']] = $customer['store_id'] ?? null;
 
         return $this;
     }
@@ -154,14 +181,29 @@ class Storage
     public function getCustomerId(string $email, int $websiteId)
     {
         $email = mb_strtolower($email);
-        //Trying to load the customer.
-        if (!array_key_exists($email, $this->_customerIds) || !array_key_exists($websiteId, $this->_customerIds[$email])
-        ) {
-            $this->loadCustomersData([['email' => $email, 'website_id' => $websiteId]]);
-        }
+        $this->loadCustomerData($email, $websiteId);
 
         if (isset($this->_customerIds[$email][$websiteId])) {
             return $this->_customerIds[$email][$websiteId];
+        }
+
+        return false;
+    }
+
+    /**
+     * Find customer store ID for unique pair of email and website ID.
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return bool|int
+     */
+    public function getCustomerStoreId(string $email, int $websiteId)
+    {
+        $email = mb_strtolower($email);
+        $this->loadCustomerData($email, $websiteId);
+
+        if (isset($this->customerStoreIds[$email][$websiteId])) {
+            return $this->customerStoreIds[$email][$websiteId];
         }
 
         return false;
@@ -179,12 +221,10 @@ class Storage
         foreach ($customersToFind as $customerToFind) {
             $email = mb_strtolower($customerToFind['email']);
             $websiteId = $customerToFind['website_id'];
-            if (!array_key_exists($email, $this->_customerIds)
-                || !array_key_exists($websiteId, $this->_customerIds[$email])
-            ) {
+            if (!$this->isLoadedCustomerData($email, $websiteId)) {
                 //Only looking for customers we don't already have ID for.
                 //We need unique identifiers.
-                $uniqueKey = $email .'_' .$websiteId;
+                $uniqueKey = $email . '_' . $websiteId;
                 $identifiers[$uniqueKey] = [
                     'email' => $email,
                     'website_id' => $websiteId,
@@ -192,8 +232,10 @@ class Storage
                 //Recording that we've searched for a customer.
                 if (!array_key_exists($email, $this->_customerIds)) {
                     $this->_customerIds[$email] = [];
+                    $this->customerStoreIds[$email] = [];
                 }
                 $this->_customerIds[$email][$websiteId] = null;
+                $this->customerStoreIds[$email][$websiteId] = null;
             }
         }
         if (!$identifiers) {
@@ -202,5 +244,32 @@ class Storage
 
         //Loading customers data.
         $this->loadCustomersData($identifiers);
+    }
+
+    /**
+     * Load customer data if it's not loaded.
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return void
+     */
+    private function loadCustomerData(string $email, int $websiteId): void
+    {
+        if (!$this->isLoadedCustomerData($email, $websiteId)) {
+            $this->loadCustomersData([['email' => $email, 'website_id' => $websiteId]]);
+        }
+    }
+
+    /**
+     * Check if customer data is loaded
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return bool
+     */
+    private function isLoadedCustomerData(string $email, int $websiteId): bool
+    {
+        return array_key_exists($email, $this->_customerIds)
+            && array_key_exists($websiteId, $this->_customerIds[$email]);
     }
 }

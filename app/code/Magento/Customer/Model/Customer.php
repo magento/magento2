@@ -20,6 +20,7 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 
 /**
  * Customer model
@@ -180,7 +181,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
@@ -220,6 +221,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+     * Caching property to store customer address data models by the address ID.
+     *
+     * @var array
+     */
+    private $storedAddress;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -241,6 +249,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param AccountConfirmation|null $accountConfirmation
+     * @param Random|null $mathRandom
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -265,7 +274,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        Random $mathRandom = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
@@ -284,6 +294,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->indexerRegistry = $indexerRegistry;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
         parent::__construct(
             $context,
             $registry,
@@ -314,7 +325,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $addressesData = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
-            $addressesData[] = $address->getDataModel();
+            if (!isset($this->storedAddress[$address->getId()])) {
+                $this->storedAddress[$address->getId()] = $address->getDataModel();
+            }
+            $addressesData[] = $this->storedAddress[$address->getId()];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -359,13 +373,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $this->setId($customerId);
         }
 
-        // Need to use attribute set or future updates can cause data loss
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(
-                CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
-            );
-        }
-
         return $this;
     }
 
@@ -391,7 +398,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
-        if ($this->getConfirmation() && $this->isConfirmationRequired()) {
+        if ($this->getConfirmation() &&
+            $this->accountConfirmation->isConfirmationRequired($this->getWebsiteId(), $this->getId(), $this->getEmail())
+        ) {
             throw new EmailNotConfirmedException(
                 __("This account isn't confirmed. Verify and try again.")
             );
@@ -412,8 +421,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Load customer by email
      *
-     * @param   string $customerEmail
-     * @return  $this
+     * @param string $customerEmail
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByEmail($customerEmail)
     {
@@ -424,8 +434,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Change customer password
      *
-     * @param   string $newPassword
-     * @return  $this
+     * @param string $newPassword
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changePassword($newPassword)
     {
@@ -437,6 +448,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get full customer name
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getName()
     {
@@ -459,8 +471,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Add address to address collection
      *
-     * @param   Address $address
-     * @return  $this
+     * @param Address $address
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addAddress(Address $address)
     {
@@ -484,6 +497,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $addressId
      * @return Address
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressItemById($addressId)
     {
@@ -504,6 +518,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Customer addresses collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressesCollection()
     {
@@ -535,6 +550,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve all customer attributes
      *
      * @return Attribute[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributes()
     {
@@ -589,6 +605,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $password
      * @return boolean
+     * @throws \Exception
      */
     public function validatePassword($password)
     {
@@ -802,7 +819,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getRandomConfirmationKey()
     {
-        return md5(uniqid());
+        return $this->mathRandom->getRandomString(32);
     }
 
     /**
@@ -962,6 +979,16 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve attribute set id for customer.
+     *
+     * @return int
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
+    }
+
+    /**
      * Set store to customer
      *
      * @param \Magento\Store\Model\Store $store
@@ -1039,17 +1066,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $this->_errors = [];
         return $this;
-    }
-
-    /**
-     * Prepare customer for delete
-     *
-     * @return $this
-     */
-    public function beforeDelete()
-    {
-        //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
-        return parent::beforeDelete();
     }
 
     /**
@@ -1292,6 +1308,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create Address from Factory
+     *
      * @return Address
      */
     protected function _createAddressInstance()
@@ -1300,6 +1318,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create Address Collection from Factory
+     *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected function _createAddressCollection()
@@ -1308,6 +1328,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get Template Types
+     *
      * @return array
      */
     protected function getTemplateTypes()

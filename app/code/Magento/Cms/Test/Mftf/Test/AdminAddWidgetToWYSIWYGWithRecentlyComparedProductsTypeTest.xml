@@ -25,7 +25,7 @@
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
@@ -41,7 +41,7 @@
         <waitForPageLoad stepKey="wait2"/>
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Recently Compared Products" stepKey="selectRecentlyComparedProducts" />
@@ -82,7 +82,7 @@
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

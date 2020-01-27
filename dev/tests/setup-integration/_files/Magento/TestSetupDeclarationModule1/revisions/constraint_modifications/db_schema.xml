@@ -22,11 +22,11 @@
         <column xsi:type="bigint" name="bigint_default_nullable" padding="2" nullable="true" default="1"
                 unsigned="true"/>
         <column xsi:type="bigint" name="bigint_not_default_not_nullable" padding="2" nullable="false" unsigned="true"/>
-        <constraint xsi:type="primary" name="tinyint_primary">
+        <constraint xsi:type="primary" referenceId="tinyint_primary">
             <column name="tinyint_ref"/>
             <column name="smallint_ref"/>
         </constraint>
-        <constraint xsi:type="unique" name="REFERENCE_TABLE_SMALLINT_REF">
+        <constraint xsi:type="unique" referenceId="REFERENCE_TABLE_SMALLINT_REF">
             <column name="smallint_ref"/>
         </constraint>
     </table>
@@ -35,7 +35,7 @@
                 nullable="true"/>
         <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
                 unsigned="true" nullable="true"/>
-        <constraint xsi:type="unique" name="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
+        <constraint xsi:type="unique" referenceId="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
             <column name="int_auto_increment_with_nullable"/>
         </constraint>
     </table>
@@ -60,23 +60,23 @@
         <column xsi:type="boolean" name="boolean"/>
         <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
         <!--Constraints-->
-        <constraint xsi:type="unique" name="TEST_TABLE_SMALLINT_FLOAT">
+        <constraint xsi:type="unique" referenceId="TEST_TABLE_SMALLINT_FLOAT">
             <column name="smallint"/>
             <column name="float"/>
         </constraint>
-        <constraint xsi:type="unique" name="TEST_TABLE_DOUBLE">
+        <constraint xsi:type="unique" referenceId="TEST_TABLE_DOUBLE">
             <column name="double"/>
         </constraint>
-        <constraint xsi:type="foreign" name="some_foreign_key_new" column="smallint_main" table="test_table"
+        <constraint xsi:type="foreign" referenceId="some_foreign_key_new" column="smallint_main" table="test_table"
                     referenceTable="reference_table" referenceColumn="smallint_ref" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
                     column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" name="FK_FB77604C299EB8612D01E4AF8D9931F2"
+        <constraint xsi:type="foreign" referenceId="FK_FB77604C299EB8612D01E4AF8D9931F2"
                     column="integer_main" table="test_table"
                     referenceTable="auto_increment_test" referenceColumn="int_auto_increment_with_nullable"/>
         <!--Indexes-->
-        <index name="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
+        <index referenceId="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
             <column name="tinyint"/>
             <column name="bigint"/>
         </index>

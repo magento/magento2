@@ -91,11 +91,13 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
         $this->_itemCollection = $product->getUpSellProductCollection()->setPositionOrder()->addStoreFilter();
         if ($this->moduleManager->isEnabled('Magento_Checkout')) {
@@ -121,6 +123,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -130,6 +134,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get items collection
+     *
      * @return Collection
      */
     public function getItemCollection()
@@ -145,6 +151,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get collection items
+     *
      * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
@@ -156,6 +164,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get row count
+     *
      * @return float
      */
     public function getRowCount()
@@ -164,6 +174,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Set column count
+     *
      * @param string $columns
      * @return $this
      */
@@ -176,6 +188,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get column count
+     *
      * @return int
      */
     public function getColumnCount()
@@ -184,6 +198,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Reset items iterator
+     *
      * @return void
      */
     public function resetItemsIterator()
@@ -193,6 +209,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get iterable item
+     *
      * @return mixed
      */
     public function getIterableItem()
@@ -204,6 +222,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
 
     /**
      * Set how many items we need to show in upsell block
+     *
      * Notice: this parameter will be also applied
      *
      * @param string $type
@@ -219,6 +238,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get item limit
+     *
      * @param string $type
      * @return array|int
      */
@@ -243,6 +264,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     {
         $identities = [];
         foreach ($this->getItems() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;

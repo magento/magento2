@@ -5,11 +5,12 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminRemoveProductWeeeAttributeOptionTest">
         <annotations>
-            <features value="Weee attribute options can be removed in product page"/>
+            <stories value="Weee attribute options can be removed in product page"/>
             <title value="Weee attribute options can be removed in product page"/>
             <description value="Weee attribute options can be removed in product page"/>
             <severity value="CRITICAL"/>
@@ -34,16 +35,17 @@
                 <argument name="stateForFPT" value="California"/>
                 <argument name="valueForFPT" value="10"/>
             </actionGroup>
-            <actionGroup ref="saveProductForm" stepKey="saveProductInitial"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInitial"/>
         </before>
         <after>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
             <waitForPageLoad stepKey="waitForProductListingPageLoad"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
+
         <!--  Test Steps  -->
         <!--  Step 1: Open created product edit page  -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
@@ -54,7 +56,7 @@
         </actionGroup>
         <!--  Step 2: Remove weee attribute options  -->
         <click selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="removeAttributeOption"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--  Assert weee attribute options are empty -->
         <dontSeeElement selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="dontSeeOptions"/>
     </test>

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminRemoveDefaultVideoSimpleProductTest">
         <annotations>
             <features value="Catalog"/>
@@ -30,21 +30,21 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
         <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="ApiSimpleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="ApiSimpleProduct"/>
         </actionGroup>
 
         <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
         <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="ApiSimpleProduct"/>
         </actionGroup>
     </test>

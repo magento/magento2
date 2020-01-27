@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
@@ -47,7 +47,7 @@ class Websites implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($value['entity_id'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
         $this->productWebsitesCollection->addIdFilters((int)$value['entity_id']);
         $result = function () use ($value) {

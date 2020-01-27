@@ -29,6 +29,16 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $scopeConfigMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Uri\Uri
+     */
+    protected $uri;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     */
+    protected $request;
+
+    /**
      * @var string
      */
     protected $_defaultFrontName = 'defaultFrontName';
@@ -41,9 +51,19 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             ->will($this->returnValue($this->_defaultFrontName));
+        $this->uri = $this->createMock(\Zend\Uri\Uri::class);
+
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+
         $this->configMock = $this->createMock(\Magento\Backend\App\Config::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->model = new FrontNameResolver($this->configMock, $deploymentConfigMock, $this->scopeConfigMock);
+        $this->model = new FrontNameResolver(
+            $this->configMock,
+            $deploymentConfigMock,
+            $this->scopeConfigMock,
+            $this->uri,
+            $this->request
+        );
     }
 
     public function testIfCustomPathUsed()
@@ -93,7 +113,6 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsHostBackend($url, $host, $useCustomAdminUrl, $customAdminUrl, $expectedValue)
     {
-        $_SERVER['HTTP_HOST'] = $host;
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->will(
@@ -115,6 +134,41 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
+
+        $this->request->expects($this->any())
+            ->method('getServer')
+            ->will($this->returnValue($host));
+
+        $urlParts = [];
+        $this->uri->expects($this->once())
+            ->method('parse')
+            ->willReturnCallback(
+                function ($url) use (&$urlParts) {
+                    $urlParts = parse_url($url);
+                }
+            );
+        $this->uri->expects($this->once())
+            ->method('getScheme')
+            ->willReturnCallback(
+                function () use (&$urlParts) {
+                    return array_key_exists('scheme', $urlParts) ? $urlParts['scheme'] : '';
+                }
+            );
+        $this->uri->expects($this->once())
+            ->method('getHost')
+            ->willReturnCallback(
+                function () use (&$urlParts) {
+                    return array_key_exists('host', $urlParts) ? $urlParts['host'] : '';
+                }
+            );
+        $this->uri->expects($this->once())
+            ->method('getPort')
+            ->willReturnCallback(
+                function () use (&$urlParts) {
+                    return array_key_exists('port', $urlParts) ? $urlParts['port'] : '';
+                }
+            );
+
         $this->assertEquals($this->model->isHostBackend(), $expectedValue);
     }
 

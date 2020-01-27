@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormItemsOrderedSection">
+        <element name="addProductsBySku" type="button" selector="//section[@id='order-items']//span[contains(text(),'Add Products By SKU')]"/>
+        <element name="configureButtonBySku" type="button" selector="//div[@class='sku-configure-button']//span[contains(text(),'Configure')]"/>
+        <element name="configureProductOk" type="button" selector="//div[@class='page-main-actions']//span[contains(text(),'OK')]"/>
+        <element name="configureProductQtyField" type="input" selector="//*[@id='super-product-table']/tbody/tr[{{arg}}]/td[5]/input[1]" parameterized="true"/>
+        <element name="addProductToOrder" type="input" selector="//*[@title='Add Products to Order']"/>
+        <element name="itemsOrderedSummaryText" type="textarea" selector="//table[@class='data-table admin__table-primary order-tables']/tfoot/tr"/>
+        <element name="configureSelectAttribute" type="select" selector="select[id*=attribute]"/>
+        <element name="itemsSKU" type="text" selector="(//div[contains(@class, 'product-sku-block')])[{{productNumber}}]" parameterized="true"/>
+        <element name="moveProduct" type="select" selector="//td[contains(.,'{{productName}}')]/../..//td//select" parameterized="true"/>
+    </section>
+</sections>

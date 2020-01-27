@@ -26,6 +26,7 @@
             <rule type="inContextActivate" event="activate-in-context-api"/>
             <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
             <rule type="inContextDisableConditional" event=":load"/>
+            <rule type="removeCreditOptionConditional" event=":load"/>
         </relation>
     </payment>
 </rules>

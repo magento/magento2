@@ -139,32 +139,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * @return void
      */
-    public function testWrongAttributeCode()
-    {
-        $postData = $this->_getAttributeData() + ['attribute_code' => '_()&&&?'];
-        $this->getRequest()->setPostValue($postData);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->dispatch('backend/catalog/product_attribute/save');
-        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
-            'catalog/product_attribute/edit',
-            $this->getResponse()->getHeader('Location')->getFieldValue()
-        );
-        /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
-        $this->assertEquals(1, $messages->getCountByType('error'));
-        /** @var \Magento\Framework\Message\Error $message */
-        $message = $messages->getItemsByType('error')[0];
-        $this->assertEquals(
-            'Attribute code "_()&&&?" is invalid. Please use only letters (a-z),'
-            . ' numbers (0-9) or underscore(_) in this field, first character should be a letter.',
-            $message->getText()
-        );
-    }
-
-    /**
-     * @return void
-     */
     public function testAttributeWithoutEntityTypeId()
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'new_attribute_set_name' => ' '];
@@ -298,13 +272,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
-            $order = $i + 1;
-            $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
+            $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
-            $optionsData []= "option[order][option_{$i}]={$order}";
-            $optionsData []= "option[value][option_{$i}][0]=value_{$i}_admin";
-            $optionsData []= "option[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
-            $optionsData []= "option[delete][option_{$i}=";
+            $optionId = 'option_' . $i;
+            $optionRowData = [];
+            $optionRowData['option']['order'][$optionId] = $i + 1;
+            $optionRowData['option']['value'][$optionId][0] = 'value_' . $i . '_admin';
+            $optionRowData['option']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['option']['delete'][$optionId] = '';
+            $optionsData[] = http_build_query($optionRowData);
         }
         $attributeData['serialized_options'] = json_encode($optionsData);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
