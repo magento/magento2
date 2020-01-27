@@ -24,6 +24,12 @@ use PHPUnit\Framework\TestCase;
  */
 class EventSaverTest extends TestCase
 {
+    const STUB_CUSTOMER_ID = 1;
+    const STUB_VISITOR_ID = 2;
+    const STUB_EVENT_TYPE_ID = 1;
+    const STUB_OBJECT_ID = 1;
+    const STUB_STORE_ID = 1;
+
     /**
      * @var Session|MockObject
      */
@@ -74,7 +80,7 @@ class EventSaverTest extends TestCase
             ->willReturn($this->storeMock);
         $this->storeMock->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn(self::STUB_STORE_ID);
 
         $this->eventMock = $this->createMock(Event::class);
         $this->eventFactoryMock = $this->createMock(EventFactory::class);
@@ -112,7 +118,7 @@ class EventSaverTest extends TestCase
             ->method('getCustomerId');
         $this->customerVisitorMock->expects($this->never())
             ->method('getId');
-        $this->eventSaver->save(1, 1, $subjectId);
+        $this->eventSaver->save(self::STUB_EVENT_TYPE_ID, self::STUB_OBJECT_ID, $subjectId);
     }
 
     /**
@@ -125,8 +131,8 @@ class EventSaverTest extends TestCase
             ->willReturn(true);
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerId')
-            ->willReturn(1);
-        $this->eventSaver->save(1, 1, null);
+            ->willReturn(self::STUB_CUSTOMER_ID);
+        $this->eventSaver->save(self::STUB_EVENT_TYPE_ID, self::STUB_OBJECT_ID, null);
     }
 
     /**
@@ -139,7 +145,7 @@ class EventSaverTest extends TestCase
             ->willReturn(false);
         $this->customerVisitorMock->expects($this->once())
             ->method('getId')
-            ->willReturn(2);
-        $this->eventSaver->save(1, 1, null);
+            ->willReturn(self::STUB_VISITOR_ID);
+        $this->eventSaver->save(self::STUB_EVENT_TYPE_ID, self::STUB_OBJECT_ID, null);
     }
 }
