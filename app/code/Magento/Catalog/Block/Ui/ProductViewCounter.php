@@ -6,15 +6,17 @@
 namespace Magento\Catalog\Block\Ui;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ProductRenderFactory;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\Hydrator;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ProductRenderFactory;
-use Magento\Catalog\Model\ProductRepository;
-use Magento\Framework\EntityManager\Hydrator;
 use Magento\Store\Model\StoreManager;
 
 /**
@@ -25,6 +27,7 @@ use Magento\Store\Model\StoreManager;
  *
  * @api
  * @since 102.0.0
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductViewCounter extends Template
 {
@@ -69,6 +72,13 @@ class ProductViewCounter extends Template
     private $registry;
 
     /**
+     * Core store config
+     *
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param Template\Context $context
      * @param ProductRepository $productRepository
      * @param ProductRenderCollectorComposite $productRenderCollectorComposite
@@ -78,6 +88,8 @@ class ProductViewCounter extends Template
      * @param SerializerInterface $serialize
      * @param Url $url
      * @param Registry $registry
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Template\Context $context,
@@ -88,7 +100,8 @@ class ProductViewCounter extends Template
         Hydrator $hydrator,
         SerializerInterface $serialize,
         Url $url,
-        Registry $registry
+        Registry $registry,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($context);
         $this->productRepository = $productRepository;
@@ -99,6 +112,7 @@ class ProductViewCounter extends Template
         $this->serialize = $serialize;
         $this->url = $url;
         $this->registry = $registry;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -116,6 +130,10 @@ class ProductViewCounter extends Template
     {
         /** @var ProductInterface $product */
         $product = $this->registry->registry('product');
+        $productsScope = $this->scopeConfig->getValue(
+            'catalog/recently_products/scope',
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+        );
         /** @var Store $store */
         $store = $this->storeManager->getStore();
 
@@ -123,7 +141,8 @@ class ProductViewCounter extends Template
             return $this->serialize->serialize([
                 'items' => [],
                 'store' => $store->getId(),
-                'currency' => $store->getCurrentCurrency()->getCode()
+                'currency' => $store->getCurrentCurrency()->getCode(),
+                'productCurrentScope' => $productsScope
             ]);
         }
 
@@ -140,7 +159,8 @@ class ProductViewCounter extends Template
                 $product->getId() => $data
             ],
             'store' => $store->getId(),
-            'currency' => $store->getCurrentCurrency()->getCode()
+            'currency' => $store->getCurrentCurrency()->getCode(),
+            'productCurrentScope' => $productsScope
         ];
 
         return $this->serialize->serialize($currentProductData);
