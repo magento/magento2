@@ -8,6 +8,9 @@ namespace Magento\Sitemap\Model\ItemProvider;
 
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 
+/**
+ * Class for adding Store Url in sitemap
+ */
 class StoreUrl implements ItemProviderInterface
 {
     /**
@@ -39,7 +42,7 @@ class StoreUrl implements ItemProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems($storeId)
     {

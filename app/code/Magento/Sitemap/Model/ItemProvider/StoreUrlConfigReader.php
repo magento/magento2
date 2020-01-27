@@ -9,6 +9,9 @@ namespace Magento\Sitemap\Model\ItemProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class for getting configuration for Store Url
+ */
 class StoreUrlConfigReader implements ConfigReaderInterface
 {
     /**#@+
