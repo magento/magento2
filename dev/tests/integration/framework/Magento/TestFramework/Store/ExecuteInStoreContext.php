@@ -29,19 +29,29 @@ class ExecuteInStoreContext
     /**
      * Execute callback in store context
      *
+     * @param null|string|bool|int|StoreInterface $store
      * @param callable $method
      * @param array $arguments
-     * @param null|string|bool|int|StoreInterface $store
-     * @return void
+     * @return mixed
      */
-    public function execute(callable $method, array $arguments, $store = 'default'): void
+    public function execute($store, callable $method, ...$arguments)
     {
+        $storeCode = $store instanceof StoreInterface
+            ? $store->getCode()
+            : $this->storeManager->getStore($store)->getCode();
         $currentStore = $this->storeManager->getStore();
+
         try {
-            $this->storeManager->setCurrentStore($store);
-            $method(...$arguments);
+            if ($currentStore->getCode() !== $storeCode) {
+                $this->storeManager->setCurrentStore($storeCode);
+            }
+            $result = $method(...array_values($arguments));
         } finally {
-            $this->storeManager->setCurrentStore($currentStore);
+            if ($currentStore->getCode() !== $storeCode) {
+                $this->storeManager->setCurrentStore($currentStore);
+            }
         }
+
+        return $result;
     }
 }

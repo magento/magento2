@@ -75,12 +75,8 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      */
     public function testMultiStoreLabelView(array $expectedStoreData, array $expectedSecondStoreData): void
     {
-        $this->executeInStoreContext->execute([$this, 'assertProductLabel'], [$expectedStoreData]);
-        $this->executeInStoreContext->execute(
-            [$this, 'assertProductLabel'],
-            [$expectedSecondStoreData],
-            'fixturestore'
-        );
+        $this->executeInStoreContext->execute('default', [$this, 'assertProductLabel'], $expectedStoreData);
+        $this->executeInStoreContext->execute('fixturestore', [$this, 'assertProductLabel'], $expectedSecondStoreData);
     }
 
     /**
@@ -142,11 +138,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     public function testMultiStoreOptionsView(array $expectedProducts, array $expectedSecondStoreProducts): void
     {
         $this->prepareConfigurableProduct('configurable', 'fixture_second_store');
-        $this->executeInStoreContext->execute([$this, 'assertProductConfig'], [$expectedProducts]);
+        $this->executeInStoreContext->execute('default', [$this, 'assertProductConfig'], $expectedProducts);
         $this->executeInStoreContext->execute(
+            'fixture_second_store',
             [$this, 'assertProductConfig'],
-            [$expectedSecondStoreProducts],
-            'fixture_second_store'
+            $expectedSecondStoreProducts
         );
     }
 
@@ -190,7 +186,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
         $productToUpdate = $product->getTypeInstance()->getUsedProductCollection($product)
             ->setPageSize(1)->getFirstItem();
         $this->assertNotEmpty($productToUpdate->getData(), 'Configurable product does not have a child');
-        $this->executeInStoreContext->execute([$this, 'setProductDisabled'], [$productToUpdate], $storeCode);
+        $this->executeInStoreContext->execute($storeCode, [$this, 'setProductDisabled'], $productToUpdate);
     }
 
     /**
