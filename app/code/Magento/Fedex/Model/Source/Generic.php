@@ -1,16 +1,17 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
- /**
-  * Fedex generic source implementation
-  *
-  * @author Magento Core Team <core@magentocommerce.com>
-  */
 namespace Magento\Fedex\Model\Source;
 
+/**
+ * Fedex generic source implementation
+ *
+ * @author Magento Core Team <core@magentocommerce.com>
+ */
 class Generic implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
