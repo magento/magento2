@@ -45,13 +45,12 @@ class ExecuteInStoreContext
             if ($currentStore->getCode() !== $storeCode) {
                 $this->storeManager->setCurrentStore($storeCode);
             }
-            $result = $method(...array_values($arguments));
+
+            return $method(...array_values($arguments));
         } finally {
             if ($currentStore->getCode() !== $storeCode) {
                 $this->storeManager->setCurrentStore($currentStore);
             }
         }
-
-        return $result;
     }
 }
