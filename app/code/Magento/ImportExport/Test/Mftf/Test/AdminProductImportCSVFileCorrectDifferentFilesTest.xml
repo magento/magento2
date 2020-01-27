@@ -12,6 +12,7 @@
         <annotations>
             <description value="Product import from CSV file correct from different files."/>
             <features value="Import/Export"/>
+            <stories value="Product Import"/>
             <title value="Product import from CSV file correct from different files."/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17104"/>

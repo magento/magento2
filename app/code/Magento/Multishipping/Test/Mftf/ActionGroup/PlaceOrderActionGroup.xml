@@ -9,11 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <actionGroup name="PlaceOrderActionGroup">
-        <waitForPageLoad stepKey="waitForPlaceOrderPageLoad"/>
-        <!--        place order and check the order number-->
-        <click stepKey="checkoutMultishipmentPlaceOrder" selector="{{SingleShippingSection.placeOrder}}" />
+        <click selector="{{SingleShippingSection.placeOrder}}"  stepKey="checkoutMultiShipmentPlaceOrder"/>
         <waitForPageLoad stepKey="waitForSuccessfullyPlacedOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
-
     </actionGroup>
 </actionGroups>

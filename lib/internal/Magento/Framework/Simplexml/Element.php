@@ -451,7 +451,7 @@ class Element extends \SimpleXMLElement
                 $arr[] = $v;
             }
         }
-        $last = sizeof($arr) - 1;
+        $last = count($arr) - 1;
         $node = $this;
         foreach ($arr as $i => $nodeName) {
             if ($last === $i) {
