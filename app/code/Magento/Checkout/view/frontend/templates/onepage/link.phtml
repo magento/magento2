@@ -8,6 +8,7 @@
 ?>
 <?php if ($block->isPossibleOnepageCheckout()) :?>
     <button type="button"
+            id="proceed-to-checkout"
             data-role="proceed-to-checkout"
             title="<?= $block->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
             data-mage-init='{
@@ -15,10 +16,8 @@
                     "checkoutUrl":"<?= $block->escapeJs($block->escapeUrl($block->getCheckoutUrl())) ?>"
                 }
             }'
-            class="action primary checkout<?= ($block->isDisabled()) ? ' disabled' : '' ?>"
-            <?php if ($block->isDisabled()) :?>
-                disabled="disabled"
-            <?php endif; ?>>
+            class="action primary checkout"
+            disabled="disabled">
         <span><?= $block->escapeHtml(__('Proceed to Checkout')) ?></span>
     </button>
 <?php endif?>

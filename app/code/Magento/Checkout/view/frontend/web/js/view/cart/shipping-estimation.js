@@ -88,6 +88,11 @@ define(
                     }
                 });
 
+                //To enable proceed to checkout button after initializing shipping form
+                if (window.checkoutConfig.isAllowedToCheckout) {
+                    $("#proceed-to-checkout").attr("disabled",false);
+                }
+
                 return this;
             },
 

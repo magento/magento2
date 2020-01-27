@@ -300,6 +300,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['quoteItemData'] = $quoteItemData;
         $output['quoteMessages'] = $this->getQuoteItemsMessages($quoteItemData);
         $output['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
+        $output['isAllowedToCheckout'] = $this->checkoutSession->getQuote()->validateMinimumAmount();
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
         if ($email && !$this->isCustomerLoggedIn()) {
             $shippingAddressFromData = $this->getAddressFromData($quote->getShippingAddress());
