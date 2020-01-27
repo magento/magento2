@@ -54,6 +54,16 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class ProductRepositoryTest extends TestCase
 {
+    private const STUB_STORE_ID = 1;
+
+    private const STUB_STORE_ID_GLOBAL = 0;
+
+    private const STUB_PRODUCT_ID = 100;
+
+    private const STUB_PRODUCT_NAME = 'name';
+
+    private const STUB_PRODUCT_SKU = 'sku';
+
     /**
      * @var Product|MockObject
      */
@@ -291,7 +301,7 @@ class ProductRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $storeMock->method('getId')->willReturn('1');
+        $storeMock->method('getId')->willReturn(self::STUB_STORE_ID);
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
         $storeMock->expects($this->any())->method('getCode')->willReturn(Store::ADMIN_CODE);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
@@ -347,7 +357,7 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * Test save product with store id 0
+     * Test save product with global store id
      *
      * @param array $productData
      * @return void
@@ -361,9 +371,10 @@ class ProductRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->willReturn($productData);
-        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->resourceModel->method('getIdBySku')->willReturn(self::STUB_PRODUCT_ID);
         $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
-        $this->product->expects($this->at(14))->method('setData')->with('store_id', $productData['store_id']);
+        $this->product->expects($this->at(14))->method('setData')
+            ->with('store_id', $productData['store_id']);
 
         $this->model->save($this->product);
     }
@@ -378,9 +389,9 @@ class ProductRepositoryTest extends TestCase
         return [
             [
                 [
-                    'sku' => 'sku',
-                    'name' => 'product',
-                    'store_id' => 0,
+                    'sku' => self::STUB_PRODUCT_SKU,
+                    'name' => self::STUB_PRODUCT_NAME,
+                    'store_id' => self::STUB_STORE_ID_GLOBAL,
                 ],
             ],
         ];
@@ -399,9 +410,10 @@ class ProductRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->willReturn($this->productData);
-        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->resourceModel->method('getIdBySku')->willReturn(self::STUB_PRODUCT_ID);
         $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
-        $this->product->expects($this->at(15))->method('setData')->with('store_id', 1);
+        $this->product->expects($this->at(15))->method('setData')
+            ->with('store_id', self::STUB_STORE_ID);
 
         $this->model->save($this->product);
     }
