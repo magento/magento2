@@ -189,7 +189,7 @@
         <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
 
         <!-- Login to storefront from customer -->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefron">
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
