@@ -42,7 +42,7 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated only used by getMainTmpTable which is deprecated.
+     * @deprecated new logic to work with tables per store in category product indexer was created
      */
     const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
