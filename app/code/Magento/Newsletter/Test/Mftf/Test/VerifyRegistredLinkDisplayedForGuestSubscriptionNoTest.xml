@@ -11,11 +11,11 @@
     <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest">
         <before>
             <!--Log in to Magento as admin.-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Allow Guest Subscription NO-->
             <actionGroup ref="AdminNewsletterConfigFieldSetGuestNotAllowedActionGroup" stepKey="amOnNewsletterConfigField"/>
             <!--Log out from Magento admin.-->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </before>
         <actionGroup ref="StorefrontCreateNewSubscriberActionGroup" stepKey="createSubscriber"/>
     </test>
