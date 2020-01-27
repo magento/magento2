@@ -85,7 +85,7 @@ class DeleteButton implements ButtonProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      *
      * @since 101.0.0
      */

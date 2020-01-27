@@ -36,9 +36,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Internal constructor, that is called from real constructor
-     *
-     * @return $this
+     * @inheritDoc
      */
     public function _construct()
     {

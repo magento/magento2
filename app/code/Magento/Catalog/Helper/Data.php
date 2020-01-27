@@ -34,7 +34,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const CONFIG_USE_STATIC_URLS = 'cms/wysiwyg/use_static_urls_in_catalog';
 
     /**
-     * @deprecated only used in \Magento\Catalog\Helper\Data::isUrlDirectivesParsingAllowed which is deprecated
+     * @deprecated a new rendering mechanism for directives was added
      * @see \Magento\Catalog\Helper\Output::isDirectivesExists
      */
     const CONFIG_PARSE_URL_DIRECTIVES = 'catalog/frontend/parse_url_directives';

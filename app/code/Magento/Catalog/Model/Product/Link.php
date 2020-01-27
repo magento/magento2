@@ -99,7 +99,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Set link type id for related links
+     * Define link type as related
      *
      * @return $this
      */
@@ -110,7 +110,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Set link type id for upsell links
+     * Define link type as upsell
      *
      * @return $this
      */
@@ -121,7 +121,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Set link type id for cross sell links
+     * Define link type as cross sell
      *
      * @return $this
      */

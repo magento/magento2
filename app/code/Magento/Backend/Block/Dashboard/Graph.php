@@ -15,7 +15,7 @@ namespace Magento\Backend\Block\Dashboard;
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
     /**
-     * Api URL for image-charts.com
+     * Chart Api URL
      */
     const API_URL = 'https://image-charts.com/chart';
 
