@@ -33,14 +33,15 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$option2.option[store_labels][0][label]$$"/>
         </actionGroup>
@@ -49,14 +50,14 @@
         <!-- Assert created attribute in a group -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <!-- Unassign attribute from group -->
-        <actionGroup ref="UnassignAttributeFromGroup" stepKey="UnassignAttributeFromGroup">
+        <actionGroup ref="UnassignAttributeFromGroupActionGroup" stepKey="UnassignAttributeFromGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <!-- Assert attribute in unassigned section -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
         <!-- Save attribute set -->
-        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
         <!-- Clear cache -->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearPageCacheActionGroup"/>
         <!-- Go to create new product page -->

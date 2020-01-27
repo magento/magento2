@@ -7,6 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection as StorageCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -130,6 +131,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
             ->setMethods(['getRealPathSafety'])
@@ -158,10 +160,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->fileMock   = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Driver\File::class,
-            ['getParentDirectory']
-        );
+        $this->fileMock   = $this->objectManagerHelper->getObject(\Magento\Framework\Filesystem\Driver\File::class);
         $this->ioFileMock = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
         $this->ioFileMock->expects(
             $this->any()
@@ -231,8 +230,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'allowed' => $this->allowedImageExtensions,
             'image_allowed' => $this->allowedImageExtensions,
         ];
-
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->imagesStorage = $this->objectManagerHelper->getObject(
             \Magento\Cms\Model\Wysiwyg\Images\Storage::class,
@@ -524,8 +521,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->fileMock->expects($this->any())->method('getParentDirectory')->willReturn($path);
-
         $image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
             ->disableOriginalConstructor()
             ->setMethods(['open', 'keepAspectRatio', 'resize', 'save'])
@@ -538,5 +533,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
 
         $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
+    }
+
+    /**
+     * Test create directory with invalid name
+     */
+    public function testCreateDirectoryWithInvalidName()
+    {
+        $name = 'папка';
+        $path = '/tmp/path';
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            (string)__('Please rename the folder using only Latin letters, numbers, underscores and dashes.')
+        );
+        $this->imagesStorage->createDirectory($name, $path);
     }
 }

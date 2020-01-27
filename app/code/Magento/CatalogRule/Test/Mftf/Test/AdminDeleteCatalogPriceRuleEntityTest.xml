@@ -31,7 +31,7 @@
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
                 <argument name="customerGroup" value="General"/>
                 <argument name="disregardRules" value="Yes"/>
@@ -78,7 +78,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct1.price$$" stepKey="seeTrueProductPrice1"/>
 
         <!-- Assert that the rule isn't present in the Shopping Cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToShoppingCart1">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToShoppingCart1">
             <argument name="productName" value="$$createProduct1.name$$"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>
@@ -163,7 +163,7 @@
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
                 <argument name="customerGroup" value="General"/>
                 <argument name="disregardRules" value="Yes"/>

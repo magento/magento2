@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Delete simple product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="SimpleProduct3"/>
             </actionGroup>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -46,15 +46,15 @@
         <!--Create product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="SimpleProduct3"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
             <argument name="product" value="SimpleProduct3"/>
         </actionGroup>
 
         <!--Add related product-->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct0">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct0">
             <argument name="sku" value="$$simpleProduct0.sku$$"/>
         </actionGroup>
 
@@ -63,7 +63,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Add another related product-->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct1">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct1">
             <argument name="sku" value="$$simpleProduct1.sku$$"/>
         </actionGroup>
 
@@ -80,19 +80,19 @@
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
 
         <!--See more related products in admin-->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct2">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct2">
             <argument name="sku" value="$$simpleProduct2.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct3">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct3">
             <argument name="sku" value="$$simpleProduct3.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct4">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct4">
             <argument name="sku" value="$$simpleProduct4.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct5">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct5">
             <argument name="sku" value="$$simpleProduct5.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct6">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct6">
             <argument name="sku" value="$$simpleProduct6.sku$$"/>
         </actionGroup>
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo2"/>
