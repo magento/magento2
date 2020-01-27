@@ -112,7 +112,7 @@ class PopupDeliveryDateTest extends TestCase
     }
 
     /**
-     *
+     * Run plugin's original method
      */
     private function executeOriginalMethod()
     {
