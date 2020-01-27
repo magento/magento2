@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminNewsletterConfigFieldGuestNotAllowedActionGroup">
+    <actionGroup name="AdminNewsletterConfigFieldSetGuestNotAllowedActionGroup">
         <amOnPage url="{{AdminNewsletterConfigPage.url}}" stepKey="amOnNewsletterConfigPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminNewsletterConfigPageSubscriptionOptionsSection.allowGuestSubscription}}" stepKey="allowEdit"/>

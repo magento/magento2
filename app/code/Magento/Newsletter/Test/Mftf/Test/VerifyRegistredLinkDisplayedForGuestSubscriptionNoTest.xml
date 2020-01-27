@@ -13,7 +13,7 @@
             <!--Log in to Magento as admin.-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Allow Guest Subscription NO-->
-            <actionGroup ref="AssertAdminNewsletterConfigFieldGuestNotAllowedActionGroup" stepKey="amOnNewsletterConfigField"/>
+            <actionGroup ref="AdminNewsletterConfigFieldSetGuestNotAllowedActionGroup" stepKey="amOnNewsletterConfigField"/>
             <!--Log out from Magento admin.-->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </before>
