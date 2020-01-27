@@ -21,16 +21,36 @@ use PHPUnit\Framework\TestCase;
  */
 class PopupDeliveryDateTest extends TestCase
 {
+    const STUB_CARRIER_CODE_NOT_FEDEX = 'not-fedex';
+    const STUB_DELIVERY_DATE = '2020-02-02';
+    const STUB_DELIVERY_TIME = '12:00';
+
     /**
      * @var MockObject|PopupDeliveryDate
      */
     private $plugin;
 
     /**
+     * @var MockObject|Status $trackingStatusMock
+     */
+    private $trackingStatusMock;
+
+    /**
+     * @var MockObject|Popup $subjectMock
+     */
+    private $subjectMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
+        $this->trackingStatusMock = $this->getStatusMock();
+        $this->subjectMock = $this->getPopupMock();
+        $this->subjectMock->expects($this->once())
+            ->method('getTrackingInfo')
+            ->willReturn([[$this->trackingStatusMock]]);
+
         $objectManagerHelper = new ObjectManager($this);
         $this->plugin = $objectManagerHelper->getObject(PopupDeliveryDate::class);
     }
@@ -40,27 +60,14 @@ class PopupDeliveryDateTest extends TestCase
      */
     public function testAfterFormatDeliveryDateTimeWithFedexCarrier()
     {
-        /** @var Status|MockObject $trackingStatusMock */
-        $trackingStatusMock = $this->getMockBuilder(Status::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCarrier'])
-            ->getMock();
-        $trackingStatusMock->expects($this::once())
+        $this->trackingStatusMock->expects($this::once())
             ->method('getCarrier')
             ->willReturn(Carrier::CODE);
 
-        /** @var Popup|MockObject $subjectMock */
-        $subjectMock = $this->getMockBuilder(Popup::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDeliveryDate', 'getTrackingInfo'])
-            ->getMock();
-        $subjectMock->expects($this->once())
-            ->method('getTrackingInfo')
-            ->willReturn([[$trackingStatusMock]]);
-        $subjectMock->expects($this->once())
+        $this->subjectMock->expects($this->once())
             ->method('formatDeliveryDate');
 
-        $this->plugin->afterFormatDeliveryDateTime($subjectMock, 'Test Result', '2020-02-02', '12:00');
+        $this->executeOriginalMethod();
     }
 
     /**
@@ -68,26 +75,52 @@ class PopupDeliveryDateTest extends TestCase
      */
     public function testAfterFormatDeliveryDateTimeWithOtherCarrier()
     {
-        /** @var Status|MockObject $trackingStatusMock */
-        $trackingStatusMock = $this->getMockBuilder(Status::class)
+        $this->trackingStatusMock->expects($this::once())
+            ->method('getCarrier')
+            ->willReturn(self::STUB_CARRIER_CODE_NOT_FEDEX);
+
+        $this->subjectMock->expects($this->never())
+            ->method('formatDeliveryDate');
+
+        $this->executeOriginalMethod();
+    }
+
+    /**
+     * Returns Mock for @see Status
+     *
+     * @return MockObject
+     */
+    private function getStatusMock(): MockObject
+    {
+        return $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCarrier'])
             ->getMock();
-        $trackingStatusMock->expects($this::once())
-            ->method('getCarrier')
-            ->willReturn('not-fedex');
+    }
 
-        /** @var Popup|MockObject $subjectMock */
-        $subjectMock = $this->getMockBuilder(Popup::class)
+    /**
+     * Returns Mock for @see Popup
+     *
+     * @return MockObject
+     */
+    private function getPopupMock(): MockObject
+    {
+        return $this->getMockBuilder(Popup::class)
             ->disableOriginalConstructor()
             ->setMethods(['formatDeliveryDate', 'getTrackingInfo'])
             ->getMock();
-        $subjectMock->expects($this->once())
-            ->method('getTrackingInfo')
-            ->willReturn([[$trackingStatusMock]]);
-        $subjectMock->expects($this->never())
-            ->method('formatDeliveryDate');
+    }
 
-        $this->plugin->afterFormatDeliveryDateTime($subjectMock, 'Test Result', '2020-02-02', '12:00');
+    /**
+     *
+     */
+    private function executeOriginalMethod()
+    {
+        $this->plugin->afterFormatDeliveryDateTime(
+            $this->subjectMock,
+            'Test Result',
+            self::STUB_DELIVERY_DATE,
+            self::STUB_DELIVERY_TIME
+        );
     }
 }
