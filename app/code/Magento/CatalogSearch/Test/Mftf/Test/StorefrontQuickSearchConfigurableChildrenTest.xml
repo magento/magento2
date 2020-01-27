@@ -72,6 +72,7 @@
             </createData>
 
             <!-- Perform reindex -->
+            <!-- TODO: remove after MC-29942 delivered-->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
