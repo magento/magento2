@@ -115,7 +115,19 @@ class Attributes extends \Magento\Framework\View\Element\Template
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
         array $excludeAttr
     ) {
-        return ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr) &&
-            (!empty($attribute->getApplyTo()) && in_array($this->getProduct()->getTypeId(), $attribute->getApplyTo())));
+        return ($this->isAppliesToProduct($attribute) && 
+                    $attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr));
+    }
+
+    /**
+     * Determine if the attribute applies to the current product
+     *
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @return bool
+     */
+    protected function isAppliesToProduct(
+        \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+    ) {
+        return (!empty($attribute->getApplyTo()) && in_array($this->getProduct()->getTypeId(), $attribute->getApplyTo()));
     }
 }
