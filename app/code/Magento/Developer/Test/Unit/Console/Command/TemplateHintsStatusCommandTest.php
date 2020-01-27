@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Developer\Test\Unit\Console\Command;
 
@@ -33,6 +34,9 @@ class TemplateHintsStatusCommandTest extends TestCase
      */
     private $reinitableConfigMock;
 
+    /**
+     * TemplateHintsStatusCommandTest setup
+     */
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
@@ -45,15 +49,13 @@ class TemplateHintsStatusCommandTest extends TestCase
 
     }
 
+    /**
+     * Test execution
+     */
     public function testExecute()
     {
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-
-        $this->assertContains(
-            'disabled',
-            $tester->getDisplay()
-        );
 
         $this->assertEquals(
             0,
