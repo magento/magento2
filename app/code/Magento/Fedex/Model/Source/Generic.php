@@ -5,7 +5,7 @@
  */
 namespace Magento\Fedex\Model\Source;
 
-class Generic implements \Magento\Framework\Option\ArrayInterface
+class Generic implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Fedex\Model\Carrier
@@ -36,9 +36,12 @@ class Generic implements \Magento\Framework\Option\ArrayInterface
     {
         $configData = $this->_shippingFedex->getCode($this->_code);
         $arr = [];
-        foreach ($configData as $code => $title) {
-            $arr[] = ['value' => $code, 'label' => $title];
+        if($configData) {
+            foreach ($configData as $code => $title) {
+                $arr[] = ['value' => $code, 'label' => $title];
+            }
         }
+
         return $arr;
     }
 }
