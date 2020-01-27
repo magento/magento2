@@ -3,6 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+ /**
+  * Fedex generic source implementation
+  *
+  * @author Magento Core Team <core@magentocommerce.com>
+  */
 namespace Magento\Fedex\Model\Source;
 
 class Generic implements \Magento\Framework\Data\OptionSourceInterface
@@ -36,7 +42,7 @@ class Generic implements \Magento\Framework\Data\OptionSourceInterface
     {
         $configData = $this->_shippingFedex->getCode($this->_code);
         $arr = [];
-        if($configData) {
+        if ($configData) {
             foreach ($configData as $code => $title) {
                 $arr[] = ['value' => $code, 'label' => $title];
             }
