@@ -86,9 +86,6 @@
                     <comment>To show VAT number on Storefront, set Show VAT Number on Storefront option to Yes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Default Email Domain</label>
-                </field>
                 <field id="email_template" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Welcome Email</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>

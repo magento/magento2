@@ -1000,9 +1000,6 @@
                 <item name="sales_email/shipment/copy_to" xsi:type="string">1</item>
                 <item name="sales_email/shipment_comment/copy_to" xsi:type="string">1</item>
             </argument>
-            <argument name="environment" xsi:type="array">
-                <item name="customer/create_account/email_domain" xsi:type="string">1</item>
-            </argument>
         </arguments>
     </type>
     <preference
