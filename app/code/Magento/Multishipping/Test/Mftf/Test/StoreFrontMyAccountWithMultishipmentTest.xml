@@ -12,13 +12,13 @@
         <annotations>
             <features value="Multishipping"/>
             <stories value="Shipping price shows 0 on Order view page after multiple address checkout"/>
-            <title value="Verify Shipping price for Storefront after multiple address checkout"/>
+            <title value="DEPRECATED. Verify Shipping price for Storefront after multiple address checkout"/>
             <description value="Verify that shipping price on My account matches with shipping method prices after multiple addresses checkout (Order view page)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19303"/>
             <group value="multishipping"/>
             <skip>
-                <issueId value="MC-22683"/>
+                <issueId value="DEPRECATED">Please use StorefrontOrderWithMultishippingTest instead</issueId>
             </skip>
         </annotations>
 
