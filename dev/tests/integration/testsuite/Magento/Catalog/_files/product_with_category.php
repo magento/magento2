@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
@@ -31,7 +30,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setSku('in-stock-product')
     ->setPrice(10)
     ->setWeight(1)
-    ->setShortDescription("Short description")
+    ->setShortDescription('Short description')
     ->setTaxClassId(0)
     ->setDescription('Description with <b>html tag</b>')
     ->setMetaTitle('meta title')
