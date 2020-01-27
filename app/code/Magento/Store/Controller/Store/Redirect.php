@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
 
@@ -39,12 +40,18 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     private $hashGenerator;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
      * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param HashGenerator $hashGenerator
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -53,12 +60,14 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         StoreResolverInterface $storeResolver,
         \Magento\Framework\Session\Generic $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        HashGenerator $hashGenerator
+        HashGenerator $hashGenerator,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->storeRepository = $storeRepository;
         $this->storeResolver = $storeResolver;
         $this->hashGenerator = $hashGenerator;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -81,6 +90,8 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         try {
             /** @var Store $fromStore */
             $fromStore = $this->storeRepository->get($fromStoreCode);
+            /** @var Store $targetStore */
+            $targetStore = $this->storeRepository->get($targetStoreCode);
         } catch (NoSuchEntityException $e) {
             $error = __('Requested store is not found');
         }
@@ -104,6 +115,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                 '_nosid' => true,
                 '_query' => $query
             ];
+            $this->storeManager->setCurrentStore($targetStore);
             $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
 
