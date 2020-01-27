@@ -5,22 +5,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\MediaStorage\App;
 
+use Closure;
+use Exception;
+use LogicException;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
+use Magento\Framework\App;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\AppInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
-use Magento\Framework\App;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\AppInterface;
+use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
-use Magento\Framework\App\Area;
-use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
 
 /**
+ * Media Storage
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Media implements AppInterface
@@ -28,7 +37,7 @@ class Media implements AppInterface
     /**
      * Authorization function
      *
-     * @var \Closure
+     * @var Closure
      */
     private $isAllowed;
 
@@ -59,7 +68,7 @@ class Media implements AppInterface
     private $response;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     private $directory;
 
@@ -92,7 +101,7 @@ class Media implements AppInterface
      * @param ConfigFactory $configFactory
      * @param SynchronizationFactory $syncFactory
      * @param Response $response
-     * @param \Closure $isAllowed
+     * @param Closure $isAllowed
      * @param string $mediaDirectory
      * @param string $configCacheFile
      * @param string $relativeFileName
@@ -106,7 +115,7 @@ class Media implements AppInterface
         ConfigFactory $configFactory,
         SynchronizationFactory $syncFactory,
         Response $response,
-        \Closure $isAllowed,
+        Closure $isAllowed,
         $mediaDirectory,
         $configCacheFile,
         $relativeFileName,
@@ -120,6 +129,7 @@ class Media implements AppInterface
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->mediaDirectoryPath = str_replace('\\', '/', realpath($mediaDirectory));
         }
         $this->configCacheFile = $configCacheFile;
@@ -135,9 +145,9 @@ class Media implements AppInterface
      * Run application
      *
      * @return Response
-     * @throws \LogicException
+     * @throws LogicException
      */
-    public function launch()
+    public function launch(): ResponseInterface
     {
         $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
@@ -150,12 +160,12 @@ class Media implements AppInterface
             $allowedResources = $config->getAllowedResources();
             $isAllowed = $this->isAllowed;
             if (!$isAllowed($this->relativeFileName, $allowedResources)) {
-                throw new \LogicException('The specified path is not allowed.');
+                throw new LogicException('The path is not allowed: ' . $this->relativeFileName);
             }
         }
 
         try {
-            /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
+            /** @var Synchronization $sync */
             $sync = $this->syncFactory->create(['directory' => $this->directory]);
             $sync->synchronize($this->relativeFileName);
             $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
@@ -164,14 +174,19 @@ class Media implements AppInterface
             } else {
                 $this->setPlaceholderImage();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->setPlaceholderImage();
         }
 
         return $this->response;
     }
 
-    private function setPlaceholderImage()
+    /**
+     * Set Placeholder as a response
+     *
+     * @return void
+     */
+    private function setPlaceholderImage(): void
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
         $this->response->setFilePath($placeholder->getPath());
@@ -189,9 +204,9 @@ class Media implements AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
+    public function catchException(App\Bootstrap $bootstrap, Exception $exception)
     {
         $this->response->setHttpResponseCode(404);
         if ($bootstrap->isDeveloperMode()) {

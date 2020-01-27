@@ -10,7 +10,7 @@
         <section id="three_d_secure">
             <group id="cardinal">
                 <group id="config">
-                    <field id="enabled_authorize" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="enabled_authorize" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1">
                         <label>Enable for Authorize.Net</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>three_d_secure/cardinal/enabled_authorizenet</config_path>
