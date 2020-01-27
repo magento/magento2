@@ -5,12 +5,13 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
-use Magento\ImportExport\Model\Import;
-use \Magento\Store\Model\Store;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
+use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 
 /**
  * Export entity product model
@@ -21,6 +22,8 @@ use Magento\Catalog\Model\Product as ProductEntity;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
@@ -348,6 +351,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var string
      */
     private $productEntityLinkField;
+    /**
+     * @var ProductFilterInterface
+     */
+    private $filter;
 
     /**
      * Product constructor.
@@ -369,6 +376,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param ProductEntity\LinkTypeProvider $linkTypeProvider
      * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
+     * @param ProductFilterInterface $filter
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -388,7 +396,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
-        array $dateAttrCodes = []
+        array $dateAttrCodes = [],
+        ?ProductFilterInterface $filter = null
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -404,6 +413,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_linkTypeProvider = $linkTypeProvider;
         $this->rowCustomizer = $rowCustomizer;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
+        $this->filter = $filter ?? ObjectManager::getInstance()->get(ProductFilterInterface::class);
 
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
@@ -819,9 +829,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 case 'g':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+                    // no break
                 case 'm':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+                    // no break
                 case 'k':
                     $memoryLimit *= 1024;
                     break;
@@ -913,12 +925,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $exportFilter = !empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]) ?
             $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP] : [];
 
-        if (isset($exportFilter['category_ids'])
-            && trim($exportFilter['category_ids'])
-            && $collection instanceof \Magento\Catalog\Model\ResourceModel\Product\Collection
-        ) {
-            $collection->addCategoriesFilter(['in' => explode(',', $exportFilter['category_ids'])]);
-        }
+        $collection = $this->filter->filter($collection, $exportFilter);
 
         return parent::_prepareEntityCollection($collection);
     }
@@ -979,7 +986,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $collection = $this->_getEntityCollection();
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $collection->setOrder('entity_id', 'asc');
-            $this->_prepareEntityCollection($collection);
             $collection->setStoreId($storeId);
             $collection->load();
             foreach ($collection as $itemId => $item) {
