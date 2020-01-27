@@ -11,6 +11,7 @@
             <values>
                 <value id="devdocs-base" type="host">https://devdocs.magento.com</value>
                 <value id="mage-base" type="host">http://magento.com</value>
+                <value id="hash3" type="hash" algorithm="sha256">B4yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=</value>
             </values>
         </policy>
     </policies>
