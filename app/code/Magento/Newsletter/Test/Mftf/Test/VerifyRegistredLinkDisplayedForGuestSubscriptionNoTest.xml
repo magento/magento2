@@ -10,12 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest">
         <before>
-            <!--Log in to Magento as admin.-->
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-            <!--Allow Guest Subscription NO-->
-            <actionGroup ref="AdminNewsletterConfigFieldSetGuestNotAllowedActionGroup" stepKey="amOnNewsletterConfigField"/>
-            <!--Log out from Magento admin.-->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <magentoCLI command="config:set newsletter/subscription/allow_guest_subscribe 0"
+                        stepKey="setConfigGuestSubscriptionDisable"/>
         </before>
         <actionGroup ref="StorefrontCreateNewSubscriberActionGroup" stepKey="createSubscriber"/>
     </test>
