@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Csp\Test\Unit\Model;
+namespace Magento\Csp\Test\Unit\Model\Mode;
 
 use Magento\Csp\Model\Mode\ConfigManager;
 use Magento\Csp\Model\Mode\Data\ModeConfigured;
