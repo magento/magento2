@@ -942,6 +942,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @return array Keys are product IDs, values arrays with keys as store IDs
      *               and values as store-specific versions of Product entity.
+     * @since 100.2.1
      */
     protected function loadCollection(): array
     {
@@ -1132,7 +1133,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Product $item
      * @param int $storeId
      * @return bool
-     * @deprecated
+     * @deprecated 100.2.3
      */
     protected function hasMultiselectData($item, $storeId)
     {

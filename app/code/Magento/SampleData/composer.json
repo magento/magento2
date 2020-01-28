@@ -6,10 +6,10 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*"
+        "magento/framework": "102.0.*"
     },
     "suggest": {
-        "magento/sample-data-media": "*"
+        "magento/sample-data-media": "Sample Data version: 100.3.*"
     },
     "type": "magento2-module",
     "license": [
@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\SampleData\\": ""
         }
-    }
+    },
+    "version": "100.3.3"
 }

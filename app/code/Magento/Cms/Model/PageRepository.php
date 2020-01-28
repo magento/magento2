@@ -269,7 +269,7 @@ class PageRepository implements PageRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

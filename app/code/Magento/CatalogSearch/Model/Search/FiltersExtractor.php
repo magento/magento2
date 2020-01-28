@@ -13,7 +13,7 @@ use Magento\Framework\Search\Request\Filter\BoolExpression;
  * Class FiltersExtractor
  * Extracts filters from QueryInterface
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class FiltersExtractor

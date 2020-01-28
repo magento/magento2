@@ -1173,4 +1173,24 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="CatalogValidationState" type="\Magento\Framework\Config\ValidationState\Configurable">
+        <arguments>
+            <argument name="required" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="LayoutUpdateAttributeValidator" type="\Magento\Framework\View\Model\Layout\Update\Validator">
+        <arguments>
+            <argument name="validationState" xsi:type="object">CatalogValidationState</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="LayoutUpdateAttributeValidatorFactory" type="Magento\Framework\View\Model\Layout\Update\ValidatorFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">LayoutUpdateAttributeValidator</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate">
+        <arguments>
+            <argument name="layoutUpdateValidatorFactory" xsi:type="object">LayoutUpdateAttributeValidatorFactory</argument>
+        </arguments>
+    </type>
 </config>

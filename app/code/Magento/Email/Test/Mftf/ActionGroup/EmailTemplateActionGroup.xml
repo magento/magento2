@@ -38,6 +38,17 @@
         <fillField selector="{{AdminEmailTemplateEditSection.templateText}}" userInput="{{template.templateText}}" after="fillTemplateSubject" stepKey="fillTemplateText"/>
     </actionGroup>
 
+    <actionGroup name="PrepareDraftCustomTemplate" extends="CreateNewTemplate">
+        <remove keyForRemoval="selectValueFromTemplateDropDown"/>
+        <remove keyForRemoval="clickLoadTemplateButton"/>
+        <remove keyForRemoval="clickSaveTemplateButton"/>
+        <remove keyForRemoval="waitForSuccessMessage"/>
+        <remove keyForRemoval="seeSuccessMessage"/>
+
+        <fillField selector="{{AdminEmailTemplateEditSection.templateSubject}}" userInput="{{template.templateSubject}}" after="fillTemplateNameField" stepKey="fillTemplateSubject"/>
+        <fillField selector="{{AdminEmailTemplateEditSection.templateText}}" userInput="{{template.templateText}}" after="fillTemplateSubject" stepKey="fillTemplateText"/>
+    </actionGroup>
+
     <!-- Find and Open Email Template -->
     <actionGroup name="FindAndOpenEmailTemplate">
         <arguments>

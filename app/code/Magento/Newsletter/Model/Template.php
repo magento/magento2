@@ -40,7 +40,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Mail object
      *
-     * @deprecated Unused property
+     * @deprecated 100.3.0 Unused property
      *
      */
     protected $_mail;
@@ -200,9 +200,16 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     {
         $variables['this'] = $this;
 
-        return $this->getTemplateFilter()
-            ->setVariables($variables)
-            ->filter($this->getTemplateSubject());
+        $filter = $this->getTemplateFilter();
+        $filter->setVariables($variables);
+
+        $previousStrictMode = $filter->setStrictMode(
+            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
+        );
+        $result = $filter->filter($this->getTemplateSubject());
+        $filter->setStrictMode($previousStrictMode);
+
+        return $result;
     }
 
     /**
@@ -227,6 +234,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     }
 
     /**
+     * Return the filter factory
+     *
      * @return \Magento\Newsletter\Model\Template\FilterFactory
      */
     protected function getFilterFactory()

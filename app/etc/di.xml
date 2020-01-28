@@ -1794,4 +1794,5 @@
                 type="Magento\Framework\Mail\MimeMessage" />
     <preference for="Magento\Framework\Mail\MimePartInterface"
                 type="Magento\Framework\Mail\MimePart" />
+    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
 </config>

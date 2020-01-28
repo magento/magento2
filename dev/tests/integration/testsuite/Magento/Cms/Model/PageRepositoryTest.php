@@ -95,4 +95,36 @@ class PageRepositoryTest extends TestCase
         $page = $this->repo->save($page);
         $this->assertEquals('test', $page->getCustomTheme());
     }
+
+    /**
+     * @magentoDataFixture Magento/Cms/_files/pages.php
+     * @return void
+     */
+    public function testSavePageWithValidCustomLayoutUpdate(): void
+    {
+        $xml = '<referenceContainer name="main">
+                    <block class="Magento\Framework\View\Element\Template" name="test.block"></block>
+                </referenceContainer>';
+
+        $page = $this->repo->getById('page100');
+        $page->setLayoutUpdateXml($xml);
+        $this->repo->save($page);
+
+        $updatedPage = $this->repo->getById('page100');
+
+        $this->assertEquals($xml, $updatedPage->getLayoutUpdateXml());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Cms/_files/pages.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Layout update is invalid
+     * @return void
+     */
+    public function testSavePageWithInValidCustomLayoutUpdate(): void
+    {
+        $page = $this->repo->getById('page100');
+        $page->setLayoutUpdateXml('test');
+        $this->repo->save($page);
+    }
 }

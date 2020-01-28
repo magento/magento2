@@ -17,6 +17,11 @@ class CustomlayoutupdateTest extends \PHPUnit\Framework\TestCase
     private $attributeName = 'private';
 
     /**
+     * @var string
+     */
+    private $attributeLabel = 'label';
+
+    /**
      * @var \Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate
      */
     private $model;
@@ -126,11 +131,14 @@ class CustomlayoutupdateTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($this->attributeName));
-
+            ->willReturn($this->attributeName);
+        $mock->expects($this->any())
+            ->method('getData')
+            ->with('frontend_label')
+            ->willReturn($this->attributeLabel);
         $mock->expects($this->any())
             ->method('getIsRequired')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         return $mock;
     }

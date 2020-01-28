@@ -632,4 +632,31 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             [1, 1, true],
         ];
     }
+
+    /**
+     * @return void
+     */
+    public function testSaveProductWithValidCustomLayoutUpdateXml(): void
+    {
+        $product = $this->productRepository->get('simple');
+        $xml = '<referenceContainer name="main">
+                    <block class="Magento\Framework\View\Element\Template" name="test.block"></block>
+                </referenceContainer>';
+        $product->setCustomLayoutUpdate($xml);
+        $updatedProduct = $this->productRepository->save($product);
+        $this->assertEquals($xml, $updatedProduct->getCustomLayoutUpdate());
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Element 'layout': Character content other than whitespace is not allowed
+     * @return void
+     */
+    public function testSaveProductWithInValidCustomLayoutUpdateXml(): void
+    {
+        $product = $this->productRepository->get('simple');
+        $product->setCustomLayoutUpdate('test');
+
+        $this->productRepository->save($product);
+    }
 }

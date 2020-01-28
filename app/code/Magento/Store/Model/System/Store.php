@@ -143,6 +143,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                     $values[] = [
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $store->getName(),
                         'value' => $store->getId(),
+                        '__disableTmpl' => true,
                     ];
                 }
                 if ($groupShow) {

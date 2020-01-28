@@ -27,6 +27,7 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Search\Model\EngineResolver;
 
 /**
  * Fulltext Collection
@@ -41,6 +42,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
+    /**
+     * Config search engine path.
+     */
+    private const SEARCH_ENGINE_VALUE_PATH = 'catalog/search/engine';
+
     /**
      * @var  QueryResponse
      * @deprecated 100.1.0
@@ -79,7 +85,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @deprecated There must be no dependencies on specific adapter in generic search implementation
+     * @deprecated 101.0.0 There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -376,6 +382,66 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     * @since 101.0.3
+     */
+    public function clear()
+    {
+        $this->searchResult = null;
+        return parent::clear();
+    }
+
+    /**
+     * @inheritDoc
+     * @since 101.0.3
+     */
+    protected function _reset()
+    {
+        $this->searchResult = null;
+        return parent::_reset();
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.0.3
+     */
+    public function _loadEntities($printQuery = false, $logQuery = false)
+    {
+        $this->getEntity();
+
+        $currentSearchEngine = $this->_scopeConfig->getValue(self::SEARCH_ENGINE_VALUE_PATH);
+        if ($this->_pageSize && $currentSearchEngine === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE) {
+            $this->getSelect()->limitPage($this->getCurPage(), $this->_pageSize);
+        }
+
+        $this->printLogQuery($printQuery, $logQuery);
+
+        try {
+            /**
+             * Prepare select query
+             * @var string $query
+             */
+            $query = $this->getSelect();
+            $rows = $this->_fetchAll($query);
+        } catch (\Exception $e) {
+            $this->printLogQuery(false, true, $query);
+            throw $e;
+        }
+
+        foreach ($rows as $value) {
+            $object = $this->getNewEmptyItem()->setData($value);
+            $this->addItem($object);
+            if (isset($this->_itemsById[$object->getId()])) {
+                $this->_itemsById[$object->getId()][] = $object;
+            } else {
+                $this->_itemsById[$object->getId()] = [$object];
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Add search query filter
      *
      * @param string $query
@@ -406,6 +472,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 101.0.2
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -515,6 +582,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 100.2.3
      */
     protected function _beforeLoad()
     {

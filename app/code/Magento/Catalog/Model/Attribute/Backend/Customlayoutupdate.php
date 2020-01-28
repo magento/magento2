@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Attribute\Backend;
 
+use Magento\Framework\Config\Dom\ValidationException;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use Magento\Eav\Model\Entity\Attribute\Exception;
 
@@ -38,7 +42,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     /**
      * Validate the custom layout update
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return bool
      * @throws Exception
      */
@@ -51,7 +55,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
             return true;
         }
 
-        /** @var $validator \Magento\Framework\View\Model\Layout\Update\Validator */
+        /** @var Validator $validator */
         $validator = $this->_layoutUpdateValidatorFactory->create();
         if (!$validator->isValid($xml)) {
             $messages = $validator->getMessages();
@@ -61,6 +65,30 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
             $eavExc->setAttributeCode($attributeName);
             throw $eavExc;
         }
+
         return true;
+    }
+
+    /**
+     * Attribute before save method.
+     *
+     * @param DataObject $object
+     * @return $this
+     * @throws LocalizedException
+     * @since 103.0.3
+     */
+    public function beforeSave($object)
+    {
+        parent::beforeSave($object);
+
+        $attributeLabel = $this->getAttribute()->getData('frontend_label');
+
+        try {
+            $this->validate($object);
+        } catch (ValidationException $e) {
+            throw new LocalizedException(__('%1 is invalid: %2', $attributeLabel, $e->getMessage()));
+        }
+
+        return $this;
     }
 }

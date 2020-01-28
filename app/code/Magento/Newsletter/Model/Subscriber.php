@@ -733,7 +733,13 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 'store' => $this->_storeManager->getStore()->getId(),
             ]
         )->setTemplateVars(
-            ['subscriber' => $this, 'store' => $this->_storeManager->getStore()]
+            [
+                'subscriber' => $this,
+                'store' => $this->_storeManager->getStore(),
+                'subscriber_data' => [
+                    'confirmation_link' => $this->getConfirmationLink(),
+                ],
+            ]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
@@ -874,6 +880,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Set date of last changed status
      *
      * @return $this
+     * @since 100.2.1
      */
     public function beforeSave()
     {

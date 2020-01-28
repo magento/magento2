@@ -235,11 +235,16 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
     </type>
+    <virtualType name="CmsLayoutXmlValidator" type="Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator">
+        <arguments>
+            <argument name="validationState" xsi:type="object">Magento\Cms\Model\Page\DomValidationState</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Cms\Model\PageRepository\ValidationComposite">
         <arguments>
             <argument name="repository" xsi:type="object">Magento\Cms\Model\PageRepository</argument>
             <argument name="validators" xsi:type="array">
-                <item name="layout_update" xsi:type="object">Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator</item>
+                <item name="layout_update" xsi:type="object">CmsLayoutXmlValidator</item>
             </argument>
         </arguments>
     </type>

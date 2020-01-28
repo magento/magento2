@@ -421,7 +421,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
