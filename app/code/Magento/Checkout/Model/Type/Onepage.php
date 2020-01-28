@@ -15,9 +15,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
+ * Class Onepage
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Onepage
 {
@@ -168,6 +171,11 @@ class Onepage
      * @var \Magento\Quote\Model\Quote\TotalsCollector
      */
     protected $totalsCollector;
+
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager

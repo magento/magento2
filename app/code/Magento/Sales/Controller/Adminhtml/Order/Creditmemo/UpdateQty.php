@@ -8,6 +8,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
+/**
+ * Class UpdateQty
+ */
 class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
@@ -36,6 +39,11 @@ class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInt
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Action\Context $context

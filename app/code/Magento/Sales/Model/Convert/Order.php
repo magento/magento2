@@ -10,6 +10,8 @@
 namespace Magento\Sales\Model\Convert;
 
 /**
+ * Class Order
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends \Magento\Framework\DataObject
@@ -50,6 +52,11 @@ class Order extends \Magento\Framework\DataObject
      * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Shipment\ItemFactory
+     */
+    protected $_shipmentItemFactory;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager

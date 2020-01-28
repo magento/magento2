@@ -15,16 +15,24 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
 
+/**
+ * Class CustomOption
+ */
 class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
+    /**
+     * @var \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor
+     */
+    protected $fileProcessor;
+
     /**
      * @param Context $context
      * @param Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
+     * @param FileProcessor $fileProcessor
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
-     * @param FileProcessor $fileProcessor
      * @param array $data
      */
     public function __construct(

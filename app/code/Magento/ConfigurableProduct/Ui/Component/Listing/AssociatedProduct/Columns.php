@@ -5,12 +5,20 @@
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
+/**
+ * Class Columns
+ */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
      * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
      */
     protected $attributeRepository;
+
+    /**
+     * @var \Magento\Catalog\Ui\Component\ColumnFactory
+     */
+    protected $columnFactory;
 
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
@@ -32,7 +40,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function prepare()
     {

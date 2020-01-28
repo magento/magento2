@@ -21,6 +21,11 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
     protected $customerResource;
 
     /**
+     * @var array
+     */
+    protected $_joinedFields = [];
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy

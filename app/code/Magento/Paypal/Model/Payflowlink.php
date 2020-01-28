@@ -117,6 +117,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     private $mathRandom;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $_requestHttp;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -508,6 +513,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             default:
                 break;
         }
+
+        return self::TRXTYPE_SALE;
     }
 
     /**

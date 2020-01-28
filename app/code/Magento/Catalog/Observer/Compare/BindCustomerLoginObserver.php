@@ -10,10 +10,14 @@ use Magento\Catalog\Model\Product\Compare\Item;
 
 /**
  * Catalog Compare Item Model
- *
  */
 class BindCustomerLoginObserver implements ObserverInterface
 {
+    /**
+     * @var \Magento\Catalog\Model\Product\Compare\Item
+     */
+    private $item;
+
     /**
      * @param Item $item
      */
@@ -25,10 +29,11 @@ class BindCustomerLoginObserver implements ObserverInterface
 
     /**
      * Customer login bind process
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

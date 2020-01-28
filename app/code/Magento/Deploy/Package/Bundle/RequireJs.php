@@ -105,6 +105,11 @@ class RequireJs implements BundleInterface
     private $pathToBundleDir;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * Bundle constructor
      *
      * @param Filesystem $filesystem
@@ -192,7 +197,7 @@ class RequireJs implements BundleInterface
      */
     public function clear()
     {
-        $this->staticDir->delete($this->pathToBundleDir);
+        return $this->staticDir->delete($this->pathToBundleDir);
     }
 
     /**

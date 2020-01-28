@@ -149,6 +149,18 @@ abstract class AbstractEntity
     protected $_storeManager;
 
     /**
+     * @var array
+     */
+    protected $_invalidRows = [];
+
+    /**
+     * Array of pairs store ID to its code.
+     *
+     * @var array
+     */
+    protected $_storeIdToCode = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param ResourceConnection $resource
@@ -249,21 +261,20 @@ abstract class AbstractEntity
      * Apply filter to collection and add not skipped attributes to select.
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     *
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
-        if (!isset(
-            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]
-        ) || !is_array(
-            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]
-        )
+        $exportFilter = [];
+        if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])
+            && is_array($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])
         ) {
-            $exportFilter = [];
-        } else {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
+
         $exportAttrCodes = $this->_getExportAttrCodes();
 
         foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
@@ -273,51 +284,50 @@ abstract class AbstractEntity
             if (isset($exportFilter[$attrCode])) {
                 $attrFilterType = \Magento\ImportExport\Model\Export::getAttributeFilterType($attribute);
 
-                if (\Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT == $attrFilterType) {
-                    if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
-                        $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
-                    }
-                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType) {
-                    if (is_array($exportFilter[$attrCode])) {
-                        array_filter($exportFilter[$attrCode]);
-                        if (!empty($exportFilter[$attrCode])) {
-                            foreach ($exportFilter[$attrCode] as $val) {
-                                $collection->addAttributeToFilter(
-                                    $attrCode,
-                                    ['finset' => $val]
-                                );
-                            }
+                if (\Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT == $attrFilterType
+                    && is_scalar($exportFilter[$attrCode])
+                    && trim($exportFilter[$attrCode])) {
+                    $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType
+                    && is_array($exportFilter[$attrCode])) {
+                    array_filter($exportFilter[$attrCode]);
+                    if (!empty($exportFilter[$attrCode])) {
+                        foreach ($exportFilter[$attrCode] as $val) {
+                            $collection->addAttributeToFilter(
+                                $attrCode,
+                                ['finset' => $val]
+                            );
                         }
                     }
-                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_INPUT == $attrFilterType) {
-                    if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
-                        $collection->addAttributeToFilter($attrCode, ['like' => "%{$exportFilter[$attrCode]}%"]);
-                    }
-                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_DATE == $attrFilterType) {
-                    if (is_array($exportFilter[$attrCode]) && count($exportFilter[$attrCode]) == 2) {
-                        $from = array_shift($exportFilter[$attrCode]);
-                        $to = array_shift($exportFilter[$attrCode]);
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_INPUT == $attrFilterType
+                    && is_scalar($exportFilter[$attrCode])
+                    && trim($exportFilter[$attrCode])) {
+                    $collection->addAttributeToFilter($attrCode, ['like' => "%{$exportFilter[$attrCode]}%"]);
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_DATE == $attrFilterType
+                    && is_array($exportFilter[$attrCode])
+                    && count($exportFilter[$attrCode]) == 2) {
+                    $from = array_shift($exportFilter[$attrCode]);
+                    $to = array_shift($exportFilter[$attrCode]);
 
-                        if (is_scalar($from) && !empty($from)) {
-                            $date = (new \DateTime($from))->format('m/d/Y');
-                            $collection->addAttributeToFilter($attrCode, ['from' => $date, 'date' => true]);
-                        }
-                        if (is_scalar($to) && !empty($to)) {
-                            $date = (new \DateTime($to))->format('m/d/Y');
-                            $collection->addAttributeToFilter($attrCode, ['to' => $date, 'date' => true]);
-                        }
+                    if (is_scalar($from) && !empty($from)) {
+                        $date = (new \DateTime($from))->format('m/d/Y');
+                        $collection->addAttributeToFilter($attrCode, ['from' => $date, 'date' => true]);
                     }
-                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_NUMBER == $attrFilterType) {
-                    if (is_array($exportFilter[$attrCode]) && count($exportFilter[$attrCode]) == 2) {
-                        $from = array_shift($exportFilter[$attrCode]);
-                        $to = array_shift($exportFilter[$attrCode]);
+                    if (is_scalar($to) && !empty($to)) {
+                        $date = (new \DateTime($to))->format('m/d/Y');
+                        $collection->addAttributeToFilter($attrCode, ['to' => $date, 'date' => true]);
+                    }
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_NUMBER == $attrFilterType
+                    && is_array($exportFilter[$attrCode])
+                    && count($exportFilter[$attrCode]) == 2) {
+                    $from = array_shift($exportFilter[$attrCode]);
+                    $to = array_shift($exportFilter[$attrCode]);
 
-                        if (is_numeric($from)) {
-                            $collection->addAttributeToFilter($attrCode, ['from' => $from]);
-                        }
-                        if (is_numeric($to)) {
-                            $collection->addAttributeToFilter($attrCode, ['to' => $to]);
-                        }
+                    if (is_numeric($from)) {
+                        $collection->addAttributeToFilter($attrCode, ['from' => $from]);
+                    }
+                    if (is_numeric($to)) {
+                        $collection->addAttributeToFilter($attrCode, ['to' => $to]);
                     }
                 }
             }
@@ -561,6 +571,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
+     *
      * @since 100.1.2
      */
     public function __destruct()

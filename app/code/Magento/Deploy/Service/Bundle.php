@@ -84,6 +84,11 @@ class Bundle
     private $file;
 
     /**
+     * @var \Magento\Deploy\Config\BundleConfig
+     */
+    protected $bundleConfig;
+
+    /**
      * Bundle constructor
      *
      * @param Filesystem $filesystem

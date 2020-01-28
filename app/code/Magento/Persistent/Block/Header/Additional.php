@@ -49,6 +49,11 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     private $persistentHelper;
 
     /**
+     * @var bool
+     */
+    protected $isScopePrivate;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Persistent\Helper\Session $persistentSessionHelper

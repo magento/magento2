@@ -55,6 +55,11 @@ class StockIndex implements StockIndexInterface
     protected $productTypes = [];
 
     /**
+     * @var \Magento\Catalog\Model\Product\Website
+     */
+    protected $productWebsite;
+
+    /**
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param ProductRepositoryInterface $productRepository
      * @param ProductWebsite $productWebsite
@@ -132,7 +137,9 @@ class StockIndex implements StockIndexInterface
      * @param int $websiteId
      * @param int $qty
      * @param int $status
-     * @return $this
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processChildren(
@@ -217,13 +224,15 @@ class StockIndex implements StockIndexInterface
      *
      * @param int $productId
      * @param int $websiteId
+     *
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function processParents($productId, $websiteId)
     {
         $parentIds = [];
         foreach ($this->getProductTypeInstances() as $typeInstance) {
-            /* @var $typeInstance AbstractType */
+            /* @var AbstractType $typeInstance */
             $parentIds = array_merge($parentIds, $typeInstance->getParentIdsByChild($productId));
         }
 
@@ -241,11 +250,12 @@ class StockIndex implements StockIndexInterface
             }
             $this->processChildren($parentId, $websiteId, $qty, $status);
         }
+
+        return $this;
     }
 
     /**
-     * Retrieve Product Type Instances
-     * as key - type code, value - instance model
+     * Retrieve Product Type Instances as key - type code, value - instance model
      *
      * @return array
      */
@@ -262,6 +272,8 @@ class StockIndex implements StockIndexInterface
     }
 
     /**
+     * Get Stock Resource
+     *
      * @return \Magento\CatalogInventory\Model\ResourceModel\Stock\Status
      */
     protected function getStockStatusResource()

@@ -21,6 +21,7 @@ use Magento\Shipping\Model\Rate\Result;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -148,6 +149,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var ClientFactory
      */
     private $soapClientFactory;
+
+    /**
+     * @var \Magento\Framework\DataObject
+     */
+    protected $_rawTrackingRequest;
+
+    /**
+     * @var string
+     */
+    protected $_defaultGatewayUrl;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

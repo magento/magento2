@@ -103,6 +103,11 @@ class Category extends AbstractResource
     private $metadataPool;
 
     /**
+     * @var array
+     */
+    protected $_attributes;
+
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

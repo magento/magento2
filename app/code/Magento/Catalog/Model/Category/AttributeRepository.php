@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 
+/**
+ * Class AttributeRepository
+ */
 class AttributeRepository implements CategoryAttributeRepositoryInterface
 {
     /**
@@ -23,6 +26,11 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
      * @var \Magento\Eav\Api\AttributeRepositoryInterface
      */
     protected $eavAttributeRepository;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -43,7 +51,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -54,7 +62,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function get($attributeCode)
     {
@@ -65,7 +73,8 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)

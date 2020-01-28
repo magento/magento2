@@ -50,6 +50,11 @@ class GeneratorFactory
     private static $guaranteeCancel = 'guarantees/cancel';
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * UpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
@@ -61,6 +66,7 @@ class GeneratorFactory
 
     /**
      * Creates instance of message generator.
+     *
      * Throws exception if type of message generator does not have implementations.
      *
      * @param string $type

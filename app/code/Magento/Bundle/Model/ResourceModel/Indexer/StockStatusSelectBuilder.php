@@ -12,12 +12,27 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Class StockStatusSelectBuilder
+ *
  * Is used to create Select object that is used for Bundle product stock status indexation
  *
  * @see \Magento\Bundle\Model\ResourceModel\Indexer\Stock::_getStockStatusSelect
  */
 class StockStatusSelectBuilder
 {
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $resourceConnection;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
@@ -35,6 +50,8 @@ class StockStatusSelectBuilder
     }
 
     /**
+     * Build Select query
+     *
      * @param Select $select
      * @return Select
      * @throws \Exception

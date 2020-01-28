@@ -36,6 +36,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     ];
 
     /**
+     * @var \Magento\Catalog\Ui\Component\ColumnFactory
+     */
+    protected $columnFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
      * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository

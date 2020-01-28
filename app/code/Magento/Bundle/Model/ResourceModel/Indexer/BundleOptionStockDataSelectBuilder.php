@@ -11,12 +11,23 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class BundleOptionStockDataSelectBuilder
+ *
  * Is used to create Select object that is used for Bundle product stock status indexation
  *
  * @see \Magento\Bundle\Model\ResourceModel\Indexer\Stock::_prepareBundleOptionStockData
  */
 class BundleOptionStockDataSelectBuilder
 {
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $resourceConnection;
+
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
@@ -30,6 +41,8 @@ class BundleOptionStockDataSelectBuilder
     }
 
     /**
+     * Build Select query to check inventory
+     *
      * @param string $idxTable
      * @return Select
      */

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,9 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
+/**
+ * Class GetAttributes
+ */
 class GetAttributes extends Action implements HttpGetActionInterface
 {
     /**
@@ -30,6 +32,11 @@ class GetAttributes extends Action implements HttpGetActionInterface
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
+
+    /**
+     * @var \Magento\ConfigurableProduct\Model\AttributesListInterface
+     */
+    protected $attributesList;
 
     /**
      * @param Action\Context $context

@@ -120,11 +120,16 @@ class Config extends \Magento\Eav\Model\Config
     protected $_configFactory;
 
     /**
+     * @var array
+     */
+    protected $_productTypesByName;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -134,7 +139,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param SerializerInterface $serializer
+     * @param SerializerInterface|null $serializer
      * @param array $attributesForPreload
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -211,6 +216,8 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Load Attribute Set(s)
+     *
      * @return $this
      */
     public function loadAttributeSets()
@@ -233,8 +240,11 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Attribute Set Name
+     *
      * @param string|int|float $entityTypeId
      * @param float|int $id
+     *
      * @return false|string
      */
     public function getAttributeSetName($entityTypeId, $id)
@@ -253,9 +263,13 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Attribute Set ID for an Entity
+     *
      * @param string|int|float $entityTypeId
      * @param string|null $name
+     *
      * @return false|string|int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeSetId($entityTypeId, $name = null)
     {
@@ -274,6 +288,8 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Load Groups
+     *
      * @return $this
      */
     public function loadAttributeGroups()
@@ -296,9 +312,13 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Group Name from Set ID
+     *
      * @param float|int|string $attributeSetId
      * @param float|int|string $id
+     *
      * @return bool|string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeGroupName($attributeSetId, $id)
     {
@@ -317,9 +337,13 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Group ID using Set ID
+     *
      * @param float|int|string $attributeSetId
      * @param string $name
+     *
      * @return bool|string|int|float
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeGroupId($attributeSetId, $name)
     {
@@ -339,6 +363,8 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Load Product Types
+     *
      * @return $this
      */
     public function loadProductTypes()
@@ -360,6 +386,8 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Product Type Id
+     *
      * @param string $name
      * @return false|string
      */
@@ -376,6 +404,8 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Product Types
+     *
      * @param float|int|string $id
      * @return false|string
      */
@@ -391,8 +421,11 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
+     * Get Source Option ID
+     *
      * @param \Magento\Framework\DataObject $source
      * @param string $value
+     *
      * @return null|mixed
      */
     public function getSourceOptionId($source, $value)
@@ -472,8 +505,7 @@ class Config extends \Magento\Eav\Model\Config
     }
 
     /**
-     * Retrieve Attributes Used for Sort by as array
-     * key = code, value = name
+     * Retrieve Attributes Used for Sort by as array key = code, value = name
      *
      * @return array
      */

@@ -29,6 +29,11 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     protected $httpContext;
 
     /**
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     */
+    protected $rssUrlBuilder;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\SalesRule\Model\Rss\Discounts $rssModel
@@ -50,7 +55,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -59,7 +64,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getRssData()
     {
@@ -124,7 +129,10 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
+     * Get Store ID
+     *
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getStoreId()
     {
@@ -136,7 +144,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCacheLifetime()
     {
@@ -144,7 +152,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isAllowed()
     {
@@ -155,7 +163,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFeeds()
     {
@@ -172,7 +180,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isAuthRequired()
     {

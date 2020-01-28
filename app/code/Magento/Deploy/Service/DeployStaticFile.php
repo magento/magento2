@@ -52,6 +52,11 @@ class DeployStaticFile
     private $tmpDir;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    protected $pubStaticDir;
+
+    /**
      * DeployStaticFile constructor
      *
      * @param Filesystem $filesystem
@@ -77,8 +82,11 @@ class DeployStaticFile
     }
 
     /**
+     * Deploy File
+     *
      * @param string $fileName
      * @param array $params ['area' =>, 'theme' =>, 'locale' =>, 'module' =>]
+     *
      * @return string
      */
     public function deployFile($fileName, array $params = [])
@@ -92,7 +100,10 @@ class DeployStaticFile
     }
 
     /**
+     * Delete File
+     *
      * @param string $path
+     *
      * @return void
      */
     public function deleteFile($path)
@@ -130,8 +141,11 @@ class DeployStaticFile
     }
 
     /**
+     * Open File
+     *
      * @param string $fileName
      * @param string $filePath
+     *
      * @return WriteInterface
      */
     public function openFile($fileName, $filePath)

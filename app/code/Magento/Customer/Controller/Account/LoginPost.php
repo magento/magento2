@@ -68,6 +68,11 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
     private $cookieMetadataManager;
 
     /**
+     * @var \Magento\Customer\Model\Url
+     */
+    protected $customerUrl;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement

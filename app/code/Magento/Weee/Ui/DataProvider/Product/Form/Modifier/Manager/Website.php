@@ -33,6 +33,21 @@ class Website
     private $catalogHelper;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $directoryHelper;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var \Magento\Catalog\Model\Locator\LocatorInterface
+     */
+    protected $locator;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param DirectoryHelper $directoryHelper

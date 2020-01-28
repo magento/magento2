@@ -150,6 +150,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     private $customerRepository;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig

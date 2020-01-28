@@ -17,6 +17,8 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolve
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 /**
+ * Class DataProvider
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated
  * @see \Magento\ElasticSearch
@@ -46,6 +48,11 @@ class DataProvider
     private $tableResolver;
 
     /**
+     * @var \Magento\Catalog\Model\Layer
+     */
+    private $layer;
+
+    /**
      * DataProvider constructor.
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
@@ -65,12 +72,14 @@ class DataProvider
     }
 
     /**
+     * Around Plugin
+     *
      * @param \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $subject
      * @param callable|\Closure $proceed
      * @param BucketInterface $bucket
      * @param Dimension[] $dimensions
-     *
      * @param Table $entityIdsTable
+     *
      * @return Select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

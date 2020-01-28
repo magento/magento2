@@ -8,6 +8,9 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Col
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Class Price
+ */
 class Price extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
@@ -19,6 +22,11 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      * @var \Magento\Framework\Locale\CurrencyInterface
      */
     protected $localeCurrency;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * @param ContextInterface $context
