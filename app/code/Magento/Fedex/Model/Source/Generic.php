@@ -47,7 +47,9 @@ class Generic implements \Magento\Framework\Data\OptionSourceInterface
                         'value' => $code,
                         'label' => $title
                     ];
-                }, array_keys($configData), $configData
+                },
+                array_keys($configData),
+                $configData
             );
         }
 
