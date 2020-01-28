@@ -91,7 +91,7 @@ class PurgeCache
     {
         $tagsBatchSize = 0;
         $formattedTagsChunk = [];
-        $formattedTags = explode('|', $tagsPattern);
+        $formattedTags = array_filter(preg_split('/(?!\))\|(?=\()/', $tagsPattern));
         foreach ($formattedTags as $formattedTag) {
             if ($tagsBatchSize + strlen($formattedTag) > $this->requestSize - count($formattedTagsChunk) - 1) {
                 yield implode('|', $formattedTagsChunk);
