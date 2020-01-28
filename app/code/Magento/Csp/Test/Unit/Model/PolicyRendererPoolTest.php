@@ -23,7 +23,7 @@ use RuntimeException;
  */
 class PolicyRendererPoolTest extends TestCase
 {
-    const STUB_POLICY_ID = 'header';
+    private const STUB_POLICY_ID = 'header';
 
     /**
      * @var PolicyRendererPool

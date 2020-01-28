@@ -26,8 +26,6 @@ use RuntimeException;
  */
 class ConfigManagerTest extends TestCase
 {
-    const STUB_CRONTAB_AREA = 'crontab';
-
     /**
      * @var ConfigManager
      */
@@ -81,7 +79,7 @@ class ConfigManagerTest extends TestCase
     {
         $this->stateMock->expects($this->any())
             ->method('getAreaCode')
-            ->willReturn(static::STUB_CRONTAB_AREA);
+            ->willReturn(Area::AREA_CRONTAB);
 
         $this->model->getConfigured();
     }
