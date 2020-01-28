@@ -33,24 +33,24 @@
         </after>
 
         <!--Update customer address UK in storefront-->
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddress">
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddress">
             <argument name="Address" value="updateCustomerUKAddress"/>
         </actionGroup>
         <!--Verify customer address save success message-->
         <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeAssertCustomerAddressSuccessSaveMessage"/>
 
         <!--Verify customer default billing address-->
-        <actionGroup ref="VerifyCustomerBillingAddress" stepKey="verifyBillingAddress">
+        <actionGroup ref="VerifyCustomerBillingAddressActionGroup" stepKey="verifyBillingAddress">
             <argument name="address" value="updateCustomerUKAddress"/>
         </actionGroup>
 
         <!--Verify customer default shipping address-->
-        <actionGroup ref="VerifyCustomerShippingAddress" stepKey="verifyShippingAddress">
+        <actionGroup ref="VerifyCustomerShippingAddressActionGroup" stepKey="verifyShippingAddress">
             <argument name="address" value="updateCustomerUKAddress"/>
         </actionGroup>
 
         <!--Verify customer name on frontend-->
-        <actionGroup ref="VerifyCustomerNameOnFrontend" stepKey="verifyVerifyCustomerName">
+        <actionGroup ref="VerifyCustomerNameOnFrontendActionGroup" stepKey="verifyVerifyCustomerName">
             <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
     </test>
