@@ -20,8 +20,6 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * Class ConfigManagerTest
- *
  * Test for \Magento\Csp\Model\Mode\ConfigManager
  */
 class ConfigManagerTest extends TestCase
@@ -71,15 +69,15 @@ class ConfigManagerTest extends TestCase
      * Test throwing an exception for non storefront or admin areas
      *
      * @return void
-     *
-     * @expectedExceptionMessage CSP can only be configured for storefront or admin area
-     * @expectedException RuntimeException
      */
     public function testThrownExceptionForCrontabArea()
     {
         $this->stateMock->expects($this->any())
             ->method('getAreaCode')
             ->willReturn(Area::AREA_CRONTAB);
+
+        $this->expectExceptionMessage('CSP can only be configured for storefront or admin area');
+        $this->expectException(RuntimeException::class);
 
         $this->model->getConfigured();
     }

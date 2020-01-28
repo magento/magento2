@@ -17,8 +17,6 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * Class PolicyRendererPoolTest
- *
  * Test for \Magento\Csp\Model\PolicyRendererPool
  */
 class PolicyRendererPoolTest extends TestCase
@@ -66,15 +64,15 @@ class PolicyRendererPoolTest extends TestCase
      * Test throwing an exception for not found policy renders
      *
      * @return void
-     *
-     * @expectedExceptionMessage Failed to find a renderer for policy
-     * @expectedException RuntimeException
      */
     public function testThrownExceptionForNotFoundPolicyRenders()
     {
         $this->policyMock->expects($this->any())
             ->method('getId')
             ->willReturn(static::STUB_POLICY_ID);
+
+        $this->expectExceptionMessage('Failed to find a renderer for policy');
+        $this->expectException(RuntimeException::class);
 
         $this->model->getRenderer($this->policyMock);
     }
