@@ -7,7 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
-    <action name="customer/account/logout"/>
+    <!-- xml merger merge same actions name into one node -->
+    <action name="customer/account/logout">
+        <section name="cart"/>
+        <section name="*"/>
+        <section name="acc"/>
+    </action>
     <action name="customer/account/editPost">
         <section name="account"/>
     </action>

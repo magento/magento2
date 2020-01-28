@@ -35,7 +35,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 'sections' => [
-                    'customer/account/logout' => '*',
+                    'customer/account/logout' => ['*'],
                     'customer/account/editpost' => ['account'],
                 ],
             ],

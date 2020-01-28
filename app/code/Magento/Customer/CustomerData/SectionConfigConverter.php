@@ -18,10 +18,20 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
     public function convert($source)
     {
         $sections = [];
+        $actionsToSkip = [];
         foreach ($source->getElementsByTagName('action') as $action) {
             $actionName = strtolower($action->getAttribute('name'));
             foreach ($action->getElementsByTagName('section') as $section) {
-                $sections[$actionName][] = strtolower($section->getAttribute('name'));
+                $sectionName = strtolower($section->getAttribute('name'));
+
+                if ($sectionName === self::INVALIDATE_ALL_SECTIONS_MARKER) {
+                    $sections[$actionName] = [];
+                    $sections[$actionName][] = self::INVALIDATE_ALL_SECTIONS_MARKER;
+                    $actionsToSkip[] = $actionName;
+                    break;
+                } else {
+                    $sections[$actionName][] = $sectionName;
+                }
             }
             if (!isset($sections[$actionName])) {
                 $sections[$actionName] = self::INVALIDATE_ALL_SECTIONS_MARKER;
