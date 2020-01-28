@@ -59,7 +59,7 @@ class OrdersTest extends TestCase
         $ordersBlock = $this->layout->createBlock(Orders::class);
         $decodedChartUrl = urldecode($ordersBlock->getChartUrl());
         $chartUrlSegments = explode('&', $decodedChartUrl);
-        $this->assertEquals($expectedAxisRange, $chartUrlSegments[8]);
+        $this->assertEquals($expectedAxisRange, $this->getUrlParamData($chartUrlSegments, 'chxr'));
     }
 
     /**
@@ -68,11 +68,27 @@ class OrdersTest extends TestCase
     public function chartUrlDataProvider(): array
     {
         return [
-            'Last 24 Hours' => ['24h', 'chxr=1,0,2,1'],
-            'Last 7 Days' => ['7d', 'chxr=1,0,3,1'],
-            'Current Month' => ['1m', 'chxr=1,0,3,1'],
-            'YTD' => ['1y', 'chxr=1,0,4,1'],
-            '2YTD' => ['2y', 'chxr=1,0,4,1'],
+            'Last 24 Hours' => ['24h', '1,0,2,1'],
+            'Last 7 Days' => ['7d', '1,0,3,1'],
+            'Current Month' => ['1m', '1,0,3,1'],
+            'YTD' => ['1y', '1,0,4,1'],
+            '2YTD' => ['2y', '1,0,4,1'],
         ];
+    }
+
+    /**
+     * @param array $chartUrlSegments
+     * @param string $paramName
+     * @return string
+     */
+    private function getUrlParamData(array $chartUrlSegments, string $paramName): string
+    {
+        $urlParams = [];
+        foreach ($chartUrlSegments as $chartUrlSegment) {
+            list($paramKey, $paramValue) = explode('=', $chartUrlSegment);
+            $urlParams[$paramKey] = $paramValue;
+        }
+
+        return $urlParams[$paramName] ?? '';
     }
 }
