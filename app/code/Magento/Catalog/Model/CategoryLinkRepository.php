@@ -6,11 +6,19 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Catalog\Api\CategoryLinkRepositoryInterface;
+use Magento\Catalog\Api\CategoryListDeleteBySkuInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 
-class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface,
-    \Magento\Catalog\Api\CategoryListDeleteBySkuInterface
+/**
+ * @inheritdoc
+ */
+class CategoryLinkRepository implements CategoryLinkRepositoryInterface, CategoryListDeleteBySkuInterface
 {
     /**
      * @var CategoryRepository
@@ -18,32 +26,32 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @var Product
      */
     private $productResource;
 
     /**
-     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param ProductRepositoryInterface $productRepository
+     * @param Product $productResource
      */
     public function __construct(
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource = null
+        CategoryRepositoryInterface $categoryRepository,
+        ProductRepositoryInterface $productRepository,
+        Product $productResource = null
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
-        $this->productResource = $productResource ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->productResource = $productResource ?? ObjectManager::getInstance()->get(Product::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -69,7 +77,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -77,7 +85,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByIds($categoryId, $sku)
     {
@@ -112,7 +120,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function deleteBySkus(int $categoryId, array $productSkuList): bool
     {
