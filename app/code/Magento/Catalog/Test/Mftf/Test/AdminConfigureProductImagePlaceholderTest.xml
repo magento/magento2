@@ -61,10 +61,13 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="productNoImages" stepKey="deleteProductNoImages"/>
             <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
-        
+
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-        
+
         <!--Admin area: configure Product Image Placeholders-->
         <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>

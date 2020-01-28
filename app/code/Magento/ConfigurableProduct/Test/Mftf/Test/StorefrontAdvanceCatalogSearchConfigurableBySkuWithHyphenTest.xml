@@ -83,6 +83,9 @@
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2" before="delete"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChildProduct1" before="delete"/>
             <deleteData createDataKey="childProductHandle2" stepKey="deleteChildProduct2" before="delete"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
 </tests>

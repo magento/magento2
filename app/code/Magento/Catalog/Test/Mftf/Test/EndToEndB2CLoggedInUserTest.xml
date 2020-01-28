@@ -43,6 +43,9 @@
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
             <!--<deleteData createDataKey="createSimpleProduct2Image" stepKey="deleteSimpleProduct2Image"/>-->
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Step 1: User browses catalog -->
