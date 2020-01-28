@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Developer\Test\Unit\Console\Command;
 
+use Magento\Developer\Console\Command\TemplateHintsStatusCommand;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Developer\Console\Command\TemplateHintsStatusCommand;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
  * Class TemplateHintsStatusCommandTest
@@ -35,7 +35,7 @@ class TemplateHintsStatusCommandTest extends TestCase
     private $reinitableConfigMock;
 
     /**
-     * TemplateHintsStatusCommandTest setup
+     * @inheritDoc
      */
     protected function setUp()
     {
@@ -46,11 +46,10 @@ class TemplateHintsStatusCommandTest extends TestCase
             $this->scopeConfigMock,
             $this->reinitableConfigMock
         );
-
     }
 
     /**
-     * Test execution
+     * Verify execution
      */
     public function testExecute()
     {

@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\Console\Cli;
 
 /**
  * Command to show frontend template hints status
  */
 class TemplateHintsStatusCommand extends Command
 {
-    
     const COMMAND_NAME = 'dev:template-hints:status';
     const TEMPLATE_HINTS_STOREFRONT_PATH = 'dev/debug/template_hints_storefront';
 
@@ -27,6 +26,7 @@ class TemplateHintsStatusCommand extends Command
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var ReinitableConfigInterface
      */
@@ -41,8 +41,7 @@ class TemplateHintsStatusCommand extends Command
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ReinitableConfigInterface $reinitableConfig
-    )
-    {
+    ) {
         parent::__construct();
         $this->scopeConfig = $scopeConfig;
         $this->reinitableConfig = $reinitableConfig;
@@ -51,7 +50,7 @@ class TemplateHintsStatusCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function configure()
+    public function configure()
     {
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Show frontend template hints status.');
@@ -63,7 +62,7 @@ class TemplateHintsStatusCommand extends Command
      * @inheritdoc
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->reinitableConfig->reinit();
         $templateHintsStatus =
