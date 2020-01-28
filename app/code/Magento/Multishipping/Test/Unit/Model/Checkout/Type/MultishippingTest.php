@@ -330,7 +330,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verefi set shipping items information for address leak
+     * Verify set shipping items information for address leak
      *
      * @return void
      * @throws LocalizedException
