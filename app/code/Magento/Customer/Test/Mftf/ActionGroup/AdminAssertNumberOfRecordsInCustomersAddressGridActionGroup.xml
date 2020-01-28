@@ -9,14 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Assert number of records in customer address grid -->
-    <actionGroup name="AdminAssertNumberOfRecordsInCustomersAddressGrid">
+    <actionGroup name="AdminAssertNumberOfRecordsInCustomersAddressGridActionGroup">
         <annotations>
             <description>Validates that the Number of Records listed on the Customer grid page is present and correct.</description>
         </annotations>
         <arguments>
             <argument name="number" type="string"/>
         </arguments>
-        
+
         <see userInput="{{number}} records found" selector="{{AdminCustomerAddressesGridActionsSection.headerRow}}" stepKey="seeRecords"/>
     </actionGroup>
 </actionGroups>

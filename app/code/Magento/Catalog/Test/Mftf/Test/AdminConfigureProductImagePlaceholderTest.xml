@@ -63,7 +63,7 @@
             <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminArea"/>
 
         <!--Admin area: configure Product Image Placeholders-->
         <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>

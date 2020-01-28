@@ -43,7 +43,7 @@
         </after>
         <!-- Steps -->
         <!-- 1. Log in to Admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
@@ -126,7 +126,7 @@
         </after>
         <!-- Steps -->
         <!-- 1. Log in to Admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
@@ -268,7 +268,7 @@
             <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
         </after>
         <!-- 1. Log in to Admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName5"/>

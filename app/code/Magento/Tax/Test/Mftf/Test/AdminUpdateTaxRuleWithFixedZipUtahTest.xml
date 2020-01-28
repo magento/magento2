@@ -32,7 +32,7 @@
             </getData>
             <createData entity="ApiSimplePrice100Qty100v2" stepKey="simpleProduct"/>
             <createData entity="Simple_US_Utah_Customer" stepKey="customer" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteTaxRule" createDataKey="initialTaxRule" />
@@ -91,7 +91,7 @@
             <argument name="productCount" value="1" />
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart" />
-        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+        <actionGroup ref="FillShippingZipFormActionGroup" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_Utah" />
         </actionGroup>
         <scrollTo selector="{{StorefrontProductPageSection.orderTotal}}" x="0" y="-80" stepKey="scrollToOrderTotal"/>

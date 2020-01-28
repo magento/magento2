@@ -19,8 +19,8 @@
             <group value="paypal"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SampleConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpress">
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="SampleConfigPayPalExpressCheckoutActionGroup" stepKey="configPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig"/>
             </actionGroup>
         </before>
@@ -29,7 +29,7 @@
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
             <magentoCLI command="config:set payment/hosted_pro/active 0" stepKey="disableHostedProExpress"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Change Merchant Country -->
         <comment userInput="Change Merchant Country" stepKey="changeMerchantCountryComment"/>
@@ -38,7 +38,7 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!-- Enable WPS Express -->
         <comment userInput="Enable WPS Express" stepKey="enableWPSExpressComment"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableWPSExpress">
             <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
             <argument name="countryCode" value="gb"/>
         </actionGroup>
@@ -56,7 +56,7 @@
         </actionGroup>
         <!-- Enable Pro Hosted With Express Checkout -->
         <comment userInput="Enable Pro Hosted With Express Checkout" stepKey="enableProHostedWithExpressCheckoutComment"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableProHostedWithExpressCheckou">
             <argument name="payPalConfigType" value="PaymentsProHostedWithExpressCheckoutConfigSection"/>
             <argument name="countryCode" value="gb"/>
         </actionGroup>
@@ -84,7 +84,7 @@
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Japan" stepKey="setMerchantCountry"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableWPSExpress">
             <argument name="payPalConfigType" value="WPSOtherConfigSection"/>
             <argument name="countryCode" value="jp"/>
         </actionGroup>
@@ -98,7 +98,7 @@
             <argument name="enabledOption" value="Yes"/>
             <argument name="countryCode" value="jp"/>
         </actionGroup>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableProHostedWithExpressCheckou">
             <argument name="payPalConfigType" value="WebsitePaymentsPlusConfigSection"/>
             <argument name="countryCode" value="jp"/>
         </actionGroup>
@@ -124,7 +124,7 @@
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="France" stepKey="setMerchantCountry"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableWPSExpress">
             <argument name="payPalConfigType" value="WPSOtherConfigSection"/>
             <argument name="countryCode" value="fr"/>
         </actionGroup>
@@ -138,7 +138,7 @@
             <argument name="enabledOption" value="Yes"/>
             <argument name="countryCode" value="fr"/>
         </actionGroup>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableProHostedWithExpressCheckou">
             <argument name="payPalConfigType" value="WebsitePaymentsPlusConfigSection"/>
             <argument name="countryCode" value="fr"/>
         </actionGroup>
@@ -164,7 +164,7 @@
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Hong Kong SAR China" stepKey="setMerchantCountry"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableWPSExpress">
             <argument name="payPalConfigType" value="WPSOtherConfigSection"/>
             <argument name="countryCode" value="hk"/>
         </actionGroup>
@@ -178,7 +178,7 @@
             <argument name="enabledOption" value="Yes"/>
             <argument name="countryCode" value="hk"/>
         </actionGroup>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableProHostedWithExpressCheckou">
             <argument name="payPalConfigType" value="WebsitePaymentsPlusConfigSection"/>
             <argument name="countryCode" value="hk"/>
         </actionGroup>
@@ -204,7 +204,7 @@
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Italy" stepKey="setMerchantCountry"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableWPSExpress">
             <argument name="payPalConfigType" value="WPSOtherConfigSection"/>
             <argument name="countryCode" value="it"/>
         </actionGroup>
@@ -218,7 +218,7 @@
             <argument name="enabledOption" value="Yes"/>
             <argument name="countryCode" value="it"/>
         </actionGroup>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableProHostedWithExpressCheckou">
             <argument name="payPalConfigType" value="WebsitePaymentsPlusConfigSection"/>
             <argument name="countryCode" value="it"/>
         </actionGroup>
@@ -244,7 +244,7 @@
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Spain" stepKey="setMerchantCountry"/>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableWPSExpress">
             <argument name="payPalConfigType" value="WPSOtherConfigSection"/>
             <argument name="countryCode" value="es"/>
         </actionGroup>
@@ -258,7 +258,7 @@
             <argument name="enabledOption" value="Yes"/>
             <argument name="countryCode" value="es"/>
         </actionGroup>
-        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="enableProHostedWithExpressCheckou">
             <argument name="payPalConfigType" value="WebsitePaymentsPlusConfigSection"/>
             <argument name="countryCode" value="es"/>
         </actionGroup>

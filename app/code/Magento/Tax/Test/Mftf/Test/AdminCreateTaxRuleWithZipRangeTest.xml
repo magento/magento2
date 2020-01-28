@@ -29,10 +29,10 @@
             <getData entity="productTaxClass" stepKey="productTaxClass">
                 <requiredEntity createDataKey="createProductTaxClass"/>
             </getData>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+            <actionGroup ref="AdminDeleteTaxRuleActionGroup" stepKey="deleteTaxRule">
                 <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
             </actionGroup>
             <deleteData stepKey="deleteTaxRate" createDataKey="taxRateWithZipRange"/>

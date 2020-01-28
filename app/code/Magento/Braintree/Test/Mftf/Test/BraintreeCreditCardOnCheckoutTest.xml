@@ -28,22 +28,22 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
-            <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
-            <createData entity="CustomBraintreeConfigurationData" stepKey="CustomBraintreeConfigurationData"/>
+            <createData entity="BraintreeConfig" stepKey="braintreeConfigurationData"/>
+            <createData entity="CustomBraintreeConfigurationData" stepKey="customBraintreeConfigurationData"/>
         </before>
 
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct1"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <createData entity="DefaultBraintreeConfig" stepKey="DefaultBraintreeConfig"/>
-            <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="RollBackCustomBraintreeConfigurationData"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+            <createData entity="DefaultBraintreeConfig" stepKey="defaultBraintreeConfig"/>
+            <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="rollBackCustomBraintreeConfigurationData"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOutActionGroup"/>
         </after>
         <!--Go to storefront-->
-        <amOnPage url="" stepKey="DoToStorefront"/>
+        <amOnPage url="" stepKey="doToStorefront"/>
         <!--Create account-->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUserFromStorefrontActionGroup">
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUserFromStorefrontActionGroup">
             <argument name="Customer" value="Simple_US_Customer"/>
         </actionGroup>
 
@@ -54,23 +54,23 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartActionGroup"/>
 
-        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup">
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="loggedInCheckoutFillNewBillingAddressActionGroup">
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <!--Fill cart data-->
-        <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="SelectBraintreePaymentMethod"/>
+        <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="selectBraintreePaymentMethod"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="ScrollToCreditCardSection"/>
-        <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="StorefrontFillCartDataActionGroup"/>
+        <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="scrollToCreditCardSection"/>
+        <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="storefrontFillCartDataActionGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <!--Place order-->
         <click selector="{{BraintreeConfigurationPaymentSection.paymentMethodContainer}}{{CheckoutPaymentSection.placeOrder}}"
-               stepKey="PlaceOrder"/>
+               stepKey="placeOrder"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
 
         <!--Add product to cart again-->
@@ -80,23 +80,23 @@
         <waitForPageLoad stepKey="waitForPageLoad7"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
         <!--Proceed to checkout-->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup1"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartActionGroup1"/>
         <click selector="{{CheckoutPaymentSection.addressAction('New Address')}}" stepKey="clickOnNewAddress"/>
         <waitForPageLoad stepKey="waitForPageLoad8"/>
-        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="LoggedInCheckoutFillNewBillingAddressActionGroup1">
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="loggedInCheckoutFillNewBillingAddressActionGroup1">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
-        <click selector="{{CheckoutPaymentSection.addressAction('Ship here')}}" stepKey="SaveAddress"/>
+        <click selector="{{CheckoutPaymentSection.addressAction('Ship here')}}" stepKey="saveAddress"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext1"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>
-        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethod}}" stepKey="SelectBraintreePaymentMethod1"/>
+        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethod}}" stepKey="selectBraintreePaymentMethod1"/>
         <waitForPageLoad stepKey="waitForPageLoad11"/>
         <!--Place order-->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder1"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder1"/>
         <waitForPageLoad stepKey="waitForPageLoad13"/>
 
-        <click selector="{{CheckoutOrderSummarySection.orderNumber}}" stepKey="ClickOnOrderNumber"/>
+        <click selector="{{CheckoutOrderSummarySection.orderNumber}}" stepKey="clickOnOrderNumber"/>
         <waitForPageLoad stepKey="waitForPageLoad14"/>
         <!--Check billing and shipping addresses also additional Address info-->
         <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>

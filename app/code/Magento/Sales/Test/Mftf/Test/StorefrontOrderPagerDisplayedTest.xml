@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- 21 products created and category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
@@ -120,7 +120,7 @@
 
             <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login to Storefront as Customer -->

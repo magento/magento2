@@ -21,7 +21,7 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
 
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
@@ -98,13 +98,13 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{SimpleCatalogPriceRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
             <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add values to your attribute ( ex: red , green) -->

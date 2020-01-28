@@ -33,7 +33,7 @@
             <!--Create tax rule for US-CA-->
             <createData entity="defaultTaxRule" stepKey="createTaxRule"/>
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <!--Step 1: Create new order for customer-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
@@ -71,7 +71,7 @@
             <!--Delete tax rule-->
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <!--Disable free shipping method -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
         </after>

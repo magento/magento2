@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CreateNewPageWithWidget">
+    <actionGroup name="CreateNewPageWithWidgetActionGroup">
         <annotations>
             <description>Goes to Admin CMS Page creation page. Adds the provided Title, Category, Conditions and Widget. Clicks on Save. Validates that the Success Message is present and correct.</description>
         </annotations>
@@ -18,7 +18,7 @@
             <argument name="condition" type="string"/>
             <argument name="widgetType" type="string"/>
         </arguments>
-        
+
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="fillFieldTitle"/>

@@ -25,13 +25,13 @@
             <createData entity="SimpleProductBeforeUpdate" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Import product from CSV file-->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProduct">

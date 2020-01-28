@@ -35,14 +35,14 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexCatalogSearch"/>
             <!-- Login to Admin page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete created entities -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createMultiSelectProductAttribute" stepKey="deleteMultiSelectProductAttribute"/>
             <!-- Logout from Admin page -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Open created product for edit -->

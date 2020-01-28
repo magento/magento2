@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
@@ -65,7 +65,7 @@
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 

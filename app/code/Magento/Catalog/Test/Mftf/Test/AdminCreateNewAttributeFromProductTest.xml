@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
 
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -42,7 +42,7 @@
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create 2 store views-->

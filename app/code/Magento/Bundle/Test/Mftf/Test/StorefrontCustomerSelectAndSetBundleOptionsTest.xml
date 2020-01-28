@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="searchBlockOnGridPage">
+    <actionGroup name="searchBlockOnGridPageActionGroup">
         <annotations>
             <description>Searches the Admin CMS Blocks grid based on the provided Block.</description>
         </annotations>
@@ -21,15 +21,15 @@
         <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish2"/>
         <waitForElementVisible selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="waitForBlockTitle"/>
     </actionGroup>
-    
-    <actionGroup name ="deleteBlock">
+
+    <actionGroup name="deleteBlockActionGroup">
         <annotations>
             <description>Goes to the Admin CMS Blocks page. Filters the grid based on the provided Block. Deletes the Block via the grid.</description>
         </annotations>
         <arguments>
             <argument name="Block" defaultValue=""/>
         </arguments>
-        
+
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>

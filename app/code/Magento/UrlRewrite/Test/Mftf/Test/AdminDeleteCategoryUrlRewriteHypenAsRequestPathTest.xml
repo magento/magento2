@@ -19,12 +19,12 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="category"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create the Category Url Rewrite-->

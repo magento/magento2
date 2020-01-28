@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create product-->
             <createData entity="_defaultCategory" stepKey="category"/>
@@ -33,7 +33,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Created product-->
@@ -54,12 +54,12 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Select product and go toUpdate Attribute page-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
-        <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToCatalogPageChangingView"/>
+        <waitForPageLoad stepKey="waitForPageToLoadFullyChangingView"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="ApiSimpleProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="clickOnSelectAllCheckBoxChangingView"/>
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickBulkUpdate"/>
         <waitForPageLoad stepKey="waitForUpdateAttributesPageLoad"/>

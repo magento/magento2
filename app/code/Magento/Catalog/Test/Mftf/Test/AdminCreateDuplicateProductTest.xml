@@ -25,13 +25,13 @@
             <createData entity="Two_nested_categories" stepKey="subCategory">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
 
         <after>
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to new simple product page -->

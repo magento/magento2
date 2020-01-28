@@ -51,7 +51,7 @@
         <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{UK_Address.city}}" stepKey="enterCity"/>
         <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="{{UK_Address.province}}" stepKey="enterProvince"/>
         <waitForPageLoad stepKey="waitFormToReload2"/>
-        <see userInput="State/Province" stepKey="StateFieldStillExists"/>
+        <see userInput="State/Province" stepKey="stateFieldStillExists"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{UK_Address.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>

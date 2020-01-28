@@ -20,12 +20,12 @@
         <before>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOutActionGroup"/>
             <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>

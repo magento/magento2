@@ -20,14 +20,14 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
                 <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
                     2. Navigate to Stores > Other Settings > Customer Groups.
@@ -40,31 +40,31 @@
             <argument name="groupName" value="{{CustomCustomerGroup.code}}"/>
             <argument name="taxClass" value="{{CustomCustomerGroup.tax_class_name}}"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertCustomerGroupPresentInGrid" stepKey="assertCustomerGroupDisplayedInGrid">
+        <actionGroup ref="AdminAssertCustomerGroupPresentInGridActionGroup" stepKey="assertCustomerGroupDisplayedInGrid">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
 
         <!--  6. Go to Catalog -> Products  -> click  "Add Product" button -> click "Advanced Pricing" link -> Customer Group Price -> click  "Add" button  -->
         <!--  Assert: Customer Group Displayed On Product Form  -->
-        <actionGroup ref="AdminAssertCustomerGroupOnProductForm" stepKey="assertCustomerGroupDisplayedOnProductForm">
+        <actionGroup ref="AdminAssertCustomerGroupOnProductFormActionGroup" stepKey="assertCustomerGroupDisplayedOnProductForm">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
 
         <!--  7. Go to Customers -> All Customers  -> click  "Add New Customer" button -->
         <!--  Assert   created  Customer Group  displayed On Customer Form -->
-        <actionGroup ref="AdminAssertCustomerGroupOnCustomerForm" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
+        <actionGroup ref="AdminAssertCustomerGroupOnCustomerFormActionGroup" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
 
         <!-- 8. Go to Marketing - Catalog Price Rule - click  "Add New Rule" button  -->
         <!--   Assert   created  Customer Group  displayed On Catalog Price Rule Form -->
-        <actionGroup ref="AdminAssertCustomerGroupOnCatalogPriceRuleForm" stepKey="assertCustomerGroupDisplayedOnCatalogPriceRuleForm">
+        <actionGroup ref="AdminAssertCustomerGroupOnCatalogPriceRuleFormActionGroup" stepKey="assertCustomerGroupDisplayedOnCatalogPriceRuleForm">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
 
         <!-- 9. Go to Marketing - Cart Price Rule - click  "Add New Rule" button -->
         <!--   Assert   created  Customer Group  displayed On Cart Price Rule Form -->
-        <actionGroup ref="AdminAssertCustomerGroupOnCartPriceRuleForm" stepKey="assertCustomerGroupDisplayedOnCartPriceRuleForm">
+        <actionGroup ref="AdminAssertCustomerGroupOnCartPriceRuleFormActionGroup" stepKey="assertCustomerGroupDisplayedOnCartPriceRuleForm">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
     </test>

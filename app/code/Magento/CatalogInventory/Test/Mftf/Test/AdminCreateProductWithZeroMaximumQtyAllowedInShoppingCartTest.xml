@@ -23,12 +23,12 @@
         <before>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <createData entity="SimpleProduct2" stepKey="createdProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <deleteData createDataKey="createdProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Inventory configuration page -->

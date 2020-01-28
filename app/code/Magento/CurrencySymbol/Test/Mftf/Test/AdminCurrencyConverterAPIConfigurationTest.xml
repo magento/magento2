@@ -32,7 +32,7 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Set currency allow previous config-->
@@ -40,7 +40,7 @@
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Import rates from Currency Converter API-->
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage"/>

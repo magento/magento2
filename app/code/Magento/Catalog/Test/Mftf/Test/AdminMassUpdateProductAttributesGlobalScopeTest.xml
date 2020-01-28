@@ -20,7 +20,7 @@
             <group value="product_attributes"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -35,10 +35,10 @@
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="adminDeleteStoreViewActionGroup"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
@@ -56,7 +56,7 @@
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
         <!-- Switch store view -->
-        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="adminSwitchStoreViewActionGroup"/>
         <!-- Update attribute -->
         <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
@@ -70,25 +70,25 @@
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Assert on storefront default view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameDefault">
             <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
             <argument name="priceFrom" value="$$createProductOne.price$$0"/>
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault"/>
         <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInDefaultView"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Assert on storefront custom view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameCustom">
             <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
             <argument name="priceFrom" value="$$createProductOne.price$$0"/>
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultCustom"/>
         <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInCustomView"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
     </test>

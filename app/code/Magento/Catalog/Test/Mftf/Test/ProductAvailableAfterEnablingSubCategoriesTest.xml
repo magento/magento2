@@ -29,12 +29,12 @@
                 <requiredEntity createDataKey="simpleSubCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront2"/>
@@ -44,8 +44,8 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoadAddProducts"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandAll"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$simpleSubCategory.name$$)}}" stepKey="clickOnCreatedSimpleSubCategoryBeforeDelete"/>
-        <waitForPageLoad stepKey="AdminCategoryEditPageLoad"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="EnableCategory"/>
+        <waitForPageLoad stepKey="adminCategoryEditPageLoad"/>
+        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="enableCategory"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see userInput="You saved the category." stepKey="seeSuccessMessage"/>

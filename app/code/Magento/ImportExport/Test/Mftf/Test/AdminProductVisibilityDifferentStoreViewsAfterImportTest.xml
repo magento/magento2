@@ -20,7 +20,7 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create English and Chinese store views-->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnglishStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
@@ -46,7 +46,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteChineseStoreView">
                 <argument name="customStore" value="storeViewChinese"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Import products from file-->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProducts">

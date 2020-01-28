@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSubscribeCustomerToNewsletters">
+    <actionGroup name="AdminSubscribeCustomerToNewslettersActionGroup">
         <annotations>
             <description>Set checkbox "Newsletter subscribed" on "Newsletter" tab on customer edit page.</description>
         </annotations>
@@ -24,7 +24,7 @@
         <see userInput="You saved the customer." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
-    <actionGroup name="AdminSubscribeCustomerToNewslettersAndSelectStoreView" extends="AdminSubscribeCustomerToNewsletters">
+    <actionGroup name="AdminSubscribeCustomerToNewslettersAndSelectStoreViewActionGroup" extends="AdminSubscribeCustomerToNewslettersActionGroup">
         <annotations>
             <description>Set checkbox "Newsletter subscribed" and select Store View on "Newsletter" tab on customer edit page.</description>
         </annotations>

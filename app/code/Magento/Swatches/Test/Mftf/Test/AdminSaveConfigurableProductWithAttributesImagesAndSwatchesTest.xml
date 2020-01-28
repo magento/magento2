@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a new product attribute -->
             <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
@@ -71,7 +71,7 @@
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearProductsGridFilter"/>
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Add created product attribute to the Default set -->

@@ -49,7 +49,7 @@
             <!-- Product C in 2 categories M and N -->
             <createData entity="SimpleProduct2" stepKey="productC"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryNAndMToProductC">
                 <argument name="productId" value="$$productC.id$$"/>
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
@@ -72,7 +72,7 @@
             <deleteData createDataKey="categoryL" stepKey="deleteCategoryL"/>
             <deleteData createDataKey="categoryK" stepKey="deleteCategoryK"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open categories K, L, M, N on Storefront -->

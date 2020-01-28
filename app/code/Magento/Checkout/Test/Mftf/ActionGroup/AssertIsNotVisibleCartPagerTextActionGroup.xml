@@ -12,6 +12,6 @@
             <argument name="text" type="string"/>
         </arguments>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
-        <dontSee userInput="{{text}}" selector="{{StorefrontCartToolbarSection.toolbarNumber}}" stepKey="VerifyMissingPagerText"/>
+        <dontSee userInput="{{text}}" selector="{{StorefrontCartToolbarSection.toolbarNumber}}" stepKey="verifyMissingPagerText"/>
     </actionGroup>
 </actionGroups>

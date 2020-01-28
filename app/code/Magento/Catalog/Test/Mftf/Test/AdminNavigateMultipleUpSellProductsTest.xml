@@ -74,11 +74,11 @@
             </createData>
 
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <!--Logout as admin-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <!--Delete created data-->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>

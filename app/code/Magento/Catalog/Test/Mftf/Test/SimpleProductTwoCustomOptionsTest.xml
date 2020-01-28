@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- log in as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create product-->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>

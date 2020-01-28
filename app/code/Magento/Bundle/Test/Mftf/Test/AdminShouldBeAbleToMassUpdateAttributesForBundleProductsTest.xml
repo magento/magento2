@@ -43,16 +43,16 @@
             <!-- Clear Filter -->
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
             <!--Log Out Admin-->
-            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
         <!-- Login as Admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!-- Go to Catalog -> Catalog -> Products and Search created product in precondition and choose it -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
             <argument name="product" value="$$createFixedBundleProduct$$"/>
         </actionGroup>
         <!-- Choose "Update attributes" and Change any product data -->
-        <actionGroup ref="AdminUpdateProductNameAndDescriptionAttributes" stepKey="updateProductAttribute">
+        <actionGroup ref="AdminUpdateProductNameAndDescriptionAttributesActionGroup" stepKey="updateProductAttribute">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>
         </actionGroup>
         <!--Run cron twice-->

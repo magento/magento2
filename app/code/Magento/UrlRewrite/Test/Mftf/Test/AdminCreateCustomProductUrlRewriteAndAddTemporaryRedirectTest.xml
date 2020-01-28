@@ -19,14 +19,14 @@
 
         <before>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{_defaultProduct.name}}.html"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter Product in product page and get the Product ID -->

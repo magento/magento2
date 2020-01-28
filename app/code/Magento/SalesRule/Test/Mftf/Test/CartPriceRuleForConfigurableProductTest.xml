@@ -74,11 +74,11 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="DeleteCartPriceRuleByName">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteCartPriceRuleByName">
                 <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
             </actionGroup>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -86,7 +86,7 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
-	    <actionGroup ref="logout" stepKey="logout"/>
+	    <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create the rule -->
@@ -102,8 +102,8 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="ABCD" stepKey="fillCouponCOde"/>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="50" stepKey="fillDiscountAmount"/>
-        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="ScrollToApplyRuleForConditions"/>
-        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="ApplyRuleForConditions"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="scrollToApplyRuleForConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="applyRuleForConditions"/>
         <waitForPageLoad stepKey="waitForDropDownOpened"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$" stepKey="selectAttribute"/>
         <waitForPageLoad stepKey="waitForOperatorOpened"/>

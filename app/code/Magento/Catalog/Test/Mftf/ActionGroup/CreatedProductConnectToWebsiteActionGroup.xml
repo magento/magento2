@@ -19,10 +19,10 @@
 
         <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.sku)}}"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
-        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openWebsitesList"/>
         <waitForPageLoad stepKey="waitForWebsitesList"/>
-        <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="SelectWebsite"/>
+        <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="selectWebsite"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForSave"/>
     </actionGroup>

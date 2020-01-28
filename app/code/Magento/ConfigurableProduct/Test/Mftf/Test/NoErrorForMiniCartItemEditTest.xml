@@ -17,7 +17,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Create Configurable product -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -34,7 +34,7 @@
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
                               dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true"
                               stepKey="clickClearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go To Created Product Page -->

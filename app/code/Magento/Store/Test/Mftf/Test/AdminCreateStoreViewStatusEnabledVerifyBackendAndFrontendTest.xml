@@ -17,13 +17,13 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="storeViewData"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create store view-->

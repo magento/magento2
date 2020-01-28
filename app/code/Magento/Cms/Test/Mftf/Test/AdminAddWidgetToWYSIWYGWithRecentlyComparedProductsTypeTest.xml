@@ -83,7 +83,7 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

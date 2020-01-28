@@ -23,13 +23,13 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0" />
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>

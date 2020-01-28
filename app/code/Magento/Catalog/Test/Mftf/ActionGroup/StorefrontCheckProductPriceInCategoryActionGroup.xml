@@ -15,6 +15,6 @@
         </annotations>
 
         <remove keyForRemoval="AssertProductPrice"/>
-        <see userInput="{{product.price}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
+        <see userInput="{{product.price}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
     </actionGroup>
 </actionGroups>

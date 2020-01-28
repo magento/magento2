@@ -39,7 +39,7 @@
             </createData>
 
             <!--Add special price to simple product-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct5.id$$)}}" stepKey="openAdminEditPage"/>
             <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
@@ -192,7 +192,7 @@
             <waitForPageLoad stepKey="waitForTaxSaved"/>
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory1"/>
 
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>

@@ -22,7 +22,7 @@
             <!-- Create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <!-- Delete configurable product and all child products -->
@@ -40,7 +40,7 @@
                 <argument name="ProductAttribute" value="ProductSizeAttribute"/>
             </actionGroup>
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create text swatch attribute with 3 options:  Black, White and Blue-->
         <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">

@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
@@ -48,7 +48,7 @@
             </actionGroup>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
                               dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Start creating a bundle product -->

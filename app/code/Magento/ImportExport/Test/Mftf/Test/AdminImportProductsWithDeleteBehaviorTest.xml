@@ -34,11 +34,11 @@
                 <field key="name">Api Downloadable Product for Test</field>
                 <field key="sku">Api Downloadable Product for Test</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
         <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>

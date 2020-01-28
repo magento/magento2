@@ -29,10 +29,10 @@
             </createData>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="createThreeLevelNestedCategories" stepKey="deleteThreeNestedCategories"/>
             <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteTwoLevelNestedCategory"/>

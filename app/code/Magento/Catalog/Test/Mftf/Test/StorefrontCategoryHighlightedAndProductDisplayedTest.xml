@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="category1"/>
             <createData entity="SimpleSubCategory" stepKey="category2"/>
             <createData entity="SimpleSubCategory" stepKey="category3"/>
@@ -47,7 +47,7 @@
             <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
             <deleteData createDataKey="category3" stepKey="deleteCategory3"/>
             <deleteData createDataKey="category4" stepKey="deleteCategory4"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Storefront home page-->
         <comment userInput="Open Storefront home page" stepKey="openStorefrontHomePage"/>

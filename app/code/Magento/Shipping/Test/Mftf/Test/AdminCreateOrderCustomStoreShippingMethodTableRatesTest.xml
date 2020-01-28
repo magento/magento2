@@ -22,7 +22,7 @@
         <before>
             <!--Create product and customer-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create website, store group and store view-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -38,7 +38,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <!--Create customer associated to website-->
-            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="DeleteWebsite">
+            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <grabFromCurrentUrl regex="~/website_id/(\d+)/~" stepKey="grabWebsiteIdFromURL"/>
@@ -70,10 +70,10 @@
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Assign product to custom website-->
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>

@@ -87,7 +87,7 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Create new customer order-->
@@ -122,7 +122,7 @@
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 

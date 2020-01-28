@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete product -->
@@ -34,7 +34,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create Simple Product -->
@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!-- Create new category for product -->
-        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="fillNewProductCategory">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 

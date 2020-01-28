@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -54,8 +54,8 @@
 
         <!--Testing that price appears correctly in admin catalog-->
         <!--Set filter to product name-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
@@ -75,8 +75,8 @@
 
         <!--Testing that price appears correctly in admin catalog-->
         <!--Set filter to product name-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage2"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad2"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName2">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>

@@ -28,8 +28,8 @@
         <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
         <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
         <reloadPage stepKey="reloadPage" after="assertShippingMethod" />
-        <waitForPageLoad stepKey="WaitForPageLoaded" after="reloadPage" />
-        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping" after="WaitForPageLoaded"/>
+        <waitForPageLoad stepKey="waitForPageLoaded" after="reloadPage" />
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping" after="waitForPageLoaded"/>
         <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal" after="assertShipping"/>
     </actionGroup>
 </actionGroups>

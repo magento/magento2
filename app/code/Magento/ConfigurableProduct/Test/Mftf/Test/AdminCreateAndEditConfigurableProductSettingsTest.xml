@@ -20,11 +20,11 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product -->

@@ -20,14 +20,14 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
-        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
+        <actionGroup ref="FillOutCMSPageContentActionGroup" stepKey="fillBasicPageData"/>
         <actionGroup ref="AdminFillCMSPageContentFieldActionGroup" stepKey="fillContentField">
             <argument name="content" value="{{block class=&apos;Magento\Framework\View\Element\Text&apos; text=&apos;bla bla bla&apos; cache_key=&apos;BACKEND_ACL_RESOURCES&apos; cache_lifetime=999}}"/>
         </actionGroup>

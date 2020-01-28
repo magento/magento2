@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
@@ -27,7 +27,7 @@
         </before>
         <after>
             <!--Clear Filters-->
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
@@ -103,7 +103,7 @@
         <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
 
         <!--Fill URL input-->
-        <fillField userInput="{{BundleProduct.urlKey2}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension2"/>
+        <fillField userInput="{{BundleProduct.urlKey2}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="fillsinSEOlinkExtension2"/>
 
         <!--Save the product-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
@@ -111,33 +111,33 @@
 
         <!--Mass delete bundle products-->
         <!--Clear Filters-->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
         <!--Setting filter-->
-        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+        <actionGroup ref="BundleProductFilterActionGroup" stepKey="filterForOnlyBundleProducts"/>
 
         <!--Delete-->
-        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="SelectAllOnly1"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="selectAllOnly1"/>
         <waitForPageLoad stepKey="loading"/>
-        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
-        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
-        <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="clickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="clickDelete"/>
+        <click selector="//button[@class='action-primary action-accept']" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="loading3"/>
 
         <!--Locating delete message-->
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
 
         <!--Clear Cache - resets products according to enabled/disabled view-->
-        <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
+        <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearPageCaches"/>
 
         <!--Testing deletion of products-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
-        <seeElement stepKey="LookingForPageNotFoundMessage" selector="{{StorefrontBundledSection.pageNotFound}}"/>
-        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageAgain2"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement2"/>
-        <dontSeeElement stepKey="LookingForNameOfProduct2" selector="{{StorefrontBundledSection.bundleProductName}}"/>
-        <seeElement stepKey="LookingForPageNotFoundMessage2" selector="{{StorefrontBundledSection.pageNotFound}}"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPageAgain"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoadToShowElement"/>
+        <dontSeeElement stepKey="lookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="lookingForPageNotFoundMessage" selector="{{StorefrontBundledSection.pageNotFound}}"/>
+        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="goToProductPageAgain2"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoadToShowElement2"/>
+        <dontSeeElement stepKey="lookingForNameOfProduct2" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="lookingForPageNotFoundMessage2" selector="{{StorefrontBundledSection.pageNotFound}}"/>
     </test>
 </tests>

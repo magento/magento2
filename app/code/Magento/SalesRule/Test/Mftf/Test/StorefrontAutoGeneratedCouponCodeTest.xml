@@ -34,10 +34,10 @@
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as Admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>

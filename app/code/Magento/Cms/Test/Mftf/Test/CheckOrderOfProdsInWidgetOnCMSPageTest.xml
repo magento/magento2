@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="enableTinyMCE4"/>
             <waitForPageLoad stepKey="waitConfigToSave"/>
@@ -39,7 +39,7 @@
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
@@ -94,7 +94,7 @@
         <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget1"/>
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget"/>
         <waitForPageLoad stepKey="waitForSaveComplete"/>
-        <actionGroup ref="CompareTwoProductsOrder" stepKey="compareProductOrders1">
+        <actionGroup ref="CompareTwoProductsOrderActionGroup" stepKey="compareProductOrders1">
             <argument name="page" value="$$createCMSPage.identifier$$"/>
             <argument name="product_1" value="$$product1$$"/>
             <argument name="product_2" value="$$product2$$"/>
@@ -129,7 +129,7 @@
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget1"/>
         <waitForPageLoad stepKey="waitForSaveComplete1"/>
 
-        <actionGroup ref="CompareTwoProductsOrder" stepKey="compareProductOrders2">
+        <actionGroup ref="CompareTwoProductsOrderActionGroup" stepKey="compareProductOrders2">
             <argument name="page" value="$$createCMSPage.identifier$$"/>
             <argument name="product_1" value="$$product2$$"/>
             <argument name="product_2" value="$$product1$$"/>

@@ -13,15 +13,15 @@
             <description>Navigates to store configuration page through UI and expands the CAPTCHA section under Customers > Customer Configuration.</description>
         </annotations>
 
-        <click selector="{{CaptchaFormsDisplayingSection.store}}" stepKey="ClickToGoStores"/>
+        <click selector="{{CaptchaFormsDisplayingSection.store}}" stepKey="clickToGoStores"/>
         <waitForPageLoad stepKey="waitForStoresLoaded"/>
-        <click selector="{{CaptchaFormsDisplayingSection.config}}" stepKey="ClickToGoConfiguration"/>
+        <click selector="{{CaptchaFormsDisplayingSection.config}}" stepKey="clickToGoConfiguration"/>
         <waitForPageLoad stepKey="waitForConfigurationsLoaded"/>
-        <scrollTo selector="{{CaptchaFormsDisplayingSection.customer}}" x="0" y="-80" stepKey="ScrollToCustomers"/>
-        <click selector="{{CaptchaFormsDisplayingSection.customer}}" stepKey="ClickToCustomers"/>
+        <scrollTo selector="{{CaptchaFormsDisplayingSection.customer}}" x="0" y="-80" stepKey="scrollToCustomers"/>
+        <click selector="{{CaptchaFormsDisplayingSection.customer}}" stepKey="clickToCustomers"/>
         <waitForPageLoad stepKey="waitForCustomerConfigurationsLoaded"/>
-        <click selector="{{CaptchaFormsDisplayingSection.customerConfig}}" stepKey="ClickToGoCustomerConfiguration"/>
+        <click selector="{{CaptchaFormsDisplayingSection.customerConfig}}" stepKey="clickToGoCustomerConfiguration"/>
         <scrollTo selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
-        <conditionalClick selector="{{CaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{CaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="ClickToOpenCaptcha"/>
+        <conditionalClick selector="{{CaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{CaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="clickToOpenCaptcha"/>
     </actionGroup>
 </actionGroups>

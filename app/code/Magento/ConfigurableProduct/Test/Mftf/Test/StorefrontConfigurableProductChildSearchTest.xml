@@ -114,7 +114,7 @@
                 <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
 
             <!-- Go to the product page for the first product -->
             <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
@@ -132,7 +132,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>

@@ -51,7 +51,7 @@
             <createData entity="PaginationProduct" stepKey="simpleProduct28"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct29"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct30"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0" />
@@ -87,7 +87,7 @@
             <deleteData createDataKey="simpleProduct28" stepKey="deleteSimpleProduct28"/>
             <deleteData createDataKey="simpleProduct29" stepKey="deleteSimpleProduct29"/>
             <deleteData createDataKey="simpleProduct30" stepKey="deleteSimpleProduct30"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
        <!--Verify default number of products displayed in the grid view-->
         <comment userInput="Verify default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>

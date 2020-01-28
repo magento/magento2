@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminDeleteTaxRule">
+    <actionGroup name="AdminDeleteTaxRuleActionGroup">
         <annotations>
             <description>Goes to the Admin Tax Rule grid page. Deletes the provided Tax Rule Code.</description>
         </annotations>

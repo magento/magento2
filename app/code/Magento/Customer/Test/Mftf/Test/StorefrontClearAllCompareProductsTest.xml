@@ -18,7 +18,7 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create Simple Customer -->
@@ -106,12 +106,12 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
             <!-- Login -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin1"/>
 
             <!-- Delete Created Entities -->
             <deleteData createDataKey="createSimpleCustomer1" stepKey="deleteSimpleCustomer1"/>

@@ -20,7 +20,7 @@
 
         <before>
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create custom store group-->
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewCustomStoreGroup">
                 <argument name="website" value="{{_defaultWebsite.name}}"/>
@@ -30,7 +30,7 @@
         </before>
         <after>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete custom store group and verify AssertStoreGroupSuccessDeleteAndBackupMessages-->
@@ -48,7 +48,7 @@
         <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
         <!--Delete database backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+        <actionGroup ref="deleteBackupActionGroup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="WebSetupWizardBackup"/>
         </actionGroup>
     </test>

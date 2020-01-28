@@ -12,7 +12,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateCustomerWithWebSiteAndGroup">
+    <actionGroup name="AdminCreateCustomerWithWebSiteAndGroupActionGroup">
         <annotations>
             <description>Goes to the Customer grid page. Click on 'Add New Customer'. Fills provided Customer Data. Fill provided Customer Address data. Assigns Product to Website and Store View. Clicks on Save.</description>
         </annotations>
@@ -27,9 +27,9 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <click stepKey="addNewCustomer" selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
         <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="{{customerData.group}}" stepKey="selectCustomerGroup"/>
-        <fillField stepKey="FillFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customerData.firstname}}"/>
-        <fillField stepKey="FillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
-        <fillField stepKey="FillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
+        <fillField stepKey="fillFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customerData.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
+        <fillField stepKey="fillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
         <selectOption stepKey="selectStoreView" selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{storeView}}"/>
         <waitForElement selector="{{AdminCustomerAccountInformationSection.storeView}}" stepKey="waitForCustomerStoreViewExpand"/>
         <click stepKey="save" selector="{{AdminCustomerAccountInformationSection.saveCustomer}}"/>
@@ -37,7 +37,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see stepKey="seeSuccessMessage" userInput="You saved the customer."/>
     </actionGroup>
 
-    <actionGroup name="AdminEditCustomerAddressNoZipNoState" extends="AdminEditCustomerAddressesFrom">
+    <actionGroup name="AdminEditCustomerAddressNoZipNoStateActionGroup" extends="AdminEditCustomerAddressesFromActionGroup">
         <annotations>
             <description>EXTENDS: AdminEditCustomerAddressesFrom. Removes 'selectState' and 'fillZipCode'. Clicks on 'Set Default' for Billing/Shipping.</description>
         </annotations>
@@ -49,7 +49,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
     </actionGroup>
 
-    <actionGroup name="AdminEditCustomerAddressSetDefaultShippingAndBilling" extends="AdminEditCustomerAddressesFrom">
+    <actionGroup name="AdminEditCustomerAddressSetDefaultShippingAndBillingActionGroup" extends="AdminEditCustomerAddressesFromActionGroup">
         <annotations>
             <description>EXTENDS: AdminEditCustomerAddressesFrom. Removes 'selectState' and 'fillZipCode'.</description>
         </annotations>
@@ -59,7 +59,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
     </actionGroup>
 
-    <actionGroup name="EnterCustomerAddressInfo">
+    <actionGroup name="EnterCustomerAddressInfoActionGroup">
         <annotations>
             <description>Fills in the provided Customer details (First/Last Name, Company, Phone # and Address) on the Admin Customer creation/edit page. Clicks on the Save button.</description>
         </annotations>
@@ -84,7 +84,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
     </actionGroup>
 
     <!-- Fills State Field instead of selecting it-->
-    <actionGroup name="EnterCustomerAddressInfoFillState" extends="EnterCustomerAddressInfo">
+    <actionGroup name="EnterCustomerAddressInfoFillStateActionGroup" extends="EnterCustomerAddressInfoActionGroup">
         <annotations>
             <description>EXTENDS: EnterCustomerAddressInfo. Fills the State field.</description>
         </annotations>
@@ -93,7 +93,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <fillField stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvinceFill}}" userInput="{{Address.state}}"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerBillingAddress">
+    <actionGroup name="VerifyCustomerBillingAddressActionGroup">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Billing Address is present and correct on the Storefront Customer Dashboard Address section.</description>
         </annotations>
@@ -114,7 +114,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultBillingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerShippingAddress">
+    <actionGroup name="VerifyCustomerShippingAddressActionGroup">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Shipping Address is present and correct.</description>
         </annotations>
@@ -134,7 +134,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultShippingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerBillingAddressWithState">
+    <actionGroup name="VerifyCustomerBillingAddressWithStateActionGroup">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Billing Address, including the State, is present and correct.</description>
         </annotations>
@@ -154,7 +154,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultBillingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerShippingAddressWithState">
+    <actionGroup name="VerifyCustomerShippingAddressWithStateActionGroup">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Shipping Address, including the State, is present and correct.</description>
         </annotations>
@@ -174,7 +174,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultShippingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerNameOnFrontend">
+    <actionGroup name="VerifyCustomerNameOnFrontendActionGroup">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard page. Validates that the Customer First/Last Name is present and correct.</description>
         </annotations>

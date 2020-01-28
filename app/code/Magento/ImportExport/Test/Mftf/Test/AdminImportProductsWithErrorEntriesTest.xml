@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login to Admin Page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Clear products grid filters-->
@@ -27,7 +27,7 @@
             <!--Delete all imported products-->
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <!--Logout from Admin page-->
-            <actionGroup ref="logout" stepKey="logoutFromAdminPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdminPage"/>
         </after>
 
         <!--Import products with "Skip error entries"-->

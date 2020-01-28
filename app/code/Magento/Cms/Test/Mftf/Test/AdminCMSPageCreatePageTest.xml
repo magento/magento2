@@ -20,14 +20,14 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
-        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
+        <actionGroup ref="FillOutCMSPageContentActionGroup" stepKey="fillBasicPageData"/>
         <!--verify successfully saved-->
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveNewPage"/>
         <!--verify page on frontend-->

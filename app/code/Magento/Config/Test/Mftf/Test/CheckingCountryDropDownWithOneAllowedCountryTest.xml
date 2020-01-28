@@ -24,13 +24,13 @@
         <after>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
-            <waitForPageLoad stepKey="WaitForPageToLoad"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <waitForPageLoad stepKey="waitForPageToLoad"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
          <!--Flush Magento Cache-->
         <magentoCLI stepKey="flushCache" command="cache:flush"/>

@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
@@ -33,7 +33,7 @@
             <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
             <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
             <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="dontSeeCategoryInTree"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create Category with Five Nesting -->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>

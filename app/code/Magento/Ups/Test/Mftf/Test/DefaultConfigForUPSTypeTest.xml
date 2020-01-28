@@ -20,13 +20,13 @@
             <group value="ups"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Collapse UPS tab and logout-->
             <comment userInput="Collapse UPS tab and logout" stepKey="collapseTabAndLogout"/>
             <click selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" stepKey="collapseTab"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Set shipping methods UPS type to default -->
         <comment userInput="Set shipping methods UPS type to default" stepKey="setToDefaultShippingMethodsUpsType"/>

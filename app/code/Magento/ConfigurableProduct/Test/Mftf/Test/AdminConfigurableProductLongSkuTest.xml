@@ -39,7 +39,7 @@
             </getData>
             <!--Create Category-->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
 
         <after>
@@ -52,7 +52,7 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <!--Clean up category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
          <!--Create a configurable product with long name and sku-->

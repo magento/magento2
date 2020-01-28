@@ -31,6 +31,6 @@
         <switchToIFrame selector="{{BraintreeConfigurationPaymentSection.codeFrame}}" stepKey="switchToIframe3"/>
         <waitForElementVisible selector="{{BraintreeConfigurationPaymentSection.verificationNumber}}" stepKey="waitVerificationNumber"/>
         <fillField selector="{{BraintreeConfigurationPaymentSection.verificationNumber}}" userInput="{{cartData.cvv}}" stepKey="setVerificationNumber"/>
-        <switchToIFrame stepKey="SwitchBackToWindow"/>
+        <switchToIFrame stepKey="switchBackToWindow"/>
     </actionGroup>
 </actionGroups>

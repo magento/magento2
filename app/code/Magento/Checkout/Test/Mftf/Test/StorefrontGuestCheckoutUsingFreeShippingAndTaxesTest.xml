@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <createData entity="MinimumOrderAmount100" stepKey="minimumOrderAmount100"/>
@@ -94,7 +94,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+            <actionGroup ref="AdminDeleteTaxRuleActionGroup" stepKey="deleteTaxRule">
                 <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -108,7 +108,7 @@
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule1"/>
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create a Tax Rule -->

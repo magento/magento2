@@ -22,18 +22,18 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="ProductWithUnicode"/>
         </actionGroup>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+        <actionGroup ref="AssertProductInStorefrontCategoryPageActionGroup" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="ProductWithUnicode"/>
         </actionGroup>

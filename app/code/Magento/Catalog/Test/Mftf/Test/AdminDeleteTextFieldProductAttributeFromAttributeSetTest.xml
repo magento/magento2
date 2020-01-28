@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!-- Create Product Attribute and assign to Default Product Attribute Set -->
             <createData entity="newProductAttribute" stepKey="attribute"/>
             <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
@@ -31,7 +31,7 @@
         <after>
             <!--Delete cteated Data -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimplaeProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Open Product Attribute Set Page -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>

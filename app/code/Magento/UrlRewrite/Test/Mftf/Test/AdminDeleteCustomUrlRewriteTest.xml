@@ -20,10 +20,10 @@
 
         <before>
             <createData entity="defaultUrlRewrite" stepKey="urlRewrite" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete created custom url rewrite and verify AssertUrlRewriteDeletedMessage-->

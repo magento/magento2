@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
@@ -27,7 +27,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Generate default value -->

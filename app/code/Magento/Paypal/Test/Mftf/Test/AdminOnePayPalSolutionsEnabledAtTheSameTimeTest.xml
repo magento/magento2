@@ -20,7 +20,7 @@
             <group value="paypal"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Set PayPal Payments Standard Configs-->
             <comment userInput="Set PayPal Payments Standard Configs" stepKey="commentsetConfigs"/>
             <magentoCLI command="config:set paypal/wpp/api_authentication 0" stepKey="setApiAuthentication"/>
@@ -32,7 +32,7 @@
             <magentoCLI command="config:set payment/wps_express/active 1" stepKey="enableWPSExpress"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disableExpressCheckout"/>
         </after>

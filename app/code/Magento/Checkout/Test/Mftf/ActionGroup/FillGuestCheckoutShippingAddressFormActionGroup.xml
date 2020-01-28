@@ -14,11 +14,11 @@
             <argument name="customerAddress" defaultValue="US_Address_TX" type="entity"/>
         </arguments>
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="setCustomerEmail"/>
-        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstname}}" stepKey="SetCustomerFirstName"/>
-        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customer.lastname}}" stepKey="SetCustomerLastName"/>
-        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddress.street[0]}}" stepKey="SetCustomerStreetAddress"/>
-        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddress.city}}" stepKey="SetCustomerCity"/>
-        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddress.postcode}}" stepKey="SetCustomerZipCode"/>
-        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddress.telephone}}" stepKey="SetCustomerPhoneNumber"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstname}}" stepKey="setCustomerFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customer.lastname}}" stepKey="setCustomerLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddress.street[0]}}" stepKey="setCustomerStreetAddress"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddress.city}}" stepKey="setCustomerCity"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddress.postcode}}" stepKey="setCustomerZipCode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddress.telephone}}" stepKey="setCustomerPhoneNumber"/>
     </actionGroup>
 </actionGroups>

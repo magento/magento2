@@ -20,10 +20,10 @@
         </annotations>
         <before>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+            <actionGroup ref="AdminDeleteTaxRuleActionGroup" stepKey="deleteTaxRule">
                 <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
             </actionGroup>
             <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />

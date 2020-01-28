@@ -19,11 +19,11 @@
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search and Select Edit option for created category in grid -->

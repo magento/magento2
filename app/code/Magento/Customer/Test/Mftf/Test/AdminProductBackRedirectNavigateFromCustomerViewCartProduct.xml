@@ -28,7 +28,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Go to storefront as customer-->
@@ -69,7 +69,7 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Sign out-->
-            <actionGroup ref="SignOut" stepKey="signOut"/>
+            <actionGroup ref="SignOutActionGroup" stepKey="signOut"/>
         </after>
     </test>
 </tests>

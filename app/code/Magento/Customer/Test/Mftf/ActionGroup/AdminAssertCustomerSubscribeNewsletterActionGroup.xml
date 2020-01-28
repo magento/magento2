@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertCustomerIsSubscribedToNewsletters">
+    <actionGroup name="AdminAssertCustomerIsSubscribedToNewslettersActionGroup">
         <annotations>
             <description>Verify that check box "Newsletter subscribed" is checked on "Newsletter" tab on customer edit page.</description>
         </annotations>
@@ -21,7 +21,7 @@
         <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedStatus(websiteId)}}" stepKey="assertSubscribedToNewsletter"/>
     </actionGroup>
 
-    <actionGroup name="AdminAssertCustomerIsSubscribedToNewslettersAndSelectedStoreView" extends="AdminAssertCustomerIsSubscribedToNewsletters">
+    <actionGroup name="AdminAssertCustomerIsSubscribedToNewslettersAndSelectedStoreViewActionGroup" extends="AdminAssertCustomerIsSubscribedToNewslettersActionGroup">
         <annotations>
             <description>Verify that check box "Newsletter subscribed" is checked and Store View is selected on "Newsletter" tab on customer edit page.</description>
         </annotations>

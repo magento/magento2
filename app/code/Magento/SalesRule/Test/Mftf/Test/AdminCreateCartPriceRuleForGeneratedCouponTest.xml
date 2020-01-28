@@ -21,16 +21,16 @@
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <!-- Delete the cart price rule we made during the test -->
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="cleanUpRule">
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a cart price rule  -->

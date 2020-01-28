@@ -20,11 +20,11 @@
 
         <before>
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Created Customer -->
@@ -33,7 +33,7 @@
         </actionGroup>
         <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="openAddressesTab"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="ClickOnAddNewAddressButton"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="clickOnAddNewAddressButton"/>
         <waitForPageLoad stepKey="waitForAdressPageToLoad"/>
         <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="clickOnSaveButton"/>
         <waitForPageLoad stepKey="waitForPageToBeSaved"/>

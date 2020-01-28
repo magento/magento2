@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create Category and Simple Products-->
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
@@ -171,11 +171,11 @@
            <actionGroup ref="ResetSearchEngineConfigurationActionGroup" stepKey="resetCatalogSearchConfiguration"/>
            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchDisable"/>
            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchDisable"/>
-           <actionGroup ref="logout" stepKey="logout"/>
+           <actionGroup ref="logoutActionGroup" stepKey="logout"/>
        </after>
 
         <!--Open Storefront on the myCategory page-->
-        <amOnPage url="/$$createCategory1.name$$.html" stepKey="GoToStorefrontCategory"/>
+        <amOnPage url="/$$createCategory1.name$$.html" stepKey="goToStorefrontCategory"/>
         <waitForPageLoad  stepKey="waitForStorefrontCategoryPageLoad"/>
 
         <!--Select 12 items per page and verify number of products displayed in each page -->

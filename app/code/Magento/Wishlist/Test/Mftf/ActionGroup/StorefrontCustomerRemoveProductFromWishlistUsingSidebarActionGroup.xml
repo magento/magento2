@@ -16,8 +16,8 @@
             <argument name="product"/>
         </arguments>
 
-        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="RemoveProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
-        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="RemoveProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="RemoveProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="removeProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="removeProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="removeProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
     </actionGroup>
 </actionGroups>

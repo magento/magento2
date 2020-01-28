@@ -30,7 +30,7 @@
             <createData entity="ApiConfigurableProduct" stepKey="createProduct3">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
 
         <after>
@@ -41,7 +41,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search for prefix of the 3 products we created via api -->
@@ -154,7 +154,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
 
         <!--check admin for both options-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
         <waitForPageLoad stepKey="wait2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="seeOption1Admin"/>
@@ -247,7 +247,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
 
         <!--go to admin and disable an option-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
@@ -275,12 +275,12 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product via the UI -->
@@ -324,12 +324,12 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product via the UI -->

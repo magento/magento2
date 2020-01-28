@@ -26,7 +26,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
         </before>
         <after>
             <!--Deleting data-->
@@ -36,7 +36,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
             <!--Logging out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to bundle product creation page-->
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
@@ -75,22 +75,22 @@
         <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scroll"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
-        <seeElement stepKey="LookingForBundleItemPresence" selector="{{AdminProductFormBundleSection.listedBundleItem}}"/>
+        <seeElement stepKey="lookingForBundleItemPresence" selector="{{AdminProductFormBundleSection.listedBundleItem}}"/>
 
         <!--Checking on customer side-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="LookingForAbilityToAddOptions"/>
+        <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="lookingForAbilityToAddOptions"/>
         <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickButtonToCustomize"/>
         <waitForPageLoad stepKey="waitCustomizationDropDown"/>
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption}}" stepKey="seeBundleItem"/>
 
         <!--Add another bundle option with 2 items-->
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-        <waitForPageLoad stepKey="WaitForClear"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <waitForPageLoad stepKey="waitForClear"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
@@ -122,12 +122,12 @@
         <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scrollAgain"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenNewSectionBundleItems2"/>
-        <seeElement selector="{{AdminProductFormBundleSection.listedBundleItem2}}" stepKey="LookingForNewBundleItemPresence"/>
+        <seeElement selector="{{AdminProductFormBundleSection.listedBundleItem2}}" stepKey="lookingForNewBundleItemPresence"/>
 
         <!--Checking on customer side-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPageAgain"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoadAgain"/>
-        <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="LookingForAbilityToAddBothOptions"/>
+        <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="lookingForAbilityToAddBothOptions"/>
         <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickButtonAgainToCustomize"/>
         <waitForPageLoad stepKey="waitForBothCustomizationDropDown"/>
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption2}}" stepKey="seeBundleItems"/>

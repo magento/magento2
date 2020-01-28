@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
     </test>

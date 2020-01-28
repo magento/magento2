@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertDownloadableProductIsPresentInCustomerAccount">
+    <actionGroup name="StorefrontAssertDownloadableProductIsPresentInCustomerAccountActionGroup">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard page. Clicks on 'My Downloadable Products'. Validates that the provided Product is present.</description>
         </annotations>

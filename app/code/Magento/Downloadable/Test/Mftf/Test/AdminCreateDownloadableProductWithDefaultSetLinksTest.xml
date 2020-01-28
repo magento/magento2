@@ -27,7 +27,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
@@ -40,7 +40,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create downloadable product -->
@@ -98,12 +98,12 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
         <!-- Assert product in storefront category page -->
-        <actionGroup ref="StorefrontCheckProductPriceInCategoryActionGroup" stepKey="StorefrontCheckCategorySimpleProduct">
+        <actionGroup ref="StorefrontCheckProductPriceInCategoryActionGroup" stepKey="storefrontCheckCategorySimpleProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 

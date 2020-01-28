@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create  10 simple products-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
                 <field key="price">10.00</field>
@@ -63,7 +63,7 @@
             <deleteData createDataKey="simpleProduct8" stepKey="deleteProduct8"/>
             <deleteData createDataKey="simpleProduct9" stepKey="deleteProduct9"/>
             <deleteData createDataKey="simpleProduct10" stepKey="deleteProduct10"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product1 page in StoreFront-->

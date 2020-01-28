@@ -76,7 +76,7 @@
             <magentoCLI command="cron:run" stepKey="runCron2"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
         </before>
         <after>
@@ -95,7 +95,7 @@
                 <argument name="rowIndex" value="0"/>
             </actionGroup>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to export page -->

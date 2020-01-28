@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login As Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Navigate To Integrations Page -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
                 <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
@@ -36,7 +36,7 @@
             <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- TEST BODY -->

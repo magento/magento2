@@ -22,10 +22,10 @@
             <group value="Watermark"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminArea"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
         <waitForPageLoad stepKey="waitForPageload1"/>

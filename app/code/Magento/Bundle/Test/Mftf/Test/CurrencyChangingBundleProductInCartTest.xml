@@ -18,7 +18,7 @@
                 <group value="Bundle"/>
             </annotations>
             <before>
-                <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+                <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             </before>
@@ -27,7 +27,7 @@
                 <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                     <argument name="product" value="BundleProduct"/>
                 </actionGroup>
-                <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+                <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
                 <waitForPageLoad stepKey="waitForClearFilter"/>
                 <!--Clear Configs-->
                 <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>

@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>
@@ -75,7 +75,7 @@
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 

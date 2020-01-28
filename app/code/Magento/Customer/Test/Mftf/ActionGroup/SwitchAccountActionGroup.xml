@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Sign out-->
-    <actionGroup name="SignOut">
+    <actionGroup name="SignOutActionGroup">
         <annotations>
             <description>Click on the Backend Admin current Admin User menu. Click on 'Logout'. Validate that you are logged out.</description>
         </annotations>

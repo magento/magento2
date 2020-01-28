@@ -19,7 +19,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="SimpleProduct3"/>
         </actionGroup>
 

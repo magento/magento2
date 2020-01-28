@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Unlock Admin user -->
@@ -92,7 +92,7 @@
         </actionGroup>
 
         <!-- Try to login as admin and check error -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginError" />
     </test>
 </tests>

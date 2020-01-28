@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Reset customers grid filter and to default view -->
-    <actionGroup name="AdminResetFilterInCustomerGrid">
+    <actionGroup name="AdminResetFilterInCustomerGridActionGroup">
         <annotations>
             <description>Clears the Admin Customer grid Filters. Sets the grid view to 'Default View'.</description>
         </annotations>

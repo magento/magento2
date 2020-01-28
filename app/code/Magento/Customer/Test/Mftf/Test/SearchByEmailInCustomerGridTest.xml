@@ -21,14 +21,14 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
             <createData entity="Simple_US_Customer" stepKey="createSecondCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
-            <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminResetFilterInCustomerAddressGridActionGroup" stepKey="clearCustomerGridFilter"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
@@ -37,7 +37,7 @@
             <argument name="keyword" value="$$createSecondCustomer.email$$"/>
         </actionGroup>
         <!--Step 3: Check if customer is placed in a first row and clear grid filter-->
-        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="checkCustomerInGrid">
+        <actionGroup ref="AdminAssertCustomerInCustomersGridActionGroup" stepKey="checkCustomerInGrid">
             <argument name="text" value="$$createSecondCustomer.email$$"/>
             <argument name="row" value="1"/>
         </actionGroup>

@@ -32,14 +32,14 @@
             <magentoCLI command="cron:run --group=index" stepKey="runIndexerCron"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAdminUserAfterTest"/>
             <deleteData createDataKey="productOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="productTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>
             <deleteData createDataKey="simpleSubCategoryTwo" stepKey="deleteSubcategoryTwo"/>
         </after>
         <!--Move category one to category two-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage"/>
         <waitForPageLoad stepKey="waitForAdminCategoryPageLoad1"/>
         <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToSimpleSubCategoryTwo">

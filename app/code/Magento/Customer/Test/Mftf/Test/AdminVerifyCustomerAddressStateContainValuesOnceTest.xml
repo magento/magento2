@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
@@ -29,7 +29,7 @@
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Customers > All Customers.-->

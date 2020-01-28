@@ -28,7 +28,7 @@
         </before>
 
         <!--Go to Storefront-->
-        <amOnPage url="" stepKey="DoToStorefront"/>
+        <amOnPage url="" stepKey="doToStorefront"/>
 
         <!-- Fill out form for a new user with address -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
@@ -61,7 +61,7 @@
         <amOnPage stepKey="goToMyAccountPage" url="/customer/account/"/>
 
         <!--Assert That Shipping And Billing Address are the same-->
-        <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
+        <actionGroup ref="AssertThatShippingAndBillingAddressTheSameActionGroup" stepKey="assertThatShippingAndBillingAddressTheSame"/>
 
         <after>
             <!--Delete created Product-->

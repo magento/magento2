@@ -17,7 +17,7 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
                 <!-- Create store -->
                 <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createFirstStore">
                     <argument name="website" value="{{_defaultWebsite.name}}"/>
@@ -29,7 +29,7 @@
                 <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
                     <argument name="storeGroupName" value="customStore.name"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create custom store view-->
@@ -54,6 +54,6 @@
                 <argument name="status" value="Enabled"/>
             </actionGroup>
             <!--Go to store view form page and verify AssertStoreNoDeleteButton-->
-            <dontSee selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="AssertStoreNoDeleteButton"/>
+            <dontSee selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="assertStoreNoDeleteButton"/>
         </test>
 </tests>

@@ -22,37 +22,37 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created product-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="NavigateToCustomerGroupPage" stepKey="navToCustomers"/>
+            <actionGroup ref="NavigateToCustomerGroupPageActionGroup" stepKey="navToCustomers"/>
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
                 <argument name="customerGroupName" value="{{CustomerGroupChange.code}}"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
             <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
             <argument name="taxClass" value="{{CustomerGroupChange.tax_class_name}}"/>
         </actionGroup>
-        <actionGroup ref="NavigateToAllCustomerPage" stepKey="navToCustomers"/>
-        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomer">
+        <actionGroup ref="NavigateToAllCustomerPageActionGroup" stepKey="navToCustomers"/>
+        <actionGroup ref="AdminFilterCustomerByNameActionGroup" stepKey="filterCustomer">
             <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
         </actionGroup>
-        <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomer">
+        <actionGroup ref="AdminSelectCustomerByEmailActionGroup" stepKey="selectCustomer">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGrid" stepKey="setCustomerGroup">
+        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGridActionGroup" stepKey="setCustomerGroup">
             <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
         </actionGroup>
-        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomerAfterGroupChange">
+        <actionGroup ref="AdminFilterCustomerByNameActionGroup" stepKey="filterCustomerAfterGroupChange">
             <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
         </actionGroup>
-        <actionGroup ref="VerifyCustomerGroupForCustomer" stepKey="verifyCustomerGroupSet">
+        <actionGroup ref="VerifyCustomerGroupForCustomerActionGroup" stepKey="verifyCustomerGroupSet">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
         </actionGroup>
@@ -74,6 +74,6 @@
 
         <remove keyForRemoval="filterCustomer"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" before="selectCustomer"/>
-        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
+        <actionGroup ref="AdminSelectAllCustomersActionGroup" stepKey="selectCustomer"/>
     </test>
 </tests>

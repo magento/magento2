@@ -57,7 +57,7 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate2" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn2" />
         <waitForLoadingMaskToDisappear stepKey="waitForWidgetChooserLoadingMaskToDisappear"/>
-        <actionGroup ref="searchBlockOnGridPage" stepKey="searchBlockOnGridPage">
+        <actionGroup ref="searchBlockOnGridPageActionGroup" stepKey="searchBlockOnGridPage">
             <argument name="Block" value="_defaultBlock"/>
         </actionGroup>
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
@@ -81,7 +81,7 @@
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

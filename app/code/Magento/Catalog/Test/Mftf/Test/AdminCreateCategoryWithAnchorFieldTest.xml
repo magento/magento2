@@ -18,13 +18,13 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultBlock" stepKey="createDefaultCMSBlock"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createDefaultCMSBlock" stepKey="deleteDefaultCMSBlock"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
         </after>

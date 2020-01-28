@@ -25,11 +25,11 @@
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!-- Step 0: User signs up an account -->
         <comment userInput="Start of signing up user account" stepKey="startOfSigningUpUserAccount" />
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <comment userInput="End of signing up user account" stepKey="endOfSigningUpUserAccount" />

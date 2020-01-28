@@ -32,17 +32,17 @@
             <actionGroup ref="UpdateIndexerOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState">
                 <argument name="indexerName" value="catalogsearch_fulltext"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Change Catalog search engine option to Elastic Search 5.x" stepKey="chooseElasticSearch5"/>
         <actionGroup ref="ChooseElasticSearchAsSearchEngineActionGroup" stepKey="chooseES5"/>
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
         <actionGroup ref="UpdateIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule">
             <argument name="indexerName" value="catalogsearch_fulltext"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         <!--Navigate to storefront and do a quick search for the product -->
         <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch" />
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
@@ -55,6 +55,6 @@
         <seeInTitle userInput="Search results for: 'Simple'" stepKey="assertQuickSearchTitle"/>
         <see userInput="Search results for: 'Simple'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
         <comment userInput="End of searching products" stepKey="endOfSearchingProducts"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin2"/>
         </test>
 </tests>

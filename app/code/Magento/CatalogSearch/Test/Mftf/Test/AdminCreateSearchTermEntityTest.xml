@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
@@ -35,7 +35,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to the search terms page and create new search term -->

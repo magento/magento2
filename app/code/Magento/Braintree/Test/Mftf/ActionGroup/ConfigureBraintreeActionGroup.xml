@@ -23,7 +23,7 @@
         <click stepKey="clickOnPaymentMethods" selector="{{ConfigurationListSection.salesPaymentMethods}}"/>
         <waitForPageLoad stepKey="waitForConfigureButton" time="2"/>
         <click stepKey="clickOnConfigureButtonForBraintree" selector="{{ConfigurationPaymentSection.configureButton}}"/>
-        <waitForPageLoad stepKey="BraintreeSettings" time="2"/>
+        <waitForPageLoad stepKey="braintreeSettings" time="2"/>
 
         <!-- Fill Braintree fields -->
         <fillField stepKey="fillTitleForBraintreeSettings" selector="{{BraintreeConfiguraionSection.titleForBraintreeSettings}}" userInput="{{BraintreeConfigurationData.title}}"/>

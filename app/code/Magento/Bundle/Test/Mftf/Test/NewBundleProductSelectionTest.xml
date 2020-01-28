@@ -19,18 +19,18 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <!--Selecting new bundle product-->
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <!--Testing if on the bundle product creation page-->
-        <seeElement selector="{{AdminProductFormBundleSection.bundleOptionsDropDown}}" stepKey="CheckForPresenceOfBundleProductFeatures"/>
+        <seeElement selector="{{AdminProductFormBundleSection.bundleOptionsDropDown}}" stepKey="checkForPresenceOfBundleProductFeatures"/>
     </test>
 </tests>

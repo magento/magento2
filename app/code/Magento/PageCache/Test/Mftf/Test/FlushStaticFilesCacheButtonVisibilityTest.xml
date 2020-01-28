@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Open Cache Management page -->

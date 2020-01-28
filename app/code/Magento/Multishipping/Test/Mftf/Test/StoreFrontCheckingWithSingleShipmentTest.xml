@@ -31,7 +31,7 @@
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
             <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
@@ -58,7 +58,7 @@
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

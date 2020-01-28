@@ -20,23 +20,23 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="LoginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout" />
+            <actionGroup ref="logoutActionGroup" stepKey="logout" />
         </after>
 
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="OpenAdminCatergoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddRootCategoryButton}}" stepKey="ClickOnAddRootButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="FillCategoryField"/>
-        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="EnableCheckOption"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="ClickSaveButton"/>
-        <waitForPageLoad stepKey="WaitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="AssertSuccessMessage"/>
-        <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}"  stepKey="SeeCheckBoxisSelected"/>
-        <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="SeedFieldInput"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCatergoryIndexPage"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddRootCategoryButton}}" stepKey="clickOnAddRootButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryField"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCheckOption"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}"  stepKey="seeCheckBoxisSelected"/>
+        <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="seedFieldInput"/>
     </test>
 </tests>

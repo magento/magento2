@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Data -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
@@ -35,7 +35,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- TEST BODY -->
@@ -52,7 +52,7 @@
         <!--Click *Submit Order* button-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
         <!-- Create Partial Shipment -->
-        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
+        <actionGroup ref="AdminCreateShipmentFromOrderPageActionGroup" stepKey="createNewShipment">
             <argument name="Qty" value="1"/>
             <argument name="Title" value="Title"/>
             <argument name="Number" value="199"/>
@@ -69,7 +69,7 @@
             <argument name="qty" value="1"/>
         </actionGroup>
         <!-- Assert Created Shipment in Shipments Grid-->
-        <actionGroup ref="AdminAssertShipmentInShipmentsGrid" stepKey="assertShipmentInGrid">
+        <actionGroup ref="AdminAssertShipmentInShipmentsGridActionGroup" stepKey="assertShipmentInGrid">
             <argument name="shipmentId" value="{$grabShipmentId}"/>
         </actionGroup>
     </test>

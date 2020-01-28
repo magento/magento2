@@ -24,7 +24,7 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheBefore"/>
         </before>
         <after>

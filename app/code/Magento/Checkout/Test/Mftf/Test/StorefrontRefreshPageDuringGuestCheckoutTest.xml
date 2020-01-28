@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -30,7 +30,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
             <!-- Logout admin -->
-            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
         <!-- Add simple product to cart as Guest -->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

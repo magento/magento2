@@ -23,7 +23,7 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
 
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -42,7 +42,7 @@
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Product Index Page-->

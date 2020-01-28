@@ -21,7 +21,7 @@
 
         <!-- Steps -->
         <!-- 1. Login to backend as admin user -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <waitForPageLoad stepKey="waitForAdminPageLoad" />
 
         <!-- 2. Navigate to Customers > Customer Groups -->

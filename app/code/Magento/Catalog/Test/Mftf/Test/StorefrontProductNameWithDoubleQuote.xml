@@ -25,7 +25,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!--Create product via admin-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>

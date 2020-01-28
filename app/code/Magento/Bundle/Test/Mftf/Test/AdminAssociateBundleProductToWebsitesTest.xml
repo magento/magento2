@@ -46,7 +46,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
@@ -82,7 +82,7 @@
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Open product page and assign grouped project to second website -->

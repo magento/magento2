@@ -18,7 +18,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
@@ -29,12 +29,12 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="NewRootCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
         <!--Create Root Category-->
-        <actionGroup ref="AdminCreateRootCategory" stepKey="createNewRootCategory">
+        <actionGroup ref="AdminCreateRootCategoryActionGroup" stepKey="createNewRootCategory">
             <argument name="categoryEntity" value="NewRootCategory"/>
         </actionGroup>
         <!--Create subcategory-->

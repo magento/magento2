@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Set default flat rate shipping method settings -->
             <comment userInput="Set default flat rate shipping method settings" stepKey="setDefaultFlatRateShippingMethodComment"/>
             <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
@@ -107,7 +107,7 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create new customer order -->
         <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
@@ -161,7 +161,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatus"/>
         <!-- Assert Simple Product Stock Status in frontend after order canceled -->
         <comment userInput="Assert Simple Product Stock Status in frontend after order Canceled" stepKey="assertSimpleProductStockStatusComment"/>
-        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfSimpleProduct">
+        <actionGroup ref="StorefrontCheckProductStockStatusActionGroup" stepKey="checkProductQtyOfSimpleProduct">
             <argument name="productUrlKey" value="$$simpleProduct.custom_attributes[url_key]$$"/>
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
@@ -176,7 +176,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeVirtualProductStockStatus"/>
         <!-- Assert Virtual Product Stock Status in frontend after order canceled -->
         <comment userInput="Assert Virtual Product Stock Status in frontend after order Canceled" stepKey="assertVirtualProductStockStatusComment"/>
-        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfVirtualProduct">
+        <actionGroup ref="StorefrontCheckProductStockStatusActionGroup" stepKey="checkProductQtyOfVirtualProduct">
             <argument name="productUrlKey" value="$$virtualProduct.custom_attributes[url_key]$$"/>
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
@@ -191,7 +191,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeBundleProductStockStatus"/>
         <!-- Assert Bundle Product Stock Status in frontend after order canceled -->
         <comment userInput="Assert Bundle Product Stock Status in frontend after order Canceled" stepKey="assertBundleProductStockStatusComment"/>
-        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfBundleProduct">
+        <actionGroup ref="StorefrontCheckProductStockStatusActionGroup" stepKey="checkProductQtyOfBundleProduct">
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
             <argument name="productName" value="$$createBundleProduct.name$$"/>
         </actionGroup>
@@ -206,7 +206,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeConfigProductStockStatus"/>
         <!-- Assert Configurable Product Stock Status in frontend after order canceled -->
         <comment userInput="Assert Configurable Product Stock Status in frontend after order Canceled" stepKey="assertConfigurableProductStockStatusComment"/>
-        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfConfigProductInFrontend">
+        <actionGroup ref="StorefrontCheckProductStockStatusActionGroup" stepKey="checkProductQtyOfConfigProductInFrontend">
             <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>

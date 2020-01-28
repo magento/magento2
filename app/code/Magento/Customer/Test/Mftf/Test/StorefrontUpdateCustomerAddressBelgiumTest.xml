@@ -19,8 +19,8 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
                 <argument name="Customer" value="CustomerEntityOne"/>
             </actionGroup>
         </before>
@@ -28,7 +28,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Update customer address Belgium in storefront-->

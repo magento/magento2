@@ -29,7 +29,7 @@
             <createData entity="secondCustomWebsite" stepKey="createWebsite"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete created virtual product -->
@@ -48,7 +48,7 @@
             <deleteData createDataKey="createThirdRelatedProduct" stepKey="deleteThirdRelatedProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <comment userInput="remove me" stepKey="disableWYSIWYG"/>

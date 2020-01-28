@@ -76,7 +76,7 @@
                 <requiredEntity createDataKey="simple2"/>
                 <field key="qty">2</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Create new customer order-->
@@ -101,7 +101,7 @@
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="product" stepKey="delete"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>

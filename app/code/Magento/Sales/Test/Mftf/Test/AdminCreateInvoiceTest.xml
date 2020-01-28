@@ -25,7 +25,7 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
         </after>
@@ -59,7 +59,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!-- end todo -->
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>

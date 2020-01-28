@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Disable created order status -->
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order status -->
@@ -52,11 +52,11 @@
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill form and validate message -->
-        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+        <actionGroup ref="AdminOrderStatusFormFillAndSaveActionGroup" stepKey="fillFormAndClickSave">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
-        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccessActionGroup" stepKey="seeFormSaveSuccess"/>
 
         <!-- Assign status to state -->
         <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
@@ -102,7 +102,7 @@
         <!-- Open My Orders -->
         <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage"/>
         <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="goToMyOrdersPage">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
 

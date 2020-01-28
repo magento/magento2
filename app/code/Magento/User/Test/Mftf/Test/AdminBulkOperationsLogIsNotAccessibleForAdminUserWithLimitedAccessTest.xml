@@ -20,11 +20,11 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAdmin"/>
 
             <!-- Delete User -->
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteLimitedUser">
@@ -35,7 +35,7 @@
             <actionGroup ref="AdminDeleteRoleByRoleNameActionGroup" stepKey="deleteRole">
                 <argument name="role" value="adminWithoutBulkActionRole"/>
             </actionGroup>
-           <actionGroup ref="logout" stepKey="logout"/>
+           <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create admin user2 who doesn't have access to "Bulk Operations". Role Resources, uncheck point with title "Bulk Operations" -->
@@ -44,10 +44,10 @@
             <argument name="user" value="NewAdminUser"/>
             <argument name="role" value="adminWithoutBulkActionRole"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logoutAdmin"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
 
         <!-- Login as user2 -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsUser">
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsUser">
             <argument name="adminUser" value="NewAdminUser"/>
         </actionGroup>
 
@@ -61,11 +61,11 @@
         <dontSeeElement selector="{{AdminSystemMessagesSection.actionMessageLog('Bulk Actions Log')}}" stepKey="dontSeeTaskYourBulkOperationsLog"/>
 
         <!-- Navigate to "Your Bulk Operations log" directly: %your_build_backend_url%/bulk/ -->
-        <amOnPage url="{{AdminBulkActionsLogIndexPage.url}}" stepKey="OnBulkPage"/>
+        <amOnPage url="{{AdminBulkActionsLogIndexPage.url}}" stepKey="onBulkPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        
+
         <!-- Access Denied -->
         <see userInput="Sorry, you need permissions to view this content." selector="{{AdminMessagesSection.accessDenied}}" stepKey="seeAccessDenied"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
     </test>
 </tests>

@@ -29,23 +29,23 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create Website -->
-            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateWebsite">
                 <argument name="newWebsiteName" value="secondWebsite"/>
                 <argument name="websiteCode" value="second_website"/>
             </actionGroup>
 
             <!-- Create store group -->
-            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateStore">
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateStore">
                 <argument name="website" value="secondWebsite"/>
                 <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
                 <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
             </actionGroup>
 
             <!-- Create store view -->
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateStoreView">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateStoreView">
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
@@ -60,12 +60,12 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!--Delete website created in the before block -->
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" before="logoutFromAdmin">
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite" before="logoutFromAdmin">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Import products with add/update behavior -->

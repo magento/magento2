@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="RestoreLayoutSetting">
+    <actionGroup name="RestoreLayoutSettingActionGroup">
         <annotations>
             <description>Goes to the 'Configuration' page for 'Web'. Selects 'No layout updates' for the Default Product/Category Layouts.</description>
         </annotations>
-        
+
         <selectOption selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="selectNoLayoutUpdates1" after="expandDefaultLayouts"/>
         <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="selectNoLayoutUpdates2" before="clickSaveConfig"/>
     </actionGroup>

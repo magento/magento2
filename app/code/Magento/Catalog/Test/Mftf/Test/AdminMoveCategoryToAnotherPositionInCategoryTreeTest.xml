@@ -20,15 +20,15 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
-            <actionGroup ref="DeleteCategoryActionGroup" stepKey="SecondLevelSubCat">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="secondLevelSubCat">
                 <argument name="categoryEntity" value="SecondLevelSubCat"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Category Page -->
@@ -72,7 +72,7 @@
         <waitForPageLoad stepKey="waitTillPageLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="DragCategory"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="dragCategory"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessageForOneMoreTime"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitTheForPageToLoad"/>

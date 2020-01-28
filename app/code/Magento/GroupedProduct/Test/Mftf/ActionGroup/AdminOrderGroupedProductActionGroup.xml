@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOrderConfigureGroupedProduct">
+    <actionGroup name="AdminOrderConfigureGroupedProductActionGroup">
         <arguments>
             <argument name="productSku" type="string" defaultValue="{{SimpleProduct.sku}}"/>
             <argument name="productQty" type="string" defaultValue="1"/>

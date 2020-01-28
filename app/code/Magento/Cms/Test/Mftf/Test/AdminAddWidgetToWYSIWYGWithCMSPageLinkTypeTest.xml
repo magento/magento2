@@ -67,7 +67,7 @@
         <see userInput="Home page" stepKey="seeHomepageWidget" />
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

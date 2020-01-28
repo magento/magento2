@@ -22,7 +22,7 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -42,7 +42,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="admin/catalog_rule/promo_catalog/" stepKey="goToPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>

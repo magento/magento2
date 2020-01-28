@@ -28,9 +28,9 @@
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>

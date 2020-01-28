@@ -75,7 +75,7 @@
         </actionGroup>
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
         <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
-        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="assertProductInStorefrontProductPage">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
         </actionGroup>
@@ -116,7 +116,7 @@
         <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
         <!-- Verify product on store front -->
         <comment userInput="Verify product on store front" stepKey="commentVerifyProductGrid"/>
-        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="assertProductInStorefrontProductPage">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
         </actionGroup>
@@ -149,11 +149,11 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create configurable product from downloadable product page-->
         <comment userInput="Create configurable product" stepKey="commentCreateProduct"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <!-- Open Dropdown and select downloadable product option -->
         <comment stepKey="beforeOpenProductFillForm" userInput="Selecting Product from the Add Product Dropdown"/>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">

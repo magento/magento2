@@ -38,7 +38,7 @@
                 <field key="price">10.00</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
              </actionGroup>
@@ -67,7 +67,7 @@
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--  Test Steps  -->
         <!--  Step 1: Go to Storefront as Guest -->

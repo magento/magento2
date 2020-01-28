@@ -25,7 +25,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
 
             <!-- Admin Login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
@@ -34,7 +34,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- go to bundle product creation page-->
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />

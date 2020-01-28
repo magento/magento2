@@ -33,9 +33,9 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
             <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!--Case: Group Price-->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -292,9 +292,9 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>

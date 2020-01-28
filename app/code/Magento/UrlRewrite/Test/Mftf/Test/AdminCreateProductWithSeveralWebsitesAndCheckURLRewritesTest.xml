@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="rootCategory"/>
             </createData>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore1">
@@ -35,7 +35,7 @@
             </actionGroup>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create first store -->

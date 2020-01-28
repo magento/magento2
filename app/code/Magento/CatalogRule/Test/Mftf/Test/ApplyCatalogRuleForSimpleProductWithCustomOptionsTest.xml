@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -57,13 +57,13 @@
 
             <!-- Delete the catalog price rule -->
             <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">

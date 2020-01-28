@@ -32,9 +32,9 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>

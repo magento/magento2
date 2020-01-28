@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!-- Create Dropdown Product Attribute -->
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
             <!-- Create Attribute set -->
@@ -28,7 +28,7 @@
         <after>
             <!--Delete Created Data -->
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Open Product Attribute Set Page -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>

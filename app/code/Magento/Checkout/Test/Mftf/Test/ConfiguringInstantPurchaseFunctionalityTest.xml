@@ -33,7 +33,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Set configs to default -->
@@ -47,7 +47,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create store views -->
@@ -107,14 +107,14 @@
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
 
         <!-- 2. Switch store view -->
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchStoreView">
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="storeView" value="storeViewData1"/>
         </actionGroup>
 
         <!-- 3. Assert customer is logged with saved card with address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openStorefrontCustomerStoredPaymentMethodsPage"/>
         <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCustomerPaymentMethod"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="goToAddressBook">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
         <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="checkShippingAddress"/>
@@ -143,14 +143,14 @@
         </actionGroup>
 
         <!-- 2. Switch store view which description was not changed -->
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchToSecondStoreView">
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToSecondStoreView">
             <argument name="storeView" value="storeViewData2"/>
         </actionGroup>
 
         <!-- 3. Assert customer is logged with saved card and address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openStorefrontCustomerPaymentMethodsPage"/>
         <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertPaymentMethod"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openAddressBook">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="openAddressBook">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
         <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="seeShippingAddress"/>
@@ -190,14 +190,14 @@
         </actionGroup>
 
         <!-- 2. Switch store view -->
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView">
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView2">
             <argument name="storeView" value="storeViewData1"/>
         </actionGroup>
 
         <!-- 3. Assert customer is logged with saved card and address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openCustomerPaymentMethodsPage"/>
         <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCartPaymentMethod"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="goToAddressBookPage">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
         <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="assertCustomerShippingAddress"/>
@@ -221,14 +221,14 @@
         </actionGroup>
 
         <!-- 2. Switch store view -->
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToSecondStoreView">
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToSecondStoreView2">
             <argument name="storeView" value="storeViewData2"/>
         </actionGroup>
 
         <!-- 3. Assert customer is logged with saved card and address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="goToStorefrontCustomerPaymentMethodsPage"/>
         <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCardPaymentMethod"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openAddressBookPage">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="openAddressBookPage">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
         <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="seeCustomerShippingAddress"/>

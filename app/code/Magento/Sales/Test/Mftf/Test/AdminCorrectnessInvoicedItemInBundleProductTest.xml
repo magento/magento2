@@ -20,7 +20,7 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create category and simple product-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -48,7 +48,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
 
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Complete Bundle product creation-->
@@ -82,7 +82,7 @@
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
         <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
-        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="5" stepKey="ChangeQtyToInvoice"/>
+        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="5" stepKey="changeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>

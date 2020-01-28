@@ -19,13 +19,13 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open New Customer Page  and create a customer with Prefix and Suffix-->
@@ -44,7 +44,7 @@
         <reloadPage stepKey="reloadPage"/>
 
         <!--Filter the customer From grid-->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterTheCustomerByEmail">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageToLoad"/>

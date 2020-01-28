@@ -20,7 +20,7 @@
             <group value="currency"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createNewProduct"/>
             <!--Set Currency options for Website-->
@@ -32,7 +32,7 @@
             <!--Delete created product-->
             <comment userInput="Delete created product" stepKey="commentDeleteCreatedProduct"/>
             <deleteData createDataKey="createNewProduct" stepKey="deleteNewProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Set currency rates-->
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="gotToCurrencyRatesPageSecondTime"/>

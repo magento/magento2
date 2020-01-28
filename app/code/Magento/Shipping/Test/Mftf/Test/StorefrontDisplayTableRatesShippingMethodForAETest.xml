@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer_ArmedForcesEurope" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -32,18 +32,18 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Rollback config-->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodSystemConfigPage"/>
-            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewToMainWebsite">
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchStoreViewToMainWebsite">
                 <argument name="website" value="_defaultWebsite"/>
             </actionGroup>
             <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
                 <argument name="status" value="0"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveSystemConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Admin Configuration: enable Table Rates and import CSV file with the rates-->
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
-        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchStoreView">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>
         <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethod"/>

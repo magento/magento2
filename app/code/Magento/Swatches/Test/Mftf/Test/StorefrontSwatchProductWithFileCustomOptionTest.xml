@@ -26,10 +26,10 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Create a configurable swatch product via the UI -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>

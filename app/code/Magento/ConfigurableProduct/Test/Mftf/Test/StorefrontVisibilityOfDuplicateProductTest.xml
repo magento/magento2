@@ -19,7 +19,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create configurable product-->
             <comment userInput="Create configurable product" stepKey="commentCreateConfigProduct"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -45,7 +45,7 @@
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridSecond"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create attribute and options for product-->
         <comment userInput="Create attribute and options for product" stepKey="commentCreateAttributesAndOptions"/>
@@ -145,7 +145,7 @@
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="createConfigurationsDuplicatedProduct"/>
         <waitForElementVisible selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="waitForCreateConfigurationsPageLoad"/>
         <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
-        <click selector="{{AdminGridSelectRows.multicheckOption('Deselect All')}}" stepKey="DeselectAllAttributes"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Deselect All')}}" stepKey="deselectAllAttributes"/>
         <actionGroup ref="CreateOptionsForAttributeActionGroup" stepKey="createOptionsForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="firstOptionName" value="{{colorConfigurableProductAttribute1.name}}"/>

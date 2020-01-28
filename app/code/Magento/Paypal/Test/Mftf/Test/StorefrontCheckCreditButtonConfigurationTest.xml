@@ -31,19 +31,19 @@
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <!--Config PayPal Express Checkout-->
             <comment userInput="config PayPal Express Checkout" stepKey="commemtConfigPayPalExpressCheckout"/>
-            <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
+            <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="configPayPalExpressCheckout"/>
         </before>
         <after>
             <deleteData stepKey="deleteCategory" createDataKey="createPreReqCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createPreReqProduct"/>
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Navigate to button configuration setting-->
         <comment userInput="Navigate to button configuration setting in Admin site" stepKey="commentNavigateToButtonConfigurationInAdmin"/>
-        <actionGroup ref="OpenPayPalButtonCheckoutPage" stepKey="openPayPalButtonCheckoutPage"/>
+        <actionGroup ref="OpenPayPalButtonCheckoutPageActionGroup" stepKey="openPayPalButtonCheckoutPage"/>
         <waitForElement selector="{{ButtonCustomization.customizeDrpDown}}" stepKey="seeCustomizeDropDown"/>
         <selectOption selector="{{ButtonCustomization.customizeDrpDown}}" userInput="Yes" stepKey="enableButtonCustomization"/>
         <!--Verify Credit Button value-->

@@ -23,10 +23,10 @@
             <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForLoad1"/>
         <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>

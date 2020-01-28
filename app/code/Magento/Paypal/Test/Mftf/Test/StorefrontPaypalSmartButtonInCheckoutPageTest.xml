@@ -58,7 +58,7 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Login to storefront as previously created customer-->

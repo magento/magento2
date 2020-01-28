@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
 
             <createData entity="SimpleProduct" stepKey="simple1Handle">
@@ -115,7 +115,7 @@
         <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="assertProductInStorefrontProductPageAfterRemove">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
         <!-- Assert product image not in storefront product page -->

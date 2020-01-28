@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create new website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -45,7 +45,7 @@
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Assign Custom Website to Simple Product -->

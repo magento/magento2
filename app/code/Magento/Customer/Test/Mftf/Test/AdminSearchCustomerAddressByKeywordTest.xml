@@ -21,11 +21,11 @@
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- -
         Step1. Login to admin and go to Customers > All Customerts.
@@ -39,7 +39,7 @@
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
         <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <!--Step4. Fill *Search by keyword* filed with the query and press enter or clock on the magnifier icon-->
-        <fillField userInput="{{US_Address_NY.street[0]}}" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="FillCustomerAddressStreetInSearchByKeyword"/>
+        <fillField userInput="{{US_Address_NY.street[0]}}" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="fillCustomerAddressStreetInSearchByKeyword"/>
         <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="pressEnterKey"/>
         <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad"/>
         <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeOnlyOneCustomerAddressesInGrid"/>

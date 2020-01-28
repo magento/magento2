@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="logIn"/>
 
             <!--Create New User-->
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
@@ -39,8 +39,8 @@
         </before>
         <after>
             <!--Delete new User-->
-            <actionGroup ref="logout" stepKey="logoutAsSaleRoleUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsDefaultAdminUser"/>
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
                 <argument name="user" value="AdminUserWithUpdatedUserRoleToSales"/>
             </actionGroup>
@@ -49,7 +49,7 @@
             <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole">
                 <argument name="roleName" value="{{roleSales.rolename}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
         </after>
 
 
@@ -68,8 +68,8 @@
         <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="seeUserInGrid">
             <argument name="user" value="AdminUserWithUpdatedUserRoleToSales"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logOutFromAdminPanel"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsSaleRoleUser">
+        <actionGroup ref="logoutActionGroup" stepKey="logOutFromAdminPanel"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsSaleRoleUser">
             <argument name="adminUser" value="AdminUserWithUpdatedUserRoleToSales"/>
         </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>

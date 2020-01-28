@@ -61,7 +61,7 @@
         </actionGroup>
         <!-- Login to admin panel -->
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <!-- Disabled bundle product from grid -->

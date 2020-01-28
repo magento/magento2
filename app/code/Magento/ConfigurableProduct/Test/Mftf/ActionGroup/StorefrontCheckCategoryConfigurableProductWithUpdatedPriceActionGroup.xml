@@ -18,8 +18,8 @@
         </arguments>
 
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="assertProductName"/>
-        <see userInput="{{expectedPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="AssertProductPrice"/>
+        <see userInput="{{expectedPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="assertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="AssertAddToCart"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="assertAddToCart"/>
     </actionGroup>
 </actionGroups>

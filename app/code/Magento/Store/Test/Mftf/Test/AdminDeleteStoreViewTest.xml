@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create custom store view-->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
@@ -28,7 +28,7 @@
         </before>
         <after>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete custom store view and verify AssertStoreSuccessDeleteMessage And BackupMessage-->
@@ -46,7 +46,7 @@
         <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
         <!--Delete database backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+        <actionGroup ref="deleteBackupActionGroup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="WebSetupWizardBackup"/>
         </actionGroup>
 

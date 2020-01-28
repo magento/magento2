@@ -18,10 +18,10 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Go to new order status page-->
@@ -29,14 +29,14 @@
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
 
         <!--Fill the form and validate save success message-->
-        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+        <actionGroup ref="AdminOrderStatusFormFillAndSaveActionGroup" stepKey="fillFormAndClickSave">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
-        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccessActionGroup" stepKey="seeFormSaveSuccess"/>
 
         <!--Open the created order status in grid page and change the order state to Pending and verify save message-->
-        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
+        <actionGroup ref="AssertOrderStatusExistsInGridActionGroup" stepKey="searchCreatedOrderStatus">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
@@ -48,7 +48,7 @@
         <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatusAssignmentButton"/>
 
         <!--Verify the order status grid page shows the updated order status-->
-        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchUpdatedOrderStatus">
+        <actionGroup ref="AssertOrderStatusExistsInGridActionGroup" stepKey="searchUpdatedOrderStatus">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
@@ -58,7 +58,7 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You have unassigned the order status." stepKey="seeAssertOrderStatusSuccessUnassignMessage"/>
 
         <!--Verify the order status grid page shows the updated order status and verify AssertOrderStatusInGrid-->
-        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="seeAssertOrderStatusInGrid">
+        <actionGroup ref="AssertOrderStatusExistsInGridActionGroup" stepKey="seeAssertOrderStatusInGrid">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>

@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertCustomerGroupPresentInGrid" extends="AdminFilterCustomerGroupByNameActionGroup">
+    <actionGroup name="AdminAssertCustomerGroupPresentInGridActionGroup" extends="AdminFilterCustomerGroupByNameActionGroup">
         <!--- Assume we are on admin customer group page. -->
         <see  selector="{{AdminDataGridTableSection.column('Group')}}" userInput="{{customerGroupName}}"  after="clickApplyFiltersButton" stepKey="seeCustomerGroupNameInGrid"/>
     </actionGroup>

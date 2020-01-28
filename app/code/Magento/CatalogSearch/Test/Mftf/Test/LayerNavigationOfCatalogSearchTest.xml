@@ -31,14 +31,14 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="subCategory"/>
             </createData>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="subCategory"/>
             <deleteData stepKey="deleteSimpleProduct1" createDataKey="simpleProduct1"/>
             <deleteData stepKey="deleteSimpleProduct2" createDataKey="simpleProduct2"/>
             <deleteData createDataKey="createPriceAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Update value for price attribute of Product 1-->
         <comment userInput="Update value for price attribute of Product 1" stepKey="comment1"/>

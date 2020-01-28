@@ -36,7 +36,7 @@
             <magentoCLI command="config:set {{EnableFreeShippingMethod.path}} {{EnableFreeShippingMethod.value}}" stepKey="enableFreeShipping"/>
             <magentoCLI command="config:set {{EnableFlatRateShippingMethod.path}} {{EnableFlatRateShippingMethod.value}}" stepKey="enableFlatRateShipping"/>
             <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
@@ -50,7 +50,7 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllFilters"/>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
         </after>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct1ToCart">
             <argument name="product" value="$$product1$$"/>

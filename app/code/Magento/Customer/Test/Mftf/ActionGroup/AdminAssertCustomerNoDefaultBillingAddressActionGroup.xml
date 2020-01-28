@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Customer Have No Default Billing Address -->
-    <actionGroup name="AdminAssertCustomerNoDefaultBillingAddress">
+    <actionGroup name="AdminAssertCustomerNoDefaultBillingAddressActionGroup">
         <annotations>
             <description>Validates that a Customer does NOT have a Default Billing Address assigned. PLEASE NOTE: The error message is hardcoded.</description>
         </annotations>

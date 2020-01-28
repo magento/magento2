@@ -23,10 +23,10 @@
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
-            <actionGroup ref="deleteBlock" stepKey="deleteCreatedBlock">
+            <actionGroup ref="deleteBlockActionGroup" stepKey="deleteCreatedBlock">
                 <argument name="Block" value="_defaultBlock"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -35,7 +35,7 @@
         <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
         <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
         <!--Create new CMS Block page-->
-        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
+        <actionGroup ref="FillOutBlockContentActionGroup" stepKey="fillOutBlockContent"/>
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
         <click selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
         <waitForPageLoad stepKey="waitForPageLoad3"/>
@@ -43,7 +43,7 @@
         <see userInput="You duplicated the block." stepKey="seeDuplicatedBlockMsg"/>
         <!--Verify duplicated CMS Block Page-->
         <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
-        <actionGroup ref="AssertBlockContent" stepKey="assertContent"/>
+        <actionGroup ref="AssertBlockContentActionGroup" stepKey="assertContent"/>
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3" />
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
         <see userInput="You saved the block." stepKey="seeSavedBlockMsgOnGrid"/>

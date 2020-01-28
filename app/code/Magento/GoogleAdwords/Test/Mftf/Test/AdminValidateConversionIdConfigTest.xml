@@ -16,10 +16,10 @@
             <severity value="MINOR"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToGoogleAdwordsConfigurationActionGroup" stepKey="goToConfigPage"/>
         <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandingGoogleAdwordsSection">

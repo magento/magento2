@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="DeleteCartPriceRuleByName">
+    <actionGroup name="DeleteCartPriceRuleByNameActionGroup">
         <annotations>
             <description>Goes to the Admin Cart Price Rules grid page. Filters the grid based on the provided Rule Name. Deletes the Price Rule via the grid.</description>
         </annotations>

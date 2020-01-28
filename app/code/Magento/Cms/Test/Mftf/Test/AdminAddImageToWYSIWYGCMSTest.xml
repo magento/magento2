@@ -31,8 +31,8 @@
         <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
-        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
-        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="createImageFolder">
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="AttachImageActionGroup" stepKey="attachImage1">
@@ -58,7 +58,7 @@
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYGFirst"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

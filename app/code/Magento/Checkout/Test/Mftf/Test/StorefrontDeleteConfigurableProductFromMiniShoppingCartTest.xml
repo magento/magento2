@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -71,7 +71,7 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add Configurable Product to the cart -->

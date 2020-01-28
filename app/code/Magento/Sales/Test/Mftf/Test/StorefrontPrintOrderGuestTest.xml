@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Create downloadable Product -->
@@ -225,7 +225,7 @@
 
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
@@ -260,7 +260,7 @@
 
         <!-- AssertSalesPrintOrderBillingAddress -->
         <scrollTo selector="{{StorefrontOrderDetailsSection.orderDetailsBlock}}" stepKey="scrollToFooter"/>
-        <actionGroup ref="AssertSalesPrintOrderBillingAddress" stepKey="assertSalesPrintOrderBillingAddress">
+        <actionGroup ref="AssertSalesPrintOrderBillingAddressActionGroup" stepKey="assertSalesPrintOrderBillingAddress">
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 

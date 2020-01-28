@@ -21,7 +21,7 @@
 
         <before>
             <!--Log In-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
@@ -60,7 +60,7 @@
         <wait stepKey="waitFiveSecondToPlayVideo" time="5"/>
         <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayed"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayed"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="assertVideoIsPlayed"/>
         <switchToIFrame stepKey="switchBack1"/>
 
         <!--Click Pause button-->
@@ -68,7 +68,7 @@
         <wait stepKey="waitFiveSecondToStopVideo" time="5"/>
         <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame2"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="waitForVideoPaused"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="AssertVideoIsPaused"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="assertVideoIsPaused"/>
         <switchToIFrame stepKey="switchBack2"/>
 
         <!--Click Play video button again. Make sure that Video continued playing-->
@@ -76,7 +76,7 @@
         <wait stepKey="waitAgainFiveSecondToPlayVideo" time="5"/>
         <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame3"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayedAgain"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayedAgain"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="assertVideoIsPlayedAgain"/>
         <switchToIFrame stepKey="switchBack3"/>
 
         <after>
@@ -85,7 +85,7 @@
             <!-- Set product video configuration to default -->
             <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig" before="logout"/>
             <!--Log Out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

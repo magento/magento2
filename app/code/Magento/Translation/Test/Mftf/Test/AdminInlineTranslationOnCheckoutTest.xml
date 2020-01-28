@@ -19,7 +19,7 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Product and a customer is created -->
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
@@ -35,7 +35,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="DisableTranslateInlineForStorefront"/>
+            <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
 
             <!-- Delete data -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomer3" stepKey="deleteCustomer3"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <!-- Set production mode -->
 <!--            <magentoCLI command="cache:flush" stepKey="flushCache"/>-->
@@ -61,7 +61,7 @@
         </actionGroup>
 
         <!-- 1. Enable Translate Inline For Storefront-->
-        <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="EnableTranslateInlineForStorefront"/>
+        <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineForStorefront"/>
 
         <!-- 2. Refresh magento cache -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
@@ -317,10 +317,10 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="SignOut"/>
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="signOut"/>
 
         <!-- 7. Set *Enabled for Storefront* option to *No* and save configuration -->
-        <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="DisableTranslateInlineForStorefront"/>
+        <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
 
         <!-- 8. Clear magento cache -->
         <magentoCLI command="cache:flush" stepKey="flushCache2"/>
@@ -329,7 +329,7 @@
         <executeJS function="location.reload(true);" stepKey="hardReload"/>
 
         <!-- Add product to cart and go through Checkout process like you did in steps ##3-6 and check translation you maid. -->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="SignInStorefront">
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signInStorefront">
             <argument name="Customer" value="$$createCustomer2$$"/>
         </actionGroup>
 
@@ -420,7 +420,7 @@
 
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="SignOutCustomer"/>
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="signOutCustomer"/>
 
         <!-- Revert translate and changes -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInCustomer3">
@@ -431,7 +431,7 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
-        <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="EnableTranslateInlineStorefront"/>
+        <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineStorefront"/>
         <magentoCLI command="cache:flush" stepKey="flushCache3"/>
         <reloadPage stepKey="reloadProductPage"/>
         <waitForPageLoad stepKey="waitForReloadPage"/>
@@ -561,9 +561,9 @@
 
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickButtonPlaceOrder"/>
         <waitForPageLoad stepKey="waitForPlaceOrder"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="SignOutCustomer3"/>
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="signOutCustomer3"/>
 
-        <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="DisableTranslateInlineStorefront"/>
+        <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineStorefront"/>
         <magentoCLI command="cache:flush" stepKey="flushCache4"/>
     </test>
 </tests>

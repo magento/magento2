@@ -25,13 +25,13 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
 
             <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to bundle product creation page-->
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
@@ -70,23 +70,23 @@
         <!--Testing enabled view-->
         <!--Product enabled by default-->
         <!--Go to page-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="lookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Testing disabled view-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="GoToProductCatalog"/>
-        <waitForPageLoad stepKey="WaitForCatalogProductPageToLoad"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="FindProductEditPage">
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductCatalog"/>
+        <waitForPageLoad stepKey="waitForCatalogProductPageToLoad"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findProductEditPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="ClickProductInGrid"/>
-        <click stepKey="ClickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
+        <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="clickProductInGrid"/>
+        <click stepKey="clickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
-        <waitForPageLoad stepKey="PauseForSave"/>
+        <waitForPageLoad stepKey="pauseForSave"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPageAgain"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoadToShowElement"/>
+        <dontSeeElement stepKey="lookingForNameOfProductTwo" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>

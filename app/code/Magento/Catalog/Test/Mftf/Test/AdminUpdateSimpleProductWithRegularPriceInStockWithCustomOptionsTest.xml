@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
@@ -32,11 +32,11 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search default simple product in the grid -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
@@ -83,7 +83,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!--Search updated simple product(from above step) in the grid page-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>

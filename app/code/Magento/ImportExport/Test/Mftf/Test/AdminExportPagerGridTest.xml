@@ -18,10 +18,10 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="navigateToExportPage"/>
         <actionGroup ref="AdminAssertVisiblePagerActionGroup" stepKey="seeGridPager"/>

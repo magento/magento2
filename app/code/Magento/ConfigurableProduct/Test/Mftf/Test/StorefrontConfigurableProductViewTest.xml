@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
@@ -37,7 +37,7 @@
             <actionGroup stepKey="deleteProduct" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify the storefront category grid view -->
@@ -62,7 +62,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -73,7 +73,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify storefront category list view -->
@@ -100,7 +100,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -111,7 +111,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Should be taken to product details page when adding to cart because an option needs to be selected -->

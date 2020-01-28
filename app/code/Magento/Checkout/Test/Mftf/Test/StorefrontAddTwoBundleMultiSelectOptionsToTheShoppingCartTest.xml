@@ -82,7 +82,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="assertCartSummary" >
             <argument name="subtotal" value="$60.00"/>
             <argument name="shipping" value="5.00"/>
             <argument name="total" value="65.00"/>

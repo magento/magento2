@@ -80,7 +80,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
@@ -119,21 +119,21 @@
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Enabled" stepKey="checkIfDefaultViewProduct2IsEnabled"/>
 
         <!-- Assert on storefront default view with first product -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
             <argument name="name" value="{{simpleProductForMassUpdate.name}}"/>
             <argument name="description" value=""/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Assert on storefront default view with second product -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefaultToSearchSecondProduct"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefaultToSearchSecondProduct"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefaultWithSecondProduct">
             <argument name="name" value="{{simpleProductForMassUpdate2.name}}"/>
             <argument name="description" value=""/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefaultForSecondProduct"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefaultForSecondProduct"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefaultSecondProductResults"/>
 
         <!--Enable the product in Default store view-->
@@ -150,12 +150,12 @@
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Disabled" stepKey="checkIfProduct2IsDisabledDefaultStoreView"/>
 
         <!-- Assert on storefront default view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault2"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault2"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault2">
             <argument name="name" value="{{simpleProductForMassUpdate.name}}"/>
             <argument name="description" value=""/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault2"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault2"/>
         <see userInput="We can't find any items matching these search criteria." selector="{{StorefrontCatalogSearchAdvancedResultMainSection.message}}" stepKey="seeInDefault2"/>
    </test>
     <test name="AdminMassUpdateProductStatusStoreViewScopeMysqlTest">
@@ -230,7 +230,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
@@ -269,12 +269,12 @@
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Enabled" stepKey="checkIfDefaultViewProduct2IsEnabled"/>
 
         <!-- Assert on storefront default view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
             <argument name="name" value="{{simpleProductForMassUpdate.keyword}}"/>
             <argument name="description" value=""/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault"/>
         <see userInput="2 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Enable the product in Default store view -->
@@ -291,12 +291,12 @@
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Disabled" stepKey="checkIfProduct2IsDisabledDefaultStoreView"/>
 
         <!-- Assert on storefront default view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault2"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault2"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault2">
             <argument name="name" value="{{simpleProductForMassUpdate.name}}"/>
             <argument name="description" value=""/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault2"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault2"/>
         <see userInput="We can't find any items matching these search criteria." selector="{{StorefrontCatalogSearchAdvancedResultMainSection.message}}" stepKey="seeInDefault2"/>
     </test>
 </tests>

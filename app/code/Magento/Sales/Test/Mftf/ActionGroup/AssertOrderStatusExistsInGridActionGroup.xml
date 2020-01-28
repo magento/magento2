@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Search order status grid for item with a specific code and validate data -->
-    <actionGroup name="AssertOrderStatusExistsInGrid">
+    <actionGroup name="AssertOrderStatusExistsInGridActionGroup">
         <annotations>
             <description>Validates that the provided Order Status and Label are present in the Admin Orders grid.</description>
         </annotations>

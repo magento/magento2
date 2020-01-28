@@ -29,7 +29,7 @@
             <actionGroup ref="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" stepKey="createConfigurableProduct2">
                 <argument name="productName" value="config2"/>
             </actionGroup>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--  Assign config1 and the associated  child products to CAT1 -->
             <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignConfigurableProduct1ToCategory">
                 <argument name="productId" value="$$createConfigProductCreateConfigurableProduct1.id$$"/>
@@ -72,7 +72,7 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct2" stepKey="deleteConfigProductAttribute2"/>
             <!--Delete Cart Price Rule -->
             <deleteData  createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1: Create a cart price rule applying to CAT1 with discount -->
         <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createCartPriceRule"/>

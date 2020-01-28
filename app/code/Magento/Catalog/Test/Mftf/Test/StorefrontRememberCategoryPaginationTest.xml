@@ -32,7 +32,7 @@
             <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
         </before>
 
-        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategory1Page">
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="goToStorefrontCategory1Page">
             <argument name="category" value="$$defaultCategory1.custom_attributes[url_key]$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>

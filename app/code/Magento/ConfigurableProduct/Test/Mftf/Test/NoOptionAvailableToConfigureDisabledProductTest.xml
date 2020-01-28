@@ -20,7 +20,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!--Create category-->
             <comment userInput="Create category" stepKey="commentCreateCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -102,7 +102,7 @@
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Disable child product -->
         <comment userInput="Disable child product" stepKey="disableChildProduct"/>

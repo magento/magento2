@@ -37,7 +37,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login Customer Storefront -->
@@ -96,7 +96,7 @@
 
         <!-- Login to Admin and open Order -->
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>

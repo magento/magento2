@@ -36,7 +36,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyComparedProductsWidget">
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
             </actionGroup>
@@ -60,7 +60,7 @@
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyViewedProductsWidget">
                 <argument name="widget" value="RecentlyViewedProductsWidget"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Login to storefront from customer-->

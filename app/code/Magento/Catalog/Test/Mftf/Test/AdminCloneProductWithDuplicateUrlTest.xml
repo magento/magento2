@@ -20,7 +20,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category and product-->
             <comment userInput="Create category and product" stepKey="commentCreateCategoryAndProduct"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
@@ -32,7 +32,7 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>

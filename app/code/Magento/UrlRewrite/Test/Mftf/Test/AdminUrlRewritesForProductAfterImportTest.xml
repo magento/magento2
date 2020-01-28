@@ -50,7 +50,7 @@
         </after>
 
         <comment userInput="1. Log in to Admin " stepKey="commentAdminLogin" />
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <comment userInput="2. Open Marketing - SEO and Search - URL Rewrites " stepKey="commentVerifyUrlRewrite" />
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>

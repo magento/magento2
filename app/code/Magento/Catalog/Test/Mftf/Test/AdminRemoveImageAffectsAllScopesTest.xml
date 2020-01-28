@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!--Create 2 websites (with stores, store views)-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="category"/>
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
@@ -67,7 +67,7 @@
             <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
             <magentoCLI stepKey="reindex" command="indexer:reindex"/>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create product-->
@@ -89,10 +89,10 @@
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <!--"Product in Websites": select both Websites-->
-        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite1">
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="productSetWebsite1">
             <argument name="website" value="FirstWebSite"/>
         </actionGroup>
-        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite2">
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="productSetWebsite2">
             <argument name="website" value="SecondWebSite"/>
         </actionGroup>
 

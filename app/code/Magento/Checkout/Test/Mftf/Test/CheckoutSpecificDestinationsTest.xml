@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="defaultCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Go to configuration general page-->
@@ -77,7 +77,7 @@
         </actionGroup>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>

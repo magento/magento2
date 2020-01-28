@@ -31,11 +31,11 @@
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
-        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
+        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="tinyMCE4Description" />
         <click selector="{{ProductDescriptionWysiwygSection.EditArea}}" stepKey="focusProductDescriptionWysiwyg"/>
         <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForShortDescription" />
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />
+        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="tinyMCE4ShortDescription" />
         <click selector="{{ProductShortDescriptionWysiwygSection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg"/>
         <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
         <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
@@ -59,7 +59,7 @@
         <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

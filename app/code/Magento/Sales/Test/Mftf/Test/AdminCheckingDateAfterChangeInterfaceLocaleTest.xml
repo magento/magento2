@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!--Login to Admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete entities-->
@@ -40,7 +40,7 @@
             <!--Clear filters-->
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <!--Logout from Admin page-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create order-->

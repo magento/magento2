@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert that order status is not saved with duplication error message -->
-    <actionGroup name="AssertOrderStatusFormSaveDuplicateError">
+    <actionGroup name="AssertOrderStatusFormSaveDuplicateErrorActionGroup">
         <annotations>
             <description>Validates that the 'Duplicate Order' Error Message is present and correct.</description>
         </annotations>

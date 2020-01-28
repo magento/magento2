@@ -23,7 +23,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete simple product -->
@@ -38,7 +38,7 @@
             </actionGroup>
 
             <!-- Logout admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Storefront as Guest and create new account -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createNewCustomerAccount"/>

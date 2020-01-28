@@ -30,18 +30,18 @@
             <magentoCLI command="config:set {{AdminCaptchaDefaultSymbolsConfigData.path}} {{AdminCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
             <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
         </after>
-        
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
+
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
             <argument name="adminUser" value="AdminUserWrongCredentials" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeFirstLoginErrorMessage" />
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
             <argument name="adminUser" value="AdminUserWrongCredentials" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeSecondLoginErrorMessage" />
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
             <argument name="adminUser" value="AdminUserWrongCredentials" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeThirdLoginErrorMessage" />

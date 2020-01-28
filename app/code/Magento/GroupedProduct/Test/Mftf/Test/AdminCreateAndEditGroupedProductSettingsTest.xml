@@ -26,7 +26,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete grouped product -->
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new grouped product -->

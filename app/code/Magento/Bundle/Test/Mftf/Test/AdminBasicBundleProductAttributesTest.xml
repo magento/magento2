@@ -18,7 +18,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -36,7 +36,7 @@
         <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggle"/>
 
         <!--Fill out product attributes-->
-        <actionGroup ref="SetBundleProductAttributes" stepKey="fillOutAllAttributes">
+        <actionGroup ref="SetBundleProductAttributesActionGroup" stepKey="fillOutAllAttributes">
             <!--primarily uses default values-->
             <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>
             <argument name="bundleProductName" value="{{BundleProduct.name}}"/>
@@ -97,7 +97,7 @@
 
         <!--Filter catalog-->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>

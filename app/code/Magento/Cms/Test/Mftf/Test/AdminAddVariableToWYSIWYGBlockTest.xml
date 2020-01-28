@@ -34,7 +34,7 @@
         <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
         <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
         <!--Main test-->
-        <actionGroup ref="AssignBlockToCMSPage" stepKey="assignBlockToCMSPage">
+        <actionGroup ref="AssignBlockToCMSPageActionGroup" stepKey="assignBlockToCMSPage">
             <argument name="Block" value="$$createPreReqBlock$$"/>
             <argument name="CmsPage" value="$$createCMSPage$$"/>
         </actionGroup>
@@ -79,7 +79,7 @@
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
         <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="insertVariableBtn" />
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
@@ -143,7 +143,7 @@
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

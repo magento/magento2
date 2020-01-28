@@ -21,7 +21,7 @@
             <!--Set Display Out Of Stock Product -->
             <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 0 "/>
             <!--Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!-- Create an attribute with two options to be used in the first child product -->
@@ -81,7 +81,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Product in Store Front Page -->
         <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>

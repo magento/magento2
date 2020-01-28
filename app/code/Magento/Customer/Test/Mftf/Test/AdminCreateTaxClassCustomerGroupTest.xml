@@ -25,7 +25,7 @@
             <getData entity="customerTaxClass" stepKey="customerTaxClassData">
                 <requiredEntity createDataKey="createCustomerTaxClass"/>
             </getData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
@@ -33,7 +33,7 @@
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
             <deleteData createDataKey="createCustomerTaxClass" stepKey="deleteCustomerTaxClass"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
                     2. Navigate to Stores > Other Settings > Customer Groups.
@@ -46,12 +46,12 @@
             <argument name="groupName" value="{{CustomCustomerGroup.code}}"/>
             <argument name="taxClass" value="$$customerTaxClassData.class_name$$"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertCustomerGroupPresentInGrid" stepKey="assertCustomerGroupDisplayedInGrid">
+        <actionGroup ref="AdminAssertCustomerGroupPresentInGridActionGroup" stepKey="assertCustomerGroupDisplayedInGrid">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
         <!-- 6. Go to Customers -> All Customers  -> click  "Add New Customer" button -->
         <!--  Assert   created  Customer Group  displayed On Customer Form -->
-        <actionGroup ref="AdminAssertCustomerGroupOnCustomerForm" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
+        <actionGroup ref="AdminAssertCustomerGroupOnCustomerFormActionGroup" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
     </test>

@@ -26,7 +26,7 @@
             <!-- Enable *Free Shipping* -->
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Disable *Free Shipping* -->
@@ -38,7 +38,7 @@
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->

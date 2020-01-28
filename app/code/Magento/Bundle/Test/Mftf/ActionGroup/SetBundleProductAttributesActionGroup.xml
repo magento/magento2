@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SetBundleProductAttributes">
+    <actionGroup name="SetBundleProductAttributesActionGroup">
         <annotations>
             <description>Requires navigation to the Product Creation page. Fills in the arguments listed below on the product page. Saves the changes.</description>
         </annotations>

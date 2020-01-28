@@ -18,7 +18,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
@@ -28,8 +28,8 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct2">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
         <waitForPageLoad stepKey="waitForProductList"/>
@@ -45,7 +45,7 @@
         <waitForPageLoad stepKey="waitForPDefaultProductSaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="successMessageYouSavedTheProductIsShown"/>
         <!--Create product with grid filter Not Visible Individually-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="ProductList"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productList"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddFilterProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="fillProductName"/>
@@ -74,7 +74,7 @@
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton1"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="WaitForCategorySaved"/>
+        <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="successMessageYouSavedTheCategory"/>
         <!--Verify product with grid filter is not not visible-->
         <amOnPage url="{{StorefrontProductPage.url(defaultSimpleProduct.urlKey)}}" stepKey="seeOnProductPage"/>

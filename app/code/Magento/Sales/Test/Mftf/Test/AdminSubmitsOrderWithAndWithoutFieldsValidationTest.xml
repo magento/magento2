@@ -25,10 +25,10 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>

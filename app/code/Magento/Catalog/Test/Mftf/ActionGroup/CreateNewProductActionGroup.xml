@@ -19,10 +19,10 @@
         <waitForPageLoad stepKey="waitForProductsPage" time="10"/>
         <click stepKey="addProduct" selector="{{ProductsPageSection.addProductButton}}"/>
         <waitForPageLoad stepKey="waitForNewProductPage" time="10"/>
-        <fillField stepKey="FillProductName" selector="{{NewProductPageSection.productName}}" userInput="{{NewProductData.ProductName}}"/>
-        <fillField stepKey="FillPrice" selector="{{NewProductPageSection.price}}" userInput="{{NewProductData.Price}}"/>
-        <fillField stepKey="FillQuantity" selector="{{NewProductPageSection.quantity}}" userInput="{{NewProductData.Quantity}}"/>
-        <click stepKey="Save" selector="{{NewProductPageSection.saveButton}}"/>
+        <fillField stepKey="fillProductName" selector="{{NewProductPageSection.productName}}" userInput="{{NewProductData.ProductName}}"/>
+        <fillField stepKey="fillPrice" selector="{{NewProductPageSection.price}}" userInput="{{NewProductData.Price}}"/>
+        <fillField stepKey="fillQuantity" selector="{{NewProductPageSection.quantity}}" userInput="{{NewProductData.Quantity}}"/>
+        <click stepKey="save" selector="{{NewProductPageSection.saveButton}}"/>
         <waitForElementVisible stepKey="waitForSuccessfullyCreatedMessage" selector="{{NewProductPageSection.createdSuccessMessage}}" time="10"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
     </actionGroup>

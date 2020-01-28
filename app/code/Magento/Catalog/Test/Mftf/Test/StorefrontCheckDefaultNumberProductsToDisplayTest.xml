@@ -21,7 +21,7 @@
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!--Create 37 Products and Subcategory -->
             <comment userInput="Create 37 Products and Subcategory" stepKey="commentCreateData"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -176,7 +176,7 @@
             <deleteData createDataKey="createSimpleProductThirtyFive" stepKey="deleteProductThirtyFive"/>
             <deleteData createDataKey="createSimpleProductThirtySix" stepKey="deleteProductThirtySix"/>
             <deleteData createDataKey="createSimpleProductThirtySeven" stepKey="deleteProductThirtySeven"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Verify configuration for default number of products displayed in the grid view-->
         <comment userInput="Verify configuration for default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>

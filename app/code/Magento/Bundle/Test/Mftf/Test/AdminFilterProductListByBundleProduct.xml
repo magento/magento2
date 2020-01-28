@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>
@@ -61,10 +61,10 @@
 
         <!--Apply Bundle Product Filter-->
         <!--Clear Filters-->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
         <!--Setting filter-->
-        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+        <actionGroup ref="BundleProductFilterActionGroup" stepKey="filterForOnlyBundleProducts"/>
 
         <!--Testing application of filter-->
         <see selector="{{AdminProductFiltersSection.productType('0')}}" userInput="Bundle Product" stepKey="correcType0"/>

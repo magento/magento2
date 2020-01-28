@@ -29,11 +29,11 @@
         </before>
         <after>
             <actionGroup ref="ResetTaxClassForShippingActionGroup" stepKey="resetTaxClassForShipping"/>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
         </after>
@@ -58,7 +58,7 @@
 
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-        <actionGroup ref="logout" stepKey="adminLogout"/>
+        <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
 
         <!-- Place an order from Storefront as a Guest  -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
@@ -92,7 +92,7 @@
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
         <!-- Search for Order in the order grid -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>

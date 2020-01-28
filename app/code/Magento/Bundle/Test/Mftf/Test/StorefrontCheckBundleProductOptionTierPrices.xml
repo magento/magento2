@@ -26,7 +26,7 @@
 
             <!-- Add tier prices to simple products -->
             <!-- Simple product 1 -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct1"/>
             <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="addTierPriceProduct1">
                 <argument name="group" value="ALL GROUPS"/>
@@ -42,7 +42,7 @@
                 <argument name="price" value="Discount"/>
                 <argument name="amount" value="25"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
 
             <!-- Run reindex -->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -61,7 +61,7 @@
         <!-- Check Tier Prices for product 1 -->
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct1CreateBundleProduct.sku$$ +$$$simpleProduct1CreateBundleProduct.price$$.00" stepKey="selectDropDownOptionProduct1"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct1CreateBundleProduct.sku$$ +$$$simpleProduct1CreateBundleProduct.price$$.00" stepKey="checkDropDownOptionProduct1"/>
-        <grabTextFrom selector="{{StorefrontBundledSection.dropDownOptionTierPrices('Drop-down Option')}}" stepKey="DropDownTierPriceTextProduct1"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.dropDownOptionTierPrices('Drop-down Option')}}" stepKey="dropDownTierPriceTextProduct1"/>
         <assertContains stepKey="assertDropDownTierPriceTextProduct1">
             <expectedResult type="string">Buy 5 for $5.00 each and save 50%</expectedResult>
             <actualResult type="variable">DropDownTierPriceTextProduct1</actualResult>

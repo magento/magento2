@@ -31,6 +31,6 @@
         <actionGroup ref="AssertProductVideoNotInAdminProductPageActionGroup" stepKey="assertProductVideoNotInAdminProductPage" after="saveProductFormAfterRemove"/>
 
         <!-- Assert product video not in storefront product page -->
-        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoNotInStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
+        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoNotInStorefrontProductPage" after="assertProductInStorefrontProductPage"/>
     </test>
 </tests>

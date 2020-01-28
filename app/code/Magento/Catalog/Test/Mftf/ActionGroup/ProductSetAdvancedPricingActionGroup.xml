@@ -30,9 +30,9 @@
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="{{price}}" stepKey="selectProductTierPriceValueType"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <waitForPageLoad stepKey="waitForProductSave"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
-        <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
+        <waitForPageLoad time="60" stepKey="waitForProductSave1"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 </actionGroups>

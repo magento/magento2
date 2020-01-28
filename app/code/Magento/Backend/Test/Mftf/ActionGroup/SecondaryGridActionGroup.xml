@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Action group to delete an item given that items name -->
     <!-- Must already be on the admin page containing the grid -->
-    <actionGroup name="deleteEntitySecondaryGrid">
+    <actionGroup name="deleteEntitySecondaryGridActionGroup">
         <annotations>
             <description>This Action Group deletes an item from a grid based on provided Name. After Searching, the First Row is clicked.</description>
         </annotations>

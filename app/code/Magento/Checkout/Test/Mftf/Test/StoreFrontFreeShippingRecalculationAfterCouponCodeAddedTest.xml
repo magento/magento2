@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
                 <field key="group_id">1</field>
             </createData>
@@ -51,10 +51,10 @@
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="cache:flush" stepKey="flushCache2"/>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{CatPriceRule.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">

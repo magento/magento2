@@ -20,10 +20,10 @@
         <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>
         <click stepKey="clickOnProducts" selector="{{CatalogSubmenuSection.products}}"/>
         <waitForPageLoad stepKey="waitForProductsPage" time="10"/>
-        <click stepKey="TickCheckbox" selector="{{ProductsPageSection.checkboxForProduct(productName)}}"/>
-        <click stepKey="OpenActions" selector="{{ProductsPageSection.actions}}"/>
+        <click stepKey="tickCheckbox" selector="{{ProductsPageSection.checkboxForProduct(productName)}}"/>
+        <click stepKey="openActions" selector="{{ProductsPageSection.actions}}"/>
         <waitForAjaxLoad stepKey="waitForDelete" time="5"/>
-        <click stepKey="ChooseDelete" selector="{{ProductsPageSection.delete}}"/>
+        <click stepKey="chooseDelete" selector="{{ProductsPageSection.delete}}"/>
         <waitForPageLoad stepKey="waitForDeleteItemPopup" time="10"/>
         <click stepKey="clickOnOk" selector="{{ProductsPageSection.ok}}"/>
         <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{ProductsPageSection.deletedSuccessMessage}}" time="10"/>

@@ -21,12 +21,12 @@
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Admin > Content > Configuration	page -->
         <comment userInput="Go to Configuration Page" stepKey="commentOpenConfigurationPage"/>

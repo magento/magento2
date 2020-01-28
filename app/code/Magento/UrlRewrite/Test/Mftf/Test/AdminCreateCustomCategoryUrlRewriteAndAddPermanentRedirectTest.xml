@@ -19,14 +19,14 @@
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{FirstLevelSubCat.name}}.html"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Category Page and Get Category ID -->

@@ -19,7 +19,7 @@
             <group value="Tax"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -43,7 +43,7 @@
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
             <!-- Fill out form for a new user with address -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
@@ -55,7 +55,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -65,12 +65,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -137,7 +137,7 @@
             <group value="Tax"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -161,7 +161,7 @@
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
             <!-- Fill out form for a new user with address -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
@@ -173,7 +173,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -183,12 +183,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -253,7 +253,7 @@
             <group value="Tax"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -280,7 +280,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -290,12 +290,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -363,7 +363,7 @@
             <group value="Tax"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -390,7 +390,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -400,12 +400,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>

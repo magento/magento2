@@ -19,10 +19,10 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to new order status page -->
@@ -30,10 +30,10 @@
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill the form and validate message -->
-        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+        <actionGroup ref="AdminOrderStatusFormFillAndSaveActionGroup" stepKey="fillFormAndClickSave">
             <argument name="status" value="{{duplicatingCodeOrderStatus.status}}"/>
             <argument name="label" value="{{duplicatingCodeOrderStatus.label}}"/>
         </actionGroup>
-        <actionGroup ref="AssertOrderStatusFormSaveDuplicateError" stepKey="seeFormSaveDuplicateError"/>
+        <actionGroup ref="AssertOrderStatusFormSaveDuplicateErrorActionGroup" stepKey="seeFormSaveDuplicateError"/>
     </test>
 </tests>

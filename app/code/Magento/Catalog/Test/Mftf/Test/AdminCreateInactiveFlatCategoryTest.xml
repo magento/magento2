@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!-- Create First StoreView  -->
@@ -52,7 +52,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select created category and make category inactive-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>

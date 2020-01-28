@@ -36,23 +36,23 @@
             <createData entity="NewRootCategory" stepKey="createNewRootCategoryA"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageCategoryLoadAfterNavigate"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createNewRootCategoryA.name$$)}}" stepKey="openNewRootCategory"/>
         <waitForPageLoad stepKey="waitForPageCategoryLoadAfterClickOnNewRootCategory"/>
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent"/>
         <!--Move categories from Default Category to NewRootCategory. -->
-        <actionGroup ref="MoveCategoryActionGroup" stepKey="MoveCategoryBToNewRootCategory">
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryBToNewRootCategory">
             <argument name="childCategory" value="$$createCategoryC.name$$"/>
             <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
         </actionGroup>
-        <actionGroup ref="MoveCategoryActionGroup" stepKey="MoveCategoryCToNewRootCategory">
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryCToNewRootCategory">
             <argument name="childCategory" value="$$createCategoryB.name$$"/>
             <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
         </actionGroup>
@@ -84,7 +84,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="clickOnDefaultRootCategory"/>
         <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
-        <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="DeleteDefaultRootCategory"/>
+        <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="deleteDefaultRootCategory"/>
         <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
         <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>

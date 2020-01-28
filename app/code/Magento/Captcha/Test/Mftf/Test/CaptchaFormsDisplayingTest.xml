@@ -20,10 +20,10 @@
         </annotations>
 
         <!--Login as admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!--Go to Captcha-->
-        <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="CaptchaFormsDisplayingActionGroup"/>
-        <waitForPageLoad stepKey="WaitForPageLoaded"/>
+        <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="captchaFormsDisplayingActionGroup"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
         <!--Verify fields removed-->
         <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forms}}" stepKey="formItems"/>
         <assertNotContains stepKey="checkoutAsGuest">
@@ -36,17 +36,17 @@
         </assertNotContains>
         <!--Verify fields existence-->
         <grabTextFrom selector="{{CaptchaFormsDisplayingSection.createUser}}" stepKey="createUser"/>
-        <assertEquals stepKey="CreateUserFieldIsPresent">
+        <assertEquals stepKey="createUserFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.createUser}}</expectedResult>
             <actualResult type="variable">$createUser</actualResult>
         </assertEquals>
         <grabTextFrom selector="{{CaptchaFormsDisplayingSection.userLogin}}" stepKey="login"/>
-        <assertEquals stepKey="LoginFieldIsPresent">
+        <assertEquals stepKey="loginFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.login}}</expectedResult>
             <actualResult type="variable">login</actualResult>
         </assertEquals>
         <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forgotpassword}}" stepKey="forgotpassword"/>
-        <assertEquals stepKey="PasswordFieldIsPresent">
+        <assertEquals stepKey="passwordFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.passwd}}</expectedResult>
             <actualResult type="variable">$forgotpassword</actualResult>
         </assertEquals>
@@ -62,8 +62,8 @@
         </assertEquals>
 
         <!--Roll back configuration-->
-        <scrollToTopOfPage stepKey="ScrollToTop"/>
-        <click selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="ClickToCloseCaptcha"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="clickToCloseCaptcha"/>
     </test>
     <test name="CaptchaWithDisabledGuestCheckout">
         <annotations>

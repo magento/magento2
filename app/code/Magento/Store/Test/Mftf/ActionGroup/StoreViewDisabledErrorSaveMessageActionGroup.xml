@@ -28,6 +28,6 @@
         <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationButton"/>
         <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="clickAcceptNewStoreViewCreationButton"/>
         <waitForElementVisible selector="{{AdminStoresMainActionsSection.errorMessage}}" stepKey="waitForErrorMessage"/>
-        <see selector="{{AdminStoresMainActionsSection.errorMessage}}" userInput="The default store cannot be disabled" stepKey="AssertStoreDisabledErrorSaveMessage"/>
+        <see selector="{{AdminStoresMainActionsSection.errorMessage}}" userInput="The default store cannot be disabled" stepKey="assertStoreDisabledErrorSaveMessage"/>
     </actionGroup>
 </actionGroups>

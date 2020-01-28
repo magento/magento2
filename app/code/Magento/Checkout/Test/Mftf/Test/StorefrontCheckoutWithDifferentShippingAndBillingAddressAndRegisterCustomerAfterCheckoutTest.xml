@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">50.00</field>
             </createData>
@@ -31,7 +31,7 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->

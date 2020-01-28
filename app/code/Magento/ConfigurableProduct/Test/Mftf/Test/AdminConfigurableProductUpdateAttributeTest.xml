@@ -92,11 +92,11 @@
             </createData>
 
             <!-- login -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -209,11 +209,11 @@
             </createData>
 
             <!-- login -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />

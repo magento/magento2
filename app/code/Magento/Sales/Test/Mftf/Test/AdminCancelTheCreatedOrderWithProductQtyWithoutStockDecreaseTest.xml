@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{DisableCatalogInventoryConfigData.path}} {{DisableCatalogInventoryConfigData.value}}" stepKey="disableDecreaseInQuantityAfterOrder"/>
 
             <!--Set default flat rate shipping method settings-->
@@ -43,7 +43,7 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->

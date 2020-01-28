@@ -22,7 +22,7 @@
         <before>
             <!-- Enable Zero Subtotal Checkout -->
             <magentoCLI command="config:set {{EnableZeroSubtotalCheckoutConfigData.path}} {{EnableZeroSubtotalCheckoutConfigData.value}}" stepKey="enableZeroSubtotalCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Set Free shipping method settings-->
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
@@ -45,7 +45,7 @@
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->

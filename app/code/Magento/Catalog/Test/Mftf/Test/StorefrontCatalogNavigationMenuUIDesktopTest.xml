@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteDefaultCategoryChildrenActionGroup" stepKey="deleteRootCategoryChildren"/>
         </before>
         <after>
@@ -29,7 +29,7 @@
                 <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
             </actionGroup>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Content > Themes. Change theme to Blank -->

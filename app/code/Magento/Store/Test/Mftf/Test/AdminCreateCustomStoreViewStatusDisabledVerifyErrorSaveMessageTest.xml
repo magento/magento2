@@ -17,7 +17,7 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
                 <!--Create website-->
                 <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                     <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -34,7 +34,7 @@
                 <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                     <argument name="websiteName" value="{{customWebsite.name}}"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create store view selecting store created, choose disabled status and verify AssertStoreDisabledErrorSaveMessage-->

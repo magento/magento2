@@ -37,7 +37,7 @@
                 <field key="price">30</field>
             </createData>
             <createData entity="_defaultCmsPage" stepKey="createPreReqPage"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
         <!--Open created cms page-->
@@ -82,7 +82,7 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

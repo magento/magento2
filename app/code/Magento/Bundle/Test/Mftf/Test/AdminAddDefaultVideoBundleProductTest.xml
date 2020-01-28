@@ -59,7 +59,7 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillQty2" before="saveProductForm"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>

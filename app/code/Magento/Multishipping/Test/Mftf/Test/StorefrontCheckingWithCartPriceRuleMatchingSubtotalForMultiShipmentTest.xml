@@ -28,7 +28,7 @@
         <actionGroup ref="AdminCreateCartPriceRuleActionsWithSubtotalActionGroup" before="goToProduct1" stepKey="createSubtotalCartPriceRuleActionsSection">
             <argument name="ruleName" value="CartPriceRuleConditionForSubtotalForMultiShipping"/>
          </actionGroup>
-        <actionGroup ref="DeleteCartPriceRuleByName" after="placeOrder" stepKey="deleteCreatedCartPriceRule">
+        <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" after="placeOrder" stepKey="deleteCreatedCartPriceRule">
             <argument name="ruleName" value="{$getSubtotalRuleCreateSubtotalCartPriceRuleActionsSection}"/>
         </actionGroup>
     </test>

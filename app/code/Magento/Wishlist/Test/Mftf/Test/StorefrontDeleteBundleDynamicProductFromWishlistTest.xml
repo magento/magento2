@@ -47,7 +47,7 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct">
                 <argument name="productId" value="$$createBundleProduct.id$$"/>
             </actionGroup>
@@ -62,7 +62,7 @@
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login as a customer -->

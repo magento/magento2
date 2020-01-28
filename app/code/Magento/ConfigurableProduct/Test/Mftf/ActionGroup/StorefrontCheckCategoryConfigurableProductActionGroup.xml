@@ -19,10 +19,10 @@
         </arguments>
 
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
-        <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
+        <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="assertAddToCart"/>
     </actionGroup>
 </actionGroups>

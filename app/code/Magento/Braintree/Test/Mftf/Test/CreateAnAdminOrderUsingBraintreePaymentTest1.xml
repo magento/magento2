@@ -23,7 +23,7 @@
         </annotations>
         <before>
             <!--Login As Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--CreateNewProduct-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -40,23 +40,23 @@
         <actionGroup ref="ConfigureBraintreeActionGroup" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
-        <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoToUserRoles"/>
+        <actionGroup ref="GoToUserRolesActionGroup" stepKey="goToUserRoles"/>
         <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
-        <actionGroup ref="AdminCreateNewRoleActionGroup" stepKey="AdminCreateNewRole"/>
+        <actionGroup ref="AdminCreateNewRoleActionGroup" stepKey="adminCreateNewRole"/>
 
         <!--Create new admin user-->
-        <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoToAllUsers"/>
+        <actionGroup ref="GoToAllUsersActionGroup" stepKey="goToAllUsers"/>
         <waitForPageLoad stepKey="waitForUsers" time="15"/>
-        <actionGroup ref="AdminCreateUserActionGroup" stepKey="AdminCreateNewUser">
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="adminCreateNewUser">
             <argument name="role" value="role"/>
             <argument name="User" value="NewAdmin"/>
         </actionGroup>
 
         <!--SignOut-->
-        <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
+        <actionGroup ref="logoutActionGroup" stepKey="signOutFromAdmin"/>
 
         <!--Log in as new user-->
-        <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
+        <actionGroup ref="LoginNewUserActionGroup" stepKey="signInNewUser"/>
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
@@ -80,7 +80,7 @@
         <waitForPageLoad stepKey="waitForShippingToFinish"/>
 
         <!--Pay with Braintree -->
-        <actionGroup ref="useBraintreeForMasterCard" stepKey="selectCardWithBraintree"/>
+        <actionGroup ref="useBraintreeForMasterCardActionGroup" stepKey="selectCardWithBraintree"/>
 
         <!--Submit Order-->
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
@@ -92,8 +92,8 @@
             <actionGroup ref="DisableBraintreeActionGroup" stepKey="disableBrainTree"/>
 
             <!--SignOut-->
-            <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="SignOutActionGroup" stepKey="signOutFromNewUser"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Delete Product-->
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
@@ -102,12 +102,12 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete User -->
-            <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoBackToAllUsers"/>
-            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
+            <actionGroup ref="GoToAllUsersActionGroup" stepKey="goBackToAllUsers"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="adminDeleteUserActionGroup"/>
 
             <!--Delete Role-->
-            <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoBackToUserRoles"/>
-            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
+            <actionGroup ref="GoToUserRolesActionGroup" stepKey="goBackToUserRoles"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="adminDeleteRoleActionGroup"/>
         </after>
     </test>
 </tests>

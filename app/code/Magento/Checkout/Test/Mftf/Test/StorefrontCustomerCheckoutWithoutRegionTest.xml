@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_GB_Customer" stepKey="createCustomer"/>
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
             <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setCustomCountryWithRequiredRegion">
                 <argument name="countries" value="CustomCountryWithRequiredRegion"/>
             </actionGroup>
@@ -33,7 +33,7 @@
             <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setDefaultCountriesWithRequiredRegion">
                 <argument name="countries" value="DefaultCountriesWithRequiredRegions"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter customer grid by the email -->
-    <actionGroup name="AdminFilterCustomerGridByEmail">
+    <actionGroup name="AdminFilterCustomerGridByEmailActionGroup">
         <annotations>
             <description>Filters the Admin Customers grid by the provided Email Address.</description>
         </annotations>

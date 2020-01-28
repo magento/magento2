@@ -22,7 +22,7 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Log in -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Clean up our modifications to the existing color attribute -->
@@ -37,7 +37,7 @@
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
 
             <!-- Delete category -->
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>

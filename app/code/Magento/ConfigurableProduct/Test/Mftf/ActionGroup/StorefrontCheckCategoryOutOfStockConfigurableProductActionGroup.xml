@@ -18,7 +18,7 @@
 
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductStockUnavailable}}" stepKey="AssertOutOfStock"/>
-        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductStockUnavailable}}" stepKey="assertOutOfStock"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="assertAddToCart"/>
     </actionGroup>
 </actionGroups>

@@ -19,10 +19,10 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to new order status page -->
@@ -30,14 +30,14 @@
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill the form and validate message -->
-        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+        <actionGroup ref="AdminOrderStatusFormFillAndSaveActionGroup" stepKey="fillFormAndClickSave">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
-        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccessActionGroup" stepKey="seeFormSaveSuccess"/>
 
         <!-- Verify the order status grid page shows the order status we just created -->
-        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
+        <actionGroup ref="AssertOrderStatusExistsInGridActionGroup" stepKey="searchCreatedOrderStatus">
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>

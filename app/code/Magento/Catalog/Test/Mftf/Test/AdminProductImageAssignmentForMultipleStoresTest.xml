@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Login Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Store View English -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
@@ -54,7 +54,7 @@
             <!-- Clear Filter Product -->
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search Product and Open Edit -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">

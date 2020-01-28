@@ -26,16 +26,16 @@
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage1"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage1"/>
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
@@ -74,7 +74,7 @@
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
-        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
+        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="changeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
@@ -89,7 +89,7 @@
 
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQuantity"/>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
 
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>

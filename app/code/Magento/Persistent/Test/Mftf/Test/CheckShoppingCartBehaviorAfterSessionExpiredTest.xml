@@ -27,7 +27,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create new customer -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
             <!--Add shipping information-->
@@ -52,6 +52,6 @@
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!--Check product exists in cart-->
-        <see userInput="$$createProduct.name$$" stepKey="ProductExistsInCart"/>
+        <see userInput="$$createProduct.name$$" stepKey="productExistsInCart"/>
     </test>
 </tests>

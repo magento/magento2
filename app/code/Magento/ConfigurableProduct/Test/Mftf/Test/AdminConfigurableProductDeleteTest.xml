@@ -66,7 +66,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
@@ -78,7 +78,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProduct"/>
 
         <!-- go to admin and delete -->
-        <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="wait2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
@@ -212,11 +212,11 @@
                 <requiredEntity createDataKey="createConfigChildProduct6"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>

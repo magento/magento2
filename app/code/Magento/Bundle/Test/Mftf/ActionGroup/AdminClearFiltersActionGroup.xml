@@ -13,8 +13,8 @@
             <description>Goes to the Catalog Backend Admin Grid page. Then clears the Grid Filters.</description>
         </annotations>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
     </actionGroup>
 </actionGroups>

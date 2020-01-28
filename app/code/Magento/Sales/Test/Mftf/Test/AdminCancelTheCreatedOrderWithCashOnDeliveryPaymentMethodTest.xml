@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Enable Cash On Delivery payment method -->
             <magentoCLI command="config:set {{EnableCashOnDeliveryConfigData.path}} {{EnableCashOnDeliveryConfigData.value}}" stepKey="enableCashOnDeliveryPayment"/>
@@ -40,7 +40,7 @@
             <magentoCLI command="config:set {{DisableCashOnDeliveryConfigData.path}} {{DisableCashOnDeliveryConfigData.value}}" stepKey="disableCashOnDeliveryPayment"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new customer order -->

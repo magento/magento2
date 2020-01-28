@@ -17,7 +17,7 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
                 <!-- Create store -->
                 <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
                     <argument name="website" value="{{_defaultWebsite.name}}"/>
@@ -29,7 +29,7 @@
                 <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
                     <argument name="storeGroupName" value="customStore.name"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create custom store view-->

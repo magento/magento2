@@ -94,7 +94,7 @@
         </actionGroup>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="assertCartSummary" >
             <argument name="subtotal" value="$1,400.00"/>
             <argument name="shipping" value="30.00"/>
             <argument name="total" value="1,430.00"/>

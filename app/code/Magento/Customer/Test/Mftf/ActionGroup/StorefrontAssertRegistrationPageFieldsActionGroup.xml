@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertRegistrationPageFields">
+    <actionGroup name="StorefrontAssertRegistrationPageFieldsActionGroup">
         <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeCreateNewCustomerAccountPage"/>
         <seeElement selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="seeFirstNameField"/>
         <seeElement selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="seeFLastNameField"/>

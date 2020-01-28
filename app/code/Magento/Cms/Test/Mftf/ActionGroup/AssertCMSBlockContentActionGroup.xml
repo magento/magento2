@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertBlockContent">
+    <actionGroup name="AssertBlockContentActionGroup">
         <annotations>
             <description>Validates that the Block details are present and correct. PLEASE NOTE: The Block data is Hardcoded, using '_defaultBlock'.</description>
         </annotations>
-        
+
         <grabValueFrom selector="{{BlockNewPageBasicFieldsSection.blockTitle}}"  stepKey="grabTextFromTitle"/>
         <assertEquals stepKey="assertTitle" message="pass">
             <expectedResult type="string">{{_defaultBlock.title}}</expectedResult>

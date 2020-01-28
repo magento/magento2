@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
 
             <!--Create simple customer-->
@@ -89,11 +89,11 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerIndexPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter and Open the customer edit page -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomer">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterTheCustomer">
             <argument name="email" value="$$simpleCustomer.email$$"/>
         </actionGroup>
         <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton"/>
@@ -132,7 +132,7 @@
         <!-- Add products to order from Wish List -->
         <waitForElementVisible selector="{{AdminCreateOrderWishListSection.addProductToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="waitForCheckBoxToVisible"/>
         <click selector="{{AdminCreateOrderWishListSection.addProductToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="selectProductToAddToOrder"/>
-        <click selector="{{AdminCreateOrderWishListSection.addConfigProductToOrder($$createConfigProduct.name$$)}}" stepKey="AddConfigurableProductToOrder"/>
+        <click selector="{{AdminCreateOrderWishListSection.addConfigProductToOrder($$createConfigProduct.name$$)}}" stepKey="addConfigurableProductFromWishlistToOrder"/>
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" stepKey="waitForConfigurablePopover"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
@@ -189,7 +189,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Filter and Open the customer edit page -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomer1">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterTheCustomer1">
             <argument name="email" value="$$simpleCustomer.email$$"/>
         </actionGroup>
         <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton1"/>

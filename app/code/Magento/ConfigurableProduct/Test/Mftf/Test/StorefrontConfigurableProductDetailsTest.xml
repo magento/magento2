@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -35,7 +35,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify configurable product details in storefront product view -->
@@ -66,7 +66,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -80,7 +80,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify configurable product options in storefront product view -->
@@ -111,7 +111,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -125,7 +125,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify adding configurable product to cart after an option is selected in storefront product view -->
@@ -153,7 +153,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -167,7 +167,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify not able to add configurable product to cart when no option is selected in storefront product view -->
@@ -209,7 +209,7 @@
             <createData entity="productAttributeOption2" stepKey="createSecondAttributeSecondOption">
                 <requiredEntity createDataKey="createSecondAttribute"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -219,7 +219,7 @@
             <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
             <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
@@ -236,10 +236,10 @@
             <argument name="urlKey" value="{{BaseConfigurableProduct.urlKey}}"/>
         </actionGroup>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
-        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkFirstAttribute">
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGridActionGroup" stepKey="checkFirstAttribute">
             <argument name="attributeCode" value="$createFirstAttribute.attribute_code$"/>
         </actionGroup>
-        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkSecondAttribute">
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGridActionGroup" stepKey="checkSecondAttribute">
             <argument name="attributeCode" value="$createSecondAttribute.attribute_code$"/>
         </actionGroup>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
@@ -253,19 +253,19 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickToGenerateConfigurations"/>
 
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.variationsGrid}}" stepKey="waitForVariationsGrid"/>
-        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setFirstVariationQuantity">
+        <actionGroup ref="AdminChangeConfigurableProductVariationQtyActionGroup" stepKey="setFirstVariationQuantity">
             <argument name="rowIndex" value="0"/>
             <argument name="quantity" value="0"/>
         </actionGroup>
-        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setSecondVariationQuantity">
+        <actionGroup ref="AdminChangeConfigurableProductVariationQtyActionGroup" stepKey="setSecondVariationQuantity">
             <argument name="rowIndex" value="1"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
-        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setThirdVariationQuantity">
+        <actionGroup ref="AdminChangeConfigurableProductVariationQtyActionGroup" stepKey="setThirdVariationQuantity">
             <argument name="rowIndex" value="2"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
-        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setFourthVariationQuantity">
+        <actionGroup ref="AdminChangeConfigurableProductVariationQtyActionGroup" stepKey="setFourthVariationQuantity">
             <argument name="rowIndex" value="3"/>
             <argument name="quantity" value="1"/>
         </actionGroup>

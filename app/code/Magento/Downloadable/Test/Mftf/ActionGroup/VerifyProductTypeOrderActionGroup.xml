@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="VerifyProductTypeOrder">
+    <actionGroup name="VerifyProductTypeOrderActionGroup">
         <annotations>
             <description>Validates that the 'Downloadable Product' option is present in the 'Add Product' dropdown menu on the Products grid page.</description>
         </annotations>
-        
+
         <seeElement stepKey="seeDownloadableInOrder" selector="{{AdminProductDropdownOrderSection.downloadProduct}}"/>
     </actionGroup>
 </actionGroups>

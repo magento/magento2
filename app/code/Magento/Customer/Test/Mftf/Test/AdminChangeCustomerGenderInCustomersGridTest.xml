@@ -21,23 +21,23 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Reset customer grid filter -->
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGridPage"/>
             <waitForPageLoad stepKey="waitForCustomersGrid"/>
-            <actionGroup ref="AdminResetFilterInCustomerGrid" stepKey="resetFilter"/>
+            <actionGroup ref="AdminResetFilterInCustomerGridActionGroup" stepKey="resetFilter"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Open customers grid page, filter by created customer-->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGridByEmail">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterCustomerGridByEmail">
             <argument name="email" value="$createCustomer.email$"/>
         </actionGroup>
         <!-- Check customer is in grid-->
-        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="assertCustomerInCustomersGrid">
+        <actionGroup ref="AdminAssertCustomerInCustomersGridActionGroup" stepKey="assertCustomerInCustomersGrid">
             <argument name="text" value="$createCustomer.email$"/>
             <argument name="row" value="1"/>
         </actionGroup>
@@ -63,7 +63,7 @@
             <argument name="customerGender" value="{{Gender.male}}"/>
         </actionGroup>
         <!--Filter customers grid by email-->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerByEmailToUpdateWithEmptyGender">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterCustomerByEmailToUpdateWithEmptyGender">
             <argument name="email" value="$createCustomer.email$"/>
         </actionGroup>
         <!--Update customer Gender to empty value-->

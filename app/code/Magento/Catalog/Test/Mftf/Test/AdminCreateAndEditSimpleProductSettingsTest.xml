@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create related products -->
             <createData entity="SimpleProduct2" stepKey="createFirstRelatedProduct"/>
@@ -34,7 +34,7 @@
             <deleteData createDataKey="createThirdRelatedProduct" stepKey="deleteThirdRelatedProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new simple product -->

@@ -22,9 +22,9 @@
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersPage"/>
         <click stepKey="addNewCustomer" selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
-        <fillField stepKey="FillFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customerData.firstname}}"/>
-        <fillField stepKey="FillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
-        <fillField stepKey="FillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
+        <fillField stepKey="fillFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customerData.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
+        <fillField stepKey="fillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
         <selectOption stepKey="selectStoreView" selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{storeView}}"/>
         <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
         <click stepKey="saveCustomer" selector="{{AdminCustomerAccountInformationSection.saveCustomerAndContinueEdit}}"/>

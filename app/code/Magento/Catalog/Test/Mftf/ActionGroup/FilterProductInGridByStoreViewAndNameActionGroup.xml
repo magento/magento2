@@ -16,8 +16,8 @@
             <argument name="storeView" type="string"/>
             <argument name="productName" type="string"/>
         </arguments>
-        
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchProduct"/>
+
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPageToSearchProduct"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>

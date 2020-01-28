@@ -20,7 +20,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
             <comment userInput="Create product" stepKey="commentCreateProduct"/>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -43,7 +43,7 @@
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>
@@ -124,7 +124,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
             <comment userInput="Create product" stepKey="commentCreateProduct"/>
             <createData entity="VirtualProduct" stepKey="createProduct"/>
@@ -147,7 +147,7 @@
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigurations"/>

@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -51,7 +51,7 @@
 
         <!-- Go to shopping cart -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
-        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+        <actionGroup ref="FillShippingZipFormActionGroup" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
@@ -82,7 +82,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>

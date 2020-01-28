@@ -19,15 +19,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
@@ -43,7 +43,7 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductWithoutManageStock.quantity}}" stepKey="fillProductQuantity"/>
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickAdvancedInventoryLink"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" stepKey="clickManageStock"/>
-        <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
+        <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="checkUseConfigSettingsCheckBox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />

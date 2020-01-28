@@ -30,7 +30,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
             <!-- log in and create the price rule -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
             <actionGroup stepKey="selectNotLoggedInCustomerGroup" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
@@ -39,7 +39,7 @@
         <after>
             <!-- delete the simple product and catalog price rule and logout -->
             <amOnPage stepKey="goToPriceRulePage" url="admin/catalog_rule/promo_catalog/"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -85,7 +85,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -108,7 +108,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{CatalogRuleToPercent.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -131,7 +131,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -155,7 +155,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete the simple product and category -->
@@ -164,7 +164,7 @@
             <!-- Delete the catalog rule -->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToRulePage"/>
             <waitForPageLoad stepKey="waitForRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -207,7 +207,7 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>

@@ -19,15 +19,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
@@ -60,7 +60,7 @@
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage1"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="checkRetailCustomerTaxClass" />
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{virtualProductBigQty.name}}" stepKey="fillProductName1"/>

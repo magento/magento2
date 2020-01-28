@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />

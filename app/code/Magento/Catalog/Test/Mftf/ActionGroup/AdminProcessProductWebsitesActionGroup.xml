@@ -12,6 +12,6 @@
         <arguments>
             <argument name="websiteToUnassign"/>
         </arguments>
-        <uncheckOption selector="{{ProductInWebsitesSection.website(websiteToUnassign.name)}}" after="SelectWebsite" stepKey="uncheckWebsite"/>
+        <uncheckOption selector="{{ProductInWebsitesSection.website(websiteToUnassign.name)}}" after="selectWebsite" stepKey="uncheckWebsite"/>
     </actionGroup>
 </actionGroups>

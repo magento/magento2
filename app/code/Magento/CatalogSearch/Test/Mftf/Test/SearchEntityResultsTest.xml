@@ -199,7 +199,7 @@
             <createData entity="productAlphabeticalB" stepKey="product2">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
 
             <!-- Create and Assign Attribute to product1-->
@@ -369,7 +369,7 @@
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
@@ -385,7 +385,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -449,7 +449,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="simple1"/>
             <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
@@ -465,7 +465,7 @@
         <after>
             <deleteData stepKey="deleteGroupedProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simple1"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -505,7 +505,7 @@
                 <field key="qty">10</field>
             </createData>
             <!--Finish bundle creation-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
@@ -517,7 +517,7 @@
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -572,7 +572,7 @@
             </createData>
 
             <!--Finish bundle creation-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
@@ -586,7 +586,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
@@ -631,8 +631,8 @@
             </createData>
 
             <!-- Assign attribute to set -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="goToAttributeGridPage" stepKey="goToPage"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="goToAttributeGridPageActionGroup" stepKey="goToPage"/>
             <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="goToSet">
                 <argument name="name" value="$attributeSet.attribute_set_name$"/>
             </actionGroup>

@@ -25,7 +25,7 @@
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -39,7 +39,7 @@
                 <argument name="perPage" value="100"/>
             </actionGroup>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
@@ -74,7 +74,7 @@
 
         <!--Select any option in the Layered navigation and verify product image-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
-        <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">
+        <actionGroup ref="SelectStorefrontSideBarAttributeOptionActionGroup" stepKey="selectStorefrontProductAttributeOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>
             <argument name="attributeDefaultLabel" value="{{visualSwatchAttribute.default_label}}"/>
         </actionGroup>
@@ -83,7 +83,7 @@
         <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabFirstOptionImg"/>
         <assertContains expectedType="string" expected="{{MagentoLogo.filename}}" actualType="variable" actual="$grabFirstOptionImg" stepKey="assertProductFirstOptionImage"/>
         <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeSideBarFilter"/>
-        <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeForSecondOption">
+        <actionGroup ref="SelectStorefrontSideBarAttributeOptionActionGroup" stepKey="selectStorefrontProductAttributeForSecondOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>
             <argument name="attributeDefaultLabel" value="{{visualSwatchAttribute.default_label}}"/>
         </actionGroup>

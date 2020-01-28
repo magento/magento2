@@ -20,12 +20,12 @@
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
-        <actionGroup ref="VerifyProductTypeOrder" stepKey="verifyProductTypeOrder"/>
+        <actionGroup ref="VerifyProductTypeOrderActionGroup" stepKey="verifyProductTypeOrder"/>
     </test>
 </tests>

@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Check for the product link. -->
     <!-- Assumes web client is on Grouped Product Page -->
-    <actionGroup name="AssertLinkPresenceOnGroupedProductPage">
+    <actionGroup name="AssertLinkPresenceOnGroupedProductPageActionGroup">
         <annotations>
             <description>Validates that the provided Product Name is present and correct on a Storefront Grouped Product page.</description>
         </annotations>

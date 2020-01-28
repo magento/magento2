@@ -20,7 +20,7 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
@@ -41,7 +41,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!--Delete attribute-->
             <deleteData createDataKey="productAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create product-->
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm"/>

@@ -20,8 +20,8 @@
             <group value="login"/>
         </annotations>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
-        <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>
 </tests>

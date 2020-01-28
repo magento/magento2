@@ -20,7 +20,7 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!-- Create three level nested category -->
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
@@ -34,7 +34,7 @@
             <deleteData createDataKey="createThreeLevelNestedCategories" stepKey="deleteThreeNestedCategories"/>
             <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteTwoLevelNestedCategory"/>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Category page -->

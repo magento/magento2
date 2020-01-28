@@ -33,7 +33,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
@@ -72,7 +72,7 @@
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open product page and assign grouped project to second website -->

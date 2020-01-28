@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
@@ -30,7 +30,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -80,7 +80,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
@@ -89,7 +89,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Generate date for use as default value, needs to be MM/d/YYYY -->
@@ -140,7 +140,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
@@ -149,7 +149,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -194,7 +194,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
@@ -203,7 +203,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -281,7 +281,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
@@ -290,7 +290,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -349,7 +349,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
@@ -358,7 +358,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->

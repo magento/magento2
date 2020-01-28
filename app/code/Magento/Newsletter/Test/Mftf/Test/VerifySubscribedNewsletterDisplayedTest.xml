@@ -49,11 +49,11 @@
             </actionGroup>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Go to store front (default) and click Create an Account.-->
-        <actionGroup ref="StorefrontCreateNewAccountNewsletterCheckedActionGroup" stepKey="SignUpNewUser">
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterCheckedActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->

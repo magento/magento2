@@ -13,7 +13,7 @@
         <description>Click on the edit default shipping address link.</description>
     </annotations>
 
-    <click stepKey="ClickEditDefaultShippingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}"/>
+    <click stepKey="clickEditDefaultShippingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}"/>
     <waitForPageLoad stepKey="waitForStorefrontSignInPageLoad"/>
 </actionGroup>
 </actionGroups>

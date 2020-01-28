@@ -21,14 +21,14 @@
 
         <before>
             <magentoCLI stepKey="setCountryOfManufacture" command="config:set catalog/fields_masks/sku" arguments="{{name}}-{{country_of_manufacture}}"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="{{name}}"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
@@ -49,7 +49,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Search created simple product(from above step) in the grid page to verify sku masked as name and country of manufacture -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchCreatedSimpleProduct"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPageToSearchCreatedSimpleProduct"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>

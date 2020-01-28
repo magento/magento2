@@ -72,7 +72,7 @@
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
         <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-        <seeElement selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <seeElement selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="insertVariableBtn" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
@@ -95,7 +95,7 @@
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

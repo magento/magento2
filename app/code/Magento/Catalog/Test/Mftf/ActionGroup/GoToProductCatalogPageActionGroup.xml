@@ -14,7 +14,7 @@
         </annotations>
 
         <comment userInput="actionGroup:GoToProductCatalogPage" stepKey="actionGroupComment"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
     </actionGroup>
 </actionGroups>

@@ -78,7 +78,7 @@
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
         <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-        <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="insertVariableBtn" />
         <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
         <waitForPageLoad stepKey="waitForPageLoad9" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
@@ -100,7 +100,7 @@
         <closeTab stepKey="closeTab"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

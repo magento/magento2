@@ -18,7 +18,7 @@
 
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" stepKey="waitForQuickSearchToBeVisible"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{searchQuery}}" stepKey="fillSearchInput"/>
-        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="WaitForSearchDropDownSuggestion"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="waitForSearchDropDownSuggestion"/>
         <see selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" userInput="{{searchQuery}}" stepKey="seeDropDownSuggestion"/>
         <click selector="{{StorefrontQuickSearchSection.searchDropDownName(searchQuery)}}" stepKey="clickOnSearchSuggestion"/>
         <waitForPageLoad stepKey="waitForSelectedProductToLoad"/>

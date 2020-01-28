@@ -27,7 +27,7 @@
         <magentoCLI command="config:set {{ChangeAdminSecuritySessionLifetimeConfigData.path}} {{ChangeAdminSecuritySessionLifetimeConfigData.value}}" stepKey="changeCookieLifetime"/>
 
         <!-- 2. Wait for session to expire. -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <wait time="60" stepKey="waitForSessionLifetime"/>
         <reloadPage stepKey="reloadPage"/>
 

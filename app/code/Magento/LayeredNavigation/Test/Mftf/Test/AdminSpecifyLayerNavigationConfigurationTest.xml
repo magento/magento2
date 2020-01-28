@@ -24,7 +24,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Configure Layered Navigation in Stores -> Configuration -> Catalog -> Layered Navigation -->

@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create inactive Include In Menu Parent Category -->
             <createData entity="CatNotIncludeInMenu" stepKey="createCategory"/>
         </before>
@@ -27,7 +27,7 @@
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Category Page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>

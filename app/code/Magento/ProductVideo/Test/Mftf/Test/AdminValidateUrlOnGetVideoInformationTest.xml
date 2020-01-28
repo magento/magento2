@@ -17,12 +17,12 @@
             <group value="ProductVideo"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig"/>
         </before>
         <after>
             <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">

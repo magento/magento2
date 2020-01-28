@@ -23,11 +23,11 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
@@ -62,9 +62,9 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCatalog" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>

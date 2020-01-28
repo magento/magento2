@@ -40,7 +40,7 @@
             </createData>
 
             <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearCache"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
         </before>
@@ -54,11 +54,11 @@
             <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
 
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
         <!-- 1. Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- 2. Navigate Go to "Catalog"->"Products" -->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="onCatalogProductPage"/>

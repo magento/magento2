@@ -41,14 +41,14 @@
             <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
             <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin1"/>
         </after>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">
             <argument name="phrase" value="$$createProduct1.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

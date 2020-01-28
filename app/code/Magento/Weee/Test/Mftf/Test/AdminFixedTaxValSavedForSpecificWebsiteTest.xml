@@ -32,7 +32,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create website, store and store view -->
             <comment userInput="Create website, store and store view" stepKey="createWebsite"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
@@ -66,7 +66,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Go to product edit page and assign it to created website -->
         <comment userInput="Go to product edit page and assign it to created website" stepKey="assignProductToCreatedWebsite"/>

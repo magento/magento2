@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
@@ -46,7 +46,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront -->

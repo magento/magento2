@@ -86,7 +86,7 @@
         </before>
         <after>
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
@@ -127,7 +127,7 @@
         </actionGroup>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open Customers -> All Customers -->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>

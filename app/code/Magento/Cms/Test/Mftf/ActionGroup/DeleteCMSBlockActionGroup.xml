@@ -15,11 +15,11 @@
 
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsPagesPageActionsSection.select(_defaultBlock.title)}}" stepKey="ClickOnSelect"/>
-        <click selector="{{CmsPagesPageActionsSection.delete(_defaultBlock.title)}}" stepKey="ClickOnEdit"/>
+        <click selector="{{CmsPagesPageActionsSection.select(_defaultBlock.title)}}" stepKey="clickOnSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(_defaultBlock.title)}}" stepKey="clickOnEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="ClickToConfirm"/>
+        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="clickToConfirm"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
-        <see userInput="You deleted the block." stepKey="VerifyBlockIsDeleted"/>
+        <see userInput="You deleted the block." stepKey="verifyBlockIsDeleted"/>
     </actionGroup>
 </actionGroups>

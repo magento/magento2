@@ -23,14 +23,14 @@
             <!-- Create category, flush cache and log in -->
             <comment userInput="Create category, flush cache and log in" stepKey="createCategoryAndLogIn"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="logInAsAdmin"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete category and log out -->
             <comment userInput="Delete category and log out" stepKey="deleteCategoryAndLogOut"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logOutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOutFromAdmin"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
         <!-- Navigate to category details page -->

@@ -25,14 +25,14 @@
             <!--Create customer-->
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
             <!--Login to admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete simple product-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">

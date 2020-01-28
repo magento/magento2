@@ -109,8 +109,8 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOutActionGroup"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
@@ -132,7 +132,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <waitForPageLoad stepKey="waitShipmentCreated"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         <magentoCLI stepKey="runCron" command="cron:run --group='index'"/>
 
         <!-- Wait till cron job runs for schedule updates -->

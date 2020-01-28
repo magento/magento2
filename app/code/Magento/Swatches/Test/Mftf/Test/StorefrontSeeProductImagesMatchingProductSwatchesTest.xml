@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -34,7 +34,7 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Begin creating a new product attribute -->
@@ -97,7 +97,7 @@
         <!-- Go to the category page -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
 
-        <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="StorefrontAssertActiveProductImage"/>
+        <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="storefrontAssertActiveProductImage"/>
 
          <!--Click a swatch and expect to see the image from the swatch from the configurable product -->
         <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImageActionGroup" stepKey="clickSwatchOption">

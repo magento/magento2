@@ -28,11 +28,11 @@
                 <requiredEntity createDataKey="attribute"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to default attribute set edit page -->
@@ -47,7 +47,7 @@
         <!-- Assert attribute in a group -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <!-- Save attribute set -->
-        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
         <!-- Go to create new product page -->
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

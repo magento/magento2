@@ -24,10 +24,10 @@
             <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
             <!-- Delete data -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Login to Admin. -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- 2. Create customer if needed. -->
         <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

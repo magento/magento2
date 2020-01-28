@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Fill Order status form and click save -->
-    <actionGroup name="AdminOrderStatusFormFillAndSave">
+    <actionGroup name="AdminOrderStatusFormFillAndSaveActionGroup">
         <annotations>
             <description>Fills in the provided Status and Label on the Admin Order Status section.</description>
         </annotations>

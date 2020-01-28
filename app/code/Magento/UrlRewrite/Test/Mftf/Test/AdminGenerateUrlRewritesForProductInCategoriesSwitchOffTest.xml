@@ -24,7 +24,7 @@
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -40,7 +40,7 @@
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Open Marketing - SEO & Search - URL Rewrites -->
@@ -53,7 +53,7 @@
         <!-- 2. Set the configuration for Generate "category/product" URL Rewrites to No-->
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="amOnCatalogConfigPage"/>
         <conditionalClick selector="{{CatalogSection.seo}}" dependentSelector="{{CatalogSection.CheckIfSeoTabExpand}}" visible="true" stepKey="expandSeoTab" />
-        <waitForElementVisible  selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="GenerateUrlRewritesSelect"/>
+        <waitForElementVisible  selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="generateUrlRewritesSelect"/>
         <selectOption userInput="0" selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="selectUrlGenerationNo" />
         <waitForElementVisible selector="{{GenerateUrlRewritesConfirm.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{GenerateUrlRewritesConfirm.ok}}" stepKey="confirmSwitchingGenerationOff"/>

@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Clear product grid-->
             <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
@@ -47,7 +47,7 @@
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteCategory2" createDataKey="category2"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>

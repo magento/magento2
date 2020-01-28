@@ -19,7 +19,7 @@
             <testCaseId value="MAGETWO-95725"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <!-- Choose TinyMCE3 as the default WYSIWYG editor-->
             <magentoCLI command="config:set cms/wysiwyg/editor Magento_Tinymce3/tinymce3Adapter" stepKey="enableTinyMCE3"/>
@@ -28,7 +28,7 @@
             <!-- Switch WYSIWYG editor to TinyMCE4-->
             <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
             <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
         <waitForPageLoad stepKey="wait5"/>
@@ -47,7 +47,7 @@
         <click selector="{{MediaGallerySection.browseForImage}}" stepKey="clickBrowse"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <waitForPageLoad stepKey="waitForPageToLoad" />
-        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="createImageFolder">
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="AttachImageActionGroup" stepKey="attachImage1">

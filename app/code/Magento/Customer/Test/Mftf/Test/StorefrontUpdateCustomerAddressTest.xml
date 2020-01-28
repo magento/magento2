@@ -23,15 +23,15 @@
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
-        <click stepKey="ClickEditDefaultBillingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
+        <amOnPage url="customer/address/" stepKey="openCustomerAddNewAddress"/>
+        <click stepKey="clickEditDefaultBillingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
         <fillField  stepKey="fillFirstName" userInput="EditedFirstNameBilling" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
         <fillField  stepKey="fillLastName" userInput="EditedLastNameBilling" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
         <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
@@ -63,15 +63,15 @@
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
-        <click stepKey="ClickEditDefaultShippingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}"/>
+        <amOnPage url="customer/address/" stepKey="openCustomerAddNewAddress"/>
+        <click stepKey="clickEditDefaultShippingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}"/>
         <fillField  stepKey="fillFirstName" userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
         <fillField  stepKey="fillLastName" userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
         <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
@@ -100,7 +100,7 @@
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
@@ -108,7 +108,7 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
+        <amOnPage url="customer/address/" stepKey="openCustomerAddNewAddress"/>
         <click selector="{{StorefrontCustomerAddressesSection.editAdditionalAddress('1')}}" stepKey="editAdditionalAddress"/>
         <fillField  stepKey="fillFirstName" userInput="EditedFirstName" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
         <fillField  stepKey="fillLastName" userInput="EditedLastName" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>

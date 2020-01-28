@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Customer Default Shipping Address -->
-    <actionGroup name="AdminAssertCustomerDefaultShippingAddress">
+    <actionGroup name="AdminAssertCustomerDefaultShippingAddressActionGroup">
         <annotations>
             <description>Validates that the provided Default Customer Shipping Address details are present and correct on the Customer creation/edit page. Under the section 'Addresses'.</description>
         </annotations>

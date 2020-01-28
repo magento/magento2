@@ -20,10 +20,10 @@
             <group value="create"/>
         </annotations>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
     </test>

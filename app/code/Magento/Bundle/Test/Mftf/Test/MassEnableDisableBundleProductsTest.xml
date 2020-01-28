@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
@@ -27,7 +27,7 @@
         </before>
         <after>
             <!--Clear Filters-->
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
@@ -98,26 +98,26 @@
         <!--Trigger SEO drop down-->
         <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="moveToSEOSection"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
-        <waitForPageLoad stepKey="WaitForDropDownSEO2"/>
+        <waitForPageLoad stepKey="waitForDropDownSEO2"/>
 
         <!--Fill URL input-->
-        <fillField userInput="{{BundleProduct.urlKey2}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension2"/>
+        <fillField userInput="{{BundleProduct.urlKey2}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="fillsinSEOlinkExtension2"/>
 
         <!--Save the product-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
         <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown2"/>
 
         <!--Clear Filters-->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
         <!--Setting filter-->
-        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+        <actionGroup ref="BundleProductFilterActionGroup" stepKey="filterForOnlyBundleProducts"/>
 
         <!--Disabling bundle products-->
-        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBox"/>
-        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActions"/>
-        <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="ClickOnChangeStatus"/>
-        <click selector="{{AdminProductFiltersSection.disable}}" stepKey="ClickOnDisable"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="clickOnSelectAllCheckBox"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="clickOnActions"/>
+        <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="clickOnChangeStatus"/>
+        <click selector="{{AdminProductFiltersSection.disable}}" stepKey="clickOnDisable"/>
         <waitForPageLoad stepKey="waitForPageloadToExecute"/>
 
         <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
@@ -126,25 +126,25 @@
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
 
         <!--Confirm bundle products have been disabled-->
-        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPage"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductDisabled" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoadToShowElement"/>
+        <dontSeeElement stepKey="lookingForNameOfProductDisabled" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Enabling bundle products-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
-        <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
-        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
-        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
-        <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="ClickOnChangeStatusChangingView"/>
-        <click selector="{{AdminProductFiltersSection.enable}}" stepKey="ClickOnEnable"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToCatalogPageChangingView"/>
+        <waitForPageLoad stepKey="waitForPageToLoadFullyChangingView"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="clickOnSelectAllCheckBoxChangingView"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="clickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="clickOnChangeStatusChangingView"/>
+        <click selector="{{AdminProductFiltersSection.enable}}" stepKey="clickOnEnable"/>
 
         <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
         <magentoCLI command="indexer:reindex" stepKey="reindex2"/>
         <magentoCLI command="cache:flush" stepKey="flushCache2"/>
 
         <!--Confirm bundle products have been enabled-->
-        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageEnabled"/>
+        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="goToProductPageEnabled"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="lookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>

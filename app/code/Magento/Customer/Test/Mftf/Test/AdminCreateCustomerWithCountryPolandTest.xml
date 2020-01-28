@@ -19,16 +19,16 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter the created customer From grid-->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterTheCustomerByEmail">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton"/>
@@ -37,9 +37,9 @@
         <!-- Add the Address -->
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="selectAddress"/>
         <waitForPageLoad stepKey="waitForAddressPageToLoad"/>
-        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="ClickOnAddNewAddressButton"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="clickOnAddNewAddressButton"/>
         <waitForPageLoad stepKey="waitForNewAddressPageToLoad"/>
-        <checkOption selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}" stepKey="EnableDefaultBillingAddress"/>
+        <checkOption selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}" stepKey="enableDefaultBillingAddress"/>
         <fillField selector="{{AdminEditCustomerAddressesSection.streetAddress}}" userInput="{{PolandAddress.street}}" stepKey="fillStreetAddress"/>
         <fillField selector="{{AdminEditCustomerAddressesSection.city}}" userInput="{{PolandAddress.city}}" stepKey="fillCity"/>
         <scrollTo selector="{{AdminEditCustomerAddressesSection.phone}}" x="0" y="-80" stepKey="scrollToPhone"/>
@@ -54,7 +54,7 @@
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
 
         <!-- Assert Customer in grid -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterTheCustomerByEmail1">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageToLoad"/>

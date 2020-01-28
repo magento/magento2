@@ -17,14 +17,14 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Remove attribute -->
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>

@@ -20,7 +20,7 @@
         </annotations>
         <!--Delete all created data during the test execution and assign Default Root Category to Store-->
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin2"/>
             <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
             <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
@@ -36,14 +36,14 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="NewRootCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout2"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout2"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Create new root category-->
-        <actionGroup ref="AdminCreateRootCategory" stepKey="createNewRootCategory">
+        <actionGroup ref="AdminCreateRootCategoryActionGroup" stepKey="createNewRootCategory">
             <argument name="categoryEntity" value="NewRootCategory"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
@@ -70,7 +70,7 @@
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionCreatedNewRootCategory"/>
         <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog1"/>
-        <actionGroup ref="logout" stepKey="logout1"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logout1"/>
         <!--Go to storefront and verify created subcategory on frontend-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad2"/>

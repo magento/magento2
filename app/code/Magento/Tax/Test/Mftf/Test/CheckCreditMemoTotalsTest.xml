@@ -31,37 +31,37 @@
             <!--Create customer-->
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create tax rule and tax rate-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
             <waitForPageLoad stepKey="waitForTaxRatePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
-            <actionGroup ref="addCustomTaxRate" stepKey="addCustomTaxRate">
+            <actionGroup ref="addCustomTaxRateActionGroup" stepKey="addCustomTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
             <click stepKey="expandAdditionalSettings" selector="{{AdminProductTaxClassSection.additionalSettings}}"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
-            <click selector="{{AdminProductTaxClassSection.productTaxClass}}" stepKey="ClickToAddTaxClass"/>
+            <click selector="{{AdminProductTaxClassSection.productTaxClass}}" stepKey="clickToAddTaxClass"/>
             <fillField selector="{{AdminProductTaxClassSection.TaxClassName}}" userInput="NewTaxClass" stepKey="setName"/>
-            <click selector="{{AdminProductTaxClassSection.confirm}}" stepKey="ClickToDone"/>
+            <click selector="{{AdminProductTaxClassSection.confirm}}" stepKey="clickToDone"/>
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
             <waitForPageLoad stepKey="waitForTaxRatePage1"/>
-            <see userInput="You saved the tax rule." stepKey="VerifyRuleSaved"/>
+            <see userInput="You saved the tax rule." stepKey="verifyRuleSaved"/>
             <!--Search and edit product to add new created tax rule-->
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
-            <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="OpenEditProductOnBackend">
+            <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductOnBackend">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
-            <selectOption selector="{{AdminProductFormActionSection.selectTaxClass}}" userInput="NewTaxClass" stepKey="SetNewTaxClass" />
+            <selectOption selector="{{AdminProductFormActionSection.selectTaxClass}}" userInput="NewTaxClass" stepKey="setNewTaxClass" />
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
             <!--Set configs-->
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToTaxConfigPage"/>
             <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.taxClasses}}" dependentSelector="{{AdminConfigureTaxSection.taxClassesCondition}}" visible="false"/>
-            <click selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="UncheckUseSystemValue"/>
+            <click selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="uncheckUseSystemValue"/>
             <selectOption selector="{{AdminConfigureTaxSection.productTaxClass}}" userInput="NewTaxClass" stepKey="selectClass"/>
             <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
             <!--flash cache-->
@@ -83,7 +83,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -91,7 +91,7 @@
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
             <waitForPageLoad stepKey="waitForRatesPage"/>
             <!-- Delete tax rate that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -99,10 +99,10 @@
                 <argument name="taxClassName" value="NewTaxClass"/>
             </actionGroup>
             <!--logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create new order-->
-        <actionGroup stepKey="CreateNewOrder" ref="NavigateToNewOrderPageExistingCustomerActionGroup">
+        <actionGroup stepKey="createNewOrder" ref="NavigateToNewOrderPageExistingCustomerActionGroup">
             <argument name="customer" value="Simple_US_Customer_NY"/>
         </actionGroup>
         <!--Add product to order-->
@@ -112,9 +112,9 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <!--Set shipping method-->
-        <actionGroup stepKey="OrderSelectFlatRateShippingActionGroup" ref="OrderSelectFlatRateShippingActionGroup"/>
+        <actionGroup stepKey="orderSelectFlatRateShippingActionGroup" ref="OrderSelectFlatRateShippingActionGroup"/>
         <!--Submit order-->
-        <click stepKey="SubmitOrder" selector="{{AdminOrderFormActionSection.SubmitOrder}}"/>
+        <click stepKey="submitOrder" selector="{{AdminOrderFormActionSection.SubmitOrder}}"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <grabTextFrom stepKey="getOrderId" selector="|Order # (\d+)|"/>
         <!--Open new created order-->
@@ -139,7 +139,7 @@
         <click selector="{{AdminCreditMemoTotalSection.creditMemoItem}}" stepKey="goToCreatedCreditMemo"/>
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <!--View created memo and verify tax for product-->
-        <click selector="{{AdminCreditMemoTotalSection.viewMemo}}" stepKey="ViewMemo"/>
+        <click selector="{{AdminCreditMemoTotalSection.viewMemo}}" stepKey="viewMemo"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
         <grabTextFrom selector="{{AdminCreditMemoTotalSection.grandTotal}}" stepKey="getGrandTotal"/>
         <assertEquals expected='$123.00' expectedType="string" actual="($getGrandTotal)" stepKey="assertGrandTotalValue"/>

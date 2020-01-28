@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
             <!-- Create simple products -->
@@ -36,7 +36,7 @@
         </before>
         <after>
             <!-- Delete created data -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -114,7 +114,7 @@
         <!-- Click 'Continue to Billing Information' -->
         <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethodForIdenticalProducts"/>
         <!-- Click 'Go to Review Your Order' -->
-        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="UseDefaultBillingMethodForIdenticalProducts"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="useDefaultBillingMethodForIdenticalProducts"/>
         <!-- Click 'Place Order' -->
         <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrderWithIdenticalProducts"/>
     </test>

@@ -24,11 +24,11 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="cleanUpRule">
                 <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>

@@ -23,7 +23,7 @@
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToYes"/>
             <createData entity="secondCustomWebsite" stepKey="createCustomWebsite"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminStoreGroupCreateActionGroup" stepKey="createNewStore">
                 <argument name="Website" value="secondCustomWebsite"/>
                 <argument name="storeGroup" value="customStoreGroup"/>
@@ -44,7 +44,7 @@
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToResetFilters"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Go to product page in admin panel to edit -->

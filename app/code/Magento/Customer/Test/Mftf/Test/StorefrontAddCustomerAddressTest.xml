@@ -23,15 +23,15 @@
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="AddNewAddress">
+        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="addNewAddress">
             <argument name="Address" value="US_Address_TX"/>
         </actionGroup>
         <see userInput="{{US_Address_TX.street[0]}}"
@@ -62,14 +62,14 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddCustomerDefaultAddressActionGroup" stepKey="AddNewDefaultAddress">
+        <actionGroup ref="StorefrontAddCustomerDefaultAddressActionGroup" stepKey="addNewDefaultAddress">
             <argument name="Address" value="US_Address_TX"/>
         </actionGroup>
         <see userInput="{{US_Address_TX.street[0]}}"
@@ -100,15 +100,15 @@
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="AddNewNonDefaultAddress">
+        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="addNewNonDefaultAddress">
             <argument name="Address" value="US_Address_TX"/>
         </actionGroup>
         <see userInput="{{US_Address_TX.street[0]}}"

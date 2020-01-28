@@ -21,14 +21,14 @@
         <before>
             <createData entity="defaultUrlRewrite" stepKey="urlRewrite"/>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter Product in product page and get the Product ID -->

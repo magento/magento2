@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Delete all products left by prev tests because it sensitive for search-->
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!-- Create Data -->
@@ -28,7 +28,7 @@
         <after>
             <!-- Delete data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
         <!-- Perform reindex and flush cache -->
@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!-- 5. Perform all asserts -->
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResult"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
         <see userInput="$$createProduct.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
     </test>

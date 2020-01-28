@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -78,13 +78,13 @@
         <after>
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="openCatalogPriceRulePage"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete all created data -->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>

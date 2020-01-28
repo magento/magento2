@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminChangeConfigurableProductVariationQty">
+    <actionGroup name="AdminChangeConfigurableProductVariationQtyActionGroup">
         <annotations>
             <description>Change quantity value for configurable product generated variation</description>
         </annotations>

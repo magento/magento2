@@ -26,7 +26,7 @@
             <createData entity="SimpleProduct_25" stepKey="simpleProduct">
                 <field key="price">5</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
@@ -50,7 +50,7 @@
             <argument name="stockStatus" value="Out of Stock"/>
         </actionGroup>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>

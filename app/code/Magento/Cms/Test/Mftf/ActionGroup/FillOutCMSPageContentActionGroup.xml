@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="FillOutCMSPageContent">
+    <actionGroup name="FillOutCMSPageContentActionGroup">
         <annotations>
             <description>Fills out the Page details (Page Title, Content and URL Key) on the Admin Page creation/edit page. PLEASE NOTE: The values are Hardcoded using '_duplicatedCMSPage'.</description>
         </annotations>

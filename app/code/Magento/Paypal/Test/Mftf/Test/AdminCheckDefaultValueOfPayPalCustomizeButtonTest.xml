@@ -23,14 +23,14 @@
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
+            <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="configPayPalExpressCheckout"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <actionGroup ref="OpenPayPalButtonCheckoutPage" stepKey= "openPayPalButtonCheckoutPage"/>
+        <actionGroup ref="OpenPayPalButtonCheckoutPageActionGroup" stepKey= "openPayPalButtonCheckoutPage"/>
         <seeElement selector="{{ButtonCustomization.customizeDrpDown}}" stepKey="seeCustomizeDropDown"/>
         <seeOptionIsSelected selector="{{ButtonCustomization.customizeDrpDown}}" userInput="No" stepKey="seeNoIsDefaultValue"/>
         <selectOption selector="{{ButtonCustomization.customizeDrpDown}}" userInput="Yes" stepKey="enableButtonCustomization"/>

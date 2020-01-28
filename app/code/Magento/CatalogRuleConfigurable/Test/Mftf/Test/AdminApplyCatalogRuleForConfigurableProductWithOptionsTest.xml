@@ -93,7 +93,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <!-- Delete created data -->
@@ -106,23 +106,23 @@
 
             <!-- Delete created price rules -->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRuleForFirstOption">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForFirstOption">
                 <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRuleForSecondOption">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForSecondOption">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRuleForThirdOption">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForThirdOption">
                 <argument name="name" value="{{CatalogRuleWithoutDiscount.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create price rule for first configurable product option -->

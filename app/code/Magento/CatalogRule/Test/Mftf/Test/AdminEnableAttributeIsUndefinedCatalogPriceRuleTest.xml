@@ -20,7 +20,7 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
 
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
@@ -49,7 +49,7 @@
 
             <!--Delete created data-->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -62,7 +62,7 @@
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
@@ -100,7 +100,7 @@
         <!--Delete previous attribute and Catalog Price Rule-->
         <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
             <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

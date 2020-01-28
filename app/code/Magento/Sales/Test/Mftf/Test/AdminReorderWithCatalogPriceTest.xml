@@ -50,10 +50,10 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetCatalogRuleGridFilters"/>
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <!--Open order page by Id-->
         <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
         <waitForPageLoad stepKey="waitForCreatedOrderPage"/>

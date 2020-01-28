@@ -21,7 +21,7 @@
         <before>
             <magentoCLI command="config:set checkout/cart/configurable_product_image 0" stepKey="setProductImageSettingUnderCofigurationSalesCheckout"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
@@ -32,7 +32,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
@@ -73,7 +73,7 @@
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistProductImage" />
-        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistSidebarProductImage" />
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="assertWishlistProductImage" />
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="assertWishlistSidebarProductImage" />
     </test>
 </tests>

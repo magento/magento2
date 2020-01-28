@@ -16,8 +16,8 @@
             <argument name="product"/>
         </arguments>
 
-        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(product.name)}}" stepKey="AddProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
-        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="AddProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="AddProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(product.name)}}" stepKey="addProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="addProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="addProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
     </actionGroup>
 </actionGroups>

@@ -21,7 +21,7 @@
             <group value="SearchEngineElasticsearch"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
@@ -31,7 +31,7 @@
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createProductThree" stepKey="deleteProductThree"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="adminDeleteStoreViewActionGroup"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -50,7 +50,7 @@
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
         <!-- Switch store view -->
-        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="adminSwitchStoreViewActionGroup"/>
         <!-- Update attribute -->
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributeDescriptionToggle}}" stepKey="toggleToChangeDescription"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributeDescription}}" userInput="Updated $$createProductOne.custom_attributes[description]$$" stepKey="fillAttributeDescriptionField"/>
@@ -59,31 +59,31 @@
 
 
         <!-- Assert on storefront default view with partial word of product name -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
             <argument name="name" value="$$createProductOne.name$$"/>
             <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault"/>
         <see userInput="2 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Assert on storefront custom view with partial word of product name  -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameCustom">
             <argument name="name" value="$$createProductOne.name$$"/>
             <argument name="description" value="Updated $$createProductOne.custom_attributes[description]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultCustom"/>
         <see userInput="2 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
 
         <!-- Assert Storefront default view with exact product name -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault1"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault1"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault1">
             <argument name="name" value="$$createProductThree.name$$"/>
             <argument name="description" value="$$createProductThree.custom_attributes[description]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault1"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault1"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault1"/>
     </test>
     <test name="AdminMassUpdateProductAttributesStoreViewScopeMysqlTest">
@@ -99,7 +99,7 @@
             <group value="SearchEngineMysql"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
@@ -107,7 +107,7 @@
         <after>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="adminDeleteStoreViewActionGroup"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -126,7 +126,7 @@
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
         <!-- Switch store view -->
-        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="adminSwitchStoreViewActionGroup"/>
         <!-- Update attribute -->
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributeDescriptionToggle}}" stepKey="toggleToChangeDescription"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributeDescription}}" userInput="Updated $$createProductOne.custom_attributes[description]$$" stepKey="fillAttributeDescriptionField"/>
@@ -140,22 +140,22 @@
         <waitForPageLoad stepKey="waitFormToReload1"/>
 
         <!-- Assert on storefront default view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
             <argument name="name" value="$$createProductOne.name$$"/>
             <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultDefault"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Assert on storefront custom view -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameCustom">
             <argument name="name" value="$$createProductOne.name$$"/>
             <argument name="description" value="Updated $$createProductOne.custom_attributes[description]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultCustom"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
     </test>
 </tests>

@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
 
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -117,7 +117,7 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Product in Store Front Page -->

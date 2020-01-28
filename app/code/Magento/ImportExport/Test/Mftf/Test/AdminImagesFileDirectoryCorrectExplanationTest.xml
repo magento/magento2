@@ -18,10 +18,10 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
         <waitForPageLoad stepKey="adminImportMainSectionLoad"/>

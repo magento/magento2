@@ -119,7 +119,7 @@
         </actionGroup>
 
         <!-- Assert Order Summary -->
-        <actionGroup ref="StorefrontCheckoutAndAssertOrderSummaryDisplayActionGroup" stepKey="AssertItemCountInOrderSummary">
+        <actionGroup ref="StorefrontCheckoutAndAssertOrderSummaryDisplayActionGroup" stepKey="assertItemCountInOrderSummary">
             <argument name="itemsText" value="2 of 4 Items in Cart"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeViewAndEditLinkInOrderSummary">

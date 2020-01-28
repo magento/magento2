@@ -28,7 +28,7 @@
                 <field key="quantity">500</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -41,12 +41,12 @@
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
 
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters1"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Start creating a bundle product-->
@@ -101,7 +101,7 @@
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage" />
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantity"/>
-        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addProductToCard">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>

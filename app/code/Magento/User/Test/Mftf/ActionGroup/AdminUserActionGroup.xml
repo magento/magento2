@@ -8,7 +8,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Login New User-->
-    <actionGroup name="LoginNewUser">
+    <actionGroup name="LoginNewUserActionGroup">
         <annotations>
             <description>Goes to the Backend Admin Login page. Fill Username and Password. Click on Sign In.</description>
         </annotations>

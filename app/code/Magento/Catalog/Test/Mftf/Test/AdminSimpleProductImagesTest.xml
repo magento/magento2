@@ -27,14 +27,14 @@
             <createData entity="_defaultProduct" stepKey="secondProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Go to the first product edit page -->
@@ -182,13 +182,13 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Go to the product edit page -->

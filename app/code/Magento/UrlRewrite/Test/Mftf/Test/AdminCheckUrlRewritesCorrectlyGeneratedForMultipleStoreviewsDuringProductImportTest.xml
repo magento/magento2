@@ -21,7 +21,7 @@
             <createData entity="ApiCategory" stepKey="createCategory">
                 <field key="name">category-admin</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
                 <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
             </actionGroup>
@@ -51,7 +51,7 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>
@@ -140,7 +140,7 @@
             <createData entity="ApiCategory" stepKey="createCategory">
                 <field key="name">category-admin</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
                 <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
             </actionGroup>
@@ -175,7 +175,7 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache2"/>

@@ -26,17 +26,17 @@
             <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <!--Go to Admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
@@ -63,7 +63,7 @@
 
         <!--Proceed to store front and place an order with free shipping using created coupon-->
         <!--Add product to card-->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCard">
             <argument name="product" value="$$simpleproduct$$"/>
         </actionGroup>
 
@@ -76,9 +76,9 @@
         <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
 
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToAddDiscount"/>
-        <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{_defaultCoupon.code}}" stepKey="TypeDiscountCode"/>
+        <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{_defaultCoupon.code}}" stepKey="typeDiscountCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="clickToApplyDiscount"/>
-        <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
+        <waitForPageLoad stepKey="waitForDiscountToBeAdded"/>
         <see userInput="Your coupon was successfully applied." stepKey="verifyText"/>
 
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>

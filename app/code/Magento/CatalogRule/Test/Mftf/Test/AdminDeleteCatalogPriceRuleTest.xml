@@ -26,7 +26,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Login to Admin page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
@@ -43,7 +43,7 @@
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
             <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a catalog price rule -->
@@ -73,7 +73,7 @@
 
         <!-- Delete the rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
             <argument name="name" value="{{_defaultCatalogRule.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

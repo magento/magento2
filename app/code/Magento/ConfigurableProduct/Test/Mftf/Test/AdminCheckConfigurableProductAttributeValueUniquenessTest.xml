@@ -20,7 +20,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="dropdownProductAttribute" stepKey="createProductAttribute"/>
         </before>
         <after>
@@ -33,7 +33,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
         </after>
         <!--Create configurable product-->
         <comment userInput="Create configurable product" stepKey="createConfProd"/>

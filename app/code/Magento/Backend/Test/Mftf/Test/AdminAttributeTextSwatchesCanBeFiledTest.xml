@@ -22,7 +22,7 @@
         </annotations>
         <before>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         </before>
         <after>
@@ -58,7 +58,7 @@
                 <argument name="customStore" value="storeViewData7"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create 10 store views -->

@@ -36,7 +36,7 @@
                 <requiredEntity createDataKey="getConfigAttributeOption"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Don't display out of stock product -->
@@ -53,7 +53,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create configurable product -->

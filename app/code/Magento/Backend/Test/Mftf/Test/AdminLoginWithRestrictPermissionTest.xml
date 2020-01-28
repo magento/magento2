@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="logIn"/>
             <!--Create user role-->
             <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
                 <argument name="User" value="adminRole"/>
@@ -39,8 +39,8 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutAsSaleRoleUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
@@ -52,8 +52,8 @@
             </actionGroup>
         </after>
         <!--Log out of admin and login with newly created user-->
-        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
+        <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsNewUser">
             <argument name="adminUser" value="admin2"/>
         </actionGroup>
         <actionGroup ref="AssertUserRoleRestrictedAccessActionGroup" stepKey="assertRestrictPage"/>

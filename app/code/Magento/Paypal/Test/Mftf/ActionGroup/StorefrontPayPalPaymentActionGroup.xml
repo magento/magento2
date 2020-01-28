@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="LoginToPayPalPaymentAccount">
+    <actionGroup name="LoginToPayPalPaymentAccountActionGroup">
         <arguments>
             <argument name="userName" type="string" defaultValue="{{Payer.buyerEmail}}"/>
             <argument name="password" type="string" defaultValue="{{Payer.buyerPassword}"/>

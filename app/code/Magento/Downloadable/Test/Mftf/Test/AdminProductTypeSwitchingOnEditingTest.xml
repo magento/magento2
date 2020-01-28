@@ -39,7 +39,7 @@
         <before>
             <!-- Add downloadable domains -->
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
             <comment userInput="Create product" stepKey="commentCreateProduct"/>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -50,7 +50,7 @@
             <!--Delete product-->
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change product type to Downloadable-->
         <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>

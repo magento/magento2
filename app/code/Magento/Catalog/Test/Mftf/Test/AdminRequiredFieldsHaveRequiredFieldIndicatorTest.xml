@@ -18,10 +18,10 @@
             <group value="Catalog"/>
         </annotations>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
         <waitForElementVisible selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="waitForAddSubCategoryVisible"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>

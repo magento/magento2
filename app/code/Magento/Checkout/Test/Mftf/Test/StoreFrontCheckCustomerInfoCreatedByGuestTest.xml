@@ -31,7 +31,7 @@
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct" />
             <deleteData createDataKey="category" stepKey="deleteCategory" />
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPage"/>
@@ -50,11 +50,11 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
-        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypePassword"/>
-        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypeConfirmationPassword"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="typePassword"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="typeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
         <see userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdmin"/>
         <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
         <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
         <see stepKey="seeCustomerName" userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminShipmentOrderInformationSection.customerName}}"/>

@@ -29,7 +29,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <!-- Create new store view and assign it to non default store -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
             <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
@@ -48,7 +48,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
         </after>
 

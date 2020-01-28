@@ -52,7 +52,7 @@
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSelectedProducts" before="saveProductForm"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
     </test>

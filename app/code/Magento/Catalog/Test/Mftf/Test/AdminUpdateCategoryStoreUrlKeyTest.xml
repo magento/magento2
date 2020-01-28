@@ -22,11 +22,11 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create category, change store view to default -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
@@ -34,7 +34,7 @@
         </actionGroup>
 
         <!--Switch to "Default Store View" scope-->
-        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="SwitchStoreView">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="_defaultCategory.name"/>
         </actionGroup>
@@ -58,7 +58,7 @@
 
         <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend, delete category -->
         <!--Switch to "Default Store View" scope-->
-        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="SwitchStoreView2">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView2">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="_defaultCategory.name"/>
         </actionGroup>

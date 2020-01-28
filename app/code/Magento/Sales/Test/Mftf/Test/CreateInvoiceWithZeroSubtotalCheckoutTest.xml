@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -58,7 +58,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order -->
@@ -110,7 +110,7 @@
         <!-- Open My Account > My Orders -->
         <amOnPage stepKey="goToMyAccountPage" url="{{StorefrontCustomerDashboardPage.url}}"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="goToSidebarMenu">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
 

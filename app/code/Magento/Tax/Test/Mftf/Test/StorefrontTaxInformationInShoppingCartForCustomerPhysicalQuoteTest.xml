@@ -40,7 +40,7 @@
             </createData>
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
@@ -71,7 +71,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--  Test Steps  -->
         <!--  Step 1: Go to Storefront as logged in Customer  -->

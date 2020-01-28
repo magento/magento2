@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminGridFilterSearchResultsByInput">
+    <actionGroup name="AdminGridFilterSearchResultsByInputActionGroup">
         <annotations>
             <description>Filters an Admin Grid page using the provided Filter Selector and Search Value.</description>
         </annotations>

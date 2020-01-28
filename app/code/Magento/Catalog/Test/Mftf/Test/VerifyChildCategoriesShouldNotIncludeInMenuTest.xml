@@ -25,9 +25,9 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
@@ -61,8 +61,8 @@
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage3"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory2"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="SetNoToEnableCategorySelect"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="SetYesToIncludeInMenuSelect"/>
+        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="setNoToEnableCategorySelect"/>
+        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="setYesToIncludeInMenuSelect"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton2"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontSeeCheckboxEnableCategoryIsChecked"/>
         <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="seeCheckboxIncludeInMenuIsChecked"/>

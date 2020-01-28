@@ -25,7 +25,7 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create downloadable product -->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
@@ -76,7 +76,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Step 1: Navigate to store front Product page as guest -->

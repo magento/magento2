@@ -34,11 +34,11 @@
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Downloadable Product page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="OpenStoreFrontProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="openStoreFrontProductPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
         <!-- Add Downloadable product to the cart -->
@@ -50,7 +50,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="assertCartSummary" >
             <argument name="subtotal" value="$123.00"/>
             <argument name="total" value="123.00"/>
         </actionGroup>

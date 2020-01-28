@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter customer address grid by phone number -->
-    <actionGroup name="AdminFilterCustomerAddressGridByPhoneNumber">
+    <actionGroup name="AdminFilterCustomerAddressGridByPhoneNumberActionGroup">
         <annotations>
             <description>Filters the Admin Customers grid by the provided Phone Number.</description>
         </annotations>

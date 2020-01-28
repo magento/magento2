@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
@@ -28,10 +28,10 @@
                 <argument name="sku" value="{{virtualProductCustomImportOptions.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetOrderFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>

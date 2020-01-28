@@ -19,13 +19,13 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCategoryActionGroup" stepKey="DeleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to create a new category with image -->
@@ -41,7 +41,7 @@
         <actionGroup ref="RemoveCategoryImageActionGroup" stepKey="removeCategoryImage"/>
         <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategoryFormAfterRemove"/>
 
-        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="CheckCategoryOnStorefront">
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="checkCategoryOnStorefront">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
 

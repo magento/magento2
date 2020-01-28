@@ -16,7 +16,7 @@
             <argument name="Address"/>
         </arguments>
 
-        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
+        <amOnPage url="customer/address/new/" stepKey="openCustomerAddNewAddress"/>
         <fillField  stepKey="fillFirstName" userInput="{{Address.firstname}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
         <fillField  stepKey="fillLastName" userInput="{{Address.lastname}}" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
         <fillField  stepKey="fillCompanyName" userInput="{{Address.company}}" selector="{{StorefrontCustomerAddressFormSection.company}}"/>

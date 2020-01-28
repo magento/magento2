@@ -25,7 +25,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
 
             <!-- Admin Login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
@@ -33,7 +33,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- go to bundle product creation page-->
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
@@ -70,10 +70,10 @@
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- go to page-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
 
         <!--Test Assertion - on correct page/page has been published-->
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <seeElement stepKey="lookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>

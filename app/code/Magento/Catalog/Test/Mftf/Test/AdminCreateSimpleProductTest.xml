@@ -25,12 +25,12 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
-        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+        <actionGroup ref="AssertProductInStorefrontCategoryPageActionGroup" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
@@ -50,16 +50,16 @@
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="RestoreLayoutSettingActionGroup" stepKey="sampleActionGroup"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="DefaultProductLayout" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="defaultProductLayout" />
         <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="3 columns" stepKey="select3ColumnsLayout"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
@@ -79,7 +79,7 @@
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
         </annotations>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
@@ -100,7 +100,7 @@
             <testCaseId value="MAGETWO-89912"/>
             <group value="product"/>
         </annotations>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>

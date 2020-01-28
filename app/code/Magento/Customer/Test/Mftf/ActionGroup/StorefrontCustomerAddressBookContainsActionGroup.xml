@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Go to Address Book -->
-    <actionGroup name="StorefrontCustomerAddressBookContains">
+    <actionGroup name="StorefrontCustomerAddressBookContainsActionGroup">
         <annotations>
             <description>Validate that the provided Address appears in the Storefront Customer Address list.</description>
         </annotations>

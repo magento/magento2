@@ -20,15 +20,15 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <!--Fill the CMS page form-->
-        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForPageWithDefaultStore"/>
+        <actionGroup ref="FillOutCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore"/>
         <actionGroup ref="AdminSelectCMSPageStoreViewActionGroup" stepKey="selectCMSPageStoreView">
             <argument name="storeViewName" value="Default Store View"/>
         </actionGroup>

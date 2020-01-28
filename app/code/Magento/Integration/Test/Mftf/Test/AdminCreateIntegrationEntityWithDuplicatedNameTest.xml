@@ -20,12 +20,12 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
-        
+
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
             <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>

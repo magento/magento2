@@ -48,7 +48,7 @@
             <deleteData createDataKey="apiBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryPage"/>
@@ -66,7 +66,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!--Check subtotal in created order-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>

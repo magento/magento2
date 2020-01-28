@@ -20,7 +20,7 @@
             <group value="Msrp"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -104,7 +104,7 @@
             <!--Disable Minimum advertised Price-->
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->

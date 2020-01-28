@@ -26,7 +26,7 @@
             <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
 
             <!-- Login to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Initiate create new order -->
@@ -42,7 +42,7 @@
         <seeCheckboxIsChecked selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="verifyProductChecked"/>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
         </after>

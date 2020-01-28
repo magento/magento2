@@ -19,7 +19,7 @@
             <group value="GroupedProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
                 <requiredEntity createDataKey="createCategory"/>
@@ -72,7 +72,7 @@
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 

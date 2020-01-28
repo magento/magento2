@@ -21,16 +21,16 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeEnabledConfigData.path}} {{StorefrontSingleStoreModeEnabledConfigData.value}}" stepKey="enableSingleStoreMode" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeDisabledConfigData.path}} {{StorefrontSingleStoreModeDisabledConfigData.value}}" stepKey="disableSingleStoreMode" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <!--Fill the CMS page form-->
-        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForPageWithDefaultStore"/>
+        <actionGroup ref="FillOutCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore"/>
         <!--Verify successfully saved-->
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="savePageInSingleStoreMode"/>
         <!--verify page on frontend-->

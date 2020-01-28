@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
          <!--Create Shipment With Tracking Number-->
-            <actionGroup name="AdminCreateShipmentFromOrderPage">
+            <actionGroup name="AdminCreateShipmentFromOrderPageActionGroup">
                 <arguments>
                     <argument name="Title" defaultValue="" type="string"/>
                     <argument name="Number" defaultValue="" type="string"/>

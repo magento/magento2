@@ -19,7 +19,7 @@
             <group value="CatalogUrlRewrite"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created categories-->
@@ -36,7 +36,7 @@
             <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteGraphQlCategory">
                 <argument name="categoryName" value="graphql"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Check category creation with restricted url key 'admin'-->
         <comment userInput="Check category creation with restricted url key 'admin'" stepKey="commentCheckAdminCategoryCreation"/>

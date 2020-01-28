@@ -35,7 +35,7 @@
             <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
 
             <!--Configure Braintree Payment method-->
-            <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
+            <createData entity="BraintreeConfig" stepKey="braintreeConfigurationData"/>
             <createData entity="CustomBraintreeConfigurationData" stepKey="enableBraintree"/>
 
             <!--Create Retailer Customer with US_CA address-->
@@ -44,7 +44,7 @@
             </createData>
 
             <!--Login as Admin User-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -52,7 +52,7 @@
             <actionGroup ref="AdminDeleteCartPriceRuleForRetailerActionGroup" stepKey="deleteSalesRule"/>
 
             <!--Set to default configuration Tax Shipping Class-->
-            <actionGroup ref="setDefaultShippingTaxClass" stepKey="setdefaultClass"/>
+            <actionGroup ref="setDefaultShippingTaxClassActionGroup" stepKey="setdefaultClass"/>
 
             <!--Delete Simple Sub Category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -70,7 +70,7 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 
             <!--Log Out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create a cart price rule with 10% discount for whole cart -->

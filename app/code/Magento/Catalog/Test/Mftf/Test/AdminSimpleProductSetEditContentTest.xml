@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!--Admin Login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
@@ -30,7 +30,7 @@
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
             <!--Admin Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create product -->

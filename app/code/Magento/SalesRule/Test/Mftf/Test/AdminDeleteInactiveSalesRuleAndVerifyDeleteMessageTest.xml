@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
             <!--Create inactive cart price rule-->
             <actionGroup ref="AdminInactiveCartPriceRuleActionGroup" stepKey="createInactiveCartPriceRule">
@@ -30,11 +30,11 @@
         </before>
         <after>
             <deleteData createDataKey="initialSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete inactive cart price rule-->
-        <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteInactiveCartPriceRule">
+        <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteInactiveCartPriceRule">
             <argument name="ruleName" value="{{InactiveSalesRule.name}}"/>
         </actionGroup>
 

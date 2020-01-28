@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
 
             <createData entity="_defaultCategory" stepKey="defaultCategory"/>
@@ -31,7 +31,7 @@
             <argument name="Category" value="$$subCategory$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewForSubCategory"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="adminSwitchStoreViewForSubCategory"/>
 
         <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyForSubCategory">
             <argument name="value" value="bags-second"/>
@@ -58,7 +58,7 @@
 
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>

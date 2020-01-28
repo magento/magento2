@@ -27,7 +27,7 @@
                 <requiredEntity createDataKey="createCategoryTwo"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>
@@ -37,7 +37,7 @@
 
             <!-- Delete the catalog price rule -->
             <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>

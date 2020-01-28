@@ -15,7 +15,7 @@
         <arguments>
             <argument name="optionTitle" defaultValue="ProductOptionValueCheckbox"/>
         </arguments>
-        
-        <checkOption selector="{{StorefrontProductInfoMainSection.customOptionCheckBox(optionTitle.title)}}"   stepKey="SelectOptionRadioButton"/>
+
+        <checkOption selector="{{StorefrontProductInfoMainSection.customOptionCheckBox(optionTitle.title)}}"   stepKey="selectOptionRadioButton"/>
     </actionGroup>
 </actionGroups>

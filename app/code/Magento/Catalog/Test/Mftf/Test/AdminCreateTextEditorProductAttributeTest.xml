@@ -26,7 +26,7 @@
             <magentoCLI command="config:set {{EnableTinyMCE4.path}} {{EnableTinyMCE4.value}}" stepKey="enableTinyMCE4"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete attribute -->
@@ -40,7 +40,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Stores > Product, click "Add New Attribute" -->

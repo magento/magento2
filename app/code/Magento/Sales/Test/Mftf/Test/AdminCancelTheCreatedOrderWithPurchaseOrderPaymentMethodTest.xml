@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Enable Purchase Order payment method -->
             <magentoCLI command="config:set {{EnablePurchaseOrderConfigData.path}} {{EnablePurchaseOrderConfigData.value}}" stepKey="enableCPurchaseOrderPayment"/>
@@ -42,7 +42,7 @@
             <magentoCLI command="config:set {{DisablePurchaseOrderConfigData.path}} {{DisablePurchaseOrderConfigData.value}}" stepKey="disablePurchaseOrderPayment"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->

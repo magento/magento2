@@ -16,7 +16,7 @@
             <argument name="errorMessage" type="string"/>
         </arguments>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageLoad"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonFromAdminCategoryModalSection"/>
         <see selector="{{AdminCategoryMessagesSection.errorMessage}}" userInput="{{errorMessage}}" stepKey="seeAssertErrorMessage"/>

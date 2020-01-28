@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
                     <requiredEntity createDataKey="rootCategory"/>
@@ -29,7 +29,7 @@
                 <argument name="storeGroupName" value="customStore.name"/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open store page -->
@@ -52,8 +52,8 @@
         <!--Verify created SubCAtegory is present on Store Front -->
         <amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="ClickSwitchStoreButtonOnDefaultStore"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="SelectSecondStoreToSwitchOn"/>
+        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
+        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectSecondStoreToSwitchOn"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="seeCatergoryInStoreFront"/>
 
         <!--Open Category Page-->

@@ -23,7 +23,7 @@
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -56,16 +56,16 @@
             <group value="Cms"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="RestoreLayoutSettingActionGroup" stepKey="sampleActionGroup"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="defaultProductLayout" />
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected" />
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected1" />
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2" />
@@ -93,7 +93,7 @@
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPageCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -102,7 +102,7 @@
         <see selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
         <see selector="{{CmsNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
         <!--Create new CMS Page page-->
-        <actionGroup ref="FillOutCMSPageContent" stepKey="FillOutBlockContent"/>
+        <actionGroup ref="FillOutCMSPageContentActionGroup" stepKey="fillOutBlockContent"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
         <click selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
         <waitForPageLoad stepKey="waitForPageLoad3"/>

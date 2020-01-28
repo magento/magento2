@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
             <!-- Create two simple products -->
@@ -36,7 +36,7 @@
         </before>
         <after>
             <!-- Delete created data -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

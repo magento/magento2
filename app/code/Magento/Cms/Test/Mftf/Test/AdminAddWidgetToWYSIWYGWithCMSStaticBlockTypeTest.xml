@@ -69,7 +69,7 @@
         <after>
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

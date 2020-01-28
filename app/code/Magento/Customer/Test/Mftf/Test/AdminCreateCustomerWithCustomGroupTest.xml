@@ -20,14 +20,14 @@
 
         <before>
             <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}" />
             </actionGroup>
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open New Customer Page -->
@@ -43,7 +43,7 @@
         <reloadPage stepKey="reloadPage"/>
 
         <!--Verify Customer in grid -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterTheCustomerByEmail1">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForCustomerPageToLoad"/>

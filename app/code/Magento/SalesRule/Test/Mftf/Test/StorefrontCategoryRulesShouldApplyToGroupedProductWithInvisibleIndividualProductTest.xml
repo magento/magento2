@@ -62,7 +62,7 @@
                 <requiredEntity createDataKey="createSecondGroupedProduct"/>
                 <requiredEntity createDataKey="createFourthSimpleProduct"/>
             </updateData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
@@ -77,7 +77,7 @@
                 <argument name="ruleName" value="TestSalesRule"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Start to create new cart price rule via Category conditions -->
         <actionGroup ref="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" stepKey="createCartPriceRuleWithCondition">

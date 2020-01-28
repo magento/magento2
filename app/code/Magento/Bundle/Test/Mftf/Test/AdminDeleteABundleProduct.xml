@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>
@@ -61,27 +61,27 @@
 
         <!--Go to catalog deletion page-->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogPage"/>
-        <waitForPageLoad stepKey="Loading"/>
+        <waitForPageLoad stepKey="loading"/>
 
         <!--Apply Name Filter-->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="SelectAllOnly1"/>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="selectAllOnly1"/>
         <waitForPageLoad stepKey="loading2"/>
 
         <!--Delete-->
-        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
-        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
-        <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="clickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="clickDelete"/>
+        <click selector="//button[@class='action-primary action-accept']" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="loading3"/>
 
         <!--Locating delete message-->
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
 
         <!--Testing deletion of product-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement selector="{{StorefrontBundledSection.bundleProductName}}" stepKey="LookingForNameOfProductTwo"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPageAgain"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoadToShowElement"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleProductName}}" stepKey="lookingForNameOfProductTwo"/>
     </test>
 </tests>

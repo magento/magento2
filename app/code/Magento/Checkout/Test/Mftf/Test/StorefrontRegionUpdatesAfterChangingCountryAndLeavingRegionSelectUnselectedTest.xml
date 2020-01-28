@@ -32,7 +32,7 @@
 
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
 
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="goToAddressBookPage">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
         <actionGroup ref="StoreFrontClickEditDefaultShippingAddressActionGroup" stepKey="clickEditAddress"/>

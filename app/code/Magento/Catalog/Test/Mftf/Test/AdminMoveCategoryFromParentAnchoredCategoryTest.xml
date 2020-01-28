@@ -18,7 +18,7 @@
             <features value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
         </before>
@@ -28,7 +28,7 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Category page-->

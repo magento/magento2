@@ -23,7 +23,7 @@
             <argument name="qty3" type="string"/>
         </arguments>
 
-        <amOnPage url="{{StorefrontProductPage.url(urlKey)}}" stepKey="OpenStoreFrontProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url(urlKey)}}" stepKey="openStoreFrontProductPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField stepKey="fillQuantityForProduct1" selector="{{StorefrontProductPageSection.qtyInputWithProduct(product1)}}" userInput="{{qty1}}"/>
         <fillField stepKey="fillQuantityForProduct2" selector="{{StorefrontProductPageSection.qtyInputWithProduct(product2)}}" userInput="{{qty2}}"/>

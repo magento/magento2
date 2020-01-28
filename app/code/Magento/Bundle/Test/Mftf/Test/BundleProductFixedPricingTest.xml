@@ -25,7 +25,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
 
             <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdminActionGroup"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
@@ -35,7 +35,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to bundle product creation page-->
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
@@ -78,16 +78,16 @@
 
         <!--Testing that price appears correctly in admin catalog-->
         <!--Set filter to product name-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-        <waitForPageLoad stepKey="WaitForClear"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <waitForPageLoad stepKey="waitForClear"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <seeElement selector="{{AdminProductFiltersSection.priceOfFirstRow(BundleProduct.fixedPrice)}}" stepKey="seePrice"/>
         <!--Storefront-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
         <seeElement selector="{{StorefrontBundledSection.fixedPricing(BundleProduct.fixedPrice)}}" stepKey="checkingForFixedPrice"/>
     </test>

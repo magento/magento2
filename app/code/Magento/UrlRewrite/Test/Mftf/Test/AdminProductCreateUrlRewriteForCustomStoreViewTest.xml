@@ -26,7 +26,7 @@
             <createData entity="SimpleProduct" stepKey="createProductForUrlRewrite">
                <requiredEntity createDataKey="createCategory" />
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create second store view -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="customStore" value="customStore"/>
@@ -41,7 +41,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearFilterForStores"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Step 1. Navigate as Admin on Product Page for edit product`s Url Key-->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToProductForUrlRewrite">

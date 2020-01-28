@@ -160,7 +160,7 @@
 
         <!--Go to shopping cart-->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
-        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+        <actionGroup ref="FillShippingZipFormActionGroup" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
 
@@ -192,7 +192,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
@@ -212,7 +212,7 @@
         <see selector="{{StorefrontCustomerRecentOrdersSection.orderTotal}}" userInput="$613.23" stepKey="checkOrderTotalInStorefront"/>
 
         <!-- Go to Address Book -->
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenuActionGroup" stepKey="goToAddressBook">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
 

@@ -19,7 +19,7 @@
             <group value="GroupedProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
                 <requiredEntity createDataKey="createCategory"/>
@@ -75,7 +75,7 @@
         <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPageAfterRemove">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <!-- Assert product image not in storefront product page -->

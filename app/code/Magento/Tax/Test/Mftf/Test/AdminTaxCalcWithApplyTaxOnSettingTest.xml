@@ -49,7 +49,7 @@
                 <argument name="userInput" value="Custom price if available"/>
             </actionGroup>
             <actionGroup ref="ResetTaxClassForShippingActionGroup" stepKey="resetTaxClassForShipping"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="NavigateToNewOrderPageNewCustomerSingleStoreActionGroup" stepKey="gotoNewOrderCreationPage"/>

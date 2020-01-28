@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CompareTwoProductsOrder">
+    <actionGroup name="CompareTwoProductsOrderActionGroup">
         <annotations>
             <description>Goes to the Storefront. Validates that the 2 provided Products appear in the correct order.</description>
         </annotations>

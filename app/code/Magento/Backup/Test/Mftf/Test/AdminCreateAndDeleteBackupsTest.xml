@@ -39,17 +39,17 @@
         <actionGroup ref="CreateDatabaseBackupActionGroup" stepKey="createDatabaseBackup"/>
 
         <!--Delete system backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteSystemBackup">
+        <actionGroup ref="deleteBackupActionGroup" stepKey="deleteSystemBackup">
             <argument name="backup" value="SystemBackup"/>
         </actionGroup>
 
         <!--Delete database/media backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteMediaBackup">
+        <actionGroup ref="deleteBackupActionGroup" stepKey="deleteMediaBackup">
             <argument name="backup" value="MediaBackup"/>
         </actionGroup>
 
         <!--Delete database backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+        <actionGroup ref="deleteBackupActionGroup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="DatabaseBackup"/>
         </actionGroup>
 

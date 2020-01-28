@@ -19,7 +19,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -52,7 +52,7 @@
         <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPageAfterRemove">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
         <!-- Assert product image not in storefront product page -->

@@ -18,14 +18,14 @@
             <group value="NewRelicReporting"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminNavigateToNewRelicConfigurationActionGroup" stepKey="goToConfigPage"/>
             <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandingGeneralSection">
                 <argument name="sectionName" value="General"/>
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="AssertAdminNewRelicConfigFieldIsNotVisibleActionGroup" stepKey="checkingIfApiUrlIsNotVisible">
             <argument name="config" value="{{AdminNewRelicConfigSystemSection.apiUrl}}"/>

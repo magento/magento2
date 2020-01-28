@@ -20,13 +20,13 @@
 
         <before>
             <createData entity="defaultUrlRewrite" stepKey="urlRewrite"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{customPermanentUrlRewrite.request_path}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Search default custom url rewrite in grid-->

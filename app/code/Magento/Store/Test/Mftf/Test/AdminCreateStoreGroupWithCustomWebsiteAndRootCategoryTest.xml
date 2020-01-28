@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create root category-->
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
@@ -38,7 +38,7 @@
             </actionGroup>
             <!--Delete root category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create custom store group with custom website and root category and verify AssertStoreGroupSuccessSaveMessage-->

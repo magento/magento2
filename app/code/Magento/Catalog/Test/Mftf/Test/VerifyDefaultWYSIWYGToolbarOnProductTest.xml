@@ -28,7 +28,7 @@
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible1"/>
-        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
+        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="tinyMCE4Description" />
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo2"/>
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo3"/>
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo4"/>
@@ -44,7 +44,7 @@
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo14"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
     <test name="Verifydefaultcontrolsonproductshortdescription">
@@ -67,7 +67,7 @@
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible2"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />
+        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="tinyMCE4ShortDescription" />
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo16"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo17"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo18"/>
@@ -83,7 +83,7 @@
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo28"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

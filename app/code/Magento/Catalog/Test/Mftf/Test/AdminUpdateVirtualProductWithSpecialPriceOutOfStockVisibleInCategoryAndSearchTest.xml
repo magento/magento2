@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
             <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
@@ -33,11 +33,11 @@
             </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search default virtual product in the grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage1"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
@@ -75,7 +75,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSaveSuccessMessage"/>
 
         <!-- Search updated virtual product with special price(out of stock) in the grid -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedVirtualProduct"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPageToSearchUpdatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>

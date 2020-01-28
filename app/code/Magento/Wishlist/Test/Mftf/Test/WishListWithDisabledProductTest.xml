@@ -26,7 +26,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$createCustomer$$"/>
@@ -39,7 +39,7 @@
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminArea"/>
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>

@@ -21,7 +21,7 @@
 
         <before>
             <!-- Log in to Dashboard page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
 
 

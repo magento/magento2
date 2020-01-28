@@ -28,6 +28,6 @@
         <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="saveProductForm"/>
 
         <!-- Assert product video in storefront product page -->
-        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="assertProductInStorefrontProductPage"/>
     </test>
 </tests>

@@ -20,7 +20,7 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
@@ -45,7 +45,7 @@
 
             <!-- Delete created below search terms -->
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to storefront home page -->

@@ -32,7 +32,7 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <!-- Open Dropdown and select simple product option -->
         <comment stepKey="beforeOpenProductFillForm" userInput="Selecting Product from the Add Product Dropdown"/>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
@@ -56,7 +56,7 @@
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Virtual Product"  stepKey="seeProductTypeInGrid"/>
-        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
     </test>

@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!--Login as admin and delete all products -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!--Create dropdown product attribute-->
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
@@ -88,8 +88,8 @@
             <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
             <!--Delete category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultViewAfterTest"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultViewAfterTest"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductGridPageLoad"/>

@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Delete customer address from grid row, row starts at 0 -->
-    <actionGroup name="AdminDeleteAddressInCustomersAddressGrid">
+    <actionGroup name="AdminDeleteAddressInCustomersAddressGridActionGroup">
         <annotations>
             <description>Deletes a Customer Address from the Customer creation/edit page under the 'Addresses' section.</description>
         </annotations>

@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
 
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -33,7 +33,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Set timezone for default config-->
@@ -47,7 +47,7 @@
         <!--Set timezone for Main Website-->
         <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig1"/>
         <waitForPageLoad stepKey="waitForConfigPage1"/>
-        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup">
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchStoreViewActionGroup">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection1"/>
@@ -84,7 +84,7 @@
         <!--Reset timezone-->
         <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset1"/>
         <waitForPageLoad stepKey="waitForConfigPageReset1"/>
-        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup1">
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchStoreViewActionGroup1">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionReset1"/>

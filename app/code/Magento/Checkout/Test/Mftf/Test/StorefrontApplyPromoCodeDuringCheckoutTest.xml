@@ -38,7 +38,7 @@
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
 
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Storefront as Guest and add simple product to cart -->
@@ -77,7 +77,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Verify total on order page -->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">

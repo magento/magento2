@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
@@ -61,7 +61,7 @@
         </before>
         <after>
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <!-- Customer logout -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -91,7 +91,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Search and open customer -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>

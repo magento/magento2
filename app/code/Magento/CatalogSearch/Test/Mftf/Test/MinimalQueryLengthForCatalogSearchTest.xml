@@ -25,13 +25,13 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
         <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>

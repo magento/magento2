@@ -21,7 +21,7 @@
 
         <before>
             <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -34,7 +34,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
                 <argument name="productName" value="$$createConfigProductAttributeCreateConfigurableProduct.name$$"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open edit product page-->

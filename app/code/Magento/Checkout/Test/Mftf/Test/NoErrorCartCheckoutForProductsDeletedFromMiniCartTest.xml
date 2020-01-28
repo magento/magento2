@@ -51,7 +51,7 @@
         <waitForPageLoad stepKey="waitForDeleteToFinish"/>
         <dontSeeElement selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="dontSeeDeleteProductFromCheckoutCart"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
-        <waitForPageLoad stepKey="WaitForPageLoad3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
     </test>
 </tests>

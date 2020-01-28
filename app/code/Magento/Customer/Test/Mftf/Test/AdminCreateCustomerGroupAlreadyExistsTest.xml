@@ -20,10 +20,10 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
                     2. Navigate to Stores > Other Settings > Customer Groups.
@@ -31,7 +31,7 @@
                     4. Fill in all data according to data set:  Group Name "General", Tax Class "Retail customer"
                     5. Click "Save Customer Group" button. -->
         <!--  Assert  "Customer Group already exists." error message displayed -->
-        <actionGroup ref="AdminAssertErrorMessageCustomerGroupAlreadyExists" stepKey="seeErrorMessageCustomerGroupAlreadyExists">
+        <actionGroup ref="AdminAssertErrorMessageCustomerGroupAlreadyExistsActionGroup" stepKey="seeErrorMessageCustomerGroupAlreadyExists">
             <argument name="groupName" value="{{GeneralCustomerGroup.code}}"/>
             <argument name="taxClass" value="{{GeneralCustomerGroup.tax_class_name}}"/>
         </actionGroup>

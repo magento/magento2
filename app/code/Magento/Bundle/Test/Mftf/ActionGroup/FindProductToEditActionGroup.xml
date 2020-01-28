@@ -13,12 +13,12 @@
             <description>Clears the Backend Admin Grid Filters on the Backend Admin Product Grid page. Searches for the BundleProduct Data Entity. Then clicks on the first item in the Admin Grid. PLEASE NOTE: The Action Group values are Hardcoded.</description>
         </annotations>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToProductCatalog"/>
-        <waitForPageLoad stepKey="WaitForCatalogProductPageToLoad"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
+        <waitForPageLoad stepKey="waitForCatalogProductPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <fillField userInput="{{BundleProduct.name}}" selector="#fulltext" stepKey="EnterProductNameInSearch"/>
-        <click stepKey="ClickSearch" selector="{{AdminProductFormBundleSection.searchButton}}"/>
-        <click stepKey="ClickOnProduct" selector="{{AdminProductFormBundleSection.firstCatalogProduct}}"/>
-        <waitForPageLoad stepKey="WaitForProductEditPageToLoad"/>
+        <fillField userInput="{{BundleProduct.name}}" selector="#fulltext" stepKey="enterProductNameInSearch"/>
+        <click stepKey="clickSearch" selector="{{AdminProductFormBundleSection.searchButton}}"/>
+        <click stepKey="clickOnProduct" selector="{{AdminProductFormBundleSection.firstCatalogProduct}}"/>
+        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
     </actionGroup>
 </actionGroups>

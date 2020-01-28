@@ -26,13 +26,13 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminCreateSimpleProductWithTextOptionCharLimitActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
             <argument name="charLimit" value="20"/>
         </actionGroup>
-        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+        <actionGroup ref="AssertProductInStorefrontCategoryPageActionGroup" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>

@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Update Product Name and Description attribute -->
-    <actionGroup name="AdminUpdateProductNameAndDescriptionAttributes">
+    <actionGroup name="AdminUpdateProductNameAndDescriptionAttributesActionGroup">
         <arguments>
             <argument name="product"/>
         </arguments>

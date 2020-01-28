@@ -13,7 +13,7 @@
             <description>Goes to the Storefront 'Advanced Search' page.</description>
         </annotations>
 
-        <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="goToStoreViewAdvancedCatalogSearchActionGroup"/>
         <waitForPageLoad time="90" stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

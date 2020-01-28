@@ -19,7 +19,7 @@
         <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
         <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.username)}}"/>
         <waitForPageLoad stepKey="waitForSingleUserPageToLoad"/>
-        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <fillField stepKey="typeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
         <waitForPageLoad stepKey="waitForConfirmationPopup"/>

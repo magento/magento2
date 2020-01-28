@@ -30,7 +30,7 @@
                 <field key="group_id">1</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <!--Create Catalog Rule-->
             <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="createCatalogPriceRule">
                 <argument name="catalogRule" value="_defaultCatalogRule"/>
@@ -45,11 +45,11 @@
         <after>
             <!-- Delete the rule -->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

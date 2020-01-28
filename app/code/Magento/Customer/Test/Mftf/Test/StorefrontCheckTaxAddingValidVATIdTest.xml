@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!--Log In-->
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="logIn"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
@@ -85,7 +85,7 @@
         <waitForPageLoad stepKey="waitForAddProductToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartActionGroup"/>
         <!-- Click next button to open payment section -->
         <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
@@ -104,12 +104,12 @@
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="{{TaxRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteSecondRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteSecondRule">
                 <argument name="name" value="{{TaxRuleZeroRate.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -119,12 +119,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxUK.state}}-{{SimpleTaxUK.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxUKZeroRate.state}}-{{SimpleTaxUKZeroRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -143,7 +143,7 @@
             </actionGroup>
 
            <!--Log Out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

@@ -21,12 +21,12 @@
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToEditPage"/>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">

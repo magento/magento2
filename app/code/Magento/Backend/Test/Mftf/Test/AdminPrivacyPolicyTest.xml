@@ -21,7 +21,7 @@
         </annotations>
 
         <!-- Logging in Magento admin and checking for Privacy policy footer in dashboard -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <closeAdminNotification stepKey="closeAdminNotification"/>
         <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkDashboard"/>
 

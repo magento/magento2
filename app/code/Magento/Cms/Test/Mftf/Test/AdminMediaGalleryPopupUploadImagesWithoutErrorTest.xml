@@ -33,14 +33,14 @@
             <comment userInput="Disable WYSIWYG options" stepKey="commentDisableWYSIWYG"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createBlock" stepKey="deleteBlock" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created block page and add image-->
         <comment userInput="Open create block page and add image" stepKey="commentOpenBlockPage"/>
         <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
             <argument name="CMSBlockPage" value="$$createBlock$$"/>
         </actionGroup>
-        <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImage">
+        <actionGroup ref="AdminAddImageToCMSBlockContentActionGroup" stepKey="addImage">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
@@ -53,7 +53,7 @@
         <switchToIFrame stepKey="switchBack"/>
         <!--Add image second time and assert-->
         <comment userInput="Add image second time and assert" stepKey="commentAddImageAndAssert"/>
-        <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImageSecondTime">
+        <actionGroup ref="AdminAddImageToCMSBlockContentActionGroup" stepKey="addImageSecondTime">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <switchToIFrame selector="{{BlockContentSection.contentIframe}}" stepKey="switchToContentFrameSecondTime"/>

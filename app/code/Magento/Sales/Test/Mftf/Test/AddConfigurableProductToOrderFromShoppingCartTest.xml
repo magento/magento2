@@ -57,7 +57,7 @@
         </before>
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -88,10 +88,10 @@
         </actionGroup>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search and open customer -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>

@@ -37,7 +37,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add product to cart -->
@@ -75,7 +75,7 @@
 
         <!-- Open new browser's window and login as Admin -->
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to Store > Configuration > Sales > Shipping Methods -->
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>

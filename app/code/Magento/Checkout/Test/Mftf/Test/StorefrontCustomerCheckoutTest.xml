@@ -33,7 +33,7 @@
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
@@ -64,7 +64,7 @@
         <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}"/>
         <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
@@ -110,7 +110,7 @@
             </createData>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="multiple_address_customer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -137,7 +137,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -146,16 +146,16 @@
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
             <waitForPageLoad stepKey="waitForRatesPage"/>
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="multiple_address_customer" stepKey="deleteCustomer"/>

@@ -21,7 +21,7 @@
         <before>
             <!-- Login as admin -->
             <createData entity="SimpleTwo" stepKey="simpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -43,7 +43,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Fill out the form for the new category -->
-        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="fillNewProductCategory">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 

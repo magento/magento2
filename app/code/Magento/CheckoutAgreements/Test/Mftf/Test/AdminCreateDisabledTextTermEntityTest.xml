@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin" />
             <createData entity="SimpleTwo" stepKey="createdProduct"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
@@ -32,7 +32,7 @@
             <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
                 <argument name="term" value="disabledTextTerm"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">

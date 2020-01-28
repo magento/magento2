@@ -87,7 +87,7 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--SKU Product Attribute is enabled for Promo Rule Conditions-->
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="navigateToSkuProductAttribute">
                 <argument name="ProductAttribute" value="sku"/>
@@ -116,7 +116,7 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
                 <argument name="option" value="No"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open category with products and Sort by price desc-->
@@ -156,7 +156,7 @@
 
         <!-- Delete the rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
             <argument name="name" value="{{CatalogRuleByPercentWith96Amount.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

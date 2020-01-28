@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Temporary file to pass CI verification -->
-    <actionGroup name="goToShipmentIntoOrder">
+    <actionGroup name="goToShipmentIntoOrderActionGroup">
         <annotations>
             <description>Clicks on the 'Ship' button on the view Admin Order page. Validates that the URL and Page Title are present and correct.</description>
         </annotations>
@@ -18,7 +18,7 @@
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Shipment" stepKey="seePageNameNewInvoicePage"/>
     </actionGroup>
-    <actionGroup name="submitShipmentIntoOrder">
+    <actionGroup name="submitShipmentIntoOrderActionGroup">
         <annotations>
             <description>Clicks on the 'Submit Shipment' button on the view Admin Order Shipment page. Validates that the URL and Page Title are present and correct.</description>
         </annotations>
@@ -27,7 +27,7 @@
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
     </actionGroup>
-    <actionGroup name="seeProductInShipmentItems">
+    <actionGroup name="seeProductInShipmentItemsActionGroup">
         <annotations>
             <description>Validates that the provided Product is present and correct on the view Admin Order Shipment page under the 'Items Shipped' section.</description>
         </annotations>
@@ -37,7 +37,7 @@
 
         <see selector="{{AdminShipmentItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
     </actionGroup>
-    <actionGroup name="verifyBasicShipmentInformation">
+    <actionGroup name="verifyBasicShipmentInformationActionGroup">
         <annotations>
             <description>Validates that the provided Customer, Shipping Address, Billing Address and Customer Group are present and correct on the view Admin Order page.</description>
         </annotations>

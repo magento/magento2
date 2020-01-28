@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         </before>
@@ -43,7 +43,7 @@
             <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
-        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 

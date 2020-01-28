@@ -19,7 +19,7 @@
             <testCaseId value="N/a"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">
@@ -34,7 +34,7 @@
         </actionGroup>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessageForMinimum"/>
         <grabValueFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitInput}}" stepKey="minimumWishListTextLengthLimit"/>
-        <assertEquals stepKey="AssertMinimumTextLengthLimitIsApplied">
+        <assertEquals stepKey="assertMinimumTextLengthLimitIsApplied">
             <expectedResult type="string">{{Wishlist.min_email_text_length_limit}}</expectedResult>
             <actualResult type="variable">minimumWishListTextLengthLimit</actualResult>
         </assertEquals>
@@ -44,7 +44,7 @@
         </actionGroup>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessageForMaximum"/>
         <grabValueFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitInput}}" stepKey="maximumWishListTextLengthLimit"/>
-        <assertEquals stepKey="AssertMaximumTextLengthLimitIsApplied">
+        <assertEquals stepKey="assertMaximumTextLengthLimitIsApplied">
             <expectedResult type="string">{{Wishlist.max_email_text_length_limit}}</expectedResult>
             <actualResult type="variable">maximumWishListTextLengthLimit</actualResult>
         </assertEquals>
@@ -54,7 +54,7 @@
         </actionGroup>
         <dontSee selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="dontSeeSuccessMessageForLowerThanMinimum"/>
         <grabTextFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitMessage}}" stepKey="enterWishListTextLengthLimitLowerThanMinimum"/>
-        <assertEquals stepKey="AssertTextLengthLimitIsNotAppliedWhenLowerThanMinimum">
+        <assertEquals stepKey="assertTextLengthLimitIsNotAppliedWhenLowerThanMinimum">
             <expectedResult type="string">The value is not within the specified range.</expectedResult>
             <actualResult type="variable">enterWishListTextLengthLimitLowerThanMinimum</actualResult>
         </assertEquals>
@@ -64,7 +64,7 @@
         </actionGroup>
         <dontSee selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="dontSeeSuccessMessageForHigherThanMaximum"/>
         <grabTextFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitMessage}}" stepKey="enterWishListTextLengthLimitHigherThanMaximum"/>
-        <assertEquals stepKey="AssertTextLengthLimitIsNotAppliedWhenHigherThanMaximum">
+        <assertEquals stepKey="assertTextLengthLimitIsNotAppliedWhenHigherThanMaximum">
             <expectedResult type="string">The value is not within the specified range.</expectedResult>
             <actualResult type="variable">enterWishListTextLengthLimitHigherThanMaximum</actualResult>
         </assertEquals>

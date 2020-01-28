@@ -22,7 +22,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
@@ -47,7 +47,7 @@
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickStoreViewSaveButton"/>
         <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationModal" />
-        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="AcceptNewStoreViewCreation"/>
+        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="acceptNewStoreViewCreation"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
         <see userInput="You saved the store view." stepKey="seeSaveMessage"/>
 

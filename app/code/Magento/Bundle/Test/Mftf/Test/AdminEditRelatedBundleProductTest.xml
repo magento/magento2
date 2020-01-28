@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!--Admin login-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
         </before>

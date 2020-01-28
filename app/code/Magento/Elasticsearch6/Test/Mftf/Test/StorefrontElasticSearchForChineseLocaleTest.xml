@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
             <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForChina.scope}} --scope-code={{GeneralLocalCodeConfigsForChina.scope_code}} {{GeneralLocalCodeConfigsForChina.path}} {{GeneralLocalCodeConfigsForChina.value}}" stepKey="setLocaleToChina"/>
             <magentoCLI command="config:set {{EnableElasticSearch6Config.path}} {{EnableElasticSearch6Config.value}}" stepKey="enableElasticsearch6"/>
             <actionGroup ref="AdminElasticConnectionTestActionGroup" stepKey="checkConnection"/>
@@ -38,7 +38,7 @@
             <magentoCLI command="config:set {{SetDefaultSearchEngineConfig.path}} {{SetDefaultSearchEngineConfig.value}}" stepKey="resetSearchEnginePreviousState"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search for product by name -->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">

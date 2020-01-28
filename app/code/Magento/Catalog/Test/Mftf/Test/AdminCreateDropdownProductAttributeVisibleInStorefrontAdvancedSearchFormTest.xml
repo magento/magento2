@@ -31,10 +31,10 @@
 
             <!-- Create product attribute set -->
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Filter product attribute set by attribute set name -->
@@ -81,7 +81,7 @@
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to store's advanced catalog search page -->
-        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroup"/>
         <dontSeeElement selector="{{StorefrontCatalogSearchAdvancedFormSection.AttributeByCode('$$attribute.attribute_code$$')}}" stepKey="dontSeeAttribute"/>
     </test>
 </tests>

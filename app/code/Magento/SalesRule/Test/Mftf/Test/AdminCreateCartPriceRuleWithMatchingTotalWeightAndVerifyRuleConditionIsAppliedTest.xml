@@ -19,15 +19,15 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="defaultSimpleProductWeight200" stepKey="initialSimpleProduct"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="initialSimpleProduct"/>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+            <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteCreatedCartPriceRule">
                 <argument name="ruleName" value="{{CartPriceRuleConditionAppliedForWeight.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->

@@ -21,11 +21,11 @@
         </annotations>
         <before>
             <!--Login as Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Logout from Admin-->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Check data products with add/update behavior-->
         <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts">

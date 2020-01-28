@@ -20,7 +20,7 @@
 
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
@@ -33,11 +33,11 @@
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Downloadable Product page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="OpenStoreFrontProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="openStoreFrontProductPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
         <!-- Add Downloadable product to the cart -->

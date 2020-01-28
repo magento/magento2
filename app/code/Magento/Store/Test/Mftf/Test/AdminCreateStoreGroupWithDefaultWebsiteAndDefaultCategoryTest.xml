@@ -19,13 +19,13 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStoreGroup">
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create custom store group with default website and default category and verify AssertStoreGroupSuccessSaveMessage-->

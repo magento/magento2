@@ -35,7 +35,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created data-->
@@ -46,7 +46,7 @@
                 <argument name="sku" value="$$createFirstProduct.sku$$-1"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Change second product sku to first product sku-->
         <amOnPage url="{{AdminProductEditPage.url($$createSecondProduct.id$$)}}" stepKey="goToProductEditPage1"/>

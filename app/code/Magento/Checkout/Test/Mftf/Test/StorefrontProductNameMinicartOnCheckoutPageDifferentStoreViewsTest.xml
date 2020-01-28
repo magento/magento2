@@ -20,7 +20,7 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create a product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -32,7 +32,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create store view -->

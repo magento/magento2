@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <!-- Create First StoreView  -->
@@ -52,7 +52,7 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select created category and disable Include In Menu option-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>

@@ -22,7 +22,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>

@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
             <createData entity="_defaultCategory" stepKey="createAnchoredCategory1"/>
             <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
@@ -53,7 +53,7 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
             <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create the anchored category <Cat1_anchored> -->
         <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
@@ -129,7 +129,7 @@
         <waitForPageLoad stepKey="waitForRefresh"/>
 
         <see userInput="2 cache type(s) refreshed." stepKey="seeCacheRefreshedMessage"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
 
         <!-- Open frontend -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="onFrontend"/>
@@ -161,7 +161,7 @@
         <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
 
         <!-- Log in to the backend: Admin user is logged in-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAdmin"/>
 
         <!-- Navigate to the Catalog > Products: Navigate to the Catalog>Products -->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="amOnProductPage"/>

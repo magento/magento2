@@ -19,12 +19,12 @@
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProductWithNewFromDate" stepKey="createSimpleProductWithDate"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProductWithDate" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
         <waitForPageLoad stepKey="wait1"/>

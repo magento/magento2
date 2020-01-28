@@ -17,14 +17,14 @@
             <group value="Swatches"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Remove attribute -->
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
@@ -107,6 +107,6 @@
             <argument name="ProductAttribute" value="visualSwatchAttribute"/>
         </actionGroup>
         <!-- Check attribute data -->
-        <seeCheckboxIsChecked selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="CheckDefaultOption"/>
+        <seeCheckboxIsChecked selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="checkDefaultOption"/>
     </test>
 </tests>

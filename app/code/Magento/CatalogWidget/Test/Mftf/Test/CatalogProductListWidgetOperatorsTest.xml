@@ -37,7 +37,7 @@
 
             <createData entity="_defaultBlock" stepKey="createPreReqBlock"/>
             <!--User log in on back-end as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
 
@@ -46,7 +46,7 @@
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCreateBlockWithWidget" stepKey="adminCreateBlockWithWidget">
+        <actionGroup ref="AdminCreateBlockWithWidgetActionGroup" stepKey="adminCreateBlockWithWidget">
             <argument name="addCondition" value="Price"/>
             <argument name="isCondition" value="greater than"/>
             <argument name="fieldCondition" value="20"/>
@@ -89,7 +89,7 @@
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCreateBlockWithWidget" stepKey="adminCreateBlockWithWidgetLessThan">
+        <actionGroup ref="AdminCreateBlockWithWidgetActionGroup" stepKey="adminCreateBlockWithWidgetLessThan">
             <argument name="addCondition" value="Price"/>
             <argument name="isCondition" value="less than"/>
             <argument name="fieldCondition" value="20"/>
@@ -109,7 +109,7 @@
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCreateBlockWithWidget" stepKey="adminCreateBlockWithWidgetEqualsOrGreaterThan">
+        <actionGroup ref="AdminCreateBlockWithWidgetActionGroup" stepKey="adminCreateBlockWithWidgetEqualsOrGreaterThan">
             <argument name="addCondition" value="Price"/>
             <argument name="isCondition" value="equals or greater than"/>
             <argument name="fieldCondition" value="50"/>
@@ -129,7 +129,7 @@
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCreateBlockWithWidget" stepKey="adminCreateBlockWithWidgetEqualsOrLessThan">
+        <actionGroup ref="AdminCreateBlockWithWidgetActionGroup" stepKey="adminCreateBlockWithWidgetEqualsOrLessThan">
             <argument name="addCondition" value="Price"/>
             <argument name="isCondition" value="equals or less than"/>
             <argument name="fieldCondition" value="50"/>
@@ -151,7 +151,7 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

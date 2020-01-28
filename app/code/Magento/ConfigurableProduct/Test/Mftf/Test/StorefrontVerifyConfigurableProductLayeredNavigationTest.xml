@@ -21,7 +21,7 @@
 
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
 
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -116,7 +116,7 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Product Index Page and Filter First Child product -->
@@ -139,7 +139,7 @@
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!--Open Category in Store Front and select product attribute option from sidebar -->
-        <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">
+        <actionGroup ref="SelectStorefrontSideBarAttributeOptionActionGroup" stepKey="selectStorefrontProductAttributeOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>
             <argument name="attributeDefaultLabel" value="$$createConfigProductAttribute.default_value$$"/>
         </actionGroup>

@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Data -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -32,7 +32,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order -->
@@ -50,7 +50,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
 
         <!-- Select Mass Action according to dataset: Cancel -->
-        <actionGroup ref="AdminOrderActionOnGridActionGroup" stepKey="ActionCancel">
+        <actionGroup ref="AdminOrderActionOnGridActionGroup" stepKey="actionCancel">
             <argument name="action" value="Cancel"/>
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>

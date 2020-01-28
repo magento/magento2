@@ -18,7 +18,7 @@
         <waitForElementVisible selector="{{ModalConfirmationSection.OkButton}}" time="30" stepKey="waitForClearOk"/>
         <scrollTo selector="{{ModalConfirmationSection.OkButton}}" stepKey="scrollToClearOk"/>
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="clickClearOk"/>
-        <waitForElement selector="{{StorefrontMessagesSection.message('You cleared the comparison list.')}}" time="30" stepKey="AssertMessageCleared"/>
+        <waitForElement selector="{{StorefrontMessagesSection.message('You cleared the comparison list.')}}" time="30" stepKey="assertMessageCleared"/>
         <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" stepKey="assertNoItems"/>
     </actionGroup>
 </actionGroups>

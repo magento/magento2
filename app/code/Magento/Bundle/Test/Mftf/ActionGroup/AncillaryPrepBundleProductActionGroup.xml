@@ -20,9 +20,9 @@
         <!--Trigger SEO drop down-->
         <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="moveToSEOSection"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
-        <waitForPageLoad stepKey="WaitForDropDownSEO"/>
+        <waitForPageLoad stepKey="waitForDropDownSEO"/>
 
         <!--Fill URL input-->
-        <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension"/>
+        <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="fillsinSEOlinkExtension"/>
     </actionGroup>
 </actionGroups>

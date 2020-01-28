@@ -39,7 +39,7 @@
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logoutFromBackend"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logoutFromBackend"/>
         </after>
 
         <!-- Login with created Customer -->
@@ -86,7 +86,7 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Login to admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to created Order -->
         <amOnPage url="{{AdminOrderPage.url({$grabOrderId})}}" stepKey="goToAdminViewOrder"/>

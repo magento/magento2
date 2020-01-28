@@ -21,7 +21,7 @@
 
         <before>
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
             <!--Create Category-->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!--Create Configurable product-->
@@ -43,7 +43,7 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Find the product that we just created using the product grid -->
@@ -109,7 +109,7 @@
 
         <!--See that validation message is shown under the fields-->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" stepKey="scrollTConfigurationTab"/>
-        <see userInput="Please enter less or equal than 64 symbols." selector="{{AdminProductFormConfigurationsSection.confProductSkuMessage('0')}}" stepKey="SeeValidationMessage"/>
+        <see userInput="Please enter less or equal than 64 symbols." selector="{{AdminProductFormConfigurationsSection.confProductSkuMessage('0')}}" stepKey="seeValidationMessage"/>
 
         <!--Edit "SKU" with valid quantity-->
         <fillField stepKey="fillValidValue" selector="{{AdminProductFormConfigurationsSection.confProductSku('0')}}" userInput="{{ApiConfigurableProduct.name}}-thisIsShortName"/>

@@ -18,12 +18,12 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="category"/>
        </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->

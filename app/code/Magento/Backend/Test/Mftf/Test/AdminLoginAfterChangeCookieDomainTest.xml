@@ -27,8 +27,8 @@
             <magentoCLI command="config:set {{EmptyCookieDomainForMainWebsiteConfigData.path}} --scope={{EmptyCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{EmptyCookieDomainForMainWebsiteConfigData.scope_code}} {{EmptyCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteAfterTestComplete"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestComplete"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
-        <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>
 </tests>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddCustomTaxRateActionGroup" extends="addNewTaxRateNoZip">
+    <actionGroup name="AddCustomTaxRateActionGroup" extends="addNewTaxRateNoZipActionGroup">
         <annotations>
             <description>EXTENDS: addNewTaxRateNoZip. Removes 'fillZipCode' and 'fillRate'. Fills in the Zip Code and Rate. PLEASE NOTE: The values are Hardcoded.</description>
         </annotations>

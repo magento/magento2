@@ -19,10 +19,10 @@
             <group value="category"/>
         </annotations>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
@@ -48,11 +48,11 @@
             <group value="category"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="RestoreLayoutSettingActionGroup" stepKey="sampleActionGroup"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -80,10 +80,10 @@
         <group value="category"/>
     </annotations>
     <before>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
     </before>
     <after>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
     </after>
     <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
     <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>

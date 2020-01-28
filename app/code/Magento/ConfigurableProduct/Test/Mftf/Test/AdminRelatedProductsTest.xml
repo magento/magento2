@@ -78,7 +78,7 @@
                 <requiredEntity createDataKey="baseConfigProductHandle"/>
                 <requiredEntity createDataKey="childProductHandle2"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>

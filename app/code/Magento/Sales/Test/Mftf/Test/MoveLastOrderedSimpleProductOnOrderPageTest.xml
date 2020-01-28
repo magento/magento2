@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
@@ -33,7 +33,7 @@
             <!-- Delete created data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!-- Create order -->
@@ -43,7 +43,7 @@
         </actionGroup>
 
         <!-- Search and open customer -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
+        <actionGroup ref="AdminFilterCustomerByEmailActionGroup" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>

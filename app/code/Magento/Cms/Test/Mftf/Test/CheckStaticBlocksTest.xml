@@ -20,17 +20,17 @@
         </annotations>
         <before>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
+            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateWebsite">
                 <argument name="newWebsiteName" value="secondWebsite"/>
                 <argument name="websiteCode" value="second_website"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateStore">
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateStore">
                 <argument name="website" value="secondWebsite"/>
                 <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
                 <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateStoreView">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateStoreView">
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
@@ -39,35 +39,35 @@
         <!--Go to Cms blocks page-->
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <seeInCurrentUrl url="cms/block/" stepKey="VerifyPageIsOpened"/>
+        <seeInCurrentUrl url="cms/block/" stepKey="verifyPageIsOpened"/>
         <!--Click to create new block-->
-        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="ClickToAddNewBlock"/>
+        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="clickToAddNewBlock"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <seeInCurrentUrl url="cms/block/new" stepKey="VerifyNewBlockPageIsOpened"/>
-        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
-        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="ClickToSaveBlock"/>
+        <seeInCurrentUrl url="cms/block/new" stepKey="verifyNewBlockPageIsOpened"/>
+        <actionGroup ref="FillOutBlockContentActionGroup" stepKey="fillOutBlockContent"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickToSaveBlock"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <see userInput="You saved the block." stepKey="VerifyBlockIsSaved"/>
+        <see userInput="You saved the block." stepKey="verifyBlockIsSaved"/>
         <!--Click to go back and add new block-->
-        <click selector="{{BlockNewPagePageActionsSection.back}}" stepKey="ClickToGoBack"/>
+        <click selector="{{BlockNewPagePageActionsSection.back}}" stepKey="clickToGoBack"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
-        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="ClickToAddNewBlock1"/>
+        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="clickToAddNewBlock1"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
-        <seeInCurrentUrl url="cms/block/new" stepKey="VerifyNewBlockPageIsOpened1"/>
+        <seeInCurrentUrl url="cms/block/new" stepKey="verifyNewBlockPageIsOpened1"/>
         <!--Add new BLock with the same data-->
-        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent1"/>
+        <actionGroup ref="FillOutBlockContentActionGroup" stepKey="fillOutBlockContent1"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="Default Store View" stepKey="selectDefaultStoreView" />
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="{{customStore.name}}" stepKey="selectSecondStoreView1" />
-        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="ClickToSaveBlock1"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickToSaveBlock1"/>
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <!--Verify that corresponding message is displayed-->
-        <see userInput="A block identifier with the same properties already exists in the selected store." stepKey="VerifyBlockIsSaved1"/>
+        <see userInput="A block identifier with the same properties already exists in the selected store." stepKey="verifyBlockIsSaved1"/>
 
         <after>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
-            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="DeleteCMSBlockActionGroup"/>
+            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="deleteCMSBlockActionGroup"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
         </after>
     </test>
