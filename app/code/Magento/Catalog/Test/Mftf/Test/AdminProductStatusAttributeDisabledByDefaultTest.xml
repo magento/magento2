@@ -35,7 +35,7 @@
             <waitForPageLoad stepKey="waitForSaveAttribute1"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache1"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
         <waitForPageLoad stepKey="wait1"/>

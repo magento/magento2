@@ -67,7 +67,7 @@
             <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DefaultWebUrlOptionsConfig" stepKey="defaultWebUrlOptionsConfig"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Grab new store view code-->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToNewWebsitePage"/>

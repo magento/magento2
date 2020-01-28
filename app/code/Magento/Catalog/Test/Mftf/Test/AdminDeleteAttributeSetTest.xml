@@ -28,7 +28,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetsPage"/>
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="filterByAttributeName"/>

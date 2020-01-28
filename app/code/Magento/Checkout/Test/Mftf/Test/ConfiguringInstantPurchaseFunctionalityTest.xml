@@ -47,7 +47,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create store views -->

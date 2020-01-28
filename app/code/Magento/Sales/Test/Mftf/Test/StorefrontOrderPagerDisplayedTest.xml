@@ -120,7 +120,7 @@
 
             <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login to Storefront as Customer -->

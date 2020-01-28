@@ -25,7 +25,7 @@
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!-- Step 0: User signs up an account -->
         <comment userInput="Start of signing up user account" stepKey="startOfSigningUpUserAccount" />

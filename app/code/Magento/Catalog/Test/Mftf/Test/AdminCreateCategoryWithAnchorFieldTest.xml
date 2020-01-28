@@ -24,7 +24,7 @@
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createDefaultCMSBlock" stepKey="deleteDefaultCMSBlock"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
         </after>

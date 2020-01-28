@@ -41,7 +41,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!--Delete attribute-->
             <deleteData createDataKey="productAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create product-->
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm"/>

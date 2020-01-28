@@ -28,7 +28,7 @@
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>

@@ -82,7 +82,7 @@
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Open product page and assign grouped project to second website -->

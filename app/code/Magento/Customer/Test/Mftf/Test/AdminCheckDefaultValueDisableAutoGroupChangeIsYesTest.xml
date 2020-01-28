@@ -26,7 +26,7 @@
         <after>
             <magentoCLI command="config:set customer/create_account/viv_disable_auto_group_assign_default 0" stepKey="setConfigDefaultIsNo"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomer"/>

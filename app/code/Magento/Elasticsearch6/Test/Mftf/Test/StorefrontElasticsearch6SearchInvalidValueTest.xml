@@ -50,7 +50,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
             <magentoCLI command="cache:flush config" stepKey="flushCache"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>

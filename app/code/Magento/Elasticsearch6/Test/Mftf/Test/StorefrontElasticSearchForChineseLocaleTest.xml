@@ -38,7 +38,7 @@
             <magentoCLI command="config:set {{SetDefaultSearchEngineConfig.path}} {{SetDefaultSearchEngineConfig.value}}" stepKey="resetSearchEnginePreviousState"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search for product by name -->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">

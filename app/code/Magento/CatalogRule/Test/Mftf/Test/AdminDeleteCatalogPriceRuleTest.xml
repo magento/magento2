@@ -43,7 +43,7 @@
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
             <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
-            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a catalog price rule -->
@@ -73,7 +73,7 @@
 
         <!-- Delete the rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
+        <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
             <argument name="name" value="{{_defaultCatalogRule.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

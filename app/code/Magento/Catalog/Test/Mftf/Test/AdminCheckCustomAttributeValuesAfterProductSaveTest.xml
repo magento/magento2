@@ -42,7 +42,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createMultiSelectProductAttribute" stepKey="deleteMultiSelectProductAttribute"/>
             <!-- Logout from Admin page -->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Open created product for edit -->

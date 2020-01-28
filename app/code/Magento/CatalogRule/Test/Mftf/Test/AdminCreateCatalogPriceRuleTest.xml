@@ -39,7 +39,7 @@
         <after>
             <!-- delete the simple product and catalog price rule and logout -->
             <amOnPage stepKey="goToPriceRulePage" url="admin/catalog_rule/promo_catalog/"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
+            <actionGroup stepKey="deletePriceRule" ref="DeleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -85,7 +85,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
+            <actionGroup stepKey="deletePriceRule" ref="DeleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -108,7 +108,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
+            <actionGroup stepKey="deletePriceRule" ref="DeleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{CatalogRuleToPercent.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -131,7 +131,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
+            <actionGroup stepKey="deletePriceRule" ref="DeleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -164,7 +164,7 @@
             <!-- Delete the catalog rule -->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToRulePage"/>
             <waitForPageLoad stepKey="waitForRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>

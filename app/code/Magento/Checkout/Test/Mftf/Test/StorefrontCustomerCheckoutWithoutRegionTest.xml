@@ -33,7 +33,7 @@
             <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setDefaultCountriesWithRequiredRegion">
                 <argument name="countries" value="DefaultCountriesWithRequiredRegions"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

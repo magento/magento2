@@ -50,7 +50,7 @@
             <argument name="stockStatus" value="Out of Stock"/>
         </actionGroup>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>

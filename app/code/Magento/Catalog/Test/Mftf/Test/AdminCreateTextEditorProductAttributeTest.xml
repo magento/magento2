@@ -40,7 +40,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Stores > Product, click "Add New Attribute" -->

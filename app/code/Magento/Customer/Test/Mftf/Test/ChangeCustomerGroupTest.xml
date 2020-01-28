@@ -32,7 +32,7 @@
                 <argument name="customerGroupName" value="{{CustomerGroupChange.code}}"/>
             </actionGroup>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">

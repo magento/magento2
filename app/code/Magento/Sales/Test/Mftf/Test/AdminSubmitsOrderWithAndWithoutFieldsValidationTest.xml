@@ -25,7 +25,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>

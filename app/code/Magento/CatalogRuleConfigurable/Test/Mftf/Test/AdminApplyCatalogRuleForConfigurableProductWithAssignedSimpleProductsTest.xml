@@ -169,13 +169,13 @@
 
             <!-- Delete created price rules -->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForFirstOption">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForFirstOption">
                 <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Admin log out -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createPriceRule">

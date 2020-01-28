@@ -35,7 +35,7 @@
             <actionGroup ref="AdminDeleteRoleByRoleNameActionGroup" stepKey="deleteRole">
                 <argument name="role" value="adminWithoutBulkActionRole"/>
             </actionGroup>
-           <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+           <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create admin user2 who doesn't have access to "Bulk Operations". Role Resources, uncheck point with title "Bulk Operations" -->
@@ -44,7 +44,7 @@
             <argument name="user" value="NewAdminUser"/>
             <argument name="role" value="adminWithoutBulkActionRole"/>
         </actionGroup>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutAdmin"/>
 
         <!-- Login as user2 -->
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsUser">
@@ -66,6 +66,6 @@
 
         <!-- Access Denied -->
         <see userInput="Sorry, you need permissions to view this content." selector="{{AdminMessagesSection.accessDenied}}" stepKey="seeAccessDenied"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
     </test>
 </tests>

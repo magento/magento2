@@ -38,7 +38,7 @@
             </actionGroup>
             <!--Delete root category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create custom store group with custom website and root category and verify AssertStoreGroupSuccessSaveMessage-->

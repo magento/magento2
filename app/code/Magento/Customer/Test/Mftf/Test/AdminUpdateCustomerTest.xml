@@ -30,7 +30,7 @@
             <amOnPage stepKey="goToCustomersGridPage" url="{{AdminCustomerPage.url}}"/>
             <waitForPageLoad stepKey="waitForCustomersGrid"/>
             <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGridActionGroup"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{AdminCustomerPage.url}}edit/id/$$customer.id$$/" stepKey="openCustomerEditPage"/>
@@ -221,7 +221,7 @@
         </before>
         <after>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{AdminCustomerPage.url}}edit/id/$$customer.id$$/" stepKey="openCustomerEditPage"/>

@@ -149,7 +149,7 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create configurable product from downloadable product page-->
         <comment userInput="Create configurable product" stepKey="commentCreateProduct"/>

@@ -39,7 +39,7 @@
             </actionGroup>
             <!-- Delete created below search terms -->
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to storefront home page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>

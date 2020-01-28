@@ -32,7 +32,7 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>

@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts">
             <argument name="behavior" value="Add/Update"/>

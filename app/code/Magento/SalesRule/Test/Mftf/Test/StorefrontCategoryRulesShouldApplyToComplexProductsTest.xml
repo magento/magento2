@@ -72,7 +72,7 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct2" stepKey="deleteConfigProductAttribute2"/>
             <!--Delete Cart Price Rule -->
             <deleteData  createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1: Create a cart price rule applying to CAT1 with discount -->
         <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createCartPriceRule"/>

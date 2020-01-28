@@ -104,7 +104,7 @@
             <!--Disable Minimum advertised Price-->
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->

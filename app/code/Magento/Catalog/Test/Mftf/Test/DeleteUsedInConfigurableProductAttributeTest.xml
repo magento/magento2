@@ -72,7 +72,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
 
             <!-- Logout -->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Go to Stores > Attributes > Products. Search and select the product attribute that was used to create the configurable product-->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">

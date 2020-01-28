@@ -25,7 +25,7 @@
                 <argument name="filename" value="{{DefaultSiteMap.filename}}" />
             </actionGroup>
             <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertDeleteSuccessMessage"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateNewSiteMap"/>
         <actionGroup ref="AdminMarketingSiteMapFillFormActionGroup" stepKey="fillSiteMapForm">

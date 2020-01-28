@@ -66,7 +66,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Go to product edit page and assign it to created website -->
         <comment userInput="Go to product edit page and assign it to created website" stepKey="assignProductToCreatedWebsite"/>

@@ -38,7 +38,7 @@
         <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad time="10" stepKey="wait1"/>
         <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{inactiveAdmin.username}}" stepKey="seeFoundUsername"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutMasterAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutMasterAdmin"/>
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{inactiveAdmin.username}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{inactiveAdmin.password}}" stepKey="fillPassword"/>

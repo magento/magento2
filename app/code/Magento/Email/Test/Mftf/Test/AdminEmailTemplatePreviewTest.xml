@@ -30,7 +30,7 @@
             <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
             <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
             <!--Logout from Admin Area-->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <actionGroup ref="CreateCustomTemplateActionGroup" stepKey="createTemplate"/>

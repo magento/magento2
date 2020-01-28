@@ -28,7 +28,7 @@
         <after>
             <!--Delete Created Data -->
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Open Product Attribute Set Page -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>

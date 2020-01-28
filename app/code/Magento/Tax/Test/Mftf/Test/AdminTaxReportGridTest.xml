@@ -33,7 +33,7 @@
                 <argument name="taxCode" value="SimpleTaxWithZipCode"/>
             </actionGroup>
 
-            <actionGroup ref="addProductTaxClassActionGroup" stepKey="addProductTaxClass">
+            <actionGroup ref="AddProductTaxClassActionGroup" stepKey="addProductTaxClass">
                 <argument name="prodTaxClassName" value="TaxClasses1"/>
             </actionGroup>
 
@@ -50,7 +50,7 @@
                 <argument name="taxCode" value="SimpleSecondTaxWithZipCode"/>
             </actionGroup>
 
-            <actionGroup ref="addProductTaxClassActionGroup" stepKey="addSecondProductTaxClass">
+            <actionGroup ref="AddProductTaxClassActionGroup" stepKey="addSecondProductTaxClass">
                 <argument name="prodTaxClassName" value="TaxClasses2"/>
             </actionGroup>
 
@@ -182,12 +182,12 @@
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
 
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="TaxRule1"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteSecondRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteSecondRule">
                 <argument name="name" value="TaxRule2"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -197,12 +197,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxWithZipCode.state}}-{{SimpleTaxWithZipCode.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleSecondTaxWithZipCode.state}}-{{SimpleSecondTaxWithZipCode.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -219,7 +219,7 @@
                 <argument name="taxClassName" value="TaxClasses2"/>
             </actionGroup>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
          </after>
     </test>
 </tests>

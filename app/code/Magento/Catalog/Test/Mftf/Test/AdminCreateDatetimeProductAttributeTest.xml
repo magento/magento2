@@ -24,7 +24,7 @@
                 <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Generate the datetime default value -->
         <generateDate date="now" format="n/j/y g:i A" stepKey="generateDefaultValue"/>

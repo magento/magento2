@@ -28,7 +28,7 @@
         <after>
             <!-- Delete data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
         <!-- Perform reindex and flush cache -->

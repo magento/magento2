@@ -42,7 +42,7 @@
         <seeCheckboxIsChecked selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="verifyProductChecked"/>
 
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
         </after>

@@ -44,7 +44,7 @@
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
         <amOnPage url="$$product1.name$$.html" stepKey="goToProduct1"/>

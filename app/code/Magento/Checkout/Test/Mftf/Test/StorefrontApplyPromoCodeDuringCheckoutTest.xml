@@ -38,7 +38,7 @@
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
 
             <!-- Admin log out -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Storefront as Guest and add simple product to cart -->

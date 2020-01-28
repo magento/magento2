@@ -104,12 +104,12 @@
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
 
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="{{TaxRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteSecondRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteSecondRule">
                 <argument name="name" value="{{TaxRuleZeroRate.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -119,12 +119,12 @@
             <waitForPageLoad stepKey="waitForRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxUK.state}}-{{SimpleTaxUK.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteCARate">
                 <argument name="name" value="{{SimpleTaxUKZeroRate.state}}-{{SimpleTaxUKZeroRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -143,7 +143,7 @@
             </actionGroup>
 
            <!--Log Out-->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

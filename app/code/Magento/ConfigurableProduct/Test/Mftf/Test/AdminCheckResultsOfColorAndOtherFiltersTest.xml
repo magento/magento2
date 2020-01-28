@@ -109,7 +109,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributesFilter"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
             <!-- Log out -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create three configurable products with options -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>

@@ -42,7 +42,7 @@
                 <argument name="price" value="Discount"/>
                 <argument name="amount" value="25"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAsAdmin"/>
 
             <!-- Run reindex -->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>

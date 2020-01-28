@@ -33,7 +33,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logOut"/>
         </after>
         <!--Create configurable product-->
         <comment userInput="Create configurable product" stepKey="createConfProd"/>

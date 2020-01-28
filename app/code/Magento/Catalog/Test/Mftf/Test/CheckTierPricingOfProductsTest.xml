@@ -328,7 +328,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
 
             <!--Do reindex and flush cache-->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>

@@ -30,7 +30,7 @@
         </before>
         <after>
             <deleteData createDataKey="initialSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete inactive cart price rule-->

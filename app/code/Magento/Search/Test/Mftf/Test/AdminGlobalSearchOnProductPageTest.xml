@@ -34,7 +34,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create Simple Product -->

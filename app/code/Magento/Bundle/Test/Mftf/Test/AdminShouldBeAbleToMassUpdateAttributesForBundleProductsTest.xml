@@ -43,7 +43,7 @@
             <!-- Clear Filter -->
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
             <!--Log Out Admin-->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
         <!-- Login as Admin -->
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>

@@ -53,7 +53,7 @@
         </actionGroup>
 
         <!--SignOut-->
-        <actionGroup ref="logoutActionGroup" stepKey="signOutFromAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="signOutFromAdmin"/>
 
         <!--Log in as new user-->
         <actionGroup ref="LoginNewUserActionGroup" stepKey="signInNewUser"/>
@@ -80,7 +80,7 @@
         <waitForPageLoad stepKey="waitForShippingToFinish"/>
 
         <!--Pay with Braintree -->
-        <actionGroup ref="useBraintreeForMasterCardActionGroup" stepKey="selectCardWithBraintree"/>
+        <actionGroup ref="UseBraintreeForMasterCardActionGroup" stepKey="selectCardWithBraintree"/>
 
         <!--Submit Order-->
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>

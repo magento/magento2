@@ -34,7 +34,7 @@
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change product type to Downloadable-->
         <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>

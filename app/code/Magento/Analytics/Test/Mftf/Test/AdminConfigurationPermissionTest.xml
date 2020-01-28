@@ -24,7 +24,7 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
         <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameSearch"/>
@@ -51,7 +51,7 @@
         <scrollTo selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="scrollToMenuItem"/>
         <!--<see stepKey="seeAdvancedReportingConfigMenuItem" selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" userInput="Advanced Reporting"/>-->
         <seeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="seeAdvancedReportingConfigMenuItem"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin2"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin2"/>
 
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameNoReport"/>

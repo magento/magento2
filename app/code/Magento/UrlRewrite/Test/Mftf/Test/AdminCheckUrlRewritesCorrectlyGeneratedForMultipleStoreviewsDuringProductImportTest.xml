@@ -51,7 +51,7 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>
@@ -175,7 +175,7 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache2"/>

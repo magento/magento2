@@ -38,7 +38,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="adminDeleteStoreViewActionGroup"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
-            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->

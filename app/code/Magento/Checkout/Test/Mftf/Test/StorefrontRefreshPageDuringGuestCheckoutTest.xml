@@ -30,7 +30,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
             <!-- Logout admin -->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
         <!-- Add simple product to cart as Guest -->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

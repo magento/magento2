@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Assert configuration are disabled in Flat Rate section-->
         <comment userInput="Assert configuration are disabled in Flat Rate section" stepKey="commentSeeDisabledFlatRateConfigs"/>

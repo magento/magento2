@@ -37,7 +37,7 @@
             <waitForPageLoad stepKey="waitForTaxRatePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
-            <actionGroup ref="addCustomTaxRateActionGroup" stepKey="addCustomTaxRate">
+            <actionGroup ref="AddCustomTaxRateActionGroup" stepKey="addCustomTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
             <click stepKey="expandAdditionalSettings" selector="{{AdminProductTaxClassSection.additionalSettings}}"/>
@@ -83,7 +83,7 @@
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -91,7 +91,7 @@
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
             <waitForPageLoad stepKey="waitForRatesPage"/>
             <!-- Delete tax rate that were created -->
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -99,7 +99,7 @@
                 <argument name="taxClassName" value="NewTaxClass"/>
             </actionGroup>
             <!--logout-->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create new order-->
         <actionGroup stepKey="createNewOrder" ref="NavigateToNewOrderPageExistingCustomerActionGroup">

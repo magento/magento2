@@ -50,7 +50,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetCatalogRuleGridFilters"/>
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>

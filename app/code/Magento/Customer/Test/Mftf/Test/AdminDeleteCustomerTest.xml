@@ -25,7 +25,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Delete created customer -->

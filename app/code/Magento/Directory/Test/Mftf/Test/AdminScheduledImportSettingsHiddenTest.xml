@@ -20,7 +20,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set currency/import/enabled 0" stepKey="disableCurrencyImport"/>
         </after>
 

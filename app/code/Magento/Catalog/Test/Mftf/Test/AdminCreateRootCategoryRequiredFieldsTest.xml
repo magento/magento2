@@ -26,7 +26,7 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory" />
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout" />
+            <actionGroup ref="LogoutActionGroup" stepKey="logout" />
         </after>
 
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCatergoryIndexPage"/>

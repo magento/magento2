@@ -37,7 +37,7 @@
             <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as admin -->
         <comment userInput="Login as admin" stepKey="adminLogin"/>

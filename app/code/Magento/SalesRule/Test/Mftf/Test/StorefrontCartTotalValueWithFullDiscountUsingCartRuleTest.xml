@@ -64,14 +64,14 @@
             <!-- Removed created Data -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
             <waitForPageLoad stepKey="waitForRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <!-- Delete the tax rate that were created -->
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
             <waitForPageLoad stepKey="waitForRatesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
@@ -92,7 +92,7 @@
             <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="unsetSubtotal"/>
             <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
             <!-- Log out -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Add testing products to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductFirst.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

@@ -26,7 +26,7 @@
             <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="configPayPalExpressCheckout"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

@@ -33,7 +33,7 @@
             <comment userInput="Disable WYSIWYG options" stepKey="commentDisableWYSIWYG"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createBlock" stepKey="deleteBlock" />
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created block page and add image-->
         <comment userInput="Open create block page and add image" stepKey="commentOpenBlockPage"/>

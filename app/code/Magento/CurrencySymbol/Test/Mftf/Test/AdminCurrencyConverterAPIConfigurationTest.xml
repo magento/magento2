@@ -40,7 +40,7 @@
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Import rates from Currency Converter API-->
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage"/>

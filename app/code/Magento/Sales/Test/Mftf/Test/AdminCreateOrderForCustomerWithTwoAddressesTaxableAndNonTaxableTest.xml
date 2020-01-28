@@ -71,7 +71,7 @@
             <!--Delete tax rule-->
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <!--Logout-->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <!--Disable free shipping method -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
         </after>

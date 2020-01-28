@@ -60,7 +60,7 @@
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyViewedProductsWidget">
                 <argument name="widget" value="RecentlyViewedProductsWidget"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Login to storefront from customer-->

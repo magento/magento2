@@ -40,7 +40,7 @@
             <!-- Delete product attribute set -->
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Filter product attribute set by attribute set name -->

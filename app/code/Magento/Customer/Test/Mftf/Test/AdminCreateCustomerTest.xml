@@ -23,7 +23,7 @@
             <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>

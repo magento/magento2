@@ -34,7 +34,7 @@
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as Admin -->
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>

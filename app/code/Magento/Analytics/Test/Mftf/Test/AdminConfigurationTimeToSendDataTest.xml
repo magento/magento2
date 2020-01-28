@@ -19,7 +19,7 @@
             <group value="analytics"/>
         </annotations>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>

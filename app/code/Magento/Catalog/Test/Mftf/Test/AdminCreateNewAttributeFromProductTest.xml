@@ -42,7 +42,7 @@
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create 2 store views-->

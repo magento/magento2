@@ -41,7 +41,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearFilterForStores"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Step 1. Navigate as Admin on Product Page for edit product`s Url Key-->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToProductForUrlRewrite">

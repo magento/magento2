@@ -32,7 +32,7 @@
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteUpdatedStoreView">
                     <argument name="customStore" value="SecondStoreUnique"/>
                 </actionGroup>
-                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+                <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Search created store view in grid-->

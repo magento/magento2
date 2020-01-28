@@ -32,7 +32,7 @@
             <magentoCLI command="cron:run --group=index" stepKey="runIndexerCron"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAdminUserAfterTest"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAdminUserAfterTest"/>
             <deleteData createDataKey="productOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="productTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>

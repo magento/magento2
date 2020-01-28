@@ -44,7 +44,7 @@
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo14"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
     <test name="Verifydefaultcontrolsonproductshortdescription">
@@ -83,7 +83,7 @@
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo28"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

@@ -24,7 +24,7 @@
         </before>
         <after>
             <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToNewRatingFormActionGroup" stepKey="navigateToNewRatingPage" />
         <actionGroup ref="AdminAssertStoreViewRatingTitleWhenSingleStoreModeIsYesActionGroup" stepKey="verifyForm" />

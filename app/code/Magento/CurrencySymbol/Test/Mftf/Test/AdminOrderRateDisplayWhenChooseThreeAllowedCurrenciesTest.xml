@@ -32,7 +32,7 @@
             <!--Delete created product-->
             <comment userInput="Delete created product" stepKey="commentDeleteCreatedProduct"/>
             <deleteData createDataKey="createNewProduct" stepKey="deleteNewProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Set currency rates-->
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="gotToCurrencyRatesPageSecondTime"/>

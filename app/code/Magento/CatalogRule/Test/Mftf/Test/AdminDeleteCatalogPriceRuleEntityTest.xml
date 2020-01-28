@@ -42,7 +42,7 @@
             <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin1"/>
 
             <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer1"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
@@ -52,7 +52,7 @@
         <!-- Delete the simple product and catalog price rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule1">
+        <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule1">
             <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>
@@ -174,7 +174,7 @@
             <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin1"/>
 
             <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
@@ -187,7 +187,7 @@
         <!-- Delete the simple product and catalog price rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule1">
+        <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule1">
             <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

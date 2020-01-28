@@ -32,7 +32,7 @@
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to default attribute set edit page -->

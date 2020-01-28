@@ -29,7 +29,7 @@
                 <argument name="storeGroupName" value="customStore.code"/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create a Store-->

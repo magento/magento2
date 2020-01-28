@@ -63,7 +63,7 @@
             <deleteData createDataKey="simpleProduct8" stepKey="deleteProduct8"/>
             <deleteData createDataKey="simpleProduct9" stepKey="deleteProduct9"/>
             <deleteData createDataKey="simpleProduct10" stepKey="deleteProduct10"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product1 page in StoreFront-->

@@ -51,7 +51,7 @@
             <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <!--logout-->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Login-->
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdmin"/>
@@ -77,7 +77,7 @@
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickToExpandSEOSection"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.urlKey}}" stepKey="scrollToUrlKey"/>
         <grabValueFrom selector="{{CmsNewPagePageSeoSection.urlKey}}"  stepKey="grabTextFromUrlKey"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
 
         <!--Open Storefront page for the new created page-->
         <amOnPage url="{{StorefrontHomePage.url}}$grabTextFromUrlKey" stepKey="gotToCreatedCmsPage"/>

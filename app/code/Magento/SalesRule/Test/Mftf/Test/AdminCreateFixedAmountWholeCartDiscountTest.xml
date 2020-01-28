@@ -30,7 +30,7 @@
                 <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a cart price rule for Fixed amount discount for whole cart -->

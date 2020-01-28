@@ -24,7 +24,7 @@
         </before>
         <after>
             <!-- Log out -->
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product -->

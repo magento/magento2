@@ -34,7 +34,7 @@
                 <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                     <argument name="websiteName" value="{{customWebsite.name}}"/>
                 </actionGroup>
-                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+                <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create store view selecting store created, choose disabled status and verify AssertStoreDisabledErrorSaveMessage-->

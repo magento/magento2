@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="searchAndMultiSelectActionGroup">
+    <actionGroup name="SearchAndMultiSelectActionGroup">
         <annotations>
             <description>Search for and select multiple items in the Magento dropdown UI component.</description>
         </annotations>

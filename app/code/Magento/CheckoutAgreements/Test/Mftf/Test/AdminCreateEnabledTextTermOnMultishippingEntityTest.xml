@@ -36,7 +36,7 @@
             <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
                 <argument name="term" value="activeTextTerm"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">

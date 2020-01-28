@@ -22,6 +22,6 @@
 
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>
 </tests>

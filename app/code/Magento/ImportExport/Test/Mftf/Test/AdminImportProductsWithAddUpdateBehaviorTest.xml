@@ -65,7 +65,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Import products with add/update behavior -->

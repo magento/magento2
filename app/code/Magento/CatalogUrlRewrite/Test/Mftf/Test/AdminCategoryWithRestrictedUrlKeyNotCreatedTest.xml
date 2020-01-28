@@ -36,7 +36,7 @@
             <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteGraphQlCategory">
                 <argument name="categoryName" value="graphql"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Check category creation with restricted url key 'admin'-->
         <comment userInput="Check category creation with restricted url key 'admin'" stepKey="commentCheckAdminCategoryCreation"/>

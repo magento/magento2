@@ -51,7 +51,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Verify Category is not listed in navigation menu-->
         <amOnPage url="/{{CatNotIncludeInMenu.name_lwr}}.html"  stepKey="openCategoryPage"/>

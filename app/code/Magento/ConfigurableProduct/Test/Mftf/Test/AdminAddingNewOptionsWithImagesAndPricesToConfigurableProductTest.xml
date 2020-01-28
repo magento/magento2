@@ -34,7 +34,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
                 <argument name="productName" value="$$createConfigProductAttributeCreateConfigurableProduct.name$$"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open edit product page-->

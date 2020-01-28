@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="clearCheckoutAddressPopupFieldsActionGroup">
+    <actionGroup name="ClearCheckoutAddressPopupFieldsActionGroup">
         <annotations>
             <description>Clears the fields for the Customer/Address fields on the Storefront Checkout Address sections based on the provided Class Prefix (i.e. '._show', '[aria-hidden=false]').</description>
         </annotations>

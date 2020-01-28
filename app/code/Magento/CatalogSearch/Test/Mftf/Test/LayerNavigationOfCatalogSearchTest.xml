@@ -38,7 +38,7 @@
             <deleteData stepKey="deleteSimpleProduct1" createDataKey="simpleProduct1"/>
             <deleteData stepKey="deleteSimpleProduct2" createDataKey="simpleProduct2"/>
             <deleteData createDataKey="createPriceAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Update value for price attribute of Product 1-->
         <comment userInput="Update value for price attribute of Product 1" stepKey="comment1"/>

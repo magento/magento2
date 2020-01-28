@@ -28,7 +28,7 @@
             <!-- Switch WYSIWYG editor to TinyMCE4-->
             <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
             <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
         <waitForPageLoad stepKey="wait5"/>

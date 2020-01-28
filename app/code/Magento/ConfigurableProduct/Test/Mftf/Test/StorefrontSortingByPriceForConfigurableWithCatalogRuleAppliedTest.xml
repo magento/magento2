@@ -116,7 +116,7 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
                 <argument name="option" value="No"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open category with products and Sort by price desc-->
@@ -156,7 +156,7 @@
 
         <!-- Delete the rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
+        <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
             <argument name="name" value="{{CatalogRuleByPercentWith96Amount.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

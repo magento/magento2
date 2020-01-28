@@ -37,7 +37,7 @@
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
             <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="cache:flush" stepKey="flushCache2"/>
         </after>
         <!--Create new order with existing customer-->

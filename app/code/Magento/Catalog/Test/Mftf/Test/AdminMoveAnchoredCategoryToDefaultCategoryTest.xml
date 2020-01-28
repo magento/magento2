@@ -25,7 +25,7 @@
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
             <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Category Page-->

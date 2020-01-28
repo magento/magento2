@@ -78,7 +78,7 @@
         </before>
         <after>
             <!--Logout as admin-->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
 
             <!--Delete created data-->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>

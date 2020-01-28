@@ -46,7 +46,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteChineseStoreView">
                 <argument name="customStore" value="storeViewChinese"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Import products from file-->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProducts">

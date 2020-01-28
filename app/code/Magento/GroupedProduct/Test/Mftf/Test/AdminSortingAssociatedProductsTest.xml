@@ -123,7 +123,7 @@
             <deleteData createDataKey="product22" stepKey="deleteProduct22"/>
             <deleteData createDataKey="product23" stepKey="deleteProduct23"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create grouped Product-->

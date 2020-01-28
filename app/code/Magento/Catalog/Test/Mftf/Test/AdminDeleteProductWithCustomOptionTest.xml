@@ -28,7 +28,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProductFilteredBySkuAndName">
             <argument name="product" value="$$createSimpleProduct$$"/>

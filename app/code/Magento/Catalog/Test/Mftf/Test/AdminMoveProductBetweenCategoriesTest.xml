@@ -53,7 +53,7 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
             <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create the anchored category <Cat1_anchored> -->
         <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
@@ -129,7 +129,7 @@
         <waitForPageLoad stepKey="waitForRefresh"/>
 
         <see userInput="2 cache type(s) refreshed." stepKey="seeCacheRefreshedMessage"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
 
         <!-- Open frontend -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="onFrontend"/>

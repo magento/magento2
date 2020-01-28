@@ -23,10 +23,10 @@
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
-            <actionGroup ref="deleteBlockActionGroup" stepKey="deleteCreatedBlock">
+            <actionGroup ref="DeleteBlockActionGroup" stepKey="deleteCreatedBlock">
                 <argument name="Block" value="_defaultBlock"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

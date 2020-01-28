@@ -23,7 +23,7 @@
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCreatedCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open category page-->

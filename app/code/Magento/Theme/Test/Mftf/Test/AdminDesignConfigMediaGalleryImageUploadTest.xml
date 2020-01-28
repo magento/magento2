@@ -22,7 +22,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminArea"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Edit Store View-->
         <comment userInput="Edit Store View" stepKey="editStoreViewComment"/>

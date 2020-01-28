@@ -32,7 +32,7 @@
             <actionGroup ref="UpdateIndexerOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState">
                 <argument name="indexerName" value="catalogsearch_fulltext"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
@@ -42,7 +42,7 @@
         <actionGroup ref="UpdateIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule">
             <argument name="indexerName" value="catalogsearch_fulltext"/>
         </actionGroup>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         <!--Navigate to storefront and do a quick search for the product -->
         <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch" />
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>

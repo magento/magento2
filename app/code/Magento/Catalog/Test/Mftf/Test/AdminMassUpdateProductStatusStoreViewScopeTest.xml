@@ -80,7 +80,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
@@ -230,7 +230,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->

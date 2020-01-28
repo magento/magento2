@@ -48,7 +48,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Complete Bundle product creation-->

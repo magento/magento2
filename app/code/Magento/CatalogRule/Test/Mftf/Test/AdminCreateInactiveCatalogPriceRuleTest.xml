@@ -28,7 +28,7 @@
                 <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteCatalogRuleActionGroup" stepKey="deleteTheCatalogRule"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--  Create Inactive Catalog Price Rule -->

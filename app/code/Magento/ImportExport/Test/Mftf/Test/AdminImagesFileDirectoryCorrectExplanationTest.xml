@@ -21,7 +21,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
         <waitForPageLoad stepKey="adminImportMainSectionLoad"/>

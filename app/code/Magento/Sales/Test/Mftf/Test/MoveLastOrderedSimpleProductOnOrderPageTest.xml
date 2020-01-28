@@ -33,7 +33,7 @@
             <!-- Delete created data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!-- Create order -->

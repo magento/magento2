@@ -22,7 +22,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">

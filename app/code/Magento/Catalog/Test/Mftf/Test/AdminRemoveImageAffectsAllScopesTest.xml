@@ -67,7 +67,7 @@
             <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
             <magentoCLI stepKey="reindex" command="indexer:reindex"/>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create product-->

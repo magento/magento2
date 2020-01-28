@@ -22,7 +22,7 @@
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
             <argument name="productAttributeCode" value="$$createProductAttribute.attribute_code$$"/>

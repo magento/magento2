@@ -33,7 +33,7 @@
             <argument name="role" value="genericAdminRole"/>
             <argument name="user" value="activeAdmin"/>
         </actionGroup>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutMasterAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutMasterAdmin"/>
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{activeAdmin.username}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{activeAdmin.password}}" stepKey="fillPassword"/>
@@ -44,6 +44,6 @@
         <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad time="10" stepKey="wait1"/>
         <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{activeAdmin.username}}" stepKey="seeFoundUsername"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutCreatedUser"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutCreatedUser"/>
     </test>
 </tests>

@@ -40,7 +40,7 @@
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Open Marketing - SEO & Search - URL Rewrites -->

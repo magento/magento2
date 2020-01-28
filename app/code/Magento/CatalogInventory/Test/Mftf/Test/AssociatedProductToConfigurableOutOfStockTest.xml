@@ -132,7 +132,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <waitForPageLoad stepKey="waitShipmentCreated"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         <magentoCLI stepKey="runCron" command="cron:run --group='index'"/>
 
         <!-- Wait till cron job runs for schedule updates -->

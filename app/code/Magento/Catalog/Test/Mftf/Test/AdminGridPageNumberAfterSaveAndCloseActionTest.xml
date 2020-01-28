@@ -47,7 +47,7 @@
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteCategory2" createDataKey="category2"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>

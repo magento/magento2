@@ -75,7 +75,7 @@
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Add country of manufacture to product-->
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="amOnEditPage"/>

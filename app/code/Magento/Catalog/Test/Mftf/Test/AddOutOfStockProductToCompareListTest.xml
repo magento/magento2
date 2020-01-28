@@ -33,7 +33,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open product page-->
         <comment userInput="Open product page" stepKey="openProdPage"/>

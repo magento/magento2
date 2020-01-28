@@ -27,7 +27,7 @@
         </before>
         <!--Logout from Admin Area-->
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to content->Design->Config page-->
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />

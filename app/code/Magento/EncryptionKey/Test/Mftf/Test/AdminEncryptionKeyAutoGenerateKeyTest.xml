@@ -25,7 +25,7 @@
 
         <after>
             <!--Logout from Admin Area-->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <actionGroup ref="AdminEncryptionKeyNavigateToChangePageActionGroup" stepKey="navigateToPage"/>

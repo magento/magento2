@@ -31,7 +31,7 @@
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct" />
             <deleteData createDataKey="category" stepKey="deleteCategory" />
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPage"/>

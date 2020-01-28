@@ -23,7 +23,7 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
 
@@ -62,7 +62,7 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCatalog" />
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">

@@ -29,6 +29,6 @@
         </after>
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
-        <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>
 </tests>

@@ -34,7 +34,7 @@
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
                               dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true"
                               stepKey="clickClearFilters"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go To Created Product Page -->

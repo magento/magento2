@@ -18,7 +18,7 @@
             <group value="Catalog"/>
         </annotations>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>

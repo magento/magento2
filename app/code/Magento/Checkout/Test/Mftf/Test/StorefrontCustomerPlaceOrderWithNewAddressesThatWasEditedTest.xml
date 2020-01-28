@@ -61,7 +61,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
 
         <click selector="{{CheckoutShippingSection.editActiveAddress}}" stepKey="editNewAddress"/>
-        <actionGroup ref="clearCheckoutAddressPopupFieldsActionGroup" stepKey="clearRequiredFields">
+        <actionGroup ref="ClearCheckoutAddressPopupFieldsActionGroup" stepKey="clearRequiredFields">
             <argument name="classPrefix" value="._show"/>
         </actionGroup>
 

@@ -40,7 +40,7 @@
             </createData>
 
             <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearCache"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
         </before>
@@ -54,7 +54,7 @@
             <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
         <!-- 1. Login as admin -->

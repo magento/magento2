@@ -32,7 +32,7 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>

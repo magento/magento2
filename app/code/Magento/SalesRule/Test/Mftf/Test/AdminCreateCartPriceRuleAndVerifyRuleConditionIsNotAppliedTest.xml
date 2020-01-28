@@ -29,7 +29,7 @@
             <actionGroup ref="DeleteCartPriceRuleByNameActionGroup" stepKey="deleteCreatedCartPriceRule">
                 <argument name="ruleName" value="{{CartPriceRuleConditionNotApplied.name}}"/>
             </actionGroup>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->

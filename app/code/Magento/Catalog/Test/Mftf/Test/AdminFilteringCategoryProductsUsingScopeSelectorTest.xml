@@ -97,7 +97,7 @@
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct12" stepKey="deleteProduct3"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Step 1-2: Open Category page and Set scope selector to All Store Views-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>

@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.name$$)}}" stepKey="goToProductDefaultPage"/>

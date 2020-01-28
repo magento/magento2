@@ -54,7 +54,7 @@
         </before>
         <after>
             <actionGroup ref="RestoreLayoutSettingActionGroup" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

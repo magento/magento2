@@ -25,7 +25,7 @@
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchSimpleProductBySkuTest">
@@ -106,7 +106,7 @@
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
     </test>
 </tests>

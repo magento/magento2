@@ -58,7 +58,7 @@
                 <argument name="customStore" value="storeViewData7"/>
             </actionGroup>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create 10 store views -->

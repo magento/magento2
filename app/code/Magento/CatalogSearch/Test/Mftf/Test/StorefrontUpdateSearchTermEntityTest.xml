@@ -41,7 +41,7 @@
             <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
             <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
 
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin1"/>
         </after>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">

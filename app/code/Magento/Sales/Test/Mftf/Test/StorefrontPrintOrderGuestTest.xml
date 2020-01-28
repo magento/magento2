@@ -225,7 +225,7 @@
 
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>

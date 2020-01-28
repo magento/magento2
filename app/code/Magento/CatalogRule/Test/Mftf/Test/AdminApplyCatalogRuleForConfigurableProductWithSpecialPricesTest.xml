@@ -78,13 +78,13 @@
         <after>
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="openCatalogPriceRulePage"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGridActionGroup">
+            <actionGroup stepKey="deletePriceRule" ref="DeleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Admin logout -->
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete all created data -->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>

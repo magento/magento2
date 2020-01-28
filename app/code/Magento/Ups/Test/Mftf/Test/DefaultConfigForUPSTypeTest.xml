@@ -26,7 +26,7 @@
             <!--Collapse UPS tab and logout-->
             <comment userInput="Collapse UPS tab and logout" stepKey="collapseTabAndLogout"/>
             <click selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" stepKey="collapseTab"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Set shipping methods UPS type to default -->
         <comment userInput="Set shipping methods UPS type to default" stepKey="setToDefaultShippingMethodsUpsType"/>

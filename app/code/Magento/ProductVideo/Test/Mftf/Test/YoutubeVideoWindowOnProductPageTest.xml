@@ -85,7 +85,7 @@
             <!-- Set product video configuration to default -->
             <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig" before="logout"/>
             <!--Log Out-->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

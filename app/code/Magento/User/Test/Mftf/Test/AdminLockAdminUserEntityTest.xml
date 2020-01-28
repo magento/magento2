@@ -28,7 +28,7 @@
         <after>
             <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
             <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logOut"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Create New User-->
@@ -47,7 +47,7 @@
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveChanges"/>
 
         <!-- Log in to Admin Panel with incorrect password specified number of times-->
-        <actionGroup ref="logoutActionGroup" stepKey="logoutAsDefaultUser"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="logoutAsDefaultUser"/>
         <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsNewUserFirstAttempt">
             <argument name="adminUser" value="adminUserIncorrectPassword"/>
         </actionGroup>

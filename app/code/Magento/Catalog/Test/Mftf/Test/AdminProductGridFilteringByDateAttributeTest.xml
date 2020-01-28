@@ -24,7 +24,7 @@
         </before>
         <after>
             <deleteData createDataKey="createSimpleProductWithDate" stepKey="deleteProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
         <waitForPageLoad stepKey="wait1"/>

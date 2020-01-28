@@ -52,7 +52,7 @@
             <actionGroup ref="AdminDeleteCartPriceRuleForRetailerActionGroup" stepKey="deleteSalesRule"/>
 
             <!--Set to default configuration Tax Shipping Class-->
-            <actionGroup ref="setDefaultShippingTaxClassActionGroup" stepKey="setdefaultClass"/>
+            <actionGroup ref="SetDefaultShippingTaxClassActionGroup" stepKey="setdefaultClass"/>
 
             <!--Delete Simple Sub Category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -70,7 +70,7 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 
             <!--Log Out-->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create a cart price rule with 10% discount for whole cart -->

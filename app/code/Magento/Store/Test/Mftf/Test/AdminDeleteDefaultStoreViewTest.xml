@@ -20,7 +20,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create custom store view-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">

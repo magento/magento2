@@ -33,7 +33,7 @@
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
-            <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
         </after>
@@ -58,7 +58,7 @@
 
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-        <actionGroup ref="logoutActionGroup" stepKey="adminLogout"/>
+        <actionGroup ref="LogoutActionGroup" stepKey="adminLogout"/>
 
         <!-- Place an order from Storefront as a Guest  -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>

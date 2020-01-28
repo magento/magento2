@@ -54,7 +54,7 @@
             <!-- Clear Filter Product -->
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <!-- Logout Admin -->
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search Product and Open Edit -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">

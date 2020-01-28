@@ -22,14 +22,14 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">
+            <actionGroup ref="SetEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">
                 <argument name="emailTextLengthLimit" value="{{Wishlist.default_email_text_length_limit}}"/>
             </actionGroup>
             <checkOption selector="{{WishListShareOptionsSection.useSystemValueForWishListEmailTextLimit}}" stepKey="checkUseSystemValueForWishListEmailTextLimit"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMin">
+        <actionGroup ref="SetEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMin">
             <argument name="emailTextLengthLimit" value="{{Wishlist.min_email_text_length_limit}}"/>
         </actionGroup>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessageForMinimum"/>
@@ -39,7 +39,7 @@
             <actualResult type="variable">minimumWishListTextLengthLimit</actualResult>
         </assertEquals>
 
-        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMax">
+        <actionGroup ref="SetEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMax">
             <argument name="emailTextLengthLimit" value="{{Wishlist.max_email_text_length_limit}}"/>
         </actionGroup>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessageForMaximum"/>
@@ -49,7 +49,7 @@
             <actualResult type="variable">maximumWishListTextLengthLimit</actualResult>
         </assertEquals>
 
-        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToLowerThanMin">
+        <actionGroup ref="SetEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToLowerThanMin">
             <argument name="emailTextLengthLimit" value="0"/>
         </actionGroup>
         <dontSee selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="dontSeeSuccessMessageForLowerThanMinimum"/>
@@ -59,7 +59,7 @@
             <actualResult type="variable">enterWishListTextLengthLimitLowerThanMinimum</actualResult>
         </assertEquals>
 
-        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToHigherThanMaximum">
+        <actionGroup ref="SetEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToHigherThanMaximum">
             <argument name="emailTextLengthLimit" value="10001"/>
         </actionGroup>
         <dontSee selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="dontSeeSuccessMessageForHigherThanMaximum"/>

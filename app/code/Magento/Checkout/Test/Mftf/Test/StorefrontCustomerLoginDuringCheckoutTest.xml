@@ -38,7 +38,7 @@
             </actionGroup>
 
             <!-- Logout admin -->
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Storefront as Guest and create new account -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createNewCustomerAccount"/>

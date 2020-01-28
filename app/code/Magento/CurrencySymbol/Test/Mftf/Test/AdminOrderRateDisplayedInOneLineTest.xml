@@ -46,7 +46,7 @@
             <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
             <magentoCLI command="config:set --scope={{SetDefaultCurrencyUSDConfig.scope}} --scope-code={{SetDefaultCurrencyUSDConfig.scope_code}} {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSDWebsites"/>
             <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSDWebsites"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created product on Storefront and place for order-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

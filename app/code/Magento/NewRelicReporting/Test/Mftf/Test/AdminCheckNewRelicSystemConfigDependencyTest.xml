@@ -25,7 +25,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="AssertAdminNewRelicConfigFieldIsNotVisibleActionGroup" stepKey="checkingIfApiUrlIsNotVisible">
             <argument name="config" value="{{AdminNewRelicConfigSystemSection.apiUrl}}"/>

@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomer3" stepKey="deleteCustomer3"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
 
             <!-- Set production mode -->
 <!--            <magentoCLI command="cache:flush" stepKey="flushCache"/>-->

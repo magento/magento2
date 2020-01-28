@@ -50,7 +50,7 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllFilters"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct1ToCart">
             <argument name="product" value="$$product1$$"/>

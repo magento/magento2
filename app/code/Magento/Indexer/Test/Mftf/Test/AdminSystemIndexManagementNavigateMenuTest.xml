@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIndexManagementPage">
             <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>

@@ -37,7 +37,7 @@
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Login as a Customer with remember me checked-->
         <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeChecked">

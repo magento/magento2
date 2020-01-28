@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="useBraintreeForMasterCardActionGroup">
+    <actionGroup name="UseBraintreeForMasterCardActionGroup">
         <annotations>
             <description>Selects 'Braintree' as the Payment Method on the Admin New Order creation page. Enters Credit Card details. PLEASE NOTE: The Credit Card details used are Hardcoded using 'PaymentAndShippingInfo'.</description>
         </annotations>

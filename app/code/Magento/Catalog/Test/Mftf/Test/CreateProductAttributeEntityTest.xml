@@ -30,7 +30,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -89,7 +89,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Generate date for use as default value, needs to be MM/d/YYYY -->
@@ -149,7 +149,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -203,7 +203,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -290,7 +290,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -358,7 +358,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->

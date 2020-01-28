@@ -23,7 +23,7 @@
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="storeViewData"/>
                 </actionGroup>
-                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+                <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create store view-->

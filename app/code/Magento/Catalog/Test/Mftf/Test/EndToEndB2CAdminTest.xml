@@ -21,7 +21,7 @@
             </skip>
         </annotations>
         <after>
-            <actionGroup ref="logoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <!--Login to Admin Area-->

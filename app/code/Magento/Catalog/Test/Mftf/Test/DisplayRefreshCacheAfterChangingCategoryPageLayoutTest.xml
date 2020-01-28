@@ -30,7 +30,7 @@
             <!-- Delete category and log out -->
             <comment userInput="Delete category and log out" stepKey="deleteCategoryAndLogOut"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logOutFromAdmin"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logOutFromAdmin"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
         <!-- Navigate to category details page -->

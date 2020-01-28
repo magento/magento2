@@ -29,7 +29,7 @@
                     <argument name="customStore" value="customStore"/>
                 </actionGroup>
                 <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-                <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+                <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Filter grid and see created store view-->

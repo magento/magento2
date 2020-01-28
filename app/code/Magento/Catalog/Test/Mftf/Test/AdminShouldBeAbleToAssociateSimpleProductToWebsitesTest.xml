@@ -44,7 +44,7 @@
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToResetFilters"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
-            <actionGroup ref="logoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Go to product page in admin panel to edit -->
