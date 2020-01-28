@@ -10,7 +10,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
-
 use Magento\Framework\Registry;
 use Magento\SalesRule\Model\Rule;
 
@@ -24,6 +23,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
