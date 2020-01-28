@@ -23,7 +23,7 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Assert that product custom options render as expected.
+ * Base logic for render custom options and check that option renders as expected.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

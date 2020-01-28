@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Block\Product\View\Options;
 
 /**
- * @inheritdoc
+ * Test cases related to check that simple product custom option renders as expected.
  *
  * @magentoDbIsolation disabled
  * @magentoAppArea frontend
