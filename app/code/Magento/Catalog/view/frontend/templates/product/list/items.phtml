@@ -223,14 +223,21 @@ switch ($type = $block->getType()) {
                                             <?php if ($showCart):?>
                                                 <div class="actions-primary">
                                                     <?php if ($_item->isSaleable()):?>
+                                                        <?php $postDataHelper =
+                                                            $this->helper
+                                                            (Magento\Framework\Data\Helper\PostHelper::class);
+                                                        $postData =
+                                                            $postDataHelper->getPostData($block->escapeUrl
+                                                            ($block->getAddToCartUrl($_item)),
+                                                                ['product' => $_item->getEntityId()])
+                                                        ?>
                                                         <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)):?>
-                                                            <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                             <button class="action tocart primary"
+                                                                    data-post='<?= /* @noEscape */ $postData ?>'
+                                                                    type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         <?php else:?>
-                                                            <?php $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
-                                                            $postData = $postDataHelper->getPostData($block->escapeUrl($block->getAddToCartUrl($_item)), ['product' => $_item->getEntityId()])
-                                                            ?>
                                                             <button class="action tocart primary"
                                                                     data-post='<?= /* @noEscape */ $postData ?>'
                                                                     type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
