@@ -14,9 +14,6 @@ namespace Magento\Backend\Block\Dashboard;
  */
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
-    /**
-     * Api URL
-     */
     const API_URL = 'https://image-charts.com/chart';
 
     /**
@@ -190,8 +187,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $params = [
             'cht' => 'lc',
             'chls' => '7',
-            'chf'  => 'bg,s,f4f4f4|c,lg,90,ffffff,0.1,ededed,0',
-            'chm'  => 'B,f4d4b2,0,0,0',
+            'chf' => 'bg,s,f4f4f4|c,lg,90,ffffff,0.1,ededed,0',
+            'chm' => 'B,f4d4b2,0,0,0',
             'chco' => 'db4814',
             'chxs' => '0,0,11|1,0,11',
             'chma' => '15,15,15,15'
@@ -300,20 +297,23 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $minvalue = min($localminvalue);
 
         // default values
-        $yLabels = [];
         $miny = 0;
         $maxy = 0;
         $yorigin = 0;
+        $xAxis = 'x';
+        $xAxisIndex = 0;
+        $yAxisIndex = 1;
 
         if ($minvalue >= 0 && $maxvalue >= 0) {
             if ($maxvalue > 10) {
-                $p = pow(10, $this->_getPow((int) $maxvalue));
+                $p = pow(10, $this->_getPow((int)$maxvalue));
                 $maxy = ceil($maxvalue / $p) * $p;
-                $yLabels = range($miny, $maxy, $p);
+                $yRange = "$yAxisIndex,$miny,$maxy,$p";
             } else {
                 $maxy = ceil($maxvalue + 1);
-                $yLabels = range($miny, $maxy, 1);
+                $yRange = "$yAxisIndex,$miny,$maxy,1";
             }
+            $params['chxr'] = $yRange;
             $yorigin = 0;
         }
 
@@ -341,22 +341,11 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $params['chd'] .= $buffer;
 
-        $valueBuffer = [];
-
         if (count($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
-            $indexid = 0;
-            foreach ($this->_axisLabels as $idx => $labels) {
-                if ($idx == 'x') {
-                    $this->formatAxisLabelDate((string) $idx, (string) $timezoneLocal);
-                    $tmpstring = implode('|', $this->_axisLabels[$idx]);
-                    $valueBuffer[] = $indexid . ":|" . $tmpstring;
-                } elseif ($idx == 'y') {
-                    $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
-                }
-                $indexid++;
-            }
-            $params['chxl'] = implode('|', $valueBuffer);
+            $this->formatAxisLabelDate($xAxis, (string)$timezoneLocal);
+            $customAxisLabels = $xAxisIndex . ":|" . implode('|', $this->_axisLabels[$xAxis]);
+            $params['chxl'] = $customAxisLabels . $dataSetdelimiter;
         }
 
         // chart size
@@ -368,7 +357,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             foreach ($params as $name => $value) {
                 $p[] = $name . '=' . urlencode($value);
             }
-            return (string) self::API_URL . '?' . implode('&', $p);
+            return (string)self::API_URL . '?' . implode('&', $p);
         }
         $gaData = urlencode(base64_encode(json_encode($params)));
         $gaHash = $this->_dashboardData->getChartDataHash($gaData);
@@ -392,7 +381,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 switch ($this->getDataHelper()->getParam('period')) {
                     case '24h':
                         $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
-                            $period->setTime((int) $period->format('H'), 0, 0),
+                            $period->setTime((int)$period->format('H'), 0, 0),
                             \IntlDateFormatter::NONE,
                             \IntlDateFormatter::SHORT
                         );
