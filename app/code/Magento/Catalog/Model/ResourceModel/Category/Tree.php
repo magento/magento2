@@ -10,6 +10,8 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
+ * Class Tree
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -98,6 +100,11 @@ class Tree extends Dbp
      * @since 101.0.0
      */
     protected $metadataPool;
+
+    /**
+     * @var array
+     */
+    protected $_inactiveItems;
 
     /**
      * Tree constructor.
@@ -680,6 +687,8 @@ class Tree extends Dbp
     }
 
     /**
+     * Get Metadata Pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

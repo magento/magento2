@@ -12,6 +12,9 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class Columns
+ */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
@@ -41,6 +44,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     ];
 
     /**
+     * @var \Magento\Customer\Ui\Component\ColumnFactory
+     */
+    protected $columnFactory;
+
+    /**
      * @param ContextInterface $context
      * @param ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
@@ -63,6 +71,8 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
+     * Default Sort Order
+     *
      * @return int
      */
     protected function getDefaultSortOrder()
@@ -94,7 +104,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function prepare()
     {
@@ -113,8 +123,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
+     * Add Column
+     *
      * @param array $attributeData
      * @param string $columnName
+     *
      * @return void
      */
     public function addColumn(array $attributeData, $columnName)
@@ -129,8 +142,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
+     * Update Column
+     *
      * @param array $attributeData
      * @param string $newAttributeCode
+     *
      * @return void
      */
     public function updateColumn(array $attributeData, $newAttributeCode)

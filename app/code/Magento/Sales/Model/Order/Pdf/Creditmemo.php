@@ -21,6 +21,11 @@ class Creditmemo extends AbstractPdf
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

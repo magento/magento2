@@ -6,6 +6,8 @@
 namespace Magento\Reports\Model\Product\Index;
 
 /**
+ * Class Factory
+ *
  * @api
  * @since 100.0.2
  */
@@ -29,6 +31,11 @@ class Factory
     protected $_instances;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
@@ -37,8 +44,11 @@ class Factory
     }
 
     /**
+     * Get Instance
+     *
      * @param string $type
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     *
+     * @return \Magento\Reports\Model\Product\Index\Abstract
      * @throws \InvalidArgumentException
      */
     public function get($type)

@@ -45,8 +45,8 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper
+     * @param string|null $connectionName
      * @param array $ignoredProductTypes
-     * @param string $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

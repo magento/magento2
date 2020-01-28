@@ -61,6 +61,11 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_catalogData;
 
     /**
+     * @var \Magento\Framework\Stdlib\ArrayUtils
+     */
+    protected $arrayUtils;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Catalog\Helper\Data $catalogData

@@ -10,6 +10,8 @@ use Magento\Marketplace\Helper\Cache;
 use Magento\Backend\Model\UrlInterface;
 
 /**
+ * Class Partners
+ *
  * @api
  * @since 100.0.2
  */
@@ -36,6 +38,11 @@ class Partners
     protected $cache;
 
     /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    protected $backendUrl;
+
+    /**
      * @param Curl $curl
      * @param Cache $cache
      * @param UrlInterface $backendUrl
@@ -48,6 +55,8 @@ class Partners
     }
 
     /**
+     * Get API URL
+     *
      * @return string
      */
     public function getApiUrl()
@@ -83,6 +92,8 @@ class Partners
     }
 
     /**
+     * Fetch Curl Client
+     *
      * @return Curl
      */
     public function getCurlClient()
@@ -91,6 +102,8 @@ class Partners
     }
 
     /**
+     * Get Cache Object
+     *
      * @return cache
      */
     public function getCache()
@@ -99,6 +112,8 @@ class Partners
     }
 
     /**
+     * Get Referer URL
+     *
      * @return string
      */
     public function getReferer()

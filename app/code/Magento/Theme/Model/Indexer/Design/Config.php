@@ -14,6 +14,9 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StructureFactory;
 use Magento\Framework\Indexer\SaveHandlerFactory;
 
+/**
+ * Class Config
+ */
 class Config implements ActionInterface
 {
     /**
@@ -55,6 +58,11 @@ class Config implements ActionInterface
      * @var HandlerPool
      */
     protected $handlerPool;
+
+    /**
+     * @var array
+     */
+    protected $data;
 
     /**
      * Config constructor

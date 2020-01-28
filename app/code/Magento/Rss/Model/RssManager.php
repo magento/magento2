@@ -22,6 +22,11 @@ class RssManager implements RssManagerInterface
     protected $providers;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $dataProviders
      */
@@ -62,7 +67,7 @@ class RssManager implements RssManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getProviders()
     {

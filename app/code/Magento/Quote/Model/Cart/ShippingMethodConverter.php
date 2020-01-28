@@ -7,7 +7,6 @@ namespace Magento\Quote\Model\Cart;
 
 /**
  * Quote shipping method data.
- *
  */
 class ShippingMethodConverter
 {
@@ -22,6 +21,11 @@ class ShippingMethodConverter
      * @var \Magento\Tax\Helper\Data
      */
     protected $taxHelper;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * Constructs a shipping method converter object.
@@ -43,9 +47,11 @@ class ShippingMethodConverter
     /**
      * Converts a specified rate model to a shipping method data object.
      *
-     * @param string $quoteCurrencyCode The quote currency code.
      * @param \Magento\Quote\Model\Quote\Address\Rate $rateModel The rate model.
+     * @param string $quoteCurrencyCode The quote currency code.
+     *
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface Shipping method data object.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function modelToDataObject($rateModel, $quoteCurrencyCode)
     {

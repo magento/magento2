@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
 /**
+ * Class AbstractRepository
+ *
  * @api
  * @since 100.0.2
  */
@@ -22,6 +24,11 @@ abstract class AbstractRepository implements RepositoryInterface
     protected $searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     */
+    protected $productAttributeRepository;
+
+    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
@@ -34,11 +41,13 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     abstract protected function buildSearchCriteria();
 
     /**
+     * Get List of Attributes
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */
     public function getList()

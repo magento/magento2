@@ -6,6 +6,8 @@
 namespace Magento\Wishlist\Model;
 
 /**
+ * Wishlist Configuration
+ *
  * @api
  * @since 100.0.2
  */
@@ -35,6 +37,11 @@ class Config
      * @var int
      */
     private $sharingEmailLimit;
+
+    /**
+     * @var int
+     */
+    protected $_sharignTextLimit;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

@@ -15,6 +15,8 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
+ * Bundle Product Link Management
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterface
@@ -55,6 +57,11 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     private $metadataPool;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
      * @param \Magento\Bundle\Model\SelectionFactory $bundleSelection
@@ -82,7 +89,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getChildren($productSku, $optionId = null)
     {
@@ -105,7 +112,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
@@ -115,7 +122,16 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * Save Child
+     *
+     * @param string $sku
+     * @param \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -169,6 +185,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
+     * Map Product link to Selection
+     *
      * @param \Magento\Bundle\Model\Selection $selectionModel
      * @param \Magento\Bundle\Api\Data\LinkInterface $productLink
      * @param string $linkedProductId
@@ -214,7 +232,17 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * Add Child
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param int $optionId
+     * @param \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
+     *
+     * @return int
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
@@ -294,7 +322,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function removeChild($sku, $optionId, $childSku)
     {
@@ -333,6 +361,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
+     * Build Link for selection
+     *
      * @param \Magento\Catalog\Model\Product $selection
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Api\Data\LinkInterface
@@ -364,7 +394,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
+     * Get Product Options
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     *
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      */
     private function getOptions(\Magento\Catalog\Api\Data\ProductInterface $product)
@@ -389,6 +422,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * Get MetadataPool instance
+     *
      * @return MetadataPool
      */
     private function getMetadataPool()

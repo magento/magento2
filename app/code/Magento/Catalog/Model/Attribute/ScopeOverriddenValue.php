@@ -16,6 +16,7 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class ScopeOverriddenValue
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ScopeOverriddenValue
@@ -44,6 +45,11 @@ class ScopeOverriddenValue
      * @var ResourceConnection
      */
     private $resourceConnection;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    protected $filterBuilder;
 
     /**
      * ScopeOverriddenValue constructor.

@@ -8,6 +8,9 @@ namespace Magento\Indexer\App;
 use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class Indexer
+ */
 class Indexer implements \Magento\Framework\AppInterface
 {
     /**
@@ -26,6 +29,11 @@ class Indexer implements \Magento\Framework\AppInterface
      * @var \Magento\Framework\App\Console\Response
      */
     protected $_response;
+
+    /**
+     * @var \Magento\Indexer\Model\Processor
+     */
+    protected $processor;
 
     /**
      * @param string $reportDir
@@ -67,7 +75,7 @@ class Indexer implements \Magento\Framework\AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {

@@ -36,6 +36,7 @@ use Magento\Search\Model\EngineResolver;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
  * @since 100.0.2
  */
@@ -117,6 +118,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var DefaultFilterStrategyApplyCheckerInterface
      */
     private $defaultFilterStrategyApplyChecker;
+
+    /**
+     * @var \Magento\Search\Model\SearchEngine
+     */
+    protected $searchEngine;
+
+    /**
+     * @var \Magento\CatalogSearch\Model\Advanced\Request\Builder
+     */
+    protected $requestBuilder;
 
     /**
      * Collection constructor

@@ -14,9 +14,47 @@ use Magento\Framework\Registry;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class Manual
+ */
 class Manual implements AlgorithmInterface
 {
     const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer\Filter\Price\Render
+     */
+    protected $render;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     */
+    protected $resource;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer\Filter\Price\Range
+     */
+    protected $range;
+
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer
+     */
+    protected $layer;
+
+    /**
+     * @var \Magento\Framework\Search\Dynamic\Algorithm
+     */
+    protected $algorithm;
 
     /**
      * @param Algorithm $algorithm
@@ -46,6 +84,8 @@ class Manual implements AlgorithmInterface
     }
 
     /**
+     * Get Items Data
+     *
      * @param int[] $intervals
      * @param string $additionalRequestData
      * @return array
@@ -68,6 +108,8 @@ class Manual implements AlgorithmInterface
     }
 
     /**
+     * Process Range
+     *
      * @param array $items
      * @return array
      */

@@ -48,6 +48,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator
+     */
+    protected $timezoneValidator;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -56,7 +61,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

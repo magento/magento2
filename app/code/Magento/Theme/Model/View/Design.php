@@ -74,6 +74,11 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
+     * @var array
+     */
+    protected $_themes;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -227,7 +232,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -257,6 +262,8 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
+     * Set Locale
+     *
      * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @return $this
      */
@@ -267,7 +274,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getDesignParams()
     {

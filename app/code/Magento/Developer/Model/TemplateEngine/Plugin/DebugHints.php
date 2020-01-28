@@ -16,6 +16,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\Http;
 
+/**
+ * Class DebugHints
+ */
 class DebugHints
 {
     /**
@@ -71,6 +74,11 @@ class DebugHints
      * @var string
      */
     private $debugHintsParameter;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    protected $http;
 
     /**
      * @param ScopeConfigInterface $scopeConfig

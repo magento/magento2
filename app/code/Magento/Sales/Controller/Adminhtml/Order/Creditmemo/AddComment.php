@@ -7,9 +7,13 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 
-class AddComment extends \Magento\Backend\App\Action
+/**
+ * Class AddComment
+ */
+class AddComment extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -42,6 +46,11 @@ class AddComment extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Action\Context $context

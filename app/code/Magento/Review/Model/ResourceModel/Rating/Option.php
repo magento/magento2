@@ -8,6 +8,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 /**
  * Rating option resource model
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -78,6 +79,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
      */
     protected $_ratingOptionVoteF;
+
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     */
+    protected $_remoteAddress;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -262,9 +268,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Load object data by optionId
+     *
      * Method renamed from 'load'.
      *
      * @param int $optionId
+     *
      * @return array
      */
     public function loadDataById($optionId)

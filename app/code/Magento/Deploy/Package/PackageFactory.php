@@ -24,6 +24,11 @@ class PackageFactory
     private $objectManager;
 
     /**
+     * @var string
+     */
+    protected $type;
+
+    /**
      * PackageFactory constructor
      *
      * @param ObjectManagerInterface $objectManager

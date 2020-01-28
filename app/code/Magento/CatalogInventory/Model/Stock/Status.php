@@ -25,6 +25,12 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     const KEY_STOCK_ID = 'stock_id';
     const KEY_QTY = 'qty';
     const KEY_STOCK_STATUS = 'stock_status';
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+
     /**#@-*/
 
     /**

@@ -15,6 +15,11 @@ use Magento\Reports\Controller\Adminhtml\Report\Statistics;
 class RefreshStatistics extends Statistics implements HttpPostActionInterface
 {
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param array $reportTypes

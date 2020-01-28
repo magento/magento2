@@ -39,8 +39,13 @@ class Config
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $taxHelper;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Tax\Helper\Data $taxData
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

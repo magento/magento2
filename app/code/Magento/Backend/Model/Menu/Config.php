@@ -6,6 +6,8 @@
 namespace Magento\Backend\Model\Menu;
 
 /**
+ * Backend Menu Config
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -62,6 +64,11 @@ class Config
      * @var \Magento\Framework\App\State
      */
     protected $_appState;
+
+    /**
+     * @var \Magento\Backend\Model\Menu\Builder
+     */
+    protected $_menuBuilder;
 
     /**
      * @param \Magento\Backend\Model\Menu\Builder $menuBuilder
