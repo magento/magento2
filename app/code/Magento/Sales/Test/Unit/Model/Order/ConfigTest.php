@@ -117,38 +117,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return void
-     */
-    public function testGetStateLabelByStateAndStatus()
-    {
-        $statuses = [
-            new DataObject(
-                [
-                    'status' => 'fraud',
-                    'state' => 'processing',
-                    'label' => 'Suspected Fraud',
-                ]
-            ),
-            new DataObject(
-                [
-                    'status' => 'processing',
-                    'state' => 'processing',
-                    'label' => 'Processing',
-                ]
-            )
-        ];
-        $collectionMock = $this->createPartialMock(Collection::class, ['create', 'joinStates']);
-        $this->orderStatusCollectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())
-            ->method('joinStates')
-            ->will($this->returnValue($statuses));
-        $result = $this->salesConfig->getStateLabelByStateAndStatus('processing', 'fraud');
-        $this->assertSame('Suspected Fraud', $result->getText());
-    }
-
-    /**
      * Test get statuses
      *
      * @dataProvider getStatusesDataProvider

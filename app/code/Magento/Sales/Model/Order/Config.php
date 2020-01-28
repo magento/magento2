@@ -300,23 +300,4 @@ class Config
         }
         return $this->statuses[(bool) $visibility];
     }
-
-    /**
-     * Retrieve label by state  and status
-     *
-     * @param string $state
-     * @param string $status
-     * @return \Magento\Framework\Phrase|string
-     * @since 100.2.0
-     */
-    public function getStateLabelByStateAndStatus($state, $status)
-    {
-        foreach ($this->_getCollection() as $item) {
-            if ($item->getData('state') == $state && $item->getData('status') == $status) {
-                $label = $item->getData('label');
-                return __($label);
-            }
-        }
-        return $state;
-    }
 }
