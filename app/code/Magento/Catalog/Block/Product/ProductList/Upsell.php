@@ -158,7 +158,7 @@ class Upsell extends AbstractProduct implements IdentityInterface
     /**
      * Get collection items
      *
-     * @return DataObject[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
     {
@@ -232,7 +232,7 @@ class Upsell extends AbstractProduct implements IdentityInterface
      *
      * @param string $type
      * @param int $limit
-     * @return $this
+     * @return \Magento\Catalog\Block\Product\ProductList\Upsell
      */
     public function setItemLimit($type, $limit)
     {
