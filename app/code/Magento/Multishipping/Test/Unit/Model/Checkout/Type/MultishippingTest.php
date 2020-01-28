@@ -931,7 +931,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateOrdersCountryNotPresentInAllowedListException(): void
     {
-        $ExceptionMessage = 'Some addresses can\'t be used due to the configurations for specific countries.';
+        $exceptionMessage = 'Some addresses can\'t be used due to the configurations for specific countries.';
 
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
@@ -964,7 +964,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->willReturn($paymentMock);
         $this->quoteMock->method('getAllShippingAddresses')
             ->willReturn([$shippingAddressMock]);
-        $this->expectExceptionMessage($ExceptionMessage);
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->model->createOrders();
     }
