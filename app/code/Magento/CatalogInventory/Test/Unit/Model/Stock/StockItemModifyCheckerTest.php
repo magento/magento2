@@ -38,7 +38,7 @@ class StockItemModifyCheckerTest extends TestCase
     private $stockItemModel;
 
     /**
-     * @var ArrayUtils|MockObject
+     * @var ArrayUtils
      */
     private $arrayUtils;
 
@@ -50,7 +50,7 @@ class StockItemModifyCheckerTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->stockItemRepository = $this->createPartialMock(StockItemRepository::class, ['get']);
-        $this->arrayUtils = $this->createPartialMock(ArrayUtils::class, ['recursiveDiff']);
+        $this->arrayUtils = $objectManager->getObject(ArrayUtils::class);
         $this->stockItemModel = $this->createPartialMock(StockItem::class, ['getId', 'getData']);
 
         $this->model = $objectManager->getObject(
@@ -61,33 +61,6 @@ class StockItemModifyCheckerTest extends TestCase
                 'skippedAttributes' => [StockItemInterface::LOW_STOCK_DATE],
             ]
         );
-    }
-
-    /**
-     * Test for IsModified method when data is not modified.
-     *
-     * @return void
-     */
-    public function testIsModifiedForNotModifiedModel(): void
-    {
-        $itemFromRepository = [
-            'id' => 1,
-            'low_stock_date' => '01.01.2020',
-            'qty' => 100,
-        ];
-        $model = [
-            'id' => 1,
-            'low_stock_date' => '01.01.2021',
-            'qty' => 100
-        ];
-        $this->stockItemModel->expects($this->exactly(2))->method('getId')->willReturn($model['id']);
-        $this->stockItemRepository->expects($this->once())->method('get')->willReturn($this->stockItemModel);
-        $this->stockItemModel->expects($this->exactly(2))
-            ->method('getData')
-            ->willReturnOnConsecutiveCalls($itemFromRepository, $model);
-        $this->arrayUtils->expects($this->once())->method('recursiveDiff')->willReturn([]);
-
-        $this->assertFalse($this->model->isModified($this->stockItemModel));
     }
 
     /**
@@ -106,27 +79,60 @@ class StockItemModifyCheckerTest extends TestCase
     /**
      * Test for IsModified method when found difference between data.
      *
+     * @param array $itemFromRepository
+     * @param array $model
+     * @param bool $expectedResult
      * @return void
+     * @dataProvider stockItemModelDataProvider
      */
-    public function testIsModifiedWhenDifferenceFound(): void
-    {
-        $itemFromRepository = [
-            'id' => 1,
-            'low_stock_date' => '01.01.2020',
-            'qty' => 100,
-        ];
-        $model = [
-            'id' => 1,
-            'low_stock_date' => '01.01.2021',
-            'qty' => 99
-        ];
+    public function testIsModified(
+        array $itemFromRepository,
+        array $model,
+        bool $expectedResult
+    ): void {
         $this->stockItemModel->expects($this->exactly(2))->method('getId')->willReturn($model['id']);
         $this->stockItemRepository->expects($this->once())->method('get')->willReturn($this->stockItemModel);
         $this->stockItemModel->expects($this->exactly(2))
             ->method('getData')
             ->willReturnOnConsecutiveCalls($itemFromRepository, $model);
-        $this->arrayUtils->expects($this->once())->method('recursiveDiff')->willReturn(['qty' => 100]);
 
-        $this->assertTrue($this->model->isModified($this->stockItemModel));
+        $this->assertEquals($expectedResult, $this->model->isModified($this->stockItemModel));
+    }
+
+    /**
+     * Data provider for testIsModified.
+     *
+     * @return array
+     */
+    public function stockItemModelDataProvider(): array
+    {
+        return [
+            'Model is modified' => [
+                'stockItemFromRepository' => [
+                    'id' => 1,
+                    'low_stock_date' => '01.01.2020',
+                    'qty' => 100,
+                ],
+                'model' => [
+                    'id' => 1,
+                    'low_stock_date' => '01.01.2021',
+                    'qty' => 99,
+                ],
+                'expectedResult' => true,
+            ],
+            'Model is not modified' => [
+                'stockItemFromRepository' => [
+                    'id' => 1,
+                    'low_stock_date' => '01.01.2020',
+                    'qty' => 100,
+                ],
+                'model' => [
+                    'id' => 1,
+                    'low_stock_date' => '01.01.2021',
+                    'qty' => 100,
+                ],
+                'expectedResult' => false,
+            ],
+        ];
     }
 }
