@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
 
 /**
- * Class ConfigTest
+ * Test for Magento\Sales\Model\Order\Config class
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {

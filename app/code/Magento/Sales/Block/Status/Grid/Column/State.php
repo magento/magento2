@@ -6,6 +6,8 @@
 namespace Magento\Sales\Block\Status\Grid\Column;
 
 /**
+ * Column State class
+ *
  * @api
  * @since 100.0.2
  */
