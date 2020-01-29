@@ -2968,4 +2968,34 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $status = $stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
     }
+
+    /**
+     * Test that product stock status is updated after import on schedule
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/cataloginventory_stock_item_update_by_schedule.php
+     * @magentoDbIsolation disabled
+     */
+    public function testProductStockStatusShouldBeUpdatedOnSchedule()
+    {
+        /** * @var $indexProcessor \Magento\Indexer\Model\Processor */
+        $indexProcessor = $this->objectManager->create(\Magento\Indexer\Model\Processor::class);
+        /** @var $stockRegistry StockRegistry */
+        $stockRegistry = $this->objectManager->create(StockRegistry::class);
+        /** @var StockRegistryStorage $stockRegistryStorage */
+        $stockRegistryStorage = $this->objectManager->get(StockRegistryStorage::class);
+        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
+        $this->importDataForMediaTest('disable_product.csv');
+        $indexProcessor->updateMview();
+        $stockRegistryStorage->clean();
+        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
+        $this->importDataForMediaTest('enable_product.csv');
+        $indexProcessor->updateMview();
+        $stockRegistryStorage->clean();
+        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
+    }
 }
