@@ -193,16 +193,17 @@ class SchemaBuilder
     {
         $columns = [];
 
-        foreach ($tableData['column'] as $columnData) {
-            if ($this->isDisabled($columnData)) {
-                continue;
+        if (array_key_exists('column', $tableData)) {
+            foreach ($tableData['column'] as $columnData) {
+                if ($this->isDisabled($columnData)) {
+                    continue;
+                }
+
+                $columnData = $this->processGenericData($columnData, $resource, $table);
+                $column = $this->elementFactory->create($columnData['type'], $columnData);
+                $columns[$column->getName()] = $column;
             }
-
-            $columnData = $this->processGenericData($columnData, $resource, $table);
-            $column = $this->elementFactory->create($columnData['type'], $columnData);
-            $columns[$column->getName()] = $column;
         }
-
         return $columns;
     }
 
