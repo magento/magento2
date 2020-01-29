@@ -31,7 +31,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Form\Element\Multiline;
 
 /**
- * Default Config Provider
+ * Default Config Provider for checkout
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)

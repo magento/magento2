@@ -5,7 +5,11 @@
  */
 namespace Magento\Catalog\Helper;
 
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
+use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -129,31 +133,39 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $attributes = [];
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
+     * @var PlaceholderFactory
      */
     private $viewAssetPlaceholderFactory;
+
+    /**
+     * @var CatalogMediaConfig
+     */
+    private $mediaConfig;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
-     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory
+     * @param PlaceholderFactory $placeholderFactory
+     * @param CatalogMediaConfig $mediaConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null
+        PlaceholderFactory $placeholderFactory = null,
+        CatalogMediaConfig $mediaConfig = null
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
         $this->viewAssetPlaceholderFactory = $placeholderFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
+            ?: ObjectManager::getInstance()
+                ->get(PlaceholderFactory::class);
+        $this->mediaConfig = $mediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
     }
 
     /**
@@ -526,7 +538,16 @@ class Image extends AbstractHelper implements ArgumentInterface
     public function getUrl()
     {
         try {
-            $this->applyScheduledActions();
+            switch ($this->mediaConfig->getMediaUrlFormat()) {
+                case CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS:
+                    $this->initBaseFile();
+                    break;
+                case CatalogMediaConfig::HASH:
+                    $this->applyScheduledActions();
+                    break;
+                default:
+                    throw new LocalizedException(__("The specified Catalog media URL format is not supported."));
+            }
             return $this->_getModel()->getUrl();
         } catch (\Exception $e) {
             return $this->getDefaultPlaceholderUrl();

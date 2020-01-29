@@ -10,7 +10,11 @@ namespace Magento\Catalog\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\State;
 use Magento\MediaStorage\Service\ImageResize;
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
 
+/**
+ * Resize product images after the product is saved
+ */
 class ImageResizeAfterProductSave implements ObserverInterface
 {
     /**
@@ -24,16 +28,25 @@ class ImageResizeAfterProductSave implements ObserverInterface
     private $state;
 
     /**
+     * @var CatalogMediaConfig
+     */
+    private $catalogMediaConfig;
+
+    /**
      * Product constructor.
+     *
      * @param ImageResize $imageResize
      * @param State $state
+     * @param CatalogMediaConfig $catalogMediaConfig
      */
     public function __construct(
         ImageResize $imageResize,
-        State $state
+        State $state,
+        CatalogMediaConfig $catalogMediaConfig
     ) {
         $this->imageResize = $imageResize;
         $this->state = $state;
+        $this->catalogMediaConfig = $catalogMediaConfig;
     }
 
     /**
@@ -44,6 +57,12 @@ class ImageResizeAfterProductSave implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $catalogMediaUrlFormat = $this->catalogMediaConfig->getMediaUrlFormat();
+        if ($catalogMediaUrlFormat == CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS) {
+            // Skip image resizing on the Magento side when it is offloaded to a web server or CDN
+            return;
+        }
+
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $observer->getEvent()->getProduct();
 
