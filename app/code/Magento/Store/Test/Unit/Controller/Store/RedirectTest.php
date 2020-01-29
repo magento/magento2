@@ -117,7 +117,10 @@ class RedirectTest extends TestCase
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->formStoreMock = $this->createMock(Store::class);
+        $this->formStoreMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCode'])
+            ->getMockForAbstractClass();
         $this->sidResolverMock = $this->getMockBuilder(SidResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUseSessionInUrl'])
