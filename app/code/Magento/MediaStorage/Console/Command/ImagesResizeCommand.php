@@ -86,7 +86,8 @@ class ImagesResizeCommand extends Command
         $this->setName('catalog:images:resize')
             ->setDescription(
                 'Creates resized product images ' .
-                '(Not relevant when image resizing is offloaded from Magento. See https://docs.magento.com/m2/ee/user_guide/configuration/general/web.html#url-options )'
+                '(Not relevant when image resizing is offloaded from Magento. ' .
+                'See https://docs.magento.com/m2/ee/user_guide/configuration/general/web.html#url-options )'
             )
             ->setDefinition($this->getOptionsList());
     }
