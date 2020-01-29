@@ -48,8 +48,6 @@
             </actionGroup>
             <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton"/>
             <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveButton"/>
-            <!-- TODO: REMOVE AFTER FIX MC-29943 -->
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>

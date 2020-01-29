@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup">
         <annotations>
-            <description>Assert AddToWishList icon is clickable</description>
+            <description>Assert "Add to Wish List" icon is clickable in category product listing</description>
         </annotations>
 
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
-        <click selector="{{StorefrontCategoryMainSection.toWishListIconProductInfoHover}}" stepKey="clickOnAddToWishListIcon"/>
+        <click selector="{{StorefrontCategoryMainSection.addToWishListIconProductInfoHover}}" stepKey="clickOnAddToWishListIcon"/>
         <waitForPageLoad stepKey="waitForCustomerSignInPageLoad"/>
         <waitForElementVisible selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" stepKey="waitForErrorMessageIsVisible"/>
         <see selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="You must login or register to add items to your wishlist." stepKey="assertErrorMessage"/>

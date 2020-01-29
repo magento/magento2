@@ -13,7 +13,7 @@
         </annotations>
 
         <dontSeeElement selector="{{StorefrontCategoryMainSection.addToCartButtonProductInfoHover}}" stepKey="assertAddToCartButtonElementIsNotVisible"/>
-        <dontSeeElement selector="{{StorefrontCategoryMainSection.toWishListIconProductInfoHover}}" stepKey="assertAddToWishListIconIsNotVisible"/>
-        <dontSeeElement selector="{{StorefrontCategoryMainSection.toCompareIconProductInfoHover}}" stepKey="assertAddToCompareIconIsNotVisible"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.addToWishListIconProductInfoHover}}" stepKey="assertAddToWishListIconIsNotVisible"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.addToCompareIconProductInfoHover}}" stepKey="assertAddToCompareIconIsNotVisible"/>
     </actionGroup>
 </actionGroups>

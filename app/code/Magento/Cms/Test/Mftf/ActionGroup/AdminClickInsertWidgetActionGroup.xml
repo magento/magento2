@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminClickInsertWidgetActionGroup">
         <annotations>
-            <description>Click Insert Widget button.</description>
+            <description>Click "Insert Widget" button in the opened widget popup</description>
         </annotations>
 
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetButton"/>
