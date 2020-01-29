@@ -6,27 +6,39 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests for @see \Magento\CatalogWidget\Block\Product\ProductsList
  */
-class ProductListTest extends \PHPUnit\Framework\TestCase
+class ProductListTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogWidget\Block\Product\ProductsList
+     * @var ProductsList
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var CategoryCollection;
+
+     */
+    private $categoryCollection;
+
+    /**
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->create(
-            \Magento\CatalogWidget\Block\Product\ProductsList::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->block = $this->objectManager->create(ProductsList::class);
+        $this->categoryCollection = $this->objectManager->create(CategoryCollection::class);
     }
 
     /**
@@ -44,16 +56,16 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
     public function testCreateCollection()
     {
         // Reindex EAV attributes to enable products filtration by created multiselect attribute
-        /** @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor $eavIndexerProcessor */
+        /** @var Processor $eavIndexerProcessor */
         $eavIndexerProcessor = $this->objectManager->get(
-            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::class
+            Processor::class
         );
         $eavIndexerProcessor->reindexAll();
 
         // Prepare conditions
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+        /** @var $attribute Attribute */
+        $attribute = Bootstrap::getObjectManager()->create(
+            Attribute::class
         );
         $attribute->load('multiselect_attribute', 'attribute_code');
         $multiselectAttributeOptionIds = [];
@@ -87,9 +99,9 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateCollectionWithDropdownAttribute()
     {
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+        /** @var $attribute Attribute */
+        $attribute = Bootstrap::getObjectManager()->create(
+            Attribute::class
         );
         $attribute->load('dropdown_attribute', 'attribute_code');
         $dropdownAttributeOptionIds = [];
@@ -119,6 +131,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $count
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function performAssertions(int $count)
     {
@@ -142,6 +155,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      * @param string $encodedConditions
      * @param string $sku
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateCollectionForSku($encodedConditions, $sku)
     {
@@ -179,6 +193,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_date_attribute.php
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testProductListWithDateAttribute()
     {
@@ -195,6 +210,50 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             1,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
+        );
+    }
+
+    /**
+     * Make sure CatalogWidget would display anchor category products recursively from children categories.
+     *
+     * 1. Create an anchor root category and a sub category inside it
+     * 2. Create 2 new products and assign them to the sub categories
+     * 3. Create product list widget condition to display products from the anchor root category
+     * 4. Load collection for product list widget and make sure that number of loaded products is correct
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/product_in_nested_anchor_categories.php
+     */
+    public function testCreateAnchorCollection()
+    {
+        // Reindex EAV attributes to enable products filtration by created multiselect attribute
+        /** @var Processor $eavIndexerProcessor */
+        $eavIndexerProcessor = $this->objectManager->get(
+            Processor::class
+        );
+        $eavIndexerProcessor->reindexAll();
+
+        $this->categoryCollection->addNameToResult()->load();
+        $rootCategoryId =  $this
+            ->categoryCollection
+            ->getItemByColumnValue('name', 'Default Category')
+            ->getId();
+
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,
+        `aggregator`:`all`,`value`:`1`,`new_child`:``^],
+        `1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,
+        `attribute`:`category_ids`,
+        `operator`:`==`,`value`:`' . $rootCategoryId . '`^]^]';
+
+        $this->block->setData('conditions_encoded', $encodedConditions);
+
+        $productCollection = $this->block->createCollection();
+        $productCollection->load();
+
+        $this->assertEquals(
+            2,
+            $productCollection->count(),
+            "Anchor root category does not contain products of it's children."
         );
     }
 }
