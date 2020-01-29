@@ -46,7 +46,6 @@ class OrdersTest extends TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Sales/_files/order_list_with_invoice.php
      * @dataProvider chartUrlDataProvider
      * @param string $period
@@ -58,8 +57,7 @@ class OrdersTest extends TestCase
         $this->graphBlock->getRequest()->setParams(['period' => $period]);
         $ordersBlock = $this->layout->createBlock(Orders::class);
         $decodedChartUrl = urldecode($ordersBlock->getChartUrl());
-        $chartUrlSegments = explode('&', $decodedChartUrl);
-        $this->assertEquals($expectedAxisRange, $this->getUrlParamData($chartUrlSegments, 'chxr'));
+        $this->assertEquals($expectedAxisRange, $this->getUrlParamData($decodedChartUrl, 'chxr'));
     }
 
     /**
@@ -77,18 +75,20 @@ class OrdersTest extends TestCase
     }
 
     /**
-     * @param array $chartUrlSegments
+     * @param string $chartUrl
      * @param string $paramName
      * @return string
      */
-    private function getUrlParamData(array $chartUrlSegments, string $paramName): string
+    private function getUrlParamData(string $chartUrl, string $paramName): string
     {
-        $urlParams = [];
+        $chartUrlSegments = explode('&', $chartUrl);
         foreach ($chartUrlSegments as $chartUrlSegment) {
-            list($paramKey, $paramValue) = explode('=', $chartUrlSegment);
-            $urlParams[$paramKey] = $paramValue;
+            [$paramKey, $paramValue] = explode('=', $chartUrlSegment);
+            if ($paramKey === $paramName) {
+                return $paramValue;
+            }
         }
 
-        return $urlParams[$paramName] ?? '';
+        return '';
     }
 }
