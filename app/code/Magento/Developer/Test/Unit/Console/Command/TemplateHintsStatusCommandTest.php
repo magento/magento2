@@ -25,7 +25,6 @@ class TemplateHintsStatusCommandTest extends TestCase
      * @var TemplateHintsStatusCommand
      */
     private $command;
-
     /**
      * @var ScopeConfigInterface
      */

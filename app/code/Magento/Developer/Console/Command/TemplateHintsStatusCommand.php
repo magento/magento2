@@ -70,7 +70,7 @@ class TemplateHintsStatusCommand extends Command
                 ? 'enabled'
                 : 'disabled';
         $templateHintsMessage = __("Template hints are %status", ['status' => $templateHintsStatus]);
-        $output->writeln("<info>" . $templateHintsMessage . "</info>");
+        $output->writeln("<info>$templateHintsMessage</info>");
 
         return Cli::RETURN_SUCCESS;
     }
