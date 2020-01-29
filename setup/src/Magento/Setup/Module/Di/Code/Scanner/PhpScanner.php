@@ -10,8 +10,8 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\ObjectManager\Code\Generator\Factory as FactoryGenerator;
+use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
-use \Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Finds factory and extension attributes classes which require auto-generation.
@@ -50,7 +50,7 @@ class PhpScanner implements ScannerInterface
      * @param string $entityType
      * @return string[]
      */
-    protected function _findMissingClasses($file, $classReflection, $methodName, $entityType)
+    private function findMissingFactories($file, $classReflection, $methodName, $entityType)
     {
         $missingClasses = [];
         if (!$classReflection->hasMethod($methodName)) {
@@ -123,7 +123,7 @@ class PhpScanner implements ScannerInterface
      */
     protected function _fetchFactories($reflectionClass, $file)
     {
-        $absentFactories = $this->_findMissingClasses(
+        $absentFactories = $this->findMissingFactories(
             $file,
             $reflectionClass,
             '__construct',
@@ -177,11 +177,11 @@ class PhpScanner implements ScannerInterface
     {
         $output = [[]];
         foreach ($files as $file) {
-            $classes = $this->_getDeclaredClasses($file);
+            $classes = $this->getDeclaredClasses($file);
             foreach ($classes as $className) {
                 $reflectionClass = new \ReflectionClass($className);
-                $output [] = $this->_fetchFactories($reflectionClass, $file);
-                $output [] = $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file);
+                $output[] = $this->_fetchFactories($reflectionClass, $file);
+                $output[] = $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file);
             }
         }
         return array_unique(array_merge(...$output));
@@ -210,32 +210,30 @@ class PhpScanner implements ScannerInterface
     }
 
     /**
-     * Fetch class names from tokenized PHP file
+     * Fetches class name from tokenized PHP file.
      *
      * @param string $namespace
      * @param int $tokenIterator
      * @param int $count
      * @param array $tokens
-     * @return array
+     * @return string|null
      */
-    protected function _fetchClasses($namespace, $tokenIterator, $count, $tokens)
+    private function fetchClass($namespace, $tokenIterator, $count, $tokens):? string
     {
-        $classes = [];
+        // anonymous classes should be omitted
+        if (is_array($tokens[$tokenIterator - 2]) && $tokens[$tokenIterator - 2][0] === T_NEW) {
+            return null;
+        }
+
         for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
             if ($tokens[$tokenOffset] !== '{') {
                 continue;
             }
-            // anonymous classes should be omitted
-            if (is_array($tokens[$tokenIterator - 2]) && $tokens[$tokenIterator - 2][0] === T_NEW) {
-                continue;
-            }
 
-            $class = $namespace . "\\" . $tokens[$tokenIterator + 2][1];
-            if (!in_array($class, $classes)) {
-                $classes[] = $class;
-            }
+            return $namespace . "\\" . $tokens[$tokenIterator + 2][1];
         }
-        return $classes;
+
+        return null;
     }
 
     /**
@@ -244,9 +242,9 @@ class PhpScanner implements ScannerInterface
      * @param string $file
      * @return array
      */
-    protected function _getDeclaredClasses($file)
+    private function getDeclaredClasses($file): array
     {
-        $classes = [[]];
+        $classes = [];
         $namespaceParts = [];
         // phpcs:ignore
         $tokens = token_get_all(file_get_contents($file));
@@ -260,10 +258,13 @@ class PhpScanner implements ScannerInterface
             if (($tokens[$tokenIterator][0] == T_CLASS || $tokens[$tokenIterator][0] == T_INTERFACE)
                 && $tokens[$tokenIterator - 1][0] != T_DOUBLE_COLON
             ) {
-                $classes[] = $this->_fetchClasses(join('', $namespaceParts), $tokenIterator, $count, $tokens);
+                $class = $this->fetchClass(join('', $namespaceParts), $tokenIterator, $count, $tokens);
+                if ($class !== null && !in_array($class, $classes)) {
+                    $classes[] = $class;
+                }
             }
         }
-        return array_unique(array_merge(...$classes));
+        return $classes;
     }
 
     /**
