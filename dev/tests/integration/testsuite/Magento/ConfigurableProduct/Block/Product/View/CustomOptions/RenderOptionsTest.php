@@ -21,7 +21,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from text group(field, area) render on configurable product as expected.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\TextGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\TextGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
@@ -36,7 +36,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from file group(file) render on configurable product as expected.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\FileGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\FileGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
@@ -52,7 +52,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * on configurable product as expected.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\SelectGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\SelectGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $optionValueData
@@ -71,7 +71,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from date group(date, date & time, time) render on configurable product as expected.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\DateGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\ConfigurableProduct\Block\CustomOptions\DateGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray

@@ -19,7 +19,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from text group(field, area) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\TextGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\TextGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
@@ -34,7 +34,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from file group(file) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\FileGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\FileGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
@@ -49,7 +49,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from select group(drop-down, radio buttons, checkbox, multiple select) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\SelectGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\SelectGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $optionValueData
@@ -68,7 +68,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from date group(date, date & time, time) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\DateGroupDataProvider::getData()
+     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\DateGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
