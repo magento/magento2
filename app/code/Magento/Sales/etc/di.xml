@@ -64,6 +64,7 @@
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Repository"/>
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
+    <preference for="Magento\Sales\Api\OrderPlacementInterface" type="Magento\Sales\Model\Service\OrderPlacementService"/>
     <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Model\Order\Status\HistoryRepository"/>
     <preference for="Magento\Sales\Api\PaymentFailuresInterface" type="Magento\Sales\Model\Service\PaymentFailuresService" />
     <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\CommentRepository"/>

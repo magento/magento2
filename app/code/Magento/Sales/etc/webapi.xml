@@ -62,7 +62,7 @@
         </resources>
     </route>
     <route url="/V1/orders/create" method="PUT">
-        <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
+        <service class="Magento\Sales\Api\OrderPlacementInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::create" />
         </resources>
