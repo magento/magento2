@@ -14,7 +14,7 @@
             <description>EXTENDS: StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice'. Validates that the provided Product Price is present and correct on a Storefront Product page.</description>
         </annotations>
 
-        <remove keyForRemoval="AssertProductPrice"/>
+        <remove keyForRemoval="assertProductPrice"/>
         <see userInput="{{product.price}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
     </actionGroup>
 </actionGroups>
