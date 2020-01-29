@@ -723,4 +723,32 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             [1, 1, true],
         ];
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_different_store_values.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
+     */
+    public function testExistsStoreValueFlagForMultipleProducts() {
+
+        $descriptionProudct = $this->productRepository->get('store_description');
+        $nameProudct = $this->productRepository->get('store_name');
+
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $store = $storeManager->getStore('fixturestore');
+
+        $nameProudct->addAttributeUpdate('name','Overwritten Name',$store->getId());
+        $descriptionProudct->addAttributeUpdate('description', 'Overwritten Description', $store->getId());
+
+        $descriptionProudct = $this->productRepository->get('store_description',false, $store->getId(), true);
+        $nameProudct = $this->productRepository->get('store_name', false, $store->getId(), true);
+
+        $this->assertTrue($descriptionProudct->getExistsStoreValueFlag('description'));
+        $this->assertFalse($descriptionProudct->getExistsStoreValueFlag('name'));
+
+        $this->assertFalse($nameProudct->getExistsStoreValueFlag('description'));
+        $this->assertTrue($nameProudct->getExistsStoreValueFlag('name'));
+    }
 }
