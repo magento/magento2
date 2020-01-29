@@ -16,4 +16,8 @@
     <action name="customer/account/editPost">
         <section name="account"/>
     </action>
+    <action name="customer/account/createPost">
+        <section name="account"/>
+        <section name="acc"/>
+    </action>
 </config>

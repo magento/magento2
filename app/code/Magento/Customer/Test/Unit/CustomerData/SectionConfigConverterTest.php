@@ -37,6 +37,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
                 'sections' => [
                     'customer/account/logout' => ['*'],
                     'customer/account/editpost' => ['account'],
+                    'customer/account/createpost' => ['account', 'acc'],
                 ],
             ],
             $this->converter->convert($this->source)
