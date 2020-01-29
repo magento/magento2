@@ -61,10 +61,10 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
             <argument name="product" value="$$product1$$"/>
         </actionGroup>
-        <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite">
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
-        <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing1">
+        <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="ProductSetAdvancedPricing1">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
 
@@ -74,10 +74,10 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$product2$$"/>
         </actionGroup>
-        <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite2">
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite2">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
-        <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing2">
+        <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="ProductSetAdvancedPricing2">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
 
@@ -87,10 +87,10 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
             <argument name="product" value="$$product3$$"/>
         </actionGroup>
-        <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite3">
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite3">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
-        <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing3">
+        <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="ProductSetAdvancedPricing3">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
 
@@ -100,10 +100,10 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
             <argument name="product" value="$$product4$$"/>
         </actionGroup>
-        <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite4">
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite4">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
-        <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing4">
+        <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="ProductSetAdvancedPricing4">
             <argument name="website" value="secondWebsite"/>
         </actionGroup>
         <actionGroup ref="ClearProductsFilterActionGroup" stepKey="ClearProductsFilterActionGroup"/>
@@ -149,7 +149,7 @@
         <see userInput="You saved the rule." stepKey="RuleSaved"/>
 
         <!--Create new order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="CreateNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="storeView" value="customStoreView"/>
         </actionGroup>

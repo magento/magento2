@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Reset the product grid to the default view-->
+    <actionGroup name="ResetProductGridToDefaultViewActionGroup">
+        <annotations>
+            <description>Sets the Admin Products grid view to the 'Default View'.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
+        <click selector="{{AdminProductGridFilterSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
+        <waitForPageLoad stepKey="waitForProductGridLoad"/>
+        <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+    </actionGroup>
+</actionGroups>

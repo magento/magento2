@@ -24,7 +24,7 @@
             <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
 
             <!--Add product to cart-->
-            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
         </before>
