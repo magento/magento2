@@ -11,12 +11,13 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\CatalogRule\Model\RuleFactory;
 use Magento\Customer\Model\Group;
+use Magento\Framework\App\Area;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../ConfigurableProduct/_files/configurable_product_with_custom_option_and_simple_tier_price.php';
-Bootstrap::getInstance()->loadArea('adminhtml');
+Bootstrap::getInstance()->loadArea(Area::AREA_ADMINHTML);
 
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $objectManager->get(StoreManagerInterface::class);

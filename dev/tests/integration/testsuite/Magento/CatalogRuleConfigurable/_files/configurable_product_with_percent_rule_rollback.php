@@ -11,19 +11,18 @@ use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
 
+require __DIR__ . '/../../ConfigurableProduct/_files/configurable_product_with_custom_option_and_simple_tier_price_rollback.php';
+
 $objectManager = Bootstrap::getObjectManager();
-/** @var IndexBuilder $indexBuilder */
-$indexBuilder = $objectManager->get(IndexBuilder::class);
 /** @var CatalogRuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
 /** @var CollectionFactory $ruleCollectionFactory */
 $ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
-$ruleCollection = $ruleCollectionFactory->create();
-$ruleCollection->addFieldToFilter('name', ['eq' => 'Percent rule for configurable product']);
-$ruleCollection->setPageSize(1);
+$ruleCollection = $ruleCollectionFactory->create()
+    ->addFieldToFilter('name', ['eq' => 'Percent rule for configurable product'])
+    ->setPageSize(1);
 /** @var Rule $rule */
 $rule = $ruleCollection->getFirstItem();
 if ($rule->getId()) {
     $ruleRepository->delete($rule);
 }
-$indexBuilder->reindexFull();
