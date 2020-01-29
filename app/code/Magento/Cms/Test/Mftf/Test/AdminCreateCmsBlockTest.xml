@@ -69,7 +69,11 @@
         <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
         <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
         <!--Create new CMS Block page with marginal space in identifier field-->
-        <actionGroup ref="FillOutBlockContentWithMarginalSpace" stepKey="FillOutBlockContent"/>
+        <actionGroup ref="FillOutBlockContentWithMarginalSpace" stepKey="FillOutBlockContent">
+            <argument name="cmsBlockDataTitle" value="Default Block" />
+            <argument name="cmsBlockDataIdentifier" value=" block " />
+            <argument name="cmsBlockDataContent" value="Here is a block test. Yeah!" />
+        </actionGroup>
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clicksaveAndClose" />
         <waitForPageLoad stepKey="waitForPageLoad3"/>
