@@ -38,14 +38,14 @@
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteCreatedSearchTerm"/>
         </after>
 
-            <!-- TEST BODY -->
-            <!-- Navigate To StoreFront -->
+        <!-- TEST BODY -->
+        <!-- Navigate To StoreFront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
-            <!-- Fill in Search Field, Submit Search Request -->
+        <!-- Fill in Search Field, Submit Search Request -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
             <argument name="query" value="{{SearchTerm.query_text}}"/>
         </actionGroup>
-            <!-- Assert Current Url -->
+        <!-- Assert Current Url -->
         <seeCurrentUrlEquals stepKey="checkUrl" url="{{SearchTerm.redirect}}"/>
     </test>
 </tests>
