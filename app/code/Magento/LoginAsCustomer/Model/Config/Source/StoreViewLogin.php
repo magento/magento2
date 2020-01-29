@@ -16,12 +16,12 @@ class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
     /**
      * @const int
      */
-    const AUTODETECT = 0;
+    private const AUTODETECT = 0;
 
     /**
      * @const int
      */
-    const MANUAL = 1;
+    private const MANUAL = 1;
 
     /**
      * Options int
