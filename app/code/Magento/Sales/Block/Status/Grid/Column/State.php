@@ -57,9 +57,11 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
     {
         $states = $this->_config->getStates();
         if (isset($states[$value])) {
-            return sprintf("%s[%s]",
+            return sprintf(
+                "%s[%s]",
                 $value,
-                $states[$value]);
+                $states[$value]
+            );
         }
 
         return $value;
