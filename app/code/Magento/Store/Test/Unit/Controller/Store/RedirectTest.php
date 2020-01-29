@@ -194,10 +194,6 @@ class RedirectTest extends TestCase
             ->expects($this->once())
             ->method('getCode')
             ->willReturn($defaultStoreViewCode);
-        $this->sidResolverMock
-            ->expects($this->once())
-            ->method('getUseSessionInUrl')
-            ->willReturn(false);
         $this->hashGeneratorMock
             ->expects($this->once())
             ->method('generateHash')
