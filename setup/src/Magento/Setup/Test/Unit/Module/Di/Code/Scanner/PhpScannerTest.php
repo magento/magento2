@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/DoubleColon.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Api/Data/SomeInterface.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/StubWithAnonymousClass.php';
+
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
@@ -38,12 +44,6 @@ class PhpScannerTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectEntities()
     {
-        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
-        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
-        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/DoubleColon.php';
-        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Api/Data/SomeInterface.php';
-        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/StubWithAnonymousClass.php';
-
         $testFiles = [
             $this->testDir . '/app/code/Magento/SomeModule/Helper/Test.php',
             $this->testDir . '/app/code/Magento/SomeModule/Model/DoubleColon.php',
