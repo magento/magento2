@@ -129,7 +129,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             );
 
             throw new RuntimeException(
-                new Phrase('Type Error occurred when creating object: %type', ['type' => $type])
+                new Phrase('Type Error occurred when creating object: %type, %msg', ['type' => $type, 'msg' => $exception->getMessage()])
             );
         }
     }
