@@ -11,14 +11,14 @@
     <test name="UpdateVirtualProductWithTierPriceInStockVisibleInCategoryAndSearchTest">
         <annotations>
             <stories value="Update Virtual Product"/>
-            <title value="Update Virtual Product with Tier Price (In Stock) Visible in Category and Search"/>
+            <title value="DEPRECATED. Update Virtual Product with Tier Price (In Stock) Visible in Category and Search"/>
             <description value="Test log in to Update Virtual Product and Update Virtual Product with Tier Price (In Stock) Visible in Category and Search"/>
             <testCaseId value="MC-6504"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-30167"/>
+                <issueId value="DEPRECATED">Please use UpdateVirtualProductWithTierPriceInStockVisibleInCategoryAndSearch2Test instead.</issueId>
             </skip>
         </annotations>
 

@@ -178,7 +178,7 @@
         <annotations>
             <description>EXTENDS: saveProductForm. Removes 'waitProductSaveSuccessMessage' and 'seeSaveConfirmation'.</description>
         </annotations>
-        
+
         <remove keyForRemoval="waitProductSaveSuccessMessage"/>
         <remove keyForRemoval="seeSaveConfirmation"/>
     </actionGroup>
@@ -352,7 +352,7 @@
         </arguments>
 
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{website}}" stepKey="selectProductWebsiteValue"/>
@@ -625,7 +625,7 @@
             <argument name="urlKey" type="string"/>
         </arguments>
 
-        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openSeoSection"/>
         <fillField userInput="{{urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
     </actionGroup>
 

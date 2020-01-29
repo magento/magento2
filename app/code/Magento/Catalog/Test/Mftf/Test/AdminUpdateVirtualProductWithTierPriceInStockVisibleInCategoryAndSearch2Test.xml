@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateVirtualProductWithTierPriceInStockVisibleInCategoryAndSearch2Test">
+        <annotations>
+            <stories value="Update Virtual Product"/>
+            <title value="Update Virtual Product with Tier Price (In Stock) Visible in Category and Search"/>
+            <description value="Test log in to Update Virtual Product and Update Virtual Product with Tier Price (In Stock) Visible in Category and Search"/>
+            <testCaseId value="MC-6504"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="initialCategoryEntity" stepKey="deleteInitialCategory"/>
+            <deleteData createDataKey="categoryEntity" stepKey="deleteCategory" />
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
+                <argument name="product" value="updateVirtualProductTierPriceInStock"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="filterAndSelectProduct" stepKey="openProductEditPageBySKU">
+            <argument name="productSku" value="$initialVirtualProduct.sku$"/>
+        </actionGroup>
+
+        <!-- Update virtual product with tier price -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductTierPriceInStock.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductTierPriceInStock.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductTierPriceInStock.price}}" stepKey="fillProductPrice"/>
+        <!-- Press enter to validate advanced pricing link -->
+        <pressKey selector="{{AdminProductFormSection.productPrice}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricingDialog"/>
+        <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="addTierPrice">
+            <argument name="website" value="{{tierPriceOnVirtualProduct.website}}"/>
+            <argument name="customerGroup" value="{{tierPriceOnVirtualProduct.customer_group}}"/>
+            <argument name="quantity" value="{{tierPriceOnVirtualProduct.qty}}"/>
+            <argument name="priceType" value="Fixed"/>
+            <argument name="amount" value="{{tierPriceOnVirtualProduct.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="doneAdvancedPricingModal"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductTierPriceInStock.productTaxClass}}" stepKey="selectProductStockClass"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductTierPriceInStock.quantity}}" stepKey="fillProductQuantity"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductTierPriceInStock.status}}" stepKey="selectStockStatusInStock"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <waitForPageLoad stepKey="waitForCategorySearch"/>
+        <click selector="{{AdminProductFormSection.selectCategory($initialCategoryEntity.name$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <waitForPageLoad stepKey="waitForCategorySearchAgain"/>
+        <click selector="{{AdminProductFormSection.selectCategory($categoryEntity.name$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductTierPriceInStock.visibility}}" stepKey="selectVisibility"/>
+        <actionGroup ref="SetProductUrlKeyByString" stepKey="updateUrlKey">
+            <argument name="urlKey" value="{{updateVirtualProductTierPriceInStock.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAndCheckSuccessMessage"/>
+
+        <!-- Search updated virtual product(from above step) in the grid -->
+        <actionGroup ref="filterAndSelectProduct" stepKey="openProductEditPageBySKUAgain">
+            <argument name="productSku" value="{{updateVirtualProductTierPriceInStock.sku}}"/>
+        </actionGroup>
+
+        <!-- Verify customer see updated virtual product with tier price(from the above step) in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductTierPriceInStock.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductTierPriceInStock.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductTierPriceInStock.price}}" stepKey="seeProductPrice"/>
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricingDialogAgain"/>
+        <actionGroup ref="AssertAdminProductFormAdvancedPricingCheckTierPriceActionGroup" stepKey="checkTierPrice">
+            <argument name="rowNumber" value="0"/>
+            <argument name="website" value="{{tierPriceOnVirtualProduct.website}}"/>
+            <argument name="customerGroup" value="{{tierPriceOnVirtualProduct.customer_group}}"/>
+            <argument name="quantity" value="{{tierPriceOnVirtualProduct.qty}}"/>
+            <argument name="priceType" value="Fixed"/>
+            <argument name="amount" value="{{tierPriceOnVirtualProduct.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormCloseAdvancedPricingDialogActionGroup" stepKey="closeAdvancedPricingModal"/>
+
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductTierPriceInStock.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductTierPriceInStock.quantity}}" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductTierPriceInStock.status}}" stepKey="seeProductStockStatus"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">selectedCategories</actualResult>
+            <expectedResult type="array">[$categoryEntity.name$]</expectedResult>
+        </assertEquals>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductTierPriceInStock.visibility}}" stepKey="seeVisibility"/>
+
+        <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.useDefaultUrl}}" visible="false" stepKey="openSearchEngineOptimizationSection"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="scrollToAdminProductSEOSection"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductTierPriceInStock.urlKey}}" stepKey="seeUrlKey"/>
+
+        <!--Verify customer see updated virtual product link on category page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPageOnFrontend">
+            <argument name="category" value="$categoryEntity$"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="checkProductOnCategoryPage">
+            <argument name="product" value="updateVirtualProductTierPriceInStock"/>
+        </actionGroup>
+
+        <!--Verify customer see updated virtual product with tier price on product storefront page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPageByUrlKey">
+            <argument name="productUrlKey" value="{{updateVirtualProductTierPriceInStock.urlKey}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductTierPriceInStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductTierPriceInStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductTierPriceInStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{updateVirtualProductTierPriceInStock.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{updateVirtualProductTierPriceInStock.price}}</expectedResult>
+            <actualResult type="variable">productPriceAmount</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage">
+            <expectedResult type="string">Buy {{tierPriceOnVirtualProduct.qty}} for ${{tierPriceOnVirtualProduct.price}} each and save 38%</expectedResult>
+            <actualResult type="variable">tierPriceText</actualResult>
+        </assertEquals>
+
+        <!--Verify customer see updated virtual product link on magento storefront page and is searchable by sku -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductBySku">
+            <argument name="phrase" value="{{updateVirtualProductTierPriceInStock.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="checkProductInSearchResults">
+            <argument name="productName" value="{{updateVirtualProductTierPriceInStock.name}}"/>
+        </actionGroup>
+        <grabTextFrom selector="{{StorefrontQuickSearchResultsSection.asLowAsLabel}}" stepKey="tierPriceTextOnStorefrontPage"/>
+        <assertEquals stepKey="assertTierPriceTextOnCategoryPage">
+            <expectedResult type="string">As low as ${{tierPriceOnVirtualProduct.price}}</expectedResult>
+            <actualResult type="variable">tierPriceTextOnStorefrontPage</actualResult>
+        </assertEquals>
+    </test>
+</tests>
