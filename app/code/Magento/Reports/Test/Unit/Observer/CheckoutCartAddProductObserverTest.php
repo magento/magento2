@@ -10,6 +10,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Reports\Model\Event as ReportsEventModel;
 use Magento\Reports\Model\ReportStatus;
@@ -73,6 +74,14 @@ class CheckoutCartAddProductObserverTest extends TestCase
         $this->observer = new CheckoutCartAddProductObserver(
             $this->eventSaverMock,
             $this->reportStatusMock
+        );
+        $objectManager = new ObjectManager($this);
+        $this->observer = $objectManager->getObject(
+            CheckoutCartAddProductObserver::class,
+            [
+                'eventSaver' => $this->eventSaverMock,
+                'reportStatus' => $this->reportStatusMock
+            ]
         );
     }
 
