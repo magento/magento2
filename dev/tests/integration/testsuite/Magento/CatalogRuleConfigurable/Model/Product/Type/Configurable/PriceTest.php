@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class PriceTest extends TestCase
 {
     /**
-     * @var  ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -46,6 +46,11 @@ class PriceTest extends TestCase
     private $getDataFromIndexTable;
 
     /**
+     * @var array
+     */
+    private $priceIndexFields = ['price', 'final_price', 'min_price', 'max_price', 'tier_price'];
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -63,12 +68,12 @@ class PriceTest extends TestCase
      */
     public function testGetFinalPriceWithCustomOptionAndCatalogRule(): void
     {
-        $this->assertConfigurableProductPrice(
-            20,
-            25,
-            ['price' => 10, 'final_price' => 9, 'min_price' => 9, 'max_price' => 9, 'tier_price' => null],
-            ['price' => 20, 'final_price' => 15, 'min_price' => 15, 'max_price' => 15, 'tier_price' => 15]
-        );
+        $indexPrices = [
+            'simple_10' => [10, 9, 9, 9, null],
+            'simple_20' => [20, 15, 15, 15, 15],
+            'configurable' => [0, 0, 9, 30, 15],
+        ];
+        $this->assertConfigurableProductPrice(20, 25, $indexPrices);
     }
 
     /**
@@ -77,12 +82,12 @@ class PriceTest extends TestCase
      */
     public function testGetFinalPriceWithCustomOptionAndCatalogRulesForChildren(): void
     {
-        $this->assertConfigurableProductPrice(
-            19.5,
-            23,
-            ['price' => 10, 'final_price' => 4.5, 'min_price' => 4.5, 'max_price' => 9, 'tier_price' => null],
-            ['price' => 20, 'final_price' => 8, 'min_price' => 8, 'max_price' => 15, 'tier_price' => 15]
-        );
+        $indexPrices = [
+            'simple_10' => [10, 4.5, 4.5, 9, null],
+            'simple_20' => [20, 8, 8, 15, 15],
+            'configurable' => [0, 0, 4.5, 23, 15],
+        ];
+        $this->assertConfigurableProductPrice(19.5, 23, $indexPrices);
     }
 
     /**
@@ -90,19 +95,18 @@ class PriceTest extends TestCase
      *
      * @param float $priceWithFirstSimple
      * @param float $priceWithSecondSimple
-     * @param array $firstSimplePrices
-     * @param array $secondSimplePrices
+     * @param array $indexPrices
      * @return void
      */
     private function assertConfigurableProductPrice(
         float $priceWithFirstSimple,
         float $priceWithSecondSimple,
-        array $firstSimplePrices,
-        array $secondSimplePrices
+        array $indexPrices
     ): void {
+        foreach ($indexPrices as $sku => $prices) {
+            $this->assertIndexTableData($sku, array_combine($this->priceIndexFields, $prices));
+        }
         $configurable = $this->productRepository->get('configurable');
-        $this->assertIndexTableData('simple_10', $firstSimplePrices);
-        $this->assertIndexTableData('simple_20', $secondSimplePrices);
         //Add tier price option
         $optionId = $configurable->getOptions()[0]->getId();
         $configurable->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
@@ -144,7 +148,7 @@ class PriceTest extends TestCase
         );
         $data = reset($data);
         foreach ($expectedPrices as $column => $price) {
-            $this->assertEquals($price, $data[$column], $column);
+            $this->assertEquals($price, $data[$column]);
         }
     }
 }

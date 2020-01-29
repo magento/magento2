@@ -15,6 +15,8 @@ require __DIR__ . '/configurable_product_with_percent_rule_rollback.php';
 $objectManager = Bootstrap::getObjectManager();
 /** @var CatalogRuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
+/** @var IndexBuilder $indexBuilder */
+$indexBuilder = $objectManager->get(IndexBuilder::class);
 /** @var CollectionFactory $ruleCollectionFactory */
 $ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
 $ruleCollection = $ruleCollectionFactory->create()
@@ -30,3 +32,4 @@ $ruleCollection = $ruleCollectionFactory->create()
 foreach ($ruleCollection as $rule) {
     $ruleRepository->delete($rule);
 }
+$indexBuilder->reindexFull();

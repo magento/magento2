@@ -41,7 +41,7 @@ $firstRule->loadPost(
     ]
 );
 $ruleRepository->save($firstRule);
-/** @var Rule $secondRule */
+
 $secondRule = $ruleFactory->create();
 $secondRule->loadPost(
     [

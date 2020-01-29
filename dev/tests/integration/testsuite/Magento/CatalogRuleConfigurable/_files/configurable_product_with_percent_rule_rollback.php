@@ -11,11 +11,15 @@ use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../ConfigurableProduct/_files/configurable_product_with_custom_option_and_simple_tier_price_rollback.php';
+require __DIR__
+    . '/../../ConfigurableProduct/_files/'
+    . 'configurable_product_with_custom_option_and_simple_tier_price_rollback.php';
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var CatalogRuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
+/** @var IndexBuilder $indexBuilder */
+$indexBuilder = $objectManager->get(IndexBuilder::class);
 /** @var CollectionFactory $ruleCollectionFactory */
 $ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
 $ruleCollection = $ruleCollectionFactory->create()
@@ -26,3 +30,4 @@ $rule = $ruleCollection->getFirstItem();
 if ($rule->getId()) {
     $ruleRepository->delete($rule);
 }
+$indexBuilder->reindexFull();
