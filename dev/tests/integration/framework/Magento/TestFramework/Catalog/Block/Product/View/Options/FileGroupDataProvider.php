@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Catalog\Block\Product\View\Options;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Option;
 
 /**
@@ -31,7 +32,7 @@ class FileGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_FILE,
                     Option::KEY_IS_REQUIRE => 1,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-file-title-1',
                     Option::KEY_SORT_ORDER => 1,
                     Option::KEY_FILE_EXTENSION => 'png, jpg',
@@ -51,7 +52,7 @@ class FileGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_FILE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-file-title-2',
                     Option::KEY_SORT_ORDER => 1,
                     Option::KEY_FILE_EXTENSION => 'png, jpg',
@@ -71,7 +72,7 @@ class FileGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_FILE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-file-title-3',
                     Option::KEY_SORT_ORDER => 1,
                     Option::KEY_FILE_EXTENSION => 'png, jpg',
@@ -91,7 +92,7 @@ class FileGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_FILE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'percent',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Option::KEY_SKU => 'test-option-file-title-4',
                     Option::KEY_SORT_ORDER => 1,
                     Option::KEY_FILE_EXTENSION => 'png, jpg',
@@ -111,7 +112,7 @@ class FileGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_FILE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-file-title-5',
                     Option::KEY_SORT_ORDER => 1,
                     Option::KEY_FILE_EXTENSION => 'png, jpg',

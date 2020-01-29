@@ -18,14 +18,11 @@ use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Result\Page;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Base logic for render custom options and check that option renders as expected.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractRenderCustomOptionsTest extends TestCase
 {
@@ -59,7 +56,6 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      */
     protected function setUp()
     {
-        CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->productCustomOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
@@ -94,7 +90,8 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         array $checkArray
     ): void {
         $product = $this->productRepository->get($productSku);
-        [$option, $product] = $this->addOptionToProduct($product, $optionData);
+        $product = $this->addOptionToProduct($product, $optionData);
+        $option = $this->findOptionByTitle($product, $optionData[Option::KEY_TITLE]);
         $optionHtml = $this->getOptionHtml($product);
         $this->baseOptionAsserts($option, $optionHtml, $checkArray);
 
@@ -120,7 +117,8 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         array $checkArray
     ): void {
         $product = $this->productRepository->get($productSku);
-        [$option, $product] = $this->addOptionToProduct($product, $optionData);
+        $product = $this->addOptionToProduct($product, $optionData);
+        $option = $this->findOptionByTitle($product, $optionData[Option::KEY_TITLE]);
         $optionHtml = $this->getOptionHtml($product);
         $this->baseOptionAsserts($option, $optionHtml, $checkArray);
         $this->assertContains($checkArray['file_extension'], $optionHtml);
@@ -153,7 +151,8 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         array $checkArray
     ): void {
         $product = $this->productRepository->get($productSku);
-        [$option, $product] = $this->addOptionToProduct($product, $optionData, $optionValueData);
+        $product = $this->addOptionToProduct($product, $optionData, $optionValueData);
+        $option = $this->findOptionByTitle($product, $optionData[Option::KEY_TITLE]);
         $optionValues = $option->getValues();
         $optionValue = reset($optionValues);
         $optionHtml = $this->getOptionHtml($product);
@@ -190,7 +189,8 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         array $checkArray
     ): void {
         $product = $this->productRepository->get($productSku);
-        [$option, $product] = $this->addOptionToProduct($product, $optionData);
+        $product = $this->addOptionToProduct($product, $optionData);
+        $option = $this->findOptionByTitle($product, $optionData[Option::KEY_TITLE]);
         $optionHtml = $this->getOptionHtml($product);
         $this->baseOptionAsserts($option, $optionHtml, $checkArray);
 
@@ -261,13 +261,13 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      * @param ProductInterface $product
      * @param array $optionData
      * @param array $optionValueData
-     * @return array
+     * @return ProductInterface
      */
     private function addOptionToProduct(
         ProductInterface $product,
         array $optionData,
         array $optionValueData = []
-    ): array {
+    ): ProductInterface {
         $optionData[Option::KEY_PRODUCT_SKU] = $product->getSku();
 
         if (!empty($optionValueData)) {
@@ -277,10 +277,8 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
 
         $option = $this->productCustomOptionFactory->create(['data' => $optionData]);
         $product->setOptions([$option]);
-        $product = $this->productRepository->save($product);
-        $createdOptions = $product->getOptions();
 
-        return [reset($createdOptions), $product];
+        return $this->productRepository->save($product);
     }
 
     /**
@@ -311,6 +309,26 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         $optionsWrapperBlock = $productInfoFormOptionsBlock->getChildBlock('product_options_wrapper');
 
         return $optionsWrapperBlock->getChildBlock('product_options');
+    }
+
+    /**
+     * Find and return custom option.
+     *
+     * @param ProductInterface $product
+     * @param string $optionTitle
+     * @return null|Option
+     */
+    private function findOptionByTitle(ProductInterface $product, string $optionTitle): ?Option
+    {
+        $option = null;
+        foreach ($product->getOptions() as $customOption) {
+            if ($customOption->getTitle() === $optionTitle) {
+                $option = $customOption;
+                break;
+            }
+        }
+
+        return $option;
     }
 
     /**
