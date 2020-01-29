@@ -21,6 +21,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Tests product model:
@@ -822,24 +823,23 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testExistsStoreValueFlagForMultipleProducts() {
 
-        $descriptionProudct = $this->productRepository->get('store_description');
-        $nameProudct = $this->productRepository->get('store_name');
+        $descriptionProduct = $this->productRepository->get('store_description');
+        $nameProduct = $this->productRepository->get('store_name');
 
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $store = $storeManager->getStore('fixturestore');
 
-        $nameProudct->addAttributeUpdate('name','Overwritten Name',$store->getId());
-        $descriptionProudct->addAttributeUpdate('description', 'Overwritten Description', $store->getId());
+        $nameProduct->addAttributeUpdate('name','Overwritten Name',$store->getId());
+        $descriptionProduct->addAttributeUpdate('description', 'Overwritten Description', $store->getId());
 
-        $descriptionProudct = $this->productRepository->get('store_description',false, $store->getId(), true);
-        $nameProudct = $this->productRepository->get('store_name', false, $store->getId(), true);
+        $descriptionProduct = $this->productRepository->get('store_description',false, $store->getId(), true);
+        $nameProduct = $this->productRepository->get('store_name', false, $store->getId(), true);
 
-        $this->assertTrue($descriptionProudct->getExistsStoreValueFlag('description'));
-        $this->assertFalse($descriptionProudct->getExistsStoreValueFlag('name'));
+        $this->assertTrue($descriptionProduct->getExistsStoreValueFlag('description'));
+        $this->assertFalse($descriptionProduct->getExistsStoreValueFlag('name'));
 
-        $this->assertFalse($nameProudct->getExistsStoreValueFlag('description'));
-        $this->assertTrue($nameProudct->getExistsStoreValueFlag('name'));
-
+        $this->assertFalse($nameProduct->getExistsStoreValueFlag('description'));
+        $this->assertTrue($nameProduct->getExistsStoreValueFlag('name'));
     }
 }
