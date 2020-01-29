@@ -18,5 +18,6 @@
         <element name="shipmentId" type="input" selector="//div[@id='sales_order_view_tabs_order_shipments_content']//input[@name='increment_id']" timeout="30"/>
         <element name="totalQtyFrom" type="input" selector="[name='total_qty[from]']" timeout="30"/>
         <element name="totalQtyTo" type="input" selector="[name='total_qty[to]']" timeout="30"/>
+        <element name="viewShipment" type="button" selector="#sales_order_view_tabs_order_shipments_content div.admin__data-grid-wrap a.action-menu-item" timeout="30"/>
     </section>
 </sections>
