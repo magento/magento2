@@ -5,11 +5,8 @@
  */
 namespace Magento\ProductAlert\Block\Product;
 
-use Magento\Store\Model\App\Emulation;
 use Magento\Catalog\Block\Product\ImageBuilder;
 use Magento\Catalog\Model\Product;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Area;
 use Magento\Catalog\Block\Product\Image;
 
 /**
@@ -23,31 +20,17 @@ class ImageProvider
     private $imageBuilder;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Emulation
-     */
-    private $appEmulation;
-
-    /**
      * @param ImageBuilder $imageBuilder
-     * @param StoreManagerInterface $storeManager
-     * @param Emulation $appEmulation
      */
     public function __construct(
-        ImageBuilder $imageBuilder,
-        StoreManagerInterface $storeManager,
-        Emulation $appEmulation
+        ImageBuilder $imageBuilder
     ) {
         $this->imageBuilder = $imageBuilder;
-        $this->storeManager = $storeManager;
-        $this->appEmulation = $appEmulation;
     }
 
     /**
+     * Gets Product Image Block
+     *
      * @param Product $product
      * @param string $imageId
      * @param array $attributes
@@ -56,17 +39,6 @@ class ImageProvider
      */
     public function getImage(Product $product, $imageId, $attributes = [])
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        $this->appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
-
-        try {
-            $image = $this->imageBuilder->create($product, $imageId, $attributes);
-        } catch (\Exception $exception) {
-            $this->appEmulation->stopEnvironmentEmulation();
-            throw $exception;
-        }
-
-        $this->appEmulation->stopEnvironmentEmulation();
-        return $image;
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }
