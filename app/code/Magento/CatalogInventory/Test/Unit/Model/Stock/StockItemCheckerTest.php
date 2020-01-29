@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Model\Stock\StockItemModifyChecker;
+use Magento\CatalogInventory\Model\Stock\StockItemChecker;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\Framework\Stdlib\ArrayUtils;
@@ -17,13 +17,13 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for StockItemModifyChecker.
- * @see StockItemModifyChecker
+ * Unit test for StockItemChecker.
+ * @see StockItemChecker
  */
-class StockItemModifyCheckerTest extends TestCase
+class StockItemCheckerTest extends TestCase
 {
     /**
-     * @var StockItemModifyChecker
+     * @var StockItemChecker
      */
     private $model;
 
@@ -54,7 +54,7 @@ class StockItemModifyCheckerTest extends TestCase
         $this->stockItemModel = $this->createPartialMock(StockItem::class, ['getId', 'getData']);
 
         $this->model = $objectManager->getObject(
-            StockItemModifyChecker::class,
+            StockItemChecker::class,
             [
                 'stockItemRepository' => $this->stockItemRepository,
                 'arrayUtils' => $this->arrayUtils,
@@ -64,7 +64,7 @@ class StockItemModifyCheckerTest extends TestCase
     }
 
     /**
-     * Test for IsModified method when model is new.
+     * Test for isModified method when model is new.
      *
      * @return void
      */
@@ -77,7 +77,7 @@ class StockItemModifyCheckerTest extends TestCase
     }
 
     /**
-     * Test for IsModified method when found difference between data.
+     * Test for isModified method when found difference between data.
      *
      * @param array $itemFromRepository
      * @param array $model

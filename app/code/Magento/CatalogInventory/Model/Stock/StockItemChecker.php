@@ -14,7 +14,7 @@ use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 /**
  * Verifies Stock item model changes.
  */
-class StockItemModifyChecker
+class StockItemChecker
 {
     /**
      * @var StockItemRepositoryInterface
