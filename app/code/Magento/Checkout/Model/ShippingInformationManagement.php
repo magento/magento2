@@ -185,7 +185,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(
-                __('The shipping information was unable to be saved. Verify the input data and try again.')
+                __('The shipping information was unable to be saved. Error: "%1"', $e->getMessage())
             );
         }
 
