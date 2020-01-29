@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Model;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
@@ -43,11 +45,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject $directoryList
+         * @var \PHPUnit_Framework_MockObject_MockObject $request
          */
-        $directoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
+        $request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->setMethods(['getServer'])
+            ->getMockForAbstractClass();
+        $request->expects($this->any())
+            ->method('getServer')
+            ->willReturn('/var/www/html/pub');
 
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator
@@ -77,7 +83,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         1234,
                         'X-Forwarded-Proto',
                         json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
-                        $directoryList
+                        $request
                     )
                 )
             );

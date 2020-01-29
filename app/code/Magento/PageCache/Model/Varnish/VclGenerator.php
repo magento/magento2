@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Model\Varnish;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\RequestInterface;
 use Magento\PageCache\Model\VclGeneratorInterface;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
@@ -51,21 +52,21 @@ class VclGenerator implements VclGeneratorInterface
     private $designExceptions;
 
     /**
-     * @var DirectoryList
+     * @var RequestInterface|null
      */
-    private $directoryList;
+    private $request;
 
     /**
      * VclGenerator constructor.
      *
      * @param VclTemplateLocatorInterface $vclTemplateLocator
-     * @param string $backendHost
-     * @param int $backendPort
-     * @param array $accessList
-     * @param int $gracePeriod
-     * @param string $sslOffloadedHeader
-     * @param array $designExceptions
-     * @param DirectoryList $directoryList
+     * @param string                      $backendHost
+     * @param int                         $backendPort
+     * @param array                       $accessList
+     * @param int                         $gracePeriod
+     * @param string                      $sslOffloadedHeader
+     * @param array                       $designExceptions
+     * @param RequestInterface|null       $request
      */
     public function __construct(
         VclTemplateLocatorInterface $vclTemplateLocator,
@@ -75,7 +76,7 @@ class VclGenerator implements VclGeneratorInterface
         $gracePeriod,
         $sslOffloadedHeader,
         $designExceptions = [],
-        ?DirectoryList $directoryList = null
+        ?RequestInterface $request = null
     ) {
         $this->backendHost = $backendHost;
         $this->backendPort = $backendPort;
@@ -84,8 +85,7 @@ class VclGenerator implements VclGeneratorInterface
         $this->vclTemplateLocator = $vclTemplateLocator;
         $this->sslOffloadedHeader = $sslOffloadedHeader;
         $this->designExceptions = $designExceptions;
-        $this->directoryList = $directoryList ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->request = $request ?: \Magento\Framework\App\ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -247,10 +247,10 @@ class VclGenerator implements VclGeneratorInterface
      */
     private function getHealthCheck()
     {
-        if (strpos($this->directoryList->getRoot(), 'pub') === false) {
+        if (strpos($this->request->getServer('DOCUMENT_ROOT'), 'pub') === false) {
             return '/pub/health_check.php';
-        } else {
-            return '/health_check.php';
         }
+
+        return '/health_check.php';
     }
 }
