@@ -68,6 +68,14 @@ class SaveTest extends AbstractBackendController
      */
     public function testExecuteWithPaymentOperation()
     {
+        /** @var OrderService|MockObject $orderService */
+        $orderService = $this->getMockBuilder(OrderService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderService->method('place')
+            ->willThrowException(new LocalizedException(__('Transaction has been declined.')));
+        $this->_objectManager->addSharedInstance($orderService, OrderService::class);
+
         $quote = $this->getQuote('2000000001');
         $session = $this->_objectManager->get(Quote::class);
         $session->setQuoteId($quote->getId());
@@ -81,14 +89,6 @@ class SaveTest extends AbstractBackendController
         ];
         $this->getRequest()->setMethod(Http::METHOD_POST);
         $this->getRequest()->setPostValue(['order' => $data]);
-
-        /** @var OrderService|MockObject $orderService */
-        $orderService = $this->getMockBuilder(OrderService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderService->method('place')
-            ->willThrowException(new LocalizedException(__('Transaction has been declined.')));
-        $this->_objectManager->addSharedInstance($orderService, OrderService::class);
 
         $this->dispatch('backend/sales/order_create/save');
         $this->assertSessionMessages(
