@@ -125,6 +125,7 @@ class ScopeOverriddenValue
     {
 	if ($this->loadedEntityId !== $entity->getId()) {
 	    $this->attributesValues = [];
+	    $this->loadedEntityId = $entity->getId();
 	}
 
 	$this->attributesValues[$storeId] = [];
