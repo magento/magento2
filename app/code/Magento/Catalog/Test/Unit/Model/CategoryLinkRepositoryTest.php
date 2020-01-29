@@ -9,10 +9,13 @@ namespace Magento\Catalog\Test\Unit\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\CategoryLinkRepository;
-use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryLinkRepository;
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\CategoryLinkRepository
@@ -24,27 +27,27 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var CategoryLinkRepository
      */
-    protected $model;
+    private $model;
 
     /**
-     * @var CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryRepositoryInterface|MockObject
      */
-    protected $categoryRepositoryMock;
+    private $categoryRepositoryMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
-    protected $productRepositoryMock;
+    private $productRepositoryMock;
 
     /**
-     * @var CategoryProductLinkInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryProductLinkInterface|MockObject
      */
-    protected $productLinkMock;
+    private $productLinkMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
-    protected $productResourceMock;
+    private $productResourceMock;
 
     /**
      * Initialize required data
@@ -126,7 +129,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
 
         $this->expectExceptionMessage('Could not save product "55" with position 1 to category 42');
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectException(CouldNotSaveException::class);
         $this->model->save($this->productLinkMock);
     }
 
@@ -185,7 +188,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
 
         $this->expectExceptionMessage('Could not save product "55" with position 1 to category 42');
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectException(CouldNotSaveException::class);
         $this->model->deleteByIds($categoryId, $productSku);
     }
 
@@ -216,7 +219,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->never())->method('save');
 
         $this->expectExceptionMessage('The category doesn\'t contain the specified product.');
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException(InputException::class);
         $this->assertTrue($this->model->delete($this->productLinkMock));
     }
 
@@ -293,7 +296,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
 
         $this->expectExceptionMessage('The category doesn\'t contain the specified products.');
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException(InputException::class);
         $this->model->deleteBySkus($categoryId, [$productSku]);
     }
 
@@ -322,7 +325,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
 
         $this->expectExceptionMessage('Could not save products "testSku" to category 42');
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectException(CouldNotSaveException::class);
         $this->assertTrue($this->model->deleteBySkus($categoryId, [$productSku]));
     }
 }
