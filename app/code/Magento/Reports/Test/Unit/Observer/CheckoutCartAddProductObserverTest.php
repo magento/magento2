@@ -71,10 +71,6 @@ class CheckoutCartAddProductObserverTest extends TestCase
             ->setMethods(['getItem'])
             ->getMock();
 
-        $this->observer = new CheckoutCartAddProductObserver(
-            $this->eventSaverMock,
-            $this->reportStatusMock
-        );
         $objectManager = new ObjectManager($this);
         $this->observer = $objectManager->getObject(
             CheckoutCartAddProductObserver::class,
