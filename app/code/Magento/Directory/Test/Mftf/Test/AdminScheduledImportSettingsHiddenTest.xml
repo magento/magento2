@@ -10,6 +10,7 @@
     <test name="AdminScheduledImportSettingsHiddenTest">
         <annotations>
             <features value="Directory"/>
+            <stories value="Check Scheduled Import Settings"/>
             <title value="Scheduled import settings hidden" />
             <description value="Scheduled Import Settings' should hide fields when 'Enabled' is 'No'"/>
             <severity value="MINOR"/>
