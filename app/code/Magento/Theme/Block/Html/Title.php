@@ -47,9 +47,11 @@ class Title extends Template
     public function getPageHeading()
     {
         if (!empty($this->pageTitle)) {
-            return __($this->pageTitle);
+            return $this->getTranslate() === false ? $this->pageTitle : __($this->pageTitle);
         }
-        return __($this->pageConfig->getTitle()->getShortHeading());
+        return $this->getTranslate() === false ?
+            $this->pageConfig->getTitle()->getShortHeading()
+            : __($this->pageConfig->getTitle()->getShortHeading());
     }
 
     /**
