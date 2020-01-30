@@ -11,7 +11,5 @@
     <section name="AdminCategoryProductsSection">
         <element name="sectionHeader" type="button" selector="div[data-index='assign_products'] .fieldset-wrapper-title" timeout="30"/>
         <element name="sectionBody" type="button" selector="div[data-index='assign_products'] .admin__fieldset-wrapper-content" timeout="30"/>
-        <element name="productsInCategorySectionTitle" type="text" selector="div[data-index='assign_products'] .fieldset-wrapper-title" timeout="10"/>
-        <element name="productsInCategorySectionBody" type="text" selector="div[data-index='assign_products'] .admin__fieldset-wrapper-content"/>
     </section>
 </sections>
