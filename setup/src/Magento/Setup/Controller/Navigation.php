@@ -5,12 +5,14 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Backend\Model\UrlInterface;
+use Magento\Setup\Exception;
+use Magento\Setup\Model\Cron\Status;
 use Magento\Setup\Model\Navigation as NavModel;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\Cron\Status;
-use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Class Navigation
@@ -47,7 +49,7 @@ class Navigation extends AbstractActionController
         $this->navigation = $navigation;
         $this->status = $status;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->view = new ViewModel;
+        $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
@@ -57,7 +59,7 @@ class Navigation extends AbstractActionController
      */
     public function indexAction()
     {
-        $json = new JsonModel;
+        $json = new JsonModel();
         $json->setVariable('nav', $this->navigation->getData());
         $json->setVariable('menu', $this->navigation->getMenuItems());
         $json->setVariable('main', $this->navigation->getMainItems());
@@ -79,11 +81,12 @@ class Navigation extends AbstractActionController
 
     /**
      * @return array|ViewModel
+     * @throws Exception
      */
     public function sideMenuAction()
     {
-        /** @var \Magento\Backend\Model\UrlInterface $backendUrl */
-        $backendUrl = $this->objectManagerProvider->get()->get(\Magento\Backend\Model\UrlInterface::class);
+        /** @var UrlInterface $backendUrl */
+        $backendUrl = $this->objectManagerProvider->get()->get(UrlInterface::class);
 
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
