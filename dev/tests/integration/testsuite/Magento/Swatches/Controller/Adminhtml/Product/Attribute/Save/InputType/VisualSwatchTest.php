@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType\AbstractSaveAttributeTest;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 
@@ -15,6 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\Table;
  * Test cases related to create attribute with input type visual swatch.
  *
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  */
 class VisualSwatchTest extends AbstractSaveAttributeTest
 {

@@ -5,15 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Eav\Model\Attribute\DataProvider;
+namespace Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider;
 
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\TestFramework\Eav\Model\Attribute\DataProvider\AbstractBaseAttributeData;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Product\Attribute\Backend\Price as BackendPrice;
 
 /**
- * Product attribute data for attribute with yes/no input type.
+ * Product attribute data for attribute with input type weee.
  */
-class YesNo extends AbstractBaseAttributeData
+class Decimal extends AbstractBaseAttributeData
 {
     /**
      * @inheritdoc
@@ -31,17 +33,11 @@ class YesNo extends AbstractBaseAttributeData
      */
     public function getAttributeData(): array
     {
-        return array_replace_recursive(
-            parent::getAttributeData(),
-            [
-                "{$this->getFrontendInput()}_with_default_value" => [
-                    [
-                        'default_value_text' => '',
-                        'default_value_yesno' => 1,
-                    ],
-                ],
-            ]
-        );
+        $result = parent::getAttributeData();
+        unset($result["{$this->getFrontendInput()}_with_default_value"]);
+        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+
+        return $result;
     }
 
     /**
@@ -49,16 +45,11 @@ class YesNo extends AbstractBaseAttributeData
      */
     public function getAttributeDataWithCheckArray(): array
     {
-        return array_replace_recursive(
-            parent::getAttributeDataWithCheckArray(),
-            [
-                "{$this->getFrontendInput()}_with_default_value" => [
-                    1 => [
-                        'default_value' => 1,
-                    ],
-                ],
-            ]
-        );
+        $result = parent::getAttributeDataWithCheckArray();
+        unset($result["{$this->getFrontendInput()}_with_default_value"]);
+        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+
+        return $result;
     }
 
     /**
@@ -75,7 +66,7 @@ class YesNo extends AbstractBaseAttributeData
                         'attribute_code' => 'text_attribute_update',
                     ],
                     'expected_data' => [
-                        'attribute_code' => 'boolean_attribute',
+                        'attribute_code' => 'decimal_attribute',
                     ],
                 ],
             ]
@@ -87,7 +78,7 @@ class YesNo extends AbstractBaseAttributeData
      */
     protected function getFrontendInput(): string
     {
-        return 'boolean';
+        return 'price';
     }
 
     /**
@@ -97,26 +88,24 @@ class YesNo extends AbstractBaseAttributeData
     {
         return [
             'frontend_label' => [
-                Store::DEFAULT_STORE_ID => 'Boolean Attribute Update',
+                Store::DEFAULT_STORE_ID => 'Decimal Attribute Update',
             ],
-            'frontend_input' => 'boolean',
+            'frontend_input' => 'price',
             'is_required' => '1',
-            'is_global' => ScopedAttributeInterface::SCOPE_WEBSITE,
-            'default_value_yesno' => '1',
             'is_unique' => '1',
             'is_used_in_grid' => '1',
             'is_visible_in_grid' => '1',
             'is_filterable_in_grid' => '1',
             'is_searchable' => '1',
             'search_weight' => '2',
-            'is_visible_in_advanced_search' => '0',
+            'is_visible_in_advanced_search' => '1',
             'is_comparable' => '1',
             'is_filterable' => '2',
-            'is_filterable_in_search' => '0',
+            'is_filterable_in_search' => '1',
             'position' => '2',
             'is_used_for_promo_rules' => '1',
-            'is_html_allowed_on_front' => '0',
-            'is_visible_on_front' => '0',
+            'is_html_allowed_on_front' => '1',
+            'is_visible_on_front' => '1',
             'used_in_product_listing' => '0',
             'used_for_sort_by' => '1',
         ];
@@ -128,16 +117,17 @@ class YesNo extends AbstractBaseAttributeData
     protected function getUpdateExpectedData(): array
     {
         $updatePostData = $this->getUpdatePostData();
-        unset($updatePostData['default_value_yesno']);
         return array_merge(
             $updatePostData,
             [
-                'frontend_label' => 'Boolean Attribute Update',
-                'attribute_code' => 'boolean_attribute',
-                'default_value' => '1',
+                'frontend_label' => 'Decimal Attribute Update',
+                'attribute_code' => 'decimal_attribute',
+                'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+                'default_value' => null,
                 'frontend_class' => null,
                 'is_user_defined' => '1',
-                'backend_type' => 'int',
+                'backend_type' => 'decimal',
+                'backend_model' => BackendPrice::class,
             ]
         );
     }

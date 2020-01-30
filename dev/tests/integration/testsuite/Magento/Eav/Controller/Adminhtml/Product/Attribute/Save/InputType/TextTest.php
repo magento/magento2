@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType\AbstractSaveAttributeTest;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 
 /**
  * Test cases related to create attribute with input type text.
  *
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  */
 class TextTest extends AbstractSaveAttributeTest
 {
