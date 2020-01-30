@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -27,6 +28,12 @@ $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $defaultWebsiteId = $websiteRepository->get('base')->getId();
 /** @var ProductExtensionFactory $extensionAttributesFactory */
 $extensionAttributesFactory = $objectManager->get(ProductExtensionFactory::class);
+/** @var OptionInterfaceFactory $optionFactory */
+$optionFactory = $objectManager->get(OptionInterfaceFactory::class);
+/** @var LinkInterfaceFactory $linkFactory */
+$linkFactory = $objectManager->get(LinkInterfaceFactory::class);
+/** @var ProductResource $productResource */
+$productResource = $objectManager->get(ProductResource::class);
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_BUNDLE)
@@ -81,24 +88,22 @@ $product->setTypeId(Type::TYPE_BUNDLE)
         ]
     );
 
-if ($product->getBundleOptionsData()) {
-    $options = [];
-    foreach ($product->getBundleOptionsData() as $key => $optionData) {
-        $option = $objectManager->create(OptionInterfaceFactory::class)->create(['data' => $optionData]);
-        $option->setSku($product->getSku());
-        $option->setOptionId(null);
-        $links = [];
-        foreach ($product->getBundleSelectionsData()[$key] as $linkData) {
-            $link = $objectManager->create(LinkInterfaceFactory::class)->create(['data' => $linkData]);
-            $linkProduct = $productRepository->getById($linkData['product_id']);
-            $link->setSku($linkProduct->getSku());
-            $links[] = $link;
-        }
-        $option->setProductLinks($links);
-        $options[] = $option;
+$options = [];
+foreach ($product->getBundleOptionsData() as $key => $optionData) {
+    $option = $optionFactory->create(['data' => $optionData]);
+    $option->setSku($product->getSku());
+    $option->setOptionId(null);
+    $links = [];
+    foreach ($product->getBundleSelectionsData()[$key] as $linkData) {
+        $link = $linkFactory->create(['data' => $linkData]);
+        $linkProduct = $productResource->getProductsSku([$linkData['product_id']]);
+        $link->setSku(array_column($linkProduct, 'sku')[0]);
+        $links[] = $link;
     }
-    $extensionAttributes = $product->getExtensionAttributes() ?: $extensionAttributesFactory->create();
-    $extensionAttributes->setBundleProductOptions($options);
-    $product->setExtensionAttributes($extensionAttributes);
+    $option->setProductLinks($links);
+    $options[] = $option;
 }
+$extensionAttributes = $product->getExtensionAttributes() ?: $extensionAttributesFactory->create();
+$extensionAttributes->setBundleProductOptions($options);
+$product->setExtensionAttributes($extensionAttributes);
 $productRepository->save($product);

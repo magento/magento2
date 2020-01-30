@@ -33,9 +33,6 @@ class BundleProductPriceTest extends TestCase
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
-    /** @var LayoutInterface */
-    private $layout;
-
     /** @var SerializerInterface */
     private $json;
 
@@ -52,8 +49,7 @@ class BundleProductPriceTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $this->block = $this->layout->createBlock(Bundle::class);
+        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Bundle::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
     }
@@ -73,7 +69,7 @@ class BundleProductPriceTest extends TestCase
      *
      * @return void
      */
-    public function testDynamicBundleOptionPricesTest(): void
+    public function testDynamicBundleOptionPrices(): void
     {
         $expectedData = [
             'options_prices' => [
@@ -107,7 +103,7 @@ class BundleProductPriceTest extends TestCase
      *
      * @return void
      */
-    public function testFixedBundleOptionPricesTest(): void
+    public function testFixedBundleOptionPrices(): void
     {
         $expectedData = [
             'options_prices' => [
