@@ -12,7 +12,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Catalog\Model\Product\Price\GetDataFromIndexTable;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -39,9 +40,14 @@ class PriceTest extends TestCase
     private $priceModel;
 
     /**
-     * @var GetDataFromIndexTable
+     * @var GetPriceIndexDataByProductId
      */
-    private $getDataFromIndexTable;
+    private $getPriceIndexDataByProductId;
+
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
 
     /**
      * @inheritdoc
@@ -52,7 +58,8 @@ class PriceTest extends TestCase
         $this->priceModel = $this->objectManager->create(Price::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->getDataFromIndexTable = $this->objectManager->get(GetDataFromIndexTable::class);
+        $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
+        $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
     }
 
     /**
@@ -162,9 +169,10 @@ class PriceTest extends TestCase
      */
     private function assertIndexTableData(string $sku, array $expectedPrices): void
     {
-        $data = $this->getDataFromIndexTable->execute(
+        $data = $this->getPriceIndexDataByProductId->execute(
             (int)$this->productRepository->get($sku)->getId(),
-            Group::NOT_LOGGED_IN_ID
+            Group::NOT_LOGGED_IN_ID,
+            (int)$this->websiteRepository->get('base')->getId()
         );
         $data = reset($data);
         foreach ($expectedPrices as $column => $price) {

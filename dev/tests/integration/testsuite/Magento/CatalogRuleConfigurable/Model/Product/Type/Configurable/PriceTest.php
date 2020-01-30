@@ -13,7 +13,8 @@ use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Catalog\Model\Product\Price\GetDataFromIndexTable;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +32,11 @@ class PriceTest extends TestCase
     private $objectManager;
 
     /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -41,14 +47,9 @@ class PriceTest extends TestCase
     private $priceModel;
 
     /**
-     * @var GetDataFromIndexTable
+     * @var GetPriceIndexDataByProductId
      */
-    private $getDataFromIndexTable;
-
-    /**
-     * @var array
-     */
-    private $priceIndexFields = ['price', 'final_price', 'min_price', 'max_price', 'tier_price'];
+    private $getPriceIndexDataByProductId;
 
     /**
      * @inheritdoc
@@ -57,9 +58,10 @@ class PriceTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->priceModel = $this->objectManager->create(Price::class);
+        $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->getDataFromIndexTable = $this->objectManager->get(GetDataFromIndexTable::class);
+        $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
     }
 
     /**
@@ -69,9 +71,27 @@ class PriceTest extends TestCase
     public function testGetFinalPriceWithCustomOptionAndCatalogRule(): void
     {
         $indexPrices = [
-            'simple_10' => [10, 9, 9, 9, null],
-            'simple_20' => [20, 15, 15, 15, 15],
-            'configurable' => [0, 0, 9, 30, 15],
+            'simple_10' => [
+                'price' => 10,
+                'final_price' => 9,
+                'min_price' => 9,
+                'max_price' => 9,
+                'tier_price' => null
+            ],
+            'simple_20' => [
+                'price' => 20,
+                'final_price' => 15,
+                'min_price' => 15,
+                'max_price' => 15,
+                'tier_price' => 15
+            ],
+            'configurable' => [
+                'price' => 0,
+                'final_price' => 0,
+                'min_price' => 9,
+                'max_price' => 30,
+                'tier_price' => 15
+            ],
         ];
         $this->assertConfigurableProductPrice(20, 25, $indexPrices);
     }
@@ -83,9 +103,27 @@ class PriceTest extends TestCase
     public function testGetFinalPriceWithCustomOptionAndCatalogRulesForChildren(): void
     {
         $indexPrices = [
-            'simple_10' => [10, 4.5, 4.5, 9, null],
-            'simple_20' => [20, 8, 8, 15, 15],
-            'configurable' => [0, 0, 4.5, 23, 15],
+            'simple_10' => [
+                'price' => 10,
+                'final_price' => 4.5,
+                'min_price' => 4.5,
+                'max_price' => 9,
+                'tier_price' => null
+            ],
+            'simple_20' => [
+                'price' => 20,
+                'final_price' => 8,
+                'min_price' => 8,
+                'max_price' => 15,
+                'tier_price' => 15
+            ],
+            'configurable' => [
+                'price' => 0,
+                'final_price' => 0,
+                'min_price' => 4.5,
+                'max_price' => 23,
+                'tier_price' => 15
+            ],
         ];
         $this->assertConfigurableProductPrice(19.5, 23, $indexPrices);
     }
@@ -104,7 +142,7 @@ class PriceTest extends TestCase
         array $indexPrices
     ): void {
         foreach ($indexPrices as $sku => $prices) {
-            $this->assertIndexTableData($sku, array_combine($this->priceIndexFields, $prices));
+            $this->assertIndexTableData($sku, $prices);
         }
         $configurable = $this->productRepository->get('configurable');
         //Add tier price option
@@ -112,20 +150,20 @@ class PriceTest extends TestCase
         $configurable->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
         $configurable->addCustomOption('option_ids', $optionId);
         //First simple rule price + Option price
-        $this->assertFinalPrice($priceWithFirstSimple, $configurable);
+        $this->assertFinalPrice($configurable, $priceWithFirstSimple);
         $configurable->addCustomOption('simple_product', 20, $this->productRepository->get('simple_20'));
         //Second simple rule price + Option price
-        $this->assertFinalPrice($priceWithSecondSimple, $configurable);
+        $this->assertFinalPrice($configurable, $priceWithSecondSimple);
     }
 
     /**
      * Asserts product final price.
      *
-     * @param float $expectedPrice
      * @param ProductInterface $product
+     * @param float $expectedPrice
      * @return void
      */
-    private function assertFinalPrice(float $expectedPrice, ProductInterface $product): void
+    private function assertFinalPrice(ProductInterface $product, float $expectedPrice): void
     {
         $this->assertEquals(
             round($expectedPrice, 2),
@@ -142,9 +180,10 @@ class PriceTest extends TestCase
      */
     private function assertIndexTableData(string $sku, array $expectedPrices): void
     {
-        $data = $this->getDataFromIndexTable->execute(
+        $data = $this->getPriceIndexDataByProductId->execute(
             (int)$this->productRepository->get($sku)->getId(),
-            Group::NOT_LOGGED_IN_ID
+            Group::NOT_LOGGED_IN_ID,
+            (int)$this->websiteRepository->get('base')->getId()
         );
         $data = reset($data);
         foreach ($expectedPrices as $column => $price) {
