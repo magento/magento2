@@ -117,6 +117,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     private $mathRandom;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $_requestHttp;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -345,6 +350,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
                 $payment->registerAuthorizationNotification($payment->getBaseAmountAuthorized());
                 break;
             case self::TRXTYPE_SALE:
+                $order->setState(Order::STATE_PROCESSING);
                 $payment->registerCaptureNotification($payment->getBaseAmountAuthorized());
                 break;
             default:
@@ -506,6 +512,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
                 return self::TRXTYPE_SALE;
             default:
+                return '';
                 break;
         }
     }
