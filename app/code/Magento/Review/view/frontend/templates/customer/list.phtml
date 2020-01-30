@@ -22,13 +22,13 @@
             <tbody>
                 <?php foreach ($block->getReviews() as $review) : ?>
                 <tr>
-                    <td data-th="<?= $block->escapeHtml(__('Created')) ?>" class="col date"><?= $block->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?></td>
-                    <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Created')) ?>" class="col date"><?= $block->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?></td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>" class="col item">
                         <strong class="product-name">
                             <a href="<?= $block->escapeUrl($block->getProductUrl($review)) ?>"><?= $block->escapeHtml($review->getName()) ?></a>
                         </strong>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Rating')) ?>" class="col summary">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Rating')) ?>" class="col summary">
                     <?php if ($review->getSum()) : ?>
                         <div class="rating-summary">
                             <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
@@ -39,7 +39,9 @@
                     <?php endif; ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Review')) ?>" class="col description">
+                        <?php //phpcs:disable ?>
                         <?= $this->helper(\Magento\Review\Helper\Data::class)->getDetailHtml($review->getDetail()) ?>
+                        <?php //phpcs:enable ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
                         <a href="<?= $block->escapeUrl($block->getReviewUrl($review)) ?>" class="action more">

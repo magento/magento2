@@ -15,8 +15,9 @@ use Magento\Framework\Api\Search\DocumentInterface;
  * Document Factory
  *
  * @api
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
+ * @since 100.0.2
  */
 class DocumentFactory
 {

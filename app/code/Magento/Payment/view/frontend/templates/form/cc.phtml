@@ -30,7 +30,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     class="select">
                 <option value=""><?= $block->escapeHtml(__('--Please Select--')) ?></option>
             <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
-                <option value="<?= $block->escapeHtml($typeCode) ?>"
+                <option value="<?= $block->escapeHtmlAttr($typeCode) ?>"
                     <?php if ($typeCode == $ccType) : ?> selected="selected"<?php endif; ?>>
                     <?= $block->escapeHtml($typeName) ?>
                 </option>
@@ -44,7 +44,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         </label>
         <div class="control">
             <input type="number" id="<?= /* @noEscape */ $code ?>_cc_number" name="payment[cc_number]"
-                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="input-text" value=""
+                   title="<?= $block->escapeHtmlAttr(__('Credit Card Number')) ?>" class="input-text" value=""
                    data-validate='{
                        "required-number":true,
                        "validate-cc-number":"#<?= /* @noEscape */ $code ?>_cc_type",
@@ -93,14 +93,14 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
         </label>
         <div class="control">
-            <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+            <input type="number" title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
                    class="input-text cvv" id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
                    data-validate='{"required-number":true, "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"}' />
             <?php $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
                 $block->escapeHtml(__('Card Verification Number Visual Reference')) .
                 '\" title=\"' . $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />'; ?>
             <div class="note">
-                <a href="#" class="action cvv" title="<?= $block->escapeHtml(__('What is this?')) ?>"
+                <a href="#" class="action cvv" title="<?= $block->escapeHtmlAttr(__('What is this?')) ?>"
                    data-mage-init='{"tooltip": {"content": "<?= /* @noEscape */ $content ?>"}}'>
                     <span><?= $block->escapeHtml(__('What is this?')) ?></span>
                 </a>

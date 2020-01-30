@@ -47,7 +47,7 @@
 </script>
 <div class="grid-container no-display">
     <table class="admin__control-table" data-role="grouped-product-grid"
-        data-products="<?= $block->escapeHtml(
+        data-products="<?= $block->escapeHtmlAttr(
             $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAssociatedProducts())
         ); ?>">
         <thead>

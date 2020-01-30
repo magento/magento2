@@ -29,7 +29,7 @@
                                                 <option value=""><?= $block->escapeHtml(__('Please select a shipping method...')); ?></option>
                                             <?php endif; ?>
                                             <?php foreach ($groups as $code => $rates) : ?>
-                                                <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)); ?>">
+                                                <optgroup label="<?= $block->escapeHtmlAttr($block->getCarrierName($code)); ?>">
                                                     <?php foreach ($rates as $rate) : ?>
                                                         <option value="<?=
                                                                         $block->escapeHtml(
@@ -100,7 +100,7 @@
                     <?= $block->escapeHtml($block->getPaymentMethodTitle()) ?><br>
                     <?= $block->escapeHtml($block->getEmail()) ?> <br>
                     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png"
-                         alt="<?= $block->escapeHtml(__('Buy now with PayPal')) ?>"/>
+                         alt="<?= $block->escapeHtmlAttr(__('Buy now with PayPal')) ?>"/>
                 </div>
             <?php if ($block->getEditUrl()) : ?>
                 <div class="box-actions">
@@ -133,12 +133,12 @@
             <div class="actions-toolbar" id="review-buttons-container">
                 <div class="primary">
                     <button type="button" id="review-button" class="action checkout primary"
-                            value="<?= $block->escapeHtml(__('Place Order')) ?>">
+                            value="<?= $block->escapeHtmlAttr(__('Place Order')) ?>">
                         <span><?= $block->escapeHtml(__('Place Order')) ?></span>
                     </button>
                 </div>
                 <span class="please-wait load indicator" id="review-please-wait" style="display: none;"
-                      data-text="<?= $block->escapeHtml(__('Submitting order information...')) ?>">
+                      data-text="<?= $block->escapeHtmlAttr(__('Submitting order information...')) ?>">
                    <span><?= $block->escapeHtml(__('Submitting order information...')) ?></span>
                 </span>
             </div>
