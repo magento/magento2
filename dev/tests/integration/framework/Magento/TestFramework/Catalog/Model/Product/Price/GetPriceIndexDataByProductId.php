@@ -68,13 +68,9 @@ class GetPriceIndexDataByProductId
 
         $select = $this->productResource->getConnection()->select()
             ->from($tableName)
-            ->where('entity_id = ?', $productId);
-        if (isset($groupId)) {
-            $select->where('customer_group_id = ?', $groupId);
-        }
-        if (isset($websiteId)) {
-            $select->where('website_id = ?', $websiteId);
-        }
+            ->where('entity_id = ?', $productId)
+            ->where('customer_group_id = ?', $groupId)
+            ->where('website_id = ?', $websiteId);
 
         return $this->productResource->getConnection()->fetchAll($select);
     }
