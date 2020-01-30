@@ -10,7 +10,7 @@ namespace Magento\Weee\Controller\Adminhtml\Product\Attribute\Update\InputType;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Update\AbstractUpdateAttributeTest;
 
 /**
- * Test cases related to create attribute with input type fixed product tax.
+ * Test cases related to update attribute with input type fixed product tax.
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml

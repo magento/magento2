@@ -14,7 +14,7 @@ use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\Model\SwatchAttributeType;
 
 /**
- * Base create and assert swatch attribute data.
+ * Base update and assert swatch attribute data.
  */
 abstract class AbstractSwatchUpdateAttributeTest extends AbstractUpdateAttributeTest
 {

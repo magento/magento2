@@ -11,7 +11,7 @@ use Magento\Swatches\Controller\Adminhtml\Product\Attribute\Update\AbstractSwatc
 use Magento\Swatches\Model\Swatch;
 
 /**
- * Test cases related to create attribute with input type visual swatch.
+ * Test cases related to update attribute with input type visual swatch.
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml

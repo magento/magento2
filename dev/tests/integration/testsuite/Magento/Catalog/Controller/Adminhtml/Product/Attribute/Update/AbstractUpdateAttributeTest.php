@@ -24,7 +24,7 @@ use Magento\TestFramework\Eav\Model\ResourceModel\GetEntityIdByAttributeId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Base create and assert attribute data.
+ * Base update and assert attribute data.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -75,7 +75,7 @@ abstract class AbstractUpdateAttributeTest extends AbstractBackendController
     }
 
     /**
-     * Start updating attribute frontend labels on stores for a given attribute type.
+     * Updates attribute frontend labels on stores for a given attribute type.
      *
      * @param string $attributeCode
      * @param array $postData
@@ -99,7 +99,7 @@ abstract class AbstractUpdateAttributeTest extends AbstractBackendController
     }
 
     /**
-     * Start updating attribute options on stores for a given attribute type.
+     * Updates attribute options on stores for a given attribute type.
      *
      * @param string $attributeCode
      * @param array $postData

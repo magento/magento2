@@ -10,7 +10,7 @@ namespace Magento\Eav\Controller\Adminhtml\Product\Attribute\Update\InputType;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Update\AbstractUpdateAttributeTest;
 
 /**
- * Test cases related to create attribute with input type dropdown.
+ * Test cases related to update attribute with input type dropdown.
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml

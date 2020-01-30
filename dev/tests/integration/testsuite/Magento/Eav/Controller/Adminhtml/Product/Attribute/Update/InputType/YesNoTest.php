@@ -10,7 +10,7 @@ namespace Magento\Eav\Controller\Adminhtml\Product\Attribute\Update\InputType;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Update\AbstractUpdateAttributeTest;
 
 /**
- * Test cases related to create attribute with yes/no input type.
+ * Test cases related to update attribute with yes/no input type.
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml

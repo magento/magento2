@@ -10,7 +10,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute\Update\InputTyp
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Update\AbstractUpdateAttributeTest;
 
 /**
- * Test cases related to create attribute with input type media image.
+ * Test cases related to update attribute with input type media image.
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
