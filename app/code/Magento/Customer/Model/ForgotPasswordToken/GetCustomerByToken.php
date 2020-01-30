@@ -71,16 +71,9 @@ class GetCustomerByToken
                 new Phrase('Reset password token expired.')
             );
         }
+
         if ($found->getTotalCount() === 0) {
-            //Customer with such token not found.
-           throw new NoSuchEntityException(
-                new Phrase(
-                    'No such entity with rp_token = %value',
-                    [
-                        'value' => $resetPasswordToken
-                    ]
-                )
-            );
+            throw new NoSuchEntityException(__('No such entity with rp_token = %1', $resetPasswordToken));
         }
 
         //Unique customer found.
