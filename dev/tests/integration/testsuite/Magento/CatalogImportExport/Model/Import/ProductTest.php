@@ -33,9 +33,9 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 /**
  * Class ProductTest
@@ -403,7 +403,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $importModel = $this->createImportModel($pathToFile);
         $errors = $importModel->validateData();
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() == 0, 'Import File Validation Failed');
         $importModel->importData();
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -422,20 +422,41 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $actualOptions = $actualData['options'];
             sort($expectedOptions);
             sort($actualOptions);
-            $this->assertEquals($expectedOptions, $actualOptions);
+            $this->assertEquals(
+                $expectedOptions,
+                $actualOptions,
+                'Expected and actual options arrays does not match'
+            );
 
             // assert of options data
-            $this->assertCount(count($expectedData['data']), $actualData['data']);
-            $this->assertCount(count($expectedData['values']), $actualData['values']);
+            $this->assertCount(
+                count($expectedData['data']),
+                $actualData['data'],
+                'Expected and actual data count does not match'
+            );
+            $this->assertCount(
+                count($expectedData['values']),
+                $actualData['values'],
+                'Expected and actual values count does not match'
+            );
+
             foreach ($expectedData['options'] as $expectedId => $expectedOption) {
                 $elementExist = false;
                 // find value in actual options and values
                 foreach ($actualData['options'] as $actualId => $actualOption) {
                     if ($actualOption == $expectedOption) {
                         $elementExist = true;
-                        $this->assertEquals($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
+                        $this->assertEquals(
+                            $expectedData['data'][$expectedId],
+                            $actualData['data'][$actualId],
+                            'Expected data does not match actual data'
+                        );
                         if (array_key_exists($expectedId, $expectedData['values'])) {
-                            $this->assertEquals($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
+                            $this->assertEquals(
+                                $expectedData['values'][$expectedId],
+                                $actualData['values'][$actualId],
+                                'Expected values does not match actual data'
+                            );
                         }
                         unset($actualData['options'][$actualId]);
                         // remove value in case of duplicating key values
@@ -448,7 +469,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             // Make sure that after importing existing options again, option IDs and option value IDs are not changed
             $customOptionValues = $this->getCustomOptionValues($sku);
             $this->createImportModel($pathToFile)->importData();
-            $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+            $this->assertEquals(
+                $customOptionValues,
+                $this->getCustomOptionValues($sku),
+                'Option IDs changed after second import'
+            );
         }
     }
 
@@ -2963,6 +2988,36 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $status = $stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
         $this->importDataForMediaTest('enable_product.csv');
+        $stockRegistryStorage->clean();
+        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
+    }
+
+    /**
+     * Test that product stock status is updated after import on schedule
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/cataloginventory_stock_item_update_by_schedule.php
+     * @magentoDbIsolation disabled
+     */
+    public function testProductStockStatusShouldBeUpdatedOnSchedule()
+    {
+        /** * @var $indexProcessor \Magento\Indexer\Model\Processor */
+        $indexProcessor = $this->objectManager->create(\Magento\Indexer\Model\Processor::class);
+        /** @var $stockRegistry StockRegistry */
+        $stockRegistry = $this->objectManager->create(StockRegistry::class);
+        /** @var StockRegistryStorage $stockRegistryStorage */
+        $stockRegistryStorage = $this->objectManager->get(StockRegistryStorage::class);
+        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
+        $this->importDataForMediaTest('disable_product.csv');
+        $indexProcessor->updateMview();
+        $stockRegistryStorage->clean();
+        $status = $stockRegistry->getStockStatusBySku('simple');
+        $this->assertEquals(Stock::STOCK_OUT_OF_STOCK, $status->getStockStatus());
+        $this->importDataForMediaTest('enable_product.csv');
+        $indexProcessor->updateMview();
         $stockRegistryStorage->clean();
         $status = $stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());

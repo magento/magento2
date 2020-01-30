@@ -12,14 +12,14 @@
         <annotations>
             <features value="Tax"/>
             <stories value="MAGETWO-91769 - Credit Memo - Wrong tax calculation! #10982"/>
-            <title value="Checking Credit memo Totals"/>
+            <title value="DEPRECATED. Checking Credit memo Totals"/>
             <description value="Checking Credit memo Totals"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95175"/>
             <group value="creditMemo"/>
             <group value="tax"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use AdminCheckCreditMemoTotalsTest instead</issueId>
             </skip>
         </annotations>
         <before>
@@ -56,7 +56,7 @@
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
-            <selectOption selector="{{AdminProductFormActionSection.selectTaxClass}}" userInput="NewTaxClass" stepKey="SetNewTaxClass" />
+            <selectOption selector="{{AdminProductFormActionSection.selectProductTaxClass}}" userInput="NewTaxClass" stepKey="SetNewTaxClass" />
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
             <!--Set configs-->
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToTaxConfigPage"/>
