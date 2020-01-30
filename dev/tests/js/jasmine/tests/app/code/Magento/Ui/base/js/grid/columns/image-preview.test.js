@@ -46,5 +46,37 @@ define([
             });
 
         });
+
+        describe('handleKeyDown method', function () {
+            it('veify record changed on key down', function () {
+                var recordMock = {
+                    _rowIndex: 2
+                },
+                    secondRecordMock = {
+                        _rowIndex: 1,
+                        rowNumber: 1
+                    },
+                    elementMock = {
+                        keyCode: 37
+                    },
+                    masonryMock = {
+                        shows: jasmine.createSpy().and.returnValue([]),
+                        rows: jasmine.createSpy().and.returnValue({
+                            1: secondRecordMock
+                        })
+
+                    },
+                    imageMock = document.createElement('img');
+
+                spyOn($.fn, 'get').and.returnValue(imageMock);
+                imagePreview.visibleRecord = jasmine.createSpy().and.returnValue(2);
+                imagePreview.displayedRecord = ko.observable();
+                imagePreview.displayedRecord(recordMock);
+                imagePreview.masonry = jasmine.createSpy().and.returnValue(masonryMock);
+                imagePreview.handleKeyDown(elementMock);
+                expect(imagePreview.displayedRecord()._rowIndex).toBe(secondRecordMock._rowIndex);
+            });
+
+        });
     });
 });
