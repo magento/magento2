@@ -124,6 +124,7 @@
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>
             <deleteData createDataKey="createGroupedProduct1" stepKey="deleteGroupedProduct1"/>
             <deleteData createDataKey="createDownloadableProduct1" stepKey="deleteDownloadableProduct1"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
