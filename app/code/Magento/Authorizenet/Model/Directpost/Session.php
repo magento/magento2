@@ -13,7 +13,7 @@ use Magento\Framework\Session\SessionManager;
  * Authorize.net DirectPost session model
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Session extends SessionManager
 {

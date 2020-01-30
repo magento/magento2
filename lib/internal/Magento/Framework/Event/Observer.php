@@ -9,6 +9,7 @@ use Magento\Framework\Event;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Observer extends \Magento\Framework\DataObject
 {

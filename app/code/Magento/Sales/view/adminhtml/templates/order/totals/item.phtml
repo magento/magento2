@@ -18,7 +18,7 @@
                 </strong>
             <?php endif; ?>
         </td>
-        <td <?= $block->getHtmlClass() ? ('class="' . $block->escapeHtmlAttr($block->getHtmlClass()) . '"') : '' ?>>
+        <td <?= $block->getHtmlClass() ? ('class="' . /* @noEscape */ $block->getHtmlClass() . '"') : '' ?>>
             <?php if ($block->getStrong()) : ?><strong><?php endif; ?>
             <?= /* @noEscape */ $block->displayPriceAttribute($block->getSourceField()) ?>
             <?php if ($block->getStrong()) : ?></strong><?php endif; ?>

@@ -11,6 +11,7 @@ namespace Magento\Framework\Event;
  * Interface \Magento\Framework\Event\ObserverInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ObserverInterface
 {
