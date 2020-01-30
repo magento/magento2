@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCatalogPriceRuleFillActionsActionGroup">
+        <annotations>
+            <description>Fill Catalog Price Rule actions fields: Apply, Discount Amount, Discard subsequent rules.</description>
+        </annotations>
+        <arguments>
+            <argument name="apply" type="string" defaultValue="{{_defaultCatalogRule.simple_action}}"/>
+            <argument name="discountAmount" type="string" defaultValue="{{_defaultCatalogRule.discount_amount}}"/>
+            <argument name="discardSubsequentRules" type="string" defaultValue="Yes"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.actionsTabTitle}}" dependentSelector="{{AdminNewCatalogPriceRule.actionsTabBody}}" visible="false" stepKey="openActionSectionIfNeeded"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTabTitle}}" stepKey="scrollToActionsFieldset"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleActions.apply}}" stepKey="waitActionsFieldsetFullyOpened"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{apply}}" stepKey="fillDiscountType"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{discountAmount}}" stepKey="fillDiscountAmount"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="{{discardSubsequentRules}}" stepKey="fillDiscardSubsequentRules"/>
+    </actionGroup>
+</actionGroups>

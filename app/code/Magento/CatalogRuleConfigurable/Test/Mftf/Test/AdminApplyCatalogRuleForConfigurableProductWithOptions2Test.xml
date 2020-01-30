@@ -7,19 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminApplyCatalogRuleForConfigurableProductWithOptionsTest">
+    <test name="AdminApplyCatalogRuleForConfigurableProductWithOptions2Test">
         <annotations>
             <features value="CatalogRuleConfigurable"/>
             <stories value="Apply catalog price rule"/>
-            <title value="DEPRECATED. Apply catalog price rule for configurable product with options"/>
-            <description value="DEPRECATED. Admin should be able to apply the catalog rule for configurable product with options"/>
+            <title value="Apply catalog price rule for configurable product with options"/>
+            <description value="Admin should be able to apply the catalog rule for configurable product with options"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-14062"/>
-            <group value="catalogRuleConfigurable"/>
+            <testCaseId value="MC-27707"/>
+            <group value="catalog"/>
+            <group value="configurable_product"/>
+            <group value="catalog_rule_configurable"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use AdminApplyCatalogRuleForConfigurableProductWithOptions2Test instead</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Create category -->
@@ -93,7 +92,8 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdminActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
         </before>
         <after>
             <!-- Delete created data -->
@@ -104,90 +104,80 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
 
-            <!-- Delete created price rules -->
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForFirstOption">
-                <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
-
-            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForSecondOption">
-                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
-
-            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRuleForThirdOption">
-                <argument name="name" value="{{CatalogRuleWithoutDiscount.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
-
-            <!-- Log out -->
-            <actionGroup ref="LogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Create price rule for first configurable product option -->
-        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createFirstPriceRule">
-            <argument name="catalogRule" value="CatalogRuleToFixed"/>
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createFirstCatalogPriceRuleCondition">
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="fillConditionsForFirstPriceRule">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
             <argument name="indexA" value="1"/>
             <argument name="indexB" value="1"/>
         </actionGroup>
-        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApplyFirstPriceRule"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForFirstPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForFirstPriceRule">
+            <argument name="apply" value="{{CatalogRuleToFixed.simple_action}}"/>
+            <argument name="discountAmount" value="{{CatalogRuleToFixed.discount_amount}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstPriceRule"/>
 
         <!-- Create price rule for second configurable product option -->
-        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createSecondPriceRule">
-            <argument name="catalogRule" value="_defaultCatalogRule"/>
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingThirdPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForThirdPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createSecondCatalogPriceRuleCondition">
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="fillConditionsForThirdPriceRule">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
             <argument name="indexA" value="1"/>
             <argument name="indexB" value="1"/>
         </actionGroup>
-        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApplySecondPriceRule"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForSecondPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyThirdPriceRule"/>
 
         <!-- Create price rule for third configurable product option -->
-        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createThirdPriceRule">
-            <argument name="catalogRule" value="CatalogRuleWithoutDiscount"/>
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingSecondPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForSecondPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createThirdCatalogPriceRuleCondition">
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="fillConditionsForSecondPriceRule">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
             <argument name="indexA" value="1"/>
             <argument name="indexB" value="1"/>
         </actionGroup>
-        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApplyThirdPriceRule"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForThirdPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForSecondPriceRule">
+            <argument name="apply" value="{{CatalogRuleWithoutDiscount.simple_action}}"/>
+            <argument name="discountAmount" value="{{CatalogRuleWithoutDiscount.discount_amount}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplySecondPriceRule"/>
 
-        <!-- Run full reindex and clear caches -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
 
         <!-- Assert product in storefront product page -->
-        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="assertUpdatedProductPriceInStorefrontProductPage">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
-            <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
+            <argument name="expectedPrice" value="As low as ${{CatalogRuleToFixed.discount_amount}}"/>
         </actionGroup>
+
+        <executeJS function="return '$' + ({{CatalogRuleToFixed.discount_amount}}).toFixed(2);" stepKey="firstOptionPrice"/>
+        <executeJS function="return '$' + ({{ApiConfigurableProduct.price}} * (100 - {{_defaultCatalogRule.discount_amount}})/100).toFixed(2);" stepKey="secondOptionPrice"/>
 
         <!-- Assert product options price in storefront product page -->
         <actionGroup ref="StorefrontAssertCatalogPriceRuleAppliedToProductOptionActionGroup" stepKey="assertCatalogPriceRuleAppliedToFirstProductOption">
             <argument name="option" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
-            <argument name="expectedPrice" value="{{CatalogRuleToFixed.discount_amount}}"/>
+            <argument name="expectedPrice" value="{$firstOptionPrice} Regular Price &#36;{{ApiConfigurableProduct.price}}"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontAssertCatalogPriceRuleAppliedToProductOptionActionGroup" stepKey="assertCatalogPriceRuleAppliedToSecondProductOption">
             <argument name="option" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
-            <argument name="expectedPrice" value="$110.70"/>
+            <argument name="expectedPrice" value="{$secondOptionPrice} Regular Price &#36;{{ApiConfigurableProduct.price}}"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontAssertCatalogPriceRuleAppliedToProductOptionActionGroup" stepKey="assertCatalogPriceRuleAppliedToThirdProductOption">
@@ -196,26 +186,35 @@
         </actionGroup>
 
         <!-- Add product with selected option to the cart -->
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableOptionToCartActionGroup" stepKey="addProductWithSelectedFirstOptionToCart">
-            <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="option" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOptionValue">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addFirstOptionToCart">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableOptionToCartActionGroup" stepKey="addProductWithSelectedSecondOptionToCart">
-            <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="option" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectSecondOptionValue">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSecondOptionToCart">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableOptionToCartActionGroup" stepKey="addProductWithSelectedThirdOptionToCart">
-            <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="option" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectThirdOptionValue">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addThirdOptionToCart">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!--Assert product price in the cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
-        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
-        <see userInput="{{CatalogRuleToFixed.discount_amount}}" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForFirstProductOption"/>
-        <see userInput="$110.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForSecondProductOption"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartPage"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="waitForPriceAppears"/>
+        <see userInput="{$firstOptionPrice}" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForFirstProductOption"/>
+        <see userInput="{$secondOptionPrice}" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForSecondProductOption"/>
         <see userInput="{{ApiConfigurableProduct.price}}" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$)}}" stepKey="assertProductPriceForThirdProductOption"/>
     </test>
 </tests>
