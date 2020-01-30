@@ -8,6 +8,7 @@ namespace Magento\Ui\Test\Unit\Model\Export;
 
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
@@ -276,15 +277,16 @@ class MetadataProviderTest extends TestCase
 
     /**
      * @param string $filter
-     * @param array $options
+     * @param array $filterOptions
+     * @param array $columnsOptions
      * @param array $expected
      *
-     * @dataProvider getOptionsDataProvider
      * @throws LocalizedException
+     * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions($filter, $options, $expected)
+    public function testGetOptions(string $filter, array $filterOptions, array $columnsOptions, array $expected)
     {
-        $component = $this->prepareColumnsWithOptions($filter, $options);
+        $component = $this->prepareColumnsWithOptions($filter, $filterOptions, $columnsOptions);
 
         $this->filter->expects($this->exactly(2))
                      ->method('getComponent')
@@ -292,17 +294,19 @@ class MetadataProviderTest extends TestCase
 
         $result = $this->model->getOptions();
         $this->assertTrue(is_array($result));
-        $this->assertCount(1, $result);
+        $this->assertCount(2, $result);
         $this->assertEquals($expected, $result);
     }
 
     /**
      * @param string $filter
-     * @param array $options
+     * @param array $filterOptions
+     *
+     * @param array $columnsOptions
      *
      * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function prepareColumnsWithOptions(string $filter, array $options)
+    protected function prepareColumnsWithOptions(string $filter, array $filterOptions, array $columnsOptions)
     {
         /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
         $component = $this->getMockBuilder(UiComponentInterface::class)
@@ -354,7 +358,7 @@ class MetadataProviderTest extends TestCase
         $select->expects($this->any())
                ->method('getData')
                ->with('config/options')
-               ->willReturn($options);
+               ->willReturn($filterOptions);
 
         $columns->expects($this->atLeastOnce())
                 ->method('getChildComponents')
@@ -363,14 +367,27 @@ class MetadataProviderTest extends TestCase
         $column->expects($this->any())
                ->method('getName')
                ->willReturn('column_name');
+
+        $optionSource = $this->getMockBuilder(OptionSourceInterface::class)
+                             ->getMockForAbstractClass();
+        $optionSource->expects($this->once())
+                     ->method('toOptionArray')
+                     ->willReturn($columnsOptions);
+
         $column->expects($this->any())
                ->method('getData')
                ->willReturnMap(
                    [
                        ['config/label', null, 'column_label'],
                        ['config/dataType', null, 'data_type'],
+                       ['options', null, $optionSource],
                    ]
                );
+
+        $column->expects($this->once())
+               ->method('hasData')
+               ->willReturn(true)
+               ->with('options');
 
         $columnActions->expects($this->any())
                       ->method('getName')
@@ -395,7 +412,13 @@ class MetadataProviderTest extends TestCase
         return [
             [
                 'filter' => 'filter_name',
-                'options' => [
+                'filterOptions' => [
+                    [
+                        'value' => 'value_1',
+                        'label' => 'label_1',
+                    ]
+                ],
+                'columnsOptions' => [
                     [
                         'value' => 'value_1',
                         'label' => 'label_1',
@@ -405,11 +428,25 @@ class MetadataProviderTest extends TestCase
                     'filter_name' => [
                         'value_1' => 'label_1',
                     ],
+                    'column_name' => [
+                        'value_1' => 'label_1',
+                    ]
                 ],
             ],
             [
                 'filter' => 'filter_name',
-                'options' => [
+                'filterOptions' => [
+                    [
+                        'value' => [
+                            [
+                                'value' => 'value_2',
+                                'label' => 'label_2',
+                            ],
+                        ],
+                        'label' => 'label_1',
+                    ]
+                ],
+                'columnsOptions' => [
                     [
                         'value' => [
                             [
@@ -424,11 +461,14 @@ class MetadataProviderTest extends TestCase
                     'filter_name' => [
                         'value_2' => 'label_1label_2',
                     ],
+                    'column_name' => [
+                        'value_2' => 'label_1label_2',
+                    ]
                 ],
             ],
             [
                 'filter' => 'filter_name',
-                'options' => [
+                'filterOptions' => [
                     [
                         'value' => [
                             [
@@ -444,10 +484,12 @@ class MetadataProviderTest extends TestCase
                         'label' => 'label_1',
                     ]
                 ],
+                'columnsOptions' => [],
                 'expected' => [
                     'filter_name' => [
                         'value_3' => 'label_1label_2label_3',
                     ],
+                    'column_name' => []
                 ],
             ],
         ];
@@ -461,6 +503,7 @@ class MetadataProviderTest extends TestCase
      *
      * @dataProvider convertDateProvider
      * @covers       \Magento\Ui\Model\Export\MetadataProvider::convertDate()
+     * @throws \Exception
      */
     public function testConvertDate($fieldValue, $expected)
     {

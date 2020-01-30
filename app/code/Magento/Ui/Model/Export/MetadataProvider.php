@@ -260,7 +260,7 @@ class MetadataProvider
                 $optionSource = $columnComponent->getData('options');
                 $optionsArray = $optionSource instanceof OptionSourceInterface ?
                     $optionSource->toOptionArray() : $optionSource;
-                $options[$columnComponent->getName()] = $this->getOptionsArray($optionsArray);
+                $options[$columnComponent->getName()] = $this->getOptionsArray($optionsArray ?: []);
             }
         }
 
