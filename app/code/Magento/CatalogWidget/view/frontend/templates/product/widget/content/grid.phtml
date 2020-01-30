@@ -41,7 +41,7 @@ use Magento\Framework\App\Action\Action;
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
-                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>"
+                                    <a title="<?= $block->escapeHtmlAttr($_item->getName()) ?>"
                                        href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
                                        class="product-item-link">
                                         <?= $block->escapeHtml($_item->getName()) ?>
@@ -62,12 +62,12 @@ use Magento\Framework\App\Action\Action;
                                                 <div class="actions-primary">
                                                     <?php if ($_item->isSaleable()) : ?>
                                                         <?php $postParams = $block->getAddToCartPostParams($_item); ?>
-                                                        <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
+                                                        <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtmlAttr($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
                                                             <input type="hidden" name="product" value="<?= $block->escapeHtmlAttr($postParams['data']['product']) ?>">
                                                             <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                                             <?= $block->getBlockHtml('formkey') ?>
                                                             <button type="submit"
-                                                                    title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                                                                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                                     class="action tocart primary">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
@@ -83,14 +83,18 @@ use Magento\Framework\App\Action\Action;
                                             <?php endif; ?>
                                             <?php if ($showWishlist || $showCompare) : ?>
                                                 <div class="actions-secondary" data-role="add-to-links">
+                                                    <?php //phpcs:disable ?>
                                                     <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) : ?>
+                                                    <?php //phpcs:enable ?>
                                                         <a href="#"
                                                            data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                                         </a>
                                                     <?php endif; ?>
                                                     <?php if ($block->getAddToCompareUrl() && $showCompare) : ?>
+                                                        <?php //phpcs:disable ?>
                                                         <?php $compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);?>
+                                                        <?php //phpcs:enable ?>
                                                         <a href="#" class="action tocompare" data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>' title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
                                                         </a>

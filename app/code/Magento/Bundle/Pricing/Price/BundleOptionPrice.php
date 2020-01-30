@@ -27,7 +27,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
 
     /**
      * @var BundleSelectionFactory
-     * @deprecated
+     * @deprecated 100.2.3
      */
     protected $selectionFactory;
 
@@ -64,7 +64,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getValue()
     {
@@ -79,7 +79,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      * Getter for maximal price of options.
      *
      * @return bool|float
-     * @deprecated
+     * @deprecated 100.2.3
      */
     public function getMaxValue()
     {
