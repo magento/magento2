@@ -28,6 +28,7 @@ class ScalarTypesProvider
             'boolean',
             'mixed',
             'callable',
+            'resource'
         ];
     }
 }
