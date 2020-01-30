@@ -10,6 +10,7 @@
     <test name="AdminCMSPageCreatePageInSingleStoreModeTest">
         <annotations>
             <features value="Cms"/>
+            <stories value="Create CMS Page"/>
             <title value="Create CMS Page via the Admin in single store mode"/>
             <description value="Admin should be able to create a CMS Page"/>
             <severity value="CRITICAL"/>

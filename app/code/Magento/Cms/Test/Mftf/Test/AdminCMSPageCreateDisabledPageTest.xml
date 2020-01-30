@@ -10,6 +10,7 @@
     <test name="AdminCMSPageCreateDisabledPageTest">
         <annotations>
             <features value="Cms"/>
+            <stories value="Create CMS Page"/>
             <title value="Create disabled CMS Page via the Admin"/>
             <description value="Admin should be able to create a CMS Page"/>
             <severity value="CRITICAL"/>

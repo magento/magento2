@@ -13,6 +13,7 @@
             <title value="Admin create order with date time option UI test"/>
             <description value="Check asterisk rendered correctly for Product with custom option (datetime) at backend"/>
             <features value="Sales"/>
+            <stories value="Create order in Admin"/>
             <severity value="MINOR"/>
             <group value="Sales"/>
         </annotations>
