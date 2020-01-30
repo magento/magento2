@@ -252,8 +252,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
             $indexer = $this->getIndexerRegistry()->get($indexerId);
             /** @var \Magento\Indexer\Model\Indexer\State $state */
             $state = $indexer->getState();
-            $state->setStatus(StateInterface::STATUS_WORKING);
-            $state->save();
             $state->setStatus(StateInterface::STATUS_VALID);
             $state->save();
         }
