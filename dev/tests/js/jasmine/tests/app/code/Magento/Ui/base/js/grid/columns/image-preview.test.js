@@ -66,7 +66,8 @@ define([
                         })
 
                     },
-                    imageMock = document.createElement('img');
+                    imageMock = document.createElement('img'),
+                    originMock = $.fn.get;
 
                 spyOn($.fn, 'get').and.returnValue(imageMock);
                 imagePreview.visibleRecord = jasmine.createSpy().and.returnValue(2);
@@ -75,6 +76,7 @@ define([
                 imagePreview.masonry = jasmine.createSpy().and.returnValue(masonryMock);
                 imagePreview.handleKeyDown(elementMock);
                 expect(imagePreview.displayedRecord()._rowIndex).toBe(secondRecordMock._rowIndex);
+                $.fn.get = originMock;
             });
 
         });
