@@ -125,7 +125,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $urlEncoder;
 
     /**
-     * @var \Magento\Framework\View\Element\RendererList
+     * @var RendererList
      */
     private $rendererListBlock;
 
@@ -194,14 +194,12 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             ->addColumnCountLayoutDepend('2columns-right', 4)
             ->addColumnCountLayoutDepend('3columns', 3);
 
-        $this->addData(
-            [
-                'cache_lifetime' => 86400,
-                'cache_tags' => [
-                    Product::CACHE_TAG,
-                ],
-            ]
-        );
+        $this->addData([
+            'cache_lifetime' => 86400,
+            'cache_tags' => [
+                Product::CACHE_TAG,
+            ],
+        ]);
     }
 
     /**
@@ -506,14 +504,15 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getIdentities()
     {
-        $identities = [];
+        $identities = [[]];
         if ($this->getProductCollection()) {
             foreach ($this->getProductCollection() as $product) {
                 if ($product instanceof IdentityInterface) {
-                    $identities += $product->getIdentities();
+                    $identities[] = $product->getIdentities();
                 }
             }
         }
+        $identities = array_merge(...$identities);
 
         return $identities ?: [Product::CACHE_TAG];
     }

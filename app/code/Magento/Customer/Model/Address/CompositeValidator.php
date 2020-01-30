@@ -30,11 +30,11 @@ class CompositeValidator implements ValidatorInterface
      */
     public function validate(AbstractAddress $address)
     {
-        $errors = [];
+        $errors = [[]];
         foreach ($this->validators as $validator) {
-            $errors = array_merge($errors, $validator->validate($address));
+            $errors[] = $validator->validate($address);
         }
 
-        return $errors;
+        return array_merge(...$errors);
     }
 }
