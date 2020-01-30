@@ -17,15 +17,15 @@ $tierPrices = $tierPriceModel->getTierPriceList();
 $msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $block->getSaleableItem();
 ?>
-<?php if (count($tierPrices)) : ?>
+<?php if (count($tierPrices)): ?>
     <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
-        <?php foreach ($tierPrices as $index => $price) : ?>
+        <?php foreach ($tierPrices as $index => $price): ?>
             <li class="item">
                 <?php
                 $productId = $product->getId();
                 $isSaleable = $product->isSaleable();
                 $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
-                if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()) :
+                if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()):
                     $addToCartUrl = '';
                     if ($isSaleable) {
                         $addToCartUrl = $this->helper(\Magento\Checkout\Helper\Cart::class)
@@ -60,7 +60,7 @@ $product = $block->getSaleableItem();
                        id="<?= $block->escapeHtmlAttr($popupId) ?>"
                        data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
                         <?= $block->escapeHtml(__('Click for price')) ?></a>
-                <?php else :
+                <?php else:
                     $priceAmountBlock = $block->renderAmount(
                         $price['price'],
                         [
@@ -73,7 +73,8 @@ $product = $block->getSaleableItem();
                     ?>
                     <?= /* @noEscape */ ($block->getShowDetailedPrice() !== false)
                     ? __(
-                        'Buy %1 for %2 each and <strong class="benefit">save<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
+                        'Buy %1 for %2 each and '.
+                        '<strong class="benefit">save<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
                         $price['price_qty'],
                         $priceAmountBlock,
                         $index,
@@ -85,7 +86,7 @@ $product = $block->getSaleableItem();
             </li>
         <?php endforeach; ?>
     </ul>
-    <?php if ($msrpShowOnGesture) :?>
+    <?php if ($msrpShowOnGesture):?>
         <script type="text/x-magento-init">
             {
                 ".product-info-main": {
