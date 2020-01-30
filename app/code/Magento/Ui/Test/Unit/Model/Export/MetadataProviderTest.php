@@ -8,12 +8,12 @@ namespace Magento\Ui\Test\Unit\Model\Export;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\MetadataProvider;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -76,8 +76,10 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $columnLabels
      * @param array $expected
+     *
      * @return void
      * @dataProvider getColumnsDataProvider
+     * @throws \Exception
      */
     public function testGetHeaders(array $columnLabels, array $expected): void
     {
@@ -156,11 +158,11 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $component->expects($this->any())
             ->method('getName')
             ->willReturn($componentName);
-        $component->expects($this->once())
+        $component->expects($this->atLeastOnce())
             ->method('getChildComponents')
             ->willReturn([$columns]);
 
-        $columns->expects($this->once())
+        $columns->expects($this->atLeastOnce())
             ->method('getChildComponents')
             ->willReturn([$column, $columnActions]);
 
@@ -267,52 +269,110 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @param string $filter
      * @param array $options
      * @param array $expected
+     *
      * @dataProvider getOptionsDataProvider
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGetOptions($filter, $options, $expected)
     {
-        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
-            ->getMockForAbstractClass();
+        $component = $this->prepareColumnsWithOptions($filter, $options);
 
-        $childComponent = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
-            ->getMockForAbstractClass();
-
-        $filters = $this->getMockBuilder(\Magento\Ui\Component\Filters::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $select = $this->getMockBuilder(\Magento\Ui\Component\Filters\Type\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->filter->expects($this->once())
+        $this->filter->expects($this->exactly(2))
             ->method('getComponent')
             ->willReturn($component);
-
-        $component->expects($this->once())
-            ->method('getChildComponents')
-            ->willReturn(['listing_top' => $childComponent]);
-
-        $childComponent->expects($this->once())
-            ->method('getChildComponents')
-            ->willReturn([$filters]);
-
-        $filters->expects($this->once())
-            ->method('getChildComponents')
-            ->willReturn([$select]);
-
-        $select->expects($this->any())
-            ->method('getName')
-            ->willReturn($filter);
-        $select->expects($this->any())
-            ->method('getData')
-            ->with('config/options')
-            ->willReturn($options);
 
         $result = $this->model->getOptions();
         $this->assertTrue(is_array($result));
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function prepareColumnsWithOptions(string $filter, array $options)
+    {
+        /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+                          ->getMockForAbstractClass();
+
+        $listingTopComponent = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+                               ->getMockForAbstractClass();
+
+        $filters = $this->getMockBuilder(\Magento\Ui\Component\Filters::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+
+        /** @var Columns|\PHPUnit_Framework_MockObject_MockObject $columns */
+        $columns = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+
+        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns\Column::class)
+                       ->disableOriginalConstructor()
+                       ->getMock();
+        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $columnActions */
+        $columnActions = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns\Column::class)
+                              ->disableOriginalConstructor()
+                              ->getMock();
+
+        $component->expects($this->any())
+                  ->method('getName')
+                  ->willReturn('columns_component_name');
+        $component->expects($this->atLeastOnce())
+                  ->method('getChildComponents')
+                  ->willReturn(['columns' => $columns, 'listing_top' => $listingTopComponent]);
+
+        $listingTopComponent->expects($this->once())
+                            ->method('getChildComponents')
+                            ->willReturn([$filters]);
+
+        $select = $this->getMockBuilder(\Magento\Ui\Component\Filters\Type\Select::class)
+                       ->disableOriginalConstructor()
+                       ->getMock();
+
+        $filters->expects($this->once())
+                ->method('getChildComponents')
+                ->willReturn([$select]);
+
+        $select->expects($this->any())
+               ->method('getName')
+               ->willReturn($filter);
+        $select->expects($this->any())
+               ->method('getData')
+               ->with('config/options')
+               ->willReturn($options);
+
+        $columns->expects($this->atLeastOnce())
+                ->method('getChildComponents')
+                ->willReturn([$column, $columnActions]);
+
+        $column->expects($this->any())
+               ->method('getName')
+               ->willReturn('column_name');
+        $column->expects($this->any())
+               ->method('getData')
+               ->willReturnMap(
+                   [
+                       ['config/label', null, 'column_label'],
+                       ['config/dataType', null, 'data_type'],
+                   ]
+               );
+
+        $columnActions->expects($this->any())
+                      ->method('getName')
+                      ->willReturn('column_actions_name');
+        $columnActions->expects($this->any())
+                      ->method('getData')
+                      ->willReturnMap(
+                          [
+                              ['config/label', null, 'column_actions_label'],
+                              ['config/dataType', null, 'actions'],
+                          ]
+                      );
+
+        return $component;
     }
 
     /**
