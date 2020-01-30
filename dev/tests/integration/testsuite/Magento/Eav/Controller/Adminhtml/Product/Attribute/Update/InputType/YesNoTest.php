@@ -20,7 +20,7 @@ class YesNoTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class YesNoTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class YesNoTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      *

@@ -20,7 +20,7 @@ class DateTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getAttributeDataWithCheckArray()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getAttributeDataWithCheckArray
      *
      * @param array $attributePostData
      * @param array $checkArray
@@ -34,7 +34,7 @@ class DateTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getAttributeDataWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getAttributeDataWithErrorMessage
      *
      * @param array $attributePostData
      * @param string $errorMessage

@@ -20,7 +20,7 @@ class TextAreaTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getAttributeDataWithCheckArray()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getAttributeDataWithCheckArray
      *
      * @param array $attributePostData
      * @param array $checkArray
@@ -34,7 +34,7 @@ class TextAreaTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getAttributeDataWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getAttributeDataWithErrorMessage
      *
      * @param array $attributePostData
      * @param string $errorMessage

@@ -20,7 +20,7 @@ class MediaImageTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/product_image_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class MediaImageTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/product_image_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class MediaImageTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/product_image_attribute.php
      *

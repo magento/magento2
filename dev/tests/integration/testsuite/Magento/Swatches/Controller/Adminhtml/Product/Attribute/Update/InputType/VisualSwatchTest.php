@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product\Attribute\Update\InputType;
 
-use Magento\Swatches\Controller\Adminhtml\Product\Attribute\Update\AbstractSwatchUpdateAttributeTest;
+use Magento\Swatches\Controller\Adminhtml\Product\Attribute\Update\AbstractUpdateSwatchAttributeTest;
 use Magento\Swatches\Model\Swatch;
 
 /**
@@ -16,12 +16,12 @@ use Magento\Swatches\Model\Swatch;
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  */
-class VisualSwatchTest extends AbstractSwatchUpdateAttributeTest
+class VisualSwatchTest extends AbstractUpdateSwatchAttributeTest
 {
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateProvider
      * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
      *
      * @param array $postData
@@ -37,7 +37,7 @@ class VisualSwatchTest extends AbstractSwatchUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
      *
      * @param array $postData
@@ -53,7 +53,7 @@ class VisualSwatchTest extends AbstractSwatchUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
      *
@@ -69,7 +69,7 @@ class VisualSwatchTest extends AbstractSwatchUpdateAttributeTest
     /**
      * Test update attribute options on stores.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateOptionsProvider()
+     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\VisualSwatch::getUpdateOptionsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
      *

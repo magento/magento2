@@ -253,7 +253,7 @@ abstract class AbstractUpdateAttributeTest extends AbstractBackendController
         $defaultValue = '';
 
         foreach ($optionsData as $optionId => $option) {
-            if (isset($option['delete']) && $option['delete']) {
+            if (!empty($option['delete'])) {
                 continue;
             }
             $optionsArray[$optionId] = [

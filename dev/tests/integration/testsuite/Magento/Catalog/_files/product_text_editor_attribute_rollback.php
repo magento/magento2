@@ -10,7 +10,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Registry;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
-/* Delete attribute with text_attribute code */
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);

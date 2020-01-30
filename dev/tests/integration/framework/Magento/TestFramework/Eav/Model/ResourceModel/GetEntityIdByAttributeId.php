@@ -39,15 +39,18 @@ class GetEntityIdByAttributeId
     public function execute(int $setId, int $attributeId, ?int $attributeGroupId = null): ?int
     {
         $select = $this->attributeSetResource->getConnection()->select()
-            ->from($this->attributeSetResource->getTable('eav_entity_attribute'))
+            ->from(
+                $this->attributeSetResource->getTable('eav_entity_attribute'),
+                'entity_attribute_id'
+            )
             ->where('attribute_set_id = ?', $setId)
             ->where('attribute_id = ?', $attributeId);
 
         if ($attributeGroupId !== null) {
             $select->where('attribute_group_id = ?', $attributeGroupId);
         }
+        $entityAttributeId = $this->attributeSetResource->getConnection()->fetchOne($select);
 
-        $result = $this->attributeSetResource->getConnection()->fetchOne($select);
-        return $result ? (int)$result : null;
+        return $entityAttributeId ? (int)$entityAttributeId : null;
     }
 }

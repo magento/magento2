@@ -20,7 +20,7 @@ class FixedProductTaxTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getUpdateProvider
      * @magentoDataFixture Magento/Weee/_files/fixed_product_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class FixedProductTaxTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Weee/_files/fixed_product_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class FixedProductTaxTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Weee/_files/fixed_product_attribute.php
      *

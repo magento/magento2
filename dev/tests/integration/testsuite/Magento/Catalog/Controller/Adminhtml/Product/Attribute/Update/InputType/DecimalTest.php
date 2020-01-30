@@ -20,7 +20,7 @@ class DecimalTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class DecimalTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class DecimalTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      *

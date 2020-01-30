@@ -20,7 +20,7 @@ class TextEditorTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextEditor::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextEditor::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/product_text_editor_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class TextEditorTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextEditor::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextEditor::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/product_text_editor_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class TextEditorTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextEditor::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextEditor::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/product_text_editor_attribute.php
      *

@@ -20,7 +20,7 @@ class DateTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/product_date_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class DateTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/product_date_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class DateTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\Date::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/product_date_attribute.php
      *

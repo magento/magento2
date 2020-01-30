@@ -20,7 +20,7 @@ class FixedProductTaxTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getAttributeDataWithCheckArray()
+     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getAttributeDataWithCheckArray
      *
      * @param array $attributePostData
      * @param array $checkArray
@@ -34,7 +34,7 @@ class FixedProductTaxTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getAttributeDataWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Weee\Model\Attribute\DataProvider\FixedProductTax::getAttributeDataWithErrorMessage
      *
      * @param array $attributePostData
      * @param string $errorMessage

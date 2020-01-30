@@ -20,7 +20,7 @@ class DropDownTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      *
      * @param array $postData
@@ -36,7 +36,7 @@ class DropDownTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateProviderWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      *
      * @param array $postData
@@ -52,7 +52,7 @@ class DropDownTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateFrontendLabelsProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      *
@@ -68,7 +68,7 @@ class DropDownTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute options on stores.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateOptionsProvider()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\DropDown::getUpdateOptionsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      *
