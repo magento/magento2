@@ -30,7 +30,7 @@
         <element name="productLink" type="text" selector="a.product-item-link" timeout="30"/>
         <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
         <element name="productPrice" type="text" selector=".price-final_price"/>
-        <element name="productPriceByName" type="text" selector="//div[contains(@class, 'product-item-info')]//a[contains(text(), '{{productName}}')]//parent::strong//parent::div//span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="productPriceByName" type="text" selector="//a[contains(text(), '{{productName}}')]//ancestor::div[contains(@class, 'product-item-info')]//span[contains(@class, 'price')]" parameterized="true"/>
         <element name="categoryImage" type="text" selector=".category-image"/>
         <element name="emptyProductMessage" type="block" selector=".message.info.empty>div"/>
         <element name="lineProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>

@@ -15,7 +15,6 @@
 
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
         <click selector="{{StorefrontCategoryMainSection.addToWishListIconProductInfoHover}}" stepKey="clickOnAddToWishListIcon"/>
-        <waitForPageLoad stepKey="waitForCustomerSignInPageLoad"/>
         <waitForElementVisible selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" stepKey="waitForErrorMessageIsVisible"/>
         <see selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="You must login or register to add items to your wishlist." stepKey="assertErrorMessage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertCustomerLoginPageUrl"/>
