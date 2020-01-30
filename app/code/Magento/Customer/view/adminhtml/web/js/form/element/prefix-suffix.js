@@ -40,12 +40,12 @@ define([
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value === null || value === captionValue) {
-                if (_.isUndefined(caption)) {
-                    caption = node.label;
-                }
-            } else {
+            if (value !== null && value !== captionValue) {
                 return node;
+            }
+
+            if (_.isUndefined(caption)) {
+                caption = node.label;
             }
         });
 
@@ -144,17 +144,19 @@ define([
             this.reset();
 
             if (!this.value()) {
-                if (this.indexedOptions.length > 0) {
-                    defaultPrefixSuffix = _.filter(result, function (item) {
-                        return item['is_default'] && _.contains(item['is_default'], value);
-                    });
-
-                    if (defaultPrefixSuffix.length) {
-                        defaultValue = defaultPrefixSuffix.shift();
-                        this.value(defaultValue.value);
-                    }
-                } else {
+                if (this.indexedOptions.length === 0) {
                     this.value(this.initialValue);
+
+                    return;
+                }
+
+                defaultPrefixSuffix = _.filter(result, function (item) {
+                    return item['is_default'] && _.contains(item['is_default'], value);
+                });
+
+                if (defaultPrefixSuffix.length) {
+                    defaultValue = defaultPrefixSuffix.shift();
+                    this.value(defaultValue.value);
                 }
             }
         },
