@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\App\Config;
 use Magento\Store\Model\StoreRepository;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\Quote;
@@ -23,6 +24,9 @@ $quoteFactory = $objectManager->get(QuoteFactory::class);
 $quoteRepository = $objectManager->get(QuoteRepository::class);
 /** @var  StoreRepository $storeRepository */
 $storeRepository = $objectManager->get(StoreRepository::class);
+/** @var Config $appConfig */
+$appConfig = $objectManager->get(Config::class);
+$appConfig->clean();
 
 /** @var Store $defaultStore */
 $defaultStore = $storeRepository->getActiveStoreByCode('default');
