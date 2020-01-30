@@ -17,9 +17,9 @@
         <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
         <element name="specifiedProductItemInfo" type="button" selector="//a[@class='product-item-link'][contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
-        <element name="addToCartButtonProductInfoHover" type="button" selector=".product-item-info:hover button.action.tocart.primary"/>
-        <element name="addToWishListIconProductInfoHover" type="button" selector=".product-item-info:hover a.action.towishlist"/>
-        <element name="addToCompareIconProductInfoHover" type="button" selector=".product-item-info:hover a.action.tocompare"/>
+        <element name="addToCartButtonProductInfoHover" type="button" selector=".product-item-info:hover button.action.tocart.primary" timeout="30"/>
+        <element name="addToWishListIconProductInfoHover" type="button" selector=".product-item-info:hover a.action.towishlist" timeout="30"/>
+        <element name="addToCompareIconProductInfoHover" type="button" selector=".product-item-info:hover a.action.tocompare" timeout="30"/>
         <element name="addToCartProductBySku" type="button" selector="//form[@data-product-sku='{{productSku}}']//button[contains(@class, 'tocart')]" parameterized="true" />
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
         <element name="productCount" type="text" selector="#toolbar-amount"/>
@@ -30,7 +30,7 @@
         <element name="productLink" type="text" selector="a.product-item-link" timeout="30"/>
         <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
         <element name="productPrice" type="text" selector=".price-final_price"/>
-        <element name="productPriceByName" type="text" selector="//div[contains(@class, 'product-item-info')]//a[contains(text(), '{{productName}}')]//..//..//span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="productPriceByName" type="text" selector="//div[contains(@class, 'product-item-info')]//a[contains(text(), '{{productName}}')]//parent::strong//parent::div//span[contains(@class, 'price')]" parameterized="true"/>
         <element name="categoryImage" type="text" selector=".category-image"/>
         <element name="emptyProductMessage" type="block" selector=".message.info.empty>div"/>
         <element name="lineProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
