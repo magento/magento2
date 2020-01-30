@@ -8,10 +8,13 @@ namespace Magento\Framework\Logger;
 
 use Monolog\Logger;
 
+/**
+ * Monolog logger
+ */
 class Monolog extends Logger
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct($name, array $handlers = [], array $processors = [])
     {
@@ -41,10 +44,9 @@ class Monolog extends Logger
          */
         if ($message instanceof \Exception && !isset($context['exception'])) {
             $context['exception'] = $message;
+            $level = $level < self::ERROR ? self::ERROR : $level;
         }
-
         $message = $message instanceof \Exception ? $message->getMessage() : $message;
-
         return parent::addRecord($level, $message, $context);
     }
 }
