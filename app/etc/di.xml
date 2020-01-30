@@ -250,16 +250,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Logger\Monolog">
-        <arguments>
-            <argument name="name" xsi:type="string">main</argument>
-            <argument name="handlers"  xsi:type="array">
-                <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
-                <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
-                <item name="syslog" xsi:type="object">Magento\Framework\Logger\Handler\Syslog</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Logger\Handler\Syslog">
         <arguments>
             <argument name="ident" xsi:type="string">Magento</argument>
@@ -1803,4 +1793,30 @@
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
     <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
+    <virtualType name="Magento\Framework\Logger\Handler\Stdout" type="Magento\Framework\Logger\Handler\StreamHandler">
+        <arguments>
+            <argument name="formatter" xsi:type="object">Magento\Framework\Logger\Formatter\JsonFormatter</argument>
+            <argument name="stream" xsi:type="string">php://stdout</argument>
+            <argument name="level" xsi:type="const">Monolog\Logger::DEBUG</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\Logger\Handler\Stderr" type="Magento\Framework\Logger\Handler\StreamHandler">
+        <arguments>
+            <argument name="formatter" xsi:type="object">Magento\Framework\Logger\Formatter\JsonFormatter</argument>
+            <argument name="stream" xsi:type="string">php://stderr</argument>
+            <argument name="level" xsi:type="const">Monolog\Logger::ERROR</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">main</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="stdout" xsi:type="object">Magento\Framework\Logger\Handler\Stdout</item>
+                <item name="stderr" xsi:type="object">Magento\Framework\Logger\Handler\Stderr</item>
+                <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
+                <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
+                <item name="syslog" xsi:type="object">Magento\Framework\Logger\Handler\Syslog</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
