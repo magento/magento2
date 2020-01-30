@@ -87,8 +87,11 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
                 $this->productRepository->delete($product);
                 $productDeleted++;
             } catch (LocalizedException $exception) {
+                $this->messageManager->addErrorMessage((string)$exception); /** @FIXME Temporary for Debugging purposes */
                 $this->logger->error($exception->getLogMessage());
                 $productDeletedError++;
+            } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage((string)$e); /** @FIXME Temporary for Debugging purposes */
             }
         }
 
