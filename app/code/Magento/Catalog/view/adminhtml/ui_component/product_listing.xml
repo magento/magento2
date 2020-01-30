@@ -132,7 +132,7 @@
             <settings>
                 <addField>true</addField>
                 <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <bodyTmpl>ui/grid/cells/text</bodyTmpl>
                 <label translate="true">Name</label>
             </settings>
         </column>
@@ -144,7 +144,7 @@
                 <label translate="true">Type</label>
             </settings>
         </column>
-        <column name="attribute_set_id" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
+        <column name="attribute_set_id" class="Magento\Catalog\Ui\Component\Listing\Columns\AttributeSetId" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
             <settings>
                 <options class="Magento\Catalog\Model\Product\AttributeSet\Options"/>
                 <filter>select</filter>
@@ -155,7 +155,7 @@
         <column name="sku" sortOrder="60">
             <settings>
                 <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <bodyTmpl>ui/grid/cells/text</bodyTmpl>
                 <label translate="true">SKU</label>
             </settings>
         </column>

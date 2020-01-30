@@ -9,7 +9,10 @@ namespace Magento\Setup\Fixtures;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttributeSetCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Setup\Model\FixtureGenerator\ProductGenerator;
 use Magento\Setup\Model\SearchTermDescriptionGeneratorFactory;
@@ -68,7 +71,7 @@ class SimpleProductsFixture extends Fixture
     private $defaultAttributeSetId;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @var Collection
      */
     private $attributeCollectionFactory;
 
@@ -96,6 +99,11 @@ class SimpleProductsFixture extends Fixture
      * @var PriceProvider
      */
     private $priceProvider;
+
+    /**
+     * @var int[]
+     */
+    private $additionalAttributeSetIds;
 
     /**
      * @param FixtureModel $fixtureModel
@@ -184,35 +192,38 @@ class SimpleProductsFixture extends Fixture
             'Short simple product Description %s'
         );
 
-        $additionalAttributeSets = $this->getAdditionalAttributeSets();
-        $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSets) {
+        $additionalAttributeSetIds = $this->getAdditionalAttributeSetIds();
+        $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSetIds) {
             // phpcs:ignore
             mt_srand($index);
             $attributeSetCount = count(array_keys($defaultAttributeSets));
             if ($attributeSetCount > (($index - 1) % (int)$this->fixtureModel->getValue('categories', 30))) {
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 return array_keys($defaultAttributeSets)[mt_rand(0, count(array_keys($defaultAttributeSets)) - 1)];
             } else {
-                $customSetsAmount = count($additionalAttributeSets);
+                $customSetsAmount = count($additionalAttributeSetIds);
                 return $customSetsAmount
-                    ? $additionalAttributeSets[$index % count($additionalAttributeSets)]['attribute_set_id']
+                    ? $additionalAttributeSetIds[$index % $customSetsAmount]
                     : $this->getDefaultAttributeSetId();
             }
         };
 
+        $additionalAttributeValues = $this->getAdditionalAttributeValues();
         $additionalAttributes = function (
             $attributeSetId,
             $index
         ) use (
             $defaultAttributeSets,
-            $additionalAttributeSets
+            $additionalAttributeValues
         ) {
             $attributeValues = [];
             // phpcs:ignore
             mt_srand($index);
-            if (isset($defaultAttributeSets[$attributeSetId])) {
-                foreach ($defaultAttributeSets[$attributeSetId] as $attributeCode => $values) {
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $attributeValuesByAttributeSet = $defaultAttributeSets[$attributeSetId]
+                ?? $additionalAttributeValues[$attributeSetId];
+            if (!empty($attributeValuesByAttributeSet)) {
+                foreach ($attributeValuesByAttributeSet as $attributeCode => $values) {
+                    // phpcs:ignore Magento2.Security.InsecureFunction
                     $attributeValues[$attributeCode] = $values[mt_rand(0, count($values) - 1)];
                 }
             }
@@ -279,10 +290,10 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * Get default attribute sets with attributes
+     * Get default attribute sets with attributes.
      *
-     * @see config/attributeSets.xml
      * @return array
+     * @see config/attributeSets.xml
      */
     private function getDefaultAttributeSets()
     {
@@ -301,17 +312,7 @@ class SimpleProductsFixture extends Fixture
                     'attribute_code',
                     array_column($attributesData, 'attribute_code')
                 );
-                /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
-                foreach ($attributeCollection as $attribute) {
-                    $values = [];
-                    $options = $attribute->getOptions();
-                    foreach (($options ?: []) as $option) {
-                        if ($option->getValue()) {
-                            $values[] = $option->getValue();
-                        }
-                    }
-                    $attributes[$attribute->getAttributeSetId()][$attribute->getAttributeCode()] = $values;
-                }
+                $attributes = $this->processAttributeValues($attributeCollection, $attributes);
             }
         }
         $attributes[$this->getDefaultAttributeSetId()] = [];
@@ -381,16 +382,64 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * Get additional attribute sets
+     * Get additional attribute set ids.
      *
-     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection[]
+     * @return int[]
      */
-    private function getAdditionalAttributeSets()
+    private function getAdditionalAttributeSetIds()
     {
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $sets */
-        $sets = $this->attributeSetCollectionFactory->create();
-        $sets->addFieldToFilter('attribute_set_name', ['like' => AttributeSetsFixture::PRODUCT_SET_NAME . '%']);
+        if (null === $this->additionalAttributeSetIds) {
+            /** @var AttributeSetCollection $sets */
+            $sets = $this->attributeSetCollectionFactory->create();
+            $sets->addFieldToFilter(
+                'attribute_set_name',
+                ['like' => AttributeSetsFixture::PRODUCT_SET_NAME . '%']
+            );
+            $this->additionalAttributeSetIds = $sets->getAllIds();
+        }
 
-        return $sets->getData();
+        return $this->additionalAttributeSetIds;
+    }
+
+    /**
+     * Get values of additional attributes.
+     *
+     * @return array
+     */
+    private function getAdditionalAttributeValues(): array
+    {
+        $attributeCollection = $this->attributeCollectionFactory->create();
+        $attributeCollection->setAttributeSetsFilter($this->getAdditionalAttributeSetIds())
+            ->addFieldToFilter('attribute_code', ['like' => 'attribute_set%']);
+        $attributeCollection->getSelect()->columns(['entity_attribute.attribute_set_id']);
+
+        return $this->processAttributeValues($attributeCollection);
+    }
+
+    /**
+     * Maps attribute values by attribute set and attribute code.
+     *
+     * @param Collection $attributeCollection
+     * @param array $attributes
+     * @return array
+     */
+    private function processAttributeValues(
+        Collection $attributeCollection,
+        array $attributes = []
+    ): array {
+        /** @var Attribute $attribute */
+        foreach ($attributeCollection as $attribute) {
+            $values = [];
+            $options = $attribute->getOptions() ?? [];
+            $attributeSetId = $attribute->getAttributeSetId() ?? $this->getDefaultAttributeSetId();
+            foreach ($options as $option) {
+                if ($option->getValue()) {
+                    $values[] = $option->getValue();
+                }
+            }
+            $attributes[$attributeSetId][$attribute->getAttributeCode()] = $values;
+        }
+
+        return $attributes;
     }
 }

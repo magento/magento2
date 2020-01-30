@@ -15,7 +15,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 /**
  * Converts MessageQueue config from \DOMDocument to array
  *
- * @deprecated 100.2.0
+ * @deprecated 102.0.4
  */
 class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {

@@ -15,7 +15,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * Class is a proxy service for retrieving configuration settings.
  *
- * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * @deprecated 100.3.1 Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
  * official payment integration available on the marketplace
  */
 class Config

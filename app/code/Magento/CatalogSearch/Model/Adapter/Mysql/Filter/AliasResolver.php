@@ -12,7 +12,7 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator;
  * Purpose of class is to resolve table alias for Search Request filter
  * @api
  * @since 100.1.6
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class AliasResolver
