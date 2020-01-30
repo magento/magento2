@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Magento\Customer\Block\Adminhtml\Edit\Tab\Cart
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,7 +29,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     private $_context;
 
     /**
-     *  @var Registry
+     * @var Registry
      */
     private $_coreRegistry;
 
@@ -38,7 +39,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     private $_storeManager;
 
     /**
-     *  @var Cart
+     * @var Cart
      */
     private $_block;
 
@@ -85,24 +86,55 @@ class CartTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Sales/_files/quote_with_two_products_and_customer.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
+     * @dataProvider getQuoteDataProvider
+     *
+     * @param int $customerId
+     * @param bool $guest
+     * @param bool $contains
      * @return void
      */
-    public function testVerifyCollectionWithQuote(): void
+    public function testVerifyCollectionWithQuote(int $customerId, bool $guest, bool $contains): void
     {
         $session = $this->_objectManager->create(SessionQuote::class);
-        $session->setCustomerId(self::CUSTOMER_ID_VALUE);
+        $session->setCustomerId($customerId);
         $quoteFixture = $this->_objectManager->create(Quote::class);
         $quoteFixture->load('test01', 'reserved_order_id');
-        $quoteFixture->setCustomerIsGuest(false)
-                     ->setCustomerId(self::CUSTOMER_ID_VALUE)
+        $quoteFixture->setCustomerIsGuest($guest)
+                     ->setCustomerId($customerId)
                      ->save();
-        $html = $this->_block->toHtml();
-        $this->assertNotContains(
-            "We couldn&#039;t find any records",
-            $this->_block->getGridParentHtml()
-        );
+        $this->_block->toHtml();
+        if ($contains) {
+            $this->assertContains(
+                "We couldn&#039;t find any records",
+                $this->_block->getGridParentHtml()
+            );
+        } else {
+            $this->assertNotContains(
+                "We couldn&#039;t find any records",
+                $this->_block->getGridParentHtml()
+            );
+        }
+    }
+
+    /**
+     * Data provider for withQuoteTest
+     *
+     * @return array
+     */
+    public function getQuoteDataProvider(): array
+    {
+        return [
+            [
+                 6,
+                 false,
+                 true
+            ],
+            [
+                 self::CUSTOMER_ID_VALUE,
+                 true,
+                 false
+            ],
+        ];
     }
 
     /**
