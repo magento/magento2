@@ -94,10 +94,11 @@ foreach ($product->getBundleOptionsData() as $key => $optionData) {
     $option->setSku($product->getSku());
     $option->setOptionId(null);
     $links = [];
-    foreach ($product->getBundleSelectionsData()[$key] as $linkData) {
+    $bundleLinks = $product->getBundleSelectionsData()[$key];
+    $productsSku = $productResource->getProductsSku(array_column($bundleLinks, 'product_id'));
+    foreach ($bundleLinks as $linkKey => $linkData) {
         $link = $linkFactory->create(['data' => $linkData]);
-        $linkProduct = $productResource->getProductsSku([$linkData['product_id']]);
-        $link->setSku(array_column($linkProduct, 'sku')[0]);
+        $link->setSku($productsSku[$linkKey]['sku']);
         $links[] = $link;
     }
     $option->setProductLinks($links);
