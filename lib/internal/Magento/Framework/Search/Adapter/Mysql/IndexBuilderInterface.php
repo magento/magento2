@@ -11,7 +11,7 @@ use Magento\Framework\Search\RequestInterface;
 /**
  * Build base Query for Index
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 interface IndexBuilderInterface

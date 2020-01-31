@@ -199,7 +199,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      *
      * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
      *
-     * @deprecated 100.1.2
+     * @deprecated 100.2.0
      */
     private function getOptionsFactory()
     {

@@ -46,7 +46,7 @@ class Uploader extends \Magento\Backend\Block\Widget
 
     /**
      * @var UploadConfigInterface
-     * @deprecated
+     * @deprecated 101.0.1
      * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface
      */
     private $imageConfig;
@@ -120,6 +120,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Get Image Upload Maximum Width Config.
      *
      * @return int
+     * @since 100.2.7
      */
     public function getImageUploadMaxWidth()
     {
@@ -130,6 +131,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Get Image Upload Maximum Height Config.
      *
      * @return int
+     * @since 100.2.7
      */
     public function getImageUploadMaxHeight()
     {

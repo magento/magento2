@@ -731,6 +731,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add Store ID to products from collection.
      *
      * @return $this
+     * @since 102.0.8
      */
     protected function prepareStoreId()
     {
@@ -2121,7 +2122,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 if (in_array($category['parent_id'], $categoryIds)
                     && in_array($category['parent_id'], $anchorCategory)) {
                     $categoryIds[] = (int)$category[$linkField];
-                    if ($category['is_anchor'] == 1) {
+                    // Storefront approach is to treat non-anchor children of anchor category as anchors.
+                    // Adding their's IDs to $anchorCategory for consistency.
+                    if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategory)) {
                         $anchorCategory[] = (int)$category[$linkField];
                     }
                 }
@@ -2205,7 +2208,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2385,7 +2388,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getProductEntityMetadata()
     {

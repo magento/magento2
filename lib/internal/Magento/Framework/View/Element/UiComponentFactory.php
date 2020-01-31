@@ -24,6 +24,7 @@ use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class UiComponentFactory extends DataObject
 {
@@ -49,7 +50,7 @@ class UiComponentFactory extends DataObject
     /**
      * UI component manager
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @var ManagerInterface
      */
     protected $componentManager;

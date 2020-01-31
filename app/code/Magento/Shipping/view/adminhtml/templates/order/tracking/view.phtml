@@ -59,7 +59,7 @@
                         <?php if ($_track->isCustom()) : ?>
                             <?= $block->escapeHtml($_track->getNumber()) ?>
                         <?php else : ?>
-                        <a href="#" onclick="popWin('<?= $block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_track))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
+                        <a href="#" onclick="popWin('<?= $block->escapeHtmlAttr($block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_track)))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
                         <div id="shipment_tracking_info_response_<?= (int) $_track->getId() ?>"></div>
                         <?php endif; ?>
                     </td>

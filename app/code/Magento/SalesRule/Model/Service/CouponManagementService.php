@@ -19,7 +19,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 {
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $couponFactory;
 
@@ -30,7 +30,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $collectionFactory;
 
@@ -41,7 +41,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
     /**
      * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $resourceModel;
 
