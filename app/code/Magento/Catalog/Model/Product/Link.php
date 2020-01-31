@@ -58,7 +58,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
-     * @deprecated 101.0.1
+     * @deprecated 101.0.0
      */
     protected $stockHelper;
 
@@ -99,6 +99,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Define link type as related
+     *
      * @return $this
      */
     public function useRelatedLinks()
@@ -108,6 +110,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Define link type as upsell
+     *
      * @return $this
      */
     public function useUpSellLinks()
@@ -117,6 +121,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Define link type as cross sell
+     *
      * @return $this
      */
     public function useCrossSellLinks()
@@ -159,6 +165,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve attributes
+     *
      * @param int $type
      * @return array
      */
@@ -187,6 +195,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve product link save handler
+     *
      * @return Link\SaveHandler
      */
     private function getProductLinkSaveHandler()

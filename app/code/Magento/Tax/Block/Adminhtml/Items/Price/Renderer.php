@@ -22,7 +22,7 @@ class Renderer extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Tax\Helper\Data
-     * @deprecated
+     * @deprecated 100.3.0
      * Marked as deprecated as it is unused.
      */
     protected $taxHelper;
