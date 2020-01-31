@@ -128,7 +128,7 @@
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="SimpleProduct2" type="product">
-        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="sku" unique="suffix">simple-product</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="name" unique="suffix">SimpleProduct</data>
