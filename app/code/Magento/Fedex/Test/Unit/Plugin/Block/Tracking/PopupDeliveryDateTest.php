@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit Test for @see \Magento\Fedex\Plugin\Block\Tracking\PopupDeliveryDate
+ * Unit Test for \Magento\Fedex\Plugin\Block\Tracking\PopupDeliveryDate
  */
 class PopupDeliveryDateTest extends TestCase
 {
@@ -63,9 +63,7 @@ class PopupDeliveryDateTest extends TestCase
         $this->trackingStatusMock->expects($this::once())
             ->method('getCarrier')
             ->willReturn(Carrier::CODE);
-
-        $this->subjectMock->expects($this->once())
-            ->method('formatDeliveryDate');
+        $this->subjectMock->expects($this->once())->method('formatDeliveryDate');
 
         $this->executeOriginalMethod();
     }
@@ -78,15 +76,13 @@ class PopupDeliveryDateTest extends TestCase
         $this->trackingStatusMock->expects($this::once())
             ->method('getCarrier')
             ->willReturn(self::STUB_CARRIER_CODE_NOT_FEDEX);
-
-        $this->subjectMock->expects($this->never())
-            ->method('formatDeliveryDate');
+        $this->subjectMock->expects($this->never())->method('formatDeliveryDate');
 
         $this->executeOriginalMethod();
     }
 
     /**
-     * Returns Mock for @see Status
+     * Returns Mock for \Magento\Shipping\Model\Tracking\Result\Status
      *
      * @return MockObject
      */
@@ -99,7 +95,7 @@ class PopupDeliveryDateTest extends TestCase
     }
 
     /**
-     * Returns Mock for @see Popup
+     * Returns Mock for \Magento\Shipping\Block\Tracking\Popup
      *
      * @return MockObject
      */
