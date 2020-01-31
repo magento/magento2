@@ -78,10 +78,11 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Get cart total repository
      *
-     * @param int $cartId The cart ID.
-     * @return Totals Quote totals data.
+     * @param int $cartId
+     * @return Api\Data\TotalsInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($cartId)
     {
