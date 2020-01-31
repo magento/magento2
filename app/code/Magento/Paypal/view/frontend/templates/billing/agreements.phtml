@@ -30,19 +30,19 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                 <tbody>
                     <?php foreach ($billingAgreements as $item) : ?>
                         <tr>
-                            <td data-th="<?= $block->escapeHtml(__('Reference ID')) ?>" class="col id">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Reference ID')) ?>" class="col id">
                                 <?= $block->escapeHtml($block->getItemValue($item, 'reference_id')) ?>
                             </td>
-                            <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="col status">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>" class="col status">
                                 <?= $block->escapeHtml($block->getItemValue($item, 'status')) ?>
                             </td>
-                            <td data-th="<?= $block->escapeHtml(__('Created At')) ?>" class="col created">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Created At')) ?>" class="col created">
                                 <?= $block->escapeHtml($block->getItemValue($item, 'created_at')) ?>
                             </td>
-                            <td data-th="<?= $block->escapeHtml(__('Updated At')) ?>" class="col updated">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Updated At')) ?>" class="col updated">
                                 <?= $block->escapeHtml($block->getItemValue($item, 'updated_at')) ?>
                             </td>
-                            <td data-th="<?= $block->escapeHtml(__('Payment Method')) ?>" class="col payment">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Payment Method')) ?>" class="col payment">
                                 <?= $block->escapeHtml($block->getItemValue($item, 'payment_method_label')) ?>
                             </td>
                             <td data-th="" class="col actions">
@@ -79,7 +79,7 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                         <select id="payment_method" name="payment_method">
                             <option value=""><?= $block->escapeHtml(__('-- Please Select --')) ?></option>
                             <?php foreach ($paymentMethods as $code => $title) : ?>
-                                <option value="<?= $block->escapeHtml($code) ?>">
+                                <option value="<?= $block->escapeHtmlAttr($code) ?>">
                                     <?= $block->escapeHtml($title) ?>
                                 </option>
                             <?php endforeach; ?>

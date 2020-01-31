@@ -13,7 +13,7 @@ use Magento\Payment\Block\Transparent\Iframe as TransparentIframe;
  * Transparent Iframe block for Authorize.net payments
  * @api
  * @since 100.0.2
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Iframe extends TransparentIframe
 {

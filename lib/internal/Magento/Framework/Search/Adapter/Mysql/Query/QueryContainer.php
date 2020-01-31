@@ -12,7 +12,7 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 /**
  * MySQL search query container.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class QueryContainer
