@@ -7,19 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminApplyCatalogRuleForConfigurableProductWithAssignedSimpleProductsTest">
+    <test name="AdminApplyCatalogRuleForConfigurableProductWithAssignedSimpleProducts2Test">
         <annotations>
             <features value="CatalogRuleConfigurable"/>
             <stories value="Apply catalog price rule"/>
-            <title value="DEPRECATED. Apply catalog rule for configurable product with assigned simple products"/>
-            <description value="DEPRECATED. Admin should be able to apply catalog rule for configurable product with assigned simple products"/>
+            <title value="Apply catalog rule for configurable product with assigned simple products"/>
+            <description value="Admin should be able to apply catalog rule for configurable product with assigned simple products"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-14063"/>
-            <group value="catalogRuleConfigurable"/>
+            <testCaseId value="MC-27708"/>
+            <group value="catalog"/>
+            <group value="configurable_product"/>
+            <group value="catalog_rule_configurable"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use AdminApplyCatalogRuleForConfigurableProductWithAssignedSimpleProducts2Test instead</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Create category for first configurable product -->
@@ -136,7 +135,7 @@
             <!-- Add customizable options to second product -->
             <updateData createDataKey="createSecondConfigProduct" entity="productWithOptionRadiobutton" stepKey="updateSecondProductWithOption"/>
 
-             <!--Create customer group -->
+            <!--Create customer group -->
             <createData entity="CustomCustomerGroup" stepKey="customerGroup"/>
 
             <!-- Create Customer -->
@@ -146,11 +145,9 @@
 
             <!-- Login as Admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
         </before>
         <after>
-            <!-- Customer log out -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-
             <!-- Delete created data -->
             <deleteData createDataKey="createFirstConfigProduct" stepKey="deleteFirstConfigProduct"/>
             <deleteData createDataKey="createFirstConfigFirstChildProduct" stepKey="deleteFirstConfigFirstChildProduct"/>
@@ -164,42 +161,40 @@
             <deleteData createDataKey="createSecondConfigProductAttribute" stepKey="deleteSecondConfigProductAttribute"/>
             <deleteData createDataKey="secondSimpleCategory" stepKey="deleteSimpleCategory"/>
 
+            <!-- Customer log out -->
+            <!-- Must logout before delete customer otherwise magento fails during logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
 
             <!-- Delete created price rules -->
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRuleForFirstOption">
-                <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
-
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
-        <!-- Create price rule -->
-        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createPriceRule">
-            <argument name="catalogRule" value="CatalogRuleToFixed"/>
-        </actionGroup>
-        <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="addCustomerGroup">
-            <argument name="customerGroupName" value="$$customerGroup.code$$"/>
-        </actionGroup>
 
-        <!-- Save price rule -->
-        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRule"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessage"/>
+        <!-- Create catalog price rule -->
+        <executeJS function="return '$$customerGroup.code$$'" stepKey="customerGroupName"/>
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingCatalogPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+            <argument name="groups" value="&quot;{$customerGroupName}&quot;"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="{{CatalogRuleToFixed.simple_action}}"/>
+            <argument name="discountAmount" value="{{CatalogRuleToFixed.discount_amount}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <!-- Run full reindex and clear caches -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
 
         <!-- Login to storefront from customer -->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Assert first product in category -->
-        <amOnPage url="$$firstSimpleCategory.name$$.html" stepKey="goToFirstCategoryPageStorefront"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkFirstProductPriceInCategory">
             <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
@@ -207,7 +202,7 @@
         </actionGroup>
 
         <!-- Assert second product in category -->
-        <amOnPage url="$$secondSimpleCategory.name$$.html" stepKey="goToSecondCategoryPageStorefront"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$secondSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToSecondCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForSecondCategoryPageLoad"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkSecondProductPriceInCategory">
             <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
@@ -215,7 +210,7 @@
         </actionGroup>
 
         <!-- Assert first product in storefront product page -->
-        <amOnPage url="$$createFirstConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnFirstProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createFirstConfigProduct.custom_attributes[url_key]$$)}}" stepKey="amOnFirstProductPage"/>
         <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
         <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="checkFirstProductPriceInStorefrontProductPage">
             <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
@@ -223,21 +218,33 @@
         </actionGroup>
 
         <!-- Add first product with selected options to the cart -->
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addFirstProductWithSelectedOptionToCart1">
-            <argument name="product" value="$$createFirstConfigProduct$$"/>
-            <argument name="option" value="$$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
-            <argument name="customizableOption" value="{{ProductOptionValueRadioButtons1.title}}"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="firstConfigProductSelectFirstOptionValue">
+            <argument name="attributeLabel" value="$$createFirstConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
         </actionGroup>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabForthProductUpdatedPrice1"/>
+        <actionGroup ref="StorefrontProductPageSelectRadioButtonOptionValueActionGroup" stepKey="firstConfigProductSelectSecondOptionValue">
+            <argument name="attributeLabel" value="{{ProductOptionRadiobuttonWithTwoFixedOptions.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueRadioButtons1.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addFirstConfigProductToCart">
+            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
+        </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addFirstProductWithSelectedOptionToCart2">
-            <argument name="product" value="$$createFirstConfigProduct$$"/>
-            <argument name="option" value="$$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
-            <argument name="customizableOption" value="{{ProductOptionValueRadioButtons3.title}}"/>
+        <!-- Add first product with another selected options to the cart -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="firstConfigProductSelectFirstOptionAnotherValue">
+            <argument name="attributeLabel" value="$$createFirstConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectRadioButtonOptionValueActionGroup" stepKey="firstConfigProductSelectSecondOptionAnotherValue">
+            <argument name="attributeLabel" value="{{ProductOptionRadiobuttonWithTwoFixedOptions.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueRadioButtons3.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addFirstConfigProductWithOtherOptionsToCart">
+            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
         </actionGroup>
 
         <!-- Assert second product in storefront product page -->
-        <amOnPage url="$$createSecondConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnSecondProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSecondConfigProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSecondProductPage"/>
         <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
         <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="checkSecondProductPriceInStorefrontProductPage">
             <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
@@ -245,21 +252,35 @@
         </actionGroup>
 
         <!-- Add second product with selected options to the cart -->
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addSecondProductWithSelectedOptionToCart1">
-            <argument name="product" value="$$createSecondConfigProduct$$"/>
-            <argument name="option" value="$$createSecondConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
-            <argument name="customizableOption" value="{{ProductOptionValueRadioButtons1.title}}"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="secondConfigProductSelectFirstOptionValue">
+            <argument name="attributeLabel" value="$$createSecondConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createSecondConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectRadioButtonOptionValueActionGroup" stepKey="secondConfigProductSelectSecondOptionValue">
+            <argument name="attributeLabel" value="{{ProductOptionRadiobuttonWithTwoFixedOptions.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueRadioButtons1.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSecondConfigProductToCart">
+            <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addSecondProductWithSelectedOptionToCart2">
-            <argument name="product" value="$$createSecondConfigProduct$$"/>
-            <argument name="option" value="$$createSecondConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
-            <argument name="customizableOption" value="{{ProductOptionValueRadioButtons3.title}}"/>
+        <!-- Add second product with another selected options to the cart -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="secondConfigProductSelectFirstOptionAnotherValue">
+            <argument name="attributeLabel" value="$$createSecondConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$createSecondConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectRadioButtonOptionValueActionGroup" stepKey="secondConfigProductSelectSecondOptionAnotherValue">
+            <argument name="attributeLabel" value="{{ProductOptionRadiobuttonWithTwoFixedOptions.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueRadioButtons3.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSecondConfigProductWithOtherOptionsToCart">
+            <argument name="productName" value="$$createSecondConfigProduct.name$$"/>
         </actionGroup>
 
         <!--Assert products prices in the cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="waitForCartFullyLoaded"/>
         <see userInput="$210.69" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForFirstProductOption"/>
         <see userInput="$120.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForSecondProductOption"/>
         <see userInput="$210.69" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createSecondConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertSecondProductPriceForFirstProductOption"/>
