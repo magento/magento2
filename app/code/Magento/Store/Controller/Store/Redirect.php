@@ -61,13 +61,13 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         \Magento\Framework\Session\Generic $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($context);
         $this->storeRepository = $storeRepository;
         $this->storeResolver = $storeResolver;
         $this->hashGenerator = $hashGenerator;
-        $this->storeManager = $storeManager;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -101,7 +101,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             $this->_redirect->redirect($this->_response, $currentStore->getBaseUrl());
         } else {
             $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
-
             $query = [
                 '___from_store' => $fromStore->getCode(),
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
