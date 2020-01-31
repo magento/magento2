@@ -136,6 +136,7 @@
         <data key="visibility">4</data>
         <data key="status">1</data>
         <data key="quantity">1000</data>
+        <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
     <entity name="SimpleProduct3" type="product">
