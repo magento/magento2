@@ -15,6 +15,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {

@@ -121,6 +121,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
     /**
      * @return string
+     * @since 101.1.0
      */
     public function getConfigSearchParamsJson()
     {

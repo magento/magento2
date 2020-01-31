@@ -30,10 +30,10 @@ $formNameEscaped = $block->escapeHtmlAttr($block->getFormName());
 $element = $block->getElement();
 $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
-<div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"
+<div id="<?= /* @noEscape */ $block->getHtmlId() ?>"
      class="gallery"
      data-mage-init='{"openVideoModal":{}}'
-     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
+     data-parent-component="<?= $block->escapeHtmlAttr($block->getData('config/parentComponent')) ?>"
      data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
      data-types='<?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes()) ?>'
 >
@@ -55,7 +55,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                type="hidden"
                value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
     <?php endforeach; ?>
-    <script id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>-template" data-template="image" type="text/x-magento-template">
+    <script id="<?= /* @noEscape */ $block->getHtmlId() ?>-template" data-template="image" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
              data-role="image">
             <input type="hidden"

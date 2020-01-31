@@ -8,7 +8,7 @@
 ?>
 <?php if ($block->canDisplayGiftmessage()) : ?>
     <?php $_required = $block->getMessage()->getMessage() != '' ?>
-    <div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>" class="admin__page-section-content giftmessage-whole-order-container">
+    <div id="<?= /* @noEscape */ $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
         <form class="entry-edit form-inline" id="<?= $block->escapeHtmlAttr($block->getFieldId('form')) ?>" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
             <fieldset class="admin__fieldset">
                 <legend class="admin__legend"><span><?= $block->escapeHtml(__('Gift Message for the Entire Order')) ?></span></legend>
@@ -26,7 +26,7 @@
                         <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
                                id="<?= $block->escapeHtmlAttr($block->getFieldId('sender')) ?>"
                                name="<?= $block->escapeHtmlAttr($block->getFieldName('sender')) ?>"
-                               value="<?= $block->escapeHtml($block->getMessage()->getSender()) ?>"/>
+                               value="<?= $block->escapeHtmlAttr($block->getMessage()->getSender()) ?>"/>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@
                         <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
                                id="<?= $block->escapeHtmlAttr($block->getFieldId('recipient')) ?>"
                                name="<?= $block->escapeHtmlAttr($block->getFieldName('recipient')) ?>"
-                               value="<?= $block->escapeHtml($block->getMessage()->getRecipient()) ?>"/>
+                               value="<?= $block->escapeHtmlAttr($block->getMessage()->getRecipient()) ?>"/>
                     </div>
                 </div>
 

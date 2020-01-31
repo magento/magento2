@@ -10,7 +10,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface CustomFilterInterface
 {
@@ -20,7 +20,7 @@ interface CustomFilterInterface
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool Whether the filter was applied
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function apply(Filter $filter, AbstractDb $collection);
 }
