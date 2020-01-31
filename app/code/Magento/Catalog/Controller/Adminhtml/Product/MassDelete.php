@@ -8,15 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Ui\Component\MassAction\Filter;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -87,11 +85,8 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
                 $this->productRepository->delete($product);
                 $productDeleted++;
             } catch (LocalizedException $exception) {
-                $this->messageManager->addErrorMessage((string)$exception); /** @FIXME Temporary for Debugging purposes */
                 $this->logger->error($exception->getLogMessage());
                 $productDeletedError++;
-            } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage((string)$e); /** @FIXME Temporary for Debugging purposes */
             }
         }
 
