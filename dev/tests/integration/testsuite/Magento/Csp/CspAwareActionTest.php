@@ -31,15 +31,13 @@ class CspAwareActionTest extends AbstractController
     {
         $this->getRequest()->setMethod('GET');
         $this->dispatch('csputil/csp/aware');
-        $headers = '';
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            $headers .= $header->getFieldName() .': ' .$header->getFieldValue() .PHP_EOL;
-        }
+        $header = $this->getResponse()->getHeader('Content-Security-Policy');
+        $this->assertNotEmpty($header);
 
         $this->assertContains(
-            'Content-Security-Policy: script-src https://controller.magento.com'
+            'script-src https://controller.magento.com'
                 .' \'self\' \'sha256-H4RRnauTM2X2Xg/z9zkno1crqhsaY3uKKu97uwmnXXE=\'',
-            $headers
+            $header->getFieldValue()
         );
     }
 }
