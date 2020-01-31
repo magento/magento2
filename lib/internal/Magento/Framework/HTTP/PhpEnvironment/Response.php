@@ -211,7 +211,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
             header($header->toString(), false);
         }
 
-        $this->headersSent = true;
         return $this;
     }
 }

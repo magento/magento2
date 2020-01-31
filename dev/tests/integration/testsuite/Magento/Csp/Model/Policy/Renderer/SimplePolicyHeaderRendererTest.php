@@ -53,13 +53,7 @@ class SimplePolicyHeaderRendererTest extends TestCase
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy-Report-Only'));
-        $contentSecurityPolicyContent = [];
-        if ($header instanceof \ArrayIterator) {
-            foreach ($header as $item) {
-                $contentSecurityPolicyContent[] = $item->getFieldValue();
-            }
-        }
-        $this->assertEquals(['default-src https://magento.com \'self\';'], $contentSecurityPolicyContent);
+        $this->assertEquals('default-src https://magento.com \'self\';', $header->getFieldValue());
     }
 
     /**
@@ -79,15 +73,9 @@ class SimplePolicyHeaderRendererTest extends TestCase
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy-Report-Only'));
-        $contentSecurityPolicyContent = [];
-        if ($header instanceof \ArrayIterator) {
-            foreach ($header as $item) {
-                $contentSecurityPolicyContent[] = $item->getFieldValue();
-            }
-        }
         $this->assertEquals(
-            ['default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;'],
-            $contentSecurityPolicyContent
+            'default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;',
+            $header->getFieldValue()
         );
         $this->assertNotEmpty($reportToHeader = $this->response->getHeader('Report-To'));
         $this->assertNotEmpty($reportData = json_decode("[{$reportToHeader->getFieldValue()}]", true));
