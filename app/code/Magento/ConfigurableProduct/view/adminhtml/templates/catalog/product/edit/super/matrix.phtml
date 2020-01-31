@@ -88,8 +88,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                                     name: $parent.getVariationRowName(variation, 'image')}"/>
                                                 <span><?= $block->escapeHtml(__('Upload Image')) ?></span>
                                                 <input name="image" type="file"
-                                                       data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                                       title="<?= $block->escapeHtml(__('Upload image')) ?>"/>
+                                                       data-url="<?= $block->escapeUrl($block->getImageUploadUrl()) ?>"
+                                                       title="<?= $block->escapeHtmlAttr(__('Upload image')) ?>"/>
                                             <!-- /ko -->
                                         </div>
                                         <!-- ko if: variation.editable -->

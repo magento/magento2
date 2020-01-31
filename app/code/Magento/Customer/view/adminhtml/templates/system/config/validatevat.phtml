@@ -48,7 +48,7 @@ require(['prototype'], function(){
 </script>
 <div class="actions actions-validate-vat">
     <p class="admin__field-error hidden" id="validation_result" style="margin-bottom:10px;"></p>
-    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
+    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>">
         <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
 </div>

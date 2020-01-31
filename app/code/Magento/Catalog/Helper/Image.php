@@ -297,7 +297,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $quality
      * @return $this
-     * @deprecated
+     * @deprecated 103.0.1
      */
     public function setQuality($quality)
     {
@@ -446,7 +446,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 101.1.0 Returns only default placeholder.
+     * @deprecated 102.0.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)

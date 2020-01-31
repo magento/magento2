@@ -158,6 +158,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Composes configuration for js price format
      *
      * @return string
+     * @since 100.2.3
      */
     public function getPriceFormatJson()
     {
@@ -168,6 +169,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Composes configuration for js price
      *
      * @return string
+     * @since 100.2.3
      */
     public function getPricesJson()
     {

@@ -15,14 +15,14 @@ $part = $block->getShowPart();
             <?= /* @noEscape */ $edition ?>
             class="logo">
             <img class="logo-img" src="<?= /* @noEscape */ $block->getViewFileUrl($logoSrc) ?>"
-            alt="<?= $block->escapeHtml(__('Magento Admin Panel')) ?>" title="<?= $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
+            alt="<?= $block->escapeHtmlAttr(__('Magento Admin Panel')) ?>" title="<?= $block->escapeHtmlAttr(__('Magento Admin Panel')) ?>"/>
         </a>
 <?php elseif ($part === 'user') : ?>
         <div class="admin-user admin__action-dropdown-wrap">
             <a
                 href="<?= /* @noEscape */ $block->getUrl('adminhtml/system_account/index') ?>"
                 class="admin__action-dropdown"
-                title="<?= $block->escapeHtml(__('My Account')) ?>"
+                title="<?= $block->escapeHtmlAttr(__('My Account')) ?>"
                 data-mage-init='{"dropdown":{}}'
                 data-toggle="dropdown">
                 <span class="admin__action-dropdown-text">
@@ -35,7 +35,7 @@ $part = $block->getShowPart();
                     <a
                         href="<?= /* @noEscape */ $block->getUrl('adminhtml/system_account/index') ?>"
                         <?= /* @noEscape */ $block->getUiId('user', 'account', 'settings') ?>
-                        title="<?= $block->escapeHtml(__('Account Setting')) ?>">
+                        title="<?= $block->escapeHtmlAttr(__('Account Setting')) ?>">
                         <?= $block->escapeHtml(__('Account Setting')) ?> (<span class="admin-user-name"><?= $block->escapeHtml($block->getUser()->getUserName()) ?></span>)
                     </a>
                 </li>
@@ -43,7 +43,7 @@ $part = $block->getShowPart();
                 <li>
                     <a
                         href="<?= /* @noEscape */ $block->getBaseUrl() ?>"
-                        title="<?= $block->escapeHtml(__('Customer View')) ?>"
+                        title="<?= $block->escapeHtmlAttr(__('Customer View')) ?>"
                         target="_blank" class="store-front">
                         <?= $block->escapeHtml(__('Customer View')) ?>
                     </a>
@@ -52,7 +52,7 @@ $part = $block->getShowPart();
                     <a
                         href="<?= /* @noEscape */ $block->getLogoutLink() ?>"
                         class="account-signout"
-                        title="<?= $block->escapeHtml(__('Sign Out')) ?>">
+                        title="<?= $block->escapeHtmlAttr(__('Sign Out')) ?>">
                         <?= $block->escapeHtml(__('Sign Out')) ?>
                     </a>
                 </li>

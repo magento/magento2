@@ -32,7 +32,9 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<label for="widget_instance[<%- data.id %>][page_group]">Display on <span class="required">*</span></label>'+
         '<?= $block->getDisplayOnSelectHtml() ?>'+
         '<div class="actions">'+
+        <?php //phpcs:disable ?>
         <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
+        <?php //phpcs:enable ?>
         '</div>'+
     '</div>'+
     '<div class="fieldset-wrapper-content">'+
@@ -76,10 +78,10 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<input disabled="disabled" type="hidden" class="product_type_id" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][product_type_id]" value="<?= $block->escapeJs($container['product_type_id']) ?>" />'+
             '<p>' +
                 '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[<%- data.id %>][<?= $block->escapeJs($container['name']) ?>][entities]" value="<%- data.<?= $block->escapeJs($container['name']) ?>_entities %>" readonly="readonly" />&nbsp;' +
-                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?= $block->escapeJs($container['code']) ?>\', \'<?= $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')"  title="<?= $block->escapeJs(__('Open Chooser')) ?>">' +
+                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?= $block->escapeHtmlAttr($block->escapeJs($container['code'])) ?>\', \'<?= $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')"  title="<?= $block->escapeJs(__('Open Chooser')) ?>">' +
                     '<img src="<?= $block->escapeUrl($block->getViewFileUrl('images/rule_chooser_trigger.gif')) ?>" alt="<?= $block->escapeJs(__('Open Chooser')) ?>" />' +
                 '</a>&nbsp;' +
-                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?= $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')" title="<?= $block->escapeJs(__('Apply')) ?>">' +
+                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?= $block->escapeHtmlAttr($block->escapeJs($container['name'])) ?>_ids_<%- data.id %>\')" title="<?= $block->escapeJs(__('Apply')) ?>">' +
                     '<img src="<?= $block->escapeUrl($block->getViewFileUrl('images/rule_component_apply.gif')) ?>" alt="<?= $block->escapeJs(__('Apply')) ?>" />' +
                 '</a>' +
             '</p>'+

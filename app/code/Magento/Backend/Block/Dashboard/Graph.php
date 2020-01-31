@@ -14,6 +14,9 @@ namespace Magento\Backend\Block\Dashboard;
  */
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
+    /**
+     * Chart Api URL
+     */
     const API_URL = 'https://image-charts.com/chart';
 
     /**
@@ -75,7 +78,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Google chart api data encoding
      *
-     * @deprecated since the Google Image Charts API not accessible from March 14, 2019
+     * @deprecated 101.0.2 since the Google Image Charts API not accessible from March 14, 2019
      * @var string
      */
     protected $_encoding = 'e';
