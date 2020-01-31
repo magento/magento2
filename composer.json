@@ -34,7 +34,7 @@
         "colinmollenhour/credis": "1.10.0",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.6",
-        "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1",
+        "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1||~7.1",
         "magento/composer": "~1.5.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
