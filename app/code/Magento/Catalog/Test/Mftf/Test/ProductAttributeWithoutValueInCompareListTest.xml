@@ -11,6 +11,7 @@
     <test name="ProductAttributeWithoutValueInCompareListTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Compare products and their attributes"/>
             <title value="Product attribute without value in compare list test"/>
             <description
                 value="The product attribute that has no value should output 'N/A' on the product comparison page."/>

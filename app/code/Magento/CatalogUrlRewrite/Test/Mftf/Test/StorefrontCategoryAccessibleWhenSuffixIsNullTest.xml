@@ -12,6 +12,7 @@
             <title value="Storefront category is accessible when url suffix is set to null test"/>
             <description value="Check no crash occurs on Category page when catalog/seo/category_url_suffix is set to null"/>
             <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
             <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
         </annotations>

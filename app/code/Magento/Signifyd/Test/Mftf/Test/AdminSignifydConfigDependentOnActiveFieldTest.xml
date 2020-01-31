@@ -10,6 +10,7 @@
     <test name="AdminSignifydConfigDependentOnActiveFieldTest">
         <annotations>
             <features value="Signifyd"/>
+            <stories value="Configure Signifyd"/>
             <title value="Signifyd config dependent on active field" />
             <description value="Signifyd system configs dependent by Enable this Solution field."/>
             <severity value="MINOR"/>

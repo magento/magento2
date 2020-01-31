@@ -10,6 +10,7 @@
     <test name="AdminCardinalCommerceSettingsHiddenTest">
         <annotations>
             <features value="CardinalCommerce"/>
+            <stories value="Configure CardinalCommerce"/>
             <title value="CardinalCommerce settings hidden" />
             <description value="CardinalCommerce config shouldn't be visible if the 3D secure is disabled for Authorize.Net."/>
             <severity value="MINOR"/>

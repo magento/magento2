@@ -11,6 +11,7 @@
     <test name="AdminSetUpWatermarkForSwatchImageTest">
         <annotations>
             <features value="Swatches"/>
+            <stories value="Set up watermark"/>
             <title value="Possibility to set up watermark for a swatch image type"/>
             <description value="Possibility to set up watermark for a swatch image type"/>
             <severity value="MAJOR"/>
