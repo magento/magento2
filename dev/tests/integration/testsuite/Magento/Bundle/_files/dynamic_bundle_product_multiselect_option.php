@@ -9,35 +9,23 @@ use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Api\Data\OptionInterfaceFactory;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
-use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/multiple_products.php';
 
-$objectManager = Bootstrap::getObjectManager();
-/** @var ProductInterfaceFactory $productFactory */
-$productFactory = $objectManager->get(ProductInterfaceFactory::class);
-/** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-$defaultWebsiteId = $websiteRepository->get('base')->getId();
 /** @var ProductExtensionFactory $extensionAttributesFactory */
 $extensionAttributesFactory = $objectManager->get(ProductExtensionFactory::class);
 /** @var OptionInterfaceFactory $optionFactory */
 $optionFactory = $objectManager->get(OptionInterfaceFactory::class);
 /** @var LinkInterfaceFactory $linkFactory */
 $linkFactory = $objectManager->get(LinkInterfaceFactory::class);
-/** @var ProductResource $productResource */
-$productResource = $objectManager->get(ProductResource::class);
 
-$product = $productFactory->create();
-$product->setTypeId(Type::TYPE_BUNDLE)
-    ->setAttributeSetId($product->getDefaultAttributeSetId())
+$bundleProduct = $productFactory->create();
+$bundleProduct->setTypeId(Type::TYPE_BUNDLE)
+    ->setAttributeSetId($bundleProduct->getDefaultAttributeSetId())
     ->setWebsiteIds([$defaultWebsiteId])
     ->setName('Bundle Product')
     ->setSku('bundle_product')
@@ -69,42 +57,41 @@ $product->setTypeId(Type::TYPE_BUNDLE)
         [
             [
                 [
-                    'product_id' => 10,
+                    'product_id' => $product->getId(),
+                    'sku' => $product->getSku(),
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                 ],
                 [
-                    'product_id' => 11,
+                    'product_id' => $product2->getId(),
+                    'sku' => $product2->getSku(),
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                 ],
                 [
-                    'product_id' => 12,
+                    'product_id' => $product3->getId(),
+                    'sku' => $product3->getSku(),
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
-                ]
+                ],
             ]
-
         ]
     );
 
 $options = [];
-foreach ($product->getBundleOptionsData() as $key => $optionData) {
+foreach ($bundleProduct->getBundleOptionsData() as $key => $optionData) {
     $option = $optionFactory->create(['data' => $optionData]);
-    $option->setSku($product->getSku());
+    $option->setSku($bundleProduct->getSku());
     $option->setOptionId(null);
     $links = [];
-    $bundleLinks = $product->getBundleSelectionsData()[$key];
-    $productsSku = $productResource->getProductsSku(array_column($bundleLinks, 'product_id'));
-    foreach ($bundleLinks as $linkKey => $linkData) {
+    foreach ($bundleProduct->getBundleSelectionsData()[$key] as $linkData) {
         $link = $linkFactory->create(['data' => $linkData]);
-        $link->setSku($productsSku[$linkKey]['sku']);
         $links[] = $link;
     }
     $option->setProductLinks($links);
     $options[] = $option;
 }
-$extensionAttributes = $product->getExtensionAttributes() ?: $extensionAttributesFactory->create();
+$extensionAttributes = $bundleProduct->getExtensionAttributes() ?: $extensionAttributesFactory->create();
 $extensionAttributes->setBundleProductOptions($options);
-$product->setExtensionAttributes($extensionAttributes);
-$productRepository->save($product);
+$bundleProduct->setExtensionAttributes($extensionAttributes);
+$productRepository->save($bundleProduct);
