@@ -5,9 +5,8 @@
 
 define([
     'jquery',
-    'mage/storage',
     'mage/url'
-], function ($, storage, urlBuilder) {
+], function ($, urlBuilder) {
     'use strict';
 
     return function (email, deferred) {
@@ -17,7 +16,11 @@ define([
                 email: email
             }
         ).done(function (response) {
-            deferred.resolve(response.subscribed);
+            if (response.errors) {
+                deferred.reject();
+            } else {
+                deferred.resolve(response.subscribed);
+            }
         }).fail(function () {
             deferred.reject();
         });

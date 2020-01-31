@@ -19,6 +19,7 @@ class GuestSubscriptionChecker
      * @var ResourceConnection
      */
     private $resourceConnection;
+
     /**
      * @var StoreManagerInterface
      */
@@ -39,6 +40,7 @@ class GuestSubscriptionChecker
      *
      * @param string $subscriberEmail
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isSubscribed(string $subscriberEmail): bool
     {
@@ -53,9 +55,7 @@ class GuestSubscriptionChecker
                 ->where('customer_id = 0')
                 ->limit(1);
 
-            $result = (bool)$connection->fetchOne($select);
-
-            return $result;
+            return (bool)$connection->fetchOne($select);
         }
 
         return false;

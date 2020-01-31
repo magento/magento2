@@ -6,7 +6,6 @@
 namespace Magento\Newsletter\Controller\Ajax;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
@@ -16,7 +15,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Newsletter subscription status verification controller.
  */
-class Status extends Action\Action implements HttpGetActionInterface
+class Status extends Action\Action implements Action\HttpGetActionInterface
 {
     /**
      * @var EmailAddressValidator
@@ -67,15 +66,11 @@ class Status extends Action\Action implements HttpGetActionInterface
                 $response['subscribed'] = $this->guestSubscriptionChecker->isSubscribed($email);
             }
         } catch (LocalizedException $exception) {
-            $response = [
-                'errors' => true,
-                'message' => $exception->getMessage(),
-            ];
+            $this->logger->error($exception->getMessage());
+            $response['errors'] = true;
         } catch (\Throwable $exception) {
-            $response = [
-                'errors' => true,
-                'message' => __('Something went wrong.'),
-            ];
+            $this->logger->error($exception->getMessage());
+            $response['errors'] = true;
         }
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

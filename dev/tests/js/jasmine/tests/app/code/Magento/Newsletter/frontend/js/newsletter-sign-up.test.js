@@ -33,9 +33,6 @@ define([
         injector.mock(mocks);
         injector.require(['Magento_Newsletter/js/newsletter-sign-up'], function (Constr) {
             obj = new Constr({
-                provider: 'provName',
-                name: '',
-                index: '',
                 submitButton: '#button',
                 signUpElement: '#is_subscribed'
             }, '#email_address');
@@ -67,7 +64,6 @@ define([
         it('Verify Subscription is checked', function () {
             emailElem.val('email@example.com');
             checkbox.prop('checked', true);
-            expect(checkbox.is(':checked')).toBeTruthy();
 
             obj.updateSignUpStatus();
 
@@ -78,7 +74,6 @@ define([
 
         it('Verify sign-up process without email', function () {
             checkbox.prop('checked', false);
-            expect(checkbox.is(':checked')).toBeFalsy();
 
             obj.updateSignUpStatus();
 
@@ -89,7 +84,6 @@ define([
         it('Verify sign-up process with incorrect email', function () {
             emailElem.val('emailexample.com');
             checkbox.prop('checked', false);
-            expect(checkbox.is(':checked')).toBeFalsy();
 
             obj.updateSignUpStatus();
 
@@ -100,7 +94,6 @@ define([
         it('Verify Subscription with correct data', function () {
             emailElem.val('email@example.com');
             checkbox.prop('checked', false);
-            expect(checkbox.is(':checked')).toBeFalsy();
 
             obj.updateSignUpStatus();
 
@@ -113,7 +106,6 @@ define([
             resolveStatus(false);
             emailElem.val('email@example.com');
             checkbox.prop('checked', false);
-            expect(checkbox.is(':checked')).toBeFalsy();
 
             obj.updateSignUpStatus();
 

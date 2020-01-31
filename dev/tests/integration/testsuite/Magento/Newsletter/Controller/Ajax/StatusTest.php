@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller\Ajax;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
@@ -14,25 +15,23 @@ use Magento\TestFramework\TestCase\AbstractController;
  */
 class StatusTest extends AbstractController
 {
-    const STATUS_NOT_SUBSCRIBED = '"subscribed":false';
-
     /**
      * Check newsletter subscription status verification
      *
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      * @dataProvider ajaxSubscriberDataProvider
+     * @param string $expStatus
      * @param string $email
-     * @param string $expected
      *
      * @return void
      */
-    public function testExecute(string $email, string $expected): void
+    public function testExecute(string $expStatus, string $email): void
     {
         $this->getRequest()->setParam('email', $email);
         $this->dispatch('newsletter/ajax/status');
-        $actual  = $this->getResponse()->getBody();
+        $actual = $this->_objectManager->get(Json::class)->unserialize($this->getResponse()->getBody());
 
-        $this->assertContains($expected, $actual);
+        $this->assertEquals($expStatus, $actual['subscribed']);
     }
 
     /**
@@ -44,26 +43,12 @@ class StatusTest extends AbstractController
     public function ajaxSubscriberDataProvider(): array
     {
         return [
-            [
-                '',
-                self::STATUS_NOT_SUBSCRIBED,
-            ],
-            [
-                'sample@email.com',
-                self::STATUS_NOT_SUBSCRIBED,
-            ],
-            [
-                'customer@example.com',
-                self::STATUS_NOT_SUBSCRIBED,
-            ],
-            [
-                'customer_two@example.com',
-                '"subscribed":true',
-            ],
-            [
-                'customer_confirm@example.com',
-                self::STATUS_NOT_SUBSCRIBED,
-            ],
+            [false, ''],
+            [false, 'sample@email.com'],
+            [false, 'customer@example.com'],
+            [true, 'customer_two@example.com'],
+            [false, 'customer_confirm@example.com'],
+            [false, 'invalid_email.com'],
         ];
     }
 }

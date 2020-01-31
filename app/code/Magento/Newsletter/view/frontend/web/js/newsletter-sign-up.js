@@ -6,11 +6,10 @@
 define([
     'jquery',
     'uiElement',
-    'mage/storage',
     'mage/url',
     'subscriptionStatusResolver',
     'mage/validation'
-], function ($, Component, storage, urlBuilder, subscriptionStatusResolver) {
+], function ($, Component, urlBuilder, subscriptionStatusResolver) {
     'use strict';
 
     return Component.extend({
