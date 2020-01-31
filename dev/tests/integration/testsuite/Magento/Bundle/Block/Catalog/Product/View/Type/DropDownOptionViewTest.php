@@ -53,8 +53,8 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and @data-validate = '{required:true}'"
-            . "and //option[span[text() = '%s']]]";
+        return "//select[contains(@id, 'bundle-option') and @data-validate = '{required:true}']"
+            . "/option/span[text() = '%s']";
     }
 
     /**
@@ -62,6 +62,7 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getNotRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and //option[span[text() = '%s']]]";
+        return "//select[contains(@id, 'bundle-option') and not(@data-validate = '{required:true}')]"
+            . "/option/span[text() = '%s']";
     }
 }

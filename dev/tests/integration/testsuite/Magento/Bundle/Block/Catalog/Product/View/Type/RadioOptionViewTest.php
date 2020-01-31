@@ -53,8 +53,8 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getRequiredSelectXpath(): string
     {
-        return "///div[contains(@class, 'choice') and //input[@type='radio'"
-            . "and @data-validate=\"{'validate-one-required-by-name':true}\"] and label//span[text() = '%s']]";
+        return "//input[@type='radio' and contains(@data-validate, 'validate-one-required-by-name')"
+            . "and contains(@class, 'bundle option')]/../label//span[text() = '%s']";
     }
 
     /**
@@ -62,8 +62,7 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getNotRequiredSelectXpath(): string
     {
-        return "//div[contains(@class, 'choice')"
-            . "and //input[@type='radio' and not(@data-validate=\"{'validate-one-required-by-name':true}\")]"
-            . "and label//span[text()='Simple Product']]";
+        return "//input[@type='radio' and not(contains(@data-validate, 'validate-one-required-by-name'))"
+            . "and contains(@class, 'bundle option')]/../label//span[text() = '%s']";
     }
 }

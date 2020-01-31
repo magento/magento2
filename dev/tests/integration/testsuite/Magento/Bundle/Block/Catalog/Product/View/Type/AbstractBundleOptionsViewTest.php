@@ -72,10 +72,9 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
-        $this->selectLabelXpath = "//fieldset[contains(@class, 'fieldset-bundle-options')] //label/span[text() = '%s']";
+        $this->selectLabelXpath = "//fieldset[contains(@class, 'fieldset-bundle-options')]//label/span[text() = '%s']";
         $this->backToProductDetailButtonXpath = "//button[contains(@class, 'back customization')]";
-        $this->titleXpath = "//fieldset[contains(@class, 'bundle-options')"
-            . "and //span[contains(text(), 'Customize %s')]]";
+        $this->titleXpath = "//fieldset[contains(@class, 'bundle-options')]//span[contains(text(), 'Customize %s')]";
         $this->singleOptionXpath = "//input[contains(@class, 'bundle-option') and contains(@type, 'hidden')]";
     }
 
@@ -107,18 +106,28 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
     ): void {
         $product = $this->productRepository->get($sku);
         $result = $this->renderProductOptionsBlock($product);
-        $this->assertEquals(1, Xpath::getElementsCountForXpath($this->backToProductDetailButtonXpath, $result));
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf($this->selectLabelXpath, $optionsSelectLabel), $result)
+            Xpath::getElementsCountForXpath($this->backToProductDetailButtonXpath, $result),
+            "'Back to product details' button doesn't exist on the page"
         );
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf($this->titleXpath, $product->getName()), $result)
+            Xpath::getElementsCountForXpath(sprintf($this->selectLabelXpath, $optionsSelectLabel), $result),
+            'Options select label does not exist on the page'
+        );
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(sprintf($this->titleXpath, $product->getName()), $result),
+            sprintf('Customize %s label does not exist on the page', $product->getName())
         );
         $selectPath = $requiredOption ? $this->getRequiredSelectXpath() : $this->getNotRequiredSelectXpath();
         foreach ($expectedSelectionsNames as $selection) {
-            $this->assertEquals(1, Xpath::getElementsCountForXpath(sprintf($selectPath, $selection), $result));
+            $this->assertEquals(
+                1,
+                Xpath::getElementsCountForXpath(sprintf($selectPath, $selection), $result),
+                sprintf('Option for product named %s does not exist on the page', $selection)
+            );
         }
     }
 
@@ -136,9 +145,14 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
         $this->assertEquals(1, Xpath::getElementsCountForXpath($this->backToProductDetailButtonXpath, $result));
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf($this->selectLabelXpath, $optionsSelectLabel), $result)
+            Xpath::getElementsCountForXpath(sprintf($this->selectLabelXpath, $optionsSelectLabel), $result),
+            'Options select label does not exist on the page'
         );
-        $this->assertEquals(1, Xpath::getElementsCountForXpath($this->singleOptionXpath, $result));
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath($this->singleOptionXpath, $result),
+            'Bundle product options select with single option does not display correctly'
+        );
     }
 
     /**

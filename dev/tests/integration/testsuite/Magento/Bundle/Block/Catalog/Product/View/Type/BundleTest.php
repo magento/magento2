@@ -74,7 +74,7 @@ class BundleTest extends TestCase
      *
      * @return void
      */
-    public function testGetJsonConfig()
+    public function testGetJsonConfig(): void
     {
         $product = $this->updateProduct('bundle-product', ['price_type' => Price::PRICE_TYPE_DYNAMIC]);
         $this->registerProduct($product);
@@ -166,7 +166,7 @@ class BundleTest extends TestCase
         $product->setSalable(true);
         $this->block->setTemplate('Magento_Bundle::catalog/product/view/customize.phtml');
         $result = $this->renderBlockHtml($product);
-        $this->assertEquals('', trim(strip_tags($result)));
+        $this->assertEmpty(trim(strip_tags($result)));
     }
 
     /**

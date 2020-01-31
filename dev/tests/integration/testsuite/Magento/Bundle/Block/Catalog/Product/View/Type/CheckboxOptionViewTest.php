@@ -12,7 +12,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
  *
  * @magentoAppArea frontend
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  */
 class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
 {
@@ -53,8 +53,8 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getRequiredSelectXpath(): string
     {
-        return "//div[contains(@class, 'choice') and //input[@type='checkbox'"
-            . "and contains(@data-validate, 'validate-one-required-by-name')] and label//span[text() = '1 x %s']]";
+        return "//input[@type='checkbox' and contains(@data-validate, 'validate-one-required-by-name')"
+            . "and contains(@class, 'bundle-option')]/../label//span[text() = '1 x %s']";
     }
 
     /**
@@ -62,7 +62,7 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getNotRequiredSelectXpath(): string
     {
-        return  "//div[contains(@class, 'choice') and //input[@type='checkbox'"
-            . "and not(contains(@data-validate, 'validate-one-required-by-name'))] and label//span[text() = '1 x %s']]";
+        return "//input[@type='checkbox' and not(contains(@data-validate, 'validate-one-required-by-name'))"
+            . "and contains(@class, 'bundle-option')]/../label//span[text() = '1 x %s']";
     }
 }

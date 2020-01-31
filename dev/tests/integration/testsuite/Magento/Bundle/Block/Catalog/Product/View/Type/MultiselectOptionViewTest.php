@@ -53,8 +53,8 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and @multiple='multiple' and @data-validate='{required:true}'"
-            . "and //option[span[contains(text(), '%s')]]]";
+        return "//select[contains(@id, 'bundle-option') and @multiple='multiple' and @data-validate='{required:true}']"
+            . "/option/span[text() = '1 x %s']";
     }
 
     /**
@@ -62,7 +62,7 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getNotRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and @multiple='multiple' and"
-            . "not(@data-validate='{required:true}') and //option[span[contains(text(), '%s')]]]";
+        return "//select[contains(@id, 'bundle-option') and @multiple='multiple'"
+            . "and not(@data-validate='{required:true}')]/option/span[text() = '1 x %s']";
     }
 }
