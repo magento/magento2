@@ -16,6 +16,7 @@
         <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{discountCode}}" stepKey="fillFieldDiscountCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="clickToApplyDiscount"/>
         <waitForElement selector="{{DiscountSection.DiscountVerificationMsg}}" time="30" stepKey="waitForDiscountToBeAdded"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingFinished"/>
         <see selector="{{DiscountSection.DiscountVerificationMsg}}" userInput="Your coupon was successfully applied" stepKey="assertDiscountApplyMessage"/>
     </actionGroup>
 </actionGroups>
