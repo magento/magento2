@@ -99,7 +99,8 @@
                 <argument name="option" value="Yes"/>
             </actionGroup>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindexIndices"/>
+            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
+            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
         </before>
 
         <after>
@@ -122,9 +123,8 @@
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
 
-            <!-- TODO: Remove this and change to CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <!-- Need reindex because creating new product attributes break some indices and this may affect other tests in testsuite -->
-            <magentoCLI command="indexer:reindex" stepKey="reindexIndices"/>
+            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
+            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
         </after>
 
         <!--Open category with products and Sort by price desc-->
