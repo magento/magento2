@@ -20,7 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit Test for @see CheckoutCartAddProductObserver
+ * Unit Test for \Magento\Reports\Observer\CheckoutCartAddProductObserver
  */
 class CheckoutCartAddProductObserverTest extends TestCase
 {
@@ -84,7 +84,7 @@ class CheckoutCartAddProductObserverTest extends TestCase
     /**
      * The case when event has to be successfully saved
      */
-    public function testExecute()
+    public function testExecuteExpectsSaveCalledWhenNewProductAdded()
     {
         $this->configureMocksWhenReportsEnabled();
         $this->quoteItemMock->expects($this->once())
@@ -94,8 +94,7 @@ class CheckoutCartAddProductObserverTest extends TestCase
             ->method('getParentItem')
             ->willReturn(null);
 
-        $this->eventSaverMock->expects($this->once())
-            ->method('save');
+        $this->eventSaverMock->expects($this->once())->method('save');
         $this->observer->execute($this->eventObserverMock);
     }
 
@@ -159,8 +158,7 @@ class CheckoutCartAddProductObserverTest extends TestCase
      */
     private function checkOriginalMethodIsNeverExecuted()
     {
-        $this->eventSaverMock->expects($this->never())
-            ->method('save');
+        $this->eventSaverMock->expects($this->never())->method('save');
         $this->observer->execute($this->eventObserverMock);
     }
 }
