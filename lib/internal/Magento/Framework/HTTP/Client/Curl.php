@@ -107,9 +107,9 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_headerCount = 0;
 
     /**
-     * Set request timeout, msec
+     * Set request timeout
      *
-     * @param int $value
+     * @param int $value value in seconds
      * @return void
      */
     public function setTimeout($value)
@@ -423,6 +423,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     public function doError($string)
     {
+        //  phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
     }
 

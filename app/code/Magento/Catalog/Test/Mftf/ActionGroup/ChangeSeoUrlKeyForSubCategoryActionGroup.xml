@@ -16,7 +16,7 @@
             <argument name="value" type="string"/>
         </arguments>
 
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.sectionBody}}" visible="false" stepKey="openSeoSection"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckDefaultValue"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
