@@ -75,7 +75,7 @@
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
 
         <!--Move the third level category under first level category -->
-        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="moveCategory"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree($$createDefaultCategory.name$$)}}" stepKey="moveCategory"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
