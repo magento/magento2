@@ -174,7 +174,7 @@ class MetadataProvider
                 if (isset($options[$column][$key])) {
                     $row[] = $options[$column][$key];
                 } else {
-                    $row[] = '';
+                    $row[] = $key;
                 }
             } else {
                 $row[] = $document->getCustomAttribute($column)->getValue();

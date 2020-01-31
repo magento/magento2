@@ -261,7 +261,7 @@ class MetadataProviderTest extends TestCase
                     ],
                 ],
                 'expected' => [
-                    '',
+                    'key_2',
                 ],
             ],
             [
