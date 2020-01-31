@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * Check bundle product prices.
  *
  * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
+ * @magentoAppIsolation disabled
  * @magentoAppArea frontend
  */
 class BundleProductPriceTest extends TestCase
