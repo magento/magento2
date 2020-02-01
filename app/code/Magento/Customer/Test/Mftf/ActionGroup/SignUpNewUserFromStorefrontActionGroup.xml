@@ -17,7 +17,7 @@
         </arguments>
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="waitForCreateAccountLink">
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="waitForCreateAccountLink"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
         <fillField  stepKey="fillFirstName" userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
         <fillField  stepKey="fillLastName" userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
