@@ -227,8 +227,11 @@ abstract class AbstractFiltersTest extends TestCase
 
         foreach ($products as $productSku => $stringValue) {
             $product = $this->productRepository->get($productSku, false, $storeId, true);
+            $productValue = $attribute->usesSource()
+                ? $attribute->getSource()->getOptionId($stringValue)
+                : $stringValue;
             $product->addData(
-                [$attribute->getAttributeCode() => $attribute->getSource()->getOptionId($stringValue)]
+                [$attribute->getAttributeCode() => $productValue]
             );
             $this->productRepository->save($product);
         }
