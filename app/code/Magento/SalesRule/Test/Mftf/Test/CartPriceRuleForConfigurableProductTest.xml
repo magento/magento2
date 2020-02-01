@@ -122,13 +122,13 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!-- Add the first product to the cart -->
-        <amOnPage url="$$createConfigChildProduct1.urlKey$$.html" stepKey="goToProductPage1"/>
+        <amOnPage url="$$createConfigChildProduct1.sku$$.html" stepKey="goToProductPage1"/>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
         <waitForPageLoad stepKey="waitForAddToCart1"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!-- Add the second product to the cart -->
-        <amOnPage url="$$createConfigChildProduct2.urlKey$$.html" stepKey="goToProductPage2"/>
+        <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
         <waitForPageLoad stepKey="waitForAddToCart2"/>
