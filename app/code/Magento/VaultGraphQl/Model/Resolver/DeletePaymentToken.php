@@ -9,7 +9,6 @@ namespace Magento\VaultGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -57,10 +56,6 @@ class DeletePaymentToken implements ResolverInterface
         /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
-
-        if (!isset($args['public_hash'])) {
-            throw new GraphQlInputException(__('Specify the "public_hash" value.'));
         }
 
         $token = $this->paymentTokenManagement->getByPublicHash($args['public_hash'], $context->getUserId());

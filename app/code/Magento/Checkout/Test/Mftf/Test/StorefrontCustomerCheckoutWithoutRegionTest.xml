@@ -25,12 +25,12 @@
             </createData>
             <createData entity="Simple_GB_Customer" stepKey="createCustomer"/>
             <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
-            <actionGroup ref="SelectCountriesWithRequiredRegion" stepKey="setCustomCountryWithRequiredRegion">
+            <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setCustomCountryWithRequiredRegion">
                 <argument name="countries" value="CustomCountryWithRequiredRegion"/>
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="SelectCountriesWithRequiredRegion" stepKey="setDefaultCountriesWithRequiredRegion">
+            <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setDefaultCountriesWithRequiredRegion">
                 <argument name="countries" value="DefaultCountriesWithRequiredRegions"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -43,7 +43,7 @@
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

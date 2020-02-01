@@ -30,7 +30,7 @@
             <deleteData  createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
         <!-- Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

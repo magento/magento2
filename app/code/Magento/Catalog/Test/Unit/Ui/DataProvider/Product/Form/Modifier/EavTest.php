@@ -38,9 +38,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Framework\Event\ManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class EavTest
+ * Class to test Data provider for eav attributes on product page
  *
  * @method Eav getModel
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -49,142 +50,142 @@ use Magento\Framework\Event\ManagerInterface;
 class EavTest extends AbstractModifierTest
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavValidationRules|MockObject
      */
     private $eavValidationRulesMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var GroupCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupCollectionFactory|MockObject
      */
     private $groupCollectionFactoryMock;
 
     /**
-     * @var GroupCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupCollection|MockObject
      */
     private $groupCollectionMock;
 
     /**
-     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var Group|MockObject
      */
     private $groupMock;
 
     /**
-     * @var EavAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttribute|MockObject
      */
     private $attributeMock;
 
     /**
-     * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityType|MockObject
      */
     private $entityTypeMock;
 
     /**
-     * @var AttributeCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCollectionFactory|MockObject
      */
     private $attributeCollectionFactoryMock;
 
     /**
-     * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCollection|MockObject
      */
     private $attributeCollectionMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var FormElementMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormElementMapper|MockObject
      */
     private $formElementMapperMock;
 
     /**
-     * @var MetaPropertiesMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetaPropertiesMapper|MockObject
      */
     private $metaPropertiesMapperMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var ProductAttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeGroupRepositoryInterface|MockObject
      */
     private $attributeGroupRepositoryMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var SortOrderBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortOrderBuilder|MockObject
      */
     private $sortOrderBuilderMock;
 
     /**
-     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var AttributeGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupInterface|MockObject
      */
     private $attributeGroupMock;
 
     /**
-     * @var SearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchResultsInterface|MockObject
      */
     private $searchResultsMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     private $eavAttributeMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|MockObject
      */
     protected $currencyMock;
 
     /**
-     * @var CurrencyLocale|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyLocale|MockObject
      */
     protected $currencyLocaleMock;
 
     /**
-     * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeInterface|MockObject
      */
     protected $productAttributeMock;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|MockObject
      */
     protected $arrayManagerMock;
 
     /**
-     * @var EavAttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeFactory|MockObject
      */
     protected $eavAttributeFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
@@ -457,8 +458,10 @@ class EavTest extends AbstractModifierTest
      * @param string|null $attrValue
      * @param array $expected
      * @param bool $locked
-     * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
-     * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
+     * @param string|null $frontendInput
+     * @param array $expectedCustomize
+     * @covers       \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
+     * @covers       \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
     public function testSetupAttributeMetaDefaultAttribute(
@@ -466,7 +469,9 @@ class EavTest extends AbstractModifierTest
         bool $productRequired,
         $attrValue,
         array $expected,
-        $locked = false
+        bool $locked = false,
+        string $frontendInput = null,
+        array $expectedCustomize = []
     ) : void {
         $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
@@ -492,6 +497,7 @@ class EavTest extends AbstractModifierTest
         $this->productAttributeMock->method('getDefaultValue')->willReturn('required_value');
         $this->productAttributeMock->method('getAttributeCode')->willReturn('code');
         $this->productAttributeMock->method('getValue')->willReturn('value');
+        $this->productAttributeMock->method('getFrontendInput')->willReturn($frontendInput);
 
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->setMethods(['getValue'])
@@ -527,14 +533,16 @@ class EavTest extends AbstractModifierTest
                     }
                 )
             )
-            ->willReturn($expected);
+            ->willReturn($expected + $expectedCustomize);
 
         $this->arrayManagerMock->method('get')->willReturn([]);
         $this->arrayManagerMock->method('exists')->willReturn(true);
 
+        $actual = $this->eav->setupAttributeMeta($this->productAttributeMock, $groupCode, $sortOrder);
+
         $this->assertEquals(
-            $expected,
-            $this->eav->setupAttributeMeta($this->productAttributeMock, $groupCode, $sortOrder)
+            $expected + $expectedCustomize,
+            $actual
         );
     }
 
@@ -666,7 +674,30 @@ class EavTest extends AbstractModifierTest
                     'sortOrder' => 0,
                     '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
-            ]
+            ],
+            'datetime_null_prod_not_new_and_required' => [
+                'productId' => 1,
+                'productRequired' => true,
+                'attrValue' => 'val',
+                'expected' => [
+                    'dataType' => 'datetime',
+                    'formElement' => 'datetime',
+                    'visible' => null,
+                    'required' => true,
+                    'notice' => null,
+                    'default' => null,
+                    'label' => new Phrase(null),
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
+                ],
+                'locked' => false,
+                'frontendInput' => 'datetime',
+                'expectedCustomize' => ['arguments' => ['data' => ['config' => ['options' => ['showsTime' => 1]]]]],
+            ],
         ];
     }
 }
