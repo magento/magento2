@@ -41,6 +41,7 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
             <!-- Fill out form for a new user with address -->
             <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
