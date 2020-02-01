@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Place extends Payment implements HttpPostActionInterface
 {
