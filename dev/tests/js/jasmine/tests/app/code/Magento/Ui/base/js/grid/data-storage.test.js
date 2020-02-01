@@ -480,12 +480,10 @@ define([
                         totalRecords: 3,
                         errorMessage: ''
                     };
-
-                    model = new DataStorage({
-                        dataScope: 'magento',
-                        cachedRequestDelay: 0
-                    });
-
+                model = new DataStorage({
+                    dataScope: 'magento',
+                    cachedRequestDelay: 0
+                });
                 spyOn(_, 'delay');
                 model.getRequestData(request);
                 expect(_.delay).not.toHaveBeenCalled();
