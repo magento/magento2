@@ -16,7 +16,7 @@ use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
- * Class Links
+ * Grid class to add links
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Links
@@ -162,7 +162,7 @@ class Links
                     'name' => $this->downloadableFile->getFileFromPathFile($sampleFile),
                     'size' => $this->downloadableFile->getFileSize($file),
                     'status' => 'old',
-                    'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                    'url' => $this->urlBuilder->getUrl(
                         'adminhtml/downloadable_product_edit/link',
                         ['id' => $link->getId(), 'type' => 'sample', '_secure' => true]
                     ),
@@ -191,7 +191,7 @@ class Links
                     'name' => $this->downloadableFile->getFileFromPathFile($linkFile),
                     'size' => $this->downloadableFile->getFileSize($file),
                     'status' => 'old',
-                    'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                    'url' => $this->urlBuilder->getUrl(
                         'adminhtml/downloadable_product_edit/link',
                         ['id' => $link->getId(), 'type' => 'link', '_secure' => true]
                     ),

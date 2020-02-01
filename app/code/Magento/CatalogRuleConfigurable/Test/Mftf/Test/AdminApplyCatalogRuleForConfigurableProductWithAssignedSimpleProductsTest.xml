@@ -11,14 +11,14 @@
         <annotations>
             <features value="CatalogRuleConfigurable"/>
             <stories value="Apply catalog price rule"/>
-            <title value="Apply catalog rule for configurable product with assigned simple products"/>
-            <description value="Admin should be able to apply catalog rule for configurable product with assigned simple products"/>
+            <title value="DEPRECATED. Apply catalog rule for configurable product with assigned simple products"/>
+            <description value="DEPRECATED. Admin should be able to apply catalog rule for configurable product with assigned simple products"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14063"/>
             <group value="catalogRuleConfigurable"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use AdminApplyCatalogRuleForConfigurableProductWithAssignedSimpleProducts2Test instead</issueId>
             </skip>
         </annotations>
         <before>
@@ -258,7 +258,7 @@
         </actionGroup>
 
         <!--Assert products prices in the cart -->
-        <amOnPage url="/checkout/cart/" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <see userInput="$210.69" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForFirstProductOption"/>
         <see userInput="$120.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForSecondProductOption"/>
