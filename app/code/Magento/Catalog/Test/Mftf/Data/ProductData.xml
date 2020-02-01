@@ -239,7 +239,7 @@
     </entity>
     <entity name="ApiSimpleOutOfStock" type="product2">
         <data key="name" unique="suffix">Api Simple Out Of Stock Product</data>
-        <data key="sku" unique="suffix">apisimpleproduct</data>
+        <data key="sku" unique="suffix">api-simple-product</data>
         <data key="urlKey" unique="suffix">api-simple-product</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
@@ -251,7 +251,7 @@
     </entity>
     <entity name="ApiSimpleOne" type="product2">
         <data key="name" unique="suffix">Api Simple Product</data>
-        <data key="sku" unique="suffix">apisimpleproduct</data>
+        <data key="sku" unique="suffix">api-simple-product</data>
         <data key="urlKey" unique="suffix">api-simple-product</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
@@ -267,7 +267,7 @@
     </entity>
     <entity name="ApiSimpleOneHidden" type="product2">
         <data key="name" unique="suffix">Api Simple Product</data>
-        <data key="sku" unique="suffix">apisimpleproduct</data>
+        <data key="sku" unique="suffix">api-simple-product</data>
         <data key="urlKey" unique="suffix">api-simple-product</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
@@ -280,7 +280,7 @@
     </entity>
     <entity name="ApiSimpleTwo" type="product2">
         <data key="name" unique="suffix">Api Simple Product Two</data>
-        <data key="sku" unique="suffix">apisimpleproducttwo</data>
+        <data key="sku" unique="suffix">api-simple-product-two</data>
         <data key="urlKey" unique="suffix">api-simple-product-two</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
