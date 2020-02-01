@@ -49,16 +49,26 @@ class TemplateHintsStatusCommandTest extends TestCase
     }
 
     /**
-     * Verify execution
+     * Verify ScopeConfigInterface instance
      */
-    public function testExecute()
+    public function testScopeConfigInterfaceInstance()
     {
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
+        $this->assertInstanceOf(ScopeConfigInterface::class, $this->scopeConfigMock);
+    }
 
-        $this->assertEquals(
-            Cli::RETURN_SUCCESS,
-            $tester->getStatusCode()
-        );
+    /**
+     * Verify ReinitableConfigInterface instance
+     */
+    public function testReinitableConfigInterfaceInstance()
+    {
+        $this->assertInstanceOf(ReinitableConfigInterface::class, $this->reinitableConfigMock);
+    }
+
+    /**
+     * Verify TemplateHintsStatusCommand instance
+     */
+    public function testCommandInstance()
+    {
+        $this->assertInstanceOf(TemplateHintsStatusCommand::class, $this->command);
     }
 }
