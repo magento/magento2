@@ -6,8 +6,8 @@
 namespace Magento\Newsletter\Controller\Ajax;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 use Magento\Newsletter\Model\GuestSubscriptionChecker;
 use Psr\Log\LoggerInterface;
@@ -65,15 +65,12 @@ class Status extends Action\Action implements Action\HttpGetActionInterface
             if (!empty($email) && $this->emailAddressValidator->isValid($email)) {
                 $response['subscribed'] = $this->guestSubscriptionChecker->isSubscribed($email);
             }
-        } catch (LocalizedException $exception) {
-            $this->logger->error($exception->getMessage());
-            $response['errors'] = true;
         } catch (\Throwable $exception) {
             $this->logger->error($exception->getMessage());
             $response['errors'] = true;
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         return $resultJson->setData($response);

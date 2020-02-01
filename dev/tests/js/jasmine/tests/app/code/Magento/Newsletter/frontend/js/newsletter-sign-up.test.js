@@ -16,9 +16,13 @@ define([
         checkbox,
         emailElem,
         button,
-        resolveStatus = ko.observable(true),
+        response = ko.observable({}),
         resolverMock = jasmine.createSpy('subscription-status-resolver', function (email, deferred) {
-            deferred.resolve(resolveStatus());
+            if (response().errors || !response().subscribed) {
+                deferred.reject();
+            } else {
+                deferred.resolve();
+            }
         }).and.callThrough(),
         mocks = {
             'Magento_Newsletter/js/subscription-status-resolver': resolverMock
@@ -61,7 +65,7 @@ define([
             expect(typeof obj.element).toEqual('string');
         });
 
-        it('Verify Subscription is checked', function () {
+        it('Check sign-up process when Subscription is checked', function () {
             emailElem.val('email@example.com');
             checkbox.prop('checked', true);
 
@@ -72,7 +76,7 @@ define([
             expect(checkbox.is(':checked')).toBeTruthy();
         });
 
-        it('Verify sign-up process without email', function () {
+        it('Check sign-up process without email', function () {
             checkbox.prop('checked', false);
 
             obj.updateSignUpStatus();
@@ -81,7 +85,7 @@ define([
             expect(checkbox.is(':checked')).toBeFalsy();
         });
 
-        it('Verify sign-up process with incorrect email', function () {
+        it('Check sign-up process with incorrect email', function () {
             emailElem.val('emailexample.com');
             checkbox.prop('checked', false);
 
@@ -91,7 +95,11 @@ define([
             expect(checkbox.is(':checked')).toBeFalsy();
         });
 
-        it('Verify Subscription with correct data', function () {
+        it('Check Subscription with correct data', function () {
+            response({
+                subscribed: true,
+                errors: false
+            });
             emailElem.val('email@example.com');
             checkbox.prop('checked', false);
 
@@ -102,8 +110,25 @@ define([
             expect(button.is(':disabled')).toBeFalsy();
         });
 
-        it('Verify sign-up process with non-subscribed email', function () {
-            resolveStatus(false);
+        it('Check sign-up process with non-subscribed email', function () {
+            response({
+                subscribed: false,
+                errors: false
+            });
+            emailElem.val('email@example.com');
+            checkbox.prop('checked', false);
+
+            obj.updateSignUpStatus();
+
+            expect(resolverMock).toHaveBeenCalled();
+            expect(checkbox.is(':checked')).toBeFalsy();
+        });
+
+        it('Check sign-up process with errors', function () {
+            response({
+                subscribed: true,
+                errors: true
+            });
             emailElem.val('email@example.com');
             checkbox.prop('checked', false);
 

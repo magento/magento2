@@ -16,10 +16,10 @@ define([
                 email: email
             }
         ).done(function (response) {
-            if (response.errors) {
+            if (response.errors || !response.subscribed) {
                 deferred.reject();
             } else {
-                deferred.resolve(response.subscribed);
+                deferred.resolve();
             }
         }).fail(function () {
             deferred.reject();

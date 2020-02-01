@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller\Ajax;
 
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
@@ -15,6 +15,20 @@ use Magento\TestFramework\TestCase\AbstractController;
  */
 class StatusTest extends AbstractController
 {
+    /**
+     * @var SerializerInterface
+     */
+    private $json;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->json = $this->_objectManager->get(SerializerInterface::class);
+    }
+
     /**
      * Check newsletter subscription status verification
      *
@@ -29,7 +43,7 @@ class StatusTest extends AbstractController
     {
         $this->getRequest()->setParam('email', $email);
         $this->dispatch('newsletter/ajax/status');
-        $actual = $this->_objectManager->get(Json::class)->unserialize($this->getResponse()->getBody());
+        $actual = $this->json->unserialize($this->getResponse()->getBody());
 
         $this->assertEquals($expStatus, $actual['subscribed']);
     }
@@ -43,12 +57,11 @@ class StatusTest extends AbstractController
     public function ajaxSubscriberDataProvider(): array
     {
         return [
-            [false, ''],
-            [false, 'sample@email.com'],
-            [false, 'customer@example.com'],
-            [true, 'customer_two@example.com'],
-            [false, 'customer_confirm@example.com'],
-            [false, 'invalid_email.com'],
+            'empty_string' => [false, ''],
+            'unsubscribed_email' => [false, 'sample@email.com'],
+            'registered_email' => [false, 'customer@example.com'],
+            'subscribed_email' => [true, 'customer_two@example.com'],
+            'invalid_email' => [false, 'invalid_email.com'],
         ];
     }
 }
