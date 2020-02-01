@@ -52,8 +52,7 @@
             <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
             <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>
             <!-- Delete data -->

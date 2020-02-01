@@ -21,6 +21,7 @@
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Delete configurable product -->

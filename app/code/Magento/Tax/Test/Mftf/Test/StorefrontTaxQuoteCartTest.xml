@@ -275,6 +275,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -385,6 +387,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
