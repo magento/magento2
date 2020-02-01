@@ -6,9 +6,11 @@
 /*eslint max-nested-callbacks: 0*/
 /*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
 define([
+    'jquery',
     'mageUtils',
+    'underscore',
     'Magento_Ui/js/grid/data-storage'
-], function (utils, DataStorage) {
+], function ($, utils, _, DataStorage) {
     'use strict';
 
     describe('Magento_Ui/js/grid/data-storage', function () {
@@ -322,7 +324,12 @@ define([
 
         describe('"updateData" method', function () {
             var model = new DataStorage({
-                dataScope: 'magento'
+                dataScope: 'magento',
+                requestConfig: {
+                    url: 'magento.com',
+                    method: 'GET',
+                    dataType: 'json'
+                }
             });
 
             it('Check for defined ', function () {
@@ -342,6 +349,83 @@ define([
                 }];
 
                 expect(model.updateData(data)).toBeTruthy();
+            });
+        });
+
+        describe('"requestData" method', function () {
+            var model = new DataStorage({
+                dataScope: 'magento'
+            });
+
+            it('Check for defined', function () {
+                expect(model.hasOwnProperty('requestData')).toBeDefined();
+            });
+
+            it('Check method type', function () {
+                var type = typeof model.requestData;
+
+                expect(type).toEqual('function');
+            });
+
+            it('Check Ajax request', function () {
+                var params = {
+                    namespace: 'magento',
+                    search: '',
+                    filters: {
+                        store_id: 0
+                    },
+                    sorting: {},
+                    paging: {}
+                },
+                query = utils.copy(params);
+
+                spyOn(model, 'onRequestComplete');
+                spyOn($, 'ajax').and.callFake(function () {
+                    return {
+                        /**
+                         * Success result for ajax request
+                         */
+                        done: function () {
+                            model.onRequestComplete(model, query);
+                        }
+                    };
+                });
+                model.requestData(params);
+                expect($.ajax).toHaveBeenCalled();
+                expect(model.onRequestComplete).toHaveBeenCalled();
+            });
+        });
+
+        describe('"getRequest" method', function () {
+            var model = new DataStorage({
+                dataScope: 'magento'
+            });
+
+            it('Check for defined', function () {
+                expect(model.hasOwnProperty('getRequest')).toBeDefined();
+            });
+
+            it('Check method', function () {
+                var type = typeof model.getRequest;
+
+                expect(type).toEqual('function');
+            });
+
+            it('check "getRequest" has been executed', function () {
+                var params = {
+                    namespace: 'magento',
+                    search: '',
+                    sorting: {},
+                    paging: {}
+                };
+
+                model._requests.push({
+                    ids: ['1'],
+                    params: params,
+                    totalRecords: 1,
+                    errorMessage: ''
+                });
+                expect(model.getRequest(params)).toBeTruthy();
             });
         });
 
@@ -366,6 +450,45 @@ define([
                 };
 
                 expect(model.getRequestData(request)).toBeTruthy();
+            });
+
+            it('check "getByIds" has been executed', function () {
+                var request = {
+                    ids: [1,2,3]
+                };
+
+                spyOn(model, 'getByIds');
+                model.getRequestData(request);
+                expect(model.getByIds).toHaveBeenCalled();
+            });
+
+            it('check "delay" function has been executed', function () {
+                var request = {
+                    ids: [1,2,3],
+                    totalRecords: 3,
+                    errorMessage: ''
+                };
+
+                spyOn(_, 'delay');
+                model.getRequestData(request);
+                expect(_.delay).toHaveBeenCalled();
+            });
+
+            it('check "delay" function has not been executed', function () {
+                var request = {
+                        ids: [1,2,3],
+                        totalRecords: 3,
+                        errorMessage: ''
+                    };
+
+                    model = new DataStorage({
+                        dataScope: 'magento',
+                        cachedRequestDelay: 0
+                    });
+
+                spyOn(_, 'delay');
+                model.getRequestData(request);
+                expect(_.delay).not.toHaveBeenCalled();
             });
         });
 
@@ -531,7 +654,9 @@ define([
                     paging: {}
                 };
 
-                model.wasRequested(params);
+                spyOn(model, 'getRequest').and.callFake(function () {
+                    return false;
+                });
                 expect(model.wasRequested(params)).toBeFalsy();
             });
         });
@@ -558,7 +683,7 @@ define([
                         entity_id: '1'
                     }]
                 },
-params = {
+                params = {
                     namespace: 'magento',
                     search: '',
                     sorting: {},
