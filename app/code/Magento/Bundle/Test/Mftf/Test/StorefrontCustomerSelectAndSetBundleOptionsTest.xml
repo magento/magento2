@@ -91,6 +91,9 @@
 
         <!-- Save product and go to storefront -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexerAfterBundle"/>
+
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
