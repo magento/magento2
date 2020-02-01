@@ -23,6 +23,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
 
+            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
@@ -92,6 +93,7 @@
         <!-- Save product and go to storefront -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
+        <wait stepKey="waitBeforeIndexerAfterBundle" time="60"/>
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexerAfterBundle"/>
 
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>

@@ -52,6 +52,8 @@
             <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
             <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>

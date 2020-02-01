@@ -21,6 +21,8 @@
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>

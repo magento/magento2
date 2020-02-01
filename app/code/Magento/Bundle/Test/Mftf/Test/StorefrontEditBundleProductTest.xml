@@ -65,6 +65,7 @@
         <click stepKey="saveProductBundle" selector="{{AdminProductFormActionSection.saveButton}}"/>
         <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
+        <wait stepKey="waitBeforeIndexer" time="60"/>
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!-- Go to the storefront bundled product page -->

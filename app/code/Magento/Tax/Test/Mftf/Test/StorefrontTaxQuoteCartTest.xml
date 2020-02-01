@@ -277,6 +277,7 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
+            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
@@ -389,6 +390,7 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
+            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>

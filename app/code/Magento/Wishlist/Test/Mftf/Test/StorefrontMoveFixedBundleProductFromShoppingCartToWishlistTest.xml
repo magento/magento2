@@ -43,8 +43,9 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+
+            <wait stepKey="waitBeforeIndexer" time="60"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>
             <!-- Delete data -->
