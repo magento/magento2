@@ -218,6 +218,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ['in' => $this->getStatusFilters($product)]
             );
 
+            $collection->getSelect()
+                ->joinInner(
+                    'cataloginventory_stock_item',
+                    'e.entity_id=cataloginventory_stock_item.product_id AND cataloginventory_stock_item.is_in_stock ="1"',
+                    ['is_in_stock']
+                );
+                
             foreach ($collection as $item) {
                 $associatedProducts[] = $item;
             }
