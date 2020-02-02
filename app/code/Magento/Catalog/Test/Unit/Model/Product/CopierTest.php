@@ -197,6 +197,9 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $duplicateMock->expects($this->once())->method('setCreatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setUpdatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setId')->with(null);
+        $duplicateMock->expects($this->once())->method('setMetaTitle')->with(null);
+        $duplicateMock->expects($this->once())->method('setMetaKeyword')->with(null);
+        $duplicateMock->expects($this->once())->method('setMetaDescription')->with(null);
         $duplicateMock->expects($this->atLeastOnce())->method('getStoreIds')->willReturn([]);
         $duplicateMock->expects($this->atLeastOnce())->method('setData')->willReturn($duplicateMock);
         $this->copyConstructorMock->expects($this->once())->method('build')->with($this->productMock, $duplicateMock);

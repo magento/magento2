@@ -78,6 +78,9 @@ class Copier
         $productData = $this->removeStockItem($productData);
         $duplicate->setData($productData);
         $duplicate->setOptions([]);
+        $duplicate->setMetaTitle(null);
+        $duplicate->setMetaKeyword(null);
+        $duplicate->setMetaDescription(null);
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
         $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
@@ -89,10 +92,6 @@ class Copier
         $this->setDefaultUrl($product, $duplicate);
         $this->setStoresUrl($product, $duplicate);
         $this->getOptionRepository()->duplicate($product, $duplicate);
-        $product->getResource()->duplicate(
-            $product->getData($metadata->getLinkField()),
-            $duplicate->getData($metadata->getLinkField())
-        );
         return $duplicate;
     }
 
