@@ -98,6 +98,11 @@ class Options
             return false;
         }
         $result = [];
+
+        if (substr($options, 0, 1) === ";") {
+            $result = array_merge([' ' => ' '], $result);
+        }
+
         $options = array_filter(explode(';', $options));
         foreach ($options as $value) {
             $value = $this->escaper->escapeHtml(trim($value));
