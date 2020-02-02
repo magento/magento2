@@ -94,7 +94,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -132,7 +132,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -187,7 +187,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $prices)
     {
@@ -316,6 +316,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
         $affectedIds = [];
 
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $productIds) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $affectedIds = array_merge($affectedIds, array_keys($productIds));
         }
 
