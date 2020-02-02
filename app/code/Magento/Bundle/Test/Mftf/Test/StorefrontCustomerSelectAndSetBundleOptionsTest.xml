@@ -23,7 +23,6 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
 
-            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>

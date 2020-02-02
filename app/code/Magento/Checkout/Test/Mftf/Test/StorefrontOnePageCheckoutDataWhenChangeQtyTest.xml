@@ -22,7 +22,6 @@
             <!--Create a product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
-            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>

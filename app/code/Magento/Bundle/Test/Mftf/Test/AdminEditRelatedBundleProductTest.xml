@@ -70,7 +70,6 @@
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
 
-        <wait stepKey="waitBeforeIndexer" time="60"/>
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->

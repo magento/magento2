@@ -44,7 +44,6 @@
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
 
-            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>

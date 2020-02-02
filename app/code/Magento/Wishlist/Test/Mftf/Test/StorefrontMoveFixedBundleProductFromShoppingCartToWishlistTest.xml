@@ -44,7 +44,6 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
 
-            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>

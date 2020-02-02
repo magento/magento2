@@ -34,7 +34,6 @@
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
-        <wait stepKey="waitBeforeIndexer" time="60"/>
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->

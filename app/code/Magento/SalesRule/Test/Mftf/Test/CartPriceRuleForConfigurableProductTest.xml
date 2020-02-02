@@ -75,7 +75,6 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <wait stepKey="waitBeforeIndexer" time="60"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
