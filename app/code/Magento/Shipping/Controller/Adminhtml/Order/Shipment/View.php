@@ -71,9 +71,8 @@ class View extends \Magento\Backend\App\Action
             $resultPage->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
             return $resultPage;
         } else {
-            $resultForward = $this->resultForwardFactory->create();
-            $resultForward->forward('noroute');
-            return $resultForward;
+            resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('sales/shipment');
         }
     }
 }
