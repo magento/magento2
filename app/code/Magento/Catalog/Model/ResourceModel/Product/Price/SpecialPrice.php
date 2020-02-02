@@ -191,40 +191,44 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
      */
     public function delete(array $prices)
     {
-        $skus = array_unique(
-            array_map(function ($price) {
-                return $price->getSku();
-            }, $prices)
-        );
-        $ids = $this->retrieveAffectedIds($skus);
-        $connection = $this->attributeResource->getConnection();
-        $connection->beginTransaction();
-        try {
-            foreach (array_chunk($ids, $this->itemsPerOperation) as $idsBunch) {
-                $this->attributeResource->getConnection()->delete(
-                    $this->attributeResource->getTable($this->priceTable),
-                    [
-                        'attribute_id = ?' => $this->getPriceAttributeId(),
-                        $this->getEntityLinkField() . ' IN (?)' => $idsBunch
-                    ]
+        $skusWithStoreId = [];
+        foreach ($prices as $price) {
+            $skusWithStoreId[$price->getStoreId()][] = $price->getSku();
+        }
+
+        foreach ($skusWithStoreId as $storeId => $skus) {
+            $ids = $this->retrieveAffectedIds($skus);
+            $connection = $this->attributeResource->getConnection();
+            $connection->beginTransaction();
+            try {
+                foreach (array_chunk($ids, $this->itemsPerOperation) as $idsBunch) {
+                    $this->attributeResource->getConnection()->delete(
+                        $this->attributeResource->getTable($this->priceTable),
+                        [
+                            'attribute_id = ?' => $this->getPriceAttributeId(),
+                            $this->getEntityLinkField() . ' IN (?)' => $idsBunch,
+                            'store_id = ?' => $storeId
+                        ]
+                    );
+                }
+                foreach (array_chunk($ids, $this->itemsPerOperation) as $idsBunch) {
+                    $this->attributeResource->getConnection()->delete(
+                        $this->attributeResource->getTable($this->datetimeTable),
+                        [
+                            'attribute_id IN (?)' => [$this->getPriceFromAttributeId(), $this->getPriceToAttributeId()],
+                            $this->getEntityLinkField() . ' IN (?)' => $idsBunch,
+                            'store_id = ?' => $storeId
+                        ]
+                    );
+                }
+                $connection->commit();
+            } catch (\Exception $e) {
+                $connection->rollBack();
+                throw new \Magento\Framework\Exception\CouldNotDeleteException(
+                    __('Could not delete Prices'),
+                    $e
                 );
             }
-            foreach (array_chunk($ids, $this->itemsPerOperation) as $idsBunch) {
-                $this->attributeResource->getConnection()->delete(
-                    $this->attributeResource->getTable($this->datetimeTable),
-                    [
-                        'attribute_id IN (?)' => [$this->getPriceFromAttributeId(), $this->getPriceToAttributeId()],
-                        $this->getEntityLinkField() . ' IN (?)' => $idsBunch
-                    ]
-                );
-            }
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                __('Could not delete Prices'),
-                $e
-            );
         }
 
         return true;
