@@ -167,11 +167,14 @@ class SimpleDataObjectConverter
      *
      * For example [DefaultShipping => default_shipping, Postcode => postcode]
      *
+     * (?<=\d)(?=[A-Za-z]) if previous position has a digit and next has a letter
+     * (?<=[A-Za-z])(?=\d) if previous position has a letter and next has a digit
+     * (?<=[a-z])(?=[A-Z]) if previous position has a lowercase and next has a uppercase letter
      * @param string $name
      * @return string
      */
     public static function camelCaseToSnakeCase($name)
     {
-        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+        return strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', "_", $name));
     }
 }
