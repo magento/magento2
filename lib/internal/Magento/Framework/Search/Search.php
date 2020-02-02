@@ -69,7 +69,7 @@ class Search implements SearchInterface
             }
         }
 
-        $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
+        $this->requestBuilder->setFrom(($searchCriteria->getCurrentPage() > 0 ? $searchCriteria->getCurrentPage() - 1 : 0) * $searchCriteria->getPageSize());
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
 
         /**
