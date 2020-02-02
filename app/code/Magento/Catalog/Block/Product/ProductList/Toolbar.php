@@ -235,6 +235,17 @@ class Toolbar extends \Magento\Framework\View\Element\Template
                     $this->getCurrentOrder(),
                     $this->getCurrentDirection()
                 );
+            } elseif (($this->getCurrentOrder()) == 'orderby') {
+                $this->_collection
+                    ->getSelect()
+                    ->joinLeft(
+                        'sales_order',
+                        'e.entity_id = sales_order.entity_id',
+                        ['qty_ordered'=>'sales_order.total_qty_ordered']
+                    )
+                    // ->group('e.entity_id')
+                    ->order('qty_ordered desc');
+                $collection->getSelect()->distinct(true);
             } else {
                 $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
             }
