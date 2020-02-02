@@ -332,7 +332,7 @@ class Observer
                     $product = $this->productRepository->getById(
                         $alert->getProductId(),
                         false,
-                        ($alert->getStoreId())?$alert->getStoreId():$website->getDefaultStore()->getId() 
+                        ($alert->getStoreId())?$alert->getStoreId():$website->getDefaultStore()->getId()
                     );
 
                     $product->setCustomerGroupId($customer->getGroupId());
