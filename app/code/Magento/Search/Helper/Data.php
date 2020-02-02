@@ -102,7 +102,9 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Retrieve result page url and set "secure" param to avoid confirm
+     * Retrieve result page url
+     *
+     * Also, set "secure" param to avoid confirm
      * message when we submit form from secure page to unsecure
      *
      * @param   string $query
@@ -225,6 +227,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Get query param name
+     *
      * @return string
      */
     public function getQueryParamName()
@@ -233,6 +237,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if query exceeds maximum query length
+     *
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return bool
@@ -256,6 +262,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Get shortened query text if it is too long
+     *
      * @param string $queryText
      * @param int|string $maxQueryLength
      * @return string

@@ -11,7 +11,8 @@
         "magento/module-catalog-search": "*",
         "magento/module-reports": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-advanced-search": "*"
     },
     "type": "magento2-module",
     "license": [

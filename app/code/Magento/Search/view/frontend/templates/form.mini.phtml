@@ -14,22 +14,23 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
 <div class="block block-search">
     <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
     <div class="block block-content">
-        <form class="form minisearch" id="search_mini_form" action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
+        <form class="form minisearch" id="search_mini_form"
+              action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
             <div class="field search">
                 <label class="label" for="search" data-role="minisearch-label">
                     <span><?= $block->escapeHtml(__('Search')) ?></span>
                 </label>
                 <div class="control">
                     <input id="search"
-                           <?php if ($helper->isSuggestionsEnabled()): ?>
-                               data-mage-init='{"quickSearch":{
+                            <?php if ($helper->isSuggestionsEnabled()): ?>
+                                data-mage-init='{"quickSearch":{
                                     "formSelector":"#search_mini_form",
                                     "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
                                     "destinationSelector":"#search_autocomplete",
                                     "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>",
                                     "isEnabled":"<?= $block->escapeJs($helper->isSuggestionsEnabled()) ?>"}
-                               }'
-                           <?php endif; ?>
+                                }'
+                            <?php endif; ?>
                            type="text"
                            name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
                            value="<?= $block->escapeHtmlAttr($helper->getEscapedQueryText()) ?>"
