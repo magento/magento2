@@ -5,6 +5,7 @@
  */
 namespace Magento\Search\Helper;
 
+use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -265,5 +266,20 @@ class Data extends AbstractHelper
             $queryText = $this->string->substr($queryText, 0, $maxQueryLength);
         }
         return $queryText;
+    }
+
+    /**
+     * Check if search suggestions is enabled
+     *
+     * @param mixed $store
+     * @return int|string
+     */
+    public function isSuggestionsEnabled($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            SuggestedQueriesInterface::SEARCH_SUGGESTION_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

@@ -21,12 +21,15 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
                 </label>
                 <div class="control">
                     <input id="search"
-                           data-mage-init='{"quickSearch":{
-                                "formSelector":"#search_mini_form",
-                                "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
-                                "destinationSelector":"#search_autocomplete",
-                                "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>"}
-                           }'
+                           <?php if ($helper->isSuggestionsEnabled()): ?>
+                               data-mage-init='{"quickSearch":{
+                                    "formSelector":"#search_mini_form",
+                                    "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
+                                    "destinationSelector":"#search_autocomplete",
+                                    "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>",
+                                    "isEnabled":"<?= $block->escapeJs($helper->isSuggestionsEnabled()) ?>"}
+                               }'
+                           <?php endif; ?>
                            type="text"
                            name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
                            value="<?= $block->escapeHtmlAttr($helper->getEscapedQueryText()) ?>"
