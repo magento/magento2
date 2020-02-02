@@ -277,7 +277,9 @@ define([
             var invalidField = _.find(this.delegate('checkInvalid'));
 
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
-                invalidField.focused(true);
+                setTimeout(function(){
+                    invalidField.focused(true);
+                }, 100);
             }
 
             return this;
