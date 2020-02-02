@@ -152,6 +152,11 @@ class PageRepository implements PageRepositoryInterface
         }
         try {
             $this->validateLayoutUpdate($page);
+            if($page->getId()){
+                $savedPage = $this->getById($page->getId());
+                $pageData = array_replace_recursive($savedPage->toArray(),$page->toArray());
+                $page->addData($pageData);
+            }
             $this->resource->save($page);
             $this->identityMap->add($page);
         } catch (\Exception $exception) {
