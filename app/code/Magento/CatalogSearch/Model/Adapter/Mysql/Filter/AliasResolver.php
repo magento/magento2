@@ -19,7 +19,7 @@ class AliasResolver
 {
     /**
      * The suffix for stock status filter that may be added to the query beside the filter query
-     * Used when showing of Out of Stock products is disabled.
+     * Used when showing of Out of Stock product(s) is disabled.
      */
     const STOCK_FILTER_SUFFIX = '_stock';
 
