@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root" label="Root">
-        <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\Reviews" name="admin.customer.reviews"/>
+        <block class="Magento\Review\Block\Adminhtml\Edit\Tab\Reviews" name="admin.customer.reviews"/>
     </container>
 </layout>
