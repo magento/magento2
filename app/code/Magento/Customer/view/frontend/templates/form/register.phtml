@@ -198,6 +198,12 @@ require([
         ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
     <?php endif ?>
     }).find('input:text').attr('autocomplete', 'off');
+    dataForm.on('submit',function() {
+        $(this).find('.submit').attr('disabled', true);
+    });
+    $('#form-validate input').focus(function() {
+        $('#form-validate .submit').attr('disabled', false);
+    });
 
 });
 </script>
