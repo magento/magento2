@@ -26,7 +26,7 @@ class JsonHexTag extends Json implements SerializerInterface
      */
     public function serialize($data): string
     {
-        $result = json_encode($data, JSON_HEX_TAG);
+        $result = json_encode($data, JSON_INVALID_UTF8_IGNORE);
         if (false === $result) {
             throw new \InvalidArgumentException('Unable to serialize value.');
         }
