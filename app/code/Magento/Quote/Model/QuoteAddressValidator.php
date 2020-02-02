@@ -125,7 +125,7 @@ class QuoteAddressValidator
      * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
      */
-    public function validateForCart(CartInterface $cart, AddressInterface $address)
+    public function validateForCart(CartInterface $cart, AddressInterface $address): void
     {
         $this->doValidate($address, $cart->getCustomer()->getId() ? $cart->getCustomer()->getId() : null);
     }
