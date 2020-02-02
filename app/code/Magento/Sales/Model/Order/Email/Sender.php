@@ -12,9 +12,8 @@ use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class Sender
- *
- * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ *
  * @since 100.0.2
  */
 abstract class Sender
@@ -45,24 +44,35 @@ abstract class Sender
     protected $addressRenderer;
 
     /**
+     * App emulation model
+     *
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    protected $_appEmulation;
+
+    /**
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
      * @param SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      */
     public function __construct(
         Template $templateContainer,
         IdentityInterface $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
-        Renderer $addressRenderer
+        Renderer $addressRenderer,
+        \Magento\Store\Model\App\Emulation $appEmulation = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->senderBuilderFactory = $senderBuilderFactory;
         $this->logger = $logger;
         $this->addressRenderer = $addressRenderer;
+        $this->_appEmulation = $appEmulation ?: \Magento\Framework\App\ObjectManager::getInstance()
+                              ->get(\Magento\Store\Model\App\Emulation::class);
     }
 
     /**
@@ -88,12 +98,10 @@ abstract class Sender
             $this->logger->error($e->getMessage());
             return false;
         }
-        if ($this->identityContainer->getCopyMethod() == 'copy') {
-            try {
-                $sender->sendCopyTo();
-            } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
-            }
+        try {
+            $sender->sendCopyTo();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
         }
         return true;
     }
@@ -143,6 +151,7 @@ abstract class Sender
      */
     protected function getTemplateOptions()
     {
+        //echo  $this->identityContainer->getStore()->getStoreId(); die("dd");
         return [
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'store' => $this->identityContainer->getStore()->getStoreId()
@@ -157,9 +166,20 @@ abstract class Sender
      */
     protected function getFormattedShippingAddress($order)
     {
-        return $order->getIsVirtual()
+       // echo $order->getStore()->getId(); die("dss");
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test11.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+        $logger->info($order->getStore()->getStoreId());
+        $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),\Magento\Framework\App\Area::AREA_FRONTEND,1);
+        
+        $shippingAddress = $order->getIsVirtual()
             ? null
             : $this->addressRenderer->format($order->getShippingAddress(), 'html');
+
+        $this->_appEmulation->stopEnvironmentEmulation();
+
+        return $shippingAddress;
     }
 
     /**
@@ -170,6 +190,11 @@ abstract class Sender
      */
     protected function getFormattedBillingAddress($order)
     {
-        return $this->addressRenderer->format($order->getBillingAddress(), 'html');
+        $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),\Magento\Framework\App\Area::AREA_FRONTEND,1);
+
+        $billingAddress =  $this->addressRenderer->format($order->getBillingAddress(), 'html');
+
+        $this->_appEmulation->stopEnvironmentEmulation();
+        return $billingAddress;
     }
 }
