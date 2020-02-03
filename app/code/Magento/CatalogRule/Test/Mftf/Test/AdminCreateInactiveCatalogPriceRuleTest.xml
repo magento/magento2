@@ -58,6 +58,7 @@
             <argument name="websites" value="Main Website"/>
             <argument name="customerGroup" value="General"/>
         </actionGroup>
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveRule"/>
 
         <!-- Search Catalog Rule in Grid -->
         <actionGroup ref="AdminSearchCatalogRuleInGridActionGroup" stepKey="searchCreatedCatalogRule">

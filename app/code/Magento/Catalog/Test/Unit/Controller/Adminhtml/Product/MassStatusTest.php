@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -110,14 +109,15 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             'resultFactory' => $resultFactory
         ];
         /** @var \Magento\Backend\App\Action\Context $context */
-        $context = $this->initContext($additionalParams, [[Action::class, $this->actionMock]]);
+        $context = $this->initContext($additionalParams);
 
         $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\MassStatus(
             $context,
             $this->productBuilderMock,
             $this->priceProcessorMock,
             $this->filterMock,
-            $collectionFactoryMock
+            $collectionFactoryMock,
+            $this->actionMock
         );
     }
 
@@ -137,11 +137,13 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->willReturn([3]);
         $this->request->expects($this->exactly(3))
             ->method('getParam')
-            ->willReturnMap([
-                ['store', null, $storeId],
-                ['status', null, $status],
-                ['filters', [], $filters]
-            ]);
+            ->willReturnMap(
+                [
+                    ['store', null, $storeId],
+                    ['status', null, $status],
+                    ['filters', [], $filters]
+                ]
+            );
         $this->actionMock->expects($this->once())
             ->method('updateAttributes')
             ->with([3], ['status' => $status], 2);

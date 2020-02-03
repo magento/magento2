@@ -11,12 +11,15 @@
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Update url rewrites"/>
-            <title value="Check url rewrites in catalog categories after changing url key"/>
-            <description value="Check url rewrites in catalog categories after changing url key for store view and moving category"/>
+            <title value="DEPRECATED. Check url rewrites in catalog categories after changing url key"/>
+            <description value="DEPRECATED. Check url rewrites in catalog categories after changing url key for store view and moving category"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5352"/>
             <group value="url_rewrite"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckUrlRewritesInCatalogCategoriesAfterChangingUrlKeyForStoreViewAndMovingCategory2Test instead</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Create two sub-categories in default category with simple products -->
@@ -34,6 +37,10 @@
 
             <!--Create additional Store View in Main Website Store -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
+
+            <!-- Reindex and flush the cache -->
+            <magentoCLI command="indexer:reindex" stepKey="runReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
@@ -45,18 +52,18 @@
         </after>
 
         <!-- On the categories editing page change store view to created additional view -->
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="Store" value="customStore.name"/>
             <argument name="CatName" value="$$createFirstCategory.name$$"/>
         </actionGroup>
 
         <!-- Change url key for category for first category; save -->
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeUrlKey">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeUrlKey">
             <argument name="value" value="{{SimpleRootSubCategory.url_key}}"/>
         </actionGroup>
 
         <!-- Change store view to "All store views" for first category -->
-        <actionGroup ref="switchCategoryToAllStoreView" stepKey="switchToAllStoreViewProduct">
+        <actionGroup ref="SwitchCategoryToAllStoreViewActionGroup" stepKey="switchToAllStoreViewProduct">
             <argument name="CatName" value="$$createFirstCategory.name$$"/>
         </actionGroup>
 
@@ -76,7 +83,6 @@
         <!-- Assert category url with custom store view -->
         <amOnPage url="{{StorefrontHomePage.url}}$$createSecondCategory.name$$/{{SimpleRootSubCategory.url_key}}.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <dontSee userInput="$$createSecondSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
-        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+        <see userInput="$$createFirstSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeProductInCategory"/>
     </test>
 </tests>

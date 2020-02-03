@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- You must already be on the category page -->
-    <actionGroup name="StorefrontCheckProductPriceInCategoryActionGroup" extends="StorefrontCheckCategorySimpleProduct">
+    <actionGroup name="StorefrontCheckProductPriceInCategoryActionGroup" extends="StorefrontCheckCategorySimpleProductActionGroup">
         <annotations>
             <description>EXTENDS: StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice'. Validates that the provided Product Price is present and correct on a Storefront Product page.</description>
         </annotations>

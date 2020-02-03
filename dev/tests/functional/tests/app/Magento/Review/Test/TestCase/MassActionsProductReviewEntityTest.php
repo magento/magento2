@@ -102,7 +102,7 @@ class MassActionsProductReviewEntityTest extends Injectable
         $this->reviewIndex->getReviewGrid()->massaction(
             [['title' => $this->review->getTitle()]],
             [$gridActions => $gridStatus],
-            ($gridActions == 'Delete' ? true : false)
+            ($gridActions == 'Delete')
         );
     }
 

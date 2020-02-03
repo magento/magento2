@@ -197,7 +197,7 @@
 		},
 
 		/**
-		 * Wraps the node in in another node.
+		 * Wraps the node in another node.
 		 *
 		 * @example
 		 * node.wrap(wrapperNode);

@@ -26,7 +26,7 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= (int) $_item->getQty() ?></td>
+    <td class="item-qty"><?= (float) $_item->getQty() ?></td>
     <td class="item-price">
         <?= /* @noEscape */ $block->getItemPrice($_item->getOrderItem()) ?>
     </td>

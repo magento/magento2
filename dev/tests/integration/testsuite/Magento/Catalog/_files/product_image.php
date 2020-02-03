@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $mediaConfig \Magento\Catalog\Model\Product\Media\Config */
 $mediaConfig = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
+/** @var $database \Magento\MediaStorage\Helper\File\Storage\Database */
+$database = $objectManager->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
 
 /** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
 $mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
@@ -28,4 +31,5 @@ foreach ($images as $image) {
 
     copy($sourceFilePath, $targetTmpFilePath);
     // Copying the image to target dir is not necessary because during product save, it will be moved there from tmp dir
+    $database->saveFile($targetTmpFilePath);
 }

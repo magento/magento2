@@ -11,11 +11,11 @@
         <column xsi:type="int" name="pk" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Primary key"/>
         <column xsi:type="int" name="website_id" padding="11" unsigned="false" nullable="false" identity="false"
-                default="0" comment="Website Id"/>
+                default="0" comment="Website ID"/>
         <column xsi:type="varchar" name="dest_country_id" nullable="false" length="4" default="0"
                 comment="Destination coutry ISO/2 or ISO/3 code"/>
         <column xsi:type="int" name="dest_region_id" padding="11" unsigned="false" nullable="false" identity="false"
-                default="0" comment="Destination Region Id"/>
+                default="0" comment="Destination Region ID"/>
         <column xsi:type="varchar" name="dest_zip" nullable="false" length="10" default="*"
                 comment="Destination Post Code (Zip)"/>
         <column xsi:type="varchar" name="condition_name" nullable="false" length="30" comment="Rate Condition name"/>

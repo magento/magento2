@@ -15,12 +15,9 @@
             <title value="Checking Catalog grid page number after Save and Close action"/>
             <description value="Checking Catalog grid page number after Save and Close action"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-96164"/>
-            <useCaseId value="MAGETWO-96127"/>
+            <testCaseId value="MC-16472"/>
+            <useCaseId value="MC-17332"/>
             <group value="Catalog"/>
-            <skip>
-                <issueId value="MC-17332"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -28,10 +25,8 @@
             <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
-            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteProductIfTheyExist"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProductIfTheyExist"/>
             <createData stepKey="category1" entity="SimpleSubCategory"/>
             <createData stepKey="product1" entity="SimpleProduct">
                 <requiredEntity createDataKey="category1"/>
@@ -45,7 +40,7 @@
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
             <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="clickPrevPageOrderGrid"/>
-            <actionGroup ref="adminDataGridDeleteCustomPerPage" stepKey="deleteCustomAddedPerPage">
+            <actionGroup ref="AdminDataGridDeleteCustomPerPageActionGroup" stepKey="deleteCustomAddedPerPage">
                 <argument name="perPage" value="ProductPerPage.productCount"/>
             </actionGroup>
             <deleteData stepKey="deleteCategory1" createDataKey="category1"/>
@@ -56,7 +51,7 @@
         </after>
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="adminDataGridSelectCustomPerPage" stepKey="select1OrderPerPage">
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select1OrderPerPage">
             <argument name="perPage" value="ProductPerPage.productCount"/>
         </actionGroup>
         <!--Go to the next page and edit the product-->
@@ -66,7 +61,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$product2$$"/>
         </actionGroup>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAndCloseProduct"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid"/>
     </test>

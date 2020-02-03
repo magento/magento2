@@ -77,14 +77,6 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(10, $amount['value']);
         self::assertArrayHasKey('currency', $amount);
         self::assertEquals('USD', $amount['currency']);
-
-        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
-        $baseAmount = $shippingAddress['selected_shipping_method']['base_amount'];
-
-        self::assertArrayHasKey('value', $baseAmount);
-        self::assertEquals(10, $baseAmount['value']);
-        self::assertArrayHasKey('currency', $baseAmount);
-        self::assertEquals('USD', $baseAmount['currency']);
     }
 
     /**
@@ -194,26 +186,9 @@ QUERY;
     public function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
-            'missed_cart_id' => [
-                'shipping_methods: [{
-                    carrier_code: "flatrate"
-                    method_code: "flatrate"
-                }]',
-                'Required parameter "cart_id" is missing'
-            ],
-            'missed_shipping_methods' => [
-                'cart_id: "cart_id_value"',
-                'Required parameter "shipping_methods" is missing'
-            ],
             'shipping_methods_are_empty' => [
                 'cart_id: "cart_id_value" shipping_methods: []',
                 'Required parameter "shipping_methods" is missing'
-            ],
-            'missed_carrier_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    method_code: "flatrate"
-                }]',
-                'Field ShippingMethodInput.carrier_code of required type String! was not provided.'
             ],
             'empty_carrier_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -228,12 +203,6 @@ QUERY;
                     method_code: "flatrate"
                 }]',
                 'Carrier with such method not found: wrong-carrier-code, flatrate'
-            ],
-            'missed_method_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    carrier_code: "flatrate"
-                }]',
-                'Required parameter "method_code" is missing.'
             ],
             'empty_method_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -387,10 +356,6 @@ mutation {
           carrier_title
           method_title
           amount {
-            value
-            currency
-          }
-          base_amount {
             value
             currency
           }

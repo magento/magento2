@@ -24,7 +24,7 @@
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
         <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
         <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
-        <element name="dropdownAddOptions" type="button" selector="#add_new_option_button"/>
+        <element name="dropdownAddOptions" type="button" selector="#add_new_option_button" timeout="30"/>
         <!-- Manage Options nth child-->
         <element name="dropdownNthOptionIsDefault" type="checkbox" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) .input-radio" parameterized="true"/>
         <element name="dropdownNthOptionAdmin" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(3) input" parameterized="true"/>
@@ -93,6 +93,7 @@
         <element name="DefaultValueText" type="textarea" selector="#default_value_text"/>
         <element name="DefaultValueTextArea" type="textarea" selector="#default_value_textarea"/>
         <element name="DefaultValueDate" type="textarea" selector="#default_value_date"/>
+        <element name="defaultValueDatetime" type="date" selector="#default_value_datetime"/>
         <element name="DefaultValueYesNo" type="textarea" selector="#default_value_yesno"/>
         <element name="Scope" type="select" selector="#is_global"/>
         <element name="UniqueValue" type="select" selector="#is_unique"/>

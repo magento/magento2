@@ -6,7 +6,8 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
-use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
+use Magento\Framework\App\ObjectManager;
+use Magento\Newsletter\Model\Config;
 
 /**
  * Customer register form block
@@ -23,7 +24,7 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
@@ -31,6 +32,11 @@ class Register extends \Magento\Directory\Block\Data
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
+
+    /**
+     * @var Config
+     */
+    private $newsLetterConfig;
 
     /**
      * Constructor
@@ -41,10 +47,11 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
+     * @param Config $newsLetterConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -55,14 +62,16 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        array $data = []
+        array $data = [],
+        Config $newsLetterConfig = null
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
+        $this->newsLetterConfig = $newsLetterConfig ?: ObjectManager::getInstance()->get(Config::class);
         parent::__construct(
             $context,
             $directoryHelper,
@@ -170,7 +179,7 @@ class Register extends \Magento\Directory\Block\Data
     public function isNewsletterEnabled()
     {
         return $this->_moduleManager->isOutputEnabled('Magento_Newsletter')
-            && $this->getConfig(PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE);
+            && $this->newsLetterConfig->isActive();
     }
 
     /**
