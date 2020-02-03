@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\LayeredNavigation\Test\Unit\Observer\Edit\Tab\Front\ProductAttributeFormBuildFrontTabObserverTest;
+namespace Magento\LayeredNavigation\Test\Unit\Observer\Edit\Tab\Front;
 
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\Form;
