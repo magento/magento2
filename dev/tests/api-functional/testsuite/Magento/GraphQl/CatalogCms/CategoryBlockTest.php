@@ -29,7 +29,7 @@ class CategoryBlockTest extends GraphQlAbstract
         $blockRepository = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class);
         $block = $blockRepository->getById($blockId);
         $filter = Bootstrap::getObjectManager()->get(FilterEmulate::class);
-        $renderedContent = $filter->setUseSessionInUrl(false)->filter($block->getContent());
+        $renderedContent = $filter->filter($block->getContent());
 
         /** @var CategoryRepositoryInterface $categoryRepository */
         $categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);

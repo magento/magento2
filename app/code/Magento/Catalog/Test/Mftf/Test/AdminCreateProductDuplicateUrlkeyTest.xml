@@ -72,7 +72,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!--Save and duplicated the product once-->
-        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm1"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductForm1"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct2">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -80,6 +80,6 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!--Save and duplicated the product second time-->
-        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm2"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductForm2"/>
     </test>
 </tests>
