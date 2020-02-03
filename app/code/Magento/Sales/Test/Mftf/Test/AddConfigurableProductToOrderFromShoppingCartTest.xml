@@ -72,6 +72,7 @@
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </after>
 
         <!-- Login as customer -->

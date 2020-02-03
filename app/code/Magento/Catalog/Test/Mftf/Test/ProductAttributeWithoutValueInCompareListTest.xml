@@ -7,13 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ProductAttributeWithoutValueInCompareListTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Product Comparison"/>
             <title value="Product attribute without value in compare list test"/>
-            <description
-                value="The product attribute that has no value should output 'N/A' on the product comparison page."/>
+            <description value="The product attribute that has no value should output 'N/A' on the product comparison page."/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
         </annotations>
@@ -22,7 +22,7 @@
             <createData entity="textProductAttribute" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
             <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/"
-                      stepKey="onAttributeSetEdit"/>
+                stepKey="onAttributeSetEdit"/>
             <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
                 <argument name="group" value="Product Details"/>
                 <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
@@ -69,11 +69,11 @@
         </actionGroup>
         <!--See attribute default value in the comparison list-->
         <see userInput="$createProductAttribute.defaultValue$"
-             selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductCustom.name$)}}"
-             stepKey="assertAttributeValueForProductCustom"/>
+            selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductCustom.name$)}}"
+            stepKey="assertAttributeValueForProductCustom"/>
         <!--See N/A if attribute has no value in the comparison list-->
         <see userInput="N/A"
-             selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductDefault.name$)}}"
-             stepKey="assertNAForProductDefault"/>
+            selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductDefault.name$)}}"
+            stepKey="assertNAForProductDefault"/>
     </test>
 </tests>
