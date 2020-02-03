@@ -5,18 +5,28 @@
  */
 namespace Magento\Store\Test\Unit\Controller\Store;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Controller\Store\Redirect;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreResolver;
+use Magento\Store\Api\Data\StoreInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RedirectTest extends \PHPUnit\Framework\TestCase
+class RedirectTest extends TestCase
 {
+
+    const STUB_STORE_TO_SWITCH_TO_CODE = 'sv2';
+    const STUB_DEFAULT_STORE_VIEW = 'default';
+
     /**
      * @var \Magento\Store\Controller\Store\SwitchAction
      */
@@ -58,21 +68,21 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
-        $this->storeRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+        $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)->getMock();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHttpHost'])
             ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)->getMock();
-        $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)->getMock();
+        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\Store\Controller\Store\Redirect::class,
+            Redirect::class,
             [
                 'storeRepository' => $this->storeRepositoryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -89,10 +99,8 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $storeToSwitchToCode = 'sv2';
-        $defaultStoreViewCode = 'default';
-        $defaultStoreViewMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
-        $storeToSwitchToMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $defaultStoreViewMock = $this->getMockBuilder(StoreInterface::class)->getMock();
+        $storeToSwitchToMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isUseStoreInUrl'])
             ->getMockForAbstractClass();
@@ -106,11 +114,11 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getById')
             ->with(1)
-            ->willReturn($defaultStoreViewCode);
+            ->willReturn(self::STUB_DEFAULT_STORE_VIEW);
         $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
-                [StoreResolver::PARAM_NAME, null, $storeToSwitchToCode],
-                ['___from_store', null, $defaultStoreViewCode]
+                [StoreResolver::PARAM_NAME, null, self::STUB_STORE_TO_SWITCH_TO_CODE],
+                ['___from_store', null, self::STUB_DEFAULT_STORE_VIEW]
             ]
         );
         $this->storeRepositoryMock
@@ -118,8 +126,8 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturnMap(
                 [
-                    [$defaultStoreViewCode, $defaultStoreViewMock],
-                    [$storeToSwitchToCode, $storeToSwitchToMock]
+                    [self::STUB_DEFAULT_STORE_VIEW, $defaultStoreViewMock],
+                    [self::STUB_STORE_TO_SWITCH_TO_CODE, $storeToSwitchToMock]
                 ]
             );
 
