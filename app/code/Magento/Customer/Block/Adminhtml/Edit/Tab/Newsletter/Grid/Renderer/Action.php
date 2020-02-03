@@ -5,11 +5,19 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Adminhtml newsletter queue grid block action item renderer
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * Core registry
      *
@@ -21,17 +29,24 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        Escaper $escaper = null
     ) {
         $this->_coreRegistry = $registry;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
         parent::__construct($context, $data);
     }
 
     /**
+     * Render actions
+     *
      * @param \Magento\Framework\DataObject $row
      * @return string
      */
@@ -57,15 +72,20 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     }
 
     /**
+     * Retrieve escaped value
+     *
      * @param string $value
      * @return string
      */
     protected function _getEscapedValue($value)
     {
-        return addcslashes(htmlspecialchars($value), '\\\'');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addcslashes($this->escaper->escapeHtml($value), '\\\'');
     }
 
     /**
+     * Actions to html
+     *
      * @param array $actions
      * @return string
      */

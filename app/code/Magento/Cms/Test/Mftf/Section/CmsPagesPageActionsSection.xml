@@ -27,5 +27,8 @@
         <element name="savePageSuccessMessage" type="text" selector=".message-success"/>
         <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Delete']" parameterized="true"/>
         <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
+        <element name="pageRowCheckboxByIdentifier" type="checkbox" selector="//table[@data-role='grid']//td[count(../../..//th[./*[.='URL Key']]/preceding-sibling::th) + 1][./*[.='{{identifier}}']]/../td//input[@data-action='select-row']"  parameterized="true" />
+        <element name="massActionsButton" type="button" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//button[contains(@class, 'action-select')]" />
+        <element name="massActionsOption" type="button" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//span[contains(@class, 'action-menu-item') and .= '{{action}}']" parameterized="true"/>
     </section>
 </sections>

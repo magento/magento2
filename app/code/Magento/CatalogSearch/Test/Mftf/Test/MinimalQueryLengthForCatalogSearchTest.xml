@@ -11,12 +11,14 @@
     <test name="MinimalQueryLengthForCatalogSearchTest">
         <annotations>
             <features value="CatalogSearch"/>
+            <stories value="Catalog search"/>
             <title value="Minimal query length for catalog search"/>
             <description value="Minimal query length for catalog search"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-6325"/>
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

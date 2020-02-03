@@ -109,7 +109,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Customer\Api\Data\GroupInterface $group)
     {
@@ -165,7 +165,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($id)
     {
@@ -179,7 +179,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -301,6 +301,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      *
      * @param \Magento\Customer\Api\Data\GroupInterface $group
      * @throws InputException
+     * @throws \Zend_Validate_Exception
      * @return void
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)

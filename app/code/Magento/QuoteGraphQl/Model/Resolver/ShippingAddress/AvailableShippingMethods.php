@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 
+use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * @inheritdoc
@@ -65,13 +68,44 @@ class AvailableShippingMethods implements ResolverInterface
         $shippingRates = $address->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
-                $methods[] = $this->dataObjectConverter->toFlatArray(
+                $methodData = $this->dataObjectConverter->toFlatArray(
                     $this->shippingMethodConverter->modelToDataObject($rate, $cart->getQuoteCurrencyCode()),
                     [],
                     ShippingMethodInterface::class
                 );
+                $methods[] = $this->processMoneyTypeData(
+                    $methodData,
+                    $cart->getQuoteCurrencyCode()
+                );
             }
         }
         return $methods;
+    }
+
+    /**
+     * Process money type data
+     *
+     * @param array $data
+     * @param string $quoteCurrencyCode
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function processMoneyTypeData(array $data, string $quoteCurrencyCode): array
+    {
+        if (isset($data['amount'])) {
+            $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
+        }
+
+        /** @deprecated The field should not be used on the storefront */
+        $data['base_amount'] = null;
+
+        if (isset($data['price_excl_tax'])) {
+            $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode];
+        }
+
+        if (isset($data['price_incl_tax'])) {
+            $data['price_incl_tax'] = ['value' => $data['price_incl_tax'], 'currency' => $quoteCurrencyCode];
+        }
+        return $data;
     }
 }

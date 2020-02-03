@@ -71,19 +71,15 @@
                 <requiredEntity createDataKey="createConfigSecondChildProduct"/>
             </createData>
 
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!-- Run cron twice -->
             <magentoCLI command="cron:run" stepKey="runCron1"/>
             <magentoCLI command="cron:run" stepKey="runCron2"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
         </before>
         <after>
-            <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
-
             <!-- Delete simple product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
@@ -94,6 +90,10 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
+            <!-- Delete exported file -->
+            <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -103,13 +103,14 @@
         <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Export created below products -->
-        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+        <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>
         </actionGroup>
     </test>

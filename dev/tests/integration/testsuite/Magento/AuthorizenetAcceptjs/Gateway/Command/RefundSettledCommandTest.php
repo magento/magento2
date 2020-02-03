@@ -10,7 +10,10 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Command;
 
 use Magento\AuthorizenetAcceptjs\Gateway\AbstractTest;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory as CreditmemoCollectionFactory;
 
 class RefundSettledCommandTest extends AbstractTest
 {
@@ -29,6 +32,7 @@ class RefundSettledCommandTest extends AbstractTest
 
         $order = $this->getOrderWithIncrementId('100000001');
         $payment = $order->getPayment();
+        $payment->setCreditmemo($this->getCreditmemo($order));
 
         $paymentDO = $this->paymentFactory->create($payment);
 
@@ -41,13 +45,35 @@ class RefundSettledCommandTest extends AbstractTest
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));
 
-        $command->execute([
-            'payment' => $paymentDO,
-            'amount' => 100.00
-        ]);
+        $command->execute(
+            [
+                'payment' => $paymentDO,
+                'amount' => 100.00
+            ]
+        );
 
         /** @var Payment $payment */
         $this->assertTrue($payment->getIsTransactionClosed());
         $this->assertSame('5678', $payment->getTransactionId());
+    }
+
+    /**
+     * Retrieve creditmemo from order.
+     *
+     * @param Order $order
+     * @return CreditmemoInterface
+     */
+    private function getCreditmemo(Order $order): CreditmemoInterface
+    {
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditMemoCollection */
+        $creditMemoCollection = $this->objectManager->create(CreditmemoCollectionFactory::class)->create();
+
+        /** @var CreditmemoInterface $creditMemo */
+        $creditMemo = $creditMemoCollection
+            ->setOrderFilter($order)
+            ->setPageSize(1)
+            ->getFirstItem();
+
+        return $creditMemo;
     }
 }

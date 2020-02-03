@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Fill Estimate Shipping and Tax fields -->
     <actionGroup name="StorefrontCartEstimateShippingAndTaxActionGroup">
+        <annotations>
+            <description>Fills in the provided Address details (Country, State and Zip Code) under the 'Summary' section on the Storefront Shopping Cart page.</description>
+        </annotations>
         <arguments>
             <argument name="estimateAddress" defaultValue="EstimateAddressCalifornia"/>
         </arguments>
+
         <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="clickOnEstimateShippingAndTax"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.country}}" stepKey="waitForCountrySelectorIsVisible"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{estimateAddress.country}}" stepKey="selectCountry"/>

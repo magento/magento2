@@ -7,16 +7,20 @@ namespace Magento\Checkout\Model;
 
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class SessionTest
+ * Checkout Session model test.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
@@ -52,6 +56,35 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that quote items and totals are correct when product becomes unavailable.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetQuoteWithUnavailableProduct()
+    {
+        $reservedOrderId = 'test01';
+        $quoteGrandTotal = 10;
+
+        $quote = $this->getQuote($reservedOrderId);
+        $this->assertEquals(1, $quote->getItemsCount());
+        $this->assertCount(1, $quote->getItems());
+        $this->assertEquals($quoteGrandTotal, $quote->getShippingAddress()->getBaseGrandTotal());
+
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+        $product->setStatus(Status::STATUS_DISABLED);
+        $productRepository->save($product);
+        $this->checkoutSession->setQuoteId($quote->getId());
+        $quote = $this->checkoutSession->getQuote();
+
+        $this->assertEquals(0, $quote->getItemsCount());
+        $this->assertEmpty($quote->getItems());
+        $this->assertEquals(0, $quote->getShippingAddress()->getBaseGrandTotal());
+    }
+
+    /**
      * Test covers case when quote is not yet initialized and customer data is set to checkout session model.
      *
      * Expected result - quote object should be loaded and customer data should be set to it.
@@ -84,6 +117,26 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT */
         $quote = $this->checkoutSession->getQuote();
         $this->_validateCustomerDataInQuote($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetQuoteWithMismatchingSession()
+    {
+        /** @var Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create(Quote::class);
+        /** @var \Magento\Quote\Model\ResourceModel\Quote $quoteResource */
+        $quoteResource = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\ResourceModel\Quote::class);
+        $quoteResource->load($quote, 'test01', 'reserved_order_id');
+
+        // Customer on quote is not logged in
+        $this->checkoutSession->setQuoteId($quote->getId());
+
+        $sessionQuote = $this->checkoutSession->getQuote();
+        $this->assertEmpty($sessionQuote->getCustomerId());
+        $this->assertNotEquals($quote->getId(), $sessionQuote->getId());
     }
 
     /**

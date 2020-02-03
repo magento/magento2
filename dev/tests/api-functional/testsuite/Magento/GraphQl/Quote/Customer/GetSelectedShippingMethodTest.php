@@ -64,6 +64,43 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
 
         self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
         self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('Flat Rate', $shippingAddress['selected_shipping_method']['carrier_title']);
+
+        self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('Fixed', $shippingAddress['selected_shipping_method']['method_title']);
+
+        self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
+        $amount = $shippingAddress['selected_shipping_method']['amount'];
+
+        self::assertArrayHasKey('value', $amount);
+        self::assertEquals(10, $amount['value']);
+        self::assertArrayHasKey('currency', $amount);
+        self::assertEquals('USD', $amount['currency']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetSelectedShippingMethodBeforeSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
+        self::assertCount(1, $response['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['cart']['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+        self::assertNull($shippingAddress['selected_shipping_method']);
     }
 
     /**
@@ -126,11 +163,7 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
 
         $shippingAddress = current($response['cart']['shipping_addresses']);
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-
-        self::assertNull($shippingAddress['selected_shipping_method']['carrier_code']);
-        self::assertNull($shippingAddress['selected_shipping_method']['method_code']);
-        self::assertNull($shippingAddress['selected_shipping_method']['label']);
-        self::assertNull($shippingAddress['selected_shipping_method']['amount']);
+        self::assertNull($shippingAddress['selected_shipping_method']);
     }
 
     /**
@@ -169,11 +202,19 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
 {
   cart(cart_id: "$maskedQuoteId") {
     shipping_addresses {
+      available_shipping_methods {
+        carrier_code
+        method_code
+      }
       selected_shipping_method {
         carrier_code
         method_code
-        label
-        amount
+        carrier_title
+        method_title
+        amount {
+            value
+            currency
+        }
       }
     }
   }

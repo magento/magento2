@@ -5,10 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontOpenCheckoutPageActionGroup">
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="openCheckoutPage" />
-        <waitForPageLoad stepKey="waitForCheckoutPageLoaded" />
+        <annotations>
+            <description>Goes to the Storefront Checkout page.</description>
+        </annotations>
+
+        <amOnPage url="{{CheckoutPage.url}}" stepKey="openCheckoutPage"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoaded"/>
     </actionGroup>
 </actionGroups>

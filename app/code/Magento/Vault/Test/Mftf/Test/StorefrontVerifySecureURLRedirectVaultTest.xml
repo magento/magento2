@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectVault">
+        <annotations>
+            <features value="Vault"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Vault Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Vault pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15562"/>
+            <group value="vault"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/vault" stepKey="goToUnsecureVaultURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/vault" stepKey="seeSecureVaultURL"/>
+    </test>
+</tests>

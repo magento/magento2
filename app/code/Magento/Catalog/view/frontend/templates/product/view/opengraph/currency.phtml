@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Directory\Block\Currency */
 ?>
-<meta property="product:price:currency" content="<?= /* @escapeNotVerified */ $block->stripTags($block->getCurrentCurrencyCode()) ?>"/>
+<meta property="product:price:currency"
+      content="<?= /* @noEscape */ $block->stripTags($block->getCurrentCurrencyCode()) ?>"/>

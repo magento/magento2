@@ -3,18 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Debug;
-use Magento\Framework\Event;
-use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Registry;
 
 /**
  * HTTP web application. Called from webroot index.php to serve web requests.
@@ -24,12 +23,12 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 class Http implements \Magento\Framework\AppInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Event\Manager
+     * @var Manager
      */
     protected $_eventManager;
 
@@ -54,46 +53,41 @@ class Http implements \Magento\Framework\AppInterface
     protected $_state;
 
     /**
-     * @var Filesystem
-     */
-    protected $_filesystem;
-
-    /**
      * @var ResponseHttp
      */
     protected $_response;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var ExceptionHandlerInterface
      */
-    private $logger;
+    private $exceptionHandler;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param Event\Manager $eventManager
+     * @param ObjectManagerInterface $objectManager
+     * @param Manager $eventManager
      * @param AreaList $areaList
      * @param RequestHttp $request
      * @param ResponseHttp $response
      * @param ConfigLoaderInterface $configLoader
      * @param State $state
-     * @param Filesystem $filesystem
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
+     * @param ExceptionHandlerInterface $exceptionHandler
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        Event\Manager $eventManager,
+        ObjectManagerInterface $objectManager,
+        Manager $eventManager,
         AreaList $areaList,
         RequestHttp $request,
         ResponseHttp $response,
         ConfigLoaderInterface $configLoader,
         State $state,
-        Filesystem $filesystem,
-        \Magento\Framework\Registry $registry
+        Registry $registry,
+        ExceptionHandlerInterface $exceptionHandler = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -102,30 +96,15 @@ class Http implements \Magento\Framework\AppInterface
         $this->_response = $response;
         $this->_configLoader = $configLoader;
         $this->_state = $state;
-        $this->_filesystem = $filesystem;
         $this->registry = $registry;
-    }
-
-    /**
-     * Add new dependency
-     *
-     * @return \Psr\Log\LoggerInterface
-     *
-     * @deprecated 100.1.0
-     */
-    private function getLogger()
-    {
-        if (!$this->logger instanceof \Psr\Log\LoggerInterface) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
+        $this->exceptionHandler = $exceptionHandler ?: $this->_objectManager->get(ExceptionHandlerInterface::class);
     }
 
     /**
      * Run application
      *
-     * @throws \InvalidArgumentException
      * @return ResponseInterface
+     * @throws LocalizedException|\InvalidArgumentException
      */
     public function launch()
     {
@@ -172,193 +151,8 @@ class Http implements \Magento\Framework\AppInterface
     /**
      * @inheritdoc
      */
-    public function catchException(Bootstrap $bootstrap, \Exception $exception)
+    public function catchException(Bootstrap $bootstrap, \Exception $exception): bool
     {
-        $result = $this->handleDeveloperMode($bootstrap, $exception)
-            || $this->handleBootstrapErrors($bootstrap, $exception)
-            || $this->handleSessionException($exception)
-            || $this->handleInitException($exception)
-            || $this->handleGenericReport($bootstrap, $exception);
-        return $result;
-    }
-
-    /**
-     * Error handler for developer mode
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleDeveloperMode(Bootstrap $bootstrap, \Exception $exception)
-    {
-        if ($bootstrap->isDeveloperMode()) {
-            if (Bootstrap::ERR_IS_INSTALLED == $bootstrap->getErrorCode()) {
-                try {
-                    $this->redirectToSetup($bootstrap, $exception);
-                    return true;
-                } catch (\Exception $e) {
-                    $exception = $e;
-                }
-            }
-            $this->_response->setHttpResponseCode(500);
-            $this->_response->setHeader('Content-Type', 'text/plain');
-            $this->_response->setBody($this->buildContentFromException($exception));
-            $this->_response->sendResponse();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Build content based on an exception
-     *
-     * @param \Exception $exception
-     * @return string
-     */
-    private function buildContentFromException(\Exception $exception)
-    {
-        /** @var \Exception[] $exceptions */
-        $exceptions = [];
-
-        do {
-            $exceptions[] = $exception;
-        } while ($exception = $exception->getPrevious());
-
-        $buffer = sprintf("%d exception(s):\n", count($exceptions));
-
-        foreach ($exceptions as $index => $exception) {
-            $buffer .= sprintf("Exception #%d (%s): %s\n", $index, get_class($exception), $exception->getMessage());
-        }
-
-        foreach ($exceptions as $index => $exception) {
-            $buffer .= sprintf(
-                "\nException #%d (%s): %s\n%s\n",
-                $index,
-                get_class($exception),
-                $exception->getMessage(),
-                Debug::trace(
-                    $exception->getTrace(),
-                    true,
-                    true,
-                    (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
-                )
-            );
-        }
-
-        return $buffer;
-    }
-
-    /**
-     * If not installed, try to redirect to installation wizard
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
-     * @return void
-     * @throws \Exception
-     */
-    private function redirectToSetup(Bootstrap $bootstrap, \Exception $exception)
-    {
-        $setupInfo = new SetupInfo($bootstrap->getParams());
-        $projectRoot = $this->_filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
-        if ($setupInfo->isAvailable()) {
-            $this->_response->setRedirect($setupInfo->getUrl());
-            $this->_response->sendHeaders();
-        } else {
-            $newMessage = $exception->getMessage() . "\nNOTE: You cannot install Magento using the Setup Wizard "
-                . "because the Magento setup directory cannot be accessed. \n"
-                . 'You can install Magento using either the command line or you must restore access '
-                . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
-            // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception($newMessage, 0, $exception);
-        }
-    }
-
-    /**
-     * Handler for bootstrap errors
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleBootstrapErrors(Bootstrap $bootstrap, \Exception &$exception)
-    {
-        $bootstrapCode = $bootstrap->getErrorCode();
-        if (Bootstrap::ERR_MAINTENANCE == $bootstrapCode) {
-            // phpcs:ignore Magento2.Security.IncludeFile
-            require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
-            return true;
-        }
-        if (Bootstrap::ERR_IS_INSTALLED == $bootstrapCode) {
-            try {
-                $this->redirectToSetup($bootstrap, $exception);
-                return true;
-            } catch (\Exception $e) {
-                $exception = $e;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Handler for session errors
-     *
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleSessionException(\Exception $exception)
-    {
-        if ($exception instanceof \Magento\Framework\Exception\SessionException) {
-            $this->_response->setRedirect($this->_request->getDistroBaseUrl());
-            $this->_response->sendHeaders();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Handler for application initialization errors
-     *
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleInitException(\Exception $exception)
-    {
-        if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
-            $this->getLogger()->critical($exception);
-            // phpcs:ignore Magento2.Security.IncludeFile
-            require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Handle for any other errors
-     *
-     * @param Bootstrap $bootstrap
-     * @param \Exception $exception
-     * @return bool
-     */
-    private function handleGenericReport(Bootstrap $bootstrap, \Exception $exception)
-    {
-        $reportData = [
-            $exception->getMessage(),
-            Debug::trace(
-                $exception->getTrace(),
-                true,
-                true,
-                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
-            )
-        ];
-        $params = $bootstrap->getParams();
-        if (isset($params['REQUEST_URI'])) {
-            $reportData['url'] = $params['REQUEST_URI'];
-        }
-        if (isset($params['SCRIPT_NAME'])) {
-            $reportData['script_name'] = $params['SCRIPT_NAME'];
-        }
-        // phpcs:ignore Magento2.Security.IncludeFile
-        require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/report.php');
-        return true;
+        return $this->exceptionHandler->handle($bootstrap, $exception, $this->_response, $this->_request);
     }
 }

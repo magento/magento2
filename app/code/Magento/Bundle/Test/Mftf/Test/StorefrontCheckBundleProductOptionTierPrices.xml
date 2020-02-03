@@ -13,8 +13,10 @@
             <features value="Bundle"/>
             <stories value="View bundle products"/>
             <title value="Check tier prices for bundle options"/>
+            <description value="Check tier prices for bundle options"/>
             <testCaseId value="MAGETWO-98968"/>
             <useCaseId value="MAGETWO-98603"/>
+            <severity value="AVERAGE"/>
             <group value="catalog"/>
             <group value="bundle"/>
         </annotations>
@@ -26,7 +28,7 @@
             <!-- Simple product 1 -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct1"/>
-            <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct1">
+            <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="addTierPriceProduct1">
                 <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="5"/>
                 <argument name="price" value="Discount"/>
@@ -34,7 +36,7 @@
             </actionGroup>
             <!-- Simple product 2 -->
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct2CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct2"/>
-            <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct2">
+            <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="addTierPriceProduct2">
                 <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="7"/>
                 <argument name="price" value="Discount"/>

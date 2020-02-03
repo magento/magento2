@@ -1,14 +1,20 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
-class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Delete store design schedule action.
+ */
+class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design implements HttpPostActionInterface
 {
     /**
+     * Execute action.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()

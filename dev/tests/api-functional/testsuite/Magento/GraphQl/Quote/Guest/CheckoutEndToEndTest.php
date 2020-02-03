@@ -69,18 +69,17 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     public function testCheckoutWorkflow()
     {
-        $qty = 2;
+        $quantity = 2;
 
         $sku = $this->findProduct();
         $cartId = $this->createEmptyCart();
         $this->setGuestEmailOnCart($cartId);
-        $this->addProductToCart($cartId, $qty, $sku);
+        $this->addProductToCart($cartId, $quantity, $sku);
 
         $this->setBillingAddress($cartId);
-        $shippingAddress = $this->setShippingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
 
-        $shippingMethod = current($shippingAddress['available_shipping_methods']);
-        $paymentMethod = $this->setShippingMethod($cartId, $shippingAddress['address_id'], $shippingMethod);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
         $this->setPaymentMethod($cartId, $paymentMethod);
 
         $this->placeOrder($cartId);
@@ -96,7 +95,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
   products (
     filter: {
       sku: {
-        like:"simple%"
+        eq:"simple1"
       }
     }
     pageSize: 1
@@ -162,21 +161,21 @@ QUERY;
 
     /**
      * @param string $cartId
-     * @param float $qty
+     * @param float $quantity
      * @param string $sku
      * @return void
      */
-    private function addProductToCart(string $cartId, float $qty, string $sku): void
+    private function addProductToCart(string $cartId, float $quantity, string $sku): void
     {
         $query = <<<QUERY
 mutation {  
   addSimpleProductsToCart(
     input: {
       cart_id: "{$cartId}"
-      cartItems: [
+      cart_items: [
         {
           data: {
-            qty: {$qty}
+            quantity: {$quantity}
             sku: "{$sku}"
           }
         }
@@ -185,7 +184,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
         product {
           sku
         }
@@ -220,14 +219,13 @@ mutation {
           telephone: "88776655"
           region: "TX"
           country_code: "US"
-          save_in_address_book: false
          }
       }
     }
   ) {
     cart {
       billing_address {
-        address_type
+        __typename
       }
     }
   }
@@ -259,7 +257,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -267,11 +264,12 @@ mutation {
   ) {
     cart {
       shipping_addresses {
-        address_id
         available_shipping_methods {
           carrier_code
           method_code
-          amount
+          amount {
+            value
+          }
         }
       }
     }
@@ -285,8 +283,6 @@ QUERY;
         self::assertCount(1, $response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
 
         $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
-        self::assertArrayHasKey('address_id', $shippingAddress);
-        self::assertNotEmpty($shippingAddress['address_id']);
         self::assertArrayHasKey('available_shipping_methods', $shippingAddress);
         self::assertCount(1, $shippingAddress['available_shipping_methods']);
 
@@ -298,18 +294,18 @@ QUERY;
         self::assertNotEmpty($availableShippingMethod['method_code']);
 
         self::assertArrayHasKey('amount', $availableShippingMethod);
-        self::assertNotEmpty($availableShippingMethod['amount']);
+        self::assertArrayHasKey('value', $availableShippingMethod['amount']);
+        self::assertNotEmpty($availableShippingMethod['amount']['value']);
 
-        return $shippingAddress;
+        return $availableShippingMethod;
     }
 
     /**
      * @param string $cartId
-     * @param int $addressId
      * @param array $method
      * @return array
      */
-    private function setShippingMethod(string $cartId, int $addressId, array $method): array
+    private function setShippingMethod(string $cartId, array $method): array
     {
         $query = <<<QUERY
 mutation {
@@ -317,7 +313,6 @@ mutation {
     cart_id: "{$cartId}", 
     shipping_methods: [
       {
-         cart_address_id: {$addressId}
          carrier_code: "{$method['carrier_code']}"
          method_code: "{$method['method_code']}"
       }
@@ -389,7 +384,7 @@ mutation {
     }
   ) {
     order {
-      order_id
+      order_number
     }
   }
 }
@@ -397,8 +392,8 @@ QUERY;
         $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertNotEmpty($response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertNotEmpty($response['placeOrder']['order']['order_number']);
     }
 
     public function tearDown()

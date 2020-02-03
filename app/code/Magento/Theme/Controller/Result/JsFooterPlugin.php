@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -14,7 +16,7 @@ use Magento\Framework\App\Response\Http;
  */
 class JsFooterPlugin
 {
-    private const XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_inline_to_bottom';
+    private const XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
 
     /**
      * @var ScopeConfigInterface
@@ -39,7 +41,7 @@ class JsFooterPlugin
     {
         $content = $subject->getContent();
         $script = [];
-        if (strpos($content, '</body') !== false) {
+        if (is_string($content) && strpos($content, '</body') !== false) {
             if ($this->scopeConfig->isSetFlag(
                 self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
                 ScopeInterface::SCOPE_STORE

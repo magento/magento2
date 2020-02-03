@@ -81,49 +81,6 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
-     * @param string $input
-     * @param string $message
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
-     */
-    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
-    {
-        $query = <<<QUERY
-mutation {
-  removeItemFromCart(
-    input: {
-      {$input}
-    }
-  ) {
-    cart {
-      items {
-        qty
-      }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
-    {
-        return [
-            'missed_cart_id' => [
-                'cart_item_id: 1',
-                'Required parameter "cart_id" is missing.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_id: "test"',
-                'Required parameter "cart_item_id" is missing.'
-            ],
-        ];
-    }
-
-    /**
      * _security
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -179,7 +136,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }

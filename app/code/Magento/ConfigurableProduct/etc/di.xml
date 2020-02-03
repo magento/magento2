@@ -12,6 +12,7 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
@@ -204,13 +205,6 @@
             <argument name="productIndexer" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
         </arguments>
     </type>
-    <virtualType name="LinkedProductSelectBuilderByIndexMinPrice" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite">
-        <arguments>
-            <argument name="linkedProductSelectBuilder" xsi:type="array">
-                <item name="indexPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider">
         <arguments>
             <argument name="linkedProductSelectBuilder" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder</argument>
@@ -219,7 +213,7 @@
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder">
         <arguments>
             <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</argument>
-            <argument name="linkedProductSelectBuilder" xsi:type="object">LinkedProductSelectBuilderByIndexMinPrice</argument>
+            <argument name="linkedProductSelectBuilder" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver">
@@ -253,6 +247,21 @@
             <argument name="reservedSystemNames" xsi:type="array">
                 <item name="configurable" xsi:type="string">configurable</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="configurable" xsi:type="object"> Magento\ConfigurableProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
 </config>

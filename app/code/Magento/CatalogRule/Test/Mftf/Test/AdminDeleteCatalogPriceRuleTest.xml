@@ -17,34 +17,38 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-160"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create a category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-
             <!-- Create a simple product -->
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-
+            <!-- Login to Admin page -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createConfigurableProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
+            <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createNewPriceRule"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 

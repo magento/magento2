@@ -58,15 +58,15 @@ class UpdateCartItemsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testUpdateCartItemQty()
+    public function testUpdateCartItemQuantity()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
-        $qty = 2;
+        $quantity = 2;
 
-        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
+        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('updateCartItems', $response);
@@ -76,7 +76,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $item = current($responseCart['items']);
 
         $this->assertEquals($itemId, $item['id']);
-        $this->assertEquals($qty, $item['qty']);
+        $this->assertEquals($quantity, $item['quantity']);
     }
 
     /**
@@ -88,9 +88,9 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
-        $qty = 0;
+        $quantity = 0;
 
-        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
+        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('updateCartItems', $response);
@@ -210,35 +210,6 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing.
-     */
-    public function testUpdateWithMissedCartItemId()
-    {
-        $query = <<<QUERY
-mutation {
-  updateCartItems(input: {
-    cart_items: [
-      {
-        cart_item_id: 1
-        quantity: 2
-      }
-    ]  
-  }) {
-    cart {
-      items {
-        id
-        qty
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
@@ -259,7 +230,7 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }
@@ -275,14 +246,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_cart_items' => [
-                '',
-                'Required parameter "cart_items" is missing.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_items: [{ quantity: 2 }]',
-                'Required parameter "cart_item_id" for "cart_items" is missing.'
-            ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
                 'Required parameter "quantity" for "cart_items" is missing.'
@@ -293,10 +256,10 @@ QUERY;
     /**
      * @param string $maskedQuoteId
      * @param int $itemId
-     * @param float $qty
+     * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $itemId, float $qty): string
+    private function getQuery(string $maskedQuoteId, int $itemId, float $quantity): string
     {
         return <<<QUERY
 mutation {
@@ -305,14 +268,14 @@ mutation {
     cart_items:[
       {
         cart_item_id: {$itemId}
-        quantity: {$qty}
+        quantity: {$quantity}
       }
     ]
   }) {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }

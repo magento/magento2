@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable Magento2.Files.LineLength.MaxExceeded
+
 /**
  * Template for displaying new products widget
  *
@@ -21,7 +22,8 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
     $image = 'new_products_content_widget_list';
     $title = __('New Products');
     $items = $block->getProductCollection()->getItems();
-    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    /** @var Magento\Catalog\Helper\Output $_helper */
+    $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
 
     $showWishlist = true;
     $showCompare = true;
@@ -31,94 +33,102 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
 }
 ?>
 
-<?php if ($exist):?>
-    <div class="block widget block-new-products <?= /* @escapeNotVerified */ $mode ?>">
+<?php if ($exist) :?>
+    <div class="block widget block-new-products <?= /* @noEscape */ $mode ?>">
         <div class="block-title">
-            <strong role="heading" aria-level="2"><?= /* @escapeNotVerified */ $title ?></strong>
+            <strong role="heading" aria-level="2"><?= $block->escapeHtml($title) ?></strong>
         </div>
         <div class="block-content">
-            <?= /* @escapeNotVerified */ '<!-- ' . $image . '-->' ?>
-            <div class="products-<?= /* @escapeNotVerified */ $mode ?> <?= /* @escapeNotVerified */ $mode ?>">
-                <ol class="product-items <?= /* @escapeNotVerified */ $type ?>">
-                    <?php foreach ($items as $_item): ?>
+            <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+            <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
+                <ol class="product-items <?= /* @noEscape */ $type ?>">
+                    <?php foreach ($items as $_item) :?>
                         <li class="product-item">
                             <div class="product-item-info">
-                                <a href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>" class="product-item-photo">
+                                <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                                   class="product-item-photo">
                                     <?= $block->getImage($_item, $image)->toHtml() ?>
                                 </a>
                                 <div class="product-item-details">
                                     <strong class="product-item-name">
-                                        <a title="<?= $block->escapeHtml($_item->getName()) ?>"
-                                           href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>"
+                                        <a title="<?= $block->escapeHtmlAttr($_item->getName()) ?>"
+                                           href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
                                            class="product-item-link">
                                             <?= $block->escapeHtml($_item->getName()) ?>
                                         </a>
                                     </strong>
                                     <?= $block->getProductPriceHtml($_item, $type) ?>
 
-                                    <?php if ($templateType): ?>
+                                    <?php if ($templateType) :?>
                                         <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                                     <?php endif; ?>
 
-                                    <?php if ($showWishlist || $showCompare || $showCart): ?>
+                                    <?php if ($showWishlist || $showCompare || $showCart) :?>
                                         <div class="product-item-actions">
-                                            <?php if ($showCart): ?>
+                                            <?php if ($showCart) :?>
                                                 <div class="actions-primary">
-                                                    <?php if ($_item->isSaleable()): ?>
-                                                        <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)): ?>
+                                                    <?php if ($_item->isSaleable()) :?>
+                                                        <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)
+                                                        ) :?>
                                                             <button class="action tocart primary"
-                                                                    data-mage-init='{"redirectUrl":{"url":"<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_item) ?>"}}'
-                                                                    type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                                                <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                                                    data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}'
+                                                                    type="button"
+                                                                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
-                                                        <?php else: ?>
+                                                        <?php else :?>
                                                             <?php
-                                                                $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                                                $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
                                                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                             ?>
                                                             <button class="action tocart primary"
-                                                                    data-post='<?= /* @escapeNotVerified */ $postData ?>'
-                                                                    type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                                                <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                                                    data-post='<?= /* @noEscape */ $postData ?>'
+                                                                    type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         <?php endif; ?>
-                                                    <?php else: ?>
-                                                        <?php if ($_item->getIsSalable()): ?>
-                                                            <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
-                                                        <?php else: ?>
-                                                            <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
+                                                    <?php else :?>
+                                                        <?php if ($_item->getIsSalable()) :?>
+                                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                                        <?php else :?>
+                                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                                                         <?php endif; ?>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
-                                            <?php if ($showWishlist || $showCompare): ?>
+                                            <?php if ($showWishlist || $showCompare) :?>
                                                 <div class="actions-secondary" data-role="add-to-links">
-                                                    <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist): ?>
+                                                    <?php if ($this->helper(Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) :?>
                                                         <a href="#"
-                                                           data-post='<?= /* @escapeNotVerified */ $block->getAddToWishlistParams($_item) ?>'
+                                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>'
                                                            class="action towishlist" data-action="add-to-wishlist"
-                                                           title="<?= /* @escapeNotVerified */ __('Add to Wish List') ?>">
-                                                            <span><?= /* @escapeNotVerified */ __('Add to Wish List') ?></span>
+                                                           title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                            <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                                         </a>
                                                     <?php endif; ?>
-                                                    <?php if ($block->getAddToCompareUrl() && $showCompare): ?>
-                                                        <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
+                                                    <?php if ($block->getAddToCompareUrl() && $showCompare) :?>
+                                                        <?php $compareHelper = $this->helper(Magento\Catalog\Helper\Product\Compare::class); ?>
                                                         <a href="#" class="action tocompare"
-                                                           title="<?= /* @escapeNotVerified */ __('Add to Compare') ?>"
-                                                           data-post='<?= /* @escapeNotVerified */ $compareHelper->getPostDataParams($_item) ?>'>
-                                                            <span><?= /* @escapeNotVerified */ __('Add to Compare') ?></span>
+                                                           title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>"
+                                                           data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>'
+                                                        >
+                                                            <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
                                                         </a>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
-                                    <?php if ($description):?>
+                                    <?php if ($description) :?>
                                         <div class="product-item-description">
-                                            <?= /* @escapeNotVerified */ $_helper->productAttribute($_item, $_item->getShortDescription(), 'short_description') ?>
-                                            <a title="<?= $block->escapeHtml($_item->getName()) ?>"
-                                               href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>"
-                                               class="action more"><?= /* @escapeNotVerified */ __('Learn More') ?></a>
+                                            <?= /* @noEscape */ $_helper->productAttribute(
+                                                $_item,
+                                                $_item->getShortDescription(),
+                                                'short_description'
+                                            ) ?>
+                                            <a title="<?= $block->escapeHtmlAttr($_item->getName()) ?>"
+                                               href="<?= $block->escapeUrl($block->getProductUrl($_item))?>"
+                                               class="action more"><?= $block->escapeHtml(__('Learn More')) ?></a>
                                         </div>
                                     <?php endif; ?>
                                 </div>

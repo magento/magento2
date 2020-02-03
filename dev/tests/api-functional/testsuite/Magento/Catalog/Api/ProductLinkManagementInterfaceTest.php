@@ -81,6 +81,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
 
         $actual = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'type' => $linkType]);
 
+        $this->assertArrayHasKey(0, $actual);
         $this->assertEquals('simple', $actual[0]['linked_product_type']);
         $this->assertEquals('simple', $actual[0]['linked_product_sku']);
         $this->assertEquals(1, $actual[0]['position']);
@@ -122,9 +123,13 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
 
         $this->_webApiCall($serviceInfo, $arguments);
         $actual = $this->getLinkedProducts($productSku, 'related');
-        array_walk($actual, function (&$item) {
-            $item = $item->__toArray();
-        });
+        array_walk(
+            $actual,
+            function (&$item) {
+                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $item */
+                $item = $item->__toArray();
+            }
+        );
         $this->assertEquals([$linkData], $actual);
     }
 

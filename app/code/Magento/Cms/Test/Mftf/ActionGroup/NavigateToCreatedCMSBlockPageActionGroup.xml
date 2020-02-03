@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToCreatedCMSBlockPageActionGroup">
+        <annotations>
+            <description>Goes to the Admin Blocks page. Clicks on 'Edit' for the provided Block.</description>
+        </annotations>
+        <arguments>
+            <argument name="CMSBlockPage" defaultValue=""/>
+        </arguments>
+
+        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <conditionalClick selector="{{BlockPageActionsSection.idColumn}}" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending" visible="true"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish"/>
+
+        <!-- Conditional Click again in case it goes from default state to ascending on first click  -->
+        <conditionalClick selector="{{BlockPageActionsSection.idColumn}}" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="secondClickToAttemptSortByIdDescending" visible="true"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish"/>
+        <click selector="{{BlockPageActionsSection.select(CMSBlockPage.identifier)}}" stepKey="clickSelectCreatedCMSBlock"/>
+        <click selector="{{BlockPageActionsSection.edit(CMSBlockPage.identifier)}}" stepKey="navigateToCreatedCMSBlock"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection"/>
+    </actionGroup>
+</actionGroups>

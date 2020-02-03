@@ -1366,7 +1366,7 @@
         font-size: 14px;
         font-weight: 600;
         line-height: 3.2rem;
-        padding: 0 30px 0 0;
+        padding: 0 30px 0 30px;
         white-space: nowrap;
         word-wrap: break-word;
 
@@ -1825,6 +1825,10 @@
 
     .x-tree-node .system-leaf .x-tree-node-icon {
         background-image: url(../images/fam_application_form_delete.png);
+    }
+
+    .x-tree-node .x-tree-node-el input[type=checkbox] {
+        margin-left: 3px;
     }
 
     //
@@ -3962,7 +3966,8 @@
 }
 
 //  Configuration -> Payment Methods
-.adminhtml-system-config-edit {
+.adminhtml-system-config-edit,
+.adminhtml-system_config-edit {
     .admin__scope-old {
         .payflow-settings-notice {
             margin-top: 2rem;
@@ -4055,6 +4060,31 @@
         .col-added,
         .col-updated {
             width: 140px;
+        }
+    }
+}
+
+.newsletter-template-preview {
+    height: 100%;
+    .cms-revision-preview {
+        height: 100%;
+        .preview_iframe {
+            height: calc(~'100% - 50px');
+        }
+    }
+}
+
+.adminhtml-email_template-preview {
+    .cms-revision-preview {
+        padding-top: 56.25%;
+        position: relative;
+
+        #preview_iframe {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
         }
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchProductGiftMessageStatusActionGroup">
+        <arguments>
+            <argument name="status" defaultValue="0"/>
+        </arguments>
+        <click selector="{{AdminProductGiftOptionsSection.giftOptions}}" stepKey="clickToExpandGiftOptionsTab"/>
+        <waitForPageLoad stepKey="waitForGiftOptionsOpen"/>
+        <uncheckOption selector="{{AdminProductGiftOptionsSection.useConfigSettingsMessage}}" stepKey="uncheckConfigSettingsMessage"/>
+        <click selector="{{AdminProductGiftOptionsSection.toggleProductGiftMessage}}" stepKey="clickToGiftMessageSwitcher"/>
+        <seeElement selector="{{AdminProductGiftOptionsSection.giftMessageStatus('status')}}" stepKey="assertGiftMessageStatus"/>
+    </actionGroup>
+</actionGroups>

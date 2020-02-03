@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Fill shipment form for free shipping-->
+    <actionGroup name="VerifyCheckoutPaymentOrderSummaryActionGroup">
+        <annotations>
+            <description>Validates that the provided Subtotal, Shipping Total and Summary Total prices are present and correct on the Storefront Checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderSummarySubTotal" type="string"/>
+            <argument name="orderSummaryShippingTotal" type="string"/>
+            <argument name="orderSummaryTotal" type="string"/>
+        </arguments>
+
+        <see selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" userInput="{{orderSummarySubTotal}}" stepKey="seeCorrectSubtotal"/>
+        <see selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" userInput="{{orderSummaryShippingTotal}}" stepKey="seeCorrectShipping"/>
+        <see selector="{{CheckoutPaymentSection.orderSummaryTotal}}" userInput="{{orderSummaryTotal}}" stepKey="seeCorrectOrderTotal"/>
+    </actionGroup>
+</actionGroups>

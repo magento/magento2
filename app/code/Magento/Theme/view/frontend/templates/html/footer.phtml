@@ -3,17 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <div class="footer-container">
     <div class="footer">
         <?= $block->getChildHtml() ?>
-        <p class="bugs"><?= /* @escapeNotVerified */ __('Help Us Keep Magento Healthy') ?> - <a
+        <p class="bugs"><?= $block->escapeHtml(__('Help Us Keep Magento Healthy')) ?> - <a
             href="http://www.magentocommerce.com/bug-tracking"
-            target="_blank"><strong><?= /* @escapeNotVerified */ __('Report All Bugs') ?></strong></a>
+            target="_blank"><strong><?= $block->escapeHtml(__('Report All Bugs')) ?></strong></a>
         </p>
-        <address><?= /* @escapeNotVerified */ $block->getCopyright() ?></address>
+        <address><?= $block->escapeHtml($block->getCopyright()) ?></address>
     </div>
 </div>
