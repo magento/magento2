@@ -38,7 +38,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
             null,
             'left'
         )->joinAttribute(
-            'billing_regione',
+            'billing_region',
             'customer_address/region',
             'default_billing',
             null,
