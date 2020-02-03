@@ -55,7 +55,7 @@ class PrepareBundleLinks
         array $bundleSelectionsData
     ): ProductInterface {
         $product->setBundleOptionsData($bundleOptionsData)
-            ->setBundleSelectionsData([$bundleSelectionsData]);
+            ->setBundleSelectionsData($bundleSelectionsData);
 
         $options = [];
         foreach ($product->getBundleOptionsData() as $key => $optionData) {

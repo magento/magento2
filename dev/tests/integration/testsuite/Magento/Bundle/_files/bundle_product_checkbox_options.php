@@ -74,6 +74,6 @@ $bundleSelectionsData = [
     ],
 ];
 
-$bundleProduct = $prepareBundleLinks->execute($bundleProduct, $bundleOptionsData, $bundleSelectionsData);
+$bundleProduct = $prepareBundleLinks->execute($bundleProduct, $bundleOptionsData, [$bundleSelectionsData]);
 
 $productRepository->save($bundleProduct);

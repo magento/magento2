@@ -53,7 +53,7 @@ $bundleOptionsData = [
         'type' => 'multi',
         'required' => 0,
         'delete' => '',
-    ]
+    ],
 ];
 $bundleSelectionsData = [
     [
@@ -74,5 +74,5 @@ $bundleSelectionsData = [
     ],
 ];
 
-$bundleProduct = $prepareBundleLinks->execute($bundleProduct, $bundleOptionsData, $bundleSelectionsData);
+$bundleProduct = $prepareBundleLinks->execute($bundleProduct, $bundleOptionsData, [$bundleSelectionsData]);
 $productRepository->save($bundleProduct);
