@@ -5,7 +5,7 @@
  */
 
 /**
- * Tests for \Magento\Framework\Data\Form\Field\Image
+ * Test for \Magento\Framework\Data\Form\Field\Image.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
@@ -26,15 +26,24 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     protected $testData;
 
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $escaperMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\Url::class);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->image = $objectManager->getObject(
             \Magento\Config\Block\System\Config\Form\Field\Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
-                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $this->escaperMock,
             ]
         );
 
@@ -53,6 +62,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get element with value and check data.
+     *
      * @covers \Magento\Config\Block\System\Config\Form\Field\Image::_getUrl
      */
     public function testGetElementHtmlWithValue()
@@ -93,7 +104,17 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             . $this->testData['html_id']
             . $this->testData['html_id_suffix'];
 
+        $this->escaperMock->expects($this->once())
+            ->method('escapeUrl')
+            ->with($url . $this->testData['path'] . '/' . $this->testData['value'])
+            ->willReturn($url . $this->testData['path'] . '/' . $this->testData['value']);
+        $this->escaperMock->expects($this->exactly(3))
+            ->method('escapeHtmlAttr')
+            ->with($this->testData['value'])
+            ->willReturn($this->testData['value']);
+        $this->escaperMock->expects($this->atLeastOnce())->method('escapeHtml')->willReturn($expectedHtmlId);
         $html = $this->image->getElementHtml();
+
         $this->assertContains('class="input-file"', $html);
         $this->assertContains('<input', $html);
         $this->assertContains('type="file"', $html);

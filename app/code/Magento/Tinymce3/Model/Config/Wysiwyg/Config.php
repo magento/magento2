@@ -9,7 +9,7 @@ namespace Magento\Tinymce3\Model\Config\Wysiwyg;
 
 /**
  * Class Config adds information about required css files for tinymce3 editor
- * @deprecated use \Magento\Cms\Model\Wysiwyg\DefaultConfigProvider instead
+ * @deprecated 100.3.0 use \Magento\Cms\Model\Wysiwyg\DefaultConfigProvider instead
  */
 class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {

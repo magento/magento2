@@ -13,6 +13,7 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
 
@@ -249,14 +250,18 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
+        $uid = $user->getId();
+        if (!$uid) {
+            return false;
+        }
+
+        $user->beforeDelete();
         $this->_beforeDelete($user);
         $connection = $this->getConnection();
-
-        $uid = $user->getId();
         $connection->beginTransaction();
         try {
             $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
@@ -264,12 +269,15 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getTable('authorization_role'),
                 ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
             );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $connection->rollBack();
             return false;
         }
+        $user->afterDelete();
         $connection->commit();
+        $user->afterDeleteCommit();
         $this->_afterDelete($user);
+
         return true;
     }
 
