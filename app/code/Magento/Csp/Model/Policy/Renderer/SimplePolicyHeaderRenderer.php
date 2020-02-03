@@ -58,7 +58,7 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             $response->setHeader('Report-To', json_encode($reportToData), true);
         }
         if ($existing = $response->getHeader($header)) {
-            $value = $existing->getFieldValue() .' ' .$value;
+            $value = $value .' ' .$existing->getFieldValue();
         }
         $response->setHeader($header, $value, true);
     }
