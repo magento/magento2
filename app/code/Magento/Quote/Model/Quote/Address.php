@@ -238,7 +238,7 @@ class Address extends AbstractAddress implements
 
     /**
      * @var RateFactory
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $_addressRateFactory;
 

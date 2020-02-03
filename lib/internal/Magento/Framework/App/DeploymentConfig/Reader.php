@@ -134,7 +134,7 @@ class Reader
      * @return array
      * @throws FileSystemException
      * @throws RuntimeException
-     * @deprecated 100.2.0 Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 101.0.0 Magento does not support custom config file pools since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)

@@ -10,12 +10,12 @@
 $elementName = $block->getElement()->getName() . '[images]';
 $formName = $block->getFormName();
 ?>
-<div id="<?= $block->getHtmlId() ?>"
+<div id="<?= /* @noEscape */ $block->getHtmlId() ?>"
      class="gallery"
-     data-mage-init='{"productGallery":{"template":"#<?= $block->getHtmlId() ?>-template"}}'
-     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
-     data-types="<?= $block->escapeHtml(
+     data-mage-init='{"productGallery":{"template":"#<?= /* @noEscape */ $block->getHtmlId() ?>-template"}}'
+     data-parent-component="<?= $block->escapeHtmlAttr($block->getData('config/parentComponent')) ?>"
+     data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
+     data-types="<?= $block->escapeHtmlAttr(
          $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())
      ) ?>"
 >
@@ -39,7 +39,7 @@ $formName = $block->getFormName();
         <?php
     } ?>
 
-    <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template">
+    <script id="<?= /* @noEscape */ $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item<% if (data.disabled == 1) { %> hidden-for-front<% } %>"
              data-role="image">
             <input type="hidden"

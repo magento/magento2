@@ -25,7 +25,7 @@
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?= $block->escapeHtmlAttr($block->getHelper()->getConversionImgSrc()) ?>"/>
+             src="<?= $block->escapeJs($block->escapeUrl($block->getHelper()->getConversionImgSrc())) ?>"/>
     </div>
 </noscript>
 <!-- END Google Code for Sale Conversion Page -->
