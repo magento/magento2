@@ -17,11 +17,11 @@
                     </option>
                 <?php endif; ?>
                 <?php foreach ($groups as $code => $rates) : ?>
-                    <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)) ?>"
+                    <optgroup label="<?= $block->escapeHtmlAttr($block->getCarrierName($code)) ?>"
                               style="font-style:normal;">
                         <?php foreach ($rates as $rate) : ?>
                             <option
-                                value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
+                                value="<?= $block->escapeHtmlAttr($block->renderShippingRateValue($rate)) ?>"
                                     <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
                                 <?= /* @noEscape */ $block->renderShippingRateOption($rate) ?>
                             </option>

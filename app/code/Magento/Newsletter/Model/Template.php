@@ -40,7 +40,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Mail object
      *
-     * @deprecated Unused property
+     * @deprecated 100.3.0 Unused property
      *
      */
     protected $_mail;

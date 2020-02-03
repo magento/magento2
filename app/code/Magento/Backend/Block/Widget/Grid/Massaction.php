@@ -58,12 +58,13 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractM
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @param string $itemId
      * @param array|DataObject $item
      *
      * @return $this
+     * @since 100.2.3
      */
     public function addItem($itemId, $item)
     {

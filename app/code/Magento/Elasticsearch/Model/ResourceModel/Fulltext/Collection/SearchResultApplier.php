@@ -60,6 +60,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         if (empty($this->searchResult->getItems())) {
             $this->collection->getSelect()->where('NULL');
+
             return;
         }
 
@@ -85,13 +86,16 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function sliceItems(array $items, int $size, int $currentPage): array
     {
         if ($size !== 0) {
+            // Check that current page is in a range of allowed page numbers, based on items count and items per page,
+            // than calculate offset for slicing items array.
             $totalPages = (int) ceil(count($items)/$size);
             $currentPage = min($currentPage, $totalPages);
             $offset = ($currentPage - 1) * $size;
             if ($offset < 0) {
                 $offset = 0;
             }
-            $items = array_slice($items, $offset, $this->size);
+
+            $items = array_slice($items, $offset, $size);
         }
 
         return $items;
