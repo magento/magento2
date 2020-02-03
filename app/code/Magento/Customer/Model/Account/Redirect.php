@@ -29,7 +29,7 @@ use Magento\Customer\Model\RedirectCookieManager;
  */
 class Redirect
 {
-    /** @deprecated
+    /** @deprecated moved into its own class
      * @see \Magento\Customer\Model\RedirectCookieManager
      * URL to redirect user on successful login or registration
      */
