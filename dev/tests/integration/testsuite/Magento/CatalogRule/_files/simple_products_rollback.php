@@ -18,7 +18,7 @@ $registry->register('isSecureArea', true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-foreach (['simple1', 'simple2','simple3'] as $sku) {
+foreach (['simple1', 'simple2'] as $sku) {
     try {
         $product = $productRepository->get($sku, false, null, true);
         $productRepository->delete($product);
