@@ -152,7 +152,8 @@
             <argument name="discountAmount" value="{{CatalogRuleByPercentWith96Amount.discount_amount}}"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
+        <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule" stepKey="reindexIndices"/>
+        <magentoCLI command="cache:clean" arguments="full_page block_html" stepKey="flushCache"/>
 
         <!--Reopen category with products and Sort by price desc-->
         <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="goToStorefrontCategoryPage2">
