@@ -9,6 +9,7 @@ namespace Magento\TestFramework\Bundle\Model;
 
 use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Api\Data\OptionInterfaceFactory;
+use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 
@@ -68,6 +69,11 @@ class PrepareBundleLinks
                 $link = $this->linkFactory->create(['data' => $linkData]);
                 $link->setQty($linkData['selection_qty']);
                 $link->setPrice($linkData['selection_price_value']);
+                $priceType = $product->getPriceType() === Price::PRICE_TYPE_FIXED
+                    && isset($linkData['selection_price_type'])
+                    ? $linkData['selection_price_type']
+                    : null;
+                $link->setPriceType($priceType);
                 $links[] = $link;
             }
             $option->setProductLinks($links);
