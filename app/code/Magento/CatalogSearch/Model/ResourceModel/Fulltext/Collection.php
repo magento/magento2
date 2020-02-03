@@ -27,6 +27,7 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Search\Model\EngineResolver;
 
 /**
  * Fulltext Collection
@@ -41,6 +42,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
+    /**
+     * Config search engine path.
+     */
+    private const SEARCH_ENGINE_VALUE_PATH = 'catalog/search/engine';
+
     /**
      * @var  QueryResponse
      * @deprecated 100.1.0
@@ -374,6 +380,74 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function clear()
+    {
+        $this->searchResult = null;
+        $this->setFlag('has_category_filter', false);
+
+        return parent::clear();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _reset()
+    {
+        $this->searchResult = null;
+        $this->setFlag('has_category_filter', false);
+
+        return parent::_reset();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _loadEntities($printQuery = false, $logQuery = false)
+    {
+        $this->getEntity();
+
+        $currentSearchEngine = $this->_scopeConfig->getValue(self::SEARCH_ENGINE_VALUE_PATH);
+        if ($this->_pageSize && $currentSearchEngine === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE) {
+            $this->getSelect()->limitPage($this->getCurPage(), $this->_pageSize);
+        }
+
+        $this->printLogQuery($printQuery, $logQuery);
+
+        try {
+            /**
+             * Prepare select query
+             * @var string $query
+             */
+            $query = $this->getSelect();
+            $rows = $this->_fetchAll($query);
+        } catch (\Exception $e) {
+            $this->printLogQuery(false, true, $query);
+            throw $e;
+        }
+
+        $position = 0;
+        foreach ($rows as $value) {
+            if ($this->getFlag('has_category_filter')) {
+                $value['cat_index_position'] = $position++;
+            }
+            $object = $this->getNewEmptyItem()->setData($value);
+            $this->addItem($object);
+            if (isset($this->_itemsById[$object->getId()])) {
+                $this->_itemsById[$object->getId()][] = $object;
+            } else {
+                $this->_itemsById[$object->getId()] = [$object];
+            }
+        }
+        if ($this->getFlag('has_category_filter')) {
+            $this->setFlag('has_category_filter', false);
+        }
+
+        return $this;
+    }
+
+    /**
      * Add search query filter
      *
      * @param string $query
@@ -606,6 +680,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::addCategoryFilter($category);
         } else {
+            $this->setFlag('has_category_filter', true);
             $this->_productLimitationPrice();
         }
 

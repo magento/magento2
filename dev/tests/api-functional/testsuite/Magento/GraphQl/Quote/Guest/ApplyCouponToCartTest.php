@@ -151,49 +151,6 @@ class ApplyCouponToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @param string $input
-     * @param string $message
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
-     * @expectedException \Exception
-     */
-    public function testApplyCouponWithMissedRequiredParameters(string $input, string $message)
-    {
-        $query = <<<QUERY
-mutation {
-  applyCouponToCart(input: {{$input}}) {
-    cart {
-      applied_coupon {
-        code
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
-    {
-        return [
-            'missed_cart_id' => [
-                'coupon_code: "test"',
-                'Required parameter "cart_id" is missing'
-            ],
-            'missed_coupon_code' => [
-                'cart_id: "test_quote"',
-                'Required parameter "coupon_code" is missing'
-            ],
-        ];
-    }
-
-    /**
      * @param string $maskedQuoteId
      * @param string $couponCode
      * @return string
