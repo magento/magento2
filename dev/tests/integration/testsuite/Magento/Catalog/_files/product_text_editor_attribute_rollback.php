@@ -19,7 +19,7 @@ $registry->register('isSecureArea', true);
 $attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
 
 try {
-    $attributeRepository->deleteById('visual_swatch_attribute');
+    $attributeRepository->deleteById('text_editor_attribute');
 } catch (NoSuchEntityException $e) {
 }
 $registry->unregister('isSecureArea');
