@@ -76,6 +76,8 @@ class TemplateHintsStatusCommand extends Command
     }
 
     /**
+     * Check if template hints enabled
+     *
      * @return bool
      */
     private function isTemplateHintsEnabled(): bool
