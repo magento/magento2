@@ -15,8 +15,7 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 /**
- * Class Navigation
- *
+ *  Controller Navigation class
  */
 class Navigation extends AbstractActionController
 {
@@ -36,6 +35,11 @@ class Navigation extends AbstractActionController
     protected $view;
 
     /**
+     * @var JsonModel
+     */
+    protected $json;
+
+    /**
      * @var ObjectManagerProvider $objectManagerProvider
      */
     protected $objectManagerProvider;
@@ -43,13 +47,22 @@ class Navigation extends AbstractActionController
     /**
      * @param NavModel $navigation
      * @param Status $status
+     * @param ViewModel $viewModel
+     * @param JsonModel $jsonModel
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
-    {
+    public function __construct(
+        NavModel $navigation,
+        Status $status,
+        ViewModel $viewModel,
+        JsonModel $jsonModel,
+        ObjectManagerProvider $objectManagerProvider
+    ) {
         $this->navigation = $navigation;
         $this->status = $status;
-        $this->objectManagerProvider = $objectManagerProvider;
-        $this->view = new ViewModel();
+        $this->objectManagerProvider = $objectManagerProvider->get();
+        $this->view = $viewModel;
+        $this->json = $jsonModel;
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
@@ -59,12 +72,11 @@ class Navigation extends AbstractActionController
      */
     public function indexAction()
     {
-        $json = new JsonModel();
-        $json->setVariable('nav', $this->navigation->getData());
-        $json->setVariable('menu', $this->navigation->getMenuItems());
-        $json->setVariable('main', $this->navigation->getMainItems());
-        $json->setVariable('titles', $this->navigation->getTitles());
-        return $json;
+        $this->json->setVariable('nav', $this->navigation->getData());
+        $this->json->setVariable('menu', $this->navigation->getMenuItems());
+        $this->json->setVariable('main', $this->navigation->getMainItems());
+        $this->json->setVariable('titles', $this->navigation->getTitles());
+        return $this->json;
     }
 
     /**
@@ -86,7 +98,7 @@ class Navigation extends AbstractActionController
     public function sideMenuAction()
     {
         /** @var UrlInterface $backendUrl */
-        $backendUrl = $this->objectManagerProvider->get()->get(UrlInterface::class);
+        $backendUrl = $this->objectManagerProvider->get(UrlInterface::class);
 
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
