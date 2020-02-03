@@ -1095,9 +1095,6 @@ class AccountManagement implements AccountManagementInterface
         $customer->setAddresses($oldAddresses);
 
         $result = $this->getEavValidator()->isValid($customerModel);
-       /* $validator = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Validator\ValidatorInterface::class);
-        $result = $this->validateCustomerStoreIdByWebsiteId($customer);*/
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
