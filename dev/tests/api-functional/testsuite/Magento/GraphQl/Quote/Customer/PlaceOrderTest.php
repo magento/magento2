@@ -86,8 +86,8 @@ class PlaceOrderTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('placeOrder', $response);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
     }
 
     /**
@@ -99,26 +99,6 @@ class PlaceOrderTest extends GraphQlAbstract
     {
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
-    public function testPlaceOrderIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  placeOrder(input: {}) {
-    order {
-      order_id
-    }
-  }
-}
-QUERY;
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -313,7 +293,7 @@ QUERY;
 mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

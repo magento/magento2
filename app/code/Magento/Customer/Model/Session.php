@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
  * @method string getNoReferer()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
@@ -107,6 +108,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var \Magento\Framework\App\Response\Http
      */
     protected $response;
+
+    /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
 
     /**
      * Session constructor.
@@ -370,7 +376,9 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Get customer group id. If customer is not logged in system, 'not logged in' group id will be returned.
+     * Get customer group id.
+     *
+     * If customer is not logged in system, 'not logged in' group id will be returned.
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -431,21 +439,22 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function setCustomerAsLoggedIn($customer)
     {
+        $this->regenerateId();
         $this->setCustomer($customer);
         $this->_eventManager->dispatch('customer_login', ['customer' => $customer]);
         $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $this->getCustomerDataObject()]);
-        $this->regenerateId();
         return $this;
     }
 
     /**
-     * Sets customer data as logged in
+     * Sets customer as logged in
      *
      * @param CustomerData $customer
      * @return $this
      */
     public function setCustomerDataAsLoggedIn($customer)
     {
+        $this->regenerateId();
         $this->_httpContext->setValue(Context::CONTEXT_AUTH, true, false);
         $this->setCustomerData($customer);
 
@@ -508,13 +517,6 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->response->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerUrl->getLoginUrlParams();
-            if ($this->_createUrl()->getUseSession()) {
-                $arguments += [
-                    '_query' => [
-                        $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
-                    ]
-                ];
-            }
             $this->response->setRedirect(
                 $this->_createUrl()->getUrl(\Magento\Customer\Model\Url::ROUTE_ACCOUNT_LOGIN, $arguments)
             );
@@ -532,8 +534,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     protected function _setAuthUrl($key, $url)
     {
-        $url = $this->_coreUrl->removeRequestParam($url, $this->sidResolver->getSessionIdQueryParam($this));
-        // Add correct session ID to URL if needed
         $url = $this->_createUrl()->getRebuiltUrl($url);
         return $this->storage->setData($key, $url);
     }
@@ -590,7 +590,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Creates URL factory
+     * Creates URL object
      *
      * @return \Magento\Framework\UrlInterface
      */

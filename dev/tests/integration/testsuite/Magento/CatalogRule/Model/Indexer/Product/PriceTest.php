@@ -5,23 +5,52 @@
  */
 namespace Magento\CatalogRule\Model\Indexer\Product;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\CatalogRule\Model\ResourceModel\Rule;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder;
+use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
     /**
      * @var Rule
      */
     private $resourceRule;
 
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
+     * @var IndexBuilder
+     */
+    private $indexerBuilder;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->resourceRule = Bootstrap::getObjectManager()->get(Rule::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->resourceRule = $this->objectManager->get(Rule::class);
+        $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
+        $this->productRepository = $this->objectManager->create(ProductRepository::class);
+        $this->indexerBuilder = $this->objectManager->get(IndexBuilder::class);
     }
 
     /**
@@ -54,6 +83,28 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\Product $confProduct */
         $confProduct = $collection->getFirstItem();
         $this->assertEquals($simpleProduct->getFinalPrice(), $confProduct->getMinimalPrice());
+    }
+
+    /**
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/simple_product_with_catalog_rule_50_percent_off.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testPriceForSecondStore():void
+    {
+        $websiteId = $this->websiteRepository->get('test')->getId();
+        $simpleProduct = $this->productRepository->get('simple');
+        $simpleProduct->setPriceCalculation(true);
+        $this->assertEquals('simple', $simpleProduct->getSku());
+        $this->assertFalse(
+            $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId())
+        );
+        $this->indexerBuilder->reindexById($simpleProduct->getId());
+        $this->assertEquals(
+            $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId()),
+            25
+        );
     }
 
     /**

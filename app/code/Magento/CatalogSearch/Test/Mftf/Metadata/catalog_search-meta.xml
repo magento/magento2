@@ -29,4 +29,15 @@
             </object>
         </object>
     </operation>
+    <operation name="CatalogSearchEngineDefault" dataType="catalog_search_engine_default" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="catalog_search_engine_default">
+            <object key="search" dataType="catalog_search_engine_default">
+                <object key="fields" dataType="catalog_search_engine_default">
+                    <object key="engine" dataType="enable">
+                        <field key="inherit">boolean</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
 </operations>

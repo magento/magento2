@@ -236,7 +236,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function isShowPerPage()
     {
-        if (sizeof($this->getAvailableLimit()) <= 1) {
+        if (count($this->getAvailableLimit()) <= 1) {
             return false;
         }
         return $this->_showPerPage;
@@ -450,7 +450,11 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl([$this->getPageVarName() => $page]);
+        return $this->getPagerUrl(
+            [
+                $this->getPageVarName() => $page > 1 ? $page : null,
+            ]
+        );
     }
 
     /**

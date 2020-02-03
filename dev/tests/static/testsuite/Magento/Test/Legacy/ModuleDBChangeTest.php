@@ -45,33 +45,22 @@ class ModuleDBChangeTest extends \PHPUnit\Framework\TestCase
             } else {
                 //get current minor branch name
                 preg_match('|^(\d+\.\d+)|', $branchName, $minorBranch);
-                $branchName = $minorBranch[0];
+                if (isset($minorBranch[0])) {
+                    $branchName = $minorBranch[0];
 
-                //get all version branches
-                preg_match_all('|^(\d+\.\d+)|m', file_get_contents($branchesFile), $matches);
+                    //get all version branches
+                    preg_match_all('|^(\d+\.\d+)|m', file_get_contents($branchesFile), $matches);
 
-                //check is this a latest release branch
-                self::$actualBranch = ($branchName == max($matches[0]));
+                    //check is this a latest release branch
+                    self::$actualBranch = ($branchName == max($matches[0]));
+                } else {
+                    self::$actualBranch = true;
+                }
             }
         }
 
         foreach (glob(self::$changedFilesPattern) as $changedFile) {
             self::$changedFileList .= file_get_contents($changedFile) . PHP_EOL;
-        }
-    }
-
-    /**
-     * Test changes for module.xml files
-     */
-    public function testModuleXmlFiles()
-    {
-        if (!self::$actualBranch) {
-            preg_match_all('|etc/module\.xml$|mi', self::$changedFileList, $matches);
-            $this->assertEmpty(
-                reset($matches),
-                'module.xml changes for patch releases in non-actual branches are not allowed:' . PHP_EOL .
-                implode(PHP_EOL, array_values(reset($matches)))
-            );
         }
     }
 
