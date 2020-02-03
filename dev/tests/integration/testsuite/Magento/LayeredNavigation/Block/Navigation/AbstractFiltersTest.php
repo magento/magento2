@@ -182,8 +182,12 @@ abstract class AbstractFiltersTest extends TestCase
         array $data
     ): void {
         $attribute = $this->attributeRepository->get($this->getAttributeCode());
+        $attribute->setDataChanges(false);
         $attribute->addData($data);
-        $this->attributeRepository->save($attribute);
+
+        if ($attribute->hasDataChanges()) {
+            $this->attributeRepository->save($attribute);
+        }
     }
 
     /**
@@ -223,8 +227,11 @@ abstract class AbstractFiltersTest extends TestCase
 
         foreach ($products as $productSku => $stringValue) {
             $product = $this->productRepository->get($productSku, false, $storeId, true);
+            $productValue = $attribute->usesSource()
+                ? $attribute->getSource()->getOptionId($stringValue)
+                : $stringValue;
             $product->addData(
-                [$attribute->getAttributeCode() => $attribute->getSource()->getOptionId($stringValue)]
+                [$attribute->getAttributeCode() => $productValue]
             );
             $this->productRepository->save($product);
         }

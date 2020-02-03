@@ -111,7 +111,7 @@
         <!--Create Invoice-->
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
         <!--Create shipping label-->
-        <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipmentIntoOrder"/>
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipmentIntoOrder"/>
         <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
         <actionGroup ref="AdminShipmentCreateShippingLabelActionGroup" stepKey="createPackage">
