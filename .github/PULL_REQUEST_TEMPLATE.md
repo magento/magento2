@@ -15,6 +15,9 @@
     Letting us know what has changed and why it needed changing will help us validate this pull request.
 -->
 
+### Related Pull Requests
+<!-- related pull request placeholder -->
+
 ### Fixed Issues (if relevant)
 <!---
     If relevant, please provide a list of fixed issues in the format magento/magento2#<issue_number>.
