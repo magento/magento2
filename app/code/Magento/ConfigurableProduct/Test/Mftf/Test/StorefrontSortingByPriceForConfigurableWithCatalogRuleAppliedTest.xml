@@ -153,7 +153,7 @@
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
         <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule" stepKey="reindexIndices"/>
-        <magentoCLI command="cache:clean" arguments="full_page block_html" stepKey="flushCache"/>
+        <magentoCLI command="cache:clean" arguments="full_page" stepKey="flushCache"/>
 
         <!--Reopen category with products and Sort by price desc-->
         <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="goToStorefrontCategoryPage2">
