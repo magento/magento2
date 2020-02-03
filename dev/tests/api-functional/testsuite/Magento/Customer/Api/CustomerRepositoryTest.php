@@ -268,6 +268,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerData = $this->_createCustomer();
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
+        $expectedGroupID = $existingCustomerDataObject->getGroupId();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $newCustomerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -296,8 +297,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->assertTrue($response !== null);
 
         //Verify if the customer is updated
-        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
-        $this->assertEquals($lastName . "Updated", $existingCustomerDataObject->getLastname());
+        $updatedCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
+        $this->assertEquals(
+            $updatedCustomerDataObject->getGroupId(),
+            $expectedGroupID
+        );
+        $this->assertEquals($lastName . "Updated", $updatedCustomerDataObject->getLastname());
     }
 
     /**
