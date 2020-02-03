@@ -9,7 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategorySEOSection">
-        <element name="SectionHeader" type="button" selector="div[data-index='search_engine_optimization']" timeout="30"/>
+        <element name="SectionHeader" type="button" selector="div[data-index='search_engine_optimization'] .fieldset-wrapper-title" timeout="30"/>
+        <element name="sectionBody" type="text" selector="div[data-index='search_engine_optimization'] .admin__fieldset-wrapper-content"/>
         <element name="UrlKeyInput" type="input" selector="input[name='url_key']"/>
         <element name="UrlKeyDefaultValueCheckbox" type="button" selector="input[name='use_default[url_key]']"/>
         <element name="UrlKeyRedirectCheckbox" type="button" selector="[data-index='url_key_create_redirect'] input[type='checkbox']"/>

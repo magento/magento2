@@ -17,11 +17,11 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" after="wishlistClickConfigurableProduct" stepKey="wishlistAddConfigurableProductToWishlist">
             <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckConfigurableProductInWishlist" after="wishlistAddConfigurableProductToWishlist" stepKey="wishlistCheckConfigurableProductInWishlist">
+        <actionGroup ref="StorefrontCustomerCheckConfigurableProductInWishlistActionGroup" after="wishlistAddConfigurableProductToWishlist" stepKey="wishlistCheckConfigurableProductInWishlist">
             <argument name="productVar" value="$$createConfigProduct$$"/>
             <argument name="optionProductVar" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckConfigurableProductInWishlistSidebar" after="wishlistCheckConfigurableProductInWishlist" stepKey="wishlistCheckConfigurableProductInWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckConfigurableProductInWishlistSidebarActionGroup" after="wishlistCheckConfigurableProductInWishlist" stepKey="wishlistCheckConfigurableProductInWishlistSidebar">
             <argument name="productVar" value="$$createConfigProduct$$"/>
             <argument name="optionProductVar" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
