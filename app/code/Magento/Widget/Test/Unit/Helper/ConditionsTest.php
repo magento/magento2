@@ -3,46 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Widget\Test\Unit\Helper;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Data\Wysiwyg\Normalizer;
+use Magento\Widget\Helper\Conditions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConditionsTest
  *
  * PHPUnit test case for \Magento\Widget\Helper\Conditions
  */
-class ConditionsTest extends \PHPUnit\Framework\TestCase
+class ConditionsTest extends TestCase
 {
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
-    protected $conditions;
+    private $conditions;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
-    private $serializer;
+    private $serializerMock;
 
     /**
-     * @var Normalizer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Normalizer|MockObject
      */
-    private $normalizer;
+    private $normalizerMock;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->normalizer = $this->createMock(Normalizer::class);
+        $this->serializerMock = $this->createMock(Json::class);
+        $this->normalizerMock = $this->createMock(Normalizer::class);
         $this->conditions = (new ObjectManager($this))->getObject(
-            \Magento\Widget\Helper\Conditions::class,
+            Conditions::class,
             [
-                'serializer' => $this->serializer,
-                'normalizer' => $this->normalizer
+                'serializer' => $this->serializerMock,
+                'normalizer' => $this->normalizerMock
             ]
         );
     }
@@ -52,19 +57,19 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
         $value = ['string'];
         $serializedValue = 'serializedString';
         $normalizedValue = 'normalizedValue';
-        $this->serializer->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($value)
             ->willReturn($serializedValue);
-        $this->serializer->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with($serializedValue)
             ->willReturn($value);
-        $this->normalizer->expects($this->once())
+        $this->normalizerMock->expects($this->once())
             ->method('replaceReservedCharacters')
             ->with($serializedValue)
             ->willReturn($normalizedValue);
-        $this->normalizer->expects($this->once())
+        $this->normalizerMock->expects($this->once())
             ->method('restoreReservedCharacters')
             ->with($normalizedValue)
             ->willReturn($serializedValue);

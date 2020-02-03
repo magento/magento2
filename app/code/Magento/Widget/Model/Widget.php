@@ -3,11 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Model;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\FileSystem;
+use Magento\Widget\Helper\Conditions;
+use Magento\Widget\Model\Config\Data;
 
 /**
  * Widget model for different purposes
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @method null|\Magento\Framework\Simplexml\Element getXmlElementByType(string $type)
  *
  * @api
  * @since 100.0.2
@@ -15,7 +28,7 @@ namespace Magento\Widget\Model;
 class Widget
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data
+     * @var Data
      */
     protected $dataStorage;
 
@@ -25,22 +38,22 @@ class Widget
     protected $configCacheType;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source
+     * @var Source
      */
     protected $assetSource;
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var FileSystem
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
@@ -50,30 +63,32 @@ class Widget
     protected $widgetsArray = [];
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     protected $conditionsHelper;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     private $mathRandom;
 
     /**
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\Asset\Source $assetSource
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @param Escaper $escaper
+     * @param Data $dataStorage
+     * @param Repository $assetRepo
+     * @param Source $assetSource
+     * @param FileSystem $viewFileSystem
+     * @param Conditions $conditionsHelper
+     * @param Random|null $mathRandom
      */
     public function __construct(
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Asset\Source $assetSource,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper
+        Escaper $escaper,
+        Data $dataStorage,
+        Repository $assetRepo,
+        Source $assetSource,
+        FileSystem $viewFileSystem,
+        Conditions $conditionsHelper,
+        ?Random $mathRandom = null
     ) {
         $this->escaper = $escaper;
         $this->dataStorage = $dataStorage;
@@ -81,22 +96,7 @@ class Widget
         $this->assetSource = $assetSource;
         $this->viewFileSystem = $viewFileSystem;
         $this->conditionsHelper = $conditionsHelper;
-    }
-
-    /**
-     * Get math random
-     *
-     * @return \Magento\Framework\Math\Random
-     *
-     * @deprecated 100.1.0
-     */
-    private function getMathRandom()
-    {
-        if ($this->mathRandom === null) {
-            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Math\Random::class);
-        }
-        return $this->mathRandom;
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
@@ -348,7 +348,7 @@ class Widget
             $pageVarName = sprintf(
                 ' %s="%s"',
                 'page_var_name',
-                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+                'p' . $this->mathRandom->getRandomString(5, Random::CHARS_LOWERS)
             );
         }
         return $pageVarName;

@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Setup;
 
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Data\Wysiwyg\Normalizer;
-use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\Escaper;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * Convert conditions_encoded part of layout update data from serialized to JSON format
@@ -19,18 +21,16 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class LayoutUpdateConverter extends SerializedToJson
 {
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * @var Normalizer
      */
     private $normalizer;
 
     /**
-     * Constructor
-     *
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Serialize $serialize
      * @param Json $json
      * @param Normalizer $normalizer
@@ -40,12 +40,10 @@ class LayoutUpdateConverter extends SerializedToJson
         Serialize $serialize,
         Json $json,
         Normalizer $normalizer,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->normalizer = $normalizer;
-        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
-            Escaper::class
-        );
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($serialize, $json);
     }
 
@@ -53,6 +51,7 @@ class LayoutUpdateConverter extends SerializedToJson
      * Convert conditions_encoded part of layout update data from serialized to JSON format
      *
      * @param string $value
+     *
      * @return string
      * @throws DataConversionException
      */
@@ -106,6 +105,7 @@ class LayoutUpdateConverter extends SerializedToJson
      * Restore the reserved characters in the existing serialized content
      *
      * @param string $serializedContent
+     *
      * @return string
      */
     private function restoreReservedCharactersInSerializedContent($serializedContent)

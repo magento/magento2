@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Helper;
 
 use Magento\Framework\Data\Wysiwyg\Normalizer;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -29,11 +30,11 @@ class Conditions
      * @param Normalizer $normalizer
      */
     public function __construct(
-        Json $serializer = null,
-        Normalizer $normalizer = null
+        Json $serializer,
+        Normalizer $normalizer
     ) {
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $this->normalizer = $normalizer ?: ObjectManager::getInstance()->get(Normalizer::class);
+        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 
     /**

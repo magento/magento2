@@ -1,16 +1,24 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Widget\Helper\Conditions;
 
-class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionInterface, HttpPostActionInterface
+/**
+ * Action used to load plugin options form via ajax
+ */
+class LoadOptions extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -18,9 +26,29 @@ class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionIn
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     private $conditionsHelper;
+
+    /**
+     * @var Json
+     */
+    private $json;
+
+    /**
+     * @param Context $context
+     * @param Conditions $conditionsHelper
+     * @param Json $json
+     */
+    public function __construct(
+        Context $context,
+        Conditions $conditionsHelper,
+        Json $json
+    ) {
+        parent::__construct($context);
+        $this->conditionsHelper = $conditionsHelper;
+        $this->json = $json;
+    }
 
     /**
      * Ajax responder for loading plugin options form
@@ -32,8 +60,7 @@ class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionIn
         try {
             $this->_view->loadLayout();
             if ($paramsJson = $this->getRequest()->getParam('widget')) {
-                $request = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
-                    ->jsonDecode($paramsJson);
+                $request = $this->json->unserialize($paramsJson);
                 if (is_array($request)) {
                     $optionsBlock = $this->_view->getLayout()->getBlock('wysiwyg_widget.options');
                     if (isset($request['widget_type'])) {
@@ -43,31 +70,18 @@ class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionIn
                         $request['values'] = array_map('htmlspecialchars_decode', $request['values']);
                         if (isset($request['values']['conditions_encoded'])) {
                             $request['values']['conditions'] =
-                                $this->getConditionsHelper()->decode($request['values']['conditions_encoded']);
+                                $this->conditionsHelper->decode($request['values']['conditions_encoded']);
                         }
                         $optionsBlock->setWidgetValues($request['values']);
                     }
                 }
                 $this->_view->renderLayout();
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+                $this->json->serialize($result)
             );
         }
-    }
-
-    /**
-     * @return \Magento\Widget\Helper\Conditions
-     * @deprecated 100.1.4
-     */
-    private function getConditionsHelper()
-    {
-        if (!$this->conditionsHelper) {
-            $this->conditionsHelper = ObjectManager::getInstance()->get(\Magento\Widget\Helper\Conditions::class);
-        }
-
-        return $this->conditionsHelper;
     }
 }
