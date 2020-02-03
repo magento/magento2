@@ -30,6 +30,7 @@ define([
 
                 if ($.mage.cookies.get(this.options.cookieName)) {
                     this.element.hide();
+                    $(document).trigger('ga:init');
                 } else {
                     window.location.href = this.options.noCookiesUrl;
                 }
