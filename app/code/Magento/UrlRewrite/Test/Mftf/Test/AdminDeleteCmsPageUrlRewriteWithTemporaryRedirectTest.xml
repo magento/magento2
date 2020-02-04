@@ -14,6 +14,7 @@
             <title value="Delete CMS Page URL rewrite with Temporary Redirect"/>
             <description value="Log in to admin and delete CMS Page URL rewrite with Temporary Redirect"/>
             <testCaseId value="MC-14650"/>
+            <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
