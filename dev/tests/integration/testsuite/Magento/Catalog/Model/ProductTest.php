@@ -14,6 +14,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Tests product model:
@@ -732,14 +733,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testExistsStoreValueFlagForMultipleProducts() {
 
-        $descriptionProudct = $this->productRepository->get('store_description');
+        $descriptionProduct = $this->productRepository->get('store_description');
         $nameProudct = $this->productRepository->get('store_name');
 
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $store = $storeManager->getStore('fixturestore');
 
-        $nameProudct->addAttributeUpdate('name','Overwritten Name',$store->getId());
+        $nameProduct->addAttributeUpdate('name','Overwritten Name',$store->getId());
         $descriptionProudct->addAttributeUpdate('description', 'Overwritten Description', $store->getId());
 
         $descriptionProudct = $this->productRepository->get('store_description',false, $store->getId(), true);
