@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
@@ -31,7 +31,7 @@
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <waitForPageLoad stepKey="waitForCategoryToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
         <!--Create second level category-->
@@ -63,7 +63,7 @@
         <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="No" />
 
         <!--Verify Redirect Path -->
-        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="verifyTheRedirectPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="verifyTheRedirectPath"/>
 
         <!--Verify Category Target Path-->
         <see stepKey="verifyTheTargetPath" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="catalog/category/view/id/{$categoryId}"/>
@@ -75,7 +75,7 @@
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
 
         <!--Move the third level category under first level category -->
-        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree($$createDefaultCategory.name$$)}}" stepKey="moveCategory"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree($$createDefaultCategory.name$$)}}" stepKey="m0oveCategory"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
@@ -85,12 +85,12 @@
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage1"/>
         <waitForPageLoad stepKey="waitForUrlRewritePage1"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
         <waitForPageLoad stepKey="waitForPageToLoad4"/>
 
         <!--Verify new Redirect Path after move -->
-        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
 
         <!--Verify new Target Path after move -->
         <see stepKey="verifyTheTargetPathAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="catalog/category/view/id/{$categoryId}" />
@@ -106,13 +106,13 @@
 
 
         <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="Permanent (301)" />
-        <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" />
-        <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
 
         <!--Verify before move Redirect Path directs to the category page-->
-        <amOnPage url="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(FirstLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>
     </test>
 </tests>
