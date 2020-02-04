@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Address;
 
-use Exception;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -27,6 +26,20 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateAddressTest extends TestCase
 {
+    /**
+     * Static customer address data.
+     */
+    private const STATIC_CUSTOMER_ADDRESS_DATA = [
+        AddressInterface::TELEPHONE => 3468676,
+        AddressInterface::POSTCODE => 75477,
+        AddressInterface::COUNTRY_ID => 'US',
+        AddressInterface::REGION_ID => 1,
+        AddressInterface::CITY => 'CityM',
+        AddressInterface::STREET => 'Green str, 67',
+        AddressInterface::LASTNAME => 'Smith',
+        AddressInterface::FIRSTNAME => 'John',
+    ];
+
     /**
      * @var ObjectManager
      */
@@ -143,13 +156,11 @@ class CreateAddressTest extends TestCase
      */
     public function createDefaultAddressesDataProvider(): array
     {
-        $staticAddressData = $this->getStaticAddressData();
-
         return [
-            'any_addresses_are_default' => [$staticAddressData, false, false],
-            'shipping_address_is_default' => [$staticAddressData, true, false],
-            'billing_address_is_default' => [$staticAddressData, false, true],
-            'all_addresses_are_default' => [$staticAddressData, true, true],
+            'any_addresses_are_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, false, false],
+            'shipping_address_is_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, true, false],
+            'billing_address_is_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, false, true],
+            'all_addresses_are_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, true, true],
         ];
     }
 
@@ -162,13 +173,13 @@ class CreateAddressTest extends TestCase
      *
      * @param array $addressData
      * @param array $expectedData
-     * @param Exception|null $expectException
+     * @param \Exception|null $expectException
      * @return void
      */
     public function testAddressCreatedWithProperData(
         array $addressData,
         array $expectedData,
-        ?Exception $expectException = null
+        ?\Exception $expectException
     ): void {
         $customer = $this->customerRepository->get('customer5@example.com');
         $this->createdCustomerIds[] = (int)$customer->getId();
@@ -190,11 +201,9 @@ class CreateAddressTest extends TestCase
      */
     public function createAddressesDataProvider(): array
     {
-        $addressStaticData = $this->getStaticAddressData();
-
         return [
             'required_fields_valid_data' => [
-                $addressStaticData,
+                self::STATIC_CUSTOMER_ADDRESS_DATA,
                 [
                     'getTelephone' => 3468676,
                     'getCountryId' => 'US',
@@ -213,18 +222,22 @@ class CreateAddressTest extends TestCase
                 null,
             ],
             'required_field_empty_telephone' => [
-                array_replace($addressStaticData, [AddressInterface::TELEPHONE => '']),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::TELEPHONE => '']),
                 [],
-                $this->createInputException('"telephone" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']]
+                ),
             ],
             'required_field_empty_postcode_for_us' => [
-                array_replace($addressStaticData, [AddressInterface::POSTCODE => '']),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::POSTCODE => '']),
                 [],
-                $this->createInputException('"postcode" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']]
+                ),
             ],
             'required_field_empty_postcode_for_uk' => [
                 array_replace(
-                    $addressStaticData,
+                    self::STATIC_CUSTOMER_ADDRESS_DATA,
                     [AddressInterface::POSTCODE => '', AddressInterface::COUNTRY_ID => 'GB']
                 ),
                 [
@@ -235,13 +248,15 @@ class CreateAddressTest extends TestCase
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
 //            'required_field_empty_region_id_for_us' => [
-//                array_replace($addressStaticData, [AddressInterface::REGION_ID => '']),
+//                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::REGION_ID => '']),
 //                [],
-//                $this->createInputException('"regionId" is required. Enter and try again.'),
+//                $this->createInputException(
+//                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']]
+//                ),
 //            ],
             'required_field_empty_region_id_for_ua' => [
                 array_replace(
-                    $addressStaticData,
+                    self::STATIC_CUSTOMER_ADDRESS_DATA,
                     [AddressInterface::REGION_ID => '', AddressInterface::COUNTRY_ID => 'UA']
                 ),
                 [
@@ -251,63 +266,73 @@ class CreateAddressTest extends TestCase
                 null,
             ],
             'required_field_empty_firstname' => [
-                array_replace($addressStaticData, [AddressInterface::FIRSTNAME => '']),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::FIRSTNAME => '']),
                 [],
-                $this->createInputException('"firstname" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'firstname']]
+                ),
             ],
             'required_field_empty_lastname' => [
-                array_replace($addressStaticData, [AddressInterface::LASTNAME => '']),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::LASTNAME => '']),
                 [],
-                $this->createInputException('"lastname" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'lastname']]
+                ),
             ],
             'required_field_empty_street_as_string' => [
-                array_replace($addressStaticData, [AddressInterface::STREET => '']),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => '']),
                 [],
-                $this->createInputException('"street" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']]
+                ),
             ],
             'required_field_empty_street_as_array' => [
-                array_replace($addressStaticData, [AddressInterface::STREET => []]),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => []]),
                 [],
-                $this->createInputException('"street" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']]
+                ),
             ],
             'required_field_street_as_array' => [
-                array_replace($addressStaticData, [AddressInterface::STREET => ['', 'Green str, 67']]),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => ['', 'Green str, 67']]),
                 ['getStreet' => ['Green str, 67']],
                 null
             ],
             'required_field_empty_city' => [
-                array_replace($addressStaticData, [AddressInterface::CITY => '']),
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::CITY => '']),
                 [],
-                $this->createInputException('"city" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']]
+                ),
             ],
             'field_name_prefix' => [
-                array_merge($addressStaticData, [AddressInterface::PREFIX => 'My prefix']),
+                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::PREFIX => 'My prefix']),
                 ['getPrefix' => 'My prefix'],
                 null,
             ],
             'field_middle_name_initial' => [
-                array_merge($addressStaticData, [AddressInterface::MIDDLENAME => 'My middle name']),
+                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::MIDDLENAME => 'My middle name']),
                 ['getMiddlename' => 'My middle name'],
                 null,
             ],
             'field_name_suffix' => [
-                array_merge($addressStaticData, [AddressInterface::SUFFIX => 'My suffix']),
+                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::SUFFIX => 'My suffix']),
                 ['getSuffix' => 'My suffix'],
                 null,
             ],
             'field_company_name' => [
-                array_merge($addressStaticData, [AddressInterface::COMPANY => 'My company']),
+                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::COMPANY => 'My company']),
                 ['getCompany' => 'My company'],
                 null,
             ],
             'field_vat_number' => [
-                array_merge($addressStaticData, [AddressInterface::VAT_ID => 'My VAT number']),
+                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::VAT_ID => 'My VAT number']),
                 ['getVatId' => 'My VAT number'],
                 null,
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
 //            'field_invalid_vat_number' => [
-//                array_merge($addressStaticData, [AddressInterface::VAT_ID => '/>.<*']),
+//                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::VAT_ID => '/>.<*']),
 //                [],
 //                null// It need to create some error but currently magento doesn't has validation for this field.,
 //            ],
@@ -343,35 +368,16 @@ class CreateAddressTest extends TestCase
     }
 
     /**
-     * Create InputException with provided error text.
+     * Create InputException with provided error message with params.
      *
-     * @param string $string
+     * @param array $message
      * @return InputException
      */
-    private function createInputException(string $string): InputException
+    private function createInputException(array $message): InputException
     {
         $inputException = new InputException();
-        $inputException->addError(__($string));
+        $inputException->addError(__(...$message));
 
         return $inputException;
-    }
-
-    /**
-     * Get static address data.
-     *
-     * @return array
-     */
-    private function getStaticAddressData(): array
-    {
-        return [
-            AddressInterface::TELEPHONE => 3468676,
-            AddressInterface::POSTCODE => 75477,
-            AddressInterface::COUNTRY_ID => 'US',
-            AddressInterface::REGION_ID => 1,
-            AddressInterface::CITY => 'CityM',
-            AddressInterface::STREET => 'Green str, 67',
-            AddressInterface::LASTNAME => 'Smith',
-            AddressInterface::FIRSTNAME => 'John',
-        ];
     }
 }

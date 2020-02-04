@@ -75,8 +75,8 @@ class DeleteAddressTest extends TestCase
         $this->addressRepository->delete($address);
         $this->customerRegistry->remove(1);
         $customer = $this->customerRepository->get('customer@example.com');
-        $this->assertEquals(null, $customer->getDefaultShipping());
-        $this->assertEquals(null, $customer->getDefaultBilling());
+        $this->assertNull($customer->getDefaultShipping());
+        $this->assertNull($customer->getDefaultBilling());
         $this->expectExceptionObject(new NoSuchEntityException(__('No such entity with addressId = 1')));
         $this->addressRepository->getById(1);
     }

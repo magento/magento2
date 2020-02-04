@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Address;
 
-use Exception;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AddressRegistry;
@@ -142,13 +141,13 @@ class UpdateAddressTest extends TestCase
      *
      * @param array $updateData
      * @param array $expectedData
-     * @param Exception|null $expectException
+     * @param \Exception|null $expectException
      * @return void
      */
     public function testUpdateAddress(
         array $updateData,
         array $expectedData,
-        ?Exception $expectException = null
+        ?\Exception $expectException
     ): void {
         $this->processedAddressesIds[] = 1;
         $address = $this->addressRepository->getById(1);
@@ -182,7 +181,9 @@ class UpdateAddressTest extends TestCase
             'required_field_empty_telephone' => [
                 ['setTelephone' => ''],
                 [],
-                $this->createInputException('"telephone" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']]
+                ),
             ],
             'required_field_postcode' => [
                 ['setPostcode' => 55425],
@@ -192,7 +193,9 @@ class UpdateAddressTest extends TestCase
             'required_field_empty_postcode_for_us' => [
                 ['setPostcode' => ''],
                 [],
-                $this->createInputException('"postcode" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']]
+                ),
             ],
             'required_field_empty_postcode_for_uk' => [
                 ['setCountryId' => 'GB', 'setPostcode' => ''],
@@ -203,7 +206,9 @@ class UpdateAddressTest extends TestCase
 //            'required_field_empty_region_id_for_us' => [
 //                ['setRegionId' => ''],
 //                [],
-//                $this->createInputException('"regionId" is required. Enter and try again.'),
+//                $this->createInputException(
+//                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']]
+//                ),
 //            ],
             'required_field_empty_region_id_for_ua' => [
                 ['setCountryId' => 'UA', 'setRegionId' => ''],
@@ -218,7 +223,9 @@ class UpdateAddressTest extends TestCase
             'required_field_empty_firstname' => [
                 ['setFirstname' => ''],
                 [],
-                $this->createInputException('"firstname" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'firstname']]
+                ),
             ],
             'required_field_lastname' => [
                 ['setLastname' => 'Test lastname'],
@@ -228,7 +235,9 @@ class UpdateAddressTest extends TestCase
             'required_field_empty_lastname' => [
                 ['setLastname' => ''],
                 [],
-                $this->createInputException('"lastname" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'lastname']]
+                ),
             ],
             'required_field_street_as_array' => [
                 ['setStreet' => ['', 'Test str, 55']],
@@ -238,7 +247,9 @@ class UpdateAddressTest extends TestCase
             'required_field_empty_street_as_array' => [
                 ['setStreet' => []],
                 [],
-                $this->createInputException('"street" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']]
+                ),
             ],
             'required_field_city' => [
                 ['setCity' => 'Test city'],
@@ -248,7 +259,9 @@ class UpdateAddressTest extends TestCase
             'required_field_empty_city' => [
                 ['setCity' => ''],
                 [],
-                $this->createInputException('"city" is required. Enter and try again.'),
+                $this->createInputException(
+                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']]
+                ),
             ],
             'field_name_prefix' => [
                 ['setPrefix' => 'My prefix'],
@@ -285,15 +298,15 @@ class UpdateAddressTest extends TestCase
     }
 
     /**
-     * Create InputException with provided error text.
+     * Create InputException with provided error message with params.
      *
-     * @param string $string
+     * @param array $message
      * @return InputException
      */
-    private function createInputException(string $string): InputException
+    private function createInputException(array $message): InputException
     {
         $inputException = new InputException();
-        $inputException->addError(__($string));
+        $inputException->addError(__(...$message));
 
         return $inputException;
     }
