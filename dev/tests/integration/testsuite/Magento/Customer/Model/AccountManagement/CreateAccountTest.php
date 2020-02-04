@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception;
@@ -65,6 +66,7 @@ class CreateAccountTest extends TestCase
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->customerFactory = $this->objectManager->get(CustomerInterfaceFactory::class);
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
+        parent::setUp();
     }
 
     /**
@@ -123,13 +125,13 @@ class CreateAccountTest extends TestCase
                 'customer_data' => [],
                 'error_type' => InputException::class,
                 'error_message' => ['The password needs at least 8 characters. Create a new password and try again.'],
-                'password' => ''
+                'password' => '',
             ],
             'invalid_password_minimum_length' => [
                 'customer_data' => [],
                 'error_type' => InputException::class,
                 'error_message' => ['The password needs at least 8 characters. Create a new password and try again.'],
-                'password' => 'test'
+                'password' => 'test',
             ],
             'invalid_password_maximum_length' => [
                 'customer_data' => [],
@@ -143,9 +145,17 @@ class CreateAccountTest extends TestCase
                 'error_message' => [
                     'Minimum of different classes of characters in password is %1.'
                     . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                    3
+                    3,
                 ],
-                'password' => 'test_password'
+                'password' => 'test_password',
+            ],
+            'password_same_as_email' => [
+                'customer_data' => ['email' => 'test1@test.com'],
+                'error_type' => LocalizedException::class,
+                'error_message' => [
+                    'The password can\'t be the same as the email address. Create a new password and try again.',
+                ],
+                'password' => 'test1@test.com',
             ],
         ];
     }
