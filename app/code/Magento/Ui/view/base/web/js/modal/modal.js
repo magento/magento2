@@ -191,7 +191,7 @@ define([
          * @param {String} title
          */
         setTitle: function (title) {
-            var $title = $(this.options.modalTitle),
+            var $title = this.modal.find(this.options.modalTitle),
                 $subTitle = this.modal.find(this.options.modalSubTitle);
 
             $title.text(title);
