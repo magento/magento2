@@ -204,6 +204,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $angle
      * @return void
+     * @deprecated unused
      */
     abstract public function rotate($angle);
 

@@ -85,6 +85,7 @@ class Image
      * @param int $angle
      * @access public
      * @return void
+     * @deprecated unused
      */
     public function rotate($angle)
     {
