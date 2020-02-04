@@ -5,35 +5,73 @@
  */
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
-use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
 use Magento\Framework\MessageQueue\ConnectionTypeResolver;
+use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * ConnectionTypeResolverTest
+ */
 class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetConnectionType()
-    {
-        $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
-        $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
 
+    /**
+     * Verify get connection type method
+     *
+     * @return void
+     */
+    public function testGetConnectionType(): void
+    {
         $resolverTwo = $this->createMock(ConnectionTypeResolverInterface::class);
-        $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn('some-type');
+        $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
+        $resolverOne->expects($this->once())
+                    ->method('getConnectionType')
+                    ->with('test')
+                    ->willReturn(null);
+        $resolverTwo->expects($this->once())
+                    ->method('getConnectionType')
+                    ->with('test')
+                    ->willReturn('some-type');
 
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);
         $this->assertEquals('some-type', $model->getConnectionType('test'));
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown connection name test
+     * Verify get connection with empty resolvers
+     *
+     * @return void
      */
-    public function testGetConnectionTypeWithException()
+    public function testGetConnectionTypeWithEmptyResolvers(): void
+    {
+        $this->objectManager = new ObjectManager($this);
+        $model = $this->objectManager->getObject(ConnectionTypeResolver::class);
+        $this->expectException(\LogicException::class);
+        $model->getConnectionType('test');
+    }
+    /**
+     * Verify get Connection types with exception
+     *
+     * @return void
+     */
+    public function testGetConnectionTypeWithException(): void
     {
         $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
-        $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
-
         $resolverTwo = $this->createMock(ConnectionTypeResolverInterface::class);
-        $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
+        $resolverOne->expects($this->once())
+                    ->method('getConnectionType')
+                    ->with('test')
+                    ->willReturn(null);
+        $resolverTwo->expects($this->once())
+                    ->method('getConnectionType')
+                    ->with('test')
+                    ->willReturn(null);
 
+        $this->expectException(\LogicException::class);
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);
         $model->getConnectionType('test');
     }

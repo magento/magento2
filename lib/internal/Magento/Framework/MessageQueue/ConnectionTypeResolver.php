@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 /**
- * Class ConnectionTypeResolver
+ * Verify resolvers and return connection type
  */
 class ConnectionTypeResolver
 {
