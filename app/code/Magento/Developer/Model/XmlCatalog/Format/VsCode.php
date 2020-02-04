@@ -117,13 +117,13 @@ class VsCode implements FormatInterface
      */
     private function initEmptyFile(\DOMDocument $dom): \DOMElement
     {
-        $copyrigthComment = $dom->createComment('
+        $copyrightComment = $dom->createComment('
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ');
-        $dom->appendChild($copyrigthComment);
+        $dom->appendChild($copyrightComment);
 
         $catalogNode = $dom->createElement('catalog');
         $catalogNode->setAttribute('xmlns', self::XMLNS);
