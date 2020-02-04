@@ -91,7 +91,7 @@ class Date extends AbstractBaseAttributeData
             [
                 "{$frontendInput}_wrong_default_value" => [
                     'post_data' => [
-                        'default_value_date' => '2019//12//12',
+                        'default_value_date' => '//2019/12/12',
                     ],
                     'error_message' => (string)__('The default date is invalid. Verify the date and try again.'),
                 ],
