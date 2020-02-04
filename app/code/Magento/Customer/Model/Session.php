@@ -100,11 +100,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_httpContext;
 
     /**
-     * @var AccountConfirmation
-     */
-    protected $accountConfirmation;
-
-    /**
      * @var GroupManagementInterface
      */
     protected $groupManagement;
