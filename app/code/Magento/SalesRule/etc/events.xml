@@ -30,4 +30,10 @@
     <event name="sales_quote_address_collect_totals_before">
         <observer name="coupon_code_validation" instance="Magento\SalesRule\Observer\CouponCodeValidation" />
     </event>
+    <event name="salesrule_rule_save_after">
+        <observer name="salesrule_quote_recollect_totals_on_disabled" instance="\Magento\SalesRule\Observer\RuleQuoteRecollectTotalsObserver" />
+    </event>
+    <event name="salesrule_rule_delete_after">
+        <observer name="salesrule_quote_recollect_totals_on_delete" instance="\Magento\SalesRule\Observer\RuleQuoteRecollectTotalsObserver" />
+    </event>
 </config>

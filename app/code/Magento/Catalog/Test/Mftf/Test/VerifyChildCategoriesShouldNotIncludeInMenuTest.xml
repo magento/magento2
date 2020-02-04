@@ -22,7 +22,7 @@
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage2"/>
             <waitForPageLoad stepKey="waitForPageLoad3"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategoryBeforeDelete"/>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -32,11 +32,11 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <!--Create new category under Default Category-->
-        <actionGroup ref="CreateCategory" stepKey="createSubcategory1">
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory1">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
         <!--Create another subcategory under created category-->
-        <actionGroup ref="CreateCategory" stepKey="createSubcategory2">
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory2">
             <argument name="categoryEntity" value="SubCategoryWithParent"/>
         </actionGroup>
         <!--Go to storefront and verify visibility of categories-->

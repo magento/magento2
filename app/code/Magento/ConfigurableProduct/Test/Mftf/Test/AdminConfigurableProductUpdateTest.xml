@@ -17,9 +17,6 @@
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
             <severity value="AVERAGE"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
         </annotations>
 
         <before>
@@ -37,15 +34,21 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteThirdProduct"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Search for prefix of the 3 products we created via api -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="wait1"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
-        <actionGroup ref="searchProductGridByKeyword" stepKey="searchForProduct">
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearAll"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>
         </actionGroup>
 
@@ -59,25 +62,25 @@
         <!-- Update the description -->
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToggleDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
-        <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSaveSuccess"/>
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="60" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron2"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Check storefront for description -->
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoProduct1"/>
-        <waitForPageLoad stepKey="wait3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeDescription1"/>
-        <amOnPage url="$$createProduct2.sku$$.html" stepKey="gotoProduct2"/>
-        <waitForPageLoad stepKey="wait4"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeDescription2"/>
-        <amOnPage url="$$createProduct3.sku$$.html" stepKey="gotoProduct3"/>
-        <waitForPageLoad stepKey="wait5"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeDescription3"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct1.custom_attributes[url_key]$$)}}" stepKey="goToFirstProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeFirstDescription"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct2.custom_attributes[url_key]$$)}}" stepKey="goToSecondProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeSecondDescription"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct3.custom_attributes[url_key]$$)}}" stepKey="goToThirdProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForThirdProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeThirdDescription"/>
     </test>
 
     <test name="AdminConfigurableProductRemoveAnOptionTest">
@@ -281,7 +284,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
@@ -330,7 +333,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>

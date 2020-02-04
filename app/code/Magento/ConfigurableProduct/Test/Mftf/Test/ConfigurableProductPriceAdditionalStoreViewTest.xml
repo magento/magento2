@@ -19,7 +19,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            
+
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -73,14 +73,14 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+        <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addNewWebsite">
             <argument name="newWebsiteName" value="Second Website"/>
             <argument name="websiteCode" value="second_website"/>
@@ -140,7 +140,7 @@
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreView"/>
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProductIsEnabled"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="enabledConfigProductSecondStore"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="enabledConfigProductSecondStore"/>
 
         <!--go to admin and open product edit page to enable child product for second store view -->
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToProductEditPage2"/>
@@ -154,7 +154,7 @@
         <click selector="{{AdminProductFormConfigurationsSection.enableProductBtn}}" stepKey="clickEnableChildProduct1"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('2')}}" stepKey="clickToExpandActionsForSecondVariation2"/>
         <click selector="{{AdminProductFormConfigurationsSection.enableProductBtn}}" stepKey="clickEnableChildProduct2"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAll"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAll"/>
 
         <!-- assert second store view storefront category list page -->
         <amOnPage url="/second_store_view/" stepKey="amOnsecondStoreFront1"/>
@@ -168,7 +168,7 @@
         <waitForPageLoad stepKey="waitChild1EditPageToLoad"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProduct1InWebsitesSection"/>
         <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite1"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveUpdatedChild1Again"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveUpdatedChild1Again"/>
 
         <!--go to admin again and open child product1 and enable for second store view-->
         <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToProduct1EditPage"/>
@@ -180,14 +180,14 @@
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP1"/>
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP1"/>
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct1IsEnabled"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild1"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="save2UpdatedChild1"/>
 
         <!--go to admin and open child product2 edit page  and assign it to the second website -->
         <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToProduct2EditPage"/>
         <waitForPageLoad stepKey="waitChild2EditPageToLoad"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProduct2InWebsitesSection"/>
         <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite2"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveUpdatedChild2"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveUpdatedChild2"/>
 
         <!--go to admin again and open child product2 and enable for second store view-->
         <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToProduct2EditPage2"/>
@@ -199,7 +199,7 @@
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP2"/>
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP2"/>
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct2IsEnabled"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild2"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="save2UpdatedChild2"/>
 
         <!-- assert storefront category list page -->
         <amOnPage url="/second_store_view/" stepKey="amOnsecondStoreFront"/>

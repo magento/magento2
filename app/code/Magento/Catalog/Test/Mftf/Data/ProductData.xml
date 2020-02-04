@@ -528,6 +528,11 @@
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
+    <entity name="productWithDateTimeOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
+    </entity>
     <entity name="productWithOptionRadiobutton" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
@@ -1327,5 +1332,10 @@
     </entity>
     <entity name="SimpleProductUpdatePrice16" type="product2">
         <data key="price">16.00</data>
+    </entity>
+    <entity name="ProductWithTwoTextFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
     </entity>
 </entities>
