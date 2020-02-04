@@ -100,6 +100,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_httpContext;
 
     /**
+     * @var AccountConfirmation
+     */
+    protected $accountConfirmation;
+
+    /**
      * @var GroupManagementInterface
      */
     protected $groupManagement;
@@ -310,7 +315,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getCustomer()
     {
         if ($this->_customerModel === null) {
-            $this->_customerModel = $this->_customerFactory->create()->load($this->getCustomerId());
+            $this->_customerModel = $this->_customerFactory->create();
+
+            if ($this->getCustomerId()) {
+                $this->_customerResource->load($this->_customerModel, $this->getCustomerId());
+            }
         }
 
         return $this->_customerModel;
