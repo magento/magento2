@@ -383,7 +383,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
 
                 foreach ($items as $item) {
                     //Skipping child items to avoid double calculations
-                    if ($item->getParentItem()) {
+                    if ($item->getParentItemId() || $item->getParentItem()) {
                         continue;
                     }
                     if (!$rule->getActions()->validate($item)) {
