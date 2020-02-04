@@ -35,9 +35,9 @@
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillNewName"/>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterGridByName">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterGridByName">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{SimpleProduct2.name}}" stepKey="seeProductNameInGrid"/>

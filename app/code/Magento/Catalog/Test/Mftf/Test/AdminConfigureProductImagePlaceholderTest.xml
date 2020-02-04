@@ -62,9 +62,9 @@
             <deleteData createDataKey="productNoImages" stepKey="deleteProductNoImages"/>
             <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
         </after>
-        
+
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-        
+
         <!--Admin area: configure Product Image Placeholders-->
         <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>
@@ -120,7 +120,7 @@
             <actualResult type="variable">$getThumbnailPlaceholderImageSrc</actualResult>
             <expectedResult type="string">{{placeholderThumbnailImage.name}}</expectedResult>
         </assertContains>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromCart1">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromCart1">
             <argument name="productName" value="$$productNoImages.name$$"/>
         </actionGroup>
         <!--Product which is NOT using placeholder-->
@@ -138,7 +138,7 @@
             <actualResult type="variable">$getThumbnailImageSrc</actualResult>
             <expectedResult type="string">{{placeholderThumbnailImage.name}}</expectedResult>
         </assertNotContains>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromCart2">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromCart2">
             <argument name="productName" value="$$productWithImages.name$$"/>
         </actionGroup>
     </test>

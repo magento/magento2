@@ -52,7 +52,7 @@
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="scrollToAddProductsToGroup"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProducts">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
             <argument name="sku" value="api-simple-product"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult1"/>

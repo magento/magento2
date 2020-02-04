@@ -9,6 +9,7 @@ type EntityUrl @doc(description: "EntityUrl is an output object containing the `
     id: Int @doc(description: "The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID.")
     canonical_url: String @deprecated(reason: "The canonical_url field is deprecated, use relative_url instead.")
     relative_url: String @doc(description: "The internal relative URL. If the specified  url is a redirect, the query returns the redirected URL, not the original.")
+    redirectCode: Int @doc(description: "301 or 302 HTTP code for url permanent or temporary redirect or 0 for the 200 no redirect")
     type: UrlRewriteEntityTypeEnum @doc(description: "One of PRODUCT, CATEGORY, or CMS_PAGE.")
 }
 

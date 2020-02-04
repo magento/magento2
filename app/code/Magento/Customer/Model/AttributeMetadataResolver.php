@@ -16,6 +16,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
+use Magento\Customer\Model\FileUploaderDataResolver;
 
 /**
  * Class to build meta data of the customer or customer address attribute
@@ -77,14 +78,14 @@ class AttributeMetadataResolver
     /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
-     * @param \Magento\Customer\Model\FileUploaderDataResolver $fileUploaderDataResolver
+     * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
         EavValidationRules $eavValidationRules,
-        fileUploaderDataResolver $fileUploaderDataResolver,
+        FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
         ShareConfig $shareConfig
     ) {
@@ -113,7 +114,12 @@ class AttributeMetadataResolver
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
-            $meta['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
+            if ($metaName === 'label') {
+                $meta['arguments']['data']['config'][$metaName] = __($value);
+                $meta['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
+            } else {
+                $meta['arguments']['data']['config'][$metaName] = $value;
+            }
             if ('frontend_input' === $origName) {
                 $meta['arguments']['data']['config']['formElement'] = self::$formElement[$value] ?? $value;
             }
@@ -124,7 +130,14 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config']['options'] = $this->countryWithWebsiteSource
                     ->getAllOptions();
             } else {
-                $meta['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                $options = $attribute->getSource()->getAllOptions();
+                array_walk(
+                    $options,
+                    function (&$item) {
+                        $item['__disableTmpl'] = ['label' => true];
+                    }
+                );
+                $meta['arguments']['data']['config']['options'] = $options;
             }
         }
 
@@ -144,7 +157,6 @@ class AttributeMetadataResolver
             $attribute,
             $meta['arguments']['data']['config']
         );
-
         return $meta;
     }
 

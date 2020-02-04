@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSearchAndSelectUrlRewriteInGridActionGroup">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid for the provided Request Path. Clicks on Edit.</description>
+        </annotations>
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForEditPageToLoad"/>
+    </actionGroup>
+</actionGroups>
