@@ -14,7 +14,8 @@
             <title value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
             <description value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-76273"/>
+            <testCaseId value="MC-10022"/>
+            <useCaseId value="MAGETWO-89248"/>
             <group value="category"/>
         </annotations>
         <before>
@@ -41,6 +42,7 @@
             <deleteData createDataKey="productOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="productTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>
+            <deleteData createDataKey="simpleSubCategoryOne" stepKey="deleteSubcategoryOne"/>
             <deleteData createDataKey="simpleSubCategoryTwo" stepKey="deleteSubcategoryTwo"/>
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
         </after>
