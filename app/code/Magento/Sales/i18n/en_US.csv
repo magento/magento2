@@ -801,3 +801,4 @@ Email is required field for Admin order creation,Email is required field for Adm
 If set YES Email field will be required during Admin order creation for new Customer.,If set YES Email field will be required during Admin order creation for new Customer.
 "Could not save the shipment tracking","Could not save the shipment tracking"
 "Please enter a coupon code!","Please enter a coupon code!"
+"Reorder is not available.","Reorder is not available."
