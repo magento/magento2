@@ -12,7 +12,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
  *
  * @magentoAppArea frontend
  * @magentoAppIsolation enabled
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  */
 class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
 {
@@ -24,7 +24,11 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
     public function testNotRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Checkbox Options', $expectedSelectionsNames);
+        $this->processMultiSelectionsView(
+            'bundle-product-checkbox-options',
+            'Checkbox Options',
+            $expectedSelectionsNames
+        );
     }
 
     /**
@@ -35,7 +39,12 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
     public function testRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Checkbox Options', $expectedSelectionsNames, true);
+        $this->processMultiSelectionsView(
+            'bundle-product-checkbox-required-options',
+            'Checkbox Options',
+            $expectedSelectionsNames,
+            true
+        );
     }
 
     /**
@@ -45,7 +54,7 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
      */
     public function testShowSingle(): void
     {
-        $this->processSingleSelectionView('bundle-product', 'Checkbox Options');
+        $this->processSingleSelectionView('bundle-product-checkbox-required-option', 'Checkbox Options');
     }
 
     /**
@@ -54,7 +63,7 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
     protected function getRequiredSelectXpath(): string
     {
         return "//input[@type='checkbox' and contains(@data-validate, 'validate-one-required-by-name')"
-            . "and contains(@class, 'bundle-option')]/../label//span[text() = '1 x %s']";
+            . "and contains(@class, 'bundle-option')]/../label//span[normalize-space(text()) = '1 x %s']";
     }
 
     /**
@@ -63,6 +72,6 @@ class CheckboxOptionViewTest extends AbstractBundleOptionsViewTest
     protected function getNotRequiredSelectXpath(): string
     {
         return "//input[@type='checkbox' and not(contains(@data-validate, 'validate-one-required-by-name'))"
-            . "and contains(@class, 'bundle-option')]/../label//span[text() = '1 x %s']";
+            . "and contains(@class, 'bundle-option')]/../label//span[normalize-space(text()) = '1 x %s']";
     }
 }

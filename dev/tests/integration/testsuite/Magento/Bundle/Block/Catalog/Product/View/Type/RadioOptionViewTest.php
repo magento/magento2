@@ -24,7 +24,7 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
     public function testNotRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Radio Options', $expectedSelectionsNames);
+        $this->processMultiSelectionsView('bundle-product-radio-options', 'Radio Options', $expectedSelectionsNames);
     }
 
     /**
@@ -35,7 +35,12 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
     public function testRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Radio Options', $expectedSelectionsNames, true);
+        $this->processMultiSelectionsView(
+            'bundle-product-radio-required-options',
+            'Radio Options',
+            $expectedSelectionsNames,
+            true
+        );
     }
 
     /**
@@ -45,7 +50,7 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
      */
     public function testShowSingle(): void
     {
-        $this->processSingleSelectionView('bundle-product', 'Radio Options');
+        $this->processSingleSelectionView('bundle-product-radio-required-option', 'Radio Options');
     }
 
     /**
@@ -54,7 +59,7 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
     protected function getRequiredSelectXpath(): string
     {
         return "//input[@type='radio' and contains(@data-validate, 'validate-one-required-by-name')"
-            . "and contains(@class, 'bundle option')]/../label//span[text() = '%s']";
+            . "and contains(@class, 'bundle option')]/../label//span[normalize-space(text()) = '%s']";
     }
 
     /**
@@ -63,6 +68,6 @@ class RadioOptionViewTest extends AbstractBundleOptionsViewTest
     protected function getNotRequiredSelectXpath(): string
     {
         return "//input[@type='radio' and not(contains(@data-validate, 'validate-one-required-by-name'))"
-            . "and contains(@class, 'bundle option')]/../label//span[text() = '%s']";
+            . "and contains(@class, 'bundle option')]/../label//span[normalize-space(text()) = '%s']";
     }
 }

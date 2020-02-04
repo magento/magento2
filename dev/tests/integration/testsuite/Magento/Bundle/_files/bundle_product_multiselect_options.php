@@ -35,7 +35,7 @@ $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsiteId])
     ->setName('Bundle Product')
-    ->setSku('bundle-product')
+    ->setSku('bundle-product-multiselect-options')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
@@ -62,7 +62,6 @@ $bundleSelectionsData = [
         'selection_price_value' => 0,
         'selection_can_change_qty' => 1,
         'delete' => '',
-        'option_id' => 1,
     ],
     [
         'sku' => $product2->getSku(),
@@ -70,7 +69,6 @@ $bundleSelectionsData = [
         'selection_price_value' => 0,
         'selection_can_change_qty' => 1,
         'delete' => '',
-        'option_id' => 1,
     ],
 ];
 

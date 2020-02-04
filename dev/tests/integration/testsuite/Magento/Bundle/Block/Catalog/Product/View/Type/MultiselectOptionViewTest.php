@@ -24,7 +24,11 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
     public function testNotRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Multiselect Options', $expectedSelectionsNames);
+        $this->processMultiSelectionsView(
+            'bundle-product-multiselect-options',
+            'Multiselect Options',
+            $expectedSelectionsNames
+        );
     }
 
     /**
@@ -35,7 +39,12 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
     public function testRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Multiselect Options', $expectedSelectionsNames, true);
+        $this->processMultiSelectionsView(
+            'bundle-product-multiselect-required-options',
+            'Multiselect Options',
+            $expectedSelectionsNames,
+            true
+        );
     }
 
     /**
@@ -45,7 +54,7 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
      */
     public function testShowSingle(): void
     {
-        $this->processSingleSelectionView('bundle-product', 'Multiselect Options');
+        $this->processSingleSelectionView('bundle-product-multiselect-required-option', 'Multiselect Options');
     }
 
     /**
@@ -53,8 +62,8 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and @multiple='multiple' and @data-validate='{required:true}']"
-            . "/option/span[text() = '1 x %s']";
+        return "//select[contains(@id, 'bundle-option') and @multiple='multiple' "
+            . "and contains(@data-validate, 'required:true')]/option/span[normalize-space(text()) = '1 x %s']";
     }
 
     /**
@@ -63,6 +72,6 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
     protected function getNotRequiredSelectXpath(): string
     {
         return "//select[contains(@id, 'bundle-option') and @multiple='multiple'"
-            . "and not(@data-validate='{required:true}')]/option/span[text() = '1 x %s']";
+            . "and not(contains(@data-validate, 'required:true'))]/option/span[normalize-space(text()) = '1 x %s']";
     }
 }

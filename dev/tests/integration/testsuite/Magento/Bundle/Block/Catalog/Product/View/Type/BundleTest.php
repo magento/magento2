@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * Class checks bundle product view behaviour
  *
  * @magentoDataFixture Magento/Bundle/_files/product.php
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  * @magentoAppArea frontend
  * @see \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
  */
@@ -88,7 +88,7 @@ class BundleTest extends TestCase
     }
 
     /**
-     * @dataProvider isSalableProvider
+     * @dataProvider isSalableForStockStatusProvider
      *
      * @param bool $isSalable
      * @param string $expectedValue
@@ -106,7 +106,7 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function isSalableProvider(): array
+    public function isSalableForStockStatusProvider(): array
     {
         return [
             'is_salable' => [
@@ -121,7 +121,7 @@ class BundleTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProvider
+     * @dataProvider isSalableForCustomizeButtonProvider
      *
      * @param bool $isSalable
      * @param string $expectedValue
@@ -139,7 +139,7 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider(): array
+    public function isSalableForCustomizeButtonProvider(): array
     {
         return [
             'is_salable' => [
@@ -160,7 +160,7 @@ class BundleTest extends TestCase
      * @param string $expectedValue
      * @return void
      */
-    public function testCustomizeButtonEmptyProduct(): void
+    public function testCustomizeButtonProductWithoutOptions(): void
     {
         $product = $this->productRepository->get('bundle-product');
         $product->setSalable(true);

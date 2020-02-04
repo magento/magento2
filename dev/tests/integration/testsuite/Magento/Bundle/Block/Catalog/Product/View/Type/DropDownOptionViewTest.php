@@ -24,7 +24,11 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
     public function testNotRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Dropdown Options', $expectedSelectionsNames);
+        $this->processMultiSelectionsView(
+            'bundle_product_dropdown_options',
+            'Dropdown Options',
+            $expectedSelectionsNames
+        );
     }
 
     /**
@@ -35,7 +39,12 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
     public function testRequiredSelectMultiSelectionsView(): void
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
-        $this->processMultiSelectionsView('bundle-product', 'Dropdown Options', $expectedSelectionsNames, true);
+        $this->processMultiSelectionsView(
+            'bundle-product-dropdown-required-options',
+            'Dropdown Options',
+            $expectedSelectionsNames,
+            true
+        );
     }
 
     /**
@@ -53,8 +62,8 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and @data-validate = '{required:true}']"
-            . "/option/span[text() = '%s']";
+        return "//select[contains(@id, 'bundle-option') and contains(@data-validate, 'required:true')]"
+            . "/option/span[normalize-space(text()) = '%s']";
     }
 
     /**
@@ -62,7 +71,7 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
      */
     protected function getNotRequiredSelectXpath(): string
     {
-        return "//select[contains(@id, 'bundle-option') and not(@data-validate = '{required:true}')]"
-            . "/option/span[text() = '%s']";
+        return "//select[contains(@id, 'bundle-option') and not(contains(@data-validate, 'required:true'))]"
+            . "/option/span[normalize-space(text()) = '%s']";
     }
 }

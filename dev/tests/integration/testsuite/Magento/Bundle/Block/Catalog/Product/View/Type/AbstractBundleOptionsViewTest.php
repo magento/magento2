@@ -13,7 +13,6 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
@@ -30,9 +29,6 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
-    /** @var LayoutInterface */
-    private $layout;
-
     /** @var SerializerInterface */
     private $serializer;
 
@@ -46,16 +42,17 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
     private $productResource;
 
     /** @var string */
-    private $selectLabelXpath;
+    private $selectLabelXpath = "//fieldset[contains(@class, 'fieldset-bundle-options')]"
+    . "//label/span[normalize-space(text()) = '%s']";
 
     /** @var string */
-    private $backToProductDetailButtonXpath;
+    private $backToProductDetailButtonXpath = "//button[contains(@class, 'back customization')]";
 
     /** @var string */
-    private $titleXpath;
+    private $titleXpath = "//fieldset[contains(@class, 'bundle-options')]//span[contains(text(), 'Customize %s')]";
 
     /** @var string */
-    private $singleOptionXpath;
+    private $singleOptionXpath = "//input[contains(@class, 'bundle-option') and contains(@type, 'hidden')]";
 
     /**
      * @inheritdoc
@@ -67,15 +64,10 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
-        $this->selectLabelXpath = "//fieldset[contains(@class, 'fieldset-bundle-options')]//label/span[text() = '%s']";
-        $this->backToProductDetailButtonXpath = "//button[contains(@class, 'back customization')]";
-        $this->titleXpath = "//fieldset[contains(@class, 'bundle-options')]//span[contains(text(), 'Customize %s')]";
-        $this->singleOptionXpath = "//input[contains(@class, 'bundle-option') and contains(@type, 'hidden')]";
     }
 
     /**
@@ -187,7 +179,7 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
     }
 
     /**
-     * Get not required select Xpath
+     * Get required select Xpath
      *
      * @return string
      */

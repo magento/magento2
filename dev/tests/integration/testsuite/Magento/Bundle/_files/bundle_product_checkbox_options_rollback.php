@@ -17,7 +17,7 @@ $registry->register('isSecureArea', true);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 try {
-    $product = $productRepository->get('bundle-product', false, null, true);
+    $product = $productRepository->get('bundle-product-checkbox-options', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
     //Product already removed
