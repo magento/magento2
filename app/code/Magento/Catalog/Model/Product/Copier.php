@@ -59,14 +59,14 @@ class Copier
         CopyConstructorInterface $copyConstructor,
         ProductFactory $productFactory,
         ScopeOverriddenValue $scopeOverriddenValue,
-        OptionRepository $optionRepository = null,
-        MetadataPool $metadataPool = null
+        OptionRepository $optionRepository,
+        MetadataPool $metadataPool
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
-        $this->optionRepository = $optionRepository ?: ObjectManager::getInstance()->get(OptionRepository::class);
-        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->optionRepository = $optionRepository;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
