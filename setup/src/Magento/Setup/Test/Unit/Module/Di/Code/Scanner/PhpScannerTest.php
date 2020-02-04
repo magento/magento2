@@ -3,74 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/DoubleColon.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Api/Data/SomeInterface.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/StubWithAnonymousClass.php';
 
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
+use Magento\Setup\Module\Di\Compiler\Log\Log;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PhpScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\PhpScanner
+     * @var PhpScanner
      */
-    protected $_model;
+    private $scanner;
 
     /**
      * @var string
      */
-    protected $_testDir;
+    private $testDir;
 
     /**
-     * @var array
+     * @var Log|MockObject
      */
-    protected $_testFiles = [];
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_logMock;
+    private $log;
 
     protected function setUp()
     {
-        $this->_logMock = $this->createMock(\Magento\Setup\Module\Di\Compiler\Log\Log::class);
-        $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\PhpScanner($this->_logMock, new TypeProcessor());
-        $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
+        $this->log = $this->createMock(Log::class);
+        $this->scanner = new PhpScanner($this->log, new TypeProcessor());
+        $this->testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
     }
 
     public function testCollectEntities()
     {
-        $this->_testFiles = [
-            $this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php',
-            $this->_testDir . '/app/code/Magento/SomeModule/Model/DoubleColon.php',
-            $this->_testDir . '/app/code/Magento/SomeModule/Api/Data/SomeInterface.php'
+        $testFiles = [
+            $this->testDir . '/app/code/Magento/SomeModule/Helper/Test.php',
+            $this->testDir . '/app/code/Magento/SomeModule/Model/DoubleColon.php',
+            $this->testDir . '/app/code/Magento/SomeModule/Api/Data/SomeInterface.php',
+            $this->testDir . '/app/code/Magento/SomeModule/Model/StubWithAnonymousClass.php',
         ];
 
-        $this->_logMock->expects(
-            $this->at(0)
-        )->method(
-            'add'
-        )->with(
-            4,
-            'Magento\SomeModule\Module\Factory',
-            'Invalid Factory for nonexistent class Magento\SomeModule\Module in file ' . $this->_testFiles[0]
-        );
-        $this->_logMock->expects(
-            $this->at(1)
-        )->method(
-            'add'
-        )->with(
-            4,
-            'Magento\SomeModule\Element\Factory',
-            'Invalid Factory declaration for class Magento\SomeModule\Element in file ' . $this->_testFiles[0]
-        );
+        $this->log->expects(self::at(0))
+            ->method('add')
+            ->with(
+                4,
+                'Magento\SomeModule\Module\Factory',
+                'Invalid Factory for nonexistent class Magento\SomeModule\Module in file ' . $testFiles[0]
+            );
+        $this->log->expects(self::at(1))
+            ->method('add')
+            ->with(
+                4,
+                'Magento\SomeModule\Element\Factory',
+                'Invalid Factory declaration for class Magento\SomeModule\Element in file ' . $testFiles[0]
+            );
 
-        $this->assertEquals(
+        $result = $this->scanner->collectEntities($testFiles);
+
+        self::assertEquals(
             ['\\' . \Magento\Eav\Api\Data\AttributeExtensionInterface::class],
-            $this->_model->collectEntities($this->_testFiles)
+            $result
         );
     }
 }
