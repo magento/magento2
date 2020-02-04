@@ -68,6 +68,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Index Action
+     *
      * @return JsonModel
      */
     public function indexAction()
@@ -80,6 +82,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Menu Action
+     *
      * @return array|ViewModel
      */
     public function menuAction()
@@ -92,7 +96,10 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * SideMenu Action
+     *
      * @return array|ViewModel
+     *
      * @throws Exception
      */
     public function sideMenuAction()
@@ -108,6 +115,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * HeaderBar Action
+     *
      * @return array|ViewModel
      */
     public function headerBarAction()
