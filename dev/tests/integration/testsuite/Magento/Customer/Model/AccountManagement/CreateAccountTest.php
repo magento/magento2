@@ -160,7 +160,7 @@ class CreateAccountTest extends TestCase
     }
 
     /**
-     * Returns random string with given length.
+     * Returns random numeric string with given length.
      *
      * @param int $length
      * @return string
