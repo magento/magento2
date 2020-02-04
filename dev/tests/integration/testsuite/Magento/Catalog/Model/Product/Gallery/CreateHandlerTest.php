@@ -252,6 +252,32 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_image_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_image.php
+     * @return void
+     */
+    public function testExecuteWithCustomMediaAttribute(): void
+    {
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'image' => 'no_selection',
+            'small_image' => 'no_selection',
+            'swatch_image' => 'no_selection',
+            'thumbnail' => 'no_selection',
+            'image_attribute' => $this->fileName
+        ];
+        $product = $this->initProduct($data);
+        $this->createHandler->execute($product);
+        $mediaAttributeValue = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            ['image_attribute'],
+            $product->getStoreId()
+        );
+        $this->assertEquals($this->fileName, $mediaAttributeValue);
+    }
+
+    /**
      * Returns product for testing.
      *
      * @param array $data

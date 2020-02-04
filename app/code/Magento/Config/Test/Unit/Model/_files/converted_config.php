@@ -158,14 +158,14 @@ return [
                                     ],
                                     '_elementType' => 'field',
                                 ],
-                                 'field_5' => [
+                                'field_5' => [
                                     'id' => 'field_5',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => '',
                                     '_elementType' => 'field',
-                                 ],
+                                ],
                             ],
                             '_elementType' => 'group',
                         ],
@@ -190,6 +190,29 @@ return [
                     ],
                     '_elementType' => 'section',
                 ],
+                'section_3' => [
+                    'id' => 'section_3',
+                    'type' => 'text',
+                    '_elementType' => 'section',
+                    'children' => [
+                        'group_5' => [
+                            'id' => 'group_5',
+                            'type' => 'text',
+                            'showInDefault' => 1,
+                            'showInWebsite' => 1,
+                            'showInStore' => 1,
+                            '_elementType' => 'group',
+                            'children' => [
+                                'field_5' => [
+                                    'id' => 'field_5',
+                                    'showInWebsite' => '1',
+                                    'type' => 'text',
+                                    '_elementType' => 'field',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ],
         ],
     ],
