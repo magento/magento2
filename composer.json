@@ -36,8 +36,6 @@
         "composer/composer": "^1.6",
         "elasticsearch/elasticsearch": "~2.0|~5.1|~6.1",
         "guzzlehttp/guzzle": "^6.3.3",
-        "magento/composer": "~1.5.0",
-        "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1",
         "magento/composer": "1.6.x-dev",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
