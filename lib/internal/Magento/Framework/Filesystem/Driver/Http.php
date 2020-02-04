@@ -109,7 +109,7 @@ class Http extends File
     public function filePutContents($path, $content, $mode = null, $context = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode, $context);
-        if (!$result) {
+        if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'The specified "%1" file couldn\'t be written. %2',

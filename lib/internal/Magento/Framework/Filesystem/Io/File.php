@@ -479,7 +479,7 @@ class File extends AbstractIo
         } else {
             $result = @file_put_contents($filename, $src);
         }
-        if ($mode !== null && $result) {
+        if ($mode !== null && $result !== false) {
             @chmod($filename, $mode);
         }
         $this->_iwd();
