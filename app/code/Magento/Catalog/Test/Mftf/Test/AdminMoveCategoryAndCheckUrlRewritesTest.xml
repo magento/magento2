@@ -19,7 +19,9 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory"/>
+            <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
+                <field key="is_active">true</field>
+            </createData>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
