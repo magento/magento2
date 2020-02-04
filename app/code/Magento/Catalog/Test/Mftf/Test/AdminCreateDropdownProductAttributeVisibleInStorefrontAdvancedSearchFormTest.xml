@@ -34,6 +34,8 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <deleteData createDataKey="attribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <actionGroup ref="logout" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
