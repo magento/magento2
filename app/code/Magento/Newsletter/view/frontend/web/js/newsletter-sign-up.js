@@ -51,8 +51,10 @@ define([
 
             subscriptionStatusResolver(email, newsletterSubscription);
 
-            $.when(newsletterSubscription).done(function () {
-                $(self.signUpElement).prop('checked', true);
+            $.when(newsletterSubscription).done(function (isSubscribed) {
+                if (isSubscribed) {
+                    $(self.signUpElement).prop('checked', true);
+                }
             }).always(function () {
                 $(self.submitButton).prop('disabled', false);
             });

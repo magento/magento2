@@ -18,10 +18,10 @@ define([
         button,
         response = ko.observable({}),
         resolverMock = jasmine.createSpy('subscription-status-resolver', function (email, deferred) {
-            if (response().errors || !response().subscribed) {
+            if (response().errors) {
                 deferred.reject();
             } else {
-                deferred.resolve();
+                deferred.resolve(response().subscribed);
             }
         }).and.callThrough(),
         mocks = {

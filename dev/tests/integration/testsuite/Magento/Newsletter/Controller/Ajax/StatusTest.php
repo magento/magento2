@@ -57,11 +57,11 @@ class StatusTest extends AbstractController
     public function ajaxSubscriberDataProvider(): array
     {
         return [
-            'empty_string' => [false, ''],
-            'unsubscribed_email' => [false, 'sample@email.com'],
-            'registered_email' => [false, 'customer@example.com'],
-            'subscribed_email' => [true, 'customer_two@example.com'],
+            'empty_email_parameter' => [false, ''],
             'invalid_email' => [false, 'invalid_email.com'],
+            'unsubscribed_email' => [false, 'sample@email.com'],
+            'subscribed_guest_email' => [true, 'customer_two@example.com'],
+            'subscribed_registered_customer_email' => [false, 'customer@example.com'],
         ];
     }
 }

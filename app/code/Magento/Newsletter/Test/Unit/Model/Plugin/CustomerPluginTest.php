@@ -124,10 +124,14 @@ class CustomerPluginTest extends TestCase
             ->method('loadByCustomer')
             ->with($customerId, $websiteId)
             ->willReturnSelf();
-        $subscriber->expects($this->once())
-            ->method('loadBySubscriberEmail')
-            ->with($customerEmail, $websiteId)
-            ->willReturnSelf();
+        if ($originalStatus == Subscriber::STATUS_UNCONFIRMED) {
+            $subscriber->method('getId')->willReturn(1);
+        } else {
+            $subscriber->expects($this->once())
+                ->method('loadBySubscriberEmail')
+                ->with($customerEmail, $websiteId)
+                ->willReturnSelf();
+        }
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
         $customerExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['getIsSubscribed']);
@@ -162,23 +166,25 @@ class CustomerPluginTest extends TestCase
     }
 
     /**
+     * Data provider for testAfterSave()
+     *
      * @return array
      */
-    public function afterSaveDataProvider()
+    public function afterSaveDataProvider(): array
     {
         return [
-            [null, null, null],
-            [null, true, true],
-            [null, false, null],
-            [Subscriber::STATUS_SUBSCRIBED, null, null],
-            [Subscriber::STATUS_SUBSCRIBED, true, null],
-            [Subscriber::STATUS_SUBSCRIBED, false, false],
-            [Subscriber::STATUS_UNSUBSCRIBED, null, null],
-            [Subscriber::STATUS_UNSUBSCRIBED, true, true],
-            [Subscriber::STATUS_UNSUBSCRIBED, false, null],
-            [Subscriber::STATUS_UNCONFIRMED, null, true],
-            [Subscriber::STATUS_UNCONFIRMED, true, true],
-            [Subscriber::STATUS_UNCONFIRMED, false, true],
+            'missing_previous_and_new_status' => [null, null, null],
+            'missing_previous_status_and_subscribe' => [null, true, true],
+            'new_unsubscribed_value_and_missing_previous_status' => [null, false, null],
+            'previous_subscribed_status_without_new_value' => [Subscriber::STATUS_SUBSCRIBED, null, null],
+            'same_subscribed_previous_and_new_status' => [Subscriber::STATUS_SUBSCRIBED, true, null],
+            'unsubscribe_previously_subscribed_customer' => [Subscriber::STATUS_SUBSCRIBED, false, false],
+            'previously_unsubscribed_status_without_new_value' => [Subscriber::STATUS_UNSUBSCRIBED, null, null],
+            'subscribe_previously_unsubscribed_customer' => [Subscriber::STATUS_UNSUBSCRIBED, true, true],
+            'same_unsubscribed_previous_and_new_status' => [Subscriber::STATUS_UNSUBSCRIBED, false, null],
+            'previous_unconfirmed_status_without_new_value' => [Subscriber::STATUS_UNCONFIRMED, null, true],
+            'subscribe_previously_unconfirmed_status' => [Subscriber::STATUS_UNCONFIRMED, true, true],
+            'unsubscribe_previously_unconfirmed_status' => [Subscriber::STATUS_UNCONFIRMED, false, true],
         ];
     }
 
