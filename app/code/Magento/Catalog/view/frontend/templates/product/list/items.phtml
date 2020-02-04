@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
@@ -161,11 +161,11 @@ switch ($type = $block->getType()) {
 <div class="block <?= $block->escapeHtmlAttr($class) ?>"
      data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}'
      data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="<?= /* @noEscape */ $shuffle ?>">
-    <?php else :?>
+    <?php else:?>
     <div class="block <?= $block->escapeHtmlAttr($class) ?>" data-mage-init='{"upsellProducts":{}}'
          data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="<?= /* @noEscape */ $shuffle ?>">
         <?php endif; ?>
-        <?php else :?>
+        <?php else:?>
         <div class="block <?= $block->escapeHtmlAttr($class) ?>">
             <?php endif; ?>
             <div class="block-title title">
@@ -182,16 +182,16 @@ switch ($type = $block->getType()) {
                 <?php endif; ?>
                 <div class="products wrapper grid products-grid products-<?= $block->escapeHtmlAttr($type) ?>">
                     <ol class="products list items product-items">
-                        <?php foreach ($items as $_item) :?>
+                        <?php foreach ($items as $_item):?>
                             <?php $available = ''; ?>
-                            <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related') :?>
-                                <?php if (!$_item->getRequiredOptions()) :?>
+                            <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'):?>
+                                <?php if (!$_item->getRequiredOptions()):?>
                                     <?php $available = 'related-available'; ?>
                                 <?php endif; ?>
                             <?php endif; ?>
-                            <?php if ($type == 'related' || $type == 'upsell') :?>
+                            <?php if ($type == 'related' || $type == 'upsell'):?>
                                 <li class="item product product-item" style="display: none;">
-                            <?php else :?>
+                            <?php else:?>
                                 <li class="item product product-item">
                             <?php endif; ?>
                             <div class="product-item-info <?= /* @noEscape */ $available ?>">
@@ -210,7 +210,7 @@ switch ($type = $block->getType()) {
 
                                     <?= /* @noEscape */ $block->getProductPrice($_item) ?>
 
-                                    <?php if ($templateType) :?>
+                                    <?php if ($templateType):?>
                                         <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                                     <?php endif; ?>
 
@@ -235,14 +235,16 @@ switch ($type = $block->getType()) {
 
                                     <?php if ($showAddTo || $showCart):?>
                                         <div class="product actions product-item-actions">
-                                            <?php if ($showCart) :?>
+                                            <?php if ($showCart):?>
                                                 <div class="actions-primary">
-                                                    <?php if ($_item->isSaleable()) :?>
-                                                        <?php $postDataHelper = $this->helper(PostHelper::class);
-                                                        $postData = $postDataHelper->getPostData(
+                                                    <?php if ($_item->isSaleable()):?>
+                                                        <?php
+                                                        /** @var $viewModel PreparePostData */
+                                                        $viewModel = $block->getViewModel();
+                                                        $postData = $viewModel->getPostData(
                                                             $block->escapeUrl($block->getAddToCartUrl($_item)),
                                                             ['product' => $_item->getEntityId()]
-                                                        )
+                                                        );
                                                         ?>
                                                     <button class="action tocart primary"
                                                             data-post='<?= /* @noEscape */ $postData ?>'
@@ -250,12 +252,12 @@ switch ($type = $block->getType()) {
                                                             title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                         <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                     </button>
-                                                    <?php else :?>
-                                                        <?php if ($_item->getIsSalable()) :?>
+                                                    <?php else:?>
+                                                        <?php if ($_item->getIsSalable()):?>
                                                         <div class="stock available">
                                                             <span><?= $block->escapeHtml(__('In stock')) ?></span>
                                                         </div>
-                                                        <?php else :?>
+                                                        <?php else:?>
                                                         <div class="stock unavailable">
                                                             <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
                                                         </div>
@@ -264,7 +266,7 @@ switch ($type = $block->getType()) {
                                                 </div>
                                             <?php endif; ?>
 
-                                            <?php if ($showAddTo) :?>
+                                            <?php if ($showAddTo):?>
                                                 <div class="secondary-addto-links actions-secondary"
                                                      data-role="add-to-links">
                                                     <?php if ($addToBlock = $block->getChildBlock('addto')):?>
