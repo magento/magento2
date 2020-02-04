@@ -1,0 +1,20 @@
+<?php
+/**@var $block \Alexx\Blog\Block\BlogList */
+
+if ($block->isBlogIsEnabled()) {
+    $blogs = $block->getPosts();
+    if (count($blogs) > 0) { ?>
+        <div class="blogs-applied-to-category" style="border: 1px solid black">
+            <h2><?= $block->escapeHtml(__('Blog posts')) ?></h2>
+            <?php foreach ($blogs as $k => $v) { ?>
+                <div class="blog-card">
+                    <div>
+                        <img src="<?= $block->escapeUrl($v->getImageUrl()) ?>">
+                    </div>
+                    <span><?= $block->escapeHtml($v->getTheme()) ?></span>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } ?>
+<?php } ?>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Alexx_Blog/css/blog_module.css"  type="text/css"  />
+    </head>
+    <body>
+        <referenceContainer name="content" >
+            <container name="category.product.extra.container" htmlTag="div" htmlClass="grid" before="-">
+
+                <block class="Alexx\Blog\Block\BlogList"
+                       name="category.product.extra"
+                       template="Alexx_Blog::blog_list.phtml"
+                       after="-"
+                       ifconfig="catalog_blog/general/enable">
+                </block>
+            </container>
+
+        </referenceContainer>
+    </body>
+</page>
+
+
