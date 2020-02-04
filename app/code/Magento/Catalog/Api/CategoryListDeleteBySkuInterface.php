@@ -15,7 +15,7 @@ interface CategoryListDeleteBySkuInterface
     /**
      * Delete by skus list
      *
-     * @param int   $categoryId
+     * @param int      $categoryId
      * @param string[] $productSkuList
      * @return bool
      *
