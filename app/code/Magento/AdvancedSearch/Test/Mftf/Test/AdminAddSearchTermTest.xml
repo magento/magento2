@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddSearchTermTest">
+        <annotations>
+            <features value="AdvancedSearch"/>
+            <stories value="Add a new search term"/>
+            <title value="Admin should be able to create a new search term"/>
+            <description value="Admin should be able to create a new search term using search terms grid"/>
+            <severity value="CRITICAL"/>
+            <group value="AdvancedSearch"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminSaveNewSearchTermActionGroup" stepKey="createNewSearchTerm"/>
+    </test>
+</tests>
