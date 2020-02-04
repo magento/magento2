@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveNewSearchTermActionGroup">
+        <annotations>
+            <description>Navigate to search terms grid and create a new search term from Magento admin.</description>
+        </annotations>
+        <!-- Navigate to search terms grid -->
+        <amOnPage url="{{AdminSearchTermsGridPage.url}}" stepKey="amOnSearchTermsGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+
+        <!-- Click add new search term button -->
+        <click selector="{{AdminSearchTermsPageGridActionsSection.addNewSearchTerm}}" stepKey="clickAddNewSearchTermButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <!-- Fill form fields -->
+        <fillField selector="{{AdminSearchTermsPageFormFieldsSection.query_text}}" userInput="{{SearchTerms.searchQuery}}" stepKey="fillFieldSearchQuery"/>
+        <selectOption selector="{{AdminSearchTermsPageFormFieldsSection.store_id}}" userInput="{{SearchTerms.store}}" stepKey="selectStoreView"/>
+        <fillField selector="{{AdminSearchTermsPageFormFieldsSection.redirect}}" userInput="{{SearchTerms.redirectUrl}}" stepKey="fillFieldRedirectUrl"/>
+        <selectOption selector="{{AdminSearchTermsPageFormFieldsSection.display_in_terms}}" userInput="{{SearchTerms.suggestedTerms}}" stepKey="selectSuggestedTerms" />
+
+        <!-- Click save action and verify success message -->
+        <click selector="{{AdminSearchTermsPageFormActionsSection.saveSearchTerm}}" stepKey="clickSaveSearchButton"/>
+        <see userInput="You saved the search term." stepKey="assertSaveSearchTermSuccessMessage" />
+    </actionGroup>
+</actionGroups>
