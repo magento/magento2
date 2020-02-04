@@ -134,7 +134,7 @@ class CustomerPluginTest extends TestCase
         }
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->getMockForAbstractClass(CustomerExtensionInterface::class);
+        $customerExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['getIsSubscribed']);
         $customerExtension->method('getIsSubscribed')->willReturn($newValue);
         /** @var CustomerInterface|MockObject $customer */
         $customer = $this->createMock(CustomerInterface::class);
@@ -152,7 +152,7 @@ class CustomerPluginTest extends TestCase
             $this->subscriptionManager->expects($this->never())->method('subscribeCustomer');
             $this->subscriptionManager->expects($this->never())->method('unsubscribeCustomer');
         }
-        $resultExtension = $this->getMockForAbstractClass(CustomerExtensionInterface::class);
+        $resultExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['setIsSubscribed']);
         $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
         /** @var CustomerInterface|MockObject $result */
         $result = $this->createMock(CustomerInterface::class);
