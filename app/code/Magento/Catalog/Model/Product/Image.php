@@ -101,6 +101,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var int
+     * @deprecated unused
      */
     protected $_angle;
 
@@ -524,6 +525,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $angle
      * @return $this
+     * @deprecated unused
      */
     public function rotate($angle)
     {
@@ -539,6 +541,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $angle
      * @return $this
+     * @deprecated unused
      */
     public function setAngle($angle)
     {

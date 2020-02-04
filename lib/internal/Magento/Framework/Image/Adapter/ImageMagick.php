@@ -195,6 +195,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
+     * @deprecated unused
      */
     public function rotate($angle)
     {
