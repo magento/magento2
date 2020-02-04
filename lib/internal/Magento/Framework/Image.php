@@ -49,7 +49,7 @@ class Image
         $this->_adapter->checkDependencies();
 
         if (!file_exists($this->_fileName)) {
-            throw new \Exception("File '{$this->_fileName}' does not exist.");
+            throw new \RuntimeException("File '{$this->_fileName}' does not exist.");
         }
 
         $this->_adapter->open($this->_fileName);
@@ -95,7 +95,7 @@ class Image
     /**
      * Crop an image.
      *
-     * @param int $top  Default value is 0
+     * @param int $top Default value is 0
      * @param int $left Default value is 0
      * @param int $right Default value is 0
      * @param int $bottom Default value is 0
@@ -195,7 +195,7 @@ class Image
      * @param int $watermarkImageOpacity Watermark image opacity.
      * @param bool $repeat Enable or disable watermark brick.
      * @access public
-     * @throws \Exception
+     * @throws \RuntimeException
      * @return void
      */
     public function watermark(
@@ -206,7 +206,7 @@ class Image
         $repeat = false
     ) {
         if (!file_exists($watermarkImage)) {
-            throw new \Exception("Required file '{$watermarkImage}' does not exists.");
+            throw new \RuntimeException("Required file '{$watermarkImage}' does not exists.");
         }
         $this->_adapter->watermark($watermarkImage, $positionX, $positionY, $watermarkImageOpacity, $repeat);
     }
@@ -233,16 +233,19 @@ class Image
         return $this->_adapter->getImageType();
     }
 
+    // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
     /**
      * Process
      *
-     * @access public
+     * @access public,
      * @return void
      */
     public function process()
     {
     }
+    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
+    // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
     /**
      * Instruction
      *
@@ -252,6 +255,7 @@ class Image
     public function instruction()
     {
     }
+    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**
      * Set image background color

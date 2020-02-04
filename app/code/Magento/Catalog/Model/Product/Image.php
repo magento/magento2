@@ -10,9 +10,11 @@ use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
+use Magento\Framework\Filesystem\Driver\File as FilesystemDriver;
 
 /**
  * Image operations
@@ -201,6 +203,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
+     * @var FilesystemDriver
+     */
+    private $filesystemDriver;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -220,6 +227,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param SerializerInterface $serializer
      * @param ParamsBuilder $paramsBuilder
+     * @param FilesystemDriver $filesystemDriver
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -240,7 +249,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         SerializerInterface $serializer = null,
-        ParamsBuilder $paramsBuilder = null
+        ParamsBuilder $paramsBuilder = null,
+        FilesystemDriver $filesystemDriver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -255,6 +265,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
+        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()->get(FilesystemDriver::class);
     }
 
     /**
@@ -666,7 +677,12 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function isCached()
     {
         $path = $this->imageAsset->getPath();
-        return is_array($this->loadImageInfoFromCache($path)) || file_exists($path);
+        try {
+            $isCached = is_array($this->loadImageInfoFromCache($path)) || $this->filesystemDriver->isExists($path);
+        } catch (FileSystemException $e) {
+            $isCached = false;
+        }
+        return $isCached;
     }
 
     /**
