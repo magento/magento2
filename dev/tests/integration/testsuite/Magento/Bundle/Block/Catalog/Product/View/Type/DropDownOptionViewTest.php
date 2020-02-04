@@ -25,7 +25,7 @@ class DropDownOptionViewTest extends AbstractBundleOptionsViewTest
     {
         $expectedSelectionsNames = ['Simple Product', 'Simple Product2'];
         $this->processMultiSelectionsView(
-            'bundle_product_dropdown_options',
+            'bundle-product-dropdown-options',
             'Dropdown Options',
             $expectedSelectionsNames
         );
