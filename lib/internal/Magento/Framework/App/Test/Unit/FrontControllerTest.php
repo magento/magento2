@@ -175,6 +175,10 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)
+            ->will($this->returnValue(null));
+        $this->router->expects($this->at(2))
+            ->method('match')
+            ->with($this->request)
             ->will($this->returnValue($controllerInstance));
 
         $this->routerList->expects($this->any())

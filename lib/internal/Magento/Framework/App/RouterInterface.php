@@ -14,10 +14,18 @@ namespace Magento\Framework\App;
 interface RouterInterface
 {
     /**
-     * Match application action by request
+     * Match application action by request.
+     *
+     * For web requests, return null if the router doesn't match the request
+     * but other routers might still match. Or to cause a 404, throw a
+     * \Magento\Framework\Exception\NotFoundException.
+     * See \Magento\Framework\App\FrontController.
+     *
+     * For Webapi Rest requests, return FALSE instead of null.
+     * See \Magento\Webapi\Controller\Rest\Router.
      *
      * @param RequestInterface $request
-     * @return ActionInterface
+     * @return ActionInterface|null|false
      */
     public function match(RequestInterface $request);
 }
