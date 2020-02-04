@@ -29,7 +29,7 @@ class PreparePostData implements ArgumentInterface
     }
 
     /**
-     * get data for post by javascript in format acceptable to $.mage.dataPost widget
+     * Wrapper for the PostHelper::getPostData()
      *
      * @param string $url
      * @param array $data

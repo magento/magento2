@@ -29,6 +29,7 @@ class CrosssellTest extends \PHPUnit\Framework\TestCase
         $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
             ->createBlock(\Magento\Catalog\Block\Product\ProductList\Crosssell::class);
         $block->setLayout($objectManager->get(\Magento\Framework\View\LayoutInterface::class));
+        $block->setViewModel($objectManager->get(\Magento\Catalog\ViewModel\Product\Listing\PreparePostData::class));
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('crosssell');
         $block->setItemCount(1);

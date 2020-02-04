@@ -173,7 +173,7 @@ switch ($type = $block->getType()) {
                         aria-level="2"><?= $block->escapeHtml($title) ?></strong>
             </div>
             <div class="block-content content" aria-labelledby="block-<?= $block->escapeHtmlAttr($class) ?>-heading">
-                <?php if ($type == 'related' && $canItemsAddToCart) :?>
+                <?php if ($type == 'related' && $canItemsAddToCart):?>
                     <div class="block-actions">
                         <?= $block->escapeHtml(__('Check items to add to the cart or')) ?>
                         <button type="button" class="action select"
