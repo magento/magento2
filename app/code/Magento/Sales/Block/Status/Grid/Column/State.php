@@ -6,6 +6,8 @@
 namespace Magento\Sales\Block\Status\Grid\Column;
 
 /**
+ * Column State class
+ *
  * @api
  * @since 100.0.2
  */
@@ -53,12 +55,15 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
      */
     public function decorateState($value, $row, $column, $isExport)
     {
-        $status = $row->getStatus();
-        if ($value) {
-            $cell = $value . '[' . $this->_config->getStateLabelByStateAndStatus($value, $status) . ']';
-        } else {
-            $cell = $value;
+        $states = $this->_config->getStates();
+        if (isset($states[$value])) {
+            return sprintf(
+                "%s[%s]",
+                $value,
+                $states[$value]
+            );
         }
-        return $cell;
+
+        return $value;
     }
 }
