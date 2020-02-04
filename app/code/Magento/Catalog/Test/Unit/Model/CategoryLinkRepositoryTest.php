@@ -261,9 +261,8 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testDeleteBySkus(): void
     {
         $categoryId = 42;
-        $productSku = 'testSku';
-        $productId = 55;
-        $productPositions = [55 => 1];
+        $productSkus = ['testSku', 'testSku1', 'testSku2', 'testSku3'];
+        $productPositions = [55 => 1, 56 => 2, 57 => 3, 58 => 4];
         $categoryMock = $this->createPartialMock(
             Category::class,
             ['getProductsPosition', 'setPostedProducts', 'save', 'getId']
@@ -271,12 +270,12 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $this->productResourceMock->expects($this->once())->method('getProductsIdsBySkus')
-            ->willReturn(['testSku' => $productId]);
+            ->willReturn(['testSku' => 55, 'testSku1' => 56, 'testSku2' => 57, 'testSku3' => 58]);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
         $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
         $categoryMock->expects($this->once())->method('save');
 
-        $this->assertTrue($this->model->deleteBySkus($categoryId, [$productSku]));
+        $this->assertTrue($this->model->deleteBySkus($categoryId, $productSkus));
     }
 
     /**
