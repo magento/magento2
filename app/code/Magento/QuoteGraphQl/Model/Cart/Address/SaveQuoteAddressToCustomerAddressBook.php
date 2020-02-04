@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
@@ -89,8 +90,15 @@ class SaveQuoteAddressToCustomerAddressBook
             $customerAddress->setRegion($region);
 
             $this->addressRepository->save($customerAddress);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()), $e);
+        } catch (InputException $inputException) {
+            $graphQlInputException = new GraphQlInputException(__($inputException->getMessage()));
+            $errors = $inputException->getErrors();
+            foreach ($errors as $error) {
+                $graphQlInputException->addError(new GraphQlInputException(__($error->getMessage())));
+            }
+            throw $graphQlInputException;
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()), $exception);
         }
     }
 }

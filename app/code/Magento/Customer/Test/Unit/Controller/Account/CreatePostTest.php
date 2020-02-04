@@ -346,11 +346,13 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['password', null, $password],
-                ['password_confirmation', null, $password],
-                ['is_subscribed', false, true],
-            ]);
+            ->willReturnMap(
+                [
+                    ['password', null, $password],
+                    ['password_confirmation', null, $password],
+                    ['is_subscribed', false, true],
+                ]
+            );
 
         $this->customerMock->expects($this->once())
             ->method('setAddresses')
@@ -371,7 +373,7 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
@@ -477,11 +479,13 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['password', null, $password],
-                ['password_confirmation', null, $password],
-                ['is_subscribed', false, true],
-            ]);
+            ->willReturnMap(
+                [
+                    ['password', null, $password],
+                    ['password_confirmation', null, $password],
+                    ['is_subscribed', false, true],
+                ]
+            );
 
         $this->customerMock->expects($this->once())
             ->method('setAddresses')
@@ -502,16 +506,18 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($customerId));
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($this->stringContains($successMessage))
             ->will($this->returnSelf());
 
         $this->urlMock->expects($this->any())
             ->method('getUrl')
-            ->willReturnMap([
-                ['*/*/index', ['_secure' => true], $successUrl],
-                ['*/*/create', ['_secure' => true], $successUrl],
-            ]);
+            ->willReturnMap(
+                [
+                    ['*/*/index', ['_secure' => true], $successUrl],
+                    ['*/*/create', ['_secure' => true], $successUrl],
+                ]
+            );
         $this->redirectMock->expects($this->once())
             ->method('success')
             ->with($this->equalTo($successUrl))

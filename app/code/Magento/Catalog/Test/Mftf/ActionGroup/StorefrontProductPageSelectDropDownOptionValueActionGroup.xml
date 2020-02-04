@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontProductPageSelectDropDownOptionValueActionGroup">
+        <annotations>
+            <description>Selects the provided Product Option Value under the provided DropDown Product Option Title on a Storefront Product page.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string" defaultValue="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="optionLabel" type="string" defaultValue="{{productAttributeOption1.label}}"/>
+        </arguments>
+
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeLabel)}}" userInput="{{optionLabel}}" stepKey="fillDropDownAttributeOption"/>
+    </actionGroup>
+</actionGroups>

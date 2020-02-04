@@ -8,23 +8,27 @@ declare(strict_types=1);
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Ui\Component\Filters;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Filters;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit tests for \Magento\Ui\Component\Filters class
  */
 class FiltersTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Filters|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filters|MockObject */
     private $filters;
 
-    /** @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UiComponentInterface|MockObject */
     private $uiComponentInterface;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UiComponentFactory|MockObject */
     private $uiComponentFactory;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ContextInterface|MockObject */
     private $context;
 
     /**
@@ -33,13 +37,13 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->uiComponentInterface = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $this->uiComponentInterface = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->uiComponentFactory = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
+        $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $this->context = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filters = $objectManager->getObject(
@@ -52,7 +56,14 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testUpdate()
+    /**
+     * Test to Update filter component according to $component
+     *
+     * @param string $filterType
+     * @param string $filterName
+     * @dataProvider updateDataProvider
+     */
+    public function testUpdate(string $filterType, string $filterName)
     {
         $componentName = 'component_name';
         $componentConfig = [0, 1, 2];
@@ -60,7 +71,10 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'getName', 'getConfiguration'])
             ->getMockForAbstractClass();
-        $columnInterface->expects($this->atLeastOnce())->method('getData')->with('config/filter')->willReturn('text');
+        $columnInterface->expects($this->atLeastOnce())
+            ->method('getData')
+            ->with('config/filter')
+            ->willReturn($filterType);
         $columnInterface->expects($this->atLeastOnce())->method('getName')->willReturn($componentName);
         $columnInterface->expects($this->once())->method('getConfiguration')->willReturn($componentConfig);
         $filterComponent = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
@@ -71,11 +85,22 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $filterComponent->expects($this->once())->method('prepare')->willReturnSelf();
         $this->uiComponentFactory->expects($this->once())->method('create')
-            ->with($componentName, 'filterInput', ['context' => $this->context])
+            ->with($componentName, $filterName, ['context' => $this->context])
             ->willReturn($filterComponent);
 
         $this->filters->update($columnInterface);
         /** Verify that filter is already set and it wouldn't be set again */
         $this->filters->update($columnInterface);
+    }
+
+    /**
+     * @return array
+     */
+    public function updateDataProvider(): array
+    {
+        return [
+            ['text', 'filterInput'],
+            ['datetimeRange', 'filterDate'],
+        ];
     }
 }

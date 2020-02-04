@@ -3,54 +3,73 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Checkout\Model\CompositeConfigProvider;
+use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\ObjectManager;
+
 /**
+ * Cart Shipping Block
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
-     * @var \Magento\Checkout\Model\CompositeConfigProvider
+     * @var CompositeConfigProvider
      */
     protected $configProvider;
 
     /**
-     * @var array|\Magento\Checkout\Block\Checkout\LayoutProcessorInterface[]
+     * @var array|LayoutProcessorInterface[]
      */
     protected $layoutProcessors;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
+     * @var JsonHexTag
+     */
+    private $jsonHexTagSerializer;
+
+    /**
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     * @param CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
+     * @param JsonHexTag|null $jsonHexTagSerializer
      * @throws \RuntimeException
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
+        CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null,
+        JsonHexTag $jsonHexTagSerializer = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->jsonHexTagSerializer = $jsonHexTagSerializer ?: ObjectManager::getInstance()->get(JsonHexTag::class);
     }
 
     /**
@@ -75,7 +94,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
             $this->jsLayout = $processor->process($this->jsLayout);
         }
 
-        return json_encode($this->jsLayout, JSON_HEX_TAG);
+        return $this->jsonHexTagSerializer->serialize($this->jsLayout);
     }
 
     /**
@@ -90,11 +109,13 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get Serialized Checkout Config
+     *
      * @return bool|string
      * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {
-        return json_encode($this->getCheckoutConfig(), JSON_HEX_TAG);
+        return $this->jsonHexTagSerializer->serialize($this->getCheckoutConfig());
     }
 }

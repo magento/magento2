@@ -11,6 +11,7 @@
     <test name="AdminCheckLocaleAndDeveloperConfigInProductionModeTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Menu Navigation"/>
             <title value="Check locale dropdown and developer configuration page are not available in production mode"/>
             <description value="Check locale dropdown and developer configuration page are not available in production mode"/>
             <testCaseId value="MC-14106" />

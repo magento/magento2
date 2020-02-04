@@ -98,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getId', 'getWebsiteId'])
             ->getMockForAbstractClass();
-        $moduleManager = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
+        $moduleManager = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $catalogProductFlatState = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Flat\State::class)
