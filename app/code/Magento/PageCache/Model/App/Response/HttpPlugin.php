@@ -19,9 +19,10 @@ class HttpPlugin
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {
-        if ($subject instanceof \Magento\Framework\App\PageCache\NotCacheableInterface) {
+        if ($subject instanceof \Magento\Framework\App\PageCache\NotCacheableInterface || headers_sent()) {
             return;
         }
+
         $subject->sendVary();
     }
 }

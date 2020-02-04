@@ -195,7 +195,7 @@ class CustomerRegistry
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
-        if ($emailKey) {
+        if (isset($this->customerRegistryByEmail[$emailKey])) {
             /** @var Customer $customer */
             $customer = $this->customerRegistryByEmail[$emailKey];
             unset($this->customerRegistryByEmail[$emailKey]);
