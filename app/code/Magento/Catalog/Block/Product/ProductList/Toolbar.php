@@ -263,7 +263,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get grit products sort order field
+     * Get grid products sort order field
      *
      * @return string
      */
