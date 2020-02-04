@@ -3,48 +3,94 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Customer\Model\Group;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PriceTest
+ * Provides tests for configurable product pricing.
+ *
  * @magentoDbIsolation disabled
  */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
-    /** @var  \Magento\Framework\ObjectManagerInterface */
-    protected $objectManager;
-
-    /** @var  \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory */
-    protected $customOptionFactory;
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
 
     /**
-     *
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var Price
+     */
+    private $priceModel;
+
+    /**
+     * @var GetPriceIndexDataByProductId
+     */
+    private $getPriceIndexDataByProductId;
+
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->priceModel = $this->objectManager->create(Price::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+        $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
+        $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
     }
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testGetFinalPrice()
+    public function testGetFinalPrice(): void
     {
         $this->assertPrice(10);
+        $this->assertIndexTableData(
+            'configurable',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null]
+        );
+        $this->assertIndexTableData(
+            'simple_10',
+            ['price' => 10, 'final_price' => 10, 'min_price' => 10, 'max_price' => 10, 'tier_price' => null]
+        );
+        $this->assertIndexTableData(
+            'simple_20',
+            ['price' => 20, 'final_price' => 20, 'min_price' => 20, 'max_price' => 20, 'tier_price' => null]
+        );
     }
 
     /**
      * @magentoConfigFixture current_store tax/display/type 1
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testGetFinalPriceExcludingTax()
+    public function testGetFinalPriceExcludingTax(): void
     {
         $this->assertPrice(10);
     }
@@ -53,9 +99,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store tax/display/type 2
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testGetFinalPriceIncludingTax()
+    public function testGetFinalPriceIncludingTax(): void
     {
         //lowest price of configurable variation + 10%
         $this->assertPrice(11);
@@ -65,9 +111,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store tax/display/type 3
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testGetFinalPriceIncludingExcludingTax()
+    public function testGetFinalPriceIncludingExcludingTax(): void
     {
         //lowest price of configurable variation + 10%
         $this->assertPrice(11);
@@ -76,109 +122,78 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testGetFinalPriceWithSelectedSimpleProduct()
+    public function testGetFinalPriceWithSelectedSimpleProduct(): void
     {
-        $product = $this->getProduct(1);
-        $product->addCustomOption('simple_product', 20, $this->getProduct(20));
+        $product = $this->productRepository->get('configurable');
+        $product->addCustomOption('simple_product', 20, $this->productRepository->get('simple_20'));
         $this->assertPrice(20, $product);
     }
 
     /**
-     * @magentoConfigFixture current_store tax/display/type 1
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation disabled
-     */
-    public function testGetFinalPriceWithCustomOption()
-    {
-        $product = $this->getProduct(1);
-
-        $options = $this->prepareOptions(
-            [
-                [
-                    'option_id' => null,
-                    'previous_group' => 'text',
-                    'title' => 'Test Field',
-                    'type' => 'field',
-                    'is_require' => 1,
-                    'sort_order' => 0,
-                    'price' => 100,
-                    'price_type' => 'fixed',
-                    'sku' => '1-text',
-                    'max_characters' => 100,
-                ],
-            ],
-            $product
-        );
-
-        $product->setOptions($options);
-        $product->setCanSaveCustomOptions(true);
-
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->save($product);
-
-        $optionId = $product->getOptions()[0]->getId();
-        $product->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
-        $product->addCustomOption('option_ids', $optionId);
-        $this->assertPrice(110, $product);
-    }
-
-    /**
-     * @param array $options
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
-     */
-    protected function prepareOptions($options, $product)
-    {
-        $preparedOptions = [];
-
-        if (!$this->customOptionFactory) {
-            $this->customOptionFactory = $this->objectManager->create(
-                \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class
-            );
-        }
-
-        foreach ($options as $option) {
-            $option = $this->customOptionFactory->create(['data' => $option]);
-            $option->setProductSku($product->getSku());
-
-            $preparedOptions[] = $option;
-        }
-
-        return $preparedOptions;
-    }
-
-    /**
-     * Test
-     *
-     * @param $expectedPrice
-     * @param null $product
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_custom_option_and_simple_tier_price.php
      * @return void
      */
-    protected function assertPrice($expectedPrice, $product = null)
+    public function testGetFinalPriceWithCustomOptionAndSimpleTierPrice(): void
     {
-        $product = $product ?: $this->getProduct(1);
-
-        /** @var $model \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price */
-        $model = $this->objectManager->create(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price::class
+        $configurable = $this->productRepository->get('configurable');
+        $this->assertIndexTableData(
+            'configurable',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 9, 'max_price' => 30, 'tier_price' => 15]
         );
-
-        // final price is the lowest price of configurable variations
-        $this->assertEquals(round($expectedPrice, 2), round($model->getFinalPrice(1, $product), 2));
+        $this->assertIndexTableData(
+            'simple_10',
+            ['price' => 10, 'final_price' => 9, 'min_price' => 9, 'max_price' => 9, 'tier_price' => null]
+        );
+        $this->assertIndexTableData(
+            'simple_20',
+            ['price' => 20, 'final_price' => 15, 'min_price' => 15, 'max_price' => 15, 'tier_price' => 15]
+        );
+        $optionId = $configurable->getOptions()[0]->getId();
+        $configurable->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
+        $configurable->addCustomOption('option_ids', $optionId);
+        //  First simple special price (9) + Option price (15)
+        $this->assertPrice(24, $configurable);
+        $configurable->addCustomOption('simple_product', 20, $this->productRepository->get('simple_20'));
+        //  Second simple tier price (15) + Option price (15)
+        $this->assertPrice(30, $configurable);
     }
 
     /**
-     * @param int $id
-     * @return \Magento\Catalog\Model\Product
+     * Asserts price data in index table.
+     *
+     * @param string $sku
+     * @param array $expectedPrices
+     * @return void
      */
-    private function getProduct($id)
+    private function assertIndexTableData(string $sku, array $expectedPrices): void
     {
-        /** @var $productRepository ProductRepositoryInterface */
-        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        return $productRepository->getById($id, true, null, true);
+        $data = $this->getPriceIndexDataByProductId->execute(
+            (int)$this->productRepository->get($sku)->getId(),
+            Group::NOT_LOGGED_IN_ID,
+            (int)$this->websiteRepository->get('base')->getId()
+        );
+        $data = reset($data);
+        foreach ($expectedPrices as $column => $price) {
+            $this->assertEquals($price, $data[$column], $column);
+        }
+    }
+
+    /**
+     * Asserts product final price.
+     *
+     * @param float $expectedPrice
+     * @param ProductInterface|null $product
+     * @return void
+     */
+    private function assertPrice(float $expectedPrice, ?ProductInterface $product = null): void
+    {
+        $product = $product ?: $this->productRepository->get('configurable');
+        // final price is the lowest price of configurable variations
+        $this->assertEquals(
+            round($expectedPrice, 2),
+            round($this->priceModel->getFinalPrice(1, $product), 2)
+        );
     }
 }

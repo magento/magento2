@@ -7,17 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
+
 /**
  * Test cases related to create attribute with input type price.
  *
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  */
-class PriceTest extends AbstractSaveAttributeTest
+class DecimalTest extends AbstractSaveAttributeTest
 {
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Price::getAttributeDataWithCheckArray()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getAttributeDataWithCheckArray
      *
      * @param array $attributePostData
      * @param array $checkArray
@@ -31,7 +34,7 @@ class PriceTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Price::getAttributeDataWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\Decimal::getAttributeDataWithErrorMessage
      *
      * @param array $attributePostData
      * @param string $errorMessage
