@@ -19,6 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
@@ -35,7 +36,7 @@
             </createData>
 
             <!-- Check Links can be purchased separately for Downloadable Product -->
-            <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToDownloadableProduct">
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProduct">
                 <argument name="product" value="$$downloadableProduct$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -111,7 +112,7 @@
             </createData>
 
             <!-- Grab attribute name for Configurable Product -->
-            <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToConfigurableProduct">
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToConfigurableProduct">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
@@ -144,7 +145,7 @@
             </createData>
 
             <!-- Grab bundle option name for Bundle Product -->
-            <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToBundleProduct">
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
                 <argument name="product" value="$$createBundleProduct$$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
@@ -163,7 +164,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
             <!-- Place order with options according to dataset -->
-            <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="newOrder">
+            <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
                 <argument name="customer" value="$$createCustomer$$"/>
             </actionGroup>
 
@@ -199,14 +200,15 @@
                 <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
             </actionGroup>
 
-            <actionGroup ref="fillOrderCustomerInformation" stepKey="fillOrder">
+            <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillOrder">
                 <argument name="customer" value="$$createCustomer$$"/>
                 <argument name="address" value="US_Address_TX"/>
             </actionGroup>
 
-            <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+            <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
         </before>
         <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
             <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
 
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>

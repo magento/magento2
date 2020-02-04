@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -17,6 +18,8 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -24,6 +27,7 @@ use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class OrderTest extends \PHPUnit\Framework\TestCase
 {
@@ -102,6 +106,11 @@ class OrderTest extends \PHPUnit\Framework\TestCase
      */
     private $searchCriteriaBuilder;
 
+    /**
+     * @var MockObject|ScopeConfigInterface $scopeConfigMock
+     */
+    private $scopeConfigMock;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -125,14 +134,17 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
             ['create']
         );
-        $this->item = $this->createPartialMock(\Magento\Sales\Model\ResourceModel\Order\Item::class, [
+        $this->item = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Order\Item::class,
+            [
                 'isDeleted',
                 'getQtyToInvoice',
                 'getParentItemId',
                 'getQuoteItemId',
                 'getLockedDoInvoice',
                 'getProductId',
-            ]);
+            ]
+        );
         $this->salesOrderCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Collection::class
         )->disableOriginalConstructor()
@@ -168,6 +180,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()->getMockForAbstractClass();
 
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->order = $helper->getObject(
             \Magento\Sales\Model\Order::class,
             [
@@ -182,7 +195,8 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 'localeResolver' => $this->localeResolver,
                 'timezone' => $this->timezone,
                 'itemRepository' => $this->itemRepository,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+                'scopeConfig' => $this->scopeConfigMock
             ]
         );
     }
@@ -352,6 +366,51 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->assertTrue($this->order->canInvoice());
+    }
+
+    /**
+     * Ensure customer name returned correctly.
+     *
+     * @dataProvider customerNameProvider
+     * @param array $expectedData
+     */
+    public function testGetCustomerName(array $expectedData)
+    {
+        $this->order->setCustomerFirstname($expectedData['first_name']);
+        $this->order->setCustomerSuffix($expectedData['customer_suffix']);
+        $this->order->setCustomerPrefix($expectedData['customer_prefix']);
+        $this->scopeConfigMock->expects($this->exactly($expectedData['invocation']))
+            ->method('isSetFlag')
+            ->willReturn(true);
+        $this->assertEquals($expectedData['expected_name'], $this->order->getCustomerName());
+    }
+
+    /**
+     * Customer name data provider
+     */
+    public function customerNameProvider()
+    {
+        return
+            [
+                [
+                    [
+                        'first_name' => null,
+                        'invocation' => 0,
+                        'expected_name' => 'Guest',
+                        'customer_suffix' => 'smith',
+                        'customer_prefix' => 'mr.'
+                    ]
+                ],
+                [
+                    [
+                        'first_name' => 'Smith',
+                        'invocation' => 1,
+                        'expected_name' => 'mr. Smith  Carl',
+                        'customer_suffix' => 'Carl',
+                        'customer_prefix' => 'mr.'
+                    ]
+                ]
+            ];
     }
 
     /**
@@ -819,9 +878,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         if ($orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
             $canVoidOrder = false;
         }
-        if ($orderState == \Magento\Sales\Model\Order::STATE_HOLDED && (!isset(
-            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
-        ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
+        if ($orderState == \Magento\Sales\Model\Order::STATE_HOLDED &&
+            (!isset($actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]) ||
+                $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false
+            )
         ) {
             $canVoidOrder = false;
         }
@@ -1193,6 +1253,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT);
     }
 
+    /**
+     * @return array
+     */
     public function notInvoicingStatesProvider()
     {
         return [
@@ -1202,6 +1265,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function canNotCreditMemoStatesProvider()
     {
         return [
