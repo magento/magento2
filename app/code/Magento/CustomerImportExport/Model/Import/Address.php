@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
@@ -224,7 +225,11 @@ class Address extends AbstractCustomer
      * @array
      */
     protected $validColumnNames = [
-        "region_id", "vat_is_valid", "vat_request_date", "vat_request_id", "vat_request_success"
+        "region_id",
+        "vat_is_valid",
+        "vat_request_date",
+        "vat_request_id",
+        "vat_request_success"
     ];
 
     /**
@@ -507,11 +512,12 @@ class Address extends AbstractCustomer
     protected function _importData()
     {
         //Preparing data for mass validation/import.
-        $rows = [];
+        $rows = [[]];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $rows = array_merge($rows, $bunch);
+            $rows[] = $bunch;
         }
-        $this->prepareCustomerData($rows);
+
+        $this->prepareCustomerData(array_merge(...$rows));
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
 
@@ -586,7 +592,7 @@ class Address extends AbstractCustomer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareDataForUpdate(array $rowData):array
+    protected function _prepareDataForUpdate(array $rowData): array
     {
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
@@ -636,7 +642,7 @@ class Address extends AbstractCustomer
                 if ($attributeParams['is_static']) {
                     $entityRow[$attributeAlias] = $value;
                 } else {
-                    $attributes[$attributeParams['table']][$addressId][$attributeParams['id']]= $value;
+                    $attributes[$attributeParams['table']][$addressId][$attributeParams['id']] = $value;
                 }
             }
         }

@@ -237,16 +237,12 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function getAllErrors()
     {
-        $result = [];
-        if (empty($this->items)) {
-            return $result;
+        if (empty($this->items) || empty($this->items['rows'])) {
+            return [];
         }
 
-        foreach (array_values($this->items['rows']) as $errors) {
-            $result = array_merge($result, $errors);
-        }
-
-        return $result;
+        $errors = array_values($this->items['rows']);
+        return array_merge(...$errors);
     }
 
     /**
@@ -257,14 +253,14 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function getErrorsByCode(array $codes)
     {
-        $result = [];
+        $result = [[]];
         foreach ($codes as $code) {
             if (isset($this->items['codes'][$code])) {
-                $result = array_merge($result, $this->items['codes'][$code]);
+                $result[] = $this->items['codes'][$code];
             }
         }
 
-        return $result;
+        return array_merge(...$result);
     }
 
     /**
