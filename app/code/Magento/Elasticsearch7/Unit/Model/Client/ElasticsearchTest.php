@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Client;
+namespace Magento\Elasticsearch7\Test\Unit\Model\Client;
 
-use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 
 /**
  * Class ElasticsearchTest
@@ -40,7 +40,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->elasticsearchClientMock = $this->getMockBuilder(\Elasticsearch\Client::class)
             ->setMethods(
@@ -81,11 +81,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->elasticsearchClientMock->expects($this->any())
             ->method('info')
-            ->willReturn(['version' => ['number' => '5.0.0']]);
+            ->willReturn(['version' => ['number' => '7.0.0']]);
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch::class,
+            Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
                 'elasticsearchClient' => $this->elasticsearchClientMock
@@ -99,7 +99,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testConstructorOptionsException()
     {
         $result = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
+            Elasticsearch::class,
             [
                 'options' => []
             ]
@@ -113,12 +113,75 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testConstructorWithOptions()
     {
         $result = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
+            \Magento\Elasticsearch7\Model\Client\Elasticsearch::class,
             [
                 'options' => $this->getOptions()
             ]
         );
         $this->assertNotNull($result);
+    }
+
+    /**
+     * Ensure that configuration returns correct url.
+     *
+     * @param array $options
+     * @param string $expectedResult
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \ReflectionException
+     * @dataProvider getOptionsDataProvider
+     */
+    public function testBuildConfig(array $options, $expectedResult): void
+    {
+        $buildConfig = new Elasticsearch($options);
+        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildConfig');
+        $result = $config->invoke($buildConfig, $options);
+        $this->assertEquals($expectedResult, $result['hosts'][0]);
+    }
+
+    /**
+     * Return private method for elastic search class.
+     *
+     * @param $className
+     * @param $methodName
+     * @return \ReflectionMethod
+     * @throws \ReflectionException
+     */
+    private function getPrivateMethod($className, $methodName)
+    {
+        $reflector = new \ReflectionClass($className);
+        $method = $reflector->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method;
+    }
+
+    /**
+     * Get options data provider.
+     */
+    public function getOptionsDataProvider()
+    {
+        return [
+            [
+                'without_protocol' => [
+                    'hostname' => 'localhost',
+                    'port' => '9200',
+                    'timeout' => 15,
+                    'index' => 'magento2',
+                    'enableAuth' => 0,
+                ],
+                'expected_result' => 'http://localhost:9200'
+            ],
+            [
+                'with_protocol' => [
+                    'hostname' => 'https://localhost',
+                    'port' => '9200',
+                    'timeout' => 15,
+                    'index' => 'magento2',
+                    'enableAuth' => 0,
+                ],
+                'expected_result' => 'https://localhost:9200'
+            ]
+        ];
     }
 
     /**
@@ -154,7 +217,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testTestConnectionPing()
     {
         $this->model = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
+            \Magento\Elasticsearch7\Model\Client\Elasticsearch::class,
             [
                 'options' => $this->getEmptyIndexOption(),
                 'elasticsearchClient' => $this->elasticsearchClientMock
@@ -351,13 +414,13 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 [
                     'index' => 'indexName',
                     'type' => 'product',
+                    'include_type_name' => true,
                     'body' => [
                         'product' => [
-                            '_all' => [
-                                'enabled' => true,
-                                'type' => 'text',
-                            ],
                             'properties' => [
+                                '_search' => [
+                                    'type' => 'text',
+                                ],
                                 'name' => [
                                     'type' => 'text',
                                 ],
@@ -379,7 +442,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => true
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -390,9 +453,10 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
+                                            'copy_to' => '_search'
                                         ],
                                     ],
-                                ],
+                                ]
                             ],
                         ],
                     ],
@@ -421,13 +485,13 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 [
                     'index' => 'indexName',
                     'type' => 'product',
+                    'include_type_name' => true,
                     'body' => [
                         'product' => [
-                            '_all' => [
-                                'enabled' => true,
-                                'type' => 'text',
-                            ],
                             'properties' => [
+                                '_search' => [
+                                    'type' => 'text',
+                                ],
                                 'name' => [
                                     'type' => 'text',
                                 ],
@@ -460,6 +524,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
+                                            'copy_to' => '_search'
                                         ],
                                     ],
                                 ]
@@ -497,40 +562,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             'indexName',
             'product'
         );
-    }
-
-    /**
-     * Ensure that configuration returns correct url.
-     *
-     * @param array $options
-     * @param string $expectedResult
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \ReflectionException
-     * @dataProvider getOptionsDataProvider
-     */
-    public function testBuildConfig(array $options, $expectedResult): void
-    {
-        $buildConfig = new Elasticsearch($options);
-        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildConfig');
-        $result = $config->invoke($buildConfig, $options);
-        $this->assertEquals($expectedResult, $result['hosts'][0]);
-    }
-
-    /**
-     * Return private method for elastic search class.
-     *
-     * @param $className
-     * @param $methodName
-     * @return \ReflectionMethod
-     * @throws \ReflectionException
-     */
-    private function getPrivateMethod($className, $methodName)
-    {
-        $reflector = new \ReflectionClass($className);
-        $method = $reflector->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method;
     }
 
     /**
@@ -579,35 +610,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->method('suggest')
             ->willReturn([]);
         $this->assertEquals([], $this->model->suggest($query));
-    }
-
-    /**
-     * Get options data provider.
-     */
-    public function getOptionsDataProvider()
-    {
-        return [
-            [
-                'without_protocol' => [
-                    'hostname' => 'localhost',
-                    'port' => '9200',
-                    'timeout' => 15,
-                    'index' => 'magento2',
-                    'enableAuth' => 0,
-                ],
-                'expected_result' => 'http://localhost:9200'
-            ],
-            [
-                'with_protocol' => [
-                    'hostname' => 'https://localhost',
-                    'port' => '9200',
-                    'timeout' => 15,
-                    'index' => 'magento2',
-                    'enableAuth' => 0,
-                ],
-                'expected_result' => 'https://localhost:9200'
-            ]
-        ];
     }
 
     /**

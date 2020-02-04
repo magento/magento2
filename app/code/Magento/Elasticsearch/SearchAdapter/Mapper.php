@@ -14,6 +14,7 @@ use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5M
 
 /**
  * Mapper class
+ *
  * @api
  * @since 100.1.0
  */

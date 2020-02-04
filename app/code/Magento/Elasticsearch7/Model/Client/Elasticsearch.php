@@ -3,15 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Elasticsearch5\Model\Client;
+declare(strict_types=1);
+
+namespace Magento\Elasticsearch7\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
- *
- * @deprecated the Elasticsearch doesn't supported due to EOL
  */
 class Elasticsearch implements ClientInterface
 {
@@ -31,11 +31,6 @@ class Elasticsearch implements ClientInterface
      * @var bool
      */
     private $pingResult;
-
-    /**
-     * @var string
-     */
-    private $serverVersion;
 
     /**
      * Initialize Elasticsearch Client
@@ -61,6 +56,17 @@ class Elasticsearch implements ClientInterface
         }
         $this->client[getmypid()] = $elasticsearchClient;
         $this->clientOptions = $options;
+    }
+
+    /**
+     * Execute suggest query
+     *
+     * @param array $query
+     * @return array
+     */
+    public function suggest($query)
+    {
+        return $this->getClient()->suggest($query);
     }
 
     /**
@@ -93,7 +99,7 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Validate connection params.
+     * Validate connection params
      *
      * @return bool
      */
@@ -261,15 +267,14 @@ class Elasticsearch implements ClientInterface
         $params = [
             'index' => $index,
             'type' => $entityType,
+            'include_type_name' => true,
             'body' => [
                 $entityType => [
-                    '_all' => $this->prepareFieldInfo(
-                        [
-                            'enabled' => true,
-                            'type' => 'text',
-                        ]
-                    ),
-                    'properties' => [],
+                    'properties' => [
+                        '_search' => [
+                            'type' => 'text'
+                        ],
+                    ],
                     'dynamic_templates' => [
                         [
                             'price_mapping' => [
@@ -295,47 +300,34 @@ class Elasticsearch implements ClientInterface
                             'string_mapping' => [
                                 'match' => '*',
                                 'match_mapping_type' => 'string',
-                                'mapping' => $this->prepareFieldInfo(
-                                    [
-                                        'type' => 'text',
-                                        'index' => true,
-                                    ]
-                                ),
+                                'mapping' => [
+                                    'type' => 'text',
+                                    'index' => true,
+                                    'copy_to' => '_search'
+                                ],
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
         ];
+
         foreach ($fields as $field => $fieldInfo) {
-            $params['body'][$entityType]['properties'][$field] = $this->prepareFieldInfo($fieldInfo);
+            $params['body'][$entityType]['properties'][$field] = $fieldInfo;
         }
 
         $this->getClient()->indices()->putMapping($params);
     }
 
     /**
-     * Fix backward compatibility of field definition. Allow to run both 2.x and 5.x servers.
+     * Execute search by $query
      *
-     * @param array $fieldInfo
-     *
+     * @param array $query
      * @return array
      */
-    private function prepareFieldInfo($fieldInfo)
+    public function query($query)
     {
-
-        if (strcmp($this->getServerVersion(), '5') < 0) {
-            if ($fieldInfo['type'] == 'keyword') {
-                $fieldInfo['type'] = 'string';
-                $fieldInfo['index'] = isset($fieldInfo['index']) ? $fieldInfo['index'] : 'not_analyzed';
-            }
-
-            if ($fieldInfo['type'] == 'text') {
-                $fieldInfo['type'] = 'string';
-            }
-        }
-
-        return $fieldInfo;
+        return $this->getClient()->search($query);
     }
 
     /**
@@ -348,65 +340,10 @@ class Elasticsearch implements ClientInterface
     public function deleteMapping($index, $entityType)
     {
         $this->getClient()->indices()->deleteMapping(
-            ['index' => $index, 'type' => $entityType]
+            [
+                'index' => $index,
+                'type' => $entityType,
+            ]
         );
-    }
-
-    /**
-     * Execute search by $query
-     *
-     * @param array $query
-     * @return array
-     */
-    public function query($query)
-    {
-        $query = $this->prepareSearchQuery($query);
-
-        return $this->getClient()->search($query);
-    }
-
-    /**
-     * Fix backward compatibility of the search queries. Allow to run both 2.x and 5.x servers.
-     *
-     * @param array $query
-     *
-     * @return array
-     */
-    private function prepareSearchQuery($query)
-    {
-        if (strcmp($this->getServerVersion(), '5') < 0) {
-            if (isset($query['body']) && isset($query['body']['stored_fields'])) {
-                $query['body']['fields'] = $query['body']['stored_fields'];
-                unset($query['body']['stored_fields']);
-            }
-        }
-
-        return $query;
-    }
-
-    /**
-     * Execute suggest query
-     *
-     * @param array $query
-     * @return array
-     */
-    public function suggest($query)
-    {
-        return $this->getClient()->suggest($query);
-    }
-
-    /**
-     * Retrieve ElasticSearch server current version.
-     *
-     * @return string
-     */
-    private function getServerVersion()
-    {
-        if ($this->serverVersion === null) {
-            $info = $this->getClient()->info();
-            $this->serverVersion = $info['version']['number'];
-        }
-
-        return $this->serverVersion;
     }
 }

@@ -11,7 +11,6 @@
             <module name="Magento_CatalogSearch"/>
             <module name="Magento_Search"/>
             <module name="Magento_AdvancedSearch"/>
-            <module name="Magento_Store"/>
             <module name="Magento_Elasticsearch"/>
         </sequence>
     </module>

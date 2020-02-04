@@ -49,7 +49,7 @@
     <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
             <argument name="clientFactories" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="string">\Magento\Elasticsearch6\Model\Client\ElasticsearchFactory</item>
+                <item name="elasticsearch7" xsi:type="string">\Magento\Elasticsearch7\Model\Client\ElasticsearchFactory</item>
             </argument>
             <argument name="clientOptions" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
@@ -97,16 +97,16 @@
         </arguments>
     </type>
 
-<!--    <virtualType name="Magento\Elasticsearch7\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">-->
-<!--        <arguments>-->
-<!--            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch7\Model\Client\Elasticsearch</argument>-->
-<!--        </arguments>-->
-<!--    </virtualType>-->
+    <virtualType name="Magento\Elasticsearch7\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
+        <arguments>
+            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch7\Model\Client\Elasticsearch</argument>
+        </arguments>
+    </virtualType>
 
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">
         <arguments>
             <argument name="clientFactories" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch6\Model\Client\ElasticsearchFactory</item>
+                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch7\Model\Client\ElasticsearchFactory</item>
             </argument>
         </arguments>
     </type>

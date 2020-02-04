@@ -3,52 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch7\SearchAdapter;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use \Magento\Elasticsearch\SearchAdapter\ResponseFactory;
+use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Search\AdapterInterface;
+use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper;
 
 /**
  * Elasticsearch Search Adapter
  */
-class Adapter extends \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter
+class Adapter implements AdapterInterface
 {
     /**
      * Mapper instance
      *
      * @var \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper
      */
-    protected $mapper;
+    private $mapper;
 
     /**
      * Response Factory
      *
      * @var ResponseFactory
      */
-    protected $responseFactory;
+    private $responseFactory;
 
     /**
      * @var ConnectionManager
      */
-    protected $connectionManager;
+    private $connectionManager;
 
     /**
      * @var AggregationBuilder
      */
-    protected $aggregationBuilder;
+    private $aggregationBuilder;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\QueryContainerFactory
+     * @var QueryContainerFactory
      */
     private $queryContainerFactory;
 
     /**
-     * Empty response from Elasticsearch.
+     * Empty response from Elasticsearch
      *
      * @var array
      */
@@ -75,27 +79,26 @@ class Adapter extends \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapte
 
     /**
      * @param ConnectionManager $connectionManager
-     * @param \Magento\Elasticsearch\SearchAdapter\Mapper $mapper
+     * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
      * @param AggregationBuilder $aggregationBuilder
-     * @param \Magento\Elasticsearch\SearchAdapter\QueryContainerFactory $queryContainerFactory
+     * @param QueryContainerFactory $queryContainerFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         ConnectionManager $connectionManager,
-        \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper $mapper,
+        Mapper $mapper,
         ResponseFactory $responseFactory,
         AggregationBuilder $aggregationBuilder,
-        \Magento\Elasticsearch\SearchAdapter\QueryContainerFactory $queryContainerFactory,
-        LoggerInterface $logger = null
+        QueryContainerFactory $queryContainerFactory,
+        LoggerInterface $logger
     ) {
         $this->connectionManager = $connectionManager;
         $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
         $this->aggregationBuilder = $aggregationBuilder;
         $this->queryContainerFactory = $queryContainerFactory;
-        $this->logger = $logger ?: ObjectManager::getInstance()
-            ->get(LoggerInterface::class);
+        $this->logger = $logger;
     }
 
     /**

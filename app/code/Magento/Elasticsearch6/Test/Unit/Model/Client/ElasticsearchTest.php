@@ -589,7 +589,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testQuery()
     {
-        $query = 'test phrase query';
+        $query = ['test phrase query'];
         $this->elasticsearchClientMock->expects($this->once())
             ->method('search')
             ->with($query)
