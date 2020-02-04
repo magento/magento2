@@ -29,11 +29,6 @@ use Psr\Log\LoggerInterface;
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
-     * Xml default email domain path
-     */
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
-
-    /**
      * Quote session object
      *
      * @var \Magento\Backend\Model\Session\Quote
