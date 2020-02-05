@@ -1776,7 +1776,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                     if ($exists) {
                                         return $exists;
                                     }
-                                    if ($file['hash'] === $hash) {
+                                    if (isset($file['hash']) &&
+                                        !empty($file['hash']) &&
+                                        $file['hash'] === $hash) {
                                         return $file['value'];
                                     }
                                     return $exists;
@@ -1860,12 +1862,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 // 5.1 Items to remove phase
                 if (!empty($rowExistingImages)) {
-                    $galleryItemsToRemove = \array_merge(
-                        $galleryItemsToRemove,
-                        \array_diff(
-                            \array_keys($rowExistingImages),
-                            $uploadedFiles
-                        )
+                    $galleryItemsToRemove[] = \array_diff(
+                        \array_keys($rowExistingImages),
+                        $uploadedFiles
                     );
                 }
 
@@ -2012,7 +2011,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($images as $storeId => $skus) {
             foreach ($skus as $sku => $files) {
                 foreach ($files as $path => $file) {
-                    $images[$storeId][$sku][$path]['hash'] = hash_file('sha256', $productMediaPath . $file['value']);
+                    if (file_exists($productMediaPath . $file['value'])) {
+                        $images[$storeId][$sku][$path]['hash'] = hash_file('sha256', $productMediaPath . $file['value']);
+                    }
                 }
             }
         }
@@ -2283,6 +2284,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($itemsToRemove)) {
             return $this;
         }
+
+        $itemsToRemove = array_merge(...$itemsToRemove);
+        if (empty($itemsToRemove)) {
+            return $this;
+        }
+
         $this->mediaProcessor->removeOldMediaItems($itemsToRemove);
 
         return $this;
