@@ -4,56 +4,81 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Customer\Block\Widget\Name;
+
 /** @var \Magento\Customer\Block\Form\Edit $block */
-?>
-<form class="form form-edit-account" action="<?= $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>" autocomplete="off">
+ ?>
+<form class="form form-edit-account"
+      action="<?= $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
+      method="post" id="form-validate"
+      enctype="multipart/form-data"
+      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+      autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
         <legend class="legend"><span><?= $block->escapeHtml(__('Account Information')) ?></span></legend><br>
-        <?= $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Name::class)->setObject($block->getCustomer())->toHtml() ?>
+        <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
 
         <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
         <?php $_taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
         <?php $_gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
-        <?php if ($_dob->isEnabled()) : ?>
+        <?php if ($_dob->isEnabled()): ?>
             <?= $_dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
         <?php endif ?>
-        <?php if ($_taxvat->isEnabled()) : ?>
+        <?php if ($_taxvat->isEnabled()): ?>
             <?= $_taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
         <?php endif ?>
-        <?php if ($_gender->isEnabled()) : ?>
+        <?php if ($_gender->isEnabled()): ?>
             <?= $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
         <?php endif ?>
         <div class="field choice">
-            <input type="checkbox" name="change_email" id="change-email" data-role="change-email" value="1" title="<?= $block->escapeHtmlAttr(__('Change Email')) ?>" class="checkbox" />
-            <label class="label" for="change-email"><span><?= $block->escapeHtml(__('Change Email')) ?></span></label>
+            <input type="checkbox" name="change_email" id="change-email" data-role="change-email" value="1"
+                   title="<?= $block->escapeHtmlAttr(__('Change Email')) ?>" class="checkbox" />
+            <label class="label" for="change-email">
+                <span><?= $block->escapeHtml(__('Change Email')) ?></span>
+            </label>
         </div>
         <div class="field choice">
-            <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1" title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>"<?php if ($block->getChangePassword()) : ?> checked="checked"<?php endif; ?> class="checkbox" />
-            <label class="label" for="change-password"><span><?= $block->escapeHtml(__('Change Password')) ?></span></label>
+            <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
+                   title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>"
+                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <label class="label" for="change-password">
+                <span><?= $block->escapeHtml(__('Change Password')) ?></span>
+            </label>
         </div>
     </fieldset>
 
     <fieldset class="fieldset password" data-container="change-email-password">
-        <legend class="legend"><span data-title="change-email-password"><?= $block->escapeHtml(__('Change Email and Password')) ?></span></legend><br>
+        <legend class="legend">
+            <span data-title="change-email-password"><?= $block->escapeHtml(__('Change Email and Password')) ?></span>
+        </legend><br>
         <div class="field email required" data-container="change-email">
             <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
-                <input type="email" name="email" id="email" autocomplete="email" data-input="change-email" value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>" title="<?= $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
+                <input type="email" name="email" id="email" autocomplete="email" data-input="change-email"
+                       value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                       class="input-text"
+                       data-validate="{required:true, 'validate-email':true}" />
             </div>
         </div>
         <div class="field password current required">
-            <label class="label" for="current-password"><span><?= $block->escapeHtml(__('Current Password')) ?></span></label>
+            <label class="label" for="current-password">
+                <span><?= $block->escapeHtml(__('Current Password')) ?></span>
+            </label>
             <div class="control">
-                <input type="password" class="input-text" name="current_password" id="current-password" data-input="current-password" autocomplete="off" />
+                <input type="password" class="input-text" name="current_password" id="current-password"
+                       data-input="current-password"
+                       autocomplete="off" />
             </div>
         </div>
         <div class="field new password required" data-container="new-password">
             <label class="label" for="password"><span><?= $block->escapeHtml(__('New Password')) ?></span></label>
             <div class="control">
+                <?php $minCharacterSets = $block->getRequiredCharacterClassesNumber() ?>
                 <input type="password" class="input-text" name="password" id="password"
                     data-password-min-length="<?= $block->escapeHtml($block->getMinimumPasswordLength()) ?>"
-                    data-password-min-character-sets="<?= $block->escapeHtml($block->getRequiredCharacterClassesNumber()) ?>"
+                    data-password-min-character-sets="<?= $block->escapeHtml($minCharacterSets) ?>"
                     data-input="new-password"
                     data-validate="{required:true, 'validate-customer-password':true}"
                     autocomplete="off" />
@@ -68,7 +93,9 @@
             </div>
         </div>
         <div class="field confirmation password required" data-container="confirm-password">
-            <label class="label" for="password-confirmation"><span><?= $block->escapeHtml(__('Confirm New Password')) ?></span></label>
+            <label class="label" for="password-confirmation">
+                <span><?= $block->escapeHtml(__('Confirm New Password')) ?></span>
+            </label>
             <div class="control">
                 <input type="password" class="input-text" name="password_confirmation" id="password-confirmation"
                     data-input="confirm-password"
@@ -79,10 +106,14 @@
     <?= $block->getChildHtml('form_additional_info') ?>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>"><span><?= $block->escapeHtml(__('Save')) ?></span></button>
+            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
+                <span><?= $block->escapeHtml(__('Save')) ?></span>
+            </button>
         </div>
         <div class="secondary">
-            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Go back')) ?></span></a>
+            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $block->escapeHtml(__('Go back')) ?></span>
+            </a>
         </div>
     </div>
 </form>
@@ -95,7 +126,7 @@
         var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
 
         dataForm.mage('validation', {
-        <?php if ($_dob->isEnabled()) : ?>
+        <?php if ($_dob->isEnabled()): ?>
             errorPlacement: function(error, element) {
                 if (element.prop('id').search('full') !== -1) {
                     var dobElement = $(element).parents('.customer-dob'),
@@ -116,13 +147,14 @@
 
     });
 </script>
+<?php $changeEmailAndPasswordTitle = $block->escapeHtml(__('Change Email and Password')) ?>
 <script type="text/x-magento-init">
     {
         "[data-role=change-email], [data-role=change-password]": {
             "changeEmailPassword": {
                 "titleChangeEmail": "<?= $block->escapeJs($block->escapeHtml(__('Change Email'))) ?>",
                 "titleChangePassword": "<?= $block->escapeJs($block->escapeHtml(__('Change Password'))) ?>",
-                "titleChangeEmailAndPassword": "<?= $block->escapeJs($block->escapeHtml(__('Change Email and Password'))) ?>"
+                "titleChangeEmailAndPassword": "<?= $block->escapeJs($changeEmailAndPasswordTitle) ?>"
             }
         },
         "[data-container=new-password]": {
