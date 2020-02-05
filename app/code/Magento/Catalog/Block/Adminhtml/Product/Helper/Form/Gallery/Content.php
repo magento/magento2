@@ -180,13 +180,15 @@ class Content extends \Magento\Backend\Block\Widget
     /**
      * @param string $fileName
      * @return array
+     * @throws FileNotFoundException
      */
     private function getFileMetadata(string $fileName): array
     {
         $metadata = [];
         try {
-            $fileHandler = $this->mediaDirectory->stat($this->_mediaConfig->getMediaPath($fileName));
-            $metadata['size'] = $fileHandler['size'];
+            $info = $this->storageProvider->get('media')
+                ->getMetadata($this->_mediaConfig->getMediaPath($fileName));
+            $metadata['size'] = $info['size'];
         } catch (FileSystemException $e) {
             $metadata['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
             $metadata['size'] = 0;
@@ -199,6 +201,7 @@ class Content extends \Magento\Backend\Block\Widget
      * Returns image json
      *
      * @return string
+     * @throws FileNotFoundException
      */
     public function getImagesJson()
     {
