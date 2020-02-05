@@ -13,11 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Catalog image helper.
+ * Catalog image helper
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Image extends AbstractHelper implements ArgumentInterface
@@ -164,7 +163,8 @@ class Image extends AbstractHelper implements ArgumentInterface
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
         $this->viewAssetPlaceholderFactory = $placeholderFactory
-            ?: ObjectManager::getInstance()->get(PlaceholderFactory::class);
+            ?: ObjectManager::getInstance()
+                ->get(PlaceholderFactory::class);
         $this->mediaConfig = $mediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
     }
 
