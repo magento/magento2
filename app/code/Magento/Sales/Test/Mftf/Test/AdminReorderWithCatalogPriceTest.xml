@@ -18,6 +18,9 @@
             <useCaseId value="MAGETWO-99691"/>
             <group value="sales"/>
             <group value="catalogRule"/>
+            <skip>
+                <issueId value="MC-31126"/>
+            </skip>
         </annotations>
         <before>
             <!--Create the catalog price rule -->
