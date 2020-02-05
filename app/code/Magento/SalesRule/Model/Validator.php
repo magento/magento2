@@ -405,6 +405,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Determine if quote item is valid for a given sales rule
+     *
      * @param AbstractItem $item
      * @param Rule $rule
      * @return bool
