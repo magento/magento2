@@ -29,6 +29,9 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckUserForgotPasswordBackendObserverTest extends TestCase
 {
+    const STUB_EMAIL = 'stub@test.mail';
+    const STUB_REQUEST_PARAMS = ['STUB_PARAM'];
+
     /**
      * @var MockObject|DataHelper
      */
@@ -60,7 +63,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
     private $observer;
 
     /**
-     * @var MockObject
+     * @var MockObject|CaptchaInterface
      */
     private $captchaMock;
 
@@ -80,13 +83,16 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
     private $httpResponseMock;
 
     /**
+     * @var MockObject|HttpRequest
+     */
+    private $requestMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
         $formId = 'backend_forgotpassword';
-        $email = 'stub@test.mail';
-        $requestParams = ['STUB_PARAM'];
 
         $this->helperMock = $this->createMock(DataHelper::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
@@ -116,14 +122,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->with($formId)
             ->willReturn($this->captchaMock);
 
-        $requestMock = $this->createMock(HttpRequest::class);
-        $requestMock->expects($this->any())
-            ->method('getParam')
-            ->with('email')
-            ->willReturn($email);
-        $requestMock->expects($this->any())
-            ->method('getParams')
-            ->willReturn($requestParams);
+        $this->requestMock = $this->createMock(HttpRequest::class);
         $this->httpResponseMock = $this->createMock(HttpResponse::class);
 
         $this->controllerMock = $this->getMockBuilder(Action::class)
@@ -132,7 +131,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->controllerMock->expects($this->any())
             ->method('getRequest')
-            ->willReturn($requestMock);
+            ->willReturn($this->requestMock);
         $this->controllerMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->httpResponseMock);
@@ -148,12 +147,11 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
      */
     public function testExecuteWhenCaptchaIsCorrect()
     {
+        $this->configureRequestMockWithStubValues();
         $this->captchaMock->expects($this->once())->method('isRequired')->willReturn(true);
         $this->captchaMock->expects($this->once())->method('isCorrect')->willReturn(true);
-        $this->messageManagerMock->expects($this->never())->method('addErrorMessage');
-        $this->httpResponseMock->expects($this->never())->method('setRedirect');
 
-        $this->observer->execute($this->eventObserverMock);
+        $this->executeOriginalMethodExpectsNoError();
     }
 
     /**
@@ -161,6 +159,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
      */
     public function testExecuteWhenCaptchaIsIncorrect()
     {
+        $this->configureRequestMockWithStubValues();
         $this->captchaMock->expects($this->once())->method('isRequired')->willReturn(true);
         $this->captchaMock->expects($this->once())->method('isCorrect')->willReturn(false);
 
@@ -180,7 +179,49 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
      */
     public function testExecuteWhenCaptchaIsNotRequired()
     {
+        $this->configureRequestMockWithStubValues();
         $this->captchaMock->expects($this->once())->method('isRequired')->willReturn(false);
+
+        $this->executeOriginalMethodExpectsNoError();
+    }
+
+    /**
+     * Test case when email is not provided
+     */
+    public function testExecuteWhenEmailParamIsNotPresent()
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('email')
+            ->willReturn(null);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn(self::STUB_REQUEST_PARAMS);
+        $this->captchaMock->expects($this->never())->method('isRequired');
+        $this->captchaMock->expects($this->never())->method('isCorrect');
+
+        $this->executeOriginalMethodExpectsNoError();
+    }
+
+    /**
+     * Stub params for Request Mock
+     */
+    private function configureRequestMockWithStubValues()
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('email')
+            ->willReturn(self::STUB_EMAIL);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn(self::STUB_REQUEST_PARAMS);
+    }
+
+    /**
+     * Run original method, expect there is no error
+     */
+    private function executeOriginalMethodExpectsNoError()
+    {
         $this->messageManagerMock->expects($this->never())->method('addErrorMessage');
         $this->httpResponseMock->expects($this->never())->method('setRedirect');
 
