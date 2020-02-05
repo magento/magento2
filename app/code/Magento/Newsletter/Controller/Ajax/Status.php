@@ -5,7 +5,9 @@
  */
 namespace Magento\Newsletter\Controller\Ajax;
 
-use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
@@ -15,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Newsletter subscription status verification controller.
  */
-class Status extends Action\Action implements Action\HttpGetActionInterface
+class Status extends Action implements HttpGetActionInterface
 {
     /**
      * @var EmailAddressValidator
@@ -33,13 +35,13 @@ class Status extends Action\Action implements Action\HttpGetActionInterface
     private $logger;
 
     /**
-     * @param Action\Context $context
+     * @param Context $context
      * @param EmailAddressValidator $emailAddressValidator
      * @param GuestSubscriptionChecker $guestSubscriptionChecker
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Action\Context $context,
+        Context $context,
         EmailAddressValidator $emailAddressValidator,
         GuestSubscriptionChecker $guestSubscriptionChecker,
         LoggerInterface $logger

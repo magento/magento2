@@ -40,7 +40,6 @@ class GuestSubscriptionChecker
      *
      * @param string $subscriberEmail
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isSubscribed(string $subscriberEmail): bool
     {
