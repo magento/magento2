@@ -30,6 +30,10 @@ $items = [
         'dest' => $dirPath . '/magento_image.jpg',
     ],
     [
+        'source' => __DIR__ . '/../../../../../Magento/Catalog/_files/magento_image_2.jpg',
+        'dest' => $dirPath . '/magento_image_2.jpg',
+    ],
+    [
         'source' => __DIR__ . '/../../../../../Magento/Catalog/_files/magento_small_image.jpg',
         'dest' => $dirPath . '/magento_small_image.jpg',
     ],

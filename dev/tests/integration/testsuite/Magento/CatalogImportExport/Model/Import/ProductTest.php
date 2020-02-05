@@ -533,6 +533,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @param string $productSku
      * @return array ['optionId' => ['optionValueId' => 'optionValueTitle', ...], ...]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCustomOptionValues($productSku)
     {
@@ -876,6 +877,23 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $additionalImageTwoItem);
         $this->assertEquals('/m/a/magento_additional_image_two.jpg', $additionalImageTwoItem->getFile());
         $this->assertEquals('Additional Image Label Two', $additionalImageTwoItem->getLabel());
+
+        // Will check that existing product update works
+        // New unique images as per MD5 should be added, images not mentioned in the import should be removed
+        $this->importDataForMediaTest('import_media_update_images.csv');
+
+        $product = $this->getProductBySku('simple_new');
+        $this->assertEquals('/m/a/magento_image_2.jpg', $product->getData('image'));
+        // small_image should be skipped from update as it is a duplicate (md5 is the same)
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+
+        $gallery = $product->getMediaGalleryImages();
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $gallery);
+
+        $items = $gallery->getItems();
+        $this->assertCount(4, $items);
     }
 
     /**
