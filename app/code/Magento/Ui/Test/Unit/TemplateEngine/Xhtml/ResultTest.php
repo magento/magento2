@@ -17,6 +17,7 @@ use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Test for \Magento\Ui\TemplateEngine\Xhtml\Result.
@@ -75,29 +76,13 @@ class ResultTest extends TestCase
      */
     protected function setUp()
     {
-        $this->templateMock = $this->getMockBuilder(Template::class)
-            ->setMethods(['getDocumentElement'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->compilerMock = $this->getMockBuilder(CompilerInterface::class)
-            ->setMethods(['compile'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->componentMock = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->jsonSerializerMock = $this->getMockBuilder(JsonHexTag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->templateMock = $this->createMock(Template::class);
+        $this->compilerMock = $this->createMock(CompilerInterface::class);
+        $this->componentMock = $this->createMock(\Magento\Ui\Component\Listing::class);
+        $this->structureMock = $this->createMock(Structure::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->stateMock = $this->createMock(State::class);
+        $this->jsonSerializerMock = $this->createMock(JsonHexTag::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -122,7 +107,10 @@ class ResultTest extends TestCase
     public function testToStringWithException(): void
     {
         $exception = new \Exception();
-        $this->templateMock->method('getDocumentElement')->willThrowException($exception);
+
+        $this->templateMock->expects($this->once())
+           ->method('getDocumentElement')
+           ->willThrowException($exception);
         $this->stateMock->method('getMode')->willReturn(State::MODE_DEVELOPER);
 
         $this->assertEquals(
@@ -139,13 +127,20 @@ class ResultTest extends TestCase
     public function testToString(): void
     {
         $domElementMock = $this->getMockBuilder(\DOMElement::class)
-            ->enableOriginalConstructor()
-            ->setConstructorArgs(['new'])
+            ->setConstructorArgs(['a'])
             ->getMock();
-        $this->templateMock->method('getDocumentElement')->willReturn($domElementMock);
-        $this->compilerMock->method('compile')
-            ->with($domElementMock, $this->componentMock, $this->componentMock)->willReturn(true);
 
-        $this->assertInternalType('string', $this->model->__toString());
+        $this->templateMock->expects($this->exactly(2))
+            ->method('getDocumentElement')
+            ->willReturn($domElementMock);
+        $this->compilerMock->expects($this->once())
+            ->method('compile')
+            ->with(
+                $this->isInstanceOf('\DOMElement'), 
+                $this->componentMock, 
+                $this->componentMock
+            );
+
+        $this->assertEquals('string', $this->model->__toString());
     }
 }
