@@ -44,6 +44,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Scheduled for rotate image
      *
      * @var bool
+     * @deprecated unused
      */
     protected $_scheduleRotate = false;
 
@@ -51,6 +52,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Angle
      *
      * @var int
+     * @deprecated unused
      */
     protected $_angle;
 
@@ -408,6 +410,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $angle
      * @return $this
+     * @deprecated unused
      */
     public function rotate($angle)
     {
@@ -620,6 +623,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $angle
      * @return $this
+     * @deprecated unused
      */
     protected function setAngle($angle)
     {
@@ -631,6 +635,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Get Rotation Angle
      *
      * @return int
+     * @deprecated unused
      */
     protected function getAngle()
     {
