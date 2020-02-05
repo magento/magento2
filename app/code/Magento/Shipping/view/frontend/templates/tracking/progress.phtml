@@ -28,15 +28,15 @@ $track = $block->getData('track');
                 $parentBlock->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) :
                 ''); ?>
             <tr>
-                <td data-th="<?= $block->escapeHtml(__('Location')) ?>" class="col location">
+                <td data-th="<?= $block->escapeHtmlAttr(__('Location')) ?>" class="col location">
                     <?= (!empty($detail['deliverylocation']) ? $block->escapeHtml($detail['deliverylocation']) : '') ?>
                 </td>
-                <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date">
+                <td data-th="<?= $block->escapeHtmlAttr(__('Date')) ?>" class="col date">
                     <?= /* @noEscape */ $detailDate ?>
                 </td>
-                <td data-th="<?= $block->escapeHtml(__('Local Time')) ?>" class="col time">
+                <td data-th="<?= $block->escapeHtmlAttr(__('Local Time')) ?>" class="col time">
                     <?= /* @noEscape */ $detailTime ?></td>
-                <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
+                <td data-th="<?= $block->escapeHtmlAttr(__('Description')) ?>" class="col description">
                     <?= (!empty($detail['activity']) ? $block->escapeHtml($detail['activity']) : '') ?>
                 </td>
             </tr>

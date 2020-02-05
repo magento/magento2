@@ -79,7 +79,7 @@ class PostDataProcessor
      *
      * @param array $data
      * @return bool     Return FALSE if some item is invalid
-     * @deprecated
+     * @deprecated 103.0.2
      */
     public function validate($data)
     {

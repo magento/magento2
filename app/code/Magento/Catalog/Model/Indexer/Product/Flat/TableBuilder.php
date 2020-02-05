@@ -368,7 +368,7 @@ class TableBuilder
      * Get Metadata Pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     private function getMetadataPool()
     {

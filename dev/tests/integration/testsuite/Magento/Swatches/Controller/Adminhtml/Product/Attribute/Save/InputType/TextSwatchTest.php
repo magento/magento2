@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType\AbstractSaveAttributeTest;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 
@@ -15,13 +15,14 @@ use Magento\Eav\Model\Entity\Attribute\Source\Table;
  * Test cases related to create attribute with input type text swatch.
  *
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  */
 class TextSwatchTest extends AbstractSaveAttributeTest
 {
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::getAttributeDataWithCheckArray()
+     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::getAttributeDataWithCheckArray
      *
      * @param array $attributePostData
      * @param array $checkArray
@@ -35,7 +36,7 @@ class TextSwatchTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::getAttributeDataWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::getAttributeDataWithErrorMessage
      *
      * @param array $attributePostData
      * @param string $errorMessage
