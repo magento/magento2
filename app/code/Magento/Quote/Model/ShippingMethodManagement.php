@@ -18,6 +18,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
+use Magento\Quote\Api\Data\AddressExtensionInterfaceFactory;
 
 /**
  * Shipping method read service
@@ -57,6 +58,11 @@ class ShippingMethodManagement implements
     protected $totalsCollector;
 
     /**
+     * @var AddressExtensionInterfaceFactory
+     */
+    protected $addressExtensionFactory;
+
+    /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      */
     private $dataProcessor;
@@ -83,6 +89,7 @@ class ShippingMethodManagement implements
      * @param Cart\ShippingMethodConverter $converter
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param Quote\TotalsCollector $totalsCollector
+     * @param AddressExtensionInterfaceFactory $addressExtensionFactory
      * @param AddressInterfaceFactory|null $addressFactory
      * @param QuoteAddressResource|null $quoteAddressResource
      * @param CustomerSession|null $customerSession
@@ -92,6 +99,7 @@ class ShippingMethodManagement implements
         Cart\ShippingMethodConverter $converter,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        AddressExtensionInterfaceFactory $addressExtensionFactory,
         AddressInterfaceFactory $addressFactory = null,
         QuoteAddressResource $quoteAddressResource = null,
         CustomerSession $customerSession = null
@@ -100,6 +108,7 @@ class ShippingMethodManagement implements
         $this->converter = $converter;
         $this->addressRepository = $addressRepository;
         $this->totalsCollector = $totalsCollector;
+        $this->addressExtensionFactory = $addressExtensionFactory;
         $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()
             ->get(AddressInterfaceFactory::class);
         $this->quoteAddressResource = $quoteAddressResource ?: ObjectManager::getInstance()
@@ -311,6 +320,14 @@ class ShippingMethodManagement implements
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->addData($this->extractAddressData($address));
         $shippingAddress->setCollectShippingRates(true);
+
+        $addressExtensionAttributes = $address->getExtensionAttributes();
+
+        if ($addressExtensionAttributes === null) {
+            $addressExtensionAttributes = $this->addressExtensionFactory->create();
+        }
+
+        $shippingAddress->setExtensionAttributes($addressExtensionAttributes);
 
         $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
         $quoteCustomerGroupId = $quote->getCustomerGroupId();
