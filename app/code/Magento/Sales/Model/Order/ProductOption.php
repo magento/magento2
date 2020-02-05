@@ -59,6 +59,7 @@ class ProductOption
     {
         /** @var DataObject $request */
         $request = $orderItem->getBuyRequest();
+        $request->setProductOptions($orderItem->getProductOptions());
 
         $productType = $orderItem->getProductType();
         if (isset($this->processorPool[$productType])
