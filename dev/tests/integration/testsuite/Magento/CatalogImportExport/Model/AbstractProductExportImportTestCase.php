@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\Store\Model\Store;
 
 /**
@@ -61,6 +62,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     private static $attributesToRefresh = [
         'tax_class_id',
     ];
+
+    /**
+     * @var AbstractAdapter
+     */
+    private $writer;
 
     /**
      * @inheritdoc
@@ -367,7 +373,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * Export products in the system.
      *
      * @param \Magento\CatalogImportExport\Model\Export\Product|null $exportProduct
-     * @return string Return exported file name
+     * @return string Return exported file
      */
     private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
     {
@@ -376,12 +382,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Export\Product::class
         );
-        $exportProduct->setWriter(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\ImportExport\Model\Export\Adapter\Csv::class,
-                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
-            )
+        $this->writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\ImportExport\Model\Export\Adapter\Csv::class,
+            ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
         );
+        $exportProduct->setWriter($this->writer);
         $this->assertNotEmpty($exportProduct->export());
 
         return $csvfile;
