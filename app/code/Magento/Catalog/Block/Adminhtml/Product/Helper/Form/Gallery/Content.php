@@ -13,12 +13,13 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
-use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
-use Magento\Backend\Block\Media\Uploader;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use League\Flysystem\FileNotFoundException;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Backend\Block\Media\Uploader;
+use Magento\Framework\Storage\StorageProvider;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
@@ -55,6 +56,10 @@ class Content extends \Magento\Backend\Block\Widget
      * @var Database
      */
     private $fileStorageDatabase;
+    /**
+     * @var StorageProvider
+     */
+    private $storageProvider;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
@@ -65,6 +70,7 @@ class Content extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     * @param StorageProvider $storageProvider
      * @param array $data
      * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
      * @param Database $fileStorageDatabase
@@ -73,6 +79,7 @@ class Content extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
+        StorageProvider $storageProvider,
         array $data = [],
         ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null,
         Database $fileStorageDatabase = null
@@ -85,6 +92,7 @@ class Content extends \Magento\Backend\Block\Widget
             ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
         $this->fileStorageDatabase = $fileStorageDatabase
             ?: ObjectManager::getInstance()->get(Database::class);
+        $this->storageProvider = $storageProvider;
     }
 
     /**

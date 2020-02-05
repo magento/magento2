@@ -570,6 +570,9 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Return resized product image information
      *
      * @return array
+     * @deprecated Magento is not responsible for image resizing anymore. This method works with local filesystem only.
+     * Service that provides resized images should guarantee that the image sizes correspond to requested ones.
+     * Use `getWidth()` and `getHeight()` instead.
      */
     public function getResizedImageInfo()
     {
