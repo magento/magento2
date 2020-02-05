@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCatalogPriceRuleAddSkuConditionActionGroup">
+        <annotations>
+            <description>Create new product SKU based condition in Catalog Price Rule form.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string" defaultValue="{{ApiSimpleTwo.sku}}"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTabTitle}}" dependentSelector="{{AdminNewCatalogPriceRule.conditionsTabBody}}" visible="false" stepKey="openConditionsSectionIfNeeded"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTabTitle}}" stepKey="scrollToConditionsFieldset"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="waitForNewConditionButton"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="clickAddNewConditionButton"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|sku" stepKey="selectConditionTypeSku"/>
+        <waitForPageLoad stepKey="waitConditionFormRefresh"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" userInput="{{productSku}}" stepKey="fillProductSku"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.applyButton('1', '1')}}" stepKey="clickApply"/>
+    </actionGroup>
+</actionGroups>
