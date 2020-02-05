@@ -48,7 +48,7 @@ class Factory
      *
      * @param string $type
      *
-     * @return \Magento\Reports\Model\Product\Index\Abstract
+     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      * @throws \InvalidArgumentException
      */
     public function get($type)
