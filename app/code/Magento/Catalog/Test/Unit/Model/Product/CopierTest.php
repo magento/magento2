@@ -19,22 +19,22 @@ class CopierTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $optionRepositoryMock;
+    private $optionRepositoryMock;
 
     /**
      * @var Copier
      */
-    protected $_model;
+    private $_model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $copyConstructorMock;
+    private $copyConstructorMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productFactoryMock;
+    private $productFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -44,12 +44,12 @@ class CopierTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productMock;
+    private $productMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadata;
+    private $metadata;
 
     protected function setUp()
     {
@@ -77,13 +77,10 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->_model = new Copier(
             $this->copyConstructorMock,
             $this->productFactoryMock,
-            $this->scopeOverriddenValueMock
+            $this->scopeOverriddenValueMock,
+            $this->optionRepositoryMock,
+            $metadataPool
         );
-
-        $this->setProperties($this->_model, [
-            'optionRepository' => $this->optionRepositoryMock,
-            'metadataPool' => $metadataPool
-        ]);
     }
 
     /**
@@ -339,21 +336,5 @@ class CopierTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException::class);
         $this->_model->copy($this->productMock);
-    }
-
-    /**
-     * @param $object
-     * @param array $properties
-     */
-    private function setProperties($object, $properties = [])
-    {
-        $reflectionClass = new \ReflectionClass(get_class($object));
-        foreach ($properties as $key => $value) {
-            if ($reflectionClass->hasProperty($key)) {
-                $reflectionProperty = $reflectionClass->getProperty($key);
-                $reflectionProperty->setAccessible(true);
-                $reflectionProperty->setValue($object, $value);
-            }
-        }
     }
 }
