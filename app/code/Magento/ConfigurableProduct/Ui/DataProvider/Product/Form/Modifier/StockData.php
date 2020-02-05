@@ -28,7 +28,7 @@ class StockData extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -36,7 +36,7 @@ class StockData extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -72,15 +72,7 @@ class StockData extends AbstractModifier
                 ],
             ];
 
-            $meta['advanced_inventory_modal'] = [
-                'children' => [
-                    'stock_data' => [
-                        'children' => [
-                            'qty' => $config,
-                        ],
-                    ],
-                ],
-            ];
+            $meta['advanced_inventory_modal']['children']['stock_data']['children']['qty'] = $config;
         }
 
         return $meta;

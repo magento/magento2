@@ -37,7 +37,7 @@ define([
         /**
          * @inheritdoc
          */
-        'onCheckedChanged': function (newChecked) {
+        onCheckedChanged: function (newChecked) {
             var valueFromConfig = this.valueFromConfig();
 
             if (newChecked && (_.isArray(valueFromConfig) && valueFromConfig.length === 0 || valueFromConfig === 1)) {
@@ -49,7 +49,7 @@ define([
                 this.changeVisibleDisabled(this.inputField, true, true, null);
                 this.changeVisibleDisabled(this.dynamicRowsField, false, true, null);
             } else {
-                this.changeVisibleDisabled(this.inputField, true, false, null);
+                this.changeVisibleDisabled(this.inputField, true, this.disabled() || false, null);
                 this.changeVisibleDisabled(this.dynamicRowsField, false, true, null);
             }
 
