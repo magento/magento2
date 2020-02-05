@@ -26,8 +26,8 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
-     * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param array $data
      */
     public function __construct(
@@ -42,6 +42,8 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     }
 
     /**
+     * Return template.
+     *
      * @param \Magento\Newsletter\Model\Template $template
      * @param string $id
      * @return $this
