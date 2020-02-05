@@ -34,13 +34,11 @@ class LoadDesignPlugin
      * Initiates design before dispatching Backend Actions.
      *
      * @param AbstractAction $backendAction
-     * @param array $args
-     * @return array
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(AbstractAction $backendAction, ...$args)
+    public function beforeDispatch(AbstractAction $backendAction)
     {
         $this->designLoader->load();
-        return $args;
     }
 }
