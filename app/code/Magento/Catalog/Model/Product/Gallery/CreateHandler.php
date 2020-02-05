@@ -290,7 +290,8 @@ class CreateHandler implements ExtensionInterface
                 $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
                 $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
                 $data['store_id'] = (int)$product->getStoreId();
-
+                $stat = $this->mediaDirectory->stat($this->mediaConfig->getMediaPath($image['file']));
+                $data['image_metadata']['size'] = $stat['size'];
                 $data[$this->metadata->getLinkField()] = (int)$product->getData($this->metadata->getLinkField());
 
                 $this->resourceModel->insertGalleryValueInStore($data);

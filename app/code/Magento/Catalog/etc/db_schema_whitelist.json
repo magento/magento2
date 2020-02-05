@@ -479,7 +479,8 @@
             "label": true,
             "position": true,
             "disabled": true,
-            "record_id": true
+            "record_id": true,
+            "image_metadata": true
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_STORE_ID": true,

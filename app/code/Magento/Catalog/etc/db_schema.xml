@@ -813,6 +813,7 @@
                 default="0" comment="Is Disabled"/>
         <column xsi:type="int" name="record_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Record ID"/>
+        <column xsi:type="json" name="image_metadata" comment="Image metadata"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="record_id"/>
         </constraint>
