@@ -130,7 +130,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterByOrderId">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>

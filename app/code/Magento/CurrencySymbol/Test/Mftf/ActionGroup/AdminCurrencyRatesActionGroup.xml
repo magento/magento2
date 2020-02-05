@@ -16,20 +16,4 @@
         <click selector="{{AdminCurrencyRatesSection.import}}" stepKey="clickImport"/>
         <waitForElementVisible selector="{{AdminCurrencyRatesSection.oldRate}}" stepKey="waitForOldRateVisible"/>
     </actionGroup>
-    <actionGroup name="AdminSaveCurrencyRatesActionGroup">
-        <click selector="{{AdminCurrencyRatesSection.saveCurrencyRates}}" stepKey="clickSaveCurrencyRates"/>
-        <waitForPageLoad stepKey="waitForSave"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="All valid rates have been saved." stepKey="seeSuccessMessage"/>
-    </actionGroup>
-    <actionGroup name="AdminSetCurrencyRatesActionGroup">
-        <arguments>
-            <argument name="firstCurrency" type="string" defaultValue="USD"/>
-            <argument name="secondCurrency" type="string" defaultValue="EUR"/>
-            <argument name="rate" type="string" defaultValue="0.5"/>
-        </arguments>
-        <fillField selector="{{AdminCurrencyRatesSection.currencyRate(firstCurrency, secondCurrency)}}" userInput="{{rate}}" stepKey="setCurrencyRate"/>
-        <click selector="{{AdminCurrencyRatesSection.saveCurrencyRates}}" stepKey="clickSaveCurrencyRates"/>
-        <waitForPageLoad stepKey="waitForSave"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="{{AdminSaveCurrencyRatesMessageData.success}}" stepKey="seeSuccessMessage"/>
-    </actionGroup>
 </actionGroups>
