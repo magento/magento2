@@ -383,13 +383,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
 
                 foreach ($items as $item) {
                     //Skipping child items to avoid double calculations
-                    if ($item->getParentItemId() || $item->getParentItem()) {
-                        continue;
-                    }
-                    if (!$rule->getActions()->validate($item)) {
-                        continue;
-                    }
-                    if (!$this->canApplyDiscount($item)) {
+                    if (!$this->isValidItemForRule($item, $rule)) {
                         continue;
                     }
                     $qty = $this->validatorUtility->getItemQty($item, $rule);
@@ -407,6 +401,32 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this;
+    }
+
+    /**
+     * Determine if quote item is valid for a given sales rule
+     * @param AbstractItem $item
+     * @param Rule $rule
+     * @return bool
+     */
+    protected function isValidItemForRule(
+        AbstractItem $item,
+        Rule $rule
+    ) {
+        /** @var AbstractItem $item */
+        if ($item->getParentItemId()) {
+            return false;
+        }
+        if ($item->getParentItem()) {
+            return false;
+        }
+        if (!$rule->getActions()->validate($item)) {
+            return false;
+        }
+        if (!$this->canApplyDiscount($item)) {
+            return false;
+        }
+        return true;
     }
 
     /**
