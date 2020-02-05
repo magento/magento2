@@ -5,10 +5,13 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\Paypal\Model\IpnFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea frontend
@@ -22,7 +25,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_objectManager = Bootstrap::getObjectManager();
     }
 
     /**
@@ -159,6 +162,39 @@ class IpnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verifies canceling an order that was in payment review state by PayPal Express IPN message service.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_payment_review.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoConfigFixture current_store paypal/general/merchant_country US
+     */
+    public function testProcessIpnRequestWithFailedStatus()
+    {
+        $ipnData = require __DIR__ . '/../_files/ipn_failed.php';
+
+        /** @var IpnFactory $ipnFactory */
+        $ipnFactory = $this->_objectManager->create(IpnFactory::class);
+        $ipnModel = $ipnFactory->create(
+            [
+                'data' => $ipnData,
+                'curlFactory' => $this->_createMockedHttpAdapter()
+            ]
+        );
+
+        $ipnModel->processIpnRequest();
+
+        $order = $this->getOrder($ipnData['invoice']);
+        $invoiceItems = $order->getInvoiceCollection()
+            ->getItems();
+        /** @var Invoice $invoice */
+        $invoice = array_pop($invoiceItems);
+        $invoice->getState();
+
+        $this->assertEquals(Order::STATE_CANCELED, $order->getState());
+        $this->assertEquals(Invoice::STATE_CANCELED, $invoice->getState());
+    }
+
+    /**
      * Test processIpnRequest() currency check for paypal_express and paypal_standard payment methods
      *
      * @param string $currencyCode
@@ -223,5 +259,26 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $factory->expects($this->once())->method('create')->with()->will($this->returnValue($adapter));
         return $factory;
+    }
+
+    /**
+     * Get stored order.
+     *
+     * @param string $incrementId
+     * @return OrderInterface
+     */
+    private function getOrder(string $incrementId)
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, $incrementId)
+            ->create();
+
+        $orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
+        $orders = $orderRepository->getList($searchCriteria)
+            ->getItems();
+
+        /** @var OrderInterface $order */
+        return array_pop($orders);
     }
 }

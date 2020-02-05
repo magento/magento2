@@ -91,6 +91,7 @@ class SaveProcessor
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @return void
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     private function invokeSave(array $scopeData, $scope, $scopeCode = null)
     {
@@ -98,11 +99,13 @@ class SaveProcessor
 
         foreach ($scopeData as $path) {
             $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
-            $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
+            if ($value !== null) {
+                $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
 
-            if ($backendModel instanceof Value) {
-                $backendModel->beforeSave();
-                $backendModel->afterSave();
+                if ($backendModel instanceof Value) {
+                    $backendModel->beforeSave();
+                    $backendModel->afterSave();
+                }
             }
         }
     }
