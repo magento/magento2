@@ -14,7 +14,8 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
 <div class="block block-search">
     <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
     <div class="block block-content">
-        <form class="form minisearch" id="search_mini_form" action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
+        <form class="form minisearch" id="search_mini_form"
+              action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
             <div class="field search">
                 <label class="label" for="search" data-role="minisearch-label">
                     <span><?= $block->escapeHtml(__('Search')) ?></span>
@@ -29,7 +30,7 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
                            }'
                            type="text"
                            name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
-                           value="<?= $block->escapeHtmlAttr($helper->getEscapedQueryText()) ?>"
+                           value="<?= /* @noEscape */ $helper->getEscapedQueryText() ?>"
                            placeholder="<?= $block->escapeHtmlAttr(__('Search entire store here...')) ?>"
                            class="input-text"
                            maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
