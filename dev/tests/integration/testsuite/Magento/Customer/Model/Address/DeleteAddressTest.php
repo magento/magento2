@@ -66,18 +66,29 @@ class DeleteAddressTest extends TestCase
      *
      * @return void
      */
-    public function testAddressDelete(): void
+    public function testDeleteDefaultAddress(): void
     {
         $customer = $this->customerRepository->get('customer@example.com');
         $address = $this->addressRepository->getById(1);
         $this->assertEquals(1, $customer->getDefaultShipping());
         $this->assertEquals(1, $customer->getDefaultBilling());
         $this->addressRepository->delete($address);
-        $this->customerRegistry->remove(1);
+        $this->customerRegistry->remove($customer->getId());
         $customer = $this->customerRepository->get('customer@example.com');
         $this->assertNull($customer->getDefaultShipping());
         $this->assertNull($customer->getDefaultBilling());
         $this->expectExceptionObject(new NoSuchEntityException(__('No such entity with addressId = 1')));
         $this->addressRepository->getById(1);
+    }
+
+    /**
+     * Assert that deleting nonexistent address throws exception.
+     *
+     * @return void
+     */
+    public function testDeleteAlreadyDeletedAddress(): void
+    {
+        $this->expectExceptionObject(new NoSuchEntityException(__('No such entity with addressId = 1')));
+        $this->addressRepository->deleteById(1);
     }
 }

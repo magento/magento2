@@ -15,12 +15,15 @@ use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address;
 use Magento\Framework\Exception\InputException;
+use Magento\TestFramework\Directory\Model\GetRegionId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Assert that address was created as expected or address create throws expected error.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @magentoDbIsolation enabled
  */
@@ -33,7 +36,7 @@ class CreateAddressTest extends TestCase
         AddressInterface::TELEPHONE => 3468676,
         AddressInterface::POSTCODE => 75477,
         AddressInterface::COUNTRY_ID => 'US',
-        AddressInterface::REGION_ID => 1,
+        'custom_region_name' => 'Alabama',
         AddressInterface::CITY => 'CityM',
         AddressInterface::STREET => 'Green str, 67',
         AddressInterface::LASTNAME => 'Smith',
@@ -44,6 +47,11 @@ class CreateAddressTest extends TestCase
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * @var GetRegionId
+     */
+    private $getRegionId;
 
     /**
      * @var AddressInterfaceFactory
@@ -78,11 +86,6 @@ class CreateAddressTest extends TestCase
     /**
      * @var int[]
      */
-    private $createdCustomerIds = [];
-
-    /**
-     * @var int[]
-     */
     private $createdAddressesIds = [];
 
     /**
@@ -91,6 +94,7 @@ class CreateAddressTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->getRegionId = $this->objectManager->get(GetRegionId::class);
         $this->addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
         $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
         $this->addressResource = $this->objectManager->get(Address::class);
@@ -105,10 +109,6 @@ class CreateAddressTest extends TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->createdCustomerIds as $createdCustomerId) {
-            $this->customerRegistry->remove($createdCustomerId);
-        }
-
         foreach ($this->createdAddressesIds as $createdAddressesId) {
             $this->addressRegistry->remove($createdAddressesId);
         }
@@ -133,7 +133,6 @@ class CreateAddressTest extends TestCase
         bool $isBillingDefault
     ): void {
         $customer = $this->customerRepository->get('customer5@example.com');
-        $this->createdCustomerIds[] = (int)$customer->getId();
         $this->assertNull($customer->getDefaultShipping(), 'Customer already has default shipping address');
         $this->assertNull($customer->getDefaultBilling(), 'Customer already has default billing address');
         $address = $this->createAddress(
@@ -181,14 +180,22 @@ class CreateAddressTest extends TestCase
         array $expectedData,
         ?\Exception $expectException
     ): void {
+        if (isset($expectedData['custom_region_name'])) {
+            $expectedData[AddressInterface::REGION_ID] = $this->getRegionId->execute(
+                $expectedData['custom_region_name'],
+                $expectedData[AddressInterface::COUNTRY_ID]
+            );
+            unset($expectedData['custom_region_name']);
+        }
         $customer = $this->customerRepository->get('customer5@example.com');
-        $this->createdCustomerIds[] = (int)$customer->getId();
         if (null !== $expectException) {
             $this->expectExceptionObject($expectException);
         }
-        $createdAddress = $this->createAddress((int)$customer->getId(), $addressData);
-        foreach ($expectedData as $getMethodName => $expectedValue) {
-            $this->assertEquals($createdAddress->$getMethodName(), $expectedValue);
+
+        $createdAddressData = $this->createAddress((int)$customer->getId(), $addressData)->__toArray();
+        foreach ($expectedData as $fieldCode => $expectedValue) {
+            $this->assertTrue(isset($createdAddressData[$fieldCode]), "Field $fieldCode wasn't found.");
+            $this->assertEquals($createdAddressData[$fieldCode], $expectedValue);
         }
     }
 
@@ -205,35 +212,26 @@ class CreateAddressTest extends TestCase
             'required_fields_valid_data' => [
                 self::STATIC_CUSTOMER_ADDRESS_DATA,
                 [
-                    'getTelephone' => 3468676,
-                    'getCountryId' => 'US',
-                    'getPostcode' => 75477,
-                    'getRegionId' => 1,
-                    'getFirstname' => 'John',
-                    'getLastname' => 'Smith',
-                    'getStreet' => ['Green str, 67'],
-                    'getCity' => 'CityM',
-                    'getPrefix' => null,
-                    'getMiddlename' => null,
-                    'getSuffix' => null,
-                    'getCompany' => null,
-                    'getVatId' => null,
+                    AddressInterface::TELEPHONE => 3468676,
+                    AddressInterface::COUNTRY_ID => 'US',
+                    AddressInterface::POSTCODE => 75477,
+                    'custom_region_name' => 'Alabama',
+                    AddressInterface::FIRSTNAME => 'John',
+                    AddressInterface::LASTNAME => 'Smith',
+                    AddressInterface::STREET => ['Green str, 67'],
+                    AddressInterface::CITY => 'CityM',
                 ],
                 null,
             ],
             'required_field_empty_telephone' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::TELEPHONE => '']),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']]
-                ),
+                InputException::requiredField('telephone'),
             ],
             'required_field_empty_postcode_for_us' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::POSTCODE => '']),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']]
-                ),
+                InputException::requiredField('postcode'),
             ],
             'required_field_empty_postcode_for_uk' => [
                 array_replace(
@@ -241,8 +239,8 @@ class CreateAddressTest extends TestCase
                     [AddressInterface::POSTCODE => '', AddressInterface::COUNTRY_ID => 'GB']
                 ),
                 [
-                    'getCountryId' => 'GB',
-                    'getPostcode' => null,
+                    AddressInterface::COUNTRY_ID => 'GB',
+                    AddressInterface::POSTCODE => null,
                 ],
                 null,
             ],
@@ -250,9 +248,7 @@ class CreateAddressTest extends TestCase
 //            'required_field_empty_region_id_for_us' => [
 //                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::REGION_ID => '']),
 //                [],
-//                $this->createInputException(
-//                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']]
-//                ),
+//                InputException::requiredField('regionId'),
 //            ],
             'required_field_empty_region_id_for_ua' => [
                 array_replace(
@@ -260,74 +256,68 @@ class CreateAddressTest extends TestCase
                     [AddressInterface::REGION_ID => '', AddressInterface::COUNTRY_ID => 'UA']
                 ),
                 [
-                    'getCountryId' => 'UA',
-                    'getRegionId' => null,
+                    AddressInterface::COUNTRY_ID => 'UA',
+                    AddressInterface::REGION => [
+                        'region' => null,
+                        'region_code' => null,
+                        'region_id' => 0,
+                    ],
                 ],
                 null,
             ],
             'required_field_empty_firstname' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::FIRSTNAME => '']),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'firstname']]
-                ),
+                InputException::requiredField('firstname'),
             ],
             'required_field_empty_lastname' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::LASTNAME => '']),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'lastname']]
-                ),
+                InputException::requiredField('lastname'),
             ],
             'required_field_empty_street_as_string' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => '']),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']]
-                ),
+                InputException::requiredField('street'),
             ],
             'required_field_empty_street_as_array' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => []]),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']]
-                ),
+                InputException::requiredField('street'),
             ],
             'required_field_street_as_array' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => ['', 'Green str, 67']]),
-                ['getStreet' => ['Green str, 67']],
+                [AddressInterface::STREET => ['Green str, 67']],
                 null
             ],
             'required_field_empty_city' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::CITY => '']),
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']]
-                ),
+                InputException::requiredField('city'),
             ],
             'field_name_prefix' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::PREFIX => 'My prefix']),
-                ['getPrefix' => 'My prefix'],
+                [AddressInterface::PREFIX => 'My prefix'],
                 null,
             ],
             'field_middle_name_initial' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::MIDDLENAME => 'My middle name']),
-                ['getMiddlename' => 'My middle name'],
+                [AddressInterface::MIDDLENAME => 'My middle name'],
                 null,
             ],
             'field_name_suffix' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::SUFFIX => 'My suffix']),
-                ['getSuffix' => 'My suffix'],
+                [AddressInterface::SUFFIX => 'My suffix'],
                 null,
             ],
             'field_company_name' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::COMPANY => 'My company']),
-                ['getCompany' => 'My company'],
+                [AddressInterface::COMPANY => 'My company'],
                 null,
             ],
             'field_vat_number' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::VAT_ID => 'My VAT number']),
-                ['getVatId' => 'My VAT number'],
+                [AddressInterface::VAT_ID => 'My VAT number'],
                 null,
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
@@ -354,6 +344,14 @@ class CreateAddressTest extends TestCase
         bool $isDefaultShipping = false,
         bool $isDefaultBilling = false
     ): AddressInterface {
+        if (isset($addressData['custom_region_name'])) {
+            $addressData[AddressInterface::REGION_ID] = $this->getRegionId->execute(
+                $addressData['custom_region_name'],
+                $addressData[AddressInterface::COUNTRY_ID]
+            );
+            unset($addressData['custom_region_name']);
+        }
+
         $addressData['attribute_set_id'] = $this->addressResource->getEntityType()->getDefaultAttributeSetId();
         $address = $this->addressFactory->create(['data' => $addressData]);
         $address->setCustomerId($customerId);
@@ -365,19 +363,5 @@ class CreateAddressTest extends TestCase
         $this->createdAddressesIds[] = (int)$address->getId();
 
         return $address;
-    }
-
-    /**
-     * Create InputException with provided error message with params.
-     *
-     * @param array $message
-     * @return InputException
-     */
-    private function createInputException(array $message): InputException
-    {
-        $inputException = new InputException();
-        $inputException->addError(__(...$message));
-
-        return $inputException;
     }
 }

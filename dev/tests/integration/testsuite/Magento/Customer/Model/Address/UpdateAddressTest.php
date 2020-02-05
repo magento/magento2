@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address;
@@ -151,15 +152,16 @@ class UpdateAddressTest extends TestCase
     ): void {
         $this->processedAddressesIds[] = 1;
         $address = $this->addressRepository->getById(1);
-        foreach ($updateData as $setMethod => $setValue) {
-            $address->$setMethod($setValue);
+        foreach ($updateData as $setFieldName => $setValue) {
+            $address->setData($setFieldName, $setValue);
         }
         if (null !== $expectException) {
             $this->expectExceptionObject($expectException);
         }
-        $updatedAddress = $this->addressRepository->save($address);
-        foreach ($expectedData as $getMethod => $getValue) {
-            $this->assertEquals($getValue, $updatedAddress->$getMethod());
+        $updatedAddressData = $this->addressRepository->save($address)->__toArray();
+        foreach ($expectedData as $getFieldName => $getValue) {
+            $this->assertTrue(isset($updatedAddressData[$getFieldName]), "Field $getFieldName wasn't found.");
+            $this->assertEquals($getValue, $updatedAddressData[$getFieldName]);
         }
     }
 
@@ -174,140 +176,115 @@ class UpdateAddressTest extends TestCase
     {
         return [
             'required_field_telephone' => [
-                ['setTelephone' => 251512979595],
-                ['getTelephone' => 251512979595],
+                [AddressInterface::TELEPHONE => 251512979595],
+                [AddressInterface::TELEPHONE => 251512979595],
                 null,
             ],
             'required_field_empty_telephone' => [
-                ['setTelephone' => ''],
+                [AddressInterface::TELEPHONE => ''],
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']]
-                ),
+                InputException::requiredField('telephone'),
             ],
             'required_field_postcode' => [
-                ['setPostcode' => 55425],
-                ['getPostcode' => 55425],
+                [AddressInterface::POSTCODE => 55425],
+                [AddressInterface::POSTCODE => 55425],
                 null,
             ],
             'required_field_empty_postcode_for_us' => [
-                ['setPostcode' => ''],
+                [AddressInterface::POSTCODE => ''],
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']]
-                ),
+                InputException::requiredField('postcode'),
             ],
             'required_field_empty_postcode_for_uk' => [
-                ['setCountryId' => 'GB', 'setPostcode' => ''],
-                ['getCountryId' => 'GB', 'getPostcode' => null],
+                [AddressInterface::COUNTRY_ID => 'GB', AddressInterface::POSTCODE => ''],
+                [AddressInterface::COUNTRY_ID => 'GB', AddressInterface::POSTCODE => null],
                 null,
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
 //            'required_field_empty_region_id_for_us' => [
-//                ['setRegionId' => ''],
+//                [AddressInterface::REGION_ID => ''],
 //                [],
-//                $this->createInputException(
-//                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']]
-//                ),
+//                InputException::requiredField('regionId'),
 //            ],
             'required_field_empty_region_id_for_ua' => [
-                ['setCountryId' => 'UA', 'setRegionId' => ''],
-                ['getCountryId' => 'UA', 'getRegionId' => null],
+                [AddressInterface::COUNTRY_ID => 'UA', AddressInterface::REGION_ID => ''],
+                [
+                    AddressInterface::COUNTRY_ID => 'UA',
+                    AddressInterface::REGION_ID => 0,
+                ],
                 null,
             ],
             'required_field_firstname' => [
-                ['setFirstname' => 'Test firstname'],
-                ['getFirstname' => 'Test firstname'],
+                [AddressInterface::FIRSTNAME => 'Test firstname'],
+                [AddressInterface::FIRSTNAME => 'Test firstname'],
                 null,
             ],
             'required_field_empty_firstname' => [
-                ['setFirstname' => ''],
+                [AddressInterface::FIRSTNAME => ''],
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'firstname']]
-                ),
+                InputException::requiredField('firstname'),
             ],
             'required_field_lastname' => [
-                ['setLastname' => 'Test lastname'],
-                ['getLastname' => 'Test lastname'],
+                [AddressInterface::LASTNAME => 'Test lastname'],
+                [AddressInterface::LASTNAME => 'Test lastname'],
                 null,
             ],
             'required_field_empty_lastname' => [
-                ['setLastname' => ''],
+                [AddressInterface::LASTNAME => ''],
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'lastname']]
-                ),
+                InputException::requiredField('lastname'),
             ],
             'required_field_street_as_array' => [
-                ['setStreet' => ['', 'Test str, 55']],
-                ['getStreet' => ['Test str, 55']],
+                [AddressInterface::STREET => ['', 'Test str, 55']],
+                [AddressInterface::STREET => ['Test str, 55']],
                 null
             ],
             'required_field_empty_street_as_array' => [
-                ['setStreet' => []],
+                [AddressInterface::STREET => []],
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']]
-                ),
+                InputException::requiredField('street'),
             ],
             'required_field_city' => [
-                ['setCity' => 'Test city'],
-                ['getCity' => 'Test city'],
+                [AddressInterface::CITY => 'Test city'],
+                [AddressInterface::CITY => 'Test city'],
                 null,
             ],
             'required_field_empty_city' => [
-                ['setCity' => ''],
+                [AddressInterface::CITY => ''],
                 [],
-                $this->createInputException(
-                    ['"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']]
-                ),
+                InputException::requiredField('city'),
             ],
             'field_name_prefix' => [
-                ['setPrefix' => 'My prefix'],
-                ['getPrefix' => 'My prefix'],
+                [AddressInterface::PREFIX => 'My prefix'],
+                [AddressInterface::PREFIX => 'My prefix'],
                 null,
             ],
             'field_middle_name_initial' => [
-                ['setMiddlename' => 'My middle name'],
-                ['getMiddlename' => 'My middle name'],
+                [AddressInterface::MIDDLENAME => 'My middle name'],
+                [AddressInterface::MIDDLENAME => 'My middle name'],
                 null,
             ],
             'field_name_suffix' => [
-                ['setSuffix' => 'My suffix'],
-                ['getSuffix' => 'My suffix'],
+                [AddressInterface::SUFFIX => 'My suffix'],
+                [AddressInterface::SUFFIX => 'My suffix'],
                 null,
             ],
             'field_company_name' => [
-                ['setCompany' => 'My company'],
-                ['getCompany' => 'My company'],
+                [AddressInterface::COMPANY => 'My company'],
+                [AddressInterface::COMPANY => 'My company'],
                 null,
             ],
             'field_vat_number' => [
-                ['setVatId' => 'My VAT number'],
-                ['getVatId' => 'My VAT number'],
+                [AddressInterface::VAT_ID => 'My VAT number'],
+                [AddressInterface::VAT_ID => 'My VAT number'],
                 null,
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
 //            'field_invalid_vat_number' => [
-//                ['setVatId' => '/>.<*'],
+//                [AddressInterface::VAT_ID => '/>.<*'],
 //                [],
 //                null// It need to create some error but currently magento doesn't has validation for this field.,
 //            ],
         ];
-    }
-
-    /**
-     * Create InputException with provided error message with params.
-     *
-     * @param array $message
-     * @return InputException
-     */
-    private function createInputException(array $message): InputException
-    {
-        $inputException = new InputException();
-        $inputException->addError(__(...$message));
-
-        return $inputException;
     }
 }
