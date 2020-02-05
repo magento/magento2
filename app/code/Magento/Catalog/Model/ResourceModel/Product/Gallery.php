@@ -126,17 +126,13 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return array
      * @since 101.0.0
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
-    public function loadProductGalleryByAttributeId($product, $attributeId)
+    public function loadProductGalleryByAttributeId($product, $attributeId = null)
     {
-        $select = $this->createBaseLoadSelect(
-            $product->getData($this->metadata->getLinkField()),
-            $product->getStoreId(),
-            $attributeId
-        );
-
-        $result = $this->getConnection()->fetchAll($select);
-
+        $result = $this->getMediaRecords($product->getStoreId(), [$product->getId()], true);
         $this->removeDuplicates($result);
         return $result;
     }
@@ -200,9 +196,10 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 101.0.1
      */
-    public function createBatchBaseSelect($storeId, $attributeId)
+    public function createBatchBaseSelect($storeId, $attributeId = null)
     {
         $linkField = $this->metadata->getLinkField();
 
@@ -266,7 +263,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->order(
             $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
         );
-
         return $select;
     }
 

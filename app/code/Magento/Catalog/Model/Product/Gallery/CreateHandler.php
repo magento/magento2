@@ -245,7 +245,6 @@ class CreateHandler implements ExtensionInterface
                 'media_gallery'
             );
         }
-
         return $this->attribute;
     }
 

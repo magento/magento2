@@ -2334,49 +2334,32 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function addMediaGalleryData()
     {
         if ($this->getFlag('media_gallery_added')) {
             return $this;
         }
-
         if (!$this->getSize()) {
             return $this;
         }
-
-        $items = $this->getItems();
-        $linkField = $this->getProductEntityMetadata()->getLinkField();
-
-        $select = $this->getMediaGalleryResource()
-            ->createBatchBaseSelect(
-                $this->getStoreId(),
-                $this->getAttribute('media_gallery')->getAttributeId()
-            )->reset(
-                Select::ORDER // we don't care what order is in current scenario
-            )->where(
-                'entity.' . $linkField . ' IN (?)',
-                array_map(
-                    function ($item) use ($linkField) {
-                        return (int) $item->getOrigData($linkField);
-                    },
-                    $items
-                )
-            );
-
+        $records = $this->getMediaGalleryResource()->getMediaRecords(
+            $this->getStoreId(),
+            $this->getLoadedIds()
+        );
         $mediaGalleries = [];
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $mediaGalleries[$row[$linkField]][] = $row;
+        foreach ($records as $record) {
+            $mediaGalleries[$record['entity_id']][] = $record;
         }
 
-        foreach ($items as $item) {
+        foreach ($this->getItems() as $item) {
             $this->getGalleryReadHandler()
                 ->addMediaDataToProduct(
                     $item,
-                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
+                    $mediaGalleries[$item->getId()] ?? []
                 );
         }
-
         $this->setFlag('media_gallery_added', true);
         return $this;
     }
