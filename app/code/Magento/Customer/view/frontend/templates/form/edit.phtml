@@ -40,8 +40,8 @@ use Magento\Customer\Block\Widget\Name;
         </div>
         <div class="field choice">
             <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
-                   title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>"
-                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                   title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>" class="checkbox"
+                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> />
             <label class="label" for="change-password">
                 <span><?= $block->escapeHtml(__('Change Password')) ?></span>
             </label>
