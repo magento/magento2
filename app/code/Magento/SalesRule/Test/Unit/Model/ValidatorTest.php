@@ -13,7 +13,7 @@ use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class ValidatorTest
+ * Tests for Magento\SalesRule\Model\Validator
  * @@SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidatorTest extends \PHPUnit\Framework\TestCase
