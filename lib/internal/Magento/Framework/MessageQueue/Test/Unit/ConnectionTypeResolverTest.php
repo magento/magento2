@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * ConnectionTypeResolverTest
+ *  Verify connection type of resolver
  */
 class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
