@@ -16,7 +16,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Result
+ * @inheritdoc
  */
 class Result implements ResultInterface
 {

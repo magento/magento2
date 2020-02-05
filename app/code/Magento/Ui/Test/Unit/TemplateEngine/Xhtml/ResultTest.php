@@ -7,17 +7,17 @@
 namespace Magento\Ui\Test\Unit\TemplateEngine\Xhtml;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
+use Magento\Ui\Component\Listing;
 use Magento\Ui\TemplateEngine\Xhtml\Result;
-use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\DataObject;
 
 /**
  * Test for \Magento\Ui\TemplateEngine\Xhtml\Result.
@@ -26,6 +26,11 @@ use Magento\Framework\DataObject;
  */
 class ResultTest extends TestCase
 {
+    /**
+     * Stub simple html element
+     */
+    private const STUB_HTML_ELEMENT = '<div id="id"></div>';
+
     /**
      * @var Result
      */
@@ -78,7 +83,7 @@ class ResultTest extends TestCase
     {
         $this->templateMock = $this->createMock(Template::class);
         $this->compilerMock = $this->createMock(CompilerInterface::class);
-        $this->componentMock = $this->createMock(\Magento\Ui\Component\Listing::class);
+        $this->componentMock = $this->createMock(Listing::class);
         $this->structureMock = $this->createMock(Structure::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
@@ -111,8 +116,13 @@ class ResultTest extends TestCase
         $this->templateMock->expects($this->once())
            ->method('getDocumentElement')
            ->willThrowException($exception);
-        $this->stateMock->method('getMode')->willReturn(State::MODE_DEVELOPER);
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_DEVELOPER);
 
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception);
         $this->assertEquals(
             '<pre><code>' . $exception->__toString() . '</code></pre>',
             $this->model->__toString()
@@ -127,20 +137,24 @@ class ResultTest extends TestCase
     public function testToString(): void
     {
         $domElementMock = $this->getMockBuilder(\DOMElement::class)
-            ->setConstructorArgs(['a'])
+            ->setConstructorArgs(['arg'])
             ->getMock();
 
-        $this->templateMock->expects($this->exactly(2))
+        $this->templateMock->expects($this->once())
             ->method('getDocumentElement')
             ->willReturn($domElementMock);
         $this->compilerMock->expects($this->once())
             ->method('compile')
             ->with(
-                $this->isInstanceOf('\DOMElement'), 
-                $this->componentMock, 
+                $this->isInstanceOf(\DOMElement::class),
+                $this->componentMock,
                 $this->componentMock
             );
+        $this->templateMock->expects($this->once())->method('__toString');
+        $this->compilerMock->expects($this->once())
+            ->method('postprocessing')
+            ->willReturn(self::STUB_HTML_ELEMENT);
 
-        $this->assertEquals('string', $this->model->__toString());
+        $this->assertEquals(self::STUB_HTML_ELEMENT, $this->model->__toString());
     }
 }
