@@ -27,7 +27,7 @@ define([
                 mockData = [
                 {
                     attributes: 'Color: dsfsd',
-                    sku: 'Conf-sdfs'
+                    sku: 'Conf&-sdfs'
                 },
                 {
                     attributes: 'Color: sdfs',
