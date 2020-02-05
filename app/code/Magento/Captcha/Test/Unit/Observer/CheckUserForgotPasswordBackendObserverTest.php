@@ -25,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit Test for \Magento\Captcha\Observer\CheckUserForgotPasswordBackendObserver
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckUserForgotPasswordBackendObserverTest extends TestCase
 {
