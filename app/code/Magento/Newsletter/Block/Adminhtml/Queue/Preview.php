@@ -50,9 +50,11 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     {
         /** @var \Magento\Newsletter\Model\Queue $queue */
         $queue = $this->_queueFactory->create()->load($id);
+        $template->setId($queue->getTemplateId());
         $template->setTemplateType($queue->getNewsletterType());
         $template->setTemplateText($queue->getNewsletterText());
         $template->setTemplateStyles($queue->getNewsletterStyles());
+
         return $this;
     }
 }
