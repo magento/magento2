@@ -10,6 +10,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
+ * Updating customer details
+ *
  * @deprecated 100.2.0 for UiComponent replacement
  * @see app/code/Magento/Customer/view/base/ui_component/customer_form.xml
  */
@@ -65,6 +67,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Updating customer details
+     *
      * @return void
      */
     protected function _construct()

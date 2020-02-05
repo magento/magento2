@@ -167,6 +167,7 @@ class Book extends \Magento\Framework\View\Element\Template
         try {
             $addresses = $this->addressesGrid->getAdditionalAddresses();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return false;
         }
         return empty($addresses) ? false : $addresses;
     }
@@ -194,12 +195,12 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     public function getCustomer()
     {
-        $customer = null;
         try {
             $customer = $this->currentCustomer->getCustomer();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return null;
         }
-        return $customer;
+        return !empty($customer) ? $customer : null;
     }
 
     /**

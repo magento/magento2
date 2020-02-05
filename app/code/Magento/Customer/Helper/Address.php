@@ -122,42 +122,6 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Addresses url
-     *
-     * @return void
-     */
-    public function getBookUrl()
-    {
-    }
-
-    /**
-     * Retrieve edit url.
-     *
-     * @return void
-     */
-    public function getEditUrl()
-    {
-    }
-
-    /**
-     * Retrieve delete url.
-     *
-     * @return void
-     */
-    public function getDeleteUrl()
-    {
-    }
-
-    /**
-     * Retrieve create url.
-     *
-     * @return void
-     */
-    public function getCreateUrl()
-    {
-    }
-
-    /**
      * Retrieve block renderer.
      *
      * @param string $renderer
@@ -281,7 +245,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
 
             $class = $attribute ? $attribute->getFrontendClass() : '';
         } catch (NoSuchEntityException $e) {
-            // the attribute does not exist so just return an empty string
+            $class = '';
         }
 
         return $class;

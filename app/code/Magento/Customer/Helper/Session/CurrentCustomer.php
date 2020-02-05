@@ -14,7 +14,8 @@ use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\View\LayoutInterface;
 
 /**
- * Class CurrentCustomer
+ * Class to get current customer according to session and context
+ *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CurrentCustomer

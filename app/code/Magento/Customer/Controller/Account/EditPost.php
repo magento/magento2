@@ -33,7 +33,8 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
- * Class EditPost
+ * Update customer email or password action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface

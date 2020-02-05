@@ -10,6 +10,11 @@ use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Attribute;
 
+/**
+ * Adding attribute fields to fieldset
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class AttributeProvider implements FieldsetInterface
 {
     /**

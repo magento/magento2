@@ -22,7 +22,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Confirm
+ * Class to confirming the customer account by id and confirmation key
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

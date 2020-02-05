@@ -7,6 +7,11 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponentInterface;
 
+/**
+ * Add editor config to component configuration with correct editorType
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class InlineEditUpdater
 {
     /**

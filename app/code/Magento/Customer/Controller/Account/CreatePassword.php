@@ -16,9 +16,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Class CreatePassword
+ * Class to create or reset the password for customer
  *
- * @package Magento\Customer\Controller\Account
+ * @author      Magento Core Team <core@magentocommerce.com>
  */
 class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {

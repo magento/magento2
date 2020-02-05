@@ -79,6 +79,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
                     AccountManagement::EMAIL_RESET
                 );
             } catch (NoSuchEntityException $exception) {
+                $this->logger->info($exception);
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
             } catch (SecurityViolationException $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());

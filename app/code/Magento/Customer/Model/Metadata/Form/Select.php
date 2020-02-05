@@ -10,10 +10,15 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Form Element Select Data Model
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class Select extends AbstractData
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(RequestInterface $request)
     {
@@ -21,7 +26,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateValue($value)
     {
@@ -50,7 +55,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
@@ -58,7 +63,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function restoreValue($value)
     {

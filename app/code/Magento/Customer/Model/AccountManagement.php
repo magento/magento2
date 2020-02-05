@@ -525,6 +525,7 @@ class AccountManagement implements AccountManagementInterface
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
         }
+        return true;
     }
 
     /**

@@ -113,6 +113,8 @@ class Address extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Edit URL for primary shipping address
+     *
      * @return string
      */
     public function getPrimaryShippingAddressEditUrl()
@@ -129,6 +131,8 @@ class Address extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Edit URL for primary billing address
+     *
      * @return string
      */
     public function getPrimaryBillingAddressEditUrl()
@@ -145,6 +149,8 @@ class Address extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get URL for address book
+     *
      * @return string
      */
     public function getAddressBookUrl()

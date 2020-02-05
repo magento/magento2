@@ -10,6 +10,8 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
+ * Addresses list for Customer
+ * 
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Index extends \Magento\Customer\Controller\Address implements HttpGetActionInterface
