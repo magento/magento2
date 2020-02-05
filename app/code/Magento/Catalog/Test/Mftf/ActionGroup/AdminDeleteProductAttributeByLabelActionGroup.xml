@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteProductAttributeByLabelActionGroup">
+        <annotations>
+            <description>Goes to the Admin Product Attributes grid page. Filters the grid for the provided Product Attribute (Label). Deletes the Product Attribute from the grid. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttributeLabel" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForProductAttributeGridPageLoad"/>
+        <fillField selector="{{AdminProductAttributeGridSection.attributeLabelFilter}}" userInput="{{productAttributeLabel}}" stepKey="setAttributeLabelFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeLabelFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
+        <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="clickOnDeleteAttributeButton"/>
+        <waitForElementVisible selector="{{ModalConfirmationSection.modalContent}}" stepKey="waitForConfirmationPopUpVisible"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="clickOnConfirmationButton"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessageVisible"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You deleted the product attribute." stepKey="seeAttributeDeleteSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
