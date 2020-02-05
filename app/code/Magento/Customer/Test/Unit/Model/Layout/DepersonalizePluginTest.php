@@ -14,7 +14,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Session\Generic as GenericSession;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use PHPUnit\Framework\TestCase;
@@ -71,7 +71,7 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp()
     {
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->sessionMock = $this->createPartialMock(
             GenericSession::class,
             ['clearStorage', 'setData', 'getData']
@@ -91,7 +91,7 @@ class DepersonalizePluginTest extends TestCase
             ->willReturn($this->customerMock);
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
-        $this->plugin = (new ObjectManager($this))->getObject(
+        $this->plugin = (new ObjectManagerHelper($this))->getObject(
             DepersonalizePlugin::class,
             [
                 'depersonalizeChecker' => $this->depersonalizeCheckerMock,
@@ -159,7 +159,7 @@ class DepersonalizePluginTest extends TestCase
             ->expects($this->once())
             ->method('setCustomer')
             ->with($this->equalTo($this->customerMock));
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
     /**
@@ -178,6 +178,6 @@ class DepersonalizePluginTest extends TestCase
         $this->customerMock->expects($this->never())->method('setGroupId');
         $this->sessionMock->expects($this->never())->method('setData');
         $this->customerSessionMock->expects($this->never())->method('setCustomer');
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 }

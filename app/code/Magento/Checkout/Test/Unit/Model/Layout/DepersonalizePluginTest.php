@@ -9,7 +9,7 @@ namespace Magento\Checkout\Test\Unit\Model\Layout;
 
 use Magento\Checkout\Model\Layout\DepersonalizePlugin;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use PHPUnit\Framework\TestCase;
@@ -44,11 +44,11 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp()
     {
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)->getMockForAbstractClass();
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->checkoutSessionMock = $this->createPartialMock(CheckoutSession::class, ['clearStorage']);
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
-        $this->plugin = (new ObjectManager($this))->getObject(
+        $this->plugin = (new ObjectManagerHelper($this))->getObject(
             DepersonalizePlugin::class,
             [
                 'depersonalizeChecker' => $this->depersonalizeCheckerMock,
@@ -70,7 +70,7 @@ class DepersonalizePluginTest extends TestCase
             ->method('clearStorage')
             ->willReturnSelf();
 
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
     /**
@@ -86,6 +86,6 @@ class DepersonalizePluginTest extends TestCase
             ->method('clearStorage')
             ->willReturnSelf();
 
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 }

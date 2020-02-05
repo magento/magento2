@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\Layout;
 
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use Magento\Tax\Model\Layout\DepersonalizePlugin;
@@ -56,9 +56,9 @@ class DepersonalizePluginTest extends TestCase
             ]
         );
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
-        $this->plugin = (new ObjectManager($this))->getObject(
+        $this->plugin = (new ObjectManagerHelper($this))->getObject(
             DepersonalizePlugin::class,
             [
                 'customerSession' => $this->customerSessionMock,
@@ -106,7 +106,7 @@ class DepersonalizePluginTest extends TestCase
         $this->customerSessionMock->expects($this->once())->method('setDefaultTaxBillingAddress');
         $this->customerSessionMock->expects($this->once())->method('setDefaultTaxShippingAddress');
         $this->customerSessionMock->expects($this->once())->method('setCustomerTaxClassId');
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
     /**
@@ -119,7 +119,7 @@ class DepersonalizePluginTest extends TestCase
         $this->customerSessionMock->expects($this->never())->method('setDefaultTaxBillingAddress');
         $this->customerSessionMock->expects($this->never())->method('setDefaultTaxShippingAddress');
         $this->customerSessionMock->expects($this->never())->method('setCustomerTaxClassId');
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
     /**
@@ -159,6 +159,6 @@ class DepersonalizePluginTest extends TestCase
             ->method('setCustomerTaxClassId')
             ->with($customerTaxClassId);
 
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 }

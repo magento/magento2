@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layout;
 
 use Magento\Catalog\Model\Layout\DepersonalizePlugin;
 use Magento\Catalog\Model\Session as CatalogSession;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use PHPUnit\Framework\TestCase;
@@ -44,11 +44,11 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp()
     {
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)->setMethods([])->getMockForAbstractClass();
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->catalogSessionMock = $this->createPartialMock(CatalogSession::class, ['clearStorage']);
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
-        $this->plugin = (new ObjectManager($this))->getObject(
+        $this->plugin = (new ObjectManagerHelper($this))->getObject(
             DepersonalizePlugin::class,
             [
                 'catalogSession' => $this->catalogSessionMock,
@@ -66,7 +66,7 @@ class DepersonalizePluginTest extends TestCase
     {
         $this->catalogSessionMock->expects($this->once())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
     /**
@@ -78,6 +78,6 @@ class DepersonalizePluginTest extends TestCase
     {
         $this->catalogSessionMock->expects($this->never())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
-        $this->plugin->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 }

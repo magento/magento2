@@ -152,20 +152,16 @@ class LayoutTest extends TestCase
         $this->processorFactoryMock = $this->createPartialMock(ProcessorFactory::class, ['create']);
         $this->themeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->processorMock = $this->createMock(Merge::class);
-        $this->eventManagerMock = $this->createMock(EventManager::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(EventManager::class);
         $this->generatorBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()->getMock();
         $this->generatorContainerMock = $this->getMockBuilder(Container::class)
             ->disableOriginalConstructor()->getMock();
-        $this->cacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->readerPoolMock = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->generatorPoolMock = $this->getMockBuilder(GeneratorPool::class)
             ->disableOriginalConstructor()->getMock();
         $this->generatorPoolMock->expects($this->any())
@@ -198,9 +194,8 @@ class LayoutTest extends TestCase
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        $this->serializer = $this->createMock(SerializerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->serializer->expects($this->any())->method('serialize')
             ->willReturnCallback(
                 function ($value) {
@@ -753,7 +748,7 @@ class LayoutTest extends TestCase
                 'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block></block></layout>',
                 'blockName' => '',
-                'hasElement' => false,
+                'hasElement' => true,
                 'cacheable' => true,
             ],
             'notCacheableBlockWithoutName' => [

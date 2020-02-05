@@ -87,7 +87,7 @@ class DepersonalizePluginTest extends TestCase
             ],
             'nonCacheableBlockWithoutReference' => [
                 'layout' => INTEGRATION_TESTS_DIR
-                . '/testsuite/Magento/Framework/View/_files/layout/non_cacheable_block_with_undeclared_reference.xml',
+                . '/testsuite/Magento/Framework/View/_files/layout/non_cacheable_block_with_missing_refference.xml',
                 'expectedResult' => [],
             ],
             'nonCacheableBlockWithExistedReference' => [

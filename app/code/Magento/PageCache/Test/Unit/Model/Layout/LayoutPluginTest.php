@@ -10,7 +10,7 @@ namespace Magento\PageCache\Test\Unit\Model\Layout;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Layout\LayoutPlugin;
@@ -52,7 +52,7 @@ class LayoutPluginTest extends TestCase
         $this->responseMock = $this->createMock(Http::class);
         $this->configMock = $this->createMock(Config::class);
 
-        $this->model = (new ObjectManager($this))->getObject(
+        $this->model = (new ObjectManagerHelper($this))->getObject(
             LayoutPlugin::class,
             [
                 'response' => $this->responseMock,
@@ -81,7 +81,7 @@ class LayoutPluginTest extends TestCase
             $this->responseMock->expects($this->never())->method('setPublicHeaders');
         }
 
-        $this->model->afterGenerateElements($this->layoutMock);
+        $this->assertEmpty($this->model->afterGenerateElements($this->layoutMock));
     }
 
     /**
