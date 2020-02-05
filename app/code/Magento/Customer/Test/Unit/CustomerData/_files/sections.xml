@@ -20,4 +20,5 @@
         <section name="account"/>
         <section name="acc"/>
     </action>
+    <action name="empty/test"/>
 </config>
