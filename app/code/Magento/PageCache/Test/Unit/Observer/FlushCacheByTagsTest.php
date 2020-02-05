@@ -29,23 +29,17 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
         $this->_cacheMock = $this->createPartialMock(\Magento\Framework\App\PageCache\Cache::class, ['clean']);
+        $this->tagResolver = $this->createMock(\Magento\Framework\App\Cache\Tag\Resolver::class);
         $this->fullPageCacheMock = $this->createPartialMock(\Magento\PageCache\Model\Cache\Type::class, ['clean']);
 
         $this->_model = new \Magento\PageCache\Observer\FlushCacheByTags(
             $this->_configMock,
-            $this->_cacheMock
+            $this->_cacheMock,
+            $this->tagResolver,
+            $this->fullPageCacheMock
         );
-
-        $this->tagResolver = $this->createMock(\Magento\Framework\App\Cache\Tag\Resolver::class);
-
-        $helper->setBackwardCompatibleProperty($this->_model, 'tagResolver', $this->tagResolver);
-        $reflection = new \ReflectionClass(\Magento\PageCache\Observer\FlushCacheByTags::class);
-        $reflectionProperty = $reflection->getProperty('fullPageCache');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->_model, $this->fullPageCacheMock);
     }
 
     /**
