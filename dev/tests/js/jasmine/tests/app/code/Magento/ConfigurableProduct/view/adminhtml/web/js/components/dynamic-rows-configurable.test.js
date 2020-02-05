@@ -46,7 +46,7 @@ define([
             model.processingUnionInsertData(mockData);
             expect(model.source.get).toHaveBeenCalled();
             expect(model.getChildItems).toHaveBeenCalled();
-            expect(expectedData[1].sku).toBe(mockData[0].sku);
+            expect(expectedData[1].sku).toBe('Conf&-sdfs');
         });
 
     });
