@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Exception\NoSuchEntityException as NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\QuoteFactory;

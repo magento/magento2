@@ -37,7 +37,7 @@
         </after>
         <!--Open created block page and add image-->
         <comment userInput="Open create block page and add image" stepKey="commentOpenBlockPage"/>
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage1">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
             <argument name="CMSBlockPage" value="$$createBlock$$"/>
         </actionGroup>
         <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImage">

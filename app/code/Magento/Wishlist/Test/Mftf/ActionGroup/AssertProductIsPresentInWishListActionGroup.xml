@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductDetailsInWishlistActionGroup">
+        <annotations>
+            <description>Assert product name and price in wishlist on hover.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="label" type="string"/>
+            <argument name="labelValue" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProductInfo"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productName)}}" stepKey="seeAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productName)}}" stepKey="seeImage"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsByName(productName)}}" stepKey="moveMouseOverProductDetails"/>
+        <see userInput="{{label}}" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsLabelByName(productName)}}" stepKey="seeLabel"/>
+        <see userInput="{{labelValue}}" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsValueByName(productName)}}" stepKey="seeLabelValue"/>
+    </actionGroup>
+</actionGroups>

@@ -18,6 +18,9 @@
                 <number_limit>10</number_limit>
                 <text_limit>255</text_limit>
             </email>
+            <wishlist_link>
+                <use_qty>0</use_qty>
+            </wishlist_link>
         </wishlist>
         <captcha translate="label">
             <frontend>

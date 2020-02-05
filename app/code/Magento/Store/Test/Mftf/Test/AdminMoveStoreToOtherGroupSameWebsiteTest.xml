@@ -62,7 +62,7 @@
             <argument name="storeDropdown" value="{{customStore.name}}"/>
         </actionGroup>
         <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-        <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+        <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
         <!--Search moved store view(from above step) in grid and verify AssertStoreInGrid-->
         <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchMovedStoreViewInGrid">

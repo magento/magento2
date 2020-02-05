@@ -15,7 +15,7 @@
     <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
     <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
-    <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
+    <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository\ValidationComposite" />
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
     <preference for="Magento\Cms\Api\GetUtilityPageIdentifiersInterface" type="Magento\Cms\Model\GetUtilityPageIdentifiers" />
     <type name="Magento\Cms\Model\Wysiwyg\Config">
@@ -116,14 +116,6 @@
             <argument name="resourceModel" xsi:type="string">Magento\Cms\Model\ResourceModel\Block</argument>
         </arguments>
     </type>
-    <virtualType name="CmsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -235,4 +227,19 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
     </type>
+    <type name="Magento\Cms\Model\PageRepository\ValidationComposite">
+        <arguments>
+            <argument name="repository" xsi:type="object">Magento\Cms\Model\PageRepository</argument>
+            <argument name="validators" xsi:type="array">
+                <item name="layout_update" xsi:type="object">Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
+    <type name="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
 </config>

@@ -34,6 +34,7 @@
         <element name="specialPriceValue" type="text" selector="//span[@class='special-price']//span[@class='price']"/>
         <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]"/>
         <element name="clickForPriceLink" type="text" selector="//div[@class='price-box price-final_price']//a[contains(text(), 'Click for price')]"/>
+        <element name="addReviewLink" type="text" selector="//div[@class='reviews-actions']//a[@class='action add']"/>
 
         <!-- The parameter is the nth custom option that you want to get -->
         <element name="nthCustomOption" type="block" selector="//*[@id='product-options-wrapper']/*[@class='fieldset']/*[contains(@class, 'field')][{{customOptionNum}}]" parameterized="true" />
@@ -61,6 +62,7 @@
         <element name="productAttributeOptionsPrice" type="text" selector="//label[contains(.,'{{var1}}')]//span[@data-price-amount='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsDropDown" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//select//option[@price='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsRadioButtons" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//span[@data-price-amount='{{var2}}']" parameterized="true"/>
+        <element name="productAttributeOptionsRadioButtonByName" type="checkbox" selector="//*[@id='product-options-wrapper']//div[contains(@class,'fieldset')]//label[contains(.,'{{attributeName}}')]/../div[contains(@class,'control')]//label[contains(@class,'label') and contains(.,'{{optionName}}')]/preceding-sibling::input[@type='radio']" parameterized="true"/>
         <element name="productAttributeOptionsCheckbox" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//span[@data-price-amount='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsMultiselect" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//select//option[@price='{{var2}}']" parameterized="true"/>
         <element name="productAttributeOptionsData" type="text" selector="//span[contains(.,'{{var1}}')]/../span[@class='price-notice']//span[@data-price-amount='{{var2}}']" parameterized="true"/>

@@ -86,7 +86,8 @@ class PageActions extends Column
                 if (isset($item['page_id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
-                        'label' => __('Edit')
+                        'label' => __('Edit'),
+                        '__disableTmpl' => true,
                     ];
                     $title = $this->getEscaper()->escapeHtml($item['title']);
                     $item[$name]['delete'] = [
@@ -98,6 +99,7 @@ class PageActions extends Column
                             '__disableTmpl' => true,
                         ],
                         'post' => true,
+                        '__disableTmpl' => true,
                     ];
                 }
                 if (isset($item['identifier'])) {
@@ -107,7 +109,8 @@ class PageActions extends Column
                             isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
                             isset($item['store_code']) ? $item['store_code'] : null
                         ),
-                        'label' => __('View')
+                        'label' => __('View'),
+                        '__disableTmpl' => true,
                     ];
                 }
             }

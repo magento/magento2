@@ -128,6 +128,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testSaveActionExistingCustomerUnsubscribeNewsletter()
     {
         $customerId = 1;
+        $websiteId = 1;
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->objectManager->get(\Magento\Newsletter\Model\SubscriberFactory::class)->create();
@@ -144,7 +145,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'lastname' => 'test lastname',
                 'sendemail_store_id' => 1
             ],
-            'subscription' => '0'
+            'subscription_status' => [$websiteId => '0']
         ];
         $this->getRequest()->setPostValue($post)->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('id', 1);
@@ -434,17 +435,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/customer/index/cart');
         $body = $this->getResponse()->getBody();
         $this->assertContains('<div id="customer_cart_grid1"', $body);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     */
-    public function testProductReviewsAction()
-    {
-        $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/productReviews');
-        $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid"', $body);
     }
 
     /**

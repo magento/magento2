@@ -15,7 +15,7 @@
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToAddDiscount"/>
         <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{discountCode}}" stepKey="fillFieldDiscountCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="clickToApplyDiscount"/>
-        <waitForPageLoad stepKey="waitForDiscountToBeAdded"/>
+        <waitForElement selector="{{DiscountSection.DiscountVerificationMsg}}" time="30" stepKey="waitForDiscountToBeAdded"/>
         <see selector="{{DiscountSection.DiscountVerificationMsg}}" userInput="Your coupon was successfully applied" stepKey="assertDiscountApplyMessage"/>
     </actionGroup>
 </actionGroups>
