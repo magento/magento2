@@ -7,7 +7,7 @@
 use Magento\Customer\Block\Widget\Name;
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
- ?>
+?>
 <form class="form form-edit-account"
       action="<?= $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
       method="post" id="form-validate"
@@ -140,7 +140,7 @@ use Magento\Customer\Block\Widget\Name;
                 }
             },
             ignore: ':hidden:not(' + ignore + ')'
-        <?php else : ?>
+        <?php else: ?>
             ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
         <?php endif ?>
         });
