@@ -885,9 +885,11 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->updateCaches(false, $frontendCaches, false);
+        $this->log->log('Disabling caches:');
+        $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
-        $this->updateCaches(true, $frontendCaches, false);
+        $this->log->log('Enabling caches:');
+        $this->updateCaches(true, $frontendCaches);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -1266,25 +1268,31 @@ class Installer
      *
      * @param bool $isEnabled
      * @param array $types
-     * @param bool $logStatus
      * @return void
      */
-    private function updateCaches($isEnabled, $types = [], $logStatus = true)
+    private function updateCaches($isEnabled, $types = [])
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
-        $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
 
+        $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
         $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
         if($isEnabled){
             $cacheManager->clean($enabledTypes);
         }
 
-        if ($logStatus) {
-            $this->log->log('Current status:');
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $this->log->log(print_r($cacheManager->getStatus(), true));
-        }
+        // Only get statuses of specific cache types
+        $cacheStatus = array_filter(
+            $cacheManager->getStatus(),
+            function (string $key) use ($types) {
+                return in_array($key, $types);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $this->log->log('Current status:');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $this->log->log(print_r($cacheStatus, true));
     }
 
     /**
