@@ -756,6 +756,7 @@
         <data key="status">In Stock</data>
         <data key="visibility">Catalog, Search</data>
         <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="storefrontStatus">IN STOCK</data>
         <data key="type_id">virtual</data>
     </entity>
     <entity name="virtualProductCustomImportOptions" type="product">
