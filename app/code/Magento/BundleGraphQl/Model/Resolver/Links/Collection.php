@@ -11,6 +11,7 @@ use Magento\Bundle\Model\Selection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as LinkCollection;
 use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 
 /**
  * Collection to fetch link data at resolution time.
@@ -43,13 +44,25 @@ class Collection
     private $links = [];
 
     /**
+     * @var StockItemRepository
+     */
+    protected $stockItemRepository;
+
+    /**
+     * Collection constructor.
+     *
      * @param CollectionFactory $linkCollectionFactory
      * @param EnumLookup $enumLookup
+     * @param StockItemRepository $stockItemRepository
      */
-    public function __construct(CollectionFactory $linkCollectionFactory, EnumLookup $enumLookup)
-    {
+    public function __construct(
+        CollectionFactory $linkCollectionFactory,
+        EnumLookup $enumLookup,
+        StockItemRepository $stockItemRepository
+    ) {
         $this->linkCollectionFactory = $linkCollectionFactory;
         $this->enumLookup = $enumLookup;
+        $this->stockItemRepository = $stockItemRepository;
     }
 
     /**
@@ -83,7 +96,26 @@ class Collection
             return [];
         }
 
-        return $linksList[$optionId];
+        return $this->validateStockItem($linksList[$optionId]);
+    }
+
+    /**
+     * Validate is Product in Stock
+     *
+     * @param $items
+     * @return array
+     */
+    private function validateStockItem($items): array
+    {
+        foreach ($items as $key => $item) {
+            $productStock = $this->stockItemRepository->get($item['product_id']);
+
+            if (!$productStock->getIsInStock()) {
+                unset($items[$key]);
+            }
+        }
+
+        return $items;
     }
 
     /**
