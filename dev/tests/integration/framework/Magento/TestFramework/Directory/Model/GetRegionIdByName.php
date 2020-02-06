@@ -38,14 +38,13 @@ class GetRegionIdByName
      *
      * @param string $regionName
      * @param string $countryId
-     * @param bool $forceReload
      * @return int|null
      */
-    public function execute(string $regionName, string $countryId, bool $forceReload = false): ?int
+    public function execute(string $regionName, string $countryId): ?int
     {
         $cacheKey = "{$regionName}_{$countryId}";
 
-        if (!isset($this->regionIdsCache[$cacheKey]) || $forceReload === true) {
+        if (!isset($this->regionIdsCache[$cacheKey])) {
             $region = $this->regionFactory->create()->loadByName($regionName, $countryId);
             $this->regionIdsCache[$cacheKey] = $region->getRegionId() ? (int)$region->getRegionId() : null;
         }
