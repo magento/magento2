@@ -39,7 +39,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleManagerInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Manager */
     private $_moduleManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */

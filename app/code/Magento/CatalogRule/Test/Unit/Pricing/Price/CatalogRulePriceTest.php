@@ -176,4 +176,17 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
         $result = $this->object->getValue();
         $this->assertFalse($result);
     }
+
+    public function testGetValueWithNullAmount()
+    {
+        $catalogRulePrice = null;
+        $convertedPrice = 0.0;
+
+        $this->saleableItemMock->expects($this->once())->method('hasData')
+                ->with('catalog_rule_price')->willReturn(true);
+        $this->saleableItemMock->expects($this->once())->method('getData')
+                    ->with('catalog_rule_price')->willReturn($catalogRulePrice);
+
+        $this->assertEquals($convertedPrice, $this->object->getValue());
+    }
 }

@@ -418,9 +418,8 @@
 }
 
 .fotorama__arr--disabled {
-    *display: none;
     cursor: default;
-    opacity: 0.1;
+    opacity: 0;
     pointer-events: none;
 }
 
@@ -762,6 +761,7 @@
     img {
         left: 0;
         max-width: inherit;
+        max-height: inherit;
         position: absolute;
         top: 0;
         object-fit: scale-down;

@@ -87,6 +87,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testGetProductUrl()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -121,6 +124,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoAppArea frontend
      */
     public function testGetUrl()
@@ -142,6 +146,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Check that rearranging product url rewrites do not influence on whether to use category in product links
      *
      * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
+     * @magentoDbIsolation disabled
      */
     public function testGetProductUrlWithRearrangedUrlRewrites()
     {

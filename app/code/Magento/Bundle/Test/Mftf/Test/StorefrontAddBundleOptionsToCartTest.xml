@@ -43,7 +43,7 @@
             <deleteData createDataKey="simpleProduct9" stepKey="deleteSimpleProduct9"/>
             <deleteData createDataKey="simpleProduct10" stepKey="deleteSimpleProduct10"/>
             <!--delete created bundle product-->
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
@@ -54,15 +54,15 @@
         <!-- Start creating a bundle product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="waitForProductList"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
         <!-- Add Option One, a "Checkbox" type option, with tree products -->
-        <actionGroup ref="addBundleOptionWithTreeProducts" stepKey="addBundleOptionWithTreeProducts">
+        <actionGroup ref="AddBundleOptionWithThreeProductsActionGroup" stepKey="addBundleOptionWithTreeProducts">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -73,7 +73,7 @@
         </actionGroup>
 
         <!-- Add Option Two, a "Radio Buttons" type option, with one product -->
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOptionWithOneProduct">
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithOneProduct">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$simpleProduct4.sku$$"/>
@@ -83,7 +83,7 @@
         </actionGroup>
 
         <!-- Add Option Tree, a "Checkbox" type option, with six products -->
-        <actionGroup ref="addBundleOptionWithSixProducts" stepKey="addBundleOptionWithSixProducts">
+        <actionGroup ref="AddBundleOptionWithSixProductsActionGroup" stepKey="addBundleOptionWithSixProducts">
             <argument name="x" value="2"/>
             <argument name="n" value="3"/>
             <argument name="prodOneSku" value="$$simpleProduct5.sku$$"/>
@@ -97,7 +97,7 @@
         </actionGroup>
 
         <!-- Save product-->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Go to Storefront and open Bundle Product page-->
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>

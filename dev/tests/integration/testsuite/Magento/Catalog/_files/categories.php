@@ -64,6 +64,7 @@ $category->setId(4)
     ->setIsActive(true)
     ->setIsAnchor(true)
     ->setPosition(1)
+    ->setDescription('Category 1.1 description.')
     ->save();
 
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
@@ -79,6 +80,7 @@ $category->setId(5)
     ->setPosition(1)
     ->setCustomUseParentSettings(0)
     ->setCustomDesign('Magento/blank')
+    ->setDescription('This is the description for Category 1.1.1')
     ->save();
 
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);

@@ -91,6 +91,8 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
             'total' => 'USD 30.0000',
             'billingAddress' => $this->quote->getBillingAddress(),
             'shippingAddress' => $this->quote->getShippingAddress(),
+            'billingAddressHtml' => $this->quote->getBillingAddress()->format('html'),
+            'shippingAddressHtml' => $this->quote->getShippingAddress()->format('html'),
         ];
 
         $this->assertEquals($expectedVars, $templateVars);

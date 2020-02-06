@@ -29,17 +29,17 @@
         <!--Create product via admin-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToProductCreatePage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToProductCreatePage">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
-        <actionGroup ref="addProductImage" stepKey="addImageToProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Run re-index task-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -61,7 +61,7 @@
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectBreadCrumbProduct"/>
 
         <!--Remove product-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
     </test>
