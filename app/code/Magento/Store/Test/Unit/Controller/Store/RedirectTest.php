@@ -62,7 +62,6 @@ class RedirectTest extends TestCase
      */
     private $storeResolverMock;
 
-
     /**
      * @return void
      */

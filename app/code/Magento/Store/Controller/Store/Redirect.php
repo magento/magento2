@@ -11,7 +11,11 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Session\Generic;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
@@ -58,8 +62,8 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         Context $context,
         StoreRepositoryInterface $storeRepository,
         StoreResolverInterface $storeResolver,
-        \Magento\Framework\Session\Generic $session,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        Generic $session,
+        SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator,
         StoreManagerInterface $storeManager = null
     ) {
@@ -67,7 +71,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         $this->storeRepository = $storeRepository;
         $this->storeResolver = $storeResolver;
         $this->hashGenerator = $hashGenerator;
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -100,11 +104,11 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             $this->messageManager->addErrorMessage($error);
             $this->_redirect->redirect($this->_response, $currentStore->getBaseUrl());
         } else {
-            $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
+            $encodedUrl = $this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED);
             $query = [
                 '___from_store' => $fromStore->getCode(),
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
-                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
+                ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
             ];
 
             $customerHash = $this->hashGenerator->generateHash($fromStore);
