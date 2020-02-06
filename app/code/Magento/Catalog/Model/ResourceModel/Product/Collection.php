@@ -2344,6 +2344,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if (!$this->getSize()) {
             return $this;
         }
+        if (!$this->isLoaded()) {
+            $this->load();
+        }
         $records = $this->getMediaGalleryResource()->getMediaRecords(
             $this->getStoreId(),
             $this->getLoadedIds()
