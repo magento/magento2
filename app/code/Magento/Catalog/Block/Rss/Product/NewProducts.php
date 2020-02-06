@@ -8,8 +8,7 @@ namespace Magento\Catalog\Block\Rss\Product;
 use Magento\Framework\App\Rss\DataProviderInterface;
 
 /**
- * Class NewProducts
- * @package Magento\Catalog\Block\Rss\Product
+ * New products feed block
  */
 class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
@@ -55,6 +54,8 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
+     * Init
+     *
      * @return void
      */
     protected function _construct()
@@ -64,7 +65,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAllowed()
     {
@@ -72,7 +73,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRssData()
     {
@@ -97,10 +98,13 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-            $this->_eventManager->dispatch('rss_catalog_new_xml_callback', [
-                'row' => $item->getData(),
-                'product' => $item
-            ]);
+            $this->_eventManager->dispatch(
+                'rss_catalog_new_xml_callback',
+                [
+                    'row' => $item->getData(),
+                    'product' => $item
+                ]
+            );
 
             if (!$item->getAllowedInRss()) {
                 continue;
@@ -132,6 +136,8 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
+     * Get store id
+     *
      * @return int
      */
     protected function getStoreId()
@@ -177,7 +183,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -185,6 +191,8 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
+     * Get feeds
+     *
      * @return array
      */
     public function getFeeds()
@@ -199,7 +207,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

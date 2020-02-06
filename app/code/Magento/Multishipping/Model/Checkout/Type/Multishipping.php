@@ -625,6 +625,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $addressId = $address->getId();
             if (isset($methods[$addressId])) {
                 $address->setShippingMethod($methods[$addressId]);
+                $address->setCollectShippingRates(true);
             } elseif (!$address->getShippingMethod()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Set shipping methods for all addresses. Verify the shipping methods and try again.')
@@ -662,7 +663,9 @@ class Multishipping extends \Magento\Framework\DataObject
         $quote->getPayment()->importData($payment);
         // shipping totals may be affected by payment method
         if (!$quote->isVirtual() && $quote->getShippingAddress()) {
-            $quote->getShippingAddress()->setCollectShippingRates(true);
+            foreach ($quote->getAllShippingAddresses() as $shippingAddress) {
+                $shippingAddress->setCollectShippingRates(true);
+            }
             $quote->setTotalsCollectedFlag(false)->collectTotals();
         }
         $this->quoteRepository->save($quote);
@@ -690,6 +693,19 @@ class Multishipping extends \Magento\Framework\DataObject
             $order,
             $this->quoteAddressToOrder->convert($address)
         );
+
+        $shippingMethodCode = $address->getShippingMethod();
+        if (isset($shippingMethodCode) && !empty($shippingMethodCode)) {
+            $rate = $address->getShippingRateByCode($shippingMethodCode);
+            $shippingPrice = $rate->getPrice();
+        } else {
+            $shippingPrice = $order->getShippingAmount();
+        }
+        $store = $order->getStore();
+        $amountPrice = $store->getBaseCurrency()
+            ->convert($shippingPrice, $store->getCurrentCurrencyCode());
+        $order->setBaseShippingAmount($shippingPrice);
+        $order->setShippingAmount($amountPrice);
 
         $order->setQuote($quote);
         $order->setBillingAddress($this->quoteAddressToOrderAddress->convert($quote->getBillingAddress()));

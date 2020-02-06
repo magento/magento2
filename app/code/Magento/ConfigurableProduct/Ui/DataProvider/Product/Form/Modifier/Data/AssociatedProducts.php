@@ -215,6 +215,7 @@ class AssociatedProducts
                 'code' => $attribute['code'],
                 'label' => $attribute['label'],
                 'position' => $attribute['position'],
+                '__disableTmpl' => true
             ];
 
             foreach ($attribute['chosen'] as $chosenOption) {
@@ -234,7 +235,7 @@ class AssociatedProducts
      * @return void
      * @throws \Zend_Currency_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * phpcs:disable Generic.Metrics.NestingLevel
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function prepareVariations()
     {
@@ -265,6 +266,7 @@ class AssociatedProducts
                                 'id' => $attribute->getAttributeId(),
                                 'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
                                 'chosen' => [],
+                                '__disableTmpl' => true
                             ];
                             $options = $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : [];
                             foreach ($options as $option) {
@@ -275,6 +277,7 @@ class AssociatedProducts
                                         'id' => $option['value'],
                                         'label' => $option['label'],
                                         'value' => $option['value'],
+                                        '__disableTmpl' => true
                                     ];
                                 }
                             }
@@ -286,6 +289,7 @@ class AssociatedProducts
                             'id' => $optionId,
                             'label' => $variation[$attribute->getId()]['label'],
                             'value' => $optionId,
+                            '__disableTmpl' => true
                         ];
                         $variationOptions[] = $variationOption;
                         $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
@@ -311,6 +315,7 @@ class AssociatedProducts
                         'newProduct' => 0,
                         'attributes' => $this->getTextAttributes($variationOptions),
                         'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl(),
+                        '__disableTmpl' => true
                     ];
                     $productIds[] = $product->getId();
                 }
@@ -321,6 +326,7 @@ class AssociatedProducts
         $this->productIds = $productIds;
         $this->productAttributes = array_values($attributes);
     }
+    //phpcs: enable
 
     /**
      * Get JSON string that contains attribute code and value

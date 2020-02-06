@@ -85,6 +85,7 @@
         <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{US_Address_CA.telephone}}" stepKey="seePhoneNumberInDefaultAddressSection"/>
 
         <!--Assert Customer Address Grid -->
+        <conditionalClick selector="{{AdminCustomerAddressesGridActionsSection.clearFilter}}" dependentSelector="{{AdminCustomerAddressesGridActionsSection.clearFilter}}" visible="true" stepKey="clearAddressesGridFilter"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{US_Address_CA.street}}" stepKey="seeStreetAddress"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{US_Address_CA.city}}" stepKey="seeCity"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{US_Address_CA.country}}" stepKey="seeCountry"/>

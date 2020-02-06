@@ -10,7 +10,7 @@
         <variation name="CatalogRule_Create_Active_AdminOnly">
             <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
-            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Yes</data>
             <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
             <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">Wholesale</data>
             <data name="catalogPriceRule/data/simple_action" xsi:type="string">Apply as percentage of original</data>
@@ -24,7 +24,7 @@
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
-            <data name="catalogPriceRule/data/is_active" xsi:type="string">Inactive</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">No</data>
             <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
             <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">General</data>
             <data name="catalogPriceRule/data/condition" xsi:type="string">-</data>
@@ -39,7 +39,7 @@
         <variation name="CatalogRule_Create_ForGuestUsers_AdjustPriceToPercentage">
             <data name="product" xsi:type="string">MAGETWO-23036</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
-            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Yes</data>
             <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
             <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
             <data name="conditionEntity" xsi:type="string">category</data>
@@ -54,7 +54,7 @@
             <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
             <data name="product" xsi:type="string">simple_10_dollar</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
-            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Yes</data>
             <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
             <data name="conditionEntity" xsi:type="string">category</data>
             <data name="catalogPriceRule/data/conditions" xsi:type="string">[Category|is|%category_id%]</data>
@@ -68,7 +68,7 @@
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="product" xsi:type="string">product_with_custom_color_attribute</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">Catalog Price Rule %isolation%</data>
-            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Yes</data>
             <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
             <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
             <data name="conditionEntity" xsi:type="string">attribute</data>

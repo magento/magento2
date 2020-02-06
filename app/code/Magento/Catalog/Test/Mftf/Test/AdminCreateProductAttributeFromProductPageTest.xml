@@ -35,7 +35,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!--<deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>-->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteCreatedAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
 
@@ -47,7 +47,7 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!-- Select Created Product-->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
@@ -89,6 +89,9 @@
         <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
         <waitForPageLoad stepKey="waitForProductToSave"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Run Re-Index task -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!--Verify product attribute added in product form -->
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
