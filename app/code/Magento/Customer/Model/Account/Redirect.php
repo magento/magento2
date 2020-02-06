@@ -74,6 +74,11 @@ class Redirect
     protected $cookieMetadataFactory;
 
     /**
+     * @var CookieManagerInterface
+     */
+    private $cookieManager;
+
+    /**
      * @var HostChecker
      */
     private $hostChecker;
