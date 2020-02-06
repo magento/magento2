@@ -9,12 +9,14 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Configurable product type implementation
@@ -195,8 +197,17 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $salableProcessor;
 
     /**
+     * @var ProductAttributeRepositoryInterface|null
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var SearchCriteriaBuilder|null
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @codingStandardsIgnoreStart/End
-     *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -214,9 +225,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\Cache\FrontendInterface|null $cache
+     * @param \Magento\Customer\Model\Session|null $customerSession
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param ProductInterfaceFactory $productFactory
      * @param SalableProcessor $salableProcessor
+     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -241,7 +256,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Customer\Model\Session $customerSession = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ProductInterfaceFactory $productFactory = null,
-        SalableProcessor $salableProcessor = null
+        SalableProcessor $salableProcessor = null,
+        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -256,6 +273,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->productFactory = $productFactory ?: ObjectManager::getInstance()
             ->get(ProductInterfaceFactory::class);
         $this->salableProcessor = $salableProcessor ?: ObjectManager::getInstance()->get(SalableProcessor::class);
+        $this->productAttributeRepository = $productAttributeRepository ?:
+            ObjectManager::getInstance()->get(ProductAttributeRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?:
+            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -1231,30 +1252,21 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Returns array of sub-products for specified configurable product
-     *
-     * $requiredAttributeIds - one dimensional array, if provided
-     *
      * Result array contains all children for specified configurable product
      *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  array $requiredAttributeIds
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $requiredAttributeIds Attributes to include in the select; one-dimensional array
      * @return ProductInterface[]
      */
     public function getUsedProducts($product, $requiredAttributeIds = null)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-        $keyParts = [
-            __METHOD__,
-            $product->getData($metadata->getLinkField()),
-            $product->getStoreId(),
-            $this->getCustomerSession()->getCustomerGroupId()
-        ];
-        if ($requiredAttributeIds !== null) {
-            sort($requiredAttributeIds);
-            $keyParts[] = implode('', $requiredAttributeIds);
+        if (!$product->hasData($this->_usedProducts)) {
+            $collection = $this->getConfiguredUsedProductCollection($product, false, $requiredAttributeIds);
+            $usedProducts = array_values($collection->getItems());
+            $product->setData($this->_usedProducts, $usedProducts);
         }
-        $cacheKey = $this->getUsedProductsCacheKey($keyParts);
-        return $this->loadUsedProducts($product, $cacheKey);
+
+        return $product->getData($this->_usedProducts);
     }
 
     /**
@@ -1396,16 +1408,18 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare collection for retrieving sub-products of specified configurable product
-     *
      * Retrieve related products collection with additional configuration
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $skipStockFilter
+     * @param array $requiredAttributeIds Attributes to include in the select
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getConfiguredUsedProductCollection(
         \Magento\Catalog\Model\Product $product,
-        $skipStockFilter = true
+        $skipStockFilter = true,
+        $requiredAttributeIds = null
     ) {
         $collection = $this->getUsedProductCollection($product);
 
@@ -1413,8 +1427,19 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection->setFlag('has_stock_status_filter', true);
         }
 
+        $attributesForSelect = $this->getAttributesForCollection($product);
+        if ($requiredAttributeIds) {
+            $this->searchCriteriaBuilder->addFilter('attribute_id', $requiredAttributeIds, 'in');
+            $requiredAttributes = $this->productAttributeRepository
+                ->getList($this->searchCriteriaBuilder->create())->getItems();
+            $requiredAttributeCodes = [];
+            foreach ($requiredAttributes as $requiredAttribute) {
+                $requiredAttributeCodes[] = $requiredAttribute->getAttributeCode();
+            }
+            $attributesForSelect = array_unique(array_merge($attributesForSelect, $requiredAttributeCodes));
+        }
         $collection
-            ->addAttributeToSelect($this->getAttributesForCollection($product))
+            ->addAttributeToSelect($attributesForSelect)
             ->addFilterByRequiredOptions()
             ->setStoreId($product->getStoreId());
 

@@ -63,23 +63,27 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
         <!--Create catalog price rule-->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
-        <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule">
+        <actionGroup ref="CreateCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition">
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeActionGroup" stepKey="createCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
+        <wait time="60" stepKey="waitMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache3"/>
 
         <!--Check Catalog Price Rule for first product-->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>
@@ -109,18 +113,20 @@
         <!--Create new Catalog Price Rule-->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage1"/>
-        <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule1">
+        <actionGroup ref="CreateCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule1">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup1"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition1">
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup1"/>
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeActionGroup" stepKey="createCatalogPriceRuleCondition1">
             <argument name="attributeName" value="$$createSecondProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
+        <wait time="60" stepKey="waitForMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
 
         <!--Check Catalog Price Rule for third product-->
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>

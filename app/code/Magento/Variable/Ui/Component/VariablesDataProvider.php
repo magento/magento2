@@ -70,9 +70,12 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
      */
     private function sortBy($items, $field, $direction)
     {
-        usort($items, function ($item1, $item2) use ($field, $direction) {
-            return $this->variablesCompare($item1, $item2, $field, $direction);
-        });
+        usort(
+            $items,
+            function ($item1, $item2) use ($field, $direction) {
+                return $this->variablesCompare($item1, $item2, $field, $direction);
+            }
+        );
         return $items;
     }
 
@@ -95,7 +98,8 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
 
     /**
      * Merge variables from different sources:
-     * custom variables and default (stores configuration variables)
+     *
+     * Custom variables and default (stores configuration variables)
      *
      * @return array
      */
@@ -120,9 +124,14 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
             foreach ($filterGroup->getFilters() as $filter) {
                 $value = str_replace('%', '', $filter->getValue());
                 $filterField = $filter->getField();
-                $items = array_values(array_filter($items, function ($item) use ($value, $filterField) {
-                    return strpos(strtolower($item[$filterField]), strtolower($value)) !== false;
-                }));
+                $items = array_values(
+                    array_filter(
+                        $items,
+                        function ($item) use ($value, $filterField) {
+                            return strpos(strtolower($item[$filterField]), (string) strtolower($value)) !== false;
+                        }
+                    )
+                );
             }
         }
 

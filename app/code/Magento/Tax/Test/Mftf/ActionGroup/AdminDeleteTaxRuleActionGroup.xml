@@ -9,17 +9,21 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteTaxRule">
+        <annotations>
+            <description>Goes to the Admin Tax Rule grid page. Deletes the provided Tax Rule Code.</description>
+        </annotations>
         <arguments>
-            <argument name="taxRuleCode" type="string" />
+            <argument name="taxRuleCode" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleGridPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{taxRuleCode}}" stepKey="fillTaxRuleCode"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch"/>
-        <waitForPageLoad stepKey="waitForTaxRuleSearch" />
+        <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
         <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminTaxRuleFormSection.deleteRule}}" stepKey="clickDeleteRule"/>
         <click selector="{{AdminTaxRuleFormSection.ok}}" stepKey="clickOk"/>
     </actionGroup>

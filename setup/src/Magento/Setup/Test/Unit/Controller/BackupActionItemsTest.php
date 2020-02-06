@@ -76,6 +76,8 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent->expects($this->any())->method('getName')->willReturn('dispatch');
+
         $contentArray = '{"options":{"code":false,"media":false,"db":true}}';
         $request->expects($this->any())->method('getContent')->willReturn($contentArray);
 

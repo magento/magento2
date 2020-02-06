@@ -516,6 +516,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         /* Check if we edit guest order */
         $session->setCustomerId($order->getCustomerId() ?: false);
         $session->setStoreId($order->getStoreId());
+        if ($session->getData('reordered')) {
+            $this->getQuote()->setCustomerGroupId($order->getCustomerGroupId());
+        }
 
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
@@ -773,7 +776,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function getCustomerGroupId()
     {
         $groupId = $this->getQuote()->getCustomerGroupId();
-        if (!$groupId) {
+        if (!isset($groupId)) {
             $groupId = $this->getSession()->getCustomerGroupId();
         }
 
@@ -1131,7 +1134,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->recollectCart();
             throw $e;
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
@@ -1988,6 +1990,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_errors = array_merge($this->_errors, $messages);
             }
         }
@@ -2007,7 +2010,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             } else {
                 try {
                     $method->validate();
-                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->_errors[] = $e->getMessage();
                 }

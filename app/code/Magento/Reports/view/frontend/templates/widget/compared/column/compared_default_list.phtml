@@ -7,11 +7,6 @@
 /**
  * @deprecated
  */
-
-/**
- * @codingStandardsIgnoreFile
- */
-
 ?>
 <?php
 if ($exist = $block->getRecentlyComparedProducts()) {
@@ -50,7 +45,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                             <strong class="product-item-name">
                                 <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
                                    title="<?= $block->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>)">
-                                    <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
+                                    <?= $block->escapeHtml($this->helper(\Magento\Catalog\Helper\Output::class)->productAttribute($_product, $_product->getName(), 'name')) ?>
                                 </a>
                             </strong>
                             <?= /* @noEscape */ $block->getProductPriceHtml(
@@ -72,7 +67,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     </button>
                                 <?php else : ?>
                                     <?php
-                                    $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                    $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
                                     $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()])
                                     ?>
                                     <button class="action tocart primary"

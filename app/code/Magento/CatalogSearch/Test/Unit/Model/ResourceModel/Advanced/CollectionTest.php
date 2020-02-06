@@ -14,6 +14,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsRe
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
@@ -35,32 +36,37 @@ class CollectionTest extends BaseCollection
     private $advancedCollection;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|MockObject
      */
     private $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder|MockObject
      */
     private $criteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory|MockObject
      */
     private $temporaryStorageFactory;
 
     /**
-     * @var \Magento\Search\Api\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Api\SearchInterface|MockObject
      */
     private $search;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|MockObject
      */
     private $eavConfig;
 
     /**
-     * setUp method for CollectionTest
+     * @var SearchResultApplierFactory|MockObject
+     */
+    private $searchResultApplierFactory;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -97,17 +103,10 @@ class CollectionTest extends BaseCollection
             ->method('create')
             ->willReturn($searchCriteriaResolver);
 
-        $searchResultApplier = $this->getMockBuilder(SearchResultApplierInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['apply'])
-            ->getMockForAbstractClass();
-        $searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
+        $this->searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $searchResultApplierFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($searchResultApplier);
 
         $totalRecordsResolver = $this->getMockBuilder(TotalRecordsResolverInterface::class)
             ->disableOriginalConstructor()
@@ -134,12 +133,15 @@ class CollectionTest extends BaseCollection
                 'productLimitationFactory' => $productLimitationFactoryMock,
                 'collectionProvider' => null,
                 'searchCriteriaResolverFactory' => $searchCriteriaResolverFactory,
-                'searchResultApplierFactory' => $searchResultApplierFactory,
+                'searchResultApplierFactory' => $this->searchResultApplierFactory,
                 'totalRecordsResolverFactory' => $totalRecordsResolverFactory
             ]
         );
     }
 
+    /**
+     * Test to Load data with filter in place
+     */
     public function testLoadWithFilterNoFilters()
     {
         $this->advancedCollection->loadWithFilter();
@@ -150,6 +152,7 @@ class CollectionTest extends BaseCollection
      */
     public function testLike()
     {
+        $pageSize = 10;
         $attributeCode = 'description';
         $attributeCodeId = 42;
         $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -168,6 +171,23 @@ class CollectionTest extends BaseCollection
         $searchResult = $this->createMock(\Magento\Framework\Api\Search\SearchResultInterface::class);
         $this->search->expects($this->once())->method('search')->willReturn($searchResult);
 
+        $this->advancedCollection->setPageSize($pageSize);
+        $this->advancedCollection->setCurPage(0);
+
+        $searchResultApplier = $this->createMock(SearchResultApplierInterface::class);
+        $this->searchResultApplierFactory->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'collection' => $this->advancedCollection,
+                    'searchResult' => $searchResult,
+                    'orders' => [],
+                    'size' => $pageSize,
+                    'currentPage' => 0,
+                ]
+            )
+            ->willReturn($searchResultApplier);
+
         // addFieldsToFilter will load filters,
         //   then loadWithFilter will trigger _renderFiltersBefore code in Advanced/Collection
         $this->assertSame(
@@ -177,7 +197,7 @@ class CollectionTest extends BaseCollection
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getCriteriaBuilder()
     {
@@ -185,6 +205,7 @@ class CollectionTest extends BaseCollection
             ->setMethods(['addFilter', 'create', 'setRequestName'])
             ->disableOriginalConstructor()
             ->getMock();
+
         return $criteriaBuilder;
     }
 }

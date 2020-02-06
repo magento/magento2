@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateUserWithRoleActionGroup">
+        <annotations>
+            <description>Goes to the Admin Users grid page. Clicks on Create User. Fills in the provided Role and User.</description>
+        </annotations>
+        <arguments>
+            <argument name="role"/>
+            <argument name="user" defaultValue="newAdmin"/>
+        </arguments>
+
+        <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
+        <waitForPageLoad stepKey="waitForUsersPage"/>
+        <fillField selector="{{AdminCreateUserSection.usernameTextField}}" userInput="{{user.username}}" stepKey="enterUserName"/>
+        <fillField selector="{{AdminCreateUserSection.firstNameTextField}}" userInput="{{user.firstName}}" stepKey="enterFirstName"/>
+        <fillField selector="{{AdminCreateUserSection.lastNameTextField}}" userInput="{{user.lastName}}" stepKey="enterLastName"/>
+        <fillField selector="{{AdminCreateUserSection.emailTextField}}" userInput="{{user.username}}@magento.com" stepKey="enterEmail"/>
+        <fillField selector="{{AdminCreateUserSection.passwordTextField}}" userInput="{{user.password}}" stepKey="enterPassword"/>
+        <fillField selector="{{AdminCreateUserSection.pwConfirmationTextField}}" userInput="{{user.password}}" stepKey="confirmPassword"/>
+        <fillField selector="{{AdminCreateUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click stepKey="clickUserRole" selector="{{AdminCreateUserSection.userRoleTab}}"/>
+        <click stepKey="chooseRole" selector="{{AdminStoreSection.createdRoleInUserPage(role.name)}}"/>
+        <click selector="{{AdminCreateUserSection.saveButton}}" stepKey="clickSaveUser"/>
+        <waitForPageLoad stepKey="waitForSaveTheUser"/>
+        <see userInput="You saved the user." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
@@ -32,7 +33,12 @@ class Product
     /**
      * @var CollectionProcessorInterface
      */
-    private $collectionProcessor;
+    private $collectionPreProcessor;
+
+    /**
+     * @var CollectionPostProcessor
+     */
+    private $collectionPostProcessor;
 
     /**
      * @var Visibility
@@ -44,17 +50,20 @@ class Product
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param Visibility $visibility
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionPostProcessor $collectionPostProcessor
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ProductSearchResultsInterfaceFactory $searchResultsFactory,
         Visibility $visibility,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        CollectionPostProcessor $collectionPostProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->visibility = $visibility;
-        $this->collectionProcessor = $collectionProcessor;
+        $this->collectionPreProcessor = $collectionProcessor;
+        $this->collectionPostProcessor = $collectionPostProcessor;
     }
 
     /**
@@ -75,7 +84,7 @@ class Product
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
 
-        $this->collectionProcessor->process($collection, $searchCriteria, $attributes);
+        $this->collectionPreProcessor->process($collection, $searchCriteria, $attributes);
 
         if (!$isChildSearch) {
             $visibilityIds = $isSearch
@@ -83,15 +92,9 @@ class Product
                 : $this->visibility->getVisibleInCatalogIds();
             $collection->setVisibility($visibilityIds);
         }
-        $collection->load();
 
-        // Methods that perform extra fetches post-load
-        if (in_array('media_gallery_entries', $attributes)) {
-            $collection->addMediaGalleryData();
-        }
-        if (in_array('options', $attributes)) {
-            $collection->addOptionsToResult();
-        }
+        $collection->load();
+        $this->collectionPostProcessor->process($collection, $attributes);
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);

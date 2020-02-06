@@ -164,6 +164,30 @@ class Modal extends Block
     }
 
     /**
+     * Dismiss the modal if it appears
+     *
+     * @return void
+     */
+    public function dismissIfModalAppears()
+    {
+        $browser = $this->browser;
+        $selector = $this->dismissWarningSelector;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $item = $browser->find($selector);
+                if ($item->isVisible()) {
+                    return true;
+                }
+                $this->waitModalAnimationFinished();
+                return true;
+            }
+        );
+        if ($this->browser->find($selector)->isVisible()) {
+            $this->browser->find($selector)->click();
+        }
+    }
+
+    /**
      * Waiting until CSS animation is done.
      * Transition-duration is set at this file: "<magento_root>/lib/web/css/source/components/_modals.less"
      *

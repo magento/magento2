@@ -8,7 +8,6 @@ type Mutation {
 
 input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
     eq: String @doc(description:"Equal")
-    finset: [String]
     from: String
     gt: String
     gteq: String

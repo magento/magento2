@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Paypal\Block\Billing\Agreements $block
  */
@@ -13,7 +12,7 @@ $billingAgreements = $block->getBillingAgreements();
 $paymentMethods = $block->getWizardPaymentMethodOptions();
 ?>
 <div class="account-billing-agreements">
-    <?php if (count($billingAgreements) > 0): ?>
+    <?php if (count($billingAgreements) > 0) : ?>
         <?= $block->getChildHtml('pager') ?>
         <div class="table-wrapper billing-agreements">
             <table id="billing-agreements" class="data table table-billing-agreements">
@@ -29,7 +28,7 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                 </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($billingAgreements as $item): ?>
+                    <?php foreach ($billingAgreements as $item) : ?>
                         <tr>
                             <td data-th="<?= $block->escapeHtml(__('Reference ID')) ?>" class="col id">
                                 <?= $block->escapeHtml($block->getItemValue($item, 'reference_id')) ?>
@@ -57,13 +56,13 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                 </tbody>
             </table>
         </div>
-    <?php else: ?>
+    <?php else : ?>
         <div class="message info empty">
             <span><?= $block->escapeHtml(__('There are no billing agreements yet.')) ?></span>
         </div>
     <?php endif; ?>
 
-    <?php if ($paymentMethods): ?>
+    <?php if ($paymentMethods) : ?>
         <form action="<?= $block->escapeUrl($block->getCreateUrl()) ?>" method="post"
               class="form form-new-agreement">
             <fieldset class="fieldset">
@@ -79,7 +78,7 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                     <div class="control">
                         <select id="payment_method" name="payment_method">
                             <option value=""><?= $block->escapeHtml(__('-- Please Select --')) ?></option>
-                            <?php foreach ($paymentMethods as $code => $title): ?>
+                            <?php foreach ($paymentMethods as $code => $title) : ?>
                                 <option value="<?= $block->escapeHtml($code) ?>">
                                     <?= $block->escapeHtml($title) ?>
                                 </option>
@@ -101,7 +100,7 @@ $paymentMethods = $block->getWizardPaymentMethodOptions();
                 </div>
             </fieldset>
         </form>
-    <?php else: ?>
+    <?php else : ?>
     <div class="actions-toolbar">
         <div class="secondary">
             <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">

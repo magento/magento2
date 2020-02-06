@@ -11,5 +11,8 @@
 $_item = $block->getItem();
 ?>
 <span class="cart-price">
-    <?= $block->escapeHtml($this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getRowTotal())) ?>
+    <?= $block->escapeHtml(
+        $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getRowTotal()),
+        ['span']
+    ) ?>
 </span>
