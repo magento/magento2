@@ -19,6 +19,8 @@
             <argument name="readers" xsi:type="array">
                 <item name="productDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\AttributeReader</item>
                 <item name="categoryDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader</item>
+                <item name="productSortDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\SortAttributeReader</item>
+                <item name="productFilterDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\FilterAttributeReader</item>
             </argument>
         </arguments>
     </virtualType>
@@ -46,6 +48,7 @@
                 <item name="search" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\SearchCriteriaProcessor</item>
                 <item name="stock" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\StockProcessor</item>
                 <item name="visibility" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\VisibilityStatusProcessor</item>
+                <item name="mediaGallery" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\MediaGalleryProcessor</item>
             </argument>
         </arguments>
     </type>
@@ -54,4 +57,18 @@
             <argument name="searchCriteriaApplier" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
+        <arguments>
+            <argument name="exactMatchAttributes" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
+        <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
+    </type>
+
+    <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
 </config>

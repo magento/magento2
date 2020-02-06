@@ -128,7 +128,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Websites</label>
@@ -297,6 +297,9 @@
                 </item>
             </argument>
             <settings>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Uses per Coupon</label>
                 <dataScope>uses_per_coupon</dataScope>
@@ -309,6 +312,9 @@
                 </item>
             </argument>
             <settings>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
                 <notice translate="true">
                     Usage limit enforced for logged in customers only.
                 </notice>
@@ -356,6 +362,9 @@
                 </item>
             </argument>
             <settings>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Priority</label>
                 <dataScope>sort_order</dataScope>
@@ -422,6 +431,8 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Discount Amount</label>
@@ -435,6 +446,10 @@
                 </item>
             </argument>
             <settings>
+                <validation>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Maximum Qty Discount is Applied To</label>
                 <dataScope>discount_qty</dataScope>
@@ -447,12 +462,16 @@
                 </item>
             </argument>
             <settings>
+                <validation>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Discount Qty Step (Buy X)</label>
                 <dataScope>discount_step</dataScope>
             </settings>
         </field>
-        <field name="apply_to_shipping" component="Magento_Ui/js/form/element/single-checkbox-toggle-notice" formElement="checkbox">
+        <field name="apply_to_shipping" component="Magento_SalesRule/js/form/element/apply_to_shipping" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">sales_rule</item>

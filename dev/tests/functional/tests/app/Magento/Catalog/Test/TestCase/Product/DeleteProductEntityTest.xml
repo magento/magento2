@@ -10,12 +10,13 @@
         <variation name="DeleteProductEntityTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, mftf_migrated:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="DeleteProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
@@ -23,6 +24,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="DeleteProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">catalogProductSimple::with_one_custom_option</data>
             <data name="isRequired" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />

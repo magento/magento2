@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Test\Legacy;
 
 use Magento\Framework\App\Utility\Files;
@@ -42,7 +44,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::loadData(self::$phpUnsecureFunctions, 'unsecure_php_functions*.php');
         self::loadData(self::$jsUnsecureFunctions, 'unsecure_js_functions*.php');
     }
 

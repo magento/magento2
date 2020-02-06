@@ -99,8 +99,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->setForegroundCountries($foregroundCountries);
         $result = $this->_model->toOptionArray($emptyLabel);
-        $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel) && !empty($foregroundCountries)) +
-            (int)(!empty($emptyLabel)), $result);
+        $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel)), $result);
         foreach ($expectedResults as $index => $expectedResult) {
             $this->assertEquals($expectedResult, $result[$index]['label']);
         }
@@ -121,8 +120,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             [$optionsArray, false, [], ['AD', 'US', 'ES', 'BZ']],
             [$optionsArray, false, 'US', ['US', 'AD', 'ES', 'BZ']],
             [$optionsArray, false, ['US', 'BZ'], ['US', 'BZ', 'AD', 'ES']],
-            [$optionsArray, ' ', 'US', [' ', 'US', ' ', 'AD', 'ES', 'BZ']],
-            [$optionsArray, ' ', [], [' ', 'AD', 'US', 'ES', 'BZ']]
+            [$optionsArray, ' ', 'US', [' ', 'US', 'AD', 'ES', 'BZ']],
+            [$optionsArray, ' ', [], [' ', 'AD', 'US', 'ES', 'BZ']],
+            [$optionsArray, ' ', 'UA', [' ', 'AD', 'US', 'ES', 'BZ']],
+            [$optionsArray, ' ', ['AF', 'UA'], [' ', 'AD', 'US', 'ES', 'BZ']],
         ];
     }
 }

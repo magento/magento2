@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\ValidateOrderOfProductTypeTest">
         <variation name="ValidateOrderOfProductTypeTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menu/1" xsi:type="string">Configurable Product</data>
         </variation>
     </testCase>

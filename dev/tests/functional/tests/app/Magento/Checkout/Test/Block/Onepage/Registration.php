@@ -19,7 +19,7 @@ class Registration extends Block
      *
      * @var string
      */
-    protected $createAccountButton = 'input[data-bind*="Create an Account"]';
+    protected $createAccountButton = '[data-bind*="i18n: \'Create an Account\'"]';
 
     /**
      * Click 'Create an Account' button and wait until button will be not visible.

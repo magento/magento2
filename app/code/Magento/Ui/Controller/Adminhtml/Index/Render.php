@@ -86,6 +86,18 @@ class Render extends AbstractAction
 
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
+            } else {
+                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                $resultJson = $this->resultJsonFactory->create();
+                $resultJson->setStatusHeader(
+                    \Zend\Http\Response::STATUS_CODE_403,
+                    \Zend\Http\AbstractMessage::VERSION_11,
+                    'Forbidden'
+                );
+                return $resultJson->setData([
+                        'error' => $this->escaper->escapeHtml('Forbidden'),
+                        'errorcode' => 403
+                ]);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);

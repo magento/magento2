@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.backup.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">backupsGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Backup\Model\Fs\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Backup\Model\Fs\Collection</argument>
                     <argument name="default_sort" xsi:type="string">time</argument>
                     <argument name="default_dir" xsi:type="string">desc</argument>
                 </arguments>

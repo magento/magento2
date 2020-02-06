@@ -139,32 +139,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * @return void
      */
-    public function testWrongAttributeCode()
-    {
-        $postData = $this->_getAttributeData() + ['attribute_code' => '_()&&&?'];
-        $this->getRequest()->setPostValue($postData);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->dispatch('backend/catalog/product_attribute/save');
-        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
-            'catalog/product_attribute/edit',
-            $this->getResponse()->getHeader('Location')->getFieldValue()
-        );
-        /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
-        $this->assertEquals(1, $messages->getCountByType('error'));
-        /** @var \Magento\Framework\Message\Error $message */
-        $message = $messages->getItemsByType('error')[0];
-        $this->assertEquals(
-            'Attribute code "_()&&&?" is invalid. Please use only letters (a-z or A-Z),'
-            . ' numbers (0-9) or underscore(_) in this field, first character should be a letter.',
-            $message->getText()
-        );
-    }
-
-    /**
-     * @return void
-     */
     public function testAttributeWithoutEntityTypeId()
     {
         $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'new_attribute_set_name' => ' '];

@@ -17,6 +17,13 @@ use Magento\Framework\Exception\SecurityViolationException;
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::reset_password';
+
+    /**
      * Reset password handler
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -37,7 +44,9 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index impleme
                 \Magento\Customer\Model\AccountManagement::EMAIL_REMINDER,
                 $customer->getWebsiteId()
             );
-            $this->messageManager->addSuccess(__('The customer will receive an email with a link to reset password.'));
+            $this->messageManager->addSuccessMessage(
+                __('The customer will receive an email with a link to reset password.')
+            );
         } catch (NoSuchEntityException $exception) {
             $resultRedirect->setPath('customer/index');
             return $resultRedirect;
@@ -50,7 +59,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index impleme
         } catch (SecurityViolationException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Exception $exception) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $exception,
                 __('Something went wrong while resetting customer password.')
             );

@@ -100,6 +100,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if item can be shipped separately
+     *
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -136,6 +138,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if child items calculated
+     *
      * @param mixed $item
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -174,6 +178,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve selection attributes values
+     *
      * @param mixed $item
      * @return mixed|null
      */
@@ -191,6 +197,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve order item options array
+     *
      * @return array
      */
     public function getOrderOptions()
@@ -212,6 +220,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Retrieve order item
+     *
      * @return mixed
      */
     public function getOrderItem()
@@ -223,6 +233,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Get html info for item
+     *
      * @param mixed $item
      * @return string
      */
@@ -245,6 +257,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
+     * Check if we can show price info for this item
+     *
      * @param object $item
      * @return bool
      */

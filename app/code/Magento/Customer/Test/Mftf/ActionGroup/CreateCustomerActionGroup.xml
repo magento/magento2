@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateCustomerActionGroup">
+        <annotations>
+            <description>Goes to the Add Customers page via the Admin Nav Menu. Fills in the Customer details. Clicks on Save. PLEASE NOTE: The Customer data is Hardcoded using 'NewCustomerData'.</description>
+        </annotations>
+        
         <click stepKey="openCustomers" selector="{{AdminMenuSection.customers}}"/>
         <waitForAjaxLoad stepKey="waitForCatalogSubmenu" time="5"/>
         <click stepKey="clickOnAllCustomers" selector="{{CustomersSubmenuSection.allCustomers}}"/>
@@ -39,6 +44,5 @@
         <click stepKey="save" selector="{{NewCustomerPageSection.saveCustomer}}"/>
         <waitForPageLoad stepKey="waitForCustomersPage" time="10"/>
         <waitForElementVisible selector="{{NewCustomerPageSection.createdSuccessMessage}}" stepKey="waitForSuccessfullyCreatedMessage" time="20"/>
-
     </actionGroup>
 </actionGroups>

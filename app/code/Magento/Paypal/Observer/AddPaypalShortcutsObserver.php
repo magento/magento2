@@ -9,6 +9,8 @@ use Magento\Paypal\Helper\Shortcut\Factory;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Paypal\Model\Config as PaypalConfig;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton as MinicartSmartButton;
+use Magento\Paypal\Block\Express\InContext\SmartButton as SmartButton;
 
 /**
  * PayPal module observer
@@ -50,8 +52,9 @@ class AddPaypalShortcutsObserver implements ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
         $blocks = [
-            \Magento\Paypal\Block\Express\InContext\Minicart\Button::class =>
+            MinicartSmartButton::class =>
                 PaypalConfig::METHOD_WPS_EXPRESS,
+            SmartButton::class => PaypalConfig::METHOD_WPS_EXPRESS,
             \Magento\Paypal\Block\Express\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\WpsExpress\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
@@ -77,11 +80,9 @@ class AddPaypalShortcutsObserver implements ObserverInterface
                 '',
                 $params
             );
-            $shortcut->setIsInCatalogProduct(
-                $observer->getEvent()->getIsCatalogProduct()
-            )->setShowOrPosition(
-                $observer->getEvent()->getOrPosition()
-            );
+            $shortcut->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
+                ->setShowOrPosition($observer->getEvent()->getOrPosition())
+                ->setIsShoppingCart((bool) $observer->getEvent()->getIsShoppingCart());
             $shortcutButtons->addShortcut($shortcut);
         }
     }

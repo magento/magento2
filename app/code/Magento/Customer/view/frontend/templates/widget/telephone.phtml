@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Widget\Telephone $block */
 ?>
 
@@ -16,18 +14,14 @@
         </span>
     </label>
     <div class="control">
-        <?php
-            $_validationClass = $block->escapeHtmlAttr(
-                $this->helper('Magento\Customer\Helper\Address')
-                     ->getAttributeValidationClass('telephone')
-            );
-        ?>
         <input type="text"
                name="telephone"
                id="telephone"
                value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-               class="input-text <?= $_validationClass ?: '' ?>"
+               class="input-text <?= $block->escapeHtmlAttr(
+                   $block->getAttributeValidationClass('telephone')
+               ) ?>"
         >
     </div>
 </div>

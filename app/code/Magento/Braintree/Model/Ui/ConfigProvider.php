@@ -13,6 +13,8 @@ use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Class ConfigProvider
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -65,18 +67,19 @@ class ConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $storeId = $this->session->getStoreId();
+        $isActive = $this->config->isActive($storeId);
         return [
             'payment' => [
                 self::CODE => [
-                    'isActive' => $this->config->isActive($storeId),
-                    'clientToken' => $this->getClientToken(),
+                    'isActive' => $isActive,
+                    'clientToken' => $isActive ? $this->getClientToken() : null,
                     'ccTypesMapper' => $this->config->getCcTypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
+                    'hostedFieldsSdkUrl' => $this->config->getHostedFieldsSdkUrl(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig($storeId),
                     'availableCardTypes' => $this->config->getAvailableCardTypes($storeId),
                     'useCvv' => $this->config->isCvvEnabled($storeId),
                     'environment' => $this->config->getEnvironment($storeId),
-                    'kountMerchantId' => $this->config->getKountMerchantId($storeId),
                     'hasFraudProtection' => $this->config->hasFraudProtection($storeId),
                     'merchantId' => $this->config->getMerchantId($storeId),
                     'ccVaultCode' => self::CC_VAULT_CODE,
@@ -92,6 +95,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Generate a new client token if necessary
+     *
      * @return string
      */
     public function getClientToken()

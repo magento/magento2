@@ -38,6 +38,12 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
     public function testBlocksAction()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\DesignInterface::class
+        )->setDefaultDesignTheme()->getDesignTheme();
+        $this->getRequest()->setParam('theme_id', $theme->getId());
         $this->dispatch('backend/admin/widget_instance/blocks');
         $this->assertStringStartsWith('<select name="block" id=""', $this->getResponse()->getBody());
     }

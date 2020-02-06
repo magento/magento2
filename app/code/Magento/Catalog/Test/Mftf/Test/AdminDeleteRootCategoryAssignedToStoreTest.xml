@@ -28,6 +28,7 @@
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
@@ -36,12 +37,14 @@
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
         <see userInput="You saved the store." stepKey="seeSaveMessage"/>
+
         <!--Verify Delete Root Category can not be deleted-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
         <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name))}}" stepKey="clickRootCategoryInTree"/>
+
         <!--Verify Delete button is not displayed-->
         <dontSeeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="dontSeeDeleteButton"/>
     </test>

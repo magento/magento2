@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="TableRatesShippingMethodForDifferentStatesTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Table Rates"/>
+            <title value="Table rates shipping method for different states test"/>
+            <description value="Checkout with Table Rates for different states of the USA"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13581"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to Stores > Configuration > Sales > Shipping Methods -->
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+
+        <!-- Switch to Website scope -->
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+            <argument name="website" value="_defaultWebsite"/>
+        </actionGroup>
+
+        <!-- Enable Table Rate method and save config -->
+        <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethod"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+
+        <!-- Make sure you have Condition Weight vs. Destination -->
+        <see selector="{{AdminShippingMethodTableRatesSection.condition}}" userInput="{{TableRatesWeightVSDestination.condition}}" stepKey="seeDefaultCondition"/>
+
+        <!-- Import file and save config -->
+        <attachFile selector="{{AdminShippingMethodTableRatesSection.importFile}}" userInput="table_rate_30895.csv" stepKey="attachFileForImport"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add product to the shopping cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Open the shopping cart page -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+
+        <!-- Expand Estimate Shipping and Tax section in Summary -->
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
+        <!-- See available Table Rate option -->
+        <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodLabel">
+            <argument name="shippingMethod" value="{{TableRatesWeightVSDestination.title}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertShippingMethodOptionPresentInCartActionGroup" stepKey="assertShippingMethodOption">
+            <argument name="methodName" value="{{TableRatesWeightVSDestination.methodName}}"/>
+            <argument name="price" value="{{TableRatesWeightVSDestination.priceCA}}"/>
+        </actionGroup>
+
+        <!-- Change State to New York -->
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_NY.state}}" stepKey="selectAnotherState"/>
+        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
+
+        <!-- See available Table Rate option for another state -->
+        <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodLabelForAnotherState">
+            <argument name="shippingMethod" value="{{TableRatesWeightVSDestination.title}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertShippingMethodOptionPresentInCartActionGroup" stepKey="assertShippingMethodOptionForAnotherState">
+            <argument name="methodName" value="{{TableRatesWeightVSDestination.methodName}}"/>
+            <argument name="price" value="{{TableRatesWeightVSDestination.price}}"/>
+        </actionGroup>
+
+        <!-- Rollback config -->
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodSystemConfigPage"/>
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewToMainWebsite">
+            <argument name="website" value="_defaultWebsite"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
+            <argument name="status" value="0"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveSystemConfig"/>
+    </test>
+</tests>

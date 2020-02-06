@@ -85,5 +85,28 @@ define([
 
             expect($.fn.init).toHaveBeenCalledWith($input, undefined);
         });
+
+        it('Verify config value is empty when reset colorpicker intput', function () {
+            var value = {
+                    configStuffInHere: true,
+                    value: jasmine.createSpy().and.returnValue(undefined)
+                },
+                valueAccessor = jasmine.createSpy().and.returnValue(value),
+                viewModel = {
+                    disabled: jasmine.createSpy().and.returnValue(false)
+                };
+
+            $.fn.spectrum = jasmine.createSpy();
+            $input = jasmine.createSpy();
+
+            ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
+            expect($.fn.spectrum).toHaveBeenCalledTimes(1);
+            expect(valueAccessor().value).toHaveBeenCalledTimes(4);
+
+            value.value = jasmine.createSpy().and.returnValue('');
+            ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
+            expect($.fn.spectrum).toHaveBeenCalledTimes(3);
+            expect(valueAccessor().value).toHaveBeenCalledTimes(5);
+        });
     });
 });

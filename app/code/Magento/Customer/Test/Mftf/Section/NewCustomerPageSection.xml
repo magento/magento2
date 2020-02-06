@@ -28,6 +28,5 @@
         <element name="phoneNumber" type="input" selector="//input[contains(@name, 'telephone')]"/>
         <element name="saveCustomer" type="button" selector="//button[@title='Save Customer']"/>
         <element name="createdSuccessMessage" type="button" selector="//div[@data-ui-id='messages-message-success']"/>
-
     </section>
 </sections>

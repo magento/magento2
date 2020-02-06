@@ -77,7 +77,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
@@ -94,7 +94,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="ApiSimpleOne"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
@@ -114,7 +114,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="product" value="ApiSimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied2"/>
@@ -200,7 +200,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
@@ -212,7 +212,7 @@
         <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
 
         <!-- Delete the first simple product -->
-        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+        <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
         </actionGroup>
 
@@ -222,7 +222,7 @@
         <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
 
         <!-- Delete the second simple product -->
-        <actionGroup stepKey="deleteProduct2" ref="deleteProductBySku">
+        <actionGroup stepKey="deleteProduct2" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="{{ApiSimpleTwo.sku}}"/>
         </actionGroup>
 
@@ -301,9 +301,10 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
         </after>
 
@@ -313,7 +314,7 @@
         <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
 
         <!-- Delete the first simple product -->
-        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+        <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
         </actionGroup>
 
@@ -326,7 +327,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="product" value="ApiSimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied2"/>

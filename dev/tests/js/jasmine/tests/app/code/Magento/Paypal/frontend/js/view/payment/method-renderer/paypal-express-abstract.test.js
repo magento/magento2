@@ -24,6 +24,18 @@ define([
                 return true;
             }).and.callThrough(),
             mocks = {
+                'Magento_Checkout/js/model/checkout-data-resolver': {
+
+                    /** Stub */
+                    applyBillingAddress: function () {
+                        return true;
+                    },
+
+                    /** Stub */
+                    resolveBillingAddress: function () {
+                        return true;
+                    }
+                },
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),
@@ -65,7 +77,7 @@ define([
                         name: 'test',
                         index: 'test',
                         item: {
-                            method: 'paypal_express_bml'
+                            method: 'payflow_express_bml'
                         }
                     });
 

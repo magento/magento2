@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingNewsletterTemplateNavigateMenuTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin marketing newsletter template navigate menu test"/>
+            <description value="Admin should be able to navigate to Marketing > Newsletter Template"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14188"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterTemplatePage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>

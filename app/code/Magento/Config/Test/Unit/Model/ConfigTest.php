@@ -330,22 +330,59 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->model->save();
     }
 
-    public function testSetDataByPath()
+    /**
+     * @param string $path
+     * @param string $value
+     * @param string $section
+     * @param array $groups
+     * @dataProvider setDataByPathDataProvider
+     */
+    public function testSetDataByPath(string $path, string $value, string $section, array $groups)
     {
-        $value = 'value';
-        $path = '<section>/<group>/<field>';
         $this->model->setDataByPath($path, $value);
-        $expected = [
-            'section' => '<section>',
-            'groups' => [
-                '<group>' => [
-                    'fields' => [
-                        '<field>' => ['value' => $value],
+        $this->assertEquals($section, $this->model->getData('section'));
+        $this->assertEquals($groups, $this->model->getData('groups'));
+    }
+
+    /**
+     * @return array
+     */
+    public function setDataByPathDataProvider(): array
+    {
+        return [
+            'depth 3' => [
+                'a/b/c',
+                'value1',
+                'a',
+                [
+                    'b' => [
+                        'fields' => [
+                            'c' => ['value' => 'value1'],
+                        ],
+                    ],
+                ],
+            ],
+            'depth 5' => [
+                'a/b/c/d/e',
+                'value1',
+                'a',
+                [
+                    'b' => [
+                        'groups' => [
+                            'c' => [
+                                'groups' => [
+                                    'd' => [
+                                        'fields' => [
+                                            'e' => ['value' => 'value1'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
         ];
-        $this->assertSame($expected, $this->model->getData());
     }
 
     /**
@@ -359,14 +396,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $path
-     * @param string $expectedException
-     *
      * @dataProvider setDataByPathWrongDepthDataProvider
      */
-    public function testSetDataByPathWrongDepth($path, $expectedException)
+    public function testSetDataByPathWrongDepth(string $path)
     {
-        $expectedException = 'Allowed depth of configuration is 3 (<section>/<group>/<field>). ' . $expectedException;
-        $this->expectException('\UnexpectedValueException');
+        $currentDepth = count(explode('/', $path));
+        $expectedException = 'Minimal depth of configuration is 3. Your configuration depth is ' . $currentDepth;
+        $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage($expectedException);
         $value = 'value';
         $this->model->setDataByPath($path, $value);
@@ -375,13 +411,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function setDataByPathWrongDepthDataProvider()
+    public function setDataByPathWrongDepthDataProvider(): array
     {
         return [
-            'depth 2' => ['section/group', "Your configuration depth is 2 for path 'section/group'"],
-            'depth 1' => ['section', "Your configuration depth is 1 for path 'section'"],
-            'depth 4' => ['section/group/field/sub-field', "Your configuration depth is 4 for path"
-                . " 'section/group/field/sub-field'", ],
+            'depth 2' => ['section/group'],
+            'depth 1' => ['section'],
         ];
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEditCustomerNewsletterSection">
+        <element name="subscribedStatus" type="checkbox" selector="//div[@class='admin__field-control control']//input[@name='subscription_status[{{websiteId}}]']" parameterized="true"/>
+        <element name="subscribedStore" type="select" selector="//div[@class='admin__field-control control']//select[@name='subscription_store[{{websiteId}}]']" parameterized="true"/>
+        <element name="subscribedLastUpdatedDate" type="text" selector="//div[@class='admin__field-control control']//div[@class='field-change_status_date_{{websiteId}}']//div[@class='control-value']" parameterized="true"/>
+    </section>
+</sections>

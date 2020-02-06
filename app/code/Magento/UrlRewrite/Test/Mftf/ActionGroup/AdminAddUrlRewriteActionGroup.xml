@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddUrlRewriteActionGroup">
+        <annotations>
+            <description>Goes to the Admin Add URL Rewrite edit page. Fills in the provided URL details. Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="customUrlRewriteValue" type="string"/>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteEditPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="waitForCreateUrlRewriteVisible"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" userInput="{{customUrlRewriteValue}}" stepKey="selectUrlRewriteTypeOption"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="waitForCategoryInTreeVisible"/>
+        <click selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="clickOnCategoryInTree"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.store}}" stepKey="waitForStoreSelectVisible"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.store}}" userInput="{{storeValue}}" stepKey="selectStoreOption"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPathField"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.redirectType}}" userInput="{{redirectTypeValue}}" stepKey="selectRedirectType"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescriptionField"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The URL Rewrite has been saved." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

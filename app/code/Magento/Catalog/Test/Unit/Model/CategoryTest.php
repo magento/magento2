@@ -383,13 +383,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function reindexFlatDisabledTestDataProvider()
     {
         return [
-            [false, null, null, null, 0],
-            [true, null, null, null, 0],
-            [false, [], null, null, 0],
-            [false, ["1", "2"], null, null, 1],
-            [false, null, 1, null, 1],
-            [false, ["1", "2"], 0, 1, 1],
-            [false, null, 1, 1, 0],
+            [false, null, null, null, null, null, 0],
+            [true, null, null, null, null, null,  0],
+            [false, [], null, null, null, null, 0],
+            [false, ["1", "2"], null, null, null, null, 1],
+            [false, null, 1, null, null, null, 1],
+            [false, ["1", "2"], 0, 1, null, null,  1],
+            [false, null, 1, 1, null, null, 0],
+            [false, ["1", "2"], null, null, 0, 1,  1],
+            [false, ["1", "2"], null, null, 1, 0,  1],
+
         ];
     }
 
@@ -407,11 +410,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $affectedIds,
         $isAnchorOrig,
         $isAnchor,
+        $isActiveOrig,
+        $isActive,
         $expectedProductReindexCall
     ) {
         $this->category->setAffectedProductIds($affectedIds);
         $this->category->setData('is_anchor', $isAnchor);
         $this->category->setOrigData('is_anchor', $isAnchorOrig);
+        $this->category->setData('is_active', $isActive);
+        $this->category->setOrigData('is_active', $isActiveOrig);
+
         $this->category->setAffectedProductIds($affectedIds);
 
         $pathIds = ['path/1/2', 'path/2/3'];
@@ -422,7 +430,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(false));
 
-        $this->productIndexer->expects($this->exactly(1))
+        $this->productIndexer
             ->method('isScheduled')
             ->willReturn($productScheduled);
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))

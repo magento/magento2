@@ -83,7 +83,7 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
 
         if ($block && $block->isActive()) {
             try {
-                $storeId = $this->_storeManager->getStore()->getId();
+                $storeId = $this->getData('store_id') ?? $this->_storeManager->getStore()->getId();
                 $this->setText(
                     $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())
                 );

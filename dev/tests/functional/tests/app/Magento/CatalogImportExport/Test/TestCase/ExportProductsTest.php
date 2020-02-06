@@ -11,6 +11,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Command\File\Export;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
  * Preconditions:
@@ -51,21 +52,31 @@ class ExportProductsTest extends Injectable
     private $assertExportProduct;
 
     /**
+     * Cron command
+     *
+     * @var Cron
+     */
+    private $cron;
+
+    /**
      * Inject data.
      *
      * @param FixtureFactory $fixtureFactory
      * @param AdminExportIndex $adminExportIndex
      * @param AssertExportProduct $assertExportProduct
+     * @param Cron $cron
      * @return void
      */
     public function __inject(
         FixtureFactory $fixtureFactory,
         AdminExportIndex $adminExportIndex,
-        AssertExportProduct $assertExportProduct
+        AssertExportProduct $assertExportProduct,
+        Cron $cron
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->adminExportIndex = $adminExportIndex;
         $this->assertExportProduct = $assertExportProduct;
+        $this->cron = $cron;
     }
 
     /**
@@ -83,14 +94,18 @@ class ExportProductsTest extends Injectable
         array $exportedFields,
         array $products
     ) {
+        $this->cron->run();
+        $this->cron->run();
         $products = $this->prepareProducts($products);
         $this->adminExportIndex->open();
+        $this->adminExportIndex->getExportedGrid()->deleteAllExportedFiles();
 
         $exportData = $this->fixtureFactory->createByCode('exportData', ['dataset' => $exportData]);
         $exportData->persist();
         $this->adminExportIndex->getExportForm()->fill($exportData);
         $this->adminExportIndex->getFilterExport()->clickContinue();
-
+        $this->cron->run();
+        $this->cron->run();
         $this->assertExportProduct->processAssert($export, $exportedFields, $products);
     }
 

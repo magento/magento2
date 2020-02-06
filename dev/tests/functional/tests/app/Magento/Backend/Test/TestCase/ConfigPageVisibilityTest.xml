@@ -9,6 +9,7 @@
     <testCase name="Magento\Backend\Test\TestCase\ConfigPageVisibilityTest" summary="Check Developer section and Locale field">
         <variation name="VisibilityOfDeveloperSectionAndLocaleField" summary="Check Developer section and Locale field" ticketId="MAGETWO-63625, MAGETWO-63624">
             <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertLocaleCodeVisibility" />
             <constraint name="Magento\Backend\Test\Constraint\AssertDeveloperSectionVisibility" />
         </variation>

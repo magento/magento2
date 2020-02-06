@@ -13,4 +13,8 @@
         <data key="one">1</data>
         <data key="two">2</data>
     </entity>
+    <entity name="prodNameWithSpecChars">
+        <data key="trademark">"Pursuit Lumaflex™ Tone Band"</data>
+        <data key="skumark">"x™"</data>
+    </entity>
 </entities>

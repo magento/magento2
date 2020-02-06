@@ -115,6 +115,11 @@ class Config extends \Magento\Framework\DataObject
     private $scopeTypeNormalizer;
 
     /**
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Config\Model\Config\Structure $configStructure
@@ -126,6 +131,7 @@ class Config extends \Magento\Framework\DataObject
      * @param array $data
      * @param ScopeResolverPool|null $scopeResolverPool
      * @param ScopeTypeNormalizer|null $scopeTypeNormalizer
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -139,7 +145,8 @@ class Config extends \Magento\Framework\DataObject
         SettingChecker $settingChecker = null,
         array $data = [],
         ScopeResolverPool $scopeResolverPool = null,
-        ScopeTypeNormalizer $scopeTypeNormalizer = null
+        ScopeTypeNormalizer $scopeTypeNormalizer = null,
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -155,6 +162,8 @@ class Config extends \Magento\Framework\DataObject
             ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
         $this->scopeTypeNormalizer = $scopeTypeNormalizer
             ?? ObjectManager::getInstance()->get(ScopeTypeNormalizer::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
     }
 
     /**
@@ -224,6 +233,8 @@ class Config extends \Magento\Framework\DataObject
             throw $e;
         }
 
+        $this->pillPut->put();
+
         return $this;
     }
 
@@ -276,8 +287,8 @@ class Config extends \Magento\Framework\DataObject
      *
      * @param Field $field
      * @param string $fieldId Need for support of clone_field feature
-     * @param array &$oldConfig Need for compatibility with _processGroup()
-     * @param array &$extraOldGroups Need for compatibility with _processGroup()
+     * @param array $oldConfig Need for compatibility with _processGroup()
+     * @param array $extraOldGroups Need for compatibility with _processGroup()
      * @return string
      */
     private function getFieldPath(Field $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string
@@ -326,8 +337,8 @@ class Config extends \Magento\Framework\DataObject
      * @param string $sectionId
      * @param string $groupId
      * @param array $groupData
-     * @param array &$oldConfig
-     * @param array &$extraOldGroups
+     * @param array $oldConfig
+     * @param array $extraOldGroups
      * @return array
      */
     private function getChangedPaths(
@@ -373,8 +384,8 @@ class Config extends \Magento\Framework\DataObject
      * @param array $groupData
      * @param array $groups
      * @param string $sectionPath
-     * @param array &$extraOldGroups
-     * @param array &$oldConfig
+     * @param array $extraOldGroups
+     * @param array $oldConfig
      * @param \Magento\Framework\DB\Transaction $saveTransaction
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
@@ -424,6 +435,11 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
+                
+                if ($field->getType() == 'multiline' && is_array($fieldData['value'])) {
+                    $fieldData['value'] = trim(implode(PHP_EOL, $fieldData['value']));
+                }
+                
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
@@ -520,25 +536,32 @@ class Config extends \Magento\Framework\DataObject
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }
+
         $pathParts = explode('/', $path);
         $keyDepth = count($pathParts);
-        if ($keyDepth !== 3) {
+        if ($keyDepth < 3) {
             throw new \UnexpectedValueException(
-                "Allowed depth of configuration is 3 (<section>/<group>/<field>). Your configuration depth is "
-                . $keyDepth . " for path '$path'"
+                'Minimal depth of configuration is 3. Your configuration depth is ' . $keyDepth
             );
         }
+
+        $section = array_shift($pathParts);
+        $this->setData('section', $section);
+
         $data = [
-            'section' => $pathParts[0],
-            'groups' => [
-                $pathParts[1] => [
-                    'fields' => [
-                        $pathParts[2] => ['value' => $value],
-                    ],
-                ],
+            'fields' => [
+                array_pop($pathParts) => ['value' => $value],
             ],
         ];
-        $this->addData($data);
+        while ($pathParts) {
+            $data = [
+                'groups' => [
+                    array_pop($pathParts) => $data,
+                ],
+            ];
+        }
+        $groups = array_replace_recursive((array) $this->getData('groups'), $data['groups']);
+        $this->setData('groups', $groups);
     }
 
     /**
@@ -658,7 +681,7 @@ class Config extends \Magento\Framework\DataObject
      * Get config data value
      *
      * @param string $path
-     * @param null|bool &$inherit
+     * @param null|bool $inherit
      * @param null|array $configData
      * @return \Magento\Framework\Simplexml\Element
      */

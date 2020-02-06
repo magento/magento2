@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.cache.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">cache_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Backend\Model\Cache\ResourceModel\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Backend\Model\Cache\ResourceModel\Grid\Collection</argument>
                     <argument name="pager_visibility" xsi:type="string">0</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.cache.massaction" as="grid.massaction">
@@ -80,6 +80,7 @@
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="width" xsi:type="string">120</argument>
                             <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="options" xsi:type="array">
                                 <item name="disabled" xsi:type="array">
                                     <item name="value" xsi:type="string">0</item>

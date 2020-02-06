@@ -182,7 +182,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
 
         if ($this->string->strlen($optionValue) > 55) {
             $result['value'] = $result['value']
-                . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
+                . ' ...';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, ['full_view' => $optionValue]);
         }
@@ -268,23 +268,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
             - $item->getDiscountAmount();
 
         return $totalAmount;
-    }
-
-    /**
-     * Return the base total amount minus discount.
-     *
-     * @param OrderItem|InvoiceItem|CreditmemoItem $item
-     * @return mixed
-     */
-    public function getBaseTotalAmount($item)
-    {
-        $baseTotalAmount = $item->getBaseRowTotal()
-            + $item->getBaseTaxAmount()
-            + $item->getBaseDiscountTaxCompensationAmount()
-            + $item->getBaseWeeeTaxAppliedAmount()
-            - $item->getBaseDiscountAmount();
-
-        return $baseTotalAmount;
     }
 
     /**

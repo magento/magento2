@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 ?>
 <?php
 /** @var $block \Magento\GoogleAdwords\Block\Code */
@@ -12,22 +10,22 @@
 <!-- Google Code for Sale Conversion Page -->
 <script>
     /* <![CDATA[ */
-    var google_conversion_id = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionId() ?>;
-    var google_conversion_language = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLanguage() ?>";
-    var google_conversion_format = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionFormat() ?>";
-    var google_conversion_color = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionColor() ?>";
-    var google_conversion_label = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLabel() ?>";
-    var google_conversion_value = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionValue() ?>;
-    <?php if($block->getHelper()->hasSendConversionValueCurrency() && $block->getHelper()->getConversionValueCurrency()): ?>
-    var google_conversion_currency = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionValueCurrency() ?>";
+    var google_conversion_id = <?= $block->escapeJs($block->getHelper()->getConversionId()) ?>;
+    var google_conversion_language = "<?= $block->escapeJs($block->getHelper()->getConversionLanguage()) ?>";
+    var google_conversion_format = "<?= $block->escapeJs($block->getHelper()->getConversionFormat()) ?>";
+    var google_conversion_color = "<?= $block->escapeJs($block->getHelper()->getConversionColor()) ?>";
+    var google_conversion_label = "<?= $block->escapeJs($block->getHelper()->getConversionLabel()) ?>";
+    var google_conversion_value = <?= $block->escapeJs($block->getHelper()->getConversionValue()) ?>;
+    <?php if ($block->getHelper()->hasSendConversionValueCurrency() && $block->getHelper()->getConversionValueCurrency()) : ?>
+    var google_conversion_currency = "<?= $block->escapeJs($block->getHelper()->getConversionValueCurrency()) ?>";
     <?php endif; ?>
     /* ]]> */
 </script>
-<script src="<?= /* @escapeNotVerified */ $block->getHelper()->getConversionJsSrc() ?>"></script>
+<script src="<?= $block->escapeHtmlAttr($block->getHelper()->getConversionJsSrc()) ?>"></script>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?= /* @escapeNotVerified */ $block->getHelper()->getConversionImgSrc() ?>"/>
+             src="<?= $block->escapeHtmlAttr($block->getHelper()->getConversionImgSrc()) ?>"/>
     </div>
 </noscript>
 <!-- END Google Code for Sale Conversion Page -->

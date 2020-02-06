@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\DeleteCustomerGroupEntityTest" summary="Delete Customer Group" ticketId="MAGETWO-25243">
         <variation name="DeleteCustomerGroupEntityTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">default</data>
             <data name="defaultCustomerGroup/dataset" xsi:type="string">General</data>

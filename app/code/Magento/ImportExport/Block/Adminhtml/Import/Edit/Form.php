@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -18,7 +19,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Basic import model
      *
-     * @var \Magento\ImportExport\Model\Import
+     * @var Import
      */
     protected $_importModel;
 
@@ -33,6 +34,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_behaviorFactory;
 
     /**
+     * @var Import\ImageDirectoryBaseProvider
+     */
+    private $imagesDirectoryProvider;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -40,6 +46,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory
      * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
      * @param array $data
+     * @param Import\ImageDirectoryBaseProvider|null $imageDirProvider
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -48,12 +55,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\ImportExport\Model\Import $importModel,
         \Magento\ImportExport\Model\Source\Import\EntityFactory $entityFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
-        array $data = []
+        array $data = [],
+        ?Import\ImageDirectoryBaseProvider $imageDirProvider = null
     ) {
         $this->_entityFactory = $entityFactory;
         $this->_behaviorFactory = $behaviorFactory;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_importModel = $importModel;
+        $this->imagesDirectoryProvider = $imageDirProvider
+            ?? ObjectManager::getInstance()->get(Import\ImageDirectoryBaseProvider::class);
     }
 
     /**
@@ -77,8 +87,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         // base fieldset
-        $fieldsets['base'] = $form->addFieldset('base_fieldset', ['legend' => __('Import Settings')]);
-        $fieldsets['base']->addField(
+        $fieldsets['base'] = $form->addFieldset(
+            'base_fieldset',
+            ['legend' => __('Import Settings')]
+        )->addField(
             'entity',
             'select',
             [
@@ -95,12 +107,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         // add behaviour fieldsets
         $uniqueBehaviors = $this->_importModel->getUniqueEntityBehaviors();
         foreach ($uniqueBehaviors as $behaviorCode => $behaviorClass) {
-            $fieldsets[$behaviorCode] = $form->addFieldset(
+            $fieldset = $form->addFieldset(
                 $behaviorCode . '_fieldset',
                 ['legend' => __('Import Behavior'), 'class' => 'no-display']
             );
-            /** @var $behaviorSource \Magento\ImportExport\Model\Source\Import\AbstractBehavior */
-            $fieldsets[$behaviorCode]->addField(
+            $fieldset->addField(
                 $behaviorCode,
                 'select',
                 [
@@ -116,13 +127,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'after_element_html' => $this->getImportBehaviorTooltip(),
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+            $fieldset->addField(
+                $behaviorCode . Import::FIELD_NAME_VALIDATION_STRATEGY,
                 'select',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
-                    'title' => __(' '),
-                    'label' => __(' '),
+                    'name' => Import::FIELD_NAME_VALIDATION_STRATEGY,
+                    'title' => __('Validation Strategy'),
+                    'label' => __('Validation Strategy'),
                     'required' => true,
                     'class' => $behaviorCode,
                     'disabled' => true,
@@ -133,11 +144,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'after_element_html' => $this->getDownloadSampleFileHtml(),
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . '_' . \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+            $fieldset->addField(
+                $behaviorCode . '_' . Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
+                    'name' => Import::FIELD_NAME_ALLOWED_ERROR_COUNT,
                     'label' => __('Allowed Errors Count'),
                     'title' => __('Allowed Errors Count'),
                     'required' => true,
@@ -149,11 +160,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     ),
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . '_' . \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+            $fieldset->addField(
+                $behaviorCode . '_' . Import::FIELD_FIELD_SEPARATOR,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+                    'name' => Import::FIELD_FIELD_SEPARATOR,
                     'label' => __('Field separator'),
                     'title' => __('Field separator'),
                     'required' => true,
@@ -162,11 +173,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => ',',
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
+            $fieldset->addField(
+                $behaviorCode . Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
+                    'name' => Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
                     'label' => __('Multiple value separator'),
                     'title' => __('Multiple value separator'),
                     'required' => true,
@@ -175,11 +186,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+            $fieldset->addField(
+                $behaviorCode . Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                 'text',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                    'name' => Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                     'label' => __('Empty attribute value constant'),
                     'title' => __('Empty attribute value constant'),
                     'required' => true,
@@ -188,28 +199,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
                 ]
             );
-            $fieldsets[$behaviorCode]->addField(
-                $behaviorCode . \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+            $fieldset->addField(
+                $behaviorCode . Import::FIELDS_ENCLOSURE,
                 'checkbox',
                 [
-                    'name' => \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                    'name' => Import::FIELDS_ENCLOSURE,
                     'label' => __('Fields enclosure'),
                     'title' => __('Fields enclosure'),
                     'value' => 1,
                 ]
             );
+            $fieldsets[$behaviorCode] = $fieldset;
         }
 
         // fieldset for file uploading
-        $fieldsets['upload'] = $form->addFieldset(
+        $fieldset = $form->addFieldset(
             'upload_file_fieldset',
             ['legend' => __('File to Import'), 'class' => 'no-display']
         );
-        $fieldsets['upload']->addField(
-            \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE,
+        $fieldset->addField(
+            Import::FIELD_NAME_SOURCE_FILE,
             'file',
             [
-                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE,
+                'name' => Import::FIELD_NAME_SOURCE_FILE,
                 'label' => __('Select File to Import'),
                 'title' => __('Select File to Import'),
                 'required' => true,
@@ -219,21 +231,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
             ]
         );
-        $fieldsets['upload']->addField(
-            \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR,
+        $fieldset->addField(
+            Import::FIELD_NAME_IMG_FILE_DIR,
             'text',
             [
-                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR,
+                'name' => Import::FIELD_NAME_IMG_FILE_DIR,
                 'label' => __('Images File Directory'),
                 'title' => __('Images File Directory'),
                 'required' => false,
                 'class' => 'input-text',
                 'note' => __(
-                    'For Type "Local Server" use relative path to Magento installation,
-                                e.g. var/export, var/import, var/export/some/dir'
+                    $this->escapeHtml(
+                        'For Type "Local Server" use relative path to &lt;Magento root directory&gt;/'
+                        .$this->imagesDirectoryProvider->getDirectoryRelativePath()
+                        .', e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>'
+                        .'For example, in case <i>product_images</i>, files should be placed into '
+                        .'<i>&lt;Magento root directory&gt;/'
+                        .$this->imagesDirectoryProvider->getDirectoryRelativePath() . '/product_images</i> folder.',
+                        ['i', 'br']
+                    )
                 ),
             ]
         );
+        $fieldsets['upload'] = $fieldset;
 
         $form->setUseContainer(true);
         $this->setForm($form);

@@ -7,6 +7,7 @@
 namespace Magento\Mtf\App\State;
 
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Util\Command\Cli;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
@@ -27,7 +28,7 @@ class State1 extends AbstractState
      *
      * @var string
      */
-    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable, log_to_file';
+    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable';
 
     /**
      * HTTP CURL Adapter.
@@ -55,6 +56,7 @@ class State1 extends AbstractState
      * Apply set up configuration profile.
      *
      * @return void
+     * @throws \Exception
      */
     public function apply()
     {
@@ -67,6 +69,10 @@ class State1 extends AbstractState
                 ['configData' => $this->config]
             )->run();
         }
+
+        /** @var Cli $cli */
+        $cli = $this->objectManager->create(Cli::class);
+        $cli->execute('setup:config:set', ['--enable-debug-logging=true']);
     }
 
     /**

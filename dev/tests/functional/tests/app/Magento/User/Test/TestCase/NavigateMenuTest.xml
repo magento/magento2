@@ -8,21 +8,25 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest52">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">System > Locked Users</data>
             <data name="pageTitle" xsi:type="string">Locked Users</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest53">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">System > Manage Encryption Key</data>
             <data name="pageTitle" xsi:type="string">Encryption Key</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest92">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">System > All Users</data>
             <data name="pageTitle" xsi:type="string">Users</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest93">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">System > User Roles</data>
             <data name="pageTitle" xsi:type="string">Roles</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>

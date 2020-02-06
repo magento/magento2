@@ -46,8 +46,8 @@ define([
 
             variation.serializeData();
 
-            expect(variation.source.data['configurable-matrix']).toBeUndefined();
-            expect(variation.source.data['associated_product_ids']).toBeUndefined();
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
             expect(variation.source.data['configurable-matrix-serialized']).toEqual(resultMatrix);
             expect(variation.source.data['associated_product_ids_serialized']).toEqual(resultIds);
         });
@@ -112,8 +112,8 @@ define([
             variation.source.data['associated_product_ids_serialized'] = JSON.stringify(['some old data']);
             variation.serializeData();
 
-            expect(variation.source.data['configurable-matrix']).toBeUndefined();
-            expect(variation.source.data['associated_product_ids']).toBeUndefined();
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
             expect(variation.source.data['configurable-matrix-serialized']).toEqual(resultMatrix);
             expect(variation.source.data['associated_product_ids_serialized']).toEqual(resultIds);
         });
@@ -164,8 +164,8 @@ define([
 
             variation.serializeData();
 
-            expect(variation.source.data['configurable-matrix']).toBeUndefined();
-            expect(variation.source.data['associated_product_ids']).toBeUndefined();
+            expect(variation.source.data['configurable-matrix']).toEqual(matrix);
+            expect(variation.source.data['associated_product_ids']).toEqual(ids);
             expect(variation.source.data['configurable-matrix-serialized']).toEqual(resultMatrix);
             expect(variation.source.data['associated_product_ids_serialized']).toEqual(resultIds);
 

@@ -3,21 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
-use Magento\Framework\Escaper;
-use Magento\Catalog\Helper\Product;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Authorizenet\Helper\Backend\Data as DataHelper;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Create;
 
 /**
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class Place extends Create implements HttpPostActionInterface
 {
     /**
      * @var DataHelper

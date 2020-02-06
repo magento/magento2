@@ -80,6 +80,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
 
     public function testFilterProductActions()
     {
+        $typeId = 'recently_compared_product';
         $productsData = [
             1 => [
                 'added_at' => 12,
@@ -87,7 +88,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             ],
             2 => [
                 'added_at' => 13,
-                'product_id' => 2,
+                'product_id' => '2',
             ],
             3 => [
                 'added_at' => 14,
@@ -126,10 +127,12 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->any())
+        $collection->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->withConsecutive(['type_id'], ['product_id']);
-
+            ->with('type_id', $typeId);
+        $collection->expects($this->at(2))
+            ->method('addFieldToFilter')
+            ->with('product_id', [1, 2]);
         $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
         $collection->expects($this->once())
             ->method('getIterator')

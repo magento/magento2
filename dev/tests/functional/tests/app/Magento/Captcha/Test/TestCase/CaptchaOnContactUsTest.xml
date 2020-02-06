@@ -12,6 +12,7 @@
             <data name="comment/data/captcha" xsi:type="string">111</data>
             <data name="comment/data/customer/dataset" xsi:type="string">default</data>
             <data name="configData" xsi:type="string">captcha_storefront_contact_us</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Contact\Test\Constraint\AssertContactUsSuccessMessage" />
         </variation>
     </testCase>

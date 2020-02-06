@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGenerateUrlRewritesForProductInCategoriesSwitchOffTest">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url Rewrites cleared in case of switching configuration off"/>
+            <title value="Clear Url Rewrites after configuration turned off"/>
+            <description value="Check Url Rewrites for product in categories is correctly cleared after configuration turned off"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16330"/>
+            <group value="urlRewrite"/>
+        </annotations>
+
+        <before>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites-->
+            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+
+            <!-- Set the configuration for Generate "category/product" URL Rewrites-->
+            <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- 1. Open Marketing - SEO & Search - URL Rewrites -->
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createCategory.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
+
+        <!-- 2. Set the configuration for Generate "category/product" URL Rewrites to No-->
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="amOnCatalogConfigPage"/>
+        <conditionalClick selector="{{CatalogSection.seo}}" dependentSelector="{{CatalogSection.CheckIfSeoTabExpand}}" visible="true" stepKey="expandSeoTab" />
+        <waitForElementVisible  selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="GenerateUrlRewritesSelect"/>
+        <selectOption userInput="0" selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="selectUrlGenerationNo" />
+        <waitForElementVisible selector="{{GenerateUrlRewritesConfirm.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{GenerateUrlRewritesConfirm.ok}}" stepKey="confirmSwitchingGenerationOff"/>
+        <click selector="{{CatalogSection.save}}" stepKey="saveConfig" />
+        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
+
+        <!-- 3. Flush cache-->
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+
+        <!-- 4. Open Marketing - SEO & Search - URL Rewrites -->
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createCategory.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="dontSeeValue2"/>
+    </test>
+</tests>

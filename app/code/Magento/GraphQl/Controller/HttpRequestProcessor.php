@@ -20,11 +20,18 @@ class HttpRequestProcessor
     private $headerProcessors = [];
 
     /**
-     * @param HttpHeaderProcessorInterface[] $graphQlHeaders
+     * @var HttpRequestValidatorInterface[] array
      */
-    public function __construct(array $graphQlHeaders = [])
+    private $requestValidators = [];
+
+    /**
+     * @param HttpHeaderProcessorInterface[] $graphQlHeaders
+     * @param HttpRequestValidatorInterface[] $requestValidators
+     */
+    public function __construct(array $graphQlHeaders = [], array $requestValidators = [])
     {
         $this->headerProcessors = $graphQlHeaders;
+        $this->requestValidators = $requestValidators;
     }
 
     /**
@@ -37,6 +44,19 @@ class HttpRequestProcessor
     {
         foreach ($this->headerProcessors as $headerName => $headerClass) {
             $headerClass->processHeaderValue((string)$request->getHeader($headerName));
+        }
+    }
+
+    /**
+     * Validate HTTP request
+     *
+     * @param Http $request
+     * @return void
+     */
+    public function validateRequest(Http $request) : void
+    {
+        foreach ($this->requestValidators as $requestValidator) {
+            $requestValidator->validate($request);
         }
     }
 }

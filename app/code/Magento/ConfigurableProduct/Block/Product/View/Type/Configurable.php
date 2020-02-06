@@ -7,6 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
@@ -15,6 +16,8 @@ use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
+ * Confugurable product view type
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -179,10 +182,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         if (!$this->hasAllowProducts()) {
             $products = [];
-            $skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
             $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
+            /** @var $product \Magento\Catalog\Model\Product */
             foreach ($allProducts as $product) {
-                if ($product->isSaleable() || $skipSaleableCheck) {
+                if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
                     $products[] = $product;
                 }
             }
@@ -276,6 +279,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Collect price options
+     *
      * @return array
      */
     protected function getOptionPrices()
@@ -314,6 +319,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         ),
                     ],
                     'tierPrices' => $tierPrices,
+                    'msrpPrice' => [
+                        'amount' => $this->localeFormat->getNumber(
+                            $product->getMsrp()
+                        ),
+                    ],
                  ];
         }
         return $prices;

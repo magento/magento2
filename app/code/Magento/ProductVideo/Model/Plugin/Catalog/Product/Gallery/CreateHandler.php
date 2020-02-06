@@ -19,6 +19,8 @@ class CreateHandler extends AbstractHandler
     const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
 
     /**
+     * Execute before Plugin
+     *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @param array $arguments
@@ -44,6 +46,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Execute plugin
+     *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
@@ -58,6 +62,9 @@ class CreateHandler extends AbstractHandler
         );
 
         if (!empty($mediaCollection)) {
+            if ($product->getIsDuplicate() === true) {
+                $mediaCollection = $this->makeAllNewVideos($product->getId(), $mediaCollection);
+            }
             $newVideoCollection = $this->collectNewVideos($mediaCollection);
             $this->saveVideoData($newVideoCollection, 0);
 
@@ -70,6 +77,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Saves video data
+     *
      * @param array $videoDataCollection
      * @param int $storeId
      * @return void
@@ -83,6 +92,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Saves additioanal video data
+     *
      * @param array $videoDataCollection
      * @return void
      */
@@ -99,6 +110,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Saves video data
+     *
      * @param array $item
      * @return void
      */
@@ -111,6 +124,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Excludes current store data
+     *
      * @param array $mediaCollection
      * @param int $currentStoreId
      * @return array
@@ -126,6 +141,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Prepare video data for saving
+     *
      * @param array $rowData
      * @return array
      */
@@ -143,6 +160,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Loads video data
+     *
      * @param array $mediaCollection
      * @param int $excludedStore
      * @return array
@@ -165,6 +184,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Collect video data
+     *
      * @param array $mediaCollection
      * @return array
      */
@@ -182,6 +203,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Extract video data
+     *
      * @param array $rowData
      * @return array
      */
@@ -194,6 +217,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Collect items for additional data adding
+     *
      * @param array $mediaCollection
      * @return array
      */
@@ -209,6 +234,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Add additional data
+     *
      * @param array $mediaCollection
      * @param array $data
      * @return array
@@ -229,6 +256,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Creates additional video data
+     *
      * @param array $storeData
      * @param int $valueId
      * @return array
@@ -247,6 +276,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Collect new videos
+     *
      * @param array $mediaCollection
      * @return array
      */
@@ -262,6 +293,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Checks if gallery item is video
+     *
      * @param array $item
      * @return bool
      */
@@ -273,6 +306,8 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+     * Checks if video is new
+     *
      * @param array $item
      * @return bool
      */
@@ -281,5 +316,24 @@ class CreateHandler extends AbstractHandler
         return !isset($item['video_url_default'], $item['video_title_default'])
             || empty($item['video_url_default'])
             || empty($item['video_title_default']);
+    }
+
+    /**
+     * Mark all videos as new
+     *
+     * @param int $entityId
+     * @param array $mediaCollection
+     * @return array
+     */
+    private function makeAllNewVideos($entityId, array $mediaCollection): array
+    {
+        foreach ($mediaCollection as $key => $video) {
+            if ($this->isVideoItem($video)) {
+                unset($video['video_url_default'], $video['video_title_default']);
+                $video['entity_id'] = $entityId;
+                $mediaCollection[$key] = $video;
+            }
+        }
+        return $mediaCollection;
     }
 }

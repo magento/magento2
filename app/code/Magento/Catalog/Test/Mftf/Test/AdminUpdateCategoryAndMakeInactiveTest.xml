@@ -25,9 +25,11 @@
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCreatedCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open category page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
+
         <!--Update category and make category inactive-->
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
@@ -37,11 +39,13 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
+
         <!--Verify Inactive Category is store front page-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="dontSeeCategoryOnStoreNavigationBar"/>
         <waitForPageLoad time="15" stepKey="wait"/>
+
         <!--Verify Inactive Category in category page -->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoaded1"/>

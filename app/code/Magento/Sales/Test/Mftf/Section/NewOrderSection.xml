@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="NewOrderSection">
@@ -31,6 +32,5 @@
         <element name="cvv" type="input" selector="#cvv"/>
         <element name="submitOrder" type="input" selector="#submit_order_top_button"/>
         <element name="successMessage" type="input" selector="#messages"/>
-
     </section>
 </sections>

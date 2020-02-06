@@ -5,9 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-                 <actionGroup name="CreateNewProductActionGroup">
+    <actionGroup name="CreateNewProductActionGroup">
+        <annotations>
+            <description>Goes to the Product creation/edit page. Fills in Product Name, Price and Quantity. Then Saves the work.</description>
+        </annotations>
 
         <click stepKey="openCatalog" selector="{{AdminMenuSection.catalog}}"/>
         <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>

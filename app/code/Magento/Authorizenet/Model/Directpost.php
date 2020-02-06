@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -14,6 +16,7 @@ use Magento\Payment\Model\Method\TransparentInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements TransparentInterface, ConfigInterface
 {
@@ -543,15 +546,16 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     public function validateResponse()
     {
         $response = $this->getResponse();
-        //md5 check
-        if (!$this->getConfigData('trans_md5')
-            || !$this->getConfigData('login')
-            || !$response->isValidHash($this->getConfigData('trans_md5'), $this->getConfigData('login'))
+        $hashConfigKey = !empty($response->getData('x_SHA2_Hash')) ? 'signature_key' : 'trans_md5';
+
+        //hash check
+        if (!$response->isValidHash($this->getConfigData($hashConfigKey), $this->getConfigData('login'))
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The transaction was declined because the response hash validation failed.')
             );
         }
+
         return true;
     }
 
@@ -651,7 +655,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             case self::RESPONSE_CODE_ERROR:
                 $errorMessage = $this->dataHelper->wrapGatewayError($this->getResponse()->getXResponseReasonText());
                 $order = $this->getOrderFromResponse();
-                $this->paymentFailures->handle((int)$order->getQuoteId(), $errorMessage);
+                $this->paymentFailures->handle((int)$order->getQuoteId(), (string)$errorMessage);
                 throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(

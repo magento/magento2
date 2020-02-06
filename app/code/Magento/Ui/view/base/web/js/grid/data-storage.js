@@ -199,7 +199,7 @@ define([
         },
 
         /**
-         * Caches requests object with provdided parameters
+         * Caches requests object with provided parameters
          * and data object associated with it.
          *
          * @param {Object} data - Data associated with request.

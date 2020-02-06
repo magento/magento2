@@ -31,6 +31,28 @@
         <data key="file">magento-logo.png</data>
         <data key="sample">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
     </entity>
+    <entity name="downloadableLink1" type="downloadable_link">
+        <data key="title" unique="suffix">link-1</data>
+        <data key="price">2.43</data>
+        <data key="number_of_downloads">2</data>
+        <data key="sample_type">url</data>
+        <data key="sample_url">http://example.com</data>
+        <data key="link_type">url</data>
+        <data key="link_url">http://example.com</data>
+        <data key="is_shareable">0</data>
+        <data key="sort_order">1</data>
+    </entity>
+    <entity name="downloadableLink2" type="downloadable_link">
+        <data key="title" unique="suffix">link-2</data>
+        <data key="price">3</data>
+        <data key="number_of_downloads">3</data>
+        <data key="sample_type">url</data>
+        <data key="sample_url">http://example.com</data>
+        <data key="link_type">url</data>
+        <data key="link_url">http://example.com</data>
+        <data key="is_shareable">1</data>
+        <data key="sort_order">2</data>
+    </entity>
     <entity name="downloadableSampleFile" type="downloadable_sample">
         <data key="title" unique="suffix">SampleFile</data>
         <data key="file_type">Upload File</data>
@@ -40,6 +62,12 @@
         <data key="title" unique="suffix">SampleUrl</data>
         <data key="file_type">URL</data>
         <data key="file">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+    </entity>
+    <entity name="DownloadableSample" type="downloadable_sample">
+        <data key="title" unique="suffix">downloadableSampleUrl</data>
+        <data key="sort_order">1</data>
+        <data key="sample_type">url</data>
+        <data key="sample_url">http://example.com</data>
     </entity>
     <entity name="ApiDownloadableLink" type="downloadable_link">
         <data key="title" unique="suffix">Api Downloadable Link</data>

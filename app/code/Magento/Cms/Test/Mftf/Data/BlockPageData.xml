@@ -9,7 +9,7 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultBlock" type="block">
-        <data key="title">Default Block</data>
+        <data key="title" unique="suffix">Default Block</data>
         <data key="identifier" unique="suffix" >block</data>
         <data key="content">Here is a block test. Yeah!</data>
         <data key="active">true</data>
