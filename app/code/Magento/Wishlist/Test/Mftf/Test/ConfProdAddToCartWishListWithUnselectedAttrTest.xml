@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!--Create Configurable product-->
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
@@ -33,7 +33,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete the first simple product -->
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"

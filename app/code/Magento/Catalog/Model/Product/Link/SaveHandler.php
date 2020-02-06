@@ -4,14 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Link;
 
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 
 /**
- * Class SaveProductLinks
+ * Save product links.
  */
 class SaveHandler
 {
@@ -47,8 +50,10 @@ class SaveHandler
     }
 
     /**
-     * @param string $entityType
-     * @param object $entity
+     * Save product links for the product.
+     *
+     * @param string $entityType Product type.
+     * @param \Magento\Catalog\Api\Data\ProductInterface $entity
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -56,13 +61,13 @@ class SaveHandler
     {
         $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
         if ($this->linkResource->hasProductLinks($link)) {
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
             foreach ($this->productLinkRepository->getList($entity) as $link) {
                 $this->productLinkRepository->delete($link);
             }
         }
 
         // Build links per type
+        /** @var ProductLinkInterface[][] $linksByType */
         $linksByType = [];
         foreach ($entity->getProductLinks() as $link) {
             $linksByType[$link->getLinkType()][] = $link;
@@ -71,13 +76,17 @@ class SaveHandler
         // Set array position as a fallback position if necessary
         foreach ($linksByType as $linkType => $links) {
             if (!$this->hasPosition($links)) {
-                array_walk($linksByType[$linkType], function ($productLink, $position) {
-                    $productLink->setPosition(++$position);
-                });
+                array_walk(
+                    $linksByType[$linkType],
+                    function (ProductLinkInterface $productLink, $position) {
+                        $productLink->setPosition(++$position);
+                    }
+                );
             }
         }
 
         // Flatten multi-dimensional linksByType in ProductLinks
+        /** @var ProductLinkInterface[] $productLinks */
         $productLinks = array_reduce($linksByType, 'array_merge', []);
 
         if (count($productLinks) > 0) {
@@ -90,13 +99,14 @@ class SaveHandler
 
     /**
      * Check if at least one link without position
-     * @param array $links
+     *
+     * @param ProductLinkInterface[] $links
      * @return bool
      */
-    private function hasPosition(array $links)
+    private function hasPosition(array $links): bool
     {
         foreach ($links as $link) {
-            if (!array_key_exists('position', $link->getData())) {
+            if ($link->getPosition() === null) {
                 return false;
             }
         }

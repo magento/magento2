@@ -20,4 +20,20 @@
         <data key="scope_code">base</data>
         <data key="value">''</data>
     </entity>
+    <entity name="ChangeWebCookieLifetimeConfigData">
+        <data key="path">web/cookie/cookie_lifetime</data>
+        <data key="value">60</data>
+    </entity>
+    <entity name="DefaultWebCookieLifetimeConfigData">
+        <data key="path">web/cookie/cookie_lifetime</data>
+        <data key="value">3600</data>
+    </entity>
+    <entity name="ChangeAdminSecuritySessionLifetimeConfigData">
+        <data key="path">admin/security/session_lifetime</data>
+        <data key="value">60</data>
+    </entity>
+    <entity name="DefaultAdminSecuritySessionLifetimeConfigData">
+        <data key="path">admin/security/session_lifetime</data>
+        <data key="value">7200</data>
+    </entity>
 </entities>

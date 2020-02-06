@@ -3,92 +3,114 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Test class for \Magento\Catalog\Controller\Product.
- */
+
 namespace Magento\Catalog\Controller;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Session;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Xpath;
+use Magento\TestFramework\TestCase\AbstractController;
+
 /**
- * @magentoAppIsolation enabled
+ * Checks product view on storefront
+ *
+ * @see \Magento\Catalog\Controller\Product
+ *
+ * @magentoDbIsolation enabled
  */
-class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
+class ProductTest extends AbstractController
 {
+    /** @var Registry */
+    private $registry;
+
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
+    /** @var Session */
+    private $session;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Randomly fails due to known HHVM bug (DOMText mixed with DOMElement)');
         }
         parent::setUp();
+
+        $this->registry = $this->_objectManager->get(Registry::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->session = $this->_objectManager->get(Session::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function assert404NotFound()
     {
         parent::assert404NotFound();
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get(\Magento\Framework\Registry::class)->registry('current_product'));
+
+        $this->assertNull($this->registry->registry('current_product'));
     }
 
-    protected function _getProductImageFile()
+    /**
+     * Get product image file
+     *
+     * @return string
+     */
+    protected function getProductImageFile(): string
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /**
-         * @var $repository \Magento\Catalog\Model\ProductRepository
-         */
-        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
-        $product = $repository->get('simple_product_1');
+        $product = $this->productRepository->get('simple_product_1');
         $images = $product->getMediaGalleryImages()->getItems();
         $image = reset($images);
+
         return $image['file'];
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
      * @magentoAppArea frontend
+     * @return void
      */
-    public function testViewAction()
+    public function testViewAction(): void
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /**
-         * @var $repository \Magento\Catalog\Model\ProductRepository
-         */
-        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
-        $product = $repository->get('simple_product_1');
+        $product = $this->productRepository->get('simple_product_1');
         $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
+        $currentProduct = $this->registry->registry('current_product');
 
-        /** @var $currentProduct \Magento\Catalog\Model\Product */
-        $currentProduct = $objectManager->get(\Magento\Framework\Registry::class)->registry('current_product');
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $currentProduct);
+        $this->assertInstanceOf(ProductInterface::class, $currentProduct);
         $this->assertEquals($product->getEntityId(), $currentProduct->getEntityId());
-
-        $lastViewedProductId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Session::class
-        )->getLastViewedProductId();
-        $this->assertEquals($product->getEntityId(), $lastViewedProductId);
+        $this->assertEquals($product->getEntityId(), $this->session->getLastViewedProductId());
 
         $responseBody = $this->getResponse()->getBody();
         /* Product info */
-        $this->assertContains('Simple Product 1 Name', $responseBody);
-        $this->assertContains('Simple Product 1 Full Description', $responseBody);
-        $this->assertContains('Simple Product 1 Short Description', $responseBody);
+        $this->assertContains($product->getName(), $responseBody);
+        $this->assertContains($product->getDescription(), $responseBody);
+        $this->assertContains($product->getShortDescription(), $responseBody);
+        $this->assertContains($product->getSku(), $responseBody);
         /* Stock info */
         $this->assertContains('$1,234.56', $responseBody);
         $this->assertContains('In stock', $responseBody);
-        $this->assertContains('Add to Cart', $responseBody);
+        $this->assertContains((string)__('Add to Cart'), $responseBody);
         /* Meta info */
         $this->assertContains('<title>Simple Product 1 Meta Title</title>', $responseBody);
         $this->assertEquals(
             1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+            Xpath::getElementsCountForXpath(
                 '//meta[@name="keywords" and @content="Simple Product 1 Meta Keyword"]',
                 $responseBody
             )
         );
         $this->assertEquals(
             1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+            Xpath::getElementsCountForXpath(
                 '//meta[@name="description" and @content="Simple Product 1 Meta Description"]',
                 $responseBody
             )
@@ -97,34 +119,36 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @return void
      */
-    public function testViewActionConfigurable()
+    public function testViewActionConfigurable(): void
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /**
-         * @var $repository \Magento\Catalog\Model\ProductRepository
-         */
-        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
-        $product = $repository->get('simple');
+        $product = $this->productRepository->get('simple');
         $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
         $html = $this->getResponse()->getBody();
         $this->assertEquals(
             1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+            Xpath::getElementsCountForXpath(
                 '//*[@id="product-options-wrapper"]',
                 $html
             )
         );
     }
 
-    public function testViewActionNoProductId()
+    /**
+     * @return void
+     */
+    public function testViewActionNoProductId(): void
     {
         $this->dispatch('catalog/product/view/id/');
+
         $this->assert404NotFound();
     }
 
-    public function testViewActionRedirect()
+    /**
+     * @return void
+     */
+    public function testViewActionRedirect(): void
     {
         $this->dispatch('catalog/product/view/?store=default');
 
@@ -133,30 +157,31 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
+     * @return void
      */
-    public function testGalleryAction()
+    public function testGalleryAction(): void
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /**
-         * @var $repository \Magento\Catalog\Model\ProductRepository
-         */
-        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
-        $product = $repository->get('simple_product_1');
+        $product = $this->productRepository->get('simple_product_1');
         $this->dispatch(sprintf('catalog/product/gallery/id/%s', $product->getEntityId()));
 
         $this->assertContains('http://localhost/pub/media/catalog/product/', $this->getResponse()->getBody());
-        $this->assertContains($this->_getProductImageFile(), $this->getResponse()->getBody());
+        $this->assertContains($this->getProductImageFile(), $this->getResponse()->getBody());
     }
 
-    public function testGalleryActionRedirect()
+    /**
+     * @return void
+     */
+    public function testGalleryActionRedirect(): void
     {
         $this->dispatch('catalog/product/gallery/?store=default');
 
         $this->assertRedirect();
     }
 
-    public function testGalleryActionNoProduct()
+    /**
+     * @return void
+     */
+    public function testGalleryActionNoProduct(): void
     {
         $this->dispatch('catalog/product/gallery/id/');
 
@@ -165,13 +190,14 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
+     * @return void
      */
-    public function testImageAction()
+    public function testImageAction(): void
     {
         $this->markTestSkipped("All logic has been cut to avoid possible malicious usage of the method");
         ob_start();
         /* Preceding slash in URL is required in this case */
-        $this->dispatch('/catalog/product/image' . $this->_getProductImageFile());
+        $this->dispatch('/catalog/product/image' . $this->getProductImageFile());
         $imageContent = ob_get_clean();
         /**
          * Check against PNG file signature.
@@ -180,10 +206,44 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertStringStartsWith(sprintf("%cPNG\r\n%c\n", 137, 26), $imageContent);
     }
 
-    public function testImageActionNoImage()
+    /**
+     * @return void
+     */
+    public function testImageActionNoImage(): void
     {
         $this->dispatch('catalog/product/image/');
 
         $this->assert404NotFound();
+    }
+
+    /**
+     * Check that custom layout update files is employed.
+     *
+     * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
+     * @return void
+     */
+    public function testViewWithCustomUpdate(): void
+    {
+        //Setting a fake file for the product.
+        $file = 'test-file';
+        /** @var ProductRepositoryInterface $repository */
+        $repository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $sku = 'simple_product_1';
+        $product = $repository->get($sku);
+        $productId = $product->getId();
+        /** @var ProductLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(ProductLayoutUpdateManager::class);
+        $layoutManager->setFakeFiles((int)$productId, [$file]);
+        //Updating the custom attribute.
+        $product->setCustomAttribute('custom_layout_update_file', $file);
+        $repository->save($product);
+
+        //Viewing the product
+        $this->dispatch("catalog/product/view/id/$productId");
+        //Layout handles must contain the file.
+        $handles = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class)
+            ->getUpdate()
+            ->getHandles();
+        $this->assertContains("catalog_product_view_selectable_{$sku}_{$file}", $handles);
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteDefaultCategoryChildrenActionGroup">
+        <annotations>
+            <description>Deletes all children categories of Default Root Category.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage"/>
+        <executeInSelenium function="function ($webdriver) use ($I) {
+            $children = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//ul[contains(@class, \'x-tree-node-ct\')]/li[@class=\'x-tree-node\' and contains(.,
+            \'{{DefaultCategory.name}}\')]/ul[contains(@class, \'x-tree-node-ct\')]/li//a'));
+            while (!empty($children)) {
+                $I->click('//ul[contains(@class, \'x-tree-node-ct\')]/li[@class=\'x-tree-node\' and contains(.,
+            \'{{DefaultCategory.name}}\')]/ul[contains(@class, \'x-tree-node-ct\')]/li//a');
+                $I->waitForPageLoad(30);
+                $I->click('#delete');
+                $I->waitForElementVisible('aside.confirm .modal-footer button.action-accept');
+                $I->click('aside.confirm .modal-footer button.action-accept');
+                $I->waitForPageLoad(30);
+                $I->waitForElementVisible('#messages div.message-success', 30);
+                $I->see('You deleted the category.', '#messages div.message-success');
+                $children = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//ul[contains(@class, \'x-tree-node-ct\')]/li[@class=\'x-tree-node\' and contains(.,
+            \'{{DefaultCategory.name}}\')]/ul[contains(@class, \'x-tree-node-ct\')]/li//a'));
+            }
+        }" stepKey="deleteAllChildCategories"/>
+    </actionGroup>
+</actionGroups>

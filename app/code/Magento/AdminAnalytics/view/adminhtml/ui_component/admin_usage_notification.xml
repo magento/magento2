@@ -85,7 +85,7 @@
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
                         <p>Help us improve Magento Admin by allowing us to collect usage data.</p>
                         <p>All usage data that we collect for this purpose cannot be used to individually identify you and is used only to improve the Magento Admin and related products and services.</p>
-                        <p>You can learn more and opt out at any time by following the instructions in <a href="https://docs.magento.com/m2/ce/user_guide/stores/admin.html" target="_blank">merchant documentation</a>.</p>
+                        <p>You can learn more and opt out at any time by following the instructions in <a href="https://docs.magento.com/m2/ce/user_guide/stores/admin.html" target="_blank" tabindex="0">merchant documentation</a>.</p>
 ]]></item>
                     </item>
                 </argument>

@@ -12,7 +12,7 @@ use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 
 /**
- * Processes form data
+ * Controller helper for user input.
  */
 class PostDataProcessor
 {
@@ -140,7 +140,7 @@ class PostDataProcessor
             if (!empty($data['layout_update_xml']) && !$layoutXmlValidator->isValid($data['layout_update_xml'])) {
                 return false;
             }
-            
+
             if (!empty($data['custom_layout_update_xml']) &&
                 !$layoutXmlValidator->isValid($data['custom_layout_update_xml'])
             ) {

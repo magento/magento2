@@ -79,7 +79,7 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
         </before>
         <after>
             <!-- Delete configurable product creation -->
@@ -90,7 +90,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+            <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
                 <argument name="rowIndex" value="0"/>
             </actionGroup>
             <!-- Log out -->
@@ -102,7 +102,7 @@
         <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Fill entity attributes data -->
-        <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">
+        <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
             <argument name="attribute" value="sku"/>
             <argument name="attributeData" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
@@ -112,7 +112,7 @@
         <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>
         </actionGroup>
     </test>

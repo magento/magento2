@@ -42,10 +42,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             "{$optionTable2}.option_id={$valueExpr} AND {$optionTable2}.store_id=?",
             $collection->getStoreId()
         );
-        $valueExpr = $connection->getCheckSql(
-            "{$optionTable2}.value_id IS NULL",
-            "{$optionTable1}.option_id",
-            "{$optionTable2}.option_id"
+        $valueIdExpr = $connection->getIfNullSql(
+            "{$optionTable2}.option_id",
+            "{$optionTable1}.option_id"
+        );
+        $valueExpr = $connection->getIfNullSql(
+            "{$optionTable2}.value",
+            "{$optionTable1}.value"
         );
 
         $collection->getSelect()->joinLeft(
@@ -55,7 +58,37 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->joinLeft(
             [$optionTable2 => $this->getTable('eav_attribute_option_value')],
             $tableJoinCond2,
-            [$attributeCode => $valueExpr]
+            [
+                $attributeCode => $valueIdExpr,
+                $attributeCode . '_value' => $valueExpr,
+            ]
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add Join with option for collection select
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param \Zend_Db_Expr $valueExpr
+     * @return $this
+     */
+    public function addOptionToCollection($collection, $attribute, $valueExpr)
+    {
+        $connection = $this->getConnection();
+        $attributeCode = $attribute->getAttributeCode();
+        $optionTable1 = $attributeCode . '_option_t1';
+        $tableJoinCond1 = "{$optionTable1}.option_id={$valueExpr}";
+        $valueExpr = $connection->getIfNullSql(
+            "{$optionTable1}.sort_order"
+        );
+
+        $collection->getSelect()->joinLeft(
+            [$optionTable1 => $this->getTable('eav_attribute_option')],
+            $tableJoinCond1,
+            ["{$attributeCode}_order" => $valueExpr]
         );
 
         return $this;

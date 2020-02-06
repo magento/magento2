@@ -362,9 +362,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -373,9 +370,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

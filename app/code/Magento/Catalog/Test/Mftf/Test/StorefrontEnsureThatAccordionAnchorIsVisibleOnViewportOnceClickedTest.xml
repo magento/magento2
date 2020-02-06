@@ -84,7 +84,7 @@
         <selectOption selector="{{AdminProductFormSection.customSelectField($$createFourthAttribute.attribute[attribute_code]$$)}}" userInput="$$createSecondOption.option[store_labels][0][label]$$" stepKey="setFourthAttributeValue"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
         <!-- Go to frontend and make a user account and login with it -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
@@ -102,7 +102,7 @@
 
         <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
 
         <!-- Moderate first product reviews: change review status from pending to approved, save -->
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
@@ -110,7 +110,7 @@
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
 
         <!-- Moderate second product reviews: change review status from pending to approved, save -->
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilter"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openSecondCustomerReviews"/>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeSecondReviewStatus"/>
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedSecondReview"/>
@@ -133,19 +133,19 @@
         </actionGroup>
 
         <!-- Assert that product page has all product attributes in More Info tab -->
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkFirstAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkFirstAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createFirstAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$createOption.option[store_labels][0][label]$$"/>
         </actionGroup>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkSecondAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkSecondAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createSecondAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
         </actionGroup>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkThirdAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkThirdAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createThirdAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
         </actionGroup>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkFourthAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkFourthAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createFourthAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$createSecondOption.option[store_labels][0][label]$$"/>
         </actionGroup>
