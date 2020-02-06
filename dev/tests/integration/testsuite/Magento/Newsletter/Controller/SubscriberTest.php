@@ -5,20 +5,29 @@
  */
 namespace Magento\Newsletter\Controller;
 
+use Magento\Customer\Model\Session;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
- * Test Subscriber
+ * Test for \Magento\Newsletter\Controller\Subscriber.
  */
 class SubscriberTest extends AbstractController
 {
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
     }
 
-    public function testNewAction()
+    /**
+     * Subscribe test
+     *
+     * @return void
+     */
+    public function testNewAction(): void
     {
         $this->getRequest()->setMethod('POST');
 
@@ -29,9 +38,13 @@ class SubscriberTest extends AbstractController
     }
 
     /**
+     * Subscribe unused email
+     *
      * @magentoDbIsolation enabled
+     *
+     * @return void
      */
-    public function testNewActionUnusedEmail()
+    public function testNewActionUnusedEmail(): void
     {
         $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue([
@@ -45,9 +58,13 @@ class SubscriberTest extends AbstractController
     }
 
     /**
+     * Subscribe used email
+     *
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
      */
-    public function testNewActionUsedEmail()
+    public function testNewActionUsedEmail(): void
     {
         $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue([
@@ -63,9 +80,13 @@ class SubscriberTest extends AbstractController
     }
 
     /**
+     * Subscribe owner email
+     *
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
      */
-    public function testNewActionOwnerEmail()
+    public function testNewActionOwnerEmail(): void
     {
         $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue([
@@ -80,16 +101,34 @@ class SubscriberTest extends AbstractController
     }
 
     /**
+     * Subscribe with disabled newsletter config
+     *
+     * @magentoConfigFixture current_store newsletter/general/active 0
+     *
+     * @return void
+     */
+    public function testWithDisabledNewsletterOption(): void
+    {
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setPostValue([
+            'email' => 'customer@example.com',
+        ]);
+        $this->dispatch('newsletter/subscriber/new');
+
+        $this->assertSessionMessages($this->isEmpty());
+        $this->assertRedirect($this->stringContains('cms/noroute/index'));
+    }
+
+    /**
      * Login the user
      *
      * @param string $customerId Customer to mark as logged in for the session
      * @return void
      */
-    protected function login($customerId)
+    protected function login($customerId): void
     {
-        /** @var \Magento\Customer\Model\Session $session */
-        $session = Bootstrap::getObjectManager()
-            ->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $session */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $session->loginById($customerId);
     }
 }
