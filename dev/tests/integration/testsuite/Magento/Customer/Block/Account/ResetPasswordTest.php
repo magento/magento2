@@ -23,6 +23,10 @@ use PHPUnit\Framework\TestCase;
 class ResetPasswordTest extends TestCase
 {
     private const FORM_XPATH = "//form[contains(@action, '?token=%s')]";
+    private const SET_NEW_PASSWORD_BUTTON_XPATH = "//button/span[contains(text(),'Set a New Password')]";
+    private const NEW_PASSWORD_LABEL_XPATH = "//label[@for='password']/span[contains(text(), 'New Password')]";
+    private const PASSWORD_CONFIRMATION_LABEL_XPATH = "//label[@for='password-confirmation']"
+    . "/span[contains(text(), 'Confirm New Password')]";
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -58,9 +62,25 @@ class ResetPasswordTest extends TestCase
         $token = $this->random->getUniqueHash();
         $this->block->setResetPasswordLinkToken($token);
         $output = $this->block->toHtml();
-        $this->assertEquals(1, Xpath::getElementsCountForXpath(sprintf(self::FORM_XPATH, $token), $output));
-        $this->assertContains('New Password', $output);
-        $this->assertContains('Set a New Password', $output);
-        $this->assertContains('Confirm New Password', $output);
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(sprintf(self::FORM_XPATH, $token), $output),
+            'Form action does not include correct token'
+        );
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(self::NEW_PASSWORD_LABEL_XPATH, $output),
+            'New password label was not found on the page'
+        );
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(self::PASSWORD_CONFIRMATION_LABEL_XPATH, $output),
+            'Confirm password label was not found on the page'
+        );
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(self::SET_NEW_PASSWORD_BUTTON_XPATH, $output),
+            'Set password button was not found on the page'
+        );
     }
 }

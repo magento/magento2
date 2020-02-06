@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller;
 
-use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Math\Random;
@@ -37,14 +36,17 @@ class CreatePasswordTest extends AbstractController
     /** @var Random */
     private $random;
 
-    /** @var CustomerFactory */
-    private $customerFactory;
-
-    /** @var Customer */
-    private $customer;
-
     /** @var CustomerResource */
     private $customerResource;
+
+    /** @var CustomerRegistry */
+    private $customerRegistry;
+
+    /** @var WebsiteRepositoryInterface */
+    private $websiteRepository;
+
+    /** @var int */
+    private $customerId;
 
     /**
      * @inheritdoc
@@ -57,27 +59,38 @@ class CreatePasswordTest extends AbstractController
         $this->session = $this->objectManager->get(Session::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->random = $this->objectManager->get(Random::class);
-        $this->customerFactory = $this->objectManager->get(CustomerFactory::class);
-        $defaultWebsite = $this->objectManager->get(WebsiteRepositoryInterface::class)->get('base')->getId();
-        $this->customer = $this->customerFactory->create();
-        $this->customer->setWebsiteId($defaultWebsite);
         $this->customerResource = $this->objectManager->get(CustomerResource::class);
+        $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
+        $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->customerRegistry->remove($this->customerId);
+
+        parent::tearDown();
+    }
+
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_with_website.php
      *
      * @return void
      */
-    public function testCreatePassword()
+    public function testCreatePassword(): void
     {
-        $this->customer->loadByEmail('john.doe@magento.com');
+        $defaultWebsite = $this->websiteRepository->get('base')->getId();
+        $customer = $this->customerRegistry->retrieveByEmail('john.doe@magento.com', $defaultWebsite);
+        $this->customerId = $customer->getId();
         $token = $this->random->getUniqueHash();
-        $this->customer->changeResetPasswordLinkToken($token);
-        $this->customer->setData('confirmation', 'confirmation');
-        $this->customerResource->save($this->customer);
+        $customer->changeResetPasswordLinkToken($token);
+        $customer->setData('confirmation', 'confirmation');
+        $this->customerResource->save($customer);
         $this->session->setRpToken($token);
-        $this->session->setRpCustomerId($this->customer->getId());
+        $this->session->setRpCustomerId($customer->getId());
         $this->dispatch('customer/account/createPassword');
         $block = $this->layout->getBlock('resetPassword');
         $this->assertEquals($token, $block->getResetPasswordLinkToken());
