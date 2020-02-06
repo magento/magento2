@@ -1,4 +1,3 @@
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,9 +15,11 @@ define([
             navigator;
 
         beforeEach(function () {
-            $(document.body).append(htmlContainer);
             widget = new Cookie();
             navigator = window.navigator;
+            $('.modal-popup').remove();
+            $('#cookie-status').remove();
+            $(document.body).append(htmlContainer);
         });
 
         afterEach(function () {
