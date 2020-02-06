@@ -406,11 +406,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
 
-        if ($this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '') {
-            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
-            $result = true;
-        }
-
         $result = $result ?? $this->isTitle($linkData);
 
         foreach ($linkData as $link) {
