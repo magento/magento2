@@ -28,6 +28,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  */
 class Redirect
 {
+
     /** URL to redirect user on successful login or registration */
     const LOGIN_REDIRECT_URL = 'login_redirect';
 
