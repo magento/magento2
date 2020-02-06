@@ -37,7 +37,7 @@
         </actionGroup>
 
         <!--Verify deleted store view not present in grid and verify AssertStoreNotInGrid Message-->
-        <actionGroup ref="AssertStoreViewNotInGrid" stepKey="verifyDeletedStoreViewNotInGrid">
+        <actionGroup ref="AssertStoreViewNotInGridActionGroup" stepKey="verifyDeletedStoreViewNotInGrid">
             <argument name="storeViewName" value="{{storeViewData.name}}"/>
         </actionGroup>
 

@@ -26,7 +26,7 @@
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
@@ -34,7 +34,7 @@
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront2">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefront2">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
     </test>

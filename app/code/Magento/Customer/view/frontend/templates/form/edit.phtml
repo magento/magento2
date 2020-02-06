@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="field confirm password required" data-container="confirm-password">
+        <div class="field confirmation password required" data-container="confirm-password">
             <label class="label" for="password-confirmation"><span><?= $block->escapeHtml(__('Confirm New Password')) ?></span></label>
             <div class="control">
                 <input type="password" class="input-text" name="password_confirmation" id="password-confirmation"
@@ -93,7 +93,7 @@
     ], function($){
         var dataForm = $('#form-validate');
         var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
-        
+
         dataForm.mage('validation', {
         <?php if ($_dob->isEnabled()) : ?>
             errorPlacement: function(error, element) {

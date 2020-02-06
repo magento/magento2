@@ -98,8 +98,6 @@ class Image implements ProductRenderCollectorInterface
     }
 
     /**
-     * In order to allow to use image generation using Services, we need to emulate area code and store code
-     *
      * @inheritdoc
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
@@ -107,6 +105,7 @@ class Image implements ProductRenderCollectorInterface
         $images = [];
         /** @var ThemeInterface $currentTheme */
         $currentTheme = $this->design->getDesignTheme();
+        $this->design->setDesignTheme($currentTheme);
 
         foreach ($this->imageCodes as $imageCode) {
             /** @var ImageInterface $image */
@@ -119,23 +118,18 @@ class Image implements ProductRenderCollectorInterface
                     [$product, $imageCode, (int) $productRender->getStoreId(), $image]
                 );
 
-            try {
-                $resizedInfo = $helper->getResizedImageInfo();
-            } catch (NotLoadInfoImageException $exception) {
-                $resizedInfo = [$helper->getWidth(), $helper->getHeight()];
-            }
-
             $image->setCode($imageCode);
-            $image->setHeight($helper->getHeight());
-            $image->setWidth($helper->getWidth());
+            $height = $helper->getHeight();
+            $image->setHeight($height);
+            $width = $helper->getWidth();
+            $image->setWidth($width);
             $image->setLabel($helper->getLabel());
-            $image->setResizedHeight($resizedInfo[1]);
-            $image->setResizedWidth($resizedInfo[0]);
+            $image->setResizedHeight($height);
+            $image->setResizedWidth($width);
 
             $images[] = $image;
         }
 
-        $this->design->setDesignTheme($currentTheme);
         $productRender->setImages($images);
     }
 
