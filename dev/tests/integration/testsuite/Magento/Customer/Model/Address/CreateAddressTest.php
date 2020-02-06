@@ -15,7 +15,7 @@ use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address;
 use Magento\Framework\Exception\InputException;
-use Magento\TestFramework\Directory\Model\GetRegionId;
+use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -49,9 +49,9 @@ class CreateAddressTest extends TestCase
     private $objectManager;
 
     /**
-     * @var GetRegionId
+     * @var GetRegionIdByName
      */
-    private $getRegionId;
+    private $getRegionIdByName;
 
     /**
      * @var AddressInterfaceFactory
@@ -94,7 +94,7 @@ class CreateAddressTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->getRegionId = $this->objectManager->get(GetRegionId::class);
+        $this->getRegionIdByName = $this->objectManager->get(GetRegionIdByName::class);
         $this->addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
         $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
         $this->addressResource = $this->objectManager->get(Address::class);
@@ -177,7 +177,7 @@ class CreateAddressTest extends TestCase
     public function testAddressCreatedWithProperData(array $addressData, array $expectedData): void
     {
         if (isset($expectedData['custom_region_name'])) {
-            $expectedData[AddressInterface::REGION_ID] = $this->getRegionId->execute(
+            $expectedData[AddressInterface::REGION_ID] = $this->getRegionIdByName->execute(
                 $expectedData['custom_region_name'],
                 $expectedData[AddressInterface::COUNTRY_ID]
             );
@@ -346,7 +346,7 @@ class CreateAddressTest extends TestCase
         bool $isDefaultBilling = false
     ): AddressInterface {
         if (isset($addressData['custom_region_name'])) {
-            $addressData[AddressInterface::REGION_ID] = $this->getRegionId->execute(
+            $addressData[AddressInterface::REGION_ID] = $this->getRegionIdByName->execute(
                 $addressData['custom_region_name'],
                 $addressData[AddressInterface::COUNTRY_ID]
             );

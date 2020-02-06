@@ -12,7 +12,7 @@ use Magento\Directory\Model\RegionFactory;
 /**
  * Return region ID by region default name and country code.
  */
-class GetRegionId
+class GetRegionIdByName
 {
     /**
      * @var RegionFactory
