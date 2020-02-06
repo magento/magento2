@@ -105,7 +105,7 @@ class Redirect
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieMetadataFactory $cookieMetadataFactory,
         HostChecker $hostChecker = null
     ) {
         $this->request = $request;
