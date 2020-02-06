@@ -30,7 +30,6 @@ define([
         });
 
         it('verify that modal does not shows when cookies are supported', function () {
-            expect($.fn.cookieStatus).toBeDefined();
             window.navigator = {
                 cookieEnabled: true
             };
@@ -39,7 +38,6 @@ define([
         });
 
         it('shows the modal when cookies are not supported', function () {
-            expect($.fn.cookieStatus).toBeDefined();
             window.navigator = {
                 cookieEnabled: false
             };
