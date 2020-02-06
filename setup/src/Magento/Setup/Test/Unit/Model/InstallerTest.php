@@ -383,6 +383,7 @@ namespace Magento\Setup\Test\Unit\Model {
 
         /**
          * @return array
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function installDataProvider()
         {
@@ -411,21 +412,20 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([],true)],
+                        [print_r([], true)],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
                         ['Current status:'],
-                        [print_r([],true)],
+                        [print_r([], true)],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        //['Installing admin user...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([],true)],
+                        [print_r([], true)],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
@@ -463,12 +463,12 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([],true)],
+                        [print_r([], true)],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
                         ['Current status:'],
-                        [print_r([],true)],
+                        [print_r([], true)],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
@@ -476,7 +476,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Bar_Two\':'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([],true)],
+                        [print_r([], true)],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
