@@ -19,7 +19,7 @@ class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
     /**
      * Content-Security-Policy header value
      */
-    const HEADER_VALUE = 'upgrade-insecure-requests;';
+    const HEADER_VALUE = 'upgrade-insecure-requests';
 
     /**
      * @var UpgradeInsecure
