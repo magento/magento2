@@ -25,8 +25,8 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
-            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <deleteData createDataKey="categoryEntity" stepKey="deleteSimpleSubCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="virtualProductGeneralGroup"/>
             </actionGroup>
@@ -50,7 +50,7 @@
             <argument name="amount" value="{{tierPriceOnGeneralGroup.price}}"/>
         </actionGroup>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="doneAdvancedPricingModal"/>
-        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{virtualProductGeneralGroup.productTaxClass}}" stepKey="selectProductStockClass"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{virtualProductGeneralGroup.productTaxClass}}" stepKey="selectProductTaxClass"/>
         <actionGroup ref="SetCategoryByNameActionGroup" stepKey="setNewCategory">
             <argument name="categoryName" value="$categoryEntity.name$"/>
         </actionGroup>
@@ -61,7 +61,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAndCheckSuccessMessage"/>
 
         <!-- Search created virtual product(from above steps) in the grid -->
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForVirtualProduct">
             <argument name="product" value="virtualProductGeneralGroup"/>
         </actionGroup>
 
