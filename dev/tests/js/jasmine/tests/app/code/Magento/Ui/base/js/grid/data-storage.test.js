@@ -225,7 +225,7 @@ define([
                 expect(model.getRequest).toHaveBeenCalled();
             });
 
-            it('Return "getRequestData" method', function () {
+            it('it returns cached request data if a cached request exists and no refresh option is provided', function () {
                 var params = {
                     namespace: 'magento',
                     search: '',
@@ -247,7 +247,7 @@ define([
                 expect(model.getRequestData).toHaveBeenCalled();
             });
 
-            it('Return "requestData" method', function () {
+            it('if refresh option is true so it will ignore cache and execute the requestData function', function () {
                 var params = {
                         namespace: 'magento',
                         search: '',
