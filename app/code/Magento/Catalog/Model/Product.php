@@ -2404,7 +2404,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
      */
-    public function __toArray()
+    public function __toArray() //phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
     {
         $data = $this->_data;
         $hasToArray = function ($model) {
