@@ -54,7 +54,7 @@
         <comment userInput="Add product to the shopping cart" stepKey="addProductToCart"/>
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <!--Go to Checkout-->
@@ -76,7 +76,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Search for Order in the order grid -->
         <comment userInput="Search for Order in the order grid" stepKey="searchOrderInGrid"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchingOrder"/>

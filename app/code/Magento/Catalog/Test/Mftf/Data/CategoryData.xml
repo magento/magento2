@@ -117,4 +117,14 @@
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
     </entity>
+    <entity name="DefaultCategory" type="category">
+        <data key="name">Default Category</data>
+    </entity>
+    <!-- Category from file "export_import_configurable_product.csv" -->
+    <entity name="CategoryExportImport" extends="SimpleSubCategory" type="category">
+        <data key="name">CategoryExportImport</data>
+    </entity>
+    <entity name="SubCategoryNonAnchor" extends="SubCategoryWithParent">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
+    </entity>
 </entities>

@@ -54,7 +54,7 @@
         <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
 
         <!-- 2. Fill fields for registration, set password and unselect the Remember Me checkbox-->
-        <actionGroup ref="StorefrontCreateCustomerOnRegisterPageDoNotRememberMe" stepKey="registrationJohnSmithCustomer">
+        <actionGroup ref="StorefrontCreateCustomerOnRegisterPageDoNotRememberMeActionGroup" stepKey="registrationJohnSmithCustomer">
             <argument name="Customer" value="John_Smith_Customer"/>
         </actionGroup>
         <!--Check customer name and last name in welcome message-->
@@ -64,10 +64,10 @@
         </actionGroup>
 
         <!-- 3. Put Simple Product 1 into Shopping Cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimple1ProductToCartForJohnSmithCustomer">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple1ProductToCartForJohnSmithCustomer">
             <argument name="product" value="$$createSimple1$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple1InMiniCartForJohnSmithCustomer">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnSmithCustomer">
             <argument name="productName" value="$$createSimple1.name$$"/>
         </actionGroup>
 
@@ -79,11 +79,11 @@
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageNotPresentActionGroup" stepKey="dontSeeWelcomeJohnSmithCustomerNotYouMessage">
             <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>
         </actionGroup>
-        <actionGroup ref="assertMiniCartEmpty" stepKey="assertMiniCartEmptyAfterJohnSmithSignOut" />
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmptyAfterJohnSmithSignOut" />
 
         <!-- 5. Click the Create an Account link again and fill fields for registration of another customer, set password and check the Remember Me checkbox  -->
         <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnCustomerAccountCreatePage"/>
-        <actionGroup ref="StorefrontRegisterCustomerRememberMe" stepKey="registrationJohnDoeCustomer">
+        <actionGroup ref="StorefrontRegisterCustomerRememberMeActionGroup" stepKey="registrationJohnDoeCustomer">
             <argument name="Customer" value="Simple_Customer_Without_Address"/>
         </actionGroup>
         <!--Check customer name and last name in welcome message-->
@@ -92,11 +92,11 @@
             <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
         </actionGroup>
         <!-- 6. Add Simple Product 1 to Shopping Cart  -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimple1ProductToCartForJohnDoeCustomer">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple1ProductToCartForJohnDoeCustomer">
             <argument name="product" value="$$createSimple1$$"/>
         </actionGroup>
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="1" stepKey="miniCartContainsOneProductForJohnDoeCustomer"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple1InMiniCartForJohnDoeCustomer">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnDoeCustomer">
             <argument name="productName" value="$$createSimple1.name$$"/>
         </actionGroup>
 
@@ -110,22 +110,22 @@
         <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessageOnHomePage"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitForCartCounterVisible"/>
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="1" stepKey="miniCartContainsOneProductForGuest"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple1InMiniCartForGuestCustomer">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForGuestCustomer">
             <argument name="productName" value="$$createSimple1.name$$"/>
         </actionGroup>
 
         <!-- 8. Go to Shopping Cart and verify Simple Product 1 is present there  -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCart" />
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCart" />
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="$$createSimple1.name$$" stepKey="checkSimple1InShoppingCart"/>
 
         <!-- 9. Add Simple Product 2 to Shopping Cart  -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimple2ProductToCartForGuest">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple2ProductToCartForGuest">
             <argument name="product" value="$$createSimple2$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple1InMiniCartForGuestCustomerSecondTime">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForGuestCustomerSecondTime">
             <argument name="productName" value="$$createSimple1.name$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple2InMiniCartForGuestCustomer">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple2InMiniCartForGuestCustomer">
             <argument name="productName" value="$$createSimple2.name$$"/>
         </actionGroup>
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="2" stepKey="miniCartContainsTwoProductForGuest"/>
@@ -140,10 +140,10 @@
             <argument name="Customer" value="Simple_Customer_Without_Address"/>
         </actionGroup>
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="2" stepKey="miniCartContainsTwoProductForJohnDoeCustomer"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple1InMiniCartForJohnDoeCustomerSecondTime">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnDoeCustomerSecondTime">
             <argument name="productName" value="$$createSimple1.name$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="checkSimple2InMiniCartForJohnDoeCustomer">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple2InMiniCartForJohnDoeCustomer">
             <argument name="productName" value="$$createSimple2.name$$"/>
         </actionGroup>
 
@@ -154,6 +154,6 @@
         <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadMainContentMessageOnHomePage"/>
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickOnNotYouLink" />
         <waitForPageLoad stepKey="waitForCustomerLoginPageLoad"/>
-        <actionGroup ref="assertMiniCartEmpty" stepKey="assertMiniCartEmptyAfterJohnDoeSignOut" />
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmptyAfterJohnDoeSignOut" />
     </test>
 </tests>

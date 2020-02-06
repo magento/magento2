@@ -6,12 +6,15 @@
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\ImportExport\Model\Import;
 
 /**
- * Controller responsible for initiating the import process
+ * Controller responsible for initiating the import process.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
@@ -26,24 +29,34 @@ class Start extends ImportResultController implements HttpPostActionInterface
     private $exceptionMessageFactory;
 
     /**
+     * @var Import\ImageDirectoryBaseProvider
+     */
+    private $imagesDirProvider;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
-     * @param \Magento\ImportExport\Model\Import $importModel
+     * @param Import $importModel
      * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+     * @param Import\ImageDirectoryBaseProvider|null $imageDirectoryBaseProvider
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
         \Magento\ImportExport\Model\History $historyModel,
         \Magento\ImportExport\Helper\Report $reportHelper,
-        \Magento\ImportExport\Model\Import $importModel,
-        \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+        Import $importModel,
+        \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory,
+        ?Import\ImageDirectoryBaseProvider $imageDirectoryBaseProvider = null
     ) {
         parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
+
         $this->importModel = $importModel;
         $this->exceptionMessageFactory = $exceptionMessageFactory;
+        $this->imagesDirProvider = $imageDirectoryBaseProvider
+            ?? ObjectManager::getInstance()->get(Import\ImageDirectoryBaseProvider::class);
     }
 
     /**
@@ -66,6 +79,8 @@ class Start extends ImportResultController implements HttpPostActionInterface
                 ->addAction('hide', ['edit_form', 'upload_button', 'messages']);
 
             $this->importModel->setData($data);
+            //Images can be read only from given directory.
+            $this->importModel->setData('images_base_directory', $this->imagesDirProvider->getDirectory());
             $errorAggregator = $this->importModel->getErrorAggregator();
             $errorAggregator->initValidationStrategy(
                 $this->importModel->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),

@@ -539,3 +539,4 @@ Addresses,Addresses
 "Prefix","Prefix"
 "Middle Name/Initial","Middle Name/Initial"
 "Suffix","Suffix"
+"The Date of Birth should not be greater than today.","The Date of Birth should not be greater than today."

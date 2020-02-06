@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -21,7 +23,7 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 class Customer extends AbstractCustomer
 {
     /**
-     * Attribute collection name
+     * Collection name attribute
      */
     const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
@@ -406,7 +408,7 @@ class Customer extends AbstractCustomer
             $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
 
-        $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
+        $emailInLowercase = strtolower(trim($rowData[self::COLUMN_EMAIL]));
         $newCustomer = false;
         $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
         if (!$entityId) {
@@ -476,6 +478,8 @@ class Customer extends AbstractCustomer
             $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             if (!empty($rowData[self::COLUMN_STORE])) {
                 $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            } else {
+                $entityRow['store_id'] = $this->getCustomerStoreId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
             }
             $entitiesToUpdate[] = $entityRow;
         }
@@ -519,8 +523,10 @@ class Customer extends AbstractCustomer
                     );
                 } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
                     $processedData = $this->_prepareDataForUpdate($rowData);
+                    // phpcs:disable Magento2.Performance.ForeachArrayMerge
                     $entitiesToCreate = array_merge($entitiesToCreate, $processedData[self::ENTITIES_TO_CREATE_KEY]);
                     $entitiesToUpdate = array_merge($entitiesToUpdate, $processedData[self::ENTITIES_TO_UPDATE_KEY]);
+                    // phpcs:enable
                     foreach ($processedData[self::ATTRIBUTES_TO_SAVE_KEY] as $tableName => $customerAttributes) {
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = [];
@@ -598,14 +604,18 @@ class Customer extends AbstractCustomer
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
                 $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
+                    = isset($rowData[$attributeCode]) && '' === trim((string)$rowData[$attributeCode]);
 
                 if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
 
-                if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
+                    if ($attributeParams['type'] == 'select') {
+                        continue;
+                    }
+
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,
@@ -657,5 +667,23 @@ class Customer extends AbstractCustomer
                 $this->customerFields
             )
         );
+    }
+
+    /**
+     * Get customer store ID by email and website ID.
+     *
+     * @param string $email
+     * @param string $websiteCode
+     * @return bool|int
+     */
+    private function getCustomerStoreId(string $email, string $websiteCode)
+    {
+        $websiteId = (int) $this->getWebsiteId($websiteCode);
+        $storeId = $this->getCustomerStorage()->getCustomerStoreId($email, $websiteId);
+        if ($storeId === null || $storeId === false) {
+            $defaultStore = $this->_storeManager->getWebsite($websiteId)->getDefaultStore();
+            $storeId = $defaultStore ? $defaultStore->getId() : \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        }
+        return $storeId;
     }
 }

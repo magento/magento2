@@ -15,7 +15,7 @@
         <arguments>
             <argument name="customer"/>
         </arguments>
-        
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
@@ -26,7 +26,7 @@
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
     </actionGroup>
-    
+
     <actionGroup name="OpenEditCustomerAddressFromAdminActionGroup">
         <annotations>
             <description>Filters the Admin Customers Addresses based on the provided Address. Clicks on Edit.</description>
@@ -34,7 +34,7 @@
         <arguments>
             <argument name="address"/>
         </arguments>
-        
+
         <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="openAddressesTab"/>
         <waitForElementVisible selector="{{AdminCustomerAddressFiltersSection.filtersButton}}" stepKey="waitForComponentLoad"/>
         <click selector="{{AdminCustomerAddressFiltersSection.filtersButton}}" stepKey="openAddressesFilter"/>
@@ -67,7 +67,7 @@
         <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
         <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
     </actionGroup>
 
     <actionGroup name="AdminClearCustomersFiltersActionGroup">

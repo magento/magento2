@@ -170,7 +170,7 @@ class NewShippingTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'shipping_address_exists' => ['*/checkout/addresses', 'shipping_address', 'back/address'],
-            'shipping_address_not_exist' => ['*/cart/', null, 'back/cart']
+            'shipping_address_not_exist' => ['checkout/cart/', null, 'back/cart']
         ];
     }
 

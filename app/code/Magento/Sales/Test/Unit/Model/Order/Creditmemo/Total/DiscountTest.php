@@ -6,9 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
-/**
- * Class DiscountTest
- */
 class DiscountTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,6 +33,11 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderItemMock;
 
+    /**
+     * @var \Magento\Tax\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $taxConfig;
+
     protected function setUp()
     {
         $this->orderMock = $this->createPartialMock(
@@ -54,7 +56,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
                 'setBaseDiscountAmount', 'isLast'
             ]);
-        $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount();
+        $this->taxConfig = $this->createMock(\Magento\Tax\Model\Config::class);
+
+        $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount($this->taxConfig);
     }
 
     public function testCollect()
@@ -74,7 +78,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getBaseShippingDiscountAmount')
             ->willReturn(1);
-        $this->orderMock->expects($this->exactly(3))
+        $this->orderMock->expects($this->exactly(2))
             ->method('getBaseShippingAmount')
             ->willReturn(1);
         $this->orderMock->expects($this->once())
@@ -150,7 +154,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getBaseShippingDiscountAmount')
             ->willReturn(1);
-        $this->orderMock->expects($this->exactly(3))
+        $this->orderMock->expects($this->exactly(2))
             ->method('getBaseShippingAmount')
             ->willReturn(1);
         $this->orderMock->expects($this->once())

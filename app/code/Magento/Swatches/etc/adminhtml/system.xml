@@ -17,6 +17,10 @@
                     <label>Show Swatches in Product List</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="show_swatch_tooltip" translate="label" type="select" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Swatch Tooltip</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>

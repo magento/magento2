@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateShippingTrackingNumberTest">
+        <annotations>
+            <stories value="Admin validate the shipping tracking number for an order"/>
+            <title value="Admin validate the shipping tracking number for an order"/>
+            <description value="Testing for a required tracking number when adding new shipping information"/>
+            <severity value="CRITICAL"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="CreateOrderActionGroup" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="createShipmentForOrder"/>
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGrid"/>
+        <actionGroup ref="AdminAddTrackingNumberToShipmentActionGroup" stepKey="addTrackingInformation">
+            <argument name="trackingNumber" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTrackingValidationErrorActionGroup" stepKey="assertValidateTrackingNumber">
+            <argument name="inputName" value="tracking_number"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTrackingNumberToShipmentActionGroup" stepKey="addTrackingNumber">
+            <argument name="trackingNumber" value="123123"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertExistingTrackingNumberActionGroup" stepKey="checkAddedTrackingNumber">
+            <argument name="trackingNumber" value="123123"/>
+        </actionGroup>
+    </test>
+</tests>

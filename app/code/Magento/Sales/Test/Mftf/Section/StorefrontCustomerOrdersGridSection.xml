@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerOrdersGridSection">
         <element name="orderView" type="button" selector="//td[text()='{{orderNumber}}']/following-sibling::td[@class='col actions']/a[contains(@class, 'view')]" parameterized="true" />
+        <element name="reorderBtn" type="button" selector="//td[text()='{{orderNumber}}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" parameterized="true" />
     </section>
 </sections>

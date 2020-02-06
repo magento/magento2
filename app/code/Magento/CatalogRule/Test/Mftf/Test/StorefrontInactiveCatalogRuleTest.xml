@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-79"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="MC-30384"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -24,11 +27,16 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
-            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
-            <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="Inactive" stepKey="setInactive"/>
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click stepKey="setInactive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>

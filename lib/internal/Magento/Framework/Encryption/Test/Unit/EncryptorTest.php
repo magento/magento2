@@ -135,8 +135,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider validateHashDataProvider
      */
-    public function testValidateHash($password, $hash, $expected): void
+    public function testValidateHash($password, $hash, $expected, int $requiresVersion): void
     {
+        if ($requiresVersion > $this->encryptor->getLatestHashVersion()) {
+            $this->markTestSkipped('On current installation encryptor does not support algo #' .$requiresVersion);
+        }
         $actual = $this->encryptor->validateHash($password, $hash);
         $this->assertEquals($expected, $actual);
     }
@@ -149,9 +152,14 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function validateHashDataProvider(): array
     {
         return [
-            ['password', 'hash:salt:1', false],
-            ['password', '67a1e09bb1f83f5007dc119c14d663aa:salt:0', true],
-            ['password', '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1', true],
+            ['password', 'hash:salt:1', false, 1],
+            ['password', '67a1e09bb1f83f5007dc119c14d663aa:salt:0', true, 0],
+            ['password', '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1', true, 1],
+            //Hashes after customer:hash:upgrade command issued
+            //Upgraded from version #1 to #2
+            ['password', 'c6aad9e058f6c4b06187c06d2b69bf506a786af030f81fb6d83778422a68205e:salt:1:2', true, 2],
+            //From #0 to #1
+            ['password', '3b68ca4706cbae291455e4340478076c1e1618e742b6144cfcc3e50f648903e4:salt:0:1', true, 1]
         ];
     }
 

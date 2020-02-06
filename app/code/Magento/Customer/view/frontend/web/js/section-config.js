@@ -6,7 +6,7 @@
 define(['underscore'], function (_) {
     'use strict';
 
-    var baseUrls, sections, clientSideSections, canonize;
+    var baseUrls, sections, clientSideSections, sectionNames, canonize;
 
     /**
      * @param {String} url
@@ -71,6 +71,15 @@ define(['underscore'], function (_) {
         },
 
         /**
+         * Returns array of section names.
+         *
+         * @returns {Array}
+         */
+        getSectionNames: function () {
+            return sectionNames;
+        },
+
+        /**
          * @param {Object} options
          * @constructor
          */
@@ -78,6 +87,7 @@ define(['underscore'], function (_) {
             baseUrls = options.baseUrls;
             sections = options.sections;
             clientSideSections = options.clientSideSections;
+            sectionNames = options.sectionNames;
         }
     };
 });
