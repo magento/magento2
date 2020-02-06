@@ -3,16 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
+/**
+ * Controller create order.
+ */
+class Reorder extends Create implements HttpPostActionInterface
 {
     /**
      * @var UnavailableProductsProvider
@@ -31,8 +43,8 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\Escaper $escaper
+     * @param Product $productHelper
+     * @param Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param UnavailableProductsProvider $unavailableProductsProvider
@@ -41,8 +53,8 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Framework\Escaper $escaper,
+        Product $productHelper,
+        Escaper $escaper,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         UnavailableProductsProvider $unavailableProductsProvider,
@@ -62,19 +74,21 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
+     * Adminhtml controller create order.
+     *
+     * @return Forward|Redirect
      */
     public function execute()
     {
         $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
-        /** @var \Magento\Sales\Model\Order $order */
+        /** @var Order $order */
         $order = $this->orderRepository->get($orderId);
         if (!$this->reorderHelper->canReorder($order->getEntityId())) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!$order->getId()) {
             $resultRedirect->setPath('sales/order/');
@@ -90,7 +104,7 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
             }
             $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } else {
-            try {                
+            try {
                 $order->setReordered(true);
                 $this->_getSession()->setUseOldShippingMethod(true);
                 $this->_getOrderCreateModel()->initFromOrder($order);
