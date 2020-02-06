@@ -1261,7 +1261,7 @@ class Installer
     }
 
     /**
-     * Enable or disable caches for specific types
+     * Enable or disable caches for specific types that are available
      *
      * If no types are specified then it will enable or disable all available types
      * Note this is called by install() via callback.
@@ -1275,9 +1275,10 @@ class Installer
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
 
-        $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
+        $availableTypes = $cacheManager->getAvailableTypes();
+        $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
         $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
-        if($isEnabled){
+        if ($isEnabled) {
             $cacheManager->clean($enabledTypes);
         }
 
