@@ -7,7 +7,7 @@
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateImageContent" dataType="ImageContent" type="create">
         <field key="base64_encoded_data" required="true">string</field>
         <field key="type" required="true">string</field>

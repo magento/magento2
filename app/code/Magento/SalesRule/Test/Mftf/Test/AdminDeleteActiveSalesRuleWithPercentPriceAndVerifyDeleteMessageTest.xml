@@ -22,7 +22,7 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create active cart price rule-->
-            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCode" stepKey="createActiveCartPriceRule">
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createActiveCartPriceRule">
                 <argument name="ruleName" value="ActiveSalesRuleWithPercentPriceDiscountCoupon"/>
                 <argument name="couponCode" value="ActiveSalesRuleWithPercentPriceDiscountCoupon.coupon_code"/>
             </actionGroup>

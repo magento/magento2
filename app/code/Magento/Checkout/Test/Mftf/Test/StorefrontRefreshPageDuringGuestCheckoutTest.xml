@@ -41,7 +41,7 @@
         </actionGroup>
 
         <!-- Go to Checkout page -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
         <waitForPageLoad stepKey="waitForProceedToCheckout"/>
 

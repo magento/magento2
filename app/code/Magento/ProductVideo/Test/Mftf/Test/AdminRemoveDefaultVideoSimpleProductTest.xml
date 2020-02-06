@@ -22,15 +22,15 @@
         </after>
 
         <!-- Add product video -->
-        <actionGroup ref="addProductVideo" stepKey="addProductVideo" after="fillMainProductForm"/>
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo" after="fillMainProductForm"/>
 
         <!-- Remove product video -->
-        <actionGroup ref="removeProductVideo" stepKey="removeProductVideo" after="saveProductForm"/>
+        <actionGroup ref="RemoveProductVideoActionGroup" stepKey="removeProductVideo" after="saveProductForm"/>
 
         <!-- Assert product video not in admin product form -->
-        <actionGroup ref="assertProductVideoNotInAdminProductPage" stepKey="assertProductVideoNotInAdminProductPage" after="saveProductFormAfterRemove"/>
+        <actionGroup ref="AssertProductVideoNotInAdminProductPageActionGroup" stepKey="assertProductVideoNotInAdminProductPage" after="saveProductFormAfterRemove"/>
 
         <!-- Assert product video not in storefront product page -->
-        <actionGroup ref="assertProductVideoNotInStorefrontProductPage" stepKey="assertProductVideoNotInStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
+        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoNotInStorefrontProductPage" after="AssertProductInStorefrontProductPage"/>
     </test>
 </tests>

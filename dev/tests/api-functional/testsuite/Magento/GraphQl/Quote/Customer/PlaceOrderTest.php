@@ -105,26 +105,6 @@ class PlaceOrderTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Field PlaceOrderInput.cart_id of required type String! was not provided.
-     */
-    public function testPlaceOrderIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  placeOrder(input: {}) {
-    order {
-      order_number
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      */
     public function testPlaceOrderWithNoItemsInCart()
