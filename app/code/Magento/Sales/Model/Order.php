@@ -1326,7 +1326,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getShippingMethod($asObject = false)
     {
-        $shippingMethod = parent::getShippingMethod();
+        $shippingMethod = $this->getData('shipping_method');
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
