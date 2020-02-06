@@ -164,7 +164,7 @@ class CreateAddressTest extends TestCase
     }
 
     /**
-     * Assert that address created successfully or proper error message has thrown.
+     * Assert that address created successfully.
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
@@ -172,14 +172,10 @@ class CreateAddressTest extends TestCase
      *
      * @param array $addressData
      * @param array $expectedData
-     * @param \Exception|null $expectException
      * @return void
      */
-    public function testAddressCreatedWithProperData(
-        array $addressData,
-        array $expectedData,
-        ?\Exception $expectException
-    ): void {
+    public function testAddressCreatedWithProperData(array $addressData, array $expectedData): void
+    {
         if (isset($expectedData['custom_region_name'])) {
             $expectedData[AddressInterface::REGION_ID] = $this->getRegionId->execute(
                 $expectedData['custom_region_name'],
@@ -188,10 +184,6 @@ class CreateAddressTest extends TestCase
             unset($expectedData['custom_region_name']);
         }
         $customer = $this->customerRepository->get('customer5@example.com');
-        if (null !== $expectException) {
-            $this->expectExceptionObject($expectException);
-        }
-
         $createdAddressData = $this->createAddress((int)$customer->getId(), $addressData)->__toArray();
         foreach ($expectedData as $fieldCode => $expectedValue) {
             $this->assertTrue(isset($createdAddressData[$fieldCode]), "Field $fieldCode wasn't found.");
@@ -200,9 +192,7 @@ class CreateAddressTest extends TestCase
     }
 
     /**
-     * Data provider for create address with proper data or with error.
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * Data provider for create address with proper data.
      *
      * @return array
      */
@@ -221,17 +211,6 @@ class CreateAddressTest extends TestCase
                     AddressInterface::STREET => ['Green str, 67'],
                     AddressInterface::CITY => 'CityM',
                 ],
-                null,
-            ],
-            'required_field_empty_telephone' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::TELEPHONE => '']),
-                [],
-                InputException::requiredField('telephone'),
-            ],
-            'required_field_empty_postcode_for_us' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::POSTCODE => '']),
-                [],
-                InputException::requiredField('postcode'),
             ],
             'required_field_empty_postcode_for_uk' => [
                 array_replace(
@@ -242,14 +221,7 @@ class CreateAddressTest extends TestCase
                     AddressInterface::COUNTRY_ID => 'GB',
                     AddressInterface::POSTCODE => null,
                 ],
-                null,
             ],
-// TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
-//            'required_field_empty_region_id_for_us' => [
-//                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::REGION_ID => '']),
-//                [],
-//                InputException::requiredField('regionId'),
-//            ],
             'required_field_empty_region_id_for_ua' => [
                 array_replace(
                     self::STATIC_CUSTOMER_ADDRESS_DATA,
@@ -263,67 +235,96 @@ class CreateAddressTest extends TestCase
                         'region_id' => 0,
                     ],
                 ],
-                null,
-            ],
-            'required_field_empty_firstname' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::FIRSTNAME => '']),
-                [],
-                InputException::requiredField('firstname'),
-            ],
-            'required_field_empty_lastname' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::LASTNAME => '']),
-                [],
-                InputException::requiredField('lastname'),
-            ],
-            'required_field_empty_street_as_string' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => '']),
-                [],
-                InputException::requiredField('street'),
-            ],
-            'required_field_empty_street_as_array' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => []]),
-                [],
-                InputException::requiredField('street'),
             ],
             'required_field_street_as_array' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => ['', 'Green str, 67']]),
                 [AddressInterface::STREET => ['Green str, 67']],
-                null
-            ],
-            'required_field_empty_city' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::CITY => '']),
-                [],
-                InputException::requiredField('city'),
             ],
             'field_name_prefix' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::PREFIX => 'My prefix']),
                 [AddressInterface::PREFIX => 'My prefix'],
-                null,
             ],
             'field_middle_name_initial' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::MIDDLENAME => 'My middle name']),
                 [AddressInterface::MIDDLENAME => 'My middle name'],
-                null,
             ],
             'field_name_suffix' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::SUFFIX => 'My suffix']),
                 [AddressInterface::SUFFIX => 'My suffix'],
-                null,
             ],
             'field_company_name' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::COMPANY => 'My company']),
                 [AddressInterface::COMPANY => 'My company'],
-                null,
             ],
             'field_vat_number' => [
                 array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::VAT_ID => 'My VAT number']),
                 [AddressInterface::VAT_ID => 'My VAT number'],
-                null,
+            ],
+        ];
+    }
+
+    /**
+     * Assert that proper error message has thrown if address creating with wrong data.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     *
+     * @dataProvider createWrongAddressesDataProvider
+     *
+     * @param array $addressData
+     * @param \Exception $expectException
+     * @return void
+     */
+    public function testExceptionThrownDuringCreateAddress(array $addressData, \Exception $expectException): void
+    {
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->expectExceptionObject($expectException);
+        $this->createAddress((int)$customer->getId(), $addressData);
+    }
+
+    /**
+     * Data provider for create address with wrong data.
+     *
+     * @return array
+     */
+    public function createWrongAddressesDataProvider(): array
+    {
+        return [
+            'required_field_empty_telephone' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::TELEPHONE => '']),
+                InputException::requiredField('telephone'),
+            ],
+            'required_field_empty_postcode_for_us' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::POSTCODE => '']),
+                InputException::requiredField('postcode'),
+            ],
+// TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
+//            'required_field_empty_region_id_for_us' => [
+//                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::REGION_ID => '']),
+//                InputException::requiredField('regionId'),
+//            ],
+            'required_field_empty_firstname' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::FIRSTNAME => '']),
+                InputException::requiredField('firstname'),
+            ],
+            'required_field_empty_lastname' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::LASTNAME => '']),
+                InputException::requiredField('lastname'),
+            ],
+            'required_field_empty_street_as_string' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => '']),
+                InputException::requiredField('street'),
+            ],
+            'required_field_empty_street_as_array' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => []]),
+                InputException::requiredField('street'),
+            ],
+            'required_field_empty_city' => [
+                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::CITY => '']),
+                InputException::requiredField('city'),
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
 //            'field_invalid_vat_number' => [
 //                array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::VAT_ID => '/>.<*']),
-//                [],
 //                null// It need to create some error but currently magento doesn't has validation for this field.,
 //            ],
         ];

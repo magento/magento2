@@ -65,26 +65,28 @@ class DeleteAddressTest extends TestCase
     public function testDeleteDefaultAddress(): void
     {
         $customer = $this->customerRepository->get('customer@example.com');
-        $address = $this->addressRepository->getById(1);
         $this->assertEquals(1, $customer->getDefaultShipping());
         $this->assertEquals(1, $customer->getDefaultBilling());
-        $this->addressRepository->delete($address);
+        $customerAddresses = $customer->getAddresses() ?? [];
+        foreach ($customerAddresses as $address) {
+            $this->addressRepository->delete($address);
+        }
         $this->customerRegistry->remove($customer->getId());
         $customer = $this->customerRepository->get('customer@example.com');
         $this->assertNull($customer->getDefaultShipping());
         $this->assertNull($customer->getDefaultBilling());
-        $this->expectExceptionObject(new NoSuchEntityException(__('No such entity with addressId = 1')));
-        $this->addressRepository->getById(1);
     }
 
     /**
-     * Assert that deleting nonexistent address throws exception.
+     * Assert that deleting non-existent address throws exception.
+     *
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No such entity with addressId = 1
      *
      * @return void
      */
-    public function testDeleteAlreadyDeletedAddress(): void
+    public function testDeleteMissingAddress(): void
     {
-        $this->expectExceptionObject(new NoSuchEntityException(__('No such entity with addressId = 1')));
         $this->addressRepository->deleteById(1);
     }
 }

@@ -133,7 +133,7 @@ class UpdateAddressTest extends TestCase
     }
 
     /**
-     * Assert that address updated successfully or proper error message has thrown.
+     * Assert that address updated successfully.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
@@ -142,21 +142,14 @@ class UpdateAddressTest extends TestCase
      *
      * @param array $updateData
      * @param array $expectedData
-     * @param \Exception|null $expectException
      * @return void
      */
-    public function testUpdateAddress(
-        array $updateData,
-        array $expectedData,
-        ?\Exception $expectException
-    ): void {
+    public function testUpdateAddress(array $updateData, array $expectedData): void
+    {
         $this->processedAddressesIds[] = 1;
         $address = $this->addressRepository->getById(1);
         foreach ($updateData as $setFieldName => $setValue) {
             $address->setData($setFieldName, $setValue);
-        }
-        if (null !== $expectException) {
-            $this->expectExceptionObject($expectException);
         }
         $updatedAddressData = $this->addressRepository->save($address)->__toArray();
         foreach ($expectedData as $getFieldName => $getValue) {
@@ -166,9 +159,7 @@ class UpdateAddressTest extends TestCase
     }
 
     /**
-     * Data provider for update address with proper data or with error.
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * Data provider for update address with proper data.
      *
      * @return array
      */
@@ -178,111 +169,124 @@ class UpdateAddressTest extends TestCase
             'required_field_telephone' => [
                 [AddressInterface::TELEPHONE => 251512979595],
                 [AddressInterface::TELEPHONE => 251512979595],
-                null,
-            ],
-            'required_field_empty_telephone' => [
-                [AddressInterface::TELEPHONE => ''],
-                [],
-                InputException::requiredField('telephone'),
             ],
             'required_field_postcode' => [
                 [AddressInterface::POSTCODE => 55425],
                 [AddressInterface::POSTCODE => 55425],
-                null,
-            ],
-            'required_field_empty_postcode_for_us' => [
-                [AddressInterface::POSTCODE => ''],
-                [],
-                InputException::requiredField('postcode'),
             ],
             'required_field_empty_postcode_for_uk' => [
                 [AddressInterface::COUNTRY_ID => 'GB', AddressInterface::POSTCODE => ''],
                 [AddressInterface::COUNTRY_ID => 'GB', AddressInterface::POSTCODE => null],
-                null,
             ],
-// TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
-//            'required_field_empty_region_id_for_us' => [
-//                [AddressInterface::REGION_ID => ''],
-//                [],
-//                InputException::requiredField('regionId'),
-//            ],
             'required_field_empty_region_id_for_ua' => [
                 [AddressInterface::COUNTRY_ID => 'UA', AddressInterface::REGION_ID => ''],
                 [
                     AddressInterface::COUNTRY_ID => 'UA',
                     AddressInterface::REGION_ID => 0,
                 ],
-                null,
             ],
             'required_field_firstname' => [
                 [AddressInterface::FIRSTNAME => 'Test firstname'],
                 [AddressInterface::FIRSTNAME => 'Test firstname'],
-                null,
-            ],
-            'required_field_empty_firstname' => [
-                [AddressInterface::FIRSTNAME => ''],
-                [],
-                InputException::requiredField('firstname'),
             ],
             'required_field_lastname' => [
                 [AddressInterface::LASTNAME => 'Test lastname'],
                 [AddressInterface::LASTNAME => 'Test lastname'],
-                null,
-            ],
-            'required_field_empty_lastname' => [
-                [AddressInterface::LASTNAME => ''],
-                [],
-                InputException::requiredField('lastname'),
             ],
             'required_field_street_as_array' => [
                 [AddressInterface::STREET => ['', 'Test str, 55']],
                 [AddressInterface::STREET => ['Test str, 55']],
-                null
-            ],
-            'required_field_empty_street_as_array' => [
-                [AddressInterface::STREET => []],
-                [],
-                InputException::requiredField('street'),
             ],
             'required_field_city' => [
                 [AddressInterface::CITY => 'Test city'],
                 [AddressInterface::CITY => 'Test city'],
-                null,
-            ],
-            'required_field_empty_city' => [
-                [AddressInterface::CITY => ''],
-                [],
-                InputException::requiredField('city'),
             ],
             'field_name_prefix' => [
                 [AddressInterface::PREFIX => 'My prefix'],
                 [AddressInterface::PREFIX => 'My prefix'],
-                null,
             ],
             'field_middle_name_initial' => [
                 [AddressInterface::MIDDLENAME => 'My middle name'],
                 [AddressInterface::MIDDLENAME => 'My middle name'],
-                null,
             ],
             'field_name_suffix' => [
                 [AddressInterface::SUFFIX => 'My suffix'],
                 [AddressInterface::SUFFIX => 'My suffix'],
-                null,
             ],
             'field_company_name' => [
                 [AddressInterface::COMPANY => 'My company'],
                 [AddressInterface::COMPANY => 'My company'],
-                null,
             ],
             'field_vat_number' => [
                 [AddressInterface::VAT_ID => 'My VAT number'],
                 [AddressInterface::VAT_ID => 'My VAT number'],
-                null,
+            ],
+        ];
+    }
+
+    /**
+     * Assert that error message has thrown during process address update.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     *
+     * @dataProvider updateWrongAddressesDataProvider
+     *
+     * @param array $updateData
+     * @param \Exception $expectException
+     * @return void
+     */
+    public function testExceptionThrownDuringUpdateAddress(array $updateData, \Exception $expectException): void
+    {
+        $this->processedAddressesIds[] = 1;
+        $address = $this->addressRepository->getById(1);
+        foreach ($updateData as $setFieldName => $setValue) {
+            $address->setData($setFieldName, $setValue);
+        }
+        $this->expectExceptionObject($expectException);
+        $this->addressRepository->save($address);
+    }
+
+    /**
+     * Data provider for update address with proper data or with error.
+     *
+     * @return array
+     */
+    public function updateWrongAddressesDataProvider(): array
+    {
+        return [
+            'required_field_empty_telephone' => [
+                [AddressInterface::TELEPHONE => ''],
+                InputException::requiredField('telephone'),
+            ],
+            'required_field_empty_postcode_for_us' => [
+                [AddressInterface::POSTCODE => ''],
+                InputException::requiredField('postcode'),
+            ],
+// TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
+//            'required_field_empty_region_id_for_us' => [
+//                [AddressInterface::REGION_ID => ''],
+//                InputException::requiredField('regionId'),
+//            ],
+            'required_field_empty_firstname' => [
+                [AddressInterface::FIRSTNAME => ''],
+                InputException::requiredField('firstname'),
+            ],
+            'required_field_empty_lastname' => [
+                [AddressInterface::LASTNAME => ''],
+                InputException::requiredField('lastname'),
+            ],
+            'required_field_empty_street_as_array' => [
+                [AddressInterface::STREET => []],
+                InputException::requiredField('street'),
+            ],
+            'required_field_empty_city' => [
+                [AddressInterface::CITY => ''],
+                InputException::requiredField('city'),
             ],
 // TODO: Uncomment this variation after fix issue https://jira.corp.magento.com/browse/MC-31031
 //            'field_invalid_vat_number' => [
 //                [AddressInterface::VAT_ID => '/>.<*'],
-//                [],
 //                null// It need to create some error but currently magento doesn't has validation for this field.,
 //            ],
         ];
