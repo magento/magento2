@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\SwatchesLayeredNavigation\Block\Navigation\Category;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
-use Magento\LayeredNavigation\Block\Navigation\Category\AbstractFiltersTest;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 
 /**
  * Provides tests for custom text swatch filter in navigation block on category page.
@@ -24,13 +25,13 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
      * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
-     * @param int $filterable
+     * @param array $attributeData
      * @param array $expectation
      * @return void
      */
-    public function testGetFiltersWithCustomAttribute(array $products, int $filterable, array $expectation): void
+    public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
-        $this->getFiltersAndAssert($products, $filterable, $expectation, 'visual_swatch_attribute');
+        $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 999');
     }
 
     /**
@@ -41,7 +42,7 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
         return [
             'not_used_in_navigation' => [
                 'products_data' => [],
-                'filterable' => 0,
+                'attribute_data' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
@@ -49,7 +50,7 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
                     'simple1000' => 'option 1',
                     'simple1001' => 'option 2',
                 ],
-                'filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
+                'attribute_data' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
                 'expectation' => [
                     ['label' => 'option 1', 'count' => 1],
                     ['label' => 'option 2', 'count' => 1],
@@ -60,7 +61,7 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
                     'simple1000' => 'option 1',
                     'simple1001' => 'option 2',
                 ],
-                'filterable' => 2,
+                'attribute_data' => ['is_filterable' => 2],
                 'expectation' => [
                     ['label' => 'option 1', 'count' => 1],
                     ['label' => 'option 2', 'count' => 1],
@@ -68,5 +69,21 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
                 ],
             ],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getLayerType(): string
+    {
+        return Resolver::CATALOG_LAYER_CATEGORY;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getAttributeCode(): string
+    {
+        return 'visual_swatch_attribute';
     }
 }

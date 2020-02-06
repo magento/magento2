@@ -21,7 +21,7 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Delete all products left by prev tests because it sensitive for search-->
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!-- Create Data -->
             <createData entity="ABC_dfj_SimpleProduct" stepKey="createProduct"/>
         </before>

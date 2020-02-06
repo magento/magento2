@@ -68,6 +68,33 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Add Join with option for collection select
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param \Zend_Db_Expr $valueExpr
+     * @return $this
+     */
+    public function addOptionToCollection($collection, $attribute, $valueExpr)
+    {
+        $connection = $this->getConnection();
+        $attributeCode = $attribute->getAttributeCode();
+        $optionTable1 = $attributeCode . '_option_t1';
+        $tableJoinCond1 = "{$optionTable1}.option_id={$valueExpr}";
+        $valueExpr = $connection->getIfNullSql(
+            "{$optionTable1}.sort_order"
+        );
+
+        $collection->getSelect()->joinLeft(
+            [$optionTable1 => $this->getTable('eav_attribute_option')],
+            $tableJoinCond1,
+            ["{$attributeCode}_order" => $valueExpr]
+        );
+
+        return $this;
+    }
+
+    /**
      * Retrieve Select for update Flat data
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute

@@ -70,26 +70,26 @@
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity($$createBundleOption1_1.title$$)}}" userInput="1" stepKey="fillQuantity00"/>
 
         <!-- Add product to the cart and Assert add product to cart success message-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert move product to wishlist success message -->
-        <actionGroup ref="AssertMoveProductToWishListSuccessMessage" stepKey="moveToWishlist">
+        <actionGroup ref="AssertMoveProductToWishListSuccessMessageActionGroup" stepKey="moveToWishlist">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
         </actionGroup>
 
         <!-- Assert product is present in wishlist -->
-        <actionGroup ref="AssertProductIsPresentInWishList" stepKey="assertProductPresent">
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="productPrice" value="$101.23"/>
         </actionGroup>
 
         <!-- Assert product details in Wishlist -->
-        <actionGroup ref="AssertProductDetailsInWishlist" stepKey="assertProductDetails">
+        <actionGroup ref="AssertProductDetailsInWishlistActionGroup" stepKey="assertProductDetails">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="label" value="$$createBundleOption1_1.title$$"/>
             <argument name="labelValue" value="$$simpleProduct1.sku$$ $100.00"/>
