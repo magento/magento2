@@ -9,9 +9,7 @@ namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Model\ResourceModel\Address;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -50,8 +48,6 @@ class DeleteAddressTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
-        $this->addressResource = $this->objectManager->get(Address::class);
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
         $this->addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
