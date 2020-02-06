@@ -462,7 +462,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * Get current website name
      *
-     * @return string | null
+     * @return string
      */
     public function getCurrentWebsiteName()
     {
@@ -474,13 +474,13 @@ class Switcher extends \Magento\Backend\Block\Template
             }
         }
 
-        return null;
+        return '';
     }
 
     /**
      * Get current store group name
      *
-     * @return string | null
+     * @return string
      */
     public function getCurrentStoreGroupName()
     {
@@ -492,13 +492,13 @@ class Switcher extends \Magento\Backend\Block\Template
             }
         }
 
-        return null;
+        return '';
     }
 
     /**
      * Get current store view name
      *
-     * @return string | null
+     * @return string
      */
     public function getCurrentStoreName()
     {
@@ -510,7 +510,7 @@ class Switcher extends \Magento\Backend\Block\Template
             }
         }
 
-        return null;
+        return '';
     }
 
     /**
