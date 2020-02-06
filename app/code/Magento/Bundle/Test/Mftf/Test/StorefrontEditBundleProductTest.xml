@@ -86,7 +86,7 @@
         <waitForPageLoad stepKey="waitForElementAdded2"/>
 
         <!-- Go to the shopping cart page and edit the first product -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <waitForElementVisible stepKey="waitForInfoDropdown" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad3"/>
@@ -104,7 +104,7 @@
         <waitForPageLoad stepKey="waitForElementAdded3"/>
 
         <!-- Go to the shopping cart page -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart2"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart2"/>
         <waitForPageLoad stepKey="waitForCartPageLoad2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->

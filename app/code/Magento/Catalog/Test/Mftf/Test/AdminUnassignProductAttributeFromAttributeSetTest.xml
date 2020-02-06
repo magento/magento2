@@ -33,8 +33,9 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->

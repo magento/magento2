@@ -60,7 +60,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_1"/>
-        <amOnPage url="customer/account/logout/" stepKey="logoutCustomer1"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomer1"/>
         <waitForPageLoad  time="30" stepKey="waitForPageLoad2"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
@@ -116,7 +116,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_2"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_1"/>
-        <amOnPage url="customer/account/logout/" stepKey="logoutCustomer2"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomer2"/>
         <waitForPageLoad  time="30" stepKey="waitForPageLoad7"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage6"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
