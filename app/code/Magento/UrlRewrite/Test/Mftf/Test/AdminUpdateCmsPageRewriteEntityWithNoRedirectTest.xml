@@ -12,6 +12,7 @@
             <stories value="Update CMS Page URL Redirect With No Redirect"/>
             <title value="Update CMS Page URL Redirect With No Redirect"/>
             <description value="Login as Admin and tried to update the created URL Rewrite for CMS page"/>
+            <severity value="MINOR"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
         </annotations>
