@@ -158,6 +158,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice</item>
                     <item name="sortOrder" xsi:type="number">150</item>
                 </item>
+                <item name="custom_layout_update" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\LayoutUpdate</item>
+                    <item name="sortOrder" xsi:type="number">160</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -166,7 +170,24 @@
             <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool"/>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="attributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\Attributes</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\Attributes">
+        <arguments>
+            <argument name="escapeAttributes" xsi:type="array">
+                <item name="name" xsi:type="string">name</item>
+                <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions">
         <arguments>
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
@@ -229,6 +250,23 @@
                 <item name="3" xsi:type="string">media_gallery</item>
                 <item name="4" xsi:type="string">quantity_and_stock_status</item>
                 <item name="5" xsi:type="string">tier_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype">
+        <arguments>
+            <argument name="optionsArray" xsi:type="array">
+                <item name="450" xsi:type="array">
+                    <item name="value" xsi:type="string">datetime</item>
+                    <item name="label" xsi:type="string" translate="true">Date and Time</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\DataProvider\Mapper\FormElement">
+        <arguments>
+            <argument name="mappings" xsi:type="array">
+                <item name="datetime" xsi:type="string">date</item>
             </argument>
         </arguments>
     </type>

@@ -30,7 +30,7 @@
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a cart price rule for 50 percent of product price -->
@@ -49,13 +49,13 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!-- Create a product to check the storefront -->
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
 
         <!-- Spot check the storefront -->
-        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
+        <actionGroup ref="VerifyDiscountAmountActionGroup" stepKey="verifyStorefront">
             <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
             <argument name="quantity" value="1"/>
             <argument name="expectedDiscount" value="-$61.50"/>

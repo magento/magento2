@@ -538,7 +538,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
             }
         }
     }
-    
+
     /**
      * Setting data for all collection items
      *

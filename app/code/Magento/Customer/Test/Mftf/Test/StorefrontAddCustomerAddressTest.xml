@@ -24,7 +24,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="AmOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
@@ -101,7 +101,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="AmOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->

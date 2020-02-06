@@ -34,7 +34,7 @@ class ContextPlugin
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     private $moduleManager;
 
@@ -50,15 +50,15 @@ class ContextPlugin
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Tax\Model\Calculation\Proxy $calculation
      * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Tax\Model\Calculation\Proxy $calculation,
+        \Magento\Tax\Model\Calculation\Proxy $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
         \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig
     ) {
         $this->customerSession = $customerSession;

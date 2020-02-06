@@ -8,21 +8,26 @@ declare(strict_types=1);
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
-use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * Test store switching
  */
-class RewriteUrlTest extends \PHPUnit\Framework\TestCase
+class RewriteUrlTest extends TestCase
 {
     /**
      * @var StoreSwitcher
@@ -62,16 +67,18 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testSwitchToNonExistingPage(): void
     {
         $fromStore = $this->getStoreByCode('default');
         $toStore = $this->getStoreByCode('fixture_second_store');
 
-        $this->setBaseUrl($toStore);
+        $this->setBaseUrl($toStore, 'http://domain.com/');
 
         $product = $this->productRepository->get('simple333');
 
@@ -79,15 +86,17 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $expectedUrl = $toStore->getBaseUrl();
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+        $this->setBaseUrl($toStore, 'http://localhost/');
     }
 
     /**
      * Testing store switching with existing cms pages
      *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDbIsolation disabled
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testSwitchToExistingPage(): void
     {
@@ -117,16 +126,52 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test store switching with logged in customer on cms page with different url_key
+     *
+     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     * @return void
+     */
+    public function testSwitchCmsPageToAnotherStoreAsCustomer(): void
+    {
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = $this->objectManager->create(CustomerRepositoryInterface::class);
+        $this->loginAsCustomer($repository->get('customer@example.com'));
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
+
+        $redirectUrl = "http://localhost/index.php/page-c/";
+        $expectedUrl = "http://localhost/index.php/page-c-on-2nd-store";
+
+        $secureRedirectUrl = $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl);
+        $this->assertEquals($expectedUrl, $secureRedirectUrl);
+    }
+
+    /**
+     * Login as customer
+     *
+     * @param CustomerInterface $customer
+     */
+    private function loginAsCustomer($customer)
+    {
+        /** @var Session $session */
+        $session = $this->objectManager->get(Session::class);
+        $session->setCustomerDataAsLoggedIn($customer);
+    }
+
+    /**
      * Set base url to store.
      *
      * @param StoreInterface $targetStore
+     * @param string $baseUrl
      * @return void
      */
-    private function setBaseUrl(StoreInterface $targetStore): void
+    private function setBaseUrl(StoreInterface $targetStore, string $baseUrl): void
     {
         $configValue = $this->objectManager->create(Value::class);
         $configValue->load('web/unsecure/base_url', 'path');
-        $baseUrl = 'http://domain.com/';
         if (!$configValue->getPath()) {
             $configValue->setPath('web/unsecure/base_url');
         }

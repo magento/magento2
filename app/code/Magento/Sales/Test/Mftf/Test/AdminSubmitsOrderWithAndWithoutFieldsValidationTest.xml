@@ -25,12 +25,12 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
-        <!--<actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage"/>-->
+        <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
@@ -39,9 +39,9 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
-        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="seeNewOrderPageTitle"/>
+        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="seeNewOrderPageTitle"/>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
@@ -50,12 +50,12 @@
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
 
         <!--Fill wrong customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillWrongCustomerAddress" after="fillCustomerEmail">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillWrongCustomerAddress" after="fillCustomerEmail">
             <argument name="customer" value="Simple_US_Customer_Incorrect_Name"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
         <!-- Select shipping -->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"
                      after="fillWrongCustomerAddress"/>
 
         <!--Verify totals on Order page-->
@@ -72,7 +72,7 @@
              after="clickSubmitOrderWrong"/>
 
         <!--Fill correct customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="firstNameError">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="firstNameError">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>

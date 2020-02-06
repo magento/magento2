@@ -26,6 +26,7 @@
         <requiredEntity type="title">freeTitleDefault</requiredEntity>
         <requiredEntity type="name">freeNameDefault</requiredEntity>
         <requiredEntity type="free_shipping_subtotal">freeShippingSubtotalDefault</requiredEntity>
+        <requiredEntity type="tax_including">TaxIncludingDefault</requiredEntity>
         <requiredEntity type="specificerrmsg">freeSpecificerrmsgDefault</requiredEntity>
         <requiredEntity type="sallowspecific">freeSallowspecificDefault</requiredEntity>
         <requiredEntity type="specificcountry">freeSpecificcountryDefault</requiredEntity>
@@ -43,6 +44,9 @@
     </entity>
     <entity name="freeShippingSubtotalDefault" type="free_shipping_subtotal">
         <data key="value" />
+    </entity>
+    <entity name="TaxIncludingDefault" type="tax_including">
+        <data key="value">0</data>
     </entity>
     <entity name="freeSpecificerrmsgDefault" type="specificerrmsg">
         <data key="value">This shipping method is not available. To use this shipping method, please contact us.</data>
@@ -65,6 +69,17 @@
     </entity>
     <entity name="freeShippingSubtotal" type="free_shipping_subtotal">
         <data key="value">101</data>
+    </entity>
+    <!--Set Free Shipping "Include Tax to Amount" to "Yes"-->
+    <entity name="SetTaxIncluding" type="free_shipping_method">
+        <requiredEntity type="tax_including">TaxIncluding</requiredEntity>
+    </entity>
+    <entity name="TaxIncluding" type="tax_including">
+        <data key="value">1</data>
+    </entity>
+    <!--Set to default Free Shipping "Include Tax to Amount"-->
+    <entity name="SetTaxIncludingToDefault" type="free_shipping_method">
+        <requiredEntity type="tax_including">TaxIncludingDefault</requiredEntity>
     </entity>
     <!--Set to default Free Shipping Subtotal-->
     <entity name="setFreeShippingSubtotalToDefault" type="free_shipping_method">

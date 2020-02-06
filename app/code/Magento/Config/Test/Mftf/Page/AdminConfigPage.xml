@@ -21,4 +21,10 @@
     <page name="AdminConfigGeneralPage" url="admin/system_config/edit/section/general/" area="admin" module="Magento_Config">
         <section name="GeneralSection"/>
     </page>
+    <page name="AdminConfigDeveloperPage" url="admin/system_config/edit/section/dev/" area="admin" module="Magento_Config">
+        <section name="AdminConfigSection" />
+    </page>
+    <page name="AdminConfigAdvancedAdmin" url="admin/system_config/edit/section/admin/" area="admin" module="Magento_Config">
+        <section name="AdvanceAdminSection"/>
+    </page>
 </pages>

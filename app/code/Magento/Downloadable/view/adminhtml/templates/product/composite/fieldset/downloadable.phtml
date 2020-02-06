@@ -18,14 +18,14 @@
     </legend><br />
     <?php $_links = $block->getLinks(); ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <div class="field admin__field link <?php if ($_isRequired) { echo ' required _required'; } ?>">
+    <div class="field admin__field link<?php if ($_isRequired) { echo ' _required'; } ?>">
         <label class="label admin__field-label"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></label>
         <div class="control admin__field-control" id="downloadable-links-list">
             <?php foreach ($_links as $_link) : ?>
                 <div class="nested admin__field-option">
                 <?php if ($_linksPurchasedSeparately) : ?>
                     <input type="checkbox"
-                           class="admin__control-checkbox checkbox<?php if ($_isRequired) :?> validate-one-required-by-name<?php endif; ?> product downloadable link"
+                           class="admin__control-checkbox checkbox<?php if ($_isRequired) :?> required-entry<?php endif; ?> product downloadable link"
                            name="links[]" id="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>"
                            value="<?= $block->escapeHtmlAttr($_link->getId()) ?>"
                            <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?>
@@ -81,7 +81,7 @@ require(['prototype'], function(){
         }
     }
 //]]>
-    
+
 });
 </script>
 <?php endif;?>

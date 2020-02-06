@@ -31,7 +31,7 @@ class GetAddressesTest extends GraphQlAbstract
      */
     private $lockCustomer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +62,7 @@ class GetAddressesTest extends GraphQlAbstract
             is_array([$response['customer']['addresses']]),
             " Addresses field must be of an array type."
         );
-        self::assertEquals($customer->getId(), $response['customer']['id']);
+        self::assertEquals(null, $response['customer']['id']);
         $this->assertCustomerAddressesFields($customer, $response);
     }
 
@@ -105,7 +105,7 @@ class GetAddressesTest extends GraphQlAbstract
      * @param CustomerInterface $customer
      * @param array $actualResponse
      */
-    public function assertCustomerAddressesFields($customer, $actualResponse)
+    private function assertCustomerAddressesFields($customer, $actualResponse)
     {
         /** @var AddressInterface $addresses */
         $addresses = $customer->getAddresses();
@@ -113,7 +113,7 @@ class GetAddressesTest extends GraphQlAbstract
             $this->assertNotEmpty($addressValue);
             $assertionMap = [
                 ['response_field' => 'id', 'expected_value' => $addresses[$addressKey]->getId()],
-                ['response_field' => 'customer_id', 'expected_value' => $addresses[$addressKey]->getCustomerId()],
+                ['response_field' => 'customer_id', 'expected_value' => 0],
                 ['response_field' => 'region_id', 'expected_value' => $addresses[$addressKey]->getRegionId()],
                 ['response_field' => 'country_id', 'expected_value' => $addresses[$addressKey]->getCountryId()],
                 ['response_field' => 'telephone', 'expected_value' => $addresses[$addressKey]->getTelephone()],

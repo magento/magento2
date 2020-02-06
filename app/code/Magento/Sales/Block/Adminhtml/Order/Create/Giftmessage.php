@@ -97,7 +97,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
             }
         }
 
-        if (sizeof($items)) {
+        if (count($items)) {
             return $items;
         }
 

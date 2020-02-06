@@ -641,8 +641,6 @@
                 <item name="adjustment_positive" xsi:type="string">sales_creditmemo.adjustment_positive</item>
                 <item name="adjustment_negative" xsi:type="string">sales_creditmemo.adjustment_negative</item>
                 <item name="order_base_grand_total" xsi:type="string">sales_order.base_grand_total</item>
-                <item name="order_currency_code" xsi:type="string">sales_order.order_currency_code</item>
-                <item name="base_currency_code" xsi:type="string">sales_order.base_currency_code</item>
             </argument>
         </arguments>
     </virtualType>
@@ -818,14 +816,6 @@
                 <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</item>
                 <item name="shipment_grid" xsi:type="object">ShipmentGridAggregator</item>
                 <item name="creditmemo_grid" xsi:type="object">CreditmemoGridAggregator</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
             </argument>
         </arguments>
     </type>

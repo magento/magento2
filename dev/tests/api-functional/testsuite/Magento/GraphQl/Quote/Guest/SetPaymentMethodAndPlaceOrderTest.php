@@ -73,7 +73,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
         self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('order_number', $response['setPaymentMethodAndPlaceOrder']['order']);
     }
 
     /**
@@ -111,7 +111,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
         self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('order_number', $response['setPaymentMethodAndPlaceOrder']['order']);
     }
 
     /**
@@ -232,7 +232,7 @@ mutation {
       }
   }) {    
     order {
-      order_id
+      order_number
     }
   }
 }

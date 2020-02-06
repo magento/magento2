@@ -101,9 +101,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileReader->expects($this->any())
             ->method('readAll')
-            ->will($this->returnCallback(function ($file) {
-                return $file . ' content';
-            }));
+            ->will(
+                $this->returnCallback(
+                    function ($file) {
+                        return $file . ' content';
+                    }
+                )
+            );
         $fileOne = $this->createMock(\Magento\Framework\View\File::class);
         $fileOne->expects($this->once())
             ->method('getFilename')
@@ -180,11 +184,12 @@ expected;
 
         $expected = <<<code
     var ctx = require.s.contexts._,
-        origNameToUrl = ctx.nameToUrl;
+        origNameToUrl = ctx.nameToUrl,
+        baseUrl = ctx.config.baseUrl;
 
     ctx.nameToUrl = function() {
         var url = origNameToUrl.apply(ctx, arguments);
-        if (!url.match(/\.min\./)) {
+        if (url.indexOf(baseUrl) === 0&&!url.match(/\.min\./)) {
             url = url.replace(/(\.min)?\.js$/, '.min.js');
         }
         return url;

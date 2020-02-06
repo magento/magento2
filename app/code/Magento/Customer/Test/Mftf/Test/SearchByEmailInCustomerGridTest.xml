@@ -33,7 +33,7 @@
         <!--Step 1: Go to Customers > All Customers-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
         <!--Step 2: On Customers grid page search customer by keyword-->
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomer">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchCustomer">
             <argument name="keyword" value="$$createSecondCustomer.email$$"/>
         </actionGroup>
         <!--Step 3: Check if customer is placed in a first row and clear grid filter-->

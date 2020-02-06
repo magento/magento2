@@ -80,7 +80,11 @@ class ConfigOptionsListConstants
     const KEY_CACHE_FRONTEND = 'cache/frontend';
     const CONFIG_PATH_BACKEND_OPTIONS = 'backend_options';
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     *
+     * Definition format constant.
+     */
     const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
 
     /**#@+
@@ -118,6 +122,7 @@ class ConfigOptionsListConstants
     const KEY_MYSQL_SSL_KEY = \PDO::MYSQL_ATTR_SSL_KEY;
     const KEY_MYSQL_SSL_CERT = \PDO::MYSQL_ATTR_SSL_CERT;
     const KEY_MYSQL_SSL_CA = \PDO::MYSQL_ATTR_SSL_CA;
+
     /**
      * Constant \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT cannot be used as it was introduced in PHP 7.1.4
      * and Magento 2 is currently supporting PHP 7.1.3.
@@ -147,6 +152,8 @@ class ConfigOptionsListConstants
 
     /**
      * Size of random string generated for store's encryption key
+     * phpcs:disable
      */
     const STORE_KEY_RANDOM_STRING_SIZE = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES;
+    //phpcs:enable
 }

@@ -59,20 +59,20 @@ class MassUpdateStatus extends ProductController implements HttpPostActionInterf
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
         if (!is_array($reviewsIds)) {
-            $this->messageManager->addError(__('Please select review(s).'));
+            $this->messageManager->addErrorMessage(__('Please select review(s).'));
         } else {
             try {
                 $status = $this->getRequest()->getParam('status');
                 foreach ($this->getCollection() as $model) {
                     $model->setStatusId($status)->save()->aggregate();
                 }
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while updating these review(s).')
                 );

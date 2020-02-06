@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <system systemId="urn:magento:framework:Acl/etc/acl.xsd" uri="../vendor/magento/framework/Acl/etc/acl.xsd"/>
+  <system systemId="urn:magento:module:Magento_Store:etc/config.xsd" uri="../vendor/magento/module-store/etc/config.xsd"/>
+  <system systemId="urn:magento:module:Magento_Cron:etc/crontab.xsd" uri="../vendor/magento/module-cron/etc/crontab.xsd"/>
+  <system systemId="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd" uri="../vendor/magento/framework/Setup/Declaration/Schema/etc/schema.xsd"/>
+</catalog>
