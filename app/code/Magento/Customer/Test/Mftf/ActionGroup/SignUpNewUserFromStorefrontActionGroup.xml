@@ -117,10 +117,10 @@
         <arguments>
             <argument name="address"/>
         </arguments>
-        
-        <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
+
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
-        
+
         <!--Verify customer default billing address-->
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultBillingAddressFirstnameAndLastname"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.company}}" stepKey="seeAssertCustomerDefaultBillingAddressCompany"/>
@@ -139,7 +139,7 @@
             <argument name="address"/>
         </arguments>
 
-        <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
         <!--Verify customer default shipping address-->
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultShippingAddressFirstnameAndLastname"/>
@@ -159,7 +159,7 @@
             <argument name="address"/>
         </arguments>
 
-        <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
 
         <!--Verify customer default billing address-->
@@ -180,7 +180,7 @@
             <argument name="address"/>
         </arguments>
 
-        <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
 
         <!--Verify customer default shipping address-->
@@ -202,7 +202,7 @@
         </arguments>
 
         <!--Verify customer name on frontend-->
-        <amOnPage url="customer/account/edit/" stepKey="goToAddressPage"/>
+        <amOnPage url="{{StorefrontCustomerEditPage.url}}" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('Account Information')}}" stepKey="clickAccountInformationFromSidebarCurrentTab"/>
         <waitForPageLoad stepKey="waitForAccountInformationTabToOpen"/>

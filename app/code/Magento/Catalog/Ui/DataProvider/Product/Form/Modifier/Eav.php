@@ -40,7 +40,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
- * Class Eav
+ * Data provider for eav attributes on product page
  *
  * @api
  *
@@ -753,6 +753,9 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+            case 'datetime':
+                $meta = $this->customizeDatetimeAttribute($meta);
+                break;
         }
 
         //Checking access to design config.
@@ -954,6 +957,19 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = $this->wysiwygConfigProcessor->process($attribute);
+
+        return $meta;
+    }
+
+    /**
+     * Customize datetime attribute
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeDatetimeAttribute(array $meta): array
+    {
+        $meta['arguments']['data']['config']['options']['showsTime'] = 1;
 
         return $meta;
     }

@@ -30,7 +30,7 @@
         </before>
 
         <!-- Initiate create new order -->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createSimpleCustomer$$"/>
         </actionGroup>
 

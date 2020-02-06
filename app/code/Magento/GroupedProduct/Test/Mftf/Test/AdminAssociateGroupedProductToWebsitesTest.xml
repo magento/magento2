@@ -69,14 +69,14 @@
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
 
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultView" stepKey="resetProductGridFilter"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 
             <!-- Admin logout -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Open product page and assign grouped project to second website -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openAdminProductPage">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openAdminProductPage">
             <argument name="productSku" value="$$createGroupedProduct.sku$$"/>
         </actionGroup>
         <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
@@ -85,15 +85,15 @@
         <actionGroup ref="AdminUnassignProductInWebsiteActionGroup" stepKey="unassignProductFromDefaultWebsite">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveGroupedProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveGroupedProduct"/>
 
         <!-- Assert product is assigned to Second website -->
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="{{secondCustomWebsite.name}}"/>
         </actionGroup>
 
         <!-- Assert product is not assigned to Main website -->
-        <actionGroup ref="AssertProductIsNotAssignedToWebsite" stepKey="seeMainWebsiteIsNotChecked">
+        <actionGroup ref="AssertProductIsNotAssignedToWebsiteActionGroup" stepKey="seeMainWebsiteIsNotChecked">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteStoreViewIfExistsActionGroup" extends="AdminSearchStoreViewByNameActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminSearchStoreViewByNameActionGroup. Goes to the Admin Stores grid page. Deletes the provided Store (if exists) without creating a Backup. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <executeInSelenium function="function($webdriver) use ($I) {
+                $items = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('.col-store_title>a'));
+                if(!empty($items)) {
+                    $I->click('.col-store_title>a');
+                    $I->waitForPageLoad(10);
+                    $I->click('#delete');
+                    $I->waitForPageLoad(30);
+                    $I->selectOption('select#store_create_backup', 'No');
+                    $I->click('#delete');
+                    $I->waitForPageLoad(30);
+                    $I->waitForElementVisible('aside.confirm .modal-title', 10);
+                    $I->click('aside.confirm .modal-footer button.action-accept');
+                    $I->waitForPageLoad(60);
+                    $I->waitForElementVisible('#messages div.message-success', 10);
+                    $I->see('You deleted the store view.', '#messages div.message-success');
+                }
+            }" after="clickSearchButton" stepKey="deleteStoreViewIfExists"/>
+    </actionGroup>
+</actionGroups>
