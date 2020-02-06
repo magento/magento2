@@ -19,9 +19,15 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
  */
 class CreateCustomOptionsTest extends AbstractBackendController
 {
+    /**
+     * @var string
+     */
+    protected $productSku = 'simple';
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -46,8 +52,6 @@ class CreateCustomOptionsTest extends AbstractBackendController
     /**
      * Test add to product custom option with type "field".
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
-     *
      * @dataProvider productWithNewOptionsDataProvider
      *
      * @param array $productPostData
@@ -55,7 +59,7 @@ class CreateCustomOptionsTest extends AbstractBackendController
     public function testSaveCustomOptionWithTypeField(array $productPostData): void
     {
         $this->getRequest()->setPostValue($productPostData);
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get($this->productSku);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertSessionMessages(
