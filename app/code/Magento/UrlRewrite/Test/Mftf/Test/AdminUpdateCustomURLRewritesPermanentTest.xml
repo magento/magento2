@@ -23,19 +23,19 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+            <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{customPermanentUrlRewrite.request_path}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Search default custom url rewrite in grid-->
-        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewrite">
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGridActionGroup" stepKey="searchUrlRewrite">
             <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
         </actionGroup>
 
         <!--Update default custom url rewrite as per requirement and verify AssertUrlRewriteSaveMessage-->
-        <actionGroup ref="AdminUpdateCustomUrlRewrite" stepKey="updateUrlRewrite">
+        <actionGroup ref="AdminUpdateCustomUrlRewriteActionGroup" stepKey="updateUrlRewrite">
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="{{customPermanentUrlRewrite.request_path}}"/>
             <argument name="targetPath" value="{{customPermanentUrlRewrite.target_path}}"/>
@@ -44,7 +44,7 @@
         </actionGroup>
 
         <!--Search and verify updated AssertUrlRewriteInGrid-->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="verifyUpdatedUrlRewriteInGrid">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="verifyUpdatedUrlRewriteInGrid">
             <argument name="redirectPath" value="{{customPermanentUrlRewrite.request_path}}"/>
             <argument name="redirectType" value="{{customPermanentUrlRewrite.redirect_type_label}}"/>
             <argument name="targetPath" value="{{customPermanentUrlRewrite.target_path}}"/>

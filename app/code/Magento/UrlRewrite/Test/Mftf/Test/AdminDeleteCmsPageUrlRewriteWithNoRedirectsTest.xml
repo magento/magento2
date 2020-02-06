@@ -13,6 +13,7 @@
             <stories value="Delete CMS Page URL rewrite with No Redirects"/>
             <title value="Delete CMS Page URL rewrite with No Redirects"/>
             <description value="Log in to admin and delete CMS Page URL rewrite with No Redirects"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-14648"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -40,7 +41,7 @@
         </actionGroup>
 
         <!--Delete the URL Rewrite for CMS Page with No redirects-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
@@ -48,12 +49,12 @@
         </actionGroup>
 
         <!--Search and verify AssertUrlRewriteNotInGrid-->
-        <actionGroup ref="AdminSearchDeletedUrlRewrite" stepKey="searchDeletedUrlRewriteInGrid">
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
 
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="assertPageByUrlRewriteIsNotFound">
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="assertPageByUrlRewriteIsNotFound">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
     </test>

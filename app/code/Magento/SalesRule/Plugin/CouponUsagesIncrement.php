@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Plugin;
 
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 /**
@@ -32,15 +33,15 @@ class CouponUsagesIncrement
     /**
      * Increments number of coupon usages after placing order.
      *
-     * @param Order $subject
-     * @param Order $result
-     * @return Order
+     * @param OrderService $subject
+     * @param OrderInterface $result
+     * @return OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterPlace(Order $subject, Order $result): Order
+    public function afterPlace(OrderService $subject, OrderInterface $result): OrderInterface
     {
-        $this->updateCouponUsages->execute($subject, true);
+        $this->updateCouponUsages->execute($result, true);
 
-        return $subject;
+        return $result;
     }
 }

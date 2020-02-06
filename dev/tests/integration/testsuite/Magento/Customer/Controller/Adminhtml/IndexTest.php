@@ -438,17 +438,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     */
-    public function testProductReviewsAction()
-    {
-        $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/productReviews');
-        $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid"', $body);
-    }
-
-    /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      */

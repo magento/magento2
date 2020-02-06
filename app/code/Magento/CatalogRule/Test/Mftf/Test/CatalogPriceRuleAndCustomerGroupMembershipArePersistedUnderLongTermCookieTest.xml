@@ -32,11 +32,11 @@
 
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
             <!--Create Catalog Rule-->
-            <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="createCatalogPriceRule">
+            <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="createCatalogPriceRule">
                 <argument name="catalogRule" value="_defaultCatalogRule"/>
                 <argument name="categoryId" value="$$createCategory.id$$"/>
             </actionGroup>
-            <actionGroup ref="selectGeneralCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
+            <actionGroup ref="SelectGeneralCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>

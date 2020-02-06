@@ -38,16 +38,16 @@
         </after>
 
         <!-- Create new simple product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createSimpleProduct"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createSimpleProduct"/>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillAllNecessaryFields"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillAllNecessaryFields"/>
 
         <!-- Add two related products -->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addFirstRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addFirstRelatedProduct">
             <argument name="sku" value="$$createFirstRelatedProduct.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addSecondRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addSecondRelatedProduct">
             <argument name="sku" value="$$createSecondRelatedProduct.sku$$"/>
         </actionGroup>
 
@@ -60,7 +60,7 @@
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
@@ -96,7 +96,7 @@
         </actionGroup>
 
         <!-- Edit related products -->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addThirdRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addThirdRelatedProduct">
             <argument name="sku" value="$$createThirdRelatedProduct.sku$$"/>
         </actionGroup>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeRelatedProduct($$createFirstRelatedProduct.sku$$)}}" stepKey="removeFirstRelatedProduct"/>
@@ -110,7 +110,7 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
@@ -129,7 +129,7 @@
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
 
         <!-- Delete created simple product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
     </test>
