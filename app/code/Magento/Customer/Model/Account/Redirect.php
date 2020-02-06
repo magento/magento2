@@ -20,7 +20,6 @@ use Magento\Framework\Controller\Result\Forward as ResultForward;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Customer\Model\RedirectCookieManager;
 
 /**
  * Account Redirect
@@ -29,10 +28,7 @@ use Magento\Customer\Model\RedirectCookieManager;
  */
 class Redirect
 {
-    /** @deprecated
-     * @see \Magento\Customer\Model\RedirectCookieManager
-     * URL to redirect user on successful login or registration
-     */
+    /** URL to redirect user on successful login or registration */
     const LOGIN_REDIRECT_URL = 'login_redirect';
 
     /**
@@ -72,14 +68,9 @@ class Redirect
     protected $resultFactory;
 
     /**
-     * @var CookieManagerInterface
+     * @var CookieMetadataFactory
      */
-    protected $cookieManager;
-
-    /**
-     * @var RedirectCookieManager
-     */
-    protected $redirectCookieManager;
+    protected $cookieMetadataFactory;
 
     /**
      * @var HostChecker
@@ -101,7 +92,7 @@ class Redirect
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerUrl
      * @param ResultFactory $resultFactory
-     * @param RedirectCookieManager $redirectCookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
      * @param HostChecker|null $hostChecker
      */
     public function __construct(
@@ -113,7 +104,7 @@ class Redirect
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
-        RedirectCookieManager $redirectCookieManager,
+        CookieMetadataFactory $cookieMetadataFactory
         HostChecker $hostChecker = null
     ) {
         $this->request = $request;
@@ -123,8 +114,8 @@ class Redirect
         $this->url = $url;
         $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerUrl;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->resultFactory = $resultFactory;
-        $this->redirectCookieManager = $redirectCookieManager;
         $this->hostChecker = $hostChecker ?: ObjectManager::getInstance()->get(HostChecker::class);
     }
 
@@ -254,8 +245,8 @@ class Redirect
     /**
      * Get Cookie manager. For release backward compatibility.
      *
-     * @deprecated 100.0.10
-     * @see \Magento\Customer\Model\RedirectCookieManager
+     * @deprecated 100.0.10 This is legacy method to pass login_redirect cookie
+     * @see Magento/Checkout/view/frontend/web/js/sidebar.js
      * @return CookieManagerInterface
      */
     protected function getCookieManager()
@@ -269,8 +260,8 @@ class Redirect
     /**
      * Set cookie manager. For unit tests.
      *
-     * @deprecated 100.0.10
-     * @see \Magento\Customer\Model\RedirectCookieManager
+     * @deprecated 100.0.10 This is legacy method to pass login_redirect cookie
+     * @see Magento/Checkout/view/frontend/web/js/sidebar.js
      * @param object $value
      * @return void
      */
@@ -282,31 +273,43 @@ class Redirect
     /**
      * Get redirect route from cookie for case of successful login/registration
      *
+     * @deprecated 100.0.10 This is legacy method to pass login_redirect cookie
+     * @see Magento/Checkout/view/frontend/web/js/sidebar.js
      * @return null|string
      */
     public function getRedirectCookie()
     {
-        return $this->redirectCookieManager->getRedirectCookie();
+        return $this->getCookieManager()->getCookie(self::LOGIN_REDIRECT_URL, null);
     }
 
     /**
      * Save redirect route to cookie for case of successful login/registration
      *
+     * @deprecated 100.0.10 This is legacy method to pass login_redirect cookie
+     * @see Magento/Checkout/view/frontend/web/js/sidebar.js
      * @param string $route
      * @return void
      */
     public function setRedirectCookie($route)
     {
-        $this->redirectCookieManager->setRedirectCookie($route, $this->storeManager->getStore());
+        $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                                                      ->setHttpOnly(true)
+                                                      ->setDuration(3600)
+                                                      ->setPath($this->storeManager->getStore()->getStorePath());
+        $this->getCookieManager()->setPublicCookie(self::LOGIN_REDIRECT_URL, $route, $cookieMetadata);
     }
 
     /**
      * Clear cookie with requested route
      *
+     * @deprecated 100.0.10 This is legacy method to pass login_redirect cookie
+     * @see Magento/Checkout/view/frontend/web/js/sidebar.js
      * @return void
      */
     public function clearRedirectCookie()
     {
-        $this->redirectCookieManager->clearRedirectCookie($this->storeManager->getStore());
+        $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                                                      ->setPath($this->storeManager->getStore()->getStorePath());
+        $this->getCookieManager()->deleteCookie(self::LOGIN_REDIRECT_URL, $cookieMetadata);
     }
 }

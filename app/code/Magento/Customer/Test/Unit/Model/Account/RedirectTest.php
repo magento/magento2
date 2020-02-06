@@ -8,7 +8,7 @@
 
 namespace Magento\Customer\Test\Unit\Model\Account;
 
-use Magento\Customer\Model\RedirectCookieManager;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Controller\ResultFactory;
@@ -82,9 +82,9 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     protected $resultFactory;
 
     /**
-     * @var RedirectCookieManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $redirectCookieManager;
+    protected $cookieMetadataFactory;
 
     /**
      * @var HostChecker | \PHPUnit_Framework_MockObject_MockObject
@@ -147,7 +147,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->redirectCookieManager = $this->getMockBuilder(RedirectCookieManager::class)
+        $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -167,7 +167,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
                 'urlDecoder' => $this->urlDecoder,
                 'customerUrl' => $this->customerUrl,
                 'resultFactory' => $this->resultFactory,
-                'redirectCookieManager' => $this->redirectCookieManager,
+                'cookieMetadataFactory' => $this->cookieMetadataFactory,
                 'hostChecker' => $this->hostChecker,
             ]
         );
