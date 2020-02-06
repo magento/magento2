@@ -25,13 +25,25 @@ define([
             window.navigator = navigator;
         });
 
-        it('verify cookie-status initialization', function () {
+        it('verify initialization cookieStatus widget', function () {
+            expect($.fn.cookieStatus).toBeDefined();
+        });
+
+        it('verify that modal does not shows when cookies are supported', function () {
+            expect($.fn.cookieStatus).toBeDefined();
+            window.navigator = {
+                cookieEnabled: true
+            };
+            widget._init();
+            expect($(document.body).html()).not.toContain('<aside role="dialog" class="modal-popup');
+        });
+
+        it('shows the modal when cookies are not supported', function () {
             expect($.fn.cookieStatus).toBeDefined();
             window.navigator = {
                 cookieEnabled: false
             };
             widget._init();
-            expect($('.cookie-status').length).toBe(1);
             expect($(document.body).html()).toContain('<aside role="dialog" class="modal-popup');
         });
 
