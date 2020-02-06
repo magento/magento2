@@ -370,20 +370,20 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $validator->expects($this->at(0))->method('isValid')->with($item1)->willReturn(false);
         $validator->expects($this->at(1))->method('isValid')->with($item2)->willReturn(true);
 
-        $item1->expects($this->any())->method('getParentItemId')->willReturn(false);
-        $item1->expects($this->any())->method('getParentItem')->willReturn(false);
+        $item1->expects($this->any())->method('getParentItemId')->willReturn(null);
+        $item1->expects($this->any())->method('getParentItem')->willReturn(null);
         $item1->expects($this->never())->method('getDiscountCalculationPrice');
         $item1->expects($this->never())->method('getBaseDiscountCalculationPrice');
-        $item2->expects($this->any())->method('getParentItemId')->willReturn(false);
-        $item2->expects($this->any())->method('getParentItem')->willReturn(false);
+        $item2->expects($this->any())->method('getParentItemId')->willReturn(null);
+        $item2->expects($this->any())->method('getParentItem')->willReturn(null);
         $item2->expects($this->any())->method('getDiscountCalculationPrice')->willReturn(50);
         $item2->expects($this->once())->method('getBaseDiscountCalculationPrice')->willReturn(50);
-        $item3->expects($this->any())->method('getParentItemId')->willReturn(false);
-        $item3->expects($this->any())->method('getParentItem')->willReturn(true);
+        $item3->expects($this->any())->method('getParentItemId')->willReturn(null);
+        $item3->expects($this->any())->method('getParentItem')->willReturn($item1);
         $item3->expects($this->never())->method('getDiscountCalculationPrice');
         $item3->expects($this->never())->method('getBaseDiscountCalculationPrice');
-        $item4->expects($this->any())->method('getParentItemId')->willReturn(true);
-        $item4->expects($this->any())->method('getParentItem')->willReturn(false);
+        $item4->expects($this->any())->method('getParentItemId')->willReturn(12345);
+        $item4->expects($this->any())->method('getParentItem')->willReturn(null);
         $item4->expects($this->never())->method('getDiscountCalculationPrice');
         $item4->expects($this->never())->method('getBaseDiscountCalculationPrice');
         $this->utility->expects($this->once())->method('getItemQty')->willReturn(1);
