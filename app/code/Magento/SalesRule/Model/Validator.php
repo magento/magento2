@@ -410,11 +410,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Rule $rule
      * @return bool
      */
-    protected function isValidItemForRule(
-        AbstractItem $item,
-        Rule $rule
-    ) {
-        /** @var AbstractItem $item */
+    private function isValidItemForRule(AbstractItem $item, Rule $rule)
+    {
         if ($item->getParentItemId()) {
             return false;
         }
