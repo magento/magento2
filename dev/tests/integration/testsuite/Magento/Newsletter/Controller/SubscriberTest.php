@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller;
 
-use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\FormKey;
@@ -98,8 +98,10 @@ class SubscriberTest extends AbstractController
      * Check that Customer still subscribed for newsletters emails after registration.
      *
      * @magentoDbIsolation enabled
+     *
+     * @return void
      */
-    public function testCreatePosWithSubscribeEmailAction()
+    public function testCreatePosWithSubscribeEmailAction(): void
     {
         $this->markTestSkipped('Skip until failed. MAGETWO-96420');
 
