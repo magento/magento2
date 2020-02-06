@@ -16,7 +16,8 @@
         "magento/module-import-export": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
-        "magento/module-tax": "*"
+        "magento/module-tax": "*",
+        "magento/module-authorization": "*"
     },
     "type": "magento2-module",
     "license": [

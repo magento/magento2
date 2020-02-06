@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-30166"/>
+            </skip>
         </annotations>
 
         <before>
@@ -28,7 +31,7 @@
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="updateVirtualProductTierPriceInStock"/>
             </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>

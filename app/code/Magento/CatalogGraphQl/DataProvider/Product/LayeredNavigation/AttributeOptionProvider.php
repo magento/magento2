@@ -41,10 +41,11 @@ class AttributeOptionProvider
      * Get option data. Return list of attributes with option data
      *
      * @param array $optionIds
+     * @param array $attributeCodes
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    public function getOptions(array $optionIds): array
+    public function getOptions(array $optionIds, array $attributeCodes = []): array
     {
         if (!$optionIds) {
             return [];
@@ -60,20 +61,28 @@ class AttributeOptionProvider
                     'attribute_label' => 'a.frontend_label',
                 ]
             )
-            ->joinInner(
+            ->joinLeft(
                 ['options' => $this->resourceConnection->getTableName('eav_attribute_option')],
                 'a.attribute_id = options.attribute_id',
                 []
             )
-            ->joinInner(
+            ->joinLeft(
                 ['option_value' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
                 'options.option_id = option_value.option_id',
                 [
                     'option_label' => 'option_value.value',
                     'option_id' => 'option_value.option_id',
                 ]
-            )
-            ->where('option_value.option_id IN (?)', $optionIds);
+            );
+
+        $select->where('option_value.option_id IN (?)', $optionIds);
+
+        if (!empty($attributeCodes)) {
+            $select->orWhere(
+                'a.attribute_code in (?) AND a.frontend_input = \'boolean\'',
+                $attributeCodes
+            );
+        }
 
         return $this->formatResult($select);
     }

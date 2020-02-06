@@ -93,6 +93,7 @@
         <element name="DefaultValueText" type="textarea" selector="#default_value_text"/>
         <element name="DefaultValueTextArea" type="textarea" selector="#default_value_textarea"/>
         <element name="DefaultValueDate" type="textarea" selector="#default_value_date"/>
+        <element name="defaultValueDatetime" type="date" selector="#default_value_datetime"/>
         <element name="DefaultValueYesNo" type="textarea" selector="#default_value_yesno"/>
         <element name="Scope" type="select" selector="#is_global"/>
         <element name="UniqueValue" type="select" selector="#is_unique"/>

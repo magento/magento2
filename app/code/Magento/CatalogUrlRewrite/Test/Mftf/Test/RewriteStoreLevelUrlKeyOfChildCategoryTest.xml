@@ -27,21 +27,21 @@
             </createData>
         </before>
 
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedSubCategory">
             <argument name="Category" value="$$subCategory$$"/>
         </actionGroup>
 
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewForSubCategory"/>
 
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeSeoUrlKeyForSubCategory">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyForSubCategory">
             <argument name="value" value="bags-second"/>
         </actionGroup>
 
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedDefaultCategory">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedDefaultCategory">
             <argument name="Category" value="$$defaultCategory$$"/>
         </actionGroup>
 
-        <actionGroup ref="ChangeSeoUrlKey" stepKey="changeSeoUrlKeyForDefaultCategory">
+        <actionGroup ref="ChangeSeoUrlKeyActionGroup" stepKey="changeSeoUrlKeyForDefaultCategory">
             <argument name="value" value="gear-global"/>
         </actionGroup>
 
@@ -50,7 +50,7 @@
 
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreView"/>
 
-        <actionGroup ref="GoToSubCategoryPage" stepKey="goToSubCategoryPage">
+        <actionGroup ref="GoToSubCategoryPageActionGroup" stepKey="goToSubCategoryPage">
             <argument name="parentCategory" value="$$defaultCategory$$"/>
             <argument name="subCategory" value="$$subCategory$$"/>
             <argument name="urlPath" value="gear-global/bags-second"/>

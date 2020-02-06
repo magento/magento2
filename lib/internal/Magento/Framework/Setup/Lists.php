@@ -96,9 +96,10 @@ class Lists
         $languages = (new LanguageBundle())->get(Resolver::DEFAULT_LOCALE)['Languages'];
         $countries = (new RegionBundle())->get(Resolver::DEFAULT_LOCALE)['Countries'];
         $locales = \ResourceBundle::getLocales('') ?: [];
+        $allowedLocales = array_flip($this->allowedLocales);
         $list = [];
         foreach ($locales as $locale) {
-            if (!in_array($locale, $this->allowedLocales)) {
+            if (!isset($allowedLocales[$locale])) {
                 continue;
             }
             $language = \Locale::getPrimaryLanguage($locale);

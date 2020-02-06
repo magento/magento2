@@ -69,6 +69,10 @@
         <waitForPageLoad stepKey="waitForSecondCategoryToSave2"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
 
+        <!-- TODO: REMOVE AFTER FIX MC-21717 -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!--Open Category in store front page-->
         <amOnPage url="/$$createDefaultCategory.name$$/{{FirstLevelSubCat.name}}/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad"/>

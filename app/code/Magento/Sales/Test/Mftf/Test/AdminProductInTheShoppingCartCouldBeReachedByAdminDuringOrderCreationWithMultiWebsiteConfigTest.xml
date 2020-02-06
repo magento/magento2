@@ -37,10 +37,10 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProductEditPage">
+            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProductEditPage">
                 <argument name="productId" value="$$createProduct.id$$"/>
             </actionGroup>
-            <actionGroup ref="ProductSetWebsite" stepKey="assignProductToSecondWebsite">
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
                 <argument name="website" value="{{customWebsite.name}}"/>
             </actionGroup>
         </before>
@@ -74,7 +74,7 @@
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
 
         <!--Create new order for existing Customer And Store-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="storeView" value="customStore"/>
         </actionGroup>
@@ -90,16 +90,16 @@
         </actionGroup>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!--Select shipping method-->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"/>
 
         <!--Checkout select Check/Money Order payment-->
-        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
 
         <!--Submit Order and verify information-->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>

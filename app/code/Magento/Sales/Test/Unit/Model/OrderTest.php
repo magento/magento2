@@ -1253,6 +1253,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT);
     }
 
+    /**
+     * @return array
+     */
     public function notInvoicingStatesProvider()
     {
         return [
@@ -1262,6 +1265,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function canNotCreditMemoStatesProvider()
     {
         return [

@@ -30,7 +30,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManager;
 
@@ -159,14 +159,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->categoryIndexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class
-        );
+        $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
-        $this->moduleManager = $this->createPartialMock(
-            \Magento\Framework\Module\ModuleManagerInterface::class,
-            ['isEnabled']
-        );
+        $this->moduleManager = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isEnabled']);
         $this->stockItemFactoryMock = $this->createPartialMock(
             \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory::class,
             ['create']
