@@ -1,8 +1,8 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/modal',
-    'mage/translate',
-], function($, modal){
+    'mage/translate'
+], function ($, modal) {
     'use strict';
 
     $.widget('mage.cookieStatus', {
@@ -14,6 +14,10 @@ define([
             buttons: [{
                 text: $.mage.__('Close'),
                 class: 'cookie-status',
+
+                /**
+                 * Callback for click event
+                 */
                 click: function () {
                     this.closeModal();
                 }
@@ -26,11 +30,11 @@ define([
          */
         _init: function () {
 
-            if(!navigator.cookieEnabled) {
+            if (!navigator.cookieEnabled) {
                 modal(this.options, $('#cookie-status'));
             }
         }
     });
-    
+
     return $.mage.cookieStatus;
 });
