@@ -25,11 +25,11 @@ define([
             window.navigator = navigator;
         });
 
-        it('verify initialization cookieStatus widget', function () {
+        it('defines cookieStatus widget', function () {
             expect($.fn.cookieStatus).toBeDefined();
         });
 
-        it('verify that modal does not shows when cookies are supported', function () {
+        it('does not show a modal when cookies are supported', function () {
             window.navigator = {
                 cookieEnabled: true
             };
