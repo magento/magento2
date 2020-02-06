@@ -8,6 +8,7 @@ namespace Magento\CatalogWidget\Block\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
@@ -16,7 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -27,7 +28,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Rule\Model\Condition\Combine;
-use Magento\Rule\Model\Condition\Sql\Builder;
+use Magento\Rule\Model\Condition\Sql\Builder as SqlBuilder;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
 
@@ -69,7 +70,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $pager;
 
     /**
-     * @var Context
+     * @var HttpContext
      */
     protected $httpContext;
 
@@ -88,7 +89,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $productCollectionFactory;
 
     /**
-     * @var Builder
+     * @var SqlBuilder
      */
     protected $sqlBuilder;
 
@@ -135,34 +136,34 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $categoryRepository;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
-     * @param Context $httpContext
-     * @param Builder $sqlBuilder
+     * @param HttpContext $httpContext
+     * @param SqlBuilder $sqlBuilder
      * @param Rule $rule
      * @param Conditions $conditionsHelper
-     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      * @param Json|null $json
      * @param LayoutFactory|null $layoutFactory
      * @param EncoderInterface|null $urlEncoder
+     * @param CategoryRepositoryInterface|null $categoryRepository
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
+        Context $context,
         CollectionFactory $productCollectionFactory,
         Visibility $catalogProductVisibility,
-        Context $httpContext,
-        Builder $sqlBuilder,
+        HttpContext $httpContext,
+        SqlBuilder $sqlBuilder,
         Rule $rule,
         Conditions $conditionsHelper,
-        CategoryRepositoryInterface $categoryRepository,
         array $data = [],
         Json $json = null,
         LayoutFactory $layoutFactory = null,
-        EncoderInterface $urlEncoder = null
+        EncoderInterface $urlEncoder = null,
+        CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -173,7 +174,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
-        $this->categoryRepository = $categoryRepository;
+        $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
+                ->get(CategoryRepositoryInterface::class);
         parent::__construct(
             $context,
             $data
