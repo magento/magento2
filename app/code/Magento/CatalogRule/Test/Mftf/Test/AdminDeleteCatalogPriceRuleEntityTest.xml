@@ -18,7 +18,7 @@
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
             <createData entity="_defaultCategory" stepKey="createCategory1"/>
@@ -31,7 +31,7 @@
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
                 <argument name="customerGroup" value="General"/>
                 <argument name="disregardRules" value="Yes"/>
@@ -59,7 +59,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <!-- Assert that the Success message is present after the delete -->
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <!-- Reindex -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
@@ -78,7 +78,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct1.price$$" stepKey="seeTrueProductPrice1"/>
 
         <!-- Assert that the rule isn't present in the Shopping Cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToShoppingCart1">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToShoppingCart1">
             <argument name="productName" value="$$createProduct1.name$$"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>
@@ -154,12 +154,16 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
                 <argument name="customerGroup" value="General"/>
                 <argument name="disregardRules" value="Yes"/>
@@ -188,7 +192,7 @@
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <!-- Reindex -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>

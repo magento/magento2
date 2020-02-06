@@ -53,6 +53,6 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
     {
         $html = $this->_model->getHtml();
         $this->assertContains('type="password"', $html);
-        $this->assertTrue(preg_match('/class=\".*input-text.*\"/i', $html) > 0);
+        $this->assertTrue(preg_match('/class=\"* input-text admin__control-text.*\"/i', $html) > 0);
     }
 }

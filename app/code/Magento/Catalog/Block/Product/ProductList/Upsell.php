@@ -60,7 +60,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     protected $_checkoutCart;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -69,7 +69,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      * @param \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -77,7 +77,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
         \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
         $this->_checkoutCart = $checkoutCart;
@@ -264,6 +264,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     {
         $identities = [];
         foreach ($this->getItems() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;

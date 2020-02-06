@@ -10,9 +10,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class Category
- *
- * @package Magento\Catalog\Block\Rss
+ * Category feed block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

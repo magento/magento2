@@ -11,5 +11,6 @@
     <section name="AdminCategoryProductsSection">
         <element name="sectionHeader" type="button" selector="div[data-index='assign_products']" timeout="30"/>
         <element name="addProducts" type="button" selector="#catalog_category_add_product_tabs" timeout="30"/>
+        <element name="addProductsDisabled" type="button" selector="#catalog_category_add_product_tabs[disabled]" timeout="30"/>
     </section>
 </sections>

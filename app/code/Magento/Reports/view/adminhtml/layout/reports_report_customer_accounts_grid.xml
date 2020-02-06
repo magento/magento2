@@ -40,6 +40,7 @@
                     <argument name="id" xsi:type="string">accounts</argument>
                     <argument name="column_css_class" xsi:type="string">col-qty</argument>
                     <argument name="header_css_class" xsi:type="string">col-qty</argument>
+                    <argument name="sortable" xsi:type="string">0</argument>
                 </arguments>
             </block>
         </referenceBlock>

@@ -46,17 +46,9 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
-        $this->moduleManagerMock = $this->createPartialMock(
-            \Magento\Framework\Module\ModuleManagerInterface::class,
-            ['isEnabled']
-        );
-        $this->cacheConfigMock = $this->createPartialMock(
-            \Magento\PageCache\Model\Config::class,
-            ['isEnabled']
-        );
-        $this->depersonalizeCheckerMock = $this->createMock(
-            \Magento\PageCache\Model\DepersonalizeChecker::class
-        );
+        $this->moduleManagerMock = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isEnabled']);
+        $this->cacheConfigMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['isEnabled']);
+        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
 
         $this->plugin = $this->objectManager->getObject(
             \Magento\Persistent\Model\Layout\DepersonalizePlugin::class,

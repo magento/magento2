@@ -10,7 +10,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <actionGroup name="SelectBillingInfoActionGroup">
         <waitForPageLoad stepKey="waitForBillingInfoPageLoad"/>
-        <click stepKey="goToReviewOrder" selector="{{PaymentMethodSection.goToReviewOrder}}"/>
+        <click selector="{{PaymentMethodSection.goToReviewOrder}}" stepKey="goToReviewOrder"/>
     </actionGroup>
 </actionGroups>
-
