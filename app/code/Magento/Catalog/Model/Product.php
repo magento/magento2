@@ -2154,7 +2154,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCacheIdTags()
     {
-        $tags = parent::getCacheIdTags();
+        $tags = (array)$this->getData('cache_id_tags');
         $affectedCategoryIds = $this->getAffectedCategoryIds();
         if (!$affectedCategoryIds) {
             $affectedCategoryIds = $this->getCategoryIds();
@@ -2334,7 +2334,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getImage()
     {
         $this->getTypeInstance()->setImageFromChildProduct($this);
-        return parent::getImage();
+
+        return (string)$this->getData('image');
     }
 
     /**
