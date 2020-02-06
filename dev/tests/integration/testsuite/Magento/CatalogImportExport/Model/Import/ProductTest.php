@@ -3046,9 +3046,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() === 0, 'Import file validation failed.');
         $importModel->importData();
 
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $simpleProduct = $productRepository->get('simple', false, null, true);
+        $simpleProduct = $this->productRepository->get('simple', false, null, true);
         $this->assertEquals('Varchar default value', $simpleProduct->getData('varchar_attribute'));
     }
 }
