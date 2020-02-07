@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1580996950336" stop="1580996970436" version="1.4.0">
+  <name>Magento\Test\Php\LiveCodeTest</name>
+  <test-cases>
+    <test-case start="1580996950339" stop="1580996950553" status="passed">
+      <name>testCodeStyle</name>
+    </test-case>
+    <test-case start="1580996950555" stop="1580996950764" status="passed">
+      <name>testCodeMess</name>
+    </test-case>
+    <test-case start="1580996950765" stop="1580996970092" status="passed">
+      <name>testCopyPaste</name>
+    </test-case>
+    <test-case start="1580996970098" stop="1580996970123" status="passed">
+      <name>testStrictTypes</name>
+    </test-case>
+    <test-case start="1580996970127" stop="1580996970283" status="passed">
+      <name>testPhpCompatibility</name>
+    </test-case>
+    <test-case start="1580996970286" stop="1580996970432" status="passed">
+      <name>testPhpStan</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>
