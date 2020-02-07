@@ -162,9 +162,9 @@ define([
                 }
 
                 value = this.modal.find(this.options.promptField).val();
-                this.options.actions.confirm.call(this, value);
+                this.options.actions.confirm.call(event, value);
             } else {
-                this.options.actions.cancel.call(this, result);
+                this.options.actions.cancel.call(event, result);
             }
 
             this.options.actions.always();
