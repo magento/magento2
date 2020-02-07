@@ -90,46 +90,34 @@ class Storage
     }
 
     /**
-     * Create new collection to load customer data with proper filters.
+     * Load customers' data that can be found by given identifiers.
      *
-     * @param array[] $customerIdentifiers With keys "email" and "website_id".
-     *
-     * @return CustomerCollection
+     * @param array $customerIdentifiers With keys "email" and "website_id".
+     * @return void
      */
-    private function prepareCollection(array $customerIdentifiers): CustomerCollection
+    private function loadCustomersData(array $customerIdentifiers)
     {
+        $this->_pageSize;
+
         /** @var CustomerCollection $collection */
         $collection = $this->customerCollectionFactory->create();
         $collection->removeAttributeToSelect();
         $select = $collection->getSelect();
         $customerTableId = array_keys($select->getPart(Select::FROM))[0];
-        $select->where(
-            $customerTableId . '.email in (?)',
-            array_map(
-                function (array $customer) {
-                    return $customer['email'];
-                },
-                $customerIdentifiers
-            )
-        );
 
-        return $collection;
-    }
-
-    /**
-     * Load customers' data that can be found by given identifiers.
-     *
-     * @param array $customerIdentifiers With keys "email" and "website_id".
-     *
-     * @return void
-     */
-    private function loadCustomersData(array $customerIdentifiers)
-    {
-        $this->_byPagesIterator->iterate(
-            $this->prepareCollection($customerIdentifiers),
-            $this->_pageSize,
-            [[$this, 'addCustomer']]
-        );
+        $getChuck = function (int $offset) use ($customerIdentifiers) {
+            return array_slice($customerIdentifiers, $offset, $this->_pageSize);
+        };
+        $offset = 0;
+        for ($chunk = $getChuck($offset); !empty($chunk); $offset += $this->_pageSize, $chunk = $getChuck($offset)) {
+            $emails = array_column($chunk, 'email');
+            $chunkSelect = clone $select;
+            $chunkSelect->where($customerTableId . '.email IN (?)', $emails);
+            $customers = $collection->getConnection()->fetchAll($chunkSelect);
+            foreach ($customers as $customer) {
+                $this->addCustomerByArray($customer);
+            }
+        }
     }
 
     /**
@@ -147,8 +135,9 @@ class Storage
         if (!isset($this->customerStoreIds[$email])) {
             $this->customerStoreIds[$email] = [];
         }
-        $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
-        $this->customerStoreIds[$email][$customer['website_id']] = $customer['store_id'] ?? null;
+        $websiteId = (int) $customer['website_id'];
+        $this->_customerIds[$email][$websiteId] = (int) $customer['entity_id'];
+        $this->customerStoreIds[$email][$websiteId] = $customer['store_id'] ?? null;
 
         return $this;
     }
