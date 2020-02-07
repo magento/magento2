@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Eav\Model\Attribute\DataProvider;
 
+use Magento\Store\Model\Store;
+
 /**
  * Base POST data for create attribute with options.
  */
@@ -70,6 +72,67 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
         unset($result["{$this->getFrontendInput()}_without_default_value"]);
 
         return $result;
+    }
+
+    /**
+     * Return product attribute data set for update attribute options.
+     *
+     * @return array
+     */
+    public function getUpdateOptionsProvider(): array
+    {
+        $frontendInput = $this->getFrontendInput();
+        return [
+            "{$frontendInput}_update_options" => [
+                'post_data' => [
+                    'options_array' => [
+                        'option_1' => [
+                            'order' => '5',
+                            'value' => [
+                                Store::DEFAULT_STORE_ID => 'Option 1 Admin',
+                                'default' => 'Option 1 Store 1',
+                                'fixture_second_store' => 'Option 1 Store 2',
+                                'fixture_third_store' => 'Option 1 Store 3',
+                            ],
+                            'delete' => '',
+                        ],
+                        'option_2' => [
+                            'order' => '6',
+                            'value' => [
+                                Store::DEFAULT_STORE_ID => 'Option 2 Admin',
+                                'default' => 'Option 2 Store 1',
+                                'fixture_second_store' => 'Option 2 Store 2',
+                                'fixture_third_store' => 'Option 2 Store 3',
+                            ],
+                            'delete' => '',
+                            'default' => 1,
+                        ],
+                    ],
+                ],
+            ],
+            "{$frontendInput}_delete_options" => [
+                'post_data' => [
+                    'options_array' => [
+                        'option_1' => [
+                            'value' => [],
+                            'delete' => '',
+                        ],
+                        'option_2' => [
+                            'value' => [],
+                            'delete' => '1',
+                        ],
+                        'option_3' => [
+                            'value' => [],
+                            'delete' => '',
+                        ],
+                        'option_4' => [
+                            'value' => [],
+                            'delete' => '1',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
