@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType;
+namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeOptionManagementInterface;
-use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -22,27 +21,21 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Base create and assert attribute data.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractSaveAttributeTest extends AbstractBackendController
 {
-    /**
-     * @var AttributeRepositoryInterface
-     */
-    protected $attributeRepository;
+    /** @var ProductAttributeRepositoryInterface */
+    protected $productAttributeRepository;
 
-    /**
-     * @var Escaper
-     */
+    /** @var Escaper */
     protected $escaper;
 
-    /**
-     * @var Json
-     */
+    /** @var Json */
     protected $jsonSerializer;
 
-    /**
-     * @var ProductAttributeOptionManagementInterface
-     */
+    /** @var ProductAttributeOptionManagementInterface */
     protected $productAttributeOptionManagement;
 
     /**
@@ -51,12 +44,12 @@ abstract class AbstractSaveAttributeTest extends AbstractBackendController
     protected function setUp()
     {
         parent::setUp();
-        $this->attributeRepository = $this->_objectManager->get(AttributeRepositoryInterface::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
         $this->jsonSerializer = $this->_objectManager->get(Json::class);
         $this->productAttributeOptionManagement = $this->_objectManager->get(
             ProductAttributeOptionManagementInterface::class
         );
+        $this->productAttributeRepository = $this->_objectManager->get(ProductAttributeRepositoryInterface::class);
     }
 
     /**
@@ -73,15 +66,15 @@ abstract class AbstractSaveAttributeTest extends AbstractBackendController
         if (isset($attributeData['serialized_options_arr'])) {
             $attributeData['serialized_options'] = $this->serializeOptions($attributeData['serialized_options_arr']);
         }
-        $this->createAttributeViaController($attributeData);
+        $this->dispatchAttributeSave($attributeData);
         $this->assertSessionMessages(
             $this->equalTo([(string)__('You saved the product attribute.')]),
             MessageInterface::TYPE_SUCCESS
         );
         try {
-            $attribute = $this->attributeRepository->get(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
+            $attribute = $this->productAttributeRepository->get($attributeCode);
             $this->assertAttributeData($attribute, $attributeData, $checkArray);
-            $this->attributeRepository->delete($attribute);
+            $this->productAttributeRepository->delete($attribute);
         } catch (NoSuchEntityException $e) {
             $this->fail("Attribute with code {$attributeCode} was not created.");
         }
@@ -101,15 +94,15 @@ abstract class AbstractSaveAttributeTest extends AbstractBackendController
         ) {
             $attributeData['serialized_options'] = $this->serializeOptions($attributeData['serialized_options_arr']);
         }
-        $this->createAttributeViaController($attributeData);
+        $this->dispatchAttributeSave($attributeData);
         $this->assertSessionMessages(
             $this->equalTo([$this->escaper->escapeHtml($errorMessage)]),
             MessageInterface::TYPE_ERROR
         );
         $attributeCode = $this->getAttributeCodeFromAttributeData($attributeData);
         try {
-            $attribute = $this->attributeRepository->get(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-            $this->attributeRepository->delete($attribute);
+            $attribute = $this->productAttributeRepository->get($attributeCode);
+            $this->productAttributeRepository->delete($attribute);
         } catch (NoSuchEntityException $e) {
             //Attribute already deleted.
         }
@@ -191,7 +184,7 @@ abstract class AbstractSaveAttributeTest extends AbstractBackendController
      * @param array $attributeData
      * @return void
      */
-    private function createAttributeViaController(array $attributeData): void
+    private function dispatchAttributeSave(array $attributeData): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($attributeData);
