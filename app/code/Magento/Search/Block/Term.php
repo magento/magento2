@@ -130,7 +130,7 @@ class Term extends Template
      * @param DataObject $obj
      * @return string
      */
-    public function getSearchUrl(DataObject $obj)
+    public function getSearchUrl($obj)
     {
         /** @var $url UrlInterface */
         $url = $this->_urlFactory->create();
