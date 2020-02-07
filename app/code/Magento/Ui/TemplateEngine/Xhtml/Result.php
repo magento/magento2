@@ -5,18 +5,17 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
-use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\TemplateEngine\Xhtml\Template;
-use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Psr\Log\LoggerInterface;
 
 /**
- * @inheritdoc
+ * Convert DOMElement to string representation
  */
 class Result implements ResultInterface
 {
@@ -61,8 +60,8 @@ class Result implements ResultInterface
      * @param UiComponentInterface $component
      * @param Structure $structure
      * @param LoggerInterface $logger
-     * @param JsonHexTag|null $jsonSerializer
-     * @param State|null $state
+     * @param JsonHexTag $jsonSerializer
+     * @param State $state
      */
     public function __construct(
         Template $template,
@@ -70,16 +69,16 @@ class Result implements ResultInterface
         UiComponentInterface $component,
         Structure $structure,
         LoggerInterface $logger,
-        ?JsonHexTag $jsonSerializer = null,
-        ?State $state = null
+        JsonHexTag $jsonSerializer,
+        State $state
     ) {
         $this->template = $template;
         $this->compiler = $compiler;
         $this->component = $component;
         $this->structure = $structure;
         $this->logger = $logger;
-        $this->jsonSerializer = $jsonSerializer ?? ObjectManager::getInstance()->get(JsonHexTag::class);
-        $this->state = $state ?? ObjectManager::getInstance()->get(State::class);
+        $this->jsonSerializer = $jsonSerializer;
+        $this->state = $state;
     }
 
     /**
@@ -128,7 +127,7 @@ class Result implements ResultInterface
             $this->logger->critical($e);
             $result = $e->getMessage();
             if ($this->state->getMode() === State::MODE_DEVELOPER) {
-                $result .= "<pre><code>{$e->__toString()}</code></pre>";
+                $result .= "<pre><code>Exception in {$e->getFile()}:{$e->getLine()}</code></pre>";
             }
         }
         return $result;

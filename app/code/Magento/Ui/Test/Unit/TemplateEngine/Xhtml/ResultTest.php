@@ -111,20 +111,20 @@ class ResultTest extends TestCase
      */
     public function testToStringWithException(): void
     {
-        $exception = new \Exception();
+        $e = new \Exception();
 
         $this->templateMock->expects($this->once())
            ->method('getDocumentElement')
-           ->willThrowException($exception);
+           ->willThrowException($e);
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception);
+            ->with($e);
         $this->assertEquals(
-            '<pre><code>' . $exception->__toString() . '</code></pre>',
+            '<pre><code>Exception in ' . $e->getFile() . ':' . $e->getLine() . '</code></pre>',
             $this->model->__toString()
         );
     }
