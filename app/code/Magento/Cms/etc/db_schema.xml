@@ -68,6 +68,8 @@
                 comment="Page Custom Template"/>
         <column xsi:type="text" name="custom_layout_update_xml" nullable="true"
                 comment="Page Custom Layout Update Content"/>
+        <column xsi:type="varchar" name="layout_update_selected" nullable="true"
+                length="128" comment="Page Custom Layout File"/>
         <column xsi:type="date" name="custom_theme_from" comment="Page Custom Theme Active From Date"/>
         <column xsi:type="date" name="custom_theme_to" comment="Page Custom Theme Active To Date"/>
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Page Meta Title"/>

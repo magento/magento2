@@ -13,4 +13,14 @@
         <var key="quote_id" entityKey="return" entityType="GuestCart"/>
         <var key="sku" entityKey="sku" entityType="product"/>
     </entity>
+    <entity name="SimpleTwoCartItems" type="CartItem">
+        <data key="qty">2</data>
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+    <entity name="NotValidCartItems" type="CartItem">
+        <data key="qty">abc</data>
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
 </entities>

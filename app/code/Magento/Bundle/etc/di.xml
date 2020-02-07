@@ -123,9 +123,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Quote\Model\Quote\Item">
-        <plugin name="update_price_for_bundle_in_quote_item_option" type="Magento\Bundle\Plugin\UpdatePriceInQuoteItemOptions"/>
-    </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
     </type>
@@ -221,6 +218,19 @@
         <arguments>
             <argument name="productTypeChildrenValidationMap" xsi:type="array">
                 <item name="bundle" xsi:type="boolean">false</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="price_type" xsi:type="string">catalog_product</item>
+                    <item name="price_view" xsi:type="string">catalog_product</item>
+                    <item name="shipment_type" xsi:type="string">catalog_product</item>
+                    <item name="sku_type" xsi:type="string">catalog_product</item>
+                    <item name="weight_type" xsi:type="string">catalog_product</item>
+                </item>
             </argument>
         </arguments>
     </type>

@@ -10,10 +10,15 @@
 namespace Magento\Theme\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
+ * Handles the storage of media files like images and fonts.
+ *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -89,16 +94,26 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     protected $mediaDirectoryWrite;
 
     /**
+     * @var \Magento\Framework\Filesystem\Io\File
+     */
+    private $file;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
+     * @param \Magento\Framework\Filesystem\Io\File|null $file
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
-        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
+        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
+        \Magento\Framework\Filesystem\Io\File $file = null
     ) {
         parent::__construct($context);
         $this->filesystem = $filesystem;
@@ -106,6 +121,9 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_themeFactory = $themeFactory;
         $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaDirectoryWrite->create($this->mediaDirectoryWrite->getRelativePath($this->getStorageRoot()));
+        $this->file = $file ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Filesystem\Io\File::class
+        );
     }
 
     /**
@@ -129,7 +147,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function convertIdToPath($value)
     {
         $path = $this->urlDecoder->decode($value);
-        if (!strstr($path, $this->getStorageRoot())) {
+        if (!strstr($path, (string) $this->getStorageRoot())) {
             $path = $this->getStorageRoot() . $path;
         }
         return $path;
@@ -229,7 +247,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
             if ($path && $path !== self::NODE_ROOT) {
                 $path = $this->convertIdToPath($path);
 
-                if ($this->mediaDirectoryWrite->isDirectory($path) && 0 === strpos($path, $currentPath)) {
+                if ($this->mediaDirectoryWrite->isDirectory($path) && 0 === strpos($path, (string) $currentPath)) {
                     $currentPath = $this->mediaDirectoryWrite->getRelativePath($path);
                 }
             }
@@ -246,7 +264,11 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getThumbnailDirectory($path)
     {
-        return pathinfo($path, PATHINFO_DIRNAME) . '/' . \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY;
+        return sprintf(
+            "%s/%s",
+            $this->file->getPathInfo($path)['dirname'],
+            \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY
+        );
     }
 
     /**
@@ -259,10 +281,16 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getThumbnailPath($imageName)
     {
         $imagePath = $this->getCurrentPath() . '/' . $imageName;
-        if (!$this->mediaDirectoryWrite->isExist($imagePath) || 0 !== strpos($imagePath, $this->getStorageRoot())) {
+        if (!$this->mediaDirectoryWrite->isExist($imagePath) ||
+            0 !== strpos($imagePath, (string) $this->getStorageRoot())
+        ) {
             throw new \InvalidArgumentException('The image not found.');
         }
-        return $this->getThumbnailDirectory($imagePath) . '/' . pathinfo($imageName, PATHINFO_BASENAME);
+        return sprintf(
+            "%s/%s",
+            $this->getThumbnailDirectory($imagePath),
+            $this->file->getPathInfo($imageName)['basename']
+        );
     }
 
     /**
@@ -291,8 +319,8 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAllowedExtensionsByType()
     {
         return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
-                ? ['ttf', 'otf', 'eot', 'svg', 'woff']
-                : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
+            ? ['ttf', 'otf', 'eot', 'svg', 'woff']
+            : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
     }
 
     /**

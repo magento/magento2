@@ -10,6 +10,7 @@
     <test name="AdminUrlForProductRewrittenCorrectlyTest">
         <annotations>
             <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
             <title value="Check that URL for product rewritten correctly"/>
             <description value="Check that URL for product rewritten correctly"/>
             <severity value="MAJOR"/>
@@ -40,7 +41,7 @@
         <waitForPageLoad stepKey="waitForEditPage"/>
 
         <!--Switch to Default Store view-->
-        <actionGroup ref="SwitchToTheNewStoreView" stepKey="selectSecondStoreView">
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="selectSecondStoreView">
             <argument name="storeViewName" value="Default Store View"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForStoreViewLoad"/>
@@ -50,12 +51,12 @@
         <waitForElementVisible selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="waitForUseDefaultUrlCheckbox"/>
         <click selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="clickUseDefaultUrlCheckbox"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$createProduct.sku$$-new" stepKey="changeUrlKey"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Select product and go toUpdate Attribute page-->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
         <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="ApiSimpleProduct"/>
         </actionGroup>
         <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>

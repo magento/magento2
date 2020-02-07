@@ -20,6 +20,7 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 
 /**
  * Customer model
@@ -180,7 +181,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
@@ -248,6 +249,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param AccountConfirmation|null $accountConfirmation
+     * @param Random|null $mathRandom
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -272,7 +274,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        Random $mathRandom = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
@@ -291,6 +294,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->indexerRegistry = $indexerRegistry;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
         parent::__construct(
             $context,
             $registry,
@@ -394,7 +398,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
-        if ($this->getConfirmation() && $this->isConfirmationRequired()) {
+        if ($this->getConfirmation() &&
+            $this->accountConfirmation->isConfirmationRequired($this->getWebsiteId(), $this->getId(), $this->getEmail())
+        ) {
             throw new EmailNotConfirmedException(
                 __("This account isn't confirmed. Verify and try again.")
             );
@@ -415,8 +421,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Load customer by email
      *
-     * @param   string $customerEmail
-     * @return  $this
+     * @param string $customerEmail
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByEmail($customerEmail)
     {
@@ -427,8 +434,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Change customer password
      *
-     * @param   string $newPassword
-     * @return  $this
+     * @param string $newPassword
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changePassword($newPassword)
     {
@@ -440,6 +448,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get full customer name
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getName()
     {
@@ -462,8 +471,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Add address to address collection
      *
-     * @param   Address $address
-     * @return  $this
+     * @param Address $address
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addAddress(Address $address)
     {
@@ -487,6 +497,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $addressId
      * @return Address
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressItemById($addressId)
     {
@@ -507,6 +518,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Customer addresses collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressesCollection()
     {
@@ -538,6 +550,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve all customer attributes
      *
      * @return Attribute[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributes()
     {
@@ -592,6 +605,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $password
      * @return boolean
+     * @throws \Exception
      */
     public function validatePassword($password)
     {
@@ -805,7 +819,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getRandomConfirmationKey()
     {
-        return md5(uniqid());
+        return $this->mathRandom->getRandomString(32);
     }
 
     /**

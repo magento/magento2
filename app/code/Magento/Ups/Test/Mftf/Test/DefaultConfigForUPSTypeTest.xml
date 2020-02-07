@@ -9,9 +9,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="DefaultConfigForUPSTypeTest">
         <annotations>
-            <title value="Default Configuration for UPS Type"/>
-            <description value="Default Configuration for UPS Type"/>
             <features value="Ups"/>
+            <stories value="UPS configuration"/>
+            <title value="Default Configuration for UPS Type"/>
+            <stories value="UPS"/>
+            <description value="Default Configuration for UPS Type"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-99012"/>
             <useCaseId value="MAGETWO-98947"/>

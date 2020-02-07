@@ -10,6 +10,7 @@
     <test name="DeleteProductAttributeTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Product attributes"/>
             <title value="Delete Product Attribute"/>
             <description value="Admin should able to delete a product attribute"/>
             <testCaseId value="MC-10887"/>
@@ -23,16 +24,20 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
-            <argument name="ProductAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
+        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+            <argument name="productAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
         <!-- Assert the product attribute is not in the grid by Attribute code -->
-        <actionGroup ref="filterProductAttributeByAttributeCode" stepKey="filterByAttributeCode">
+        <actionGroup ref="FilterProductAttributeByAttributeCodeActionGroup" stepKey="filterByAttributeCode">
             <argument name="ProductAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
         <!--Assert the product attribute is not in the grid by Default Label -->
-        <actionGroup ref="filterProductAttributeByDefaultLabel" stepKey="filterByDefaultLabel">
+        <actionGroup ref="FilterProductAttributeByDefaultLabelActionGroup" stepKey="filterByDefaultLabel">
             <argument name="productAttributeLabel" value="$$createProductAttribute.default_frontend_label$$"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
@@ -47,7 +52,7 @@
         <waitForPageLoad stepKey="waitForAttributeAdded"/>
         <!-- Filter By Attribute Label on Add Attribute Page -->
         <click selector="{{AdminProductFiltersSection.filter}}" stepKey="clickOnFilter"/>
-        <actionGroup ref="filterProductAttributeByAttributeLabel" stepKey="filterByAttributeLabel">
+        <actionGroup ref="FilterProductAttributeByAttributeLabelActionGroup" stepKey="filterByAttributeLabel">
             <argument name="productAttributeLabel" value="$$createProductAttribute.default_frontend_label$$"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage3"/>

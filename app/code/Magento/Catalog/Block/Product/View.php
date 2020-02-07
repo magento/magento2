@@ -169,8 +169,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     }
 
     /**
-     * Get JSON encoded configuration array which can be used for JS dynamic
-     * price calculation depending on product options
+     * Get JSON encoded configuration which can be used for JS dynamic price calculation depending on product options
      *
      * @return string
      */
@@ -188,24 +187,25 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         }
 
         $tierPrices = [];
-        $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
+        $priceInfo = $product->getPriceInfo();
+        $tierPricesList = $priceInfo->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $tierPrice['price']->getValue();
+            $tierPrices[] = $tierPrice['price']->getValue() * 1;
         }
         $config = [
-            'productId'   => $product->getId(),
+            'productId'   => (int)$product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'prices'      => [
                 'oldPrice'   => [
-                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
+                    'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ],
                 'basePrice'  => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
+                    'amount'      => $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount() * 1,
                     'adjustments' => []
                 ],
                 'finalPrice' => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
+                    'amount'      => $priceInfo->getPrice('final_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ]
             ],
@@ -262,6 +262,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * Get default qty - either as preconfigured, or as 1.
+     *
      * Also restricts it by minimal qty.
      *
      * @param null|\Magento\Catalog\Model\Product $product
@@ -323,10 +324,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     public function getIdentities()
     {
         $identities = $this->getProduct()->getIdentities();
-        $category = $this->_coreRegistry->registry('current_category');
-        if ($category) {
-            $identities[] = Category::CACHE_TAG . '_' . $category->getId();
-        }
+
         return $identities;
     }
 

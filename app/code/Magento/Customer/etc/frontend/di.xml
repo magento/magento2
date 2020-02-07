@@ -77,4 +77,34 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="customerAlreadyExistsErrorMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerAlreadyExistsErrorMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="confirmAccountSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/confirmAccountSuccessMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="customerVatShippingAddressSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerVatShippingAddressSuccessMessage.phtml</item>
+                    </item>
+                </item>
+                <item name="customerVatBillingAddressSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/customerVatBillingAddressSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

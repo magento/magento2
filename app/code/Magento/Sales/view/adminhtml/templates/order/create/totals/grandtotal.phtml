@@ -4,38 +4,36 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\Tax\Block\Checkout\Grandtotal
  * @see \Magento\Tax\Block\Checkout\Grandtotal
  */
 ?>
-<?php if ($block->includeTax() && $block->getTotalExclTax() >= 0):?>
-<tr class="row-totals">
-    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
-        <strong><?= /* @escapeNotVerified */ __('Grand Total Excl. Tax') ?></strong>
-    </td>
-    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
-        <strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getTotalExclTax()) ?></strong>
-    </td>
-</tr>
-<?= /* @escapeNotVerified */ $block->renderTotals('taxes', $block->getColspan()) ?>
-<tr class="row-totals">
-    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
-        <strong><?= /* @escapeNotVerified */ __('Grand Total Incl. Tax') ?></strong>
-    </td>
-    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
-        <strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValue()) ?></strong>
-    </td>
-</tr>
-<?php else:?>
-<tr class="row-totals">
-    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
-        <strong><?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?></strong>
-    </td>
-    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
-        <strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValue()) ?></strong>
-    </td>
-</tr>
+<?php if ($block->includeTax() && $block->getTotalExclTax() >= 0) : ?>
+    <tr class="row-totals">
+        <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+            <strong><?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?></strong>
+        </td>
+        <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+            <strong><?= /* @noEscape */ $block->formatPrice($block->getTotalExclTax()) ?></strong>
+        </td>
+    </tr>
+    <?= /* @noEscape */ $block->renderTotals('taxes', $block->getColspan()) ?>
+    <tr class="row-totals">
+        <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+            <strong><?= $block->escapeHtml(__('Grand Total Incl. Tax')) ?></strong>
+        </td>
+        <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+            <strong><?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValue()) ?></strong>
+        </td>
+    </tr>
+    <?php else : ?>
+    <tr class="row-totals">
+        <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+            <strong><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></strong>
+        </td>
+        <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+            <strong><?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValue()) ?></strong>
+        </td>
+    </tr>
 <?php endif;?>

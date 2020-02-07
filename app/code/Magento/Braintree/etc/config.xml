@@ -34,7 +34,8 @@
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>
                 <allowspecific>0</allowspecific>
-                <sdk_url><![CDATA[https://js.braintreegateway.com/js/braintree-2.32.0.min.js]]></sdk_url>
+                <sdk_url><![CDATA[https://js.braintreegateway.com/web/3.44.1/js/client.min.js]]></sdk_url>
+                <hosted_fields_sdk_url><![CDATA[https://js.braintreegateway.com/web/3.44.1/js/hosted-fields.min.js]]></hosted_fields_sdk_url>
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <masked_fields>cvv,number</masked_fields>

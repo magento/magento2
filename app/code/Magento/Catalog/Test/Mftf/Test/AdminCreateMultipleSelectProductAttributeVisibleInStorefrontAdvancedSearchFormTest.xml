@@ -34,12 +34,18 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete product attribute -->
+            <deleteData createDataKey="attribute" stepKey="deleteProductAttribute"/>
+
+            <!-- Delete product attribute set -->
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Filter product attribute set by attribute set name -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
-        <actionGroup ref="FilterProductAttributeSetGridByAttributeSetName" stepKey="filterProductAttrSetGridByAttrSetName">
+        <actionGroup ref="FilterProductAttributeSetGridByAttributeSetNameActionGroup" stepKey="filterProductAttrSetGridByAttrSetName">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 
@@ -47,12 +53,12 @@
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassignedAttr"/>
 
         <!-- Assign attribute in the group -->
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
 
         <!-- Go to Product Attribute Grid page -->
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>

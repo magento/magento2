@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Braintree\Model\Multishipping;
 
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider as PaypalConfigProvider;
@@ -117,6 +118,10 @@ class PlaceOrder implements PlaceOrderInterface
         $orderPayment->setAdditionalInformation(
             PaymentTokenInterface::CUSTOMER_ID,
             $customerId
+        );
+        $orderPayment->setAdditionalInformation(
+            'is_multishipping',
+            1
         );
     }
 

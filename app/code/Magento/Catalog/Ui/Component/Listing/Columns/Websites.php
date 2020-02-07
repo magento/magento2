@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -120,31 +119,32 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             && !empty($sorting['direction'])
             && $sorting['field'] === $this->getName()
         ) {
+            /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection */
             $collection = $this->getContext()->getDataProvider()->getCollection();
-            $collection
-                 ->joinField(
-                     'websites_ids',
-                     'catalog_product_website',
-                     'website_id',
-                     'product_id=entity_id',
-                     null,
-                     'left'
-                 )
-                 ->joinTable(
-                     'store_website',
-                     'website_id = websites_ids',
-                     ['name'],
-                     null,
-                     'left'
-                 )
-                 ->groupByAttribute('entity_id');
-            $this->resourceHelper->addGroupConcatColumn(
-                $collection->getSelect(),
-                $this->websiteNames,
-                'name'
+
+            $select = $collection->getConnection()->select();
+            $select->from(
+                ['cpw' => $collection->getTable('catalog_product_website')],
+                ['product_id']
+            )->joinLeft(
+                ['sw' => $collection->getTable('store_website')],
+                'cpw.website_id = sw.website_id',
+                [
+                    $this->websiteNames => new \Zend_Db_Expr(
+                        'GROUP_CONCAT(sw.name ORDER BY sw.website_id ASC SEPARATOR \',\')'
+                    )
+                ]
+            )->group(
+                'cpw.product_id'
             );
 
-            $collection->getSelect()->order($this->websiteNames . ' ' . $sorting['direction']);
+            $collection->getSelect()->joinLeft(
+                ['product_websites' => $select],
+                'product_websites.product_id = e.entity_id',
+                [$this->websiteNames]
+            )->order(
+                'product_websites.' . $this->websiteNames . ' ' . $sorting['direction']
+            );
         }
     }
 }

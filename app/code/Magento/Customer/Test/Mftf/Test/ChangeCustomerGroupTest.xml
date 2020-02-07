@@ -67,10 +67,13 @@
             <stories value="Change Customer Group"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <remove keyForRemoval="filterCustomer"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters" before="selectCustomer"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" before="selectCustomer"/>
         <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
     </test>
 </tests>

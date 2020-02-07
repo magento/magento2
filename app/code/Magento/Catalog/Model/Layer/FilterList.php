@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Layer;
 
+/**
+ * Layer navigation filters
+ */
 class FilterList
 {
     const CATEGORY_FILTER   = 'category';
@@ -106,9 +110,9 @@ class FilterList
     {
         $filterClassName = $this->filterTypes[self::ATTRIBUTE_FILTER];
 
-        if ($attribute->getAttributeCode() == 'price') {
+        if ($attribute->getFrontendInput() === 'price') {
             $filterClassName = $this->filterTypes[self::PRICE_FILTER];
-        } elseif ($attribute->getBackendType() == 'decimal') {
+        } elseif ($attribute->getBackendType() === 'decimal') {
             $filterClassName = $this->filterTypes[self::DECIMAL_FILTER];
         }
 

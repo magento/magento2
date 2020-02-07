@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Class CategoriesTest
@@ -45,6 +47,11 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected $categoryCollectionMock;
 
+    /**
+     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $authorizationMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -61,6 +68,9 @@ class CategoriesTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryCollectionMock = $this->getMockBuilder(CategoryCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,11 +96,15 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(Categories::class, [
-            'locator' => $this->locatorMock,
-            'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
-            'arrayManager' => $this->arrayManagerMock,
-        ]);
+        return $this->objectManager->getObject(
+            Categories::class,
+            [
+                'locator' => $this->locatorMock,
+                'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
+                'arrayManager' => $this->arrayManagerMock,
+                'authorization' => $this->authorizationMock
+            ]
+        );
     }
 
     public function testModifyData()
@@ -130,7 +144,9 @@ class CategoriesTest extends AbstractModifierTest
                 ],
             ],
         ];
-
+        $this->authorizationMock->expects($this->exactly(2))
+            ->method('isAllowed')
+            ->willReturn(true);
         $this->arrayManagerMock->expects($this->any())
             ->method('findPath')
             ->willReturn('path');
@@ -144,7 +160,14 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturnArgument(2);
 
         $modifyMeta = $this->createModel()->modifyMeta($meta);
-        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['category_ids']['arguments']['data']['config']['disabled']
+        );
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['create_category_button']['arguments']['data']['config']['disabled']
+        );
     }
 
     /**

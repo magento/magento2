@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
@@ -16,7 +19,6 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Framework\App\ObjectManager;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterface;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
@@ -75,6 +77,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private $serializer;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
      * Constructor
      *
      * @param Metadata $metadata
@@ -84,6 +91,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param OrderTaxManagementInterface|null $orderTaxManagement
      * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
      * @param JsonSerializer|null $serializer
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         Metadata $metadata,
@@ -92,7 +100,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
         OrderTaxManagementInterface $orderTaxManagement = null,
         PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
-        JsonSerializer $serializer = null
+        JsonSerializer $serializer = null,
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -106,6 +115,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ->get(PaymentAdditionalInfoInterfaceFactory::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(JsonSerializer::class);
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
+            ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
     }
 
     /**
@@ -198,6 +209,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     {
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
+        $this->extensionAttributesJoinProcessor->process($searchResult);
         $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
         foreach ($searchResult->getItems() as $order) {
@@ -236,8 +248,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Perform persist operations for one entity
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $entity
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @param OrderInterface $entity
+     * @return OrderInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
@@ -251,6 +266,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
                 $entity->setShippingMethod($shipping->getMethod());
             }
         }
+
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];

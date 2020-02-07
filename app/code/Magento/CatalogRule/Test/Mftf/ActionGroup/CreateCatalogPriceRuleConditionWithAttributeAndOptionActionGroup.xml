@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup">
+        <annotations>
+            <description>Adds the provided Attribute Name, Select Value, Index A and Index B details to the 'Conditions' section on the Admin Catalog Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeName" type="string"/>
+            <argument name="targetSelectValue" type="string"/>
+            <argument name="indexA" type="string"/>
+            <argument name="indexB" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTabTitle}}" dependentSelector="{{AdminNewCatalogPriceRule.conditionsTabBody}}" visible="false" stepKey="openConditionsTab"/>
+        <waitForPageLoad stepKey="waitForConditionTabOpened"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect(indexA)}}" userInput="{{attributeName}}" stepKey="selectTypeCondition"/>
+        <waitForElement selector="{{AdminNewCatalogPriceRuleConditions.ellipsisValue(indexA)}}" stepKey="waitForTarget"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.ellipsisValue(indexA)}}" stepKey="clickOnEllipsis"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsisSelect(indexA, indexB)}}" userInput="{{targetSelectValue}}" stepKey="selectOption"/>
+    </actionGroup>
+</actionGroups>

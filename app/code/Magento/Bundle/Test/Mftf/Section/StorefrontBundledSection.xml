@@ -37,5 +37,6 @@
         <element name="multiselectOptionFourProducts" type="multiselect" selector="//label//span[contains(text(), '{{productName}}')]/../..//select[@multiple='multiple']" parameterized="true"/>
         <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
         <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>
+        <element name="multiSelectOption" type="select" selector="//div[@class='field option  required']//select"/>
     </section>
 </sections>

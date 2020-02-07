@@ -7,28 +7,32 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
-use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Delegation\Data\NewOperation;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Customer repository.
+ *
+ * CRUD operations for customer entity
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -186,8 +190,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
-        $prevCustomerData = null;
-        $prevCustomerDataArr = null;
+        $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
@@ -203,14 +206,17 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray($customer, [], CustomerInterface::class);
         $customer->setAddresses($origAddresses);
-        /** @var Customer $customerModel */
+        /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
-            $customerModel->setStoreId($this->storeManager->getStore()->getId());
+            $customerModel->setStoreId(
+                $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
+            );
         }
+        $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
             $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
@@ -277,7 +283,6 @@ class CustomerRepository implements CustomerRepositoryInterface
                 'delegate_data' => $delegatedNewOperation ? $delegatedNewOperation->getAdditionalData() : [],
             ]
         );
-
         return $savedCustomer;
     }
 
@@ -343,7 +348,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Retrieve customers which match a specified criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
      * which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -448,6 +453,20 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         if (isset($customerArray['ignore_validation_flag'])) {
             $customerModel->setData('ignore_validation_flag', true);
+        }
+    }
+
+    /**
+     * Set customer group id
+     *
+     * @param Customer $customerModel
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     */
+    private function setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr)
+    {
+        if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
+            $customerModel->setGroupId($prevCustomerDataArr['group_id']);
         }
     }
 }

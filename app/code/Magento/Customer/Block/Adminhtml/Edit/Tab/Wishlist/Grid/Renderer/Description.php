@@ -18,6 +18,6 @@ class Description extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        return nl2br(htmlspecialchars($row->getData($this->getColumn()->getIndex())));
+        return nl2br($this->escapeHtml($row->getData($this->getColumn()->getIndex())));
     }
 }

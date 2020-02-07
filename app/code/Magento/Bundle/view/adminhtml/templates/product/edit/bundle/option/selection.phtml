@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
 ?>
 <script id="bundle-option-selection-box-template" type="text/x-magento-template">
@@ -13,16 +11,16 @@
         <thead>
             <tr class="headings">
                 <th class="col-draggable"></th>
-                <th class="col-default"><?= /* @escapeNotVerified */ __('Default') ?></th>
-                <th class="col-name"><?= /* @escapeNotVerified */ __('Name') ?></th>
-                <th class="col-sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
-            <?php if ($block->getCanReadPrice() !== false): ?>
-                <th class="col-price price-type-box"><?= /* @escapeNotVerified */ __('Price') ?></th>
-                <th class="col-price price-type-box"><?= /* @escapeNotVerified */ __('Price Type') ?></th>
+                <th class="col-default"><?= $block->escapeHtml(__('Default')) ?></th>
+                <th class="col-name"><?= $block->escapeHtml(__('Name')) ?></th>
+                <th class="col-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+            <?php if ($block->getCanReadPrice() !== false) : ?>
+                <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price')) ?></th>
+                <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price Type')) ?></th>
             <?php endif; ?>
-                <th class="col-qty"><?= /* @escapeNotVerified */ __('Default Quantity') ?></th>
-                <th class="col-uqty qty-box"><?= /* @escapeNotVerified */ __('User Defined') ?></th>
-                <th class="col-order type-order" style="display:none"><?= /* @escapeNotVerified */ __('Position') ?></th>
+                <th class="col-qty"><?= $block->escapeHtml(__('Default Quantity')) ?></th>
+                <th class="col-uqty qty-box"><?= $block->escapeHtml(__('User Defined')) ?></th>
+                <th class="col-order type-order" style="display:none"><?= $block->escapeHtml(__('Position')) ?></th>
                 <th class="col-actions"></th>
             </tr>
         </thead>
@@ -33,31 +31,38 @@
 <script id="bundle-option-selection-row-template" type="text/x-magento-template">
     <td class="col-draggable">
         <span data-role="draggable-handle" class="draggable-handle"></span>
-        <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_id<%- data.index %>"
-               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_id]"
+        <input type="hidden"
+               id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_id<%- data.index %>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_id]"
                value="<%- data.selection_id %>"/>
-        <input type="hidden" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][option_id]"
+        <input type="hidden"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][option_id]"
                value="<%- data.option_id %>"/>
-        <input type="hidden" class="product"
-               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][product_id]"
+        <input type="hidden"
+               class="product"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][product_id]"
                value="<%- data.product_id %>"/>
-        <input type="hidden" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][delete]"
-               value="" class="delete"/>
+        <input type="hidden" name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][delete]"
+               value=""
+               class="delete"/>
     </td>
     <td class="col-default">
-        <input onclick="bSelection.checkGroup(event)" type="<%- data.option_type %>" class="default"
-               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][is_default]"
+        <input onclick="bSelection.checkGroup(event)"
+               type="<%- data.option_type %>"
+               class="default"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][is_default]"
                value="1" <%- data.checked %> />
     </td>
     <td class="col-name"><%- data.name %></td>
     <td class="col-sku"><%- data.sku %></td>
-<?php if ($block->getCanReadPrice() !== false): ?>
+<?php if ($block->getCanReadPrice() !== false) : ?>
     <td class="col-price price-type-box">
-        <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_value"
-               class="input-text required-entry validate-zero-or-greater" type="text"
-               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
+        <input id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
+               class="input-text required-entry validate-zero-or-greater"
+               type="text"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
                value="<%- data.selection_price_value %>"
-            <?php if ($block->getCanEditPrice() === false): ?>
+            <?php if ($block->getCanEditPrice() === false) : ?>
                disabled="disabled"
             <?php endif; ?>/>
     </td>
@@ -65,19 +70,23 @@
         <?= $block->getPriceTypeSelectHtml() ?>
         <div><?= $block->getCheckboxScopeHtml() ?></div>
     </td>
-<?php else: ?>
-    <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_value"
-           name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
-    <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_type"
-           name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
-    <?php if ($block->isUsedWebsitePrice()): ?>
-    <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_scope"
-           name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
+<?php else : ?>
+    <input type="hidden"
+           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
+           name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
+    <input type="hidden"
+           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_type"
+           name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
+    <?php if ($block->isUsedWebsitePrice()) : ?>
+    <input type="hidden"
+           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_scope"
+           name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
     <?php endif; ?>
 <?php endif; ?>
     <td class="col-qty">
-        <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater" type="text"
-               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_qty]"
+        <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater"
+               type="text"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][selection_qty]"
                value="<%- data.selection_qty %>" />
     </td>
     <td class="col-uqty qty-box">
@@ -85,8 +94,9 @@
         <span style="display:none"><?= $block->getQtyTypeSelectHtml() ?></span>
     </td>
     <td class="col-order type-order" style="display:none">
-        <input class="input-text required-entry validate-zero-or-greater" type="text"
-               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][position]"
+        <input class="input-text required-entry validate-zero-or-greater"
+               type="text"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.parentIndex %>][<%- data.index %>][position]"
                value="<%- data.position %>" />
     </td>
     <td class="col-actions">
@@ -106,7 +116,7 @@ var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
 
 Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {
-    idLabel : '<?= /* @escapeNotVerified */ $block->getFieldId() ?>',
+    idLabel : '<?= $block->escapeJs($block->getFieldId()) ?>',
     scopePrice : <?= (int)$block->isUsedWebsitePrice() ?>,
     templateBox : '',
     templateRow : '',
@@ -115,7 +125,7 @@ Bundle.Selection.prototype = {
     gridSelection: new Hash(),
     gridRemoval: new Hash(),
     gridSelectedProductSkus: [],
-    selectionSearchUrl: '<?= /* @escapeNotVerified */ $block->getSelectionSearchUrl() ?>',
+    selectionSearchUrl: '<?= $block->escapeUrl($block->getSelectionSearchUrl()) ?>',
 
     initialize : function() {
         this.templateBox = '<div class="tier form-list" id="' + this.idLabel + '_box_<%- data.parentIndex %>">' + bundleTemplateBox + '</div>';
