@@ -3038,7 +3038,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testEmptyAttributeValueShouldBeIgnoredAfterUpdateProductByImport()
     {
-        $pathToFile = __DIR__ . '/_files/' . 'import_product_with_empty_attribute_value.csv';
+        $pathToFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
+            . 'import_product_with_empty_attribute_value.csv';
         /** @var ImportProduct $importModel */
         $importModel = $this->createImportModel($pathToFile);
         /** @var ProcessingErrorAggregatorInterface $errors */
