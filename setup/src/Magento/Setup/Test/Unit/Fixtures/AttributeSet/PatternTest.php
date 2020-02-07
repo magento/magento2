@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures\AttributeSet;
 
@@ -28,7 +29,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                         'frontend_label' => 'Attribute 1',
                         'frontend_input' => 'select',
                         'backend_type' => 1,
-                        'default_option' => 'option 1',
+                        'default_value' => 'option_1',
                         'options' => [
                             'option' => [
                                 [

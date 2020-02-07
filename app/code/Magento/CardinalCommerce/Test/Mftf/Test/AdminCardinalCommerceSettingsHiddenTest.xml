@@ -9,6 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCardinalCommerceSettingsHiddenTest">
         <annotations>
+            <stories value="Cardinal Commerce Settings"/>
             <features value="CardinalCommerce"/>
             <title value="CardinalCommerce settings hidden" />
             <description value="CardinalCommerce config shouldn't be visible if the 3D secure is disabled for Authorize.Net."/>
