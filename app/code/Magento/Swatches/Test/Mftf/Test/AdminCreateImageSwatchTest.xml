@@ -30,6 +30,7 @@
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
+            <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -102,11 +103,7 @@
         </assertContains>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
-            <argument name="product" value="BaseConfigurableProduct"/>
-        </actionGroup>
+        <amOnPage url="{{AdminProductCreatePage.url(BaseConfigurableProduct.attribute_set_id, BaseConfigurableProduct.type_id)}}" stepKey="goToCreateConfigurableProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
@@ -150,7 +147,7 @@
         </assertContains>
 
         <!-- Go to the product listing page and see text swatch options -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPageStorefront"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForProductListingPage"/>
 
         <!-- Verify the storefront -->
