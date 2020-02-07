@@ -25,6 +25,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * A unit test for testing of the query factory.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryFactoryTest extends TestCase
 {

@@ -14,6 +14,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * Creates Query object according to configuration
+ *
  * Factory for @see \Magento\Analytics\ReportXml\Query
  */
 class QueryFactory
