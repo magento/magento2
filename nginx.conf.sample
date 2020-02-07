@@ -26,6 +26,9 @@
 ##
 ## In production mode, you should uncomment the 'expires' directive in the /static/ location block
 
+# Modules can be loaded only at the very beginning of the Nginx config file, please move the line below to the main config file
+# load_module /etc/nginx/modules/ngx_http_image_filter_module.so;
+
 root $MAGE_ROOT/pub;
 
 index index.php;
@@ -134,6 +137,28 @@ location /static/ {
 }
 
 location /media/ {
+
+## The following section allows to offload image resizing from Magento instance to the Nginx.
+## Catalog image URL format should be set accordingly.
+## See https://docs.magento.com/m2/ee/user_guide/configuration/general/web.html#url-options
+#   location ~* ^/media/catalog/.* {
+#
+#       # Replace placeholders and uncomment the line below to serve product images from public S3
+#       # See examples of S3 authentication at https://github.com/anomalizer/ngx_aws_auth
+#       # proxy_pass https://<bucket-name>.<region-name>.amazonaws.com;
+#
+#       set $width "-";
+#       set $height "-";
+#       if ($arg_width != '') {
+#           set $width $arg_width;
+#       }
+#       if ($arg_height != '') {
+#           set $height $arg_height;
+#       }
+#       image_filter resize $width $height;
+#       image_filter_jpeg_quality 90;
+#   }
+
     try_files $uri $uri/ /get.php$is_args$args;
 
     location ~ ^/media/theme_customization/.*\.xml {

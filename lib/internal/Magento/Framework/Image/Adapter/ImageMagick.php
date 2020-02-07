@@ -6,7 +6,9 @@
 namespace Magento\Framework\Image\Adapter;
 
 /**
- * ImageMagick adapter.
+ * Wrapper for Imagick image processing PHP Extension.
+ *
+ * @link https://www.php.net/manual/en/book.imagick.php
  */
 class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
@@ -85,7 +87,11 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_imageHandler = new \Imagick($this->_fileName);
         } catch (\ImagickException $e) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception(sprintf('Unsupported image format. File: %s', $this->_fileName), $e->getCode(), $e);
+            throw new \RuntimeException(
+                sprintf('Unsupported image format. File: %s', $this->_fileName),
+                $e->getCode(),
+                $e
+            );
         }
 
         $this->backgroundColor();
@@ -110,7 +116,9 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Save image to specific path. If some folders of path does not exist they will be created
+     * Save image to specific path.
+     *
+     * If some folders of path does not exist they will be created
      *
      * @param null|string $destination
      * @param null|string $newName
@@ -222,6 +230,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
+     * @deprecated unused
      */
     public function rotate($angle)
     {
@@ -361,7 +370,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         } catch (\ImagickException $e) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception('Unable to create watermark.', $e->getCode(), $e);
+            throw new \RuntimeException('Unable to create watermark.', $e->getCode(), $e);
         }
 
         // merge layers
@@ -374,13 +383,13 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception If some of dependencies are missing
+     * @throws \RuntimeException If some of dependencies are missing
      */
     public function checkDependencies()
     {
         if (!class_exists('\Imagick', false)) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception("Required PHP extension 'Imagick' was not loaded.");
+            throw new \RuntimeException("Required PHP extension 'Imagick' was not loaded.");
         }
     }
 
