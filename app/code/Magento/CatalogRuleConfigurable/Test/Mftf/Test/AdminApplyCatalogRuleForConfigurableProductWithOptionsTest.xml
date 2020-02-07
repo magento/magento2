@@ -11,14 +11,14 @@
         <annotations>
             <features value="CatalogRuleConfigurable"/>
             <stories value="Apply catalog price rule"/>
-            <title value="Apply catalog price rule for configurable product with options"/>
-            <description value="Admin should be able to apply the catalog rule for configurable product with options"/>
+            <title value="DEPRECATED. Apply catalog price rule for configurable product with options"/>
+            <description value="DEPRECATED. Admin should be able to apply the catalog rule for configurable product with options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14062"/>
             <group value="catalogRuleConfigurable"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use AdminApplyCatalogRuleForConfigurableProductWithOptions2Test instead</issueId>
             </skip>
         </annotations>
         <before>
