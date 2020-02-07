@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\TemplateEngine\Xhtml;
 
 use Magento\Framework\App\State;
-use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Ui\Component\Listing;
@@ -21,8 +21,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Test for \Magento\Ui\TemplateEngine\Xhtml\Result.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ResultTest extends TestCase
 {
@@ -57,19 +55,9 @@ class ResultTest extends TestCase
     private $componentMock;
 
     /**
-     * @var Structure|MockObject
-     */
-    private $structureMock;
-
-    /**
      * @var LoggerInterface|MockObject
      */
     private $loggerMock;
-
-    /**
-     * @var JsonHexTag|MockObject
-     */
-    private $jsonSerializerMock;
 
     /**
      * @var State|MockObject
@@ -84,10 +72,8 @@ class ResultTest extends TestCase
         $this->templateMock = $this->createMock(Template::class);
         $this->compilerMock = $this->createMock(CompilerInterface::class);
         $this->componentMock = $this->createMock(Listing::class);
-        $this->structureMock = $this->createMock(Structure::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
-        $this->jsonSerializerMock = $this->createMock(JsonHexTag::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -96,9 +82,7 @@ class ResultTest extends TestCase
                 'template' => $this->templateMock,
                 'compiler' => $this->compilerMock,
                 'component' => $this->componentMock,
-                'structure' => $this->structureMock,
                 'logger' => $this->loggerMock,
-                'jsonSerializer' => $this->jsonSerializerMock,
                 'state' => $this->stateMock,
             ]
         );
