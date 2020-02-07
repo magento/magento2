@@ -99,5 +99,6 @@
             <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($createProduct.name$)}}" stepKey="dontSeeSpecialPrice"/>
     </test>
 </tests>
