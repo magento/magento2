@@ -100,9 +100,7 @@ class Term extends Template
                 $temp[$term->getQueryText()] = $term;
                 $termKeys[] = $term->getQueryText();
             }
-            if (empty($termKeys)) {
-                return $this;
-            }
+
             natcasesort($termKeys);
 
             foreach ($termKeys as $termKey) {
