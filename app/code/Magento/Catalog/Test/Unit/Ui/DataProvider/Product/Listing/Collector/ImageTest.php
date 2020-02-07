@@ -99,9 +99,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($image);
 
-        $imageHelper->expects($this->once())
-            ->method('getResizedImageInfo')
-            ->willReturn([11, 11]);
         $this->state->expects($this->once())
             ->method('emulateAreaCode')
             ->with(
@@ -111,12 +108,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($imageHelper);
 
+        $width = 5;
+        $height = 10;
         $imageHelper->expects($this->once())
             ->method('getHeight')
-            ->willReturn(10);
+            ->willReturn($height);
         $imageHelper->expects($this->once())
             ->method('getWidth')
-            ->willReturn(10);
+            ->willReturn($width);
         $imageHelper->expects($this->once())
             ->method('getLabel')
             ->willReturn('Label');
@@ -132,10 +131,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with();
         $image->expects($this->once())
             ->method('setResizedHeight')
-            ->with(11);
+            ->with($height);
         $image->expects($this->once())
             ->method('setResizedWidth')
-            ->with(11);
+            ->with($width);
 
         $productRenderInfoDto->expects($this->once())
             ->method('setImages')
