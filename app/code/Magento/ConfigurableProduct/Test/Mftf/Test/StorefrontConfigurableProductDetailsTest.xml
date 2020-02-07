@@ -220,6 +220,9 @@
             <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
