@@ -62,7 +62,7 @@ define([
                  * Click handler.
                  */
                 click: function (event) {
-                    this.closeModal(event);
+                    this.closeModal(event, true);
                 }
             }]
         },
@@ -75,7 +75,7 @@ define([
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
             this.modal.find(this.options.modalContent).append(this.getFormTemplate());
-            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this));
 
             if (this.options.validation) {
                 this.setValidationClasses();
@@ -154,7 +154,9 @@ define([
          */
         closeModal: function (event, result) {
             var value;
-            if (result && !(result instanceof $.Event)) {
+            result = result || false;
+
+            if (result) {
                 if (this.options.validation && !this.validate()) {
                     return false;
                 }
