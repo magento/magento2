@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">chechur_blog_post_form.chechur_blog_post_form_data_source</item>
+            <item name="deps" xsi:type="string">chechur_blog_post_form.chechur_blog_post_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Sample Form</item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+        </item>
+        <!--
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Chechur\Blog\Block\Adminhtml\Post\Edit\BackButton</item>
+            <item name="delete" xsi:type="string">Chechur\Blog\Block\Adminhtml\Post\Edit\DeleteButton</item>
+            <item name="reset" xsi:type="string">Chechur\Blog\Block\Adminhtml\Post\Edit\ResetButton</item>
+            <item name="save" xsi:type="string">Chechur\Blog\Block\Adminhtml\Post\Edit\SaveButton</item>
+        </item>
+        -->
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save" class="Chechur\Blog\Block\Adminhtml\Post\Edit\SaveButton"/>
+            <button name="delete" class="Chechur\Blog\Block\Adminhtml\Post\Edit\DeleteButton"/>
+            <button name="reset" class="Chechur\Blog\Block\Adminhtml\Post\Edit\ResetButton"/>
+            <button name="back" class="Chechur\Blog\Block\Adminhtml\Post\Edit\BackButton"/>
+        </buttons>
+        <namespace>chechur_blog_post_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>chechur_blog_post_form.chechur_blog_post_form_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="chechur_blog_post_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Chechur\Blog\Model\Post\DataProvider</argument>
+            <argument name="name" xsi:type="string">chechur_blog_post_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">post_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="chechur_blog/post/save"/>
+        </settings>
+    </dataSource>
+
+    <fieldset name="contact">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Sample Fieldset</item>
+            </item>
+        </argument>
+
+        <!-- This field represents form id and is hidden -->
+        <field name="post_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">contact</item>
+                </item>
+            </argument>
+        </field>
+
+
+        <!-- This field has data type 'text' and standard 'input' form element and looks like input -->
+        <field name="theme">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Theme</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">contact</item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="type">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Type</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">contact</item>
+                </item>
+            </argument>
+        </field>
+        <!-- This field has data type 'text' and standard 'input' form element and looks like input -->
+        <field name="post_content">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">post_content</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">contact</item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="image">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="source" xsi:type="string">contact</item>
+                    <item name="label" xsi:type="string" translate="true">Image</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="chechur_blog/image/upload"/>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="created_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="label" xsi:type="string" translate="true">Go Live Start Date</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">page</item>
+                    <item name="sortOrder" xsi:type="number">21</item>
+                    <item name="dataScope" xsi:type="string">contact</item>
+                    <item name="validation" xsi:type="array">
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="updated_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="label" xsi:type="string" translate="true">Go Live Update Date</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">page</item>
+                    <item name="sortOrder" xsi:type="number">21</item>
+                    <item name="dataScope" xsi:type="string">contact</item>
+                    <item name="validation" xsi:type="array">
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+    </fieldset>
+</form>

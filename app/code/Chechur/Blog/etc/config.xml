@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <!--section-->
+        <blog>
+            <!--group-->
+            <general>
+                <!--field-->
+                <enable>1</enable>
+                <display_text>Blog Apllied To</display_text>
+            </general>
+        </blog>
+    </default>
+<!--
+        <default>
+            <blog>
+                <multiselect>
+                    <first_entry>
+                        <label>Simple Product</label>
+                    </first_entry>
+                    <second_entry>
+                        <label>Configurable Product</label>
+                    </second_entry>
+                </multiselect>
+            </blog>
+        </default>
+-->
+</config>

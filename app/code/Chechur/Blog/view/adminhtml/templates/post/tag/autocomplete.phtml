@@ -1,0 +1,102 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+?>
+<?php
+/**
+ * Post tag autocomplete template
+ *
+ * @var $block \Magefan\Blog\Block\Adminhtml\Post\Tag\Autocomplete
+ */
+?>
+
+<script>
+    require(['jquery', 'domReady!'], function ($) {
+        require(['Magefan_Blog/js/jquery.tagsinput'], function(){
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+
+            var intr = setInterval(function() {
+                var $el = $('[name*="tag_input"]');
+                if (!$el.length) {
+                    return;
+                }
+                clearInterval(intr);
+
+                var oAddTag = $.fn.addTag;
+                $.fn.addTag = function() {
+                    setTimeout(function(){
+                        $el.change();
+                    }, 500);
+
+                    return oAddTag.apply(this, arguments);
+                };
+
+                var oRemoveTag = $.fn.removeTag;
+                $.fn.removeTag = function() {
+                    setTimeout(function(){
+                        $el.change();
+                    }, 500);
+
+                    return oRemoveTag.apply(this, arguments);
+                };
+
+                $el.each(function () {
+
+                    var $e = $(this);
+                    var $tags = $e.tagsInput({
+                        'height':'200px',
+                        'width':'768px',
+                        'interactive':true,
+                        'defaultText':'Add tag',
+                        'removeWithBackspace' : true,
+                        'minChars' : 2,
+                        'maxChars' : 0,
+                    });
+
+                    var linkedTags = <?= /*@noEscape*/ $block->getLinkedTags() ?>;
+
+                    for (var i=0; i<linkedTags.length;i++) {
+                        if (!$tags.tagExist(linkedTags[i])) {
+                            $tags.addTag(linkedTags[i]);
+                        }
+                    }
+
+                    $('#' + $tags.attr('id') + '_tag').autocomplete({
+                        source: function (request, response) {
+                            var searchTag = extractLast(request.term);
+                            $.ajax({
+                                url: '<?= $block->escapeUrl($block->getAutocompleteUrl()) ?>',
+                                type: 'post',
+                                dataType: "json",
+                                data: {
+                                    search: searchTag,
+                                },
+                                success: function (data) {
+                                    response(data);
+                                }
+                            });
+                        },
+                        'select': function( event, ui ) {
+                            var tag = ui.item.label;
+                            $tags.removeTag(tag);
+                            $tags.addTag(tag);
+                            return false;
+                        }
+                    });
+                });
+            }, 1000);
+        })
+    });
+</script>
+

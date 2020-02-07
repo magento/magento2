@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @var \Chechur\Blog\Block\Display $block
+ */
+echo"<h1>" .$block->blog() ."</h1>";
+?>
+<?php
+$_post = $block->getData();
+$_postUrl = $block->getBaseUrl();
+$_postName = $block->escapeHtml($block->getTitle(), null);
+?>
+<div class="post-view">
+    <div class="post-holder post-holder-<?= (int)$block->getId() ?>">
+        <div class="post-content">
+            <div class="post-description clearfix">
+                <div class="post-text-hld">
+
+                    <?php foreach ($block->getPostCollection() as $key => $post): ?>
+                        <div class="post-content">
+                            <h2 align="center"><?= $post->getTheme() ?></h2><br>
+                            <?php if(!empty($post->getImage())): ?>
+                                <img src="<?= $post->getImage()?>" width="100" height="100" align="right">
+                            <?php endif;?>
+                            <p align="justify"><?= $post->getPostContent() ?></p><br>
+
+                            <p align="right"><?= $post->getCreatedAt() ?></p>
+                        </div>
+                    <?php endforeach; ?>
+
+                </div>
+
+                <div class="clear clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-bottom">
+        <?= $block->getChildHtml('blog.post.bottom') ?>
+    </div>
+</div>
+</div>

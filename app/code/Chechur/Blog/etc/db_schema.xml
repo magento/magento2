@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="chechur_blog_post" resource="default" engine="innodb" comment="List of data/schema patches">
+        <column xsi:type="int" name="post_id" identity="true" comment="Post Id"/>
+        <column xsi:type="varchar" name="theme" length="1024" nullable="false" comment="Post Theme"/>
+        <column xsi:type="varchar" name="type" length="255" nullable="false" comment="Post Type"/>
+        <column xsi:type="text" name="post_content" nullable="false" comment="Post Content"/>
+        <column xsi:type="text" name="image" nullable="false" comment="Post Image"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Post Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Post Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="post_id"/>
+        </constraint>
+    </table>
+</schema>

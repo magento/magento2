@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Chechur_Blog::blog" title="Blog" module="Chechur_Blog" sortOrder="51" resource="Chechur_Blog::blog"/>
+        <add id="Chechur_Blog::post" title="Manage Posts" module="Chechur_Blog" sortOrder="10" action="chechur_blog/post" resource="Chechur_Blog::post" parent="Chechur_Blog::blog"/>
+        <add id="Chechur_Blog::blog_configuration" title="Configuration" module="Chechur_Blog" sortOrder="99" parent="Chechur_Blog::blog" action="adminhtml/system_config/edit/section/blog" resource="Chechur_Blog::blog_configuration"/>
+    </menu>
+</config>
