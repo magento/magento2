@@ -15,7 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * Its responsibility is to choose appropriate strategy to apply passed filter to the Select
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class FilterContext implements FilterStrategyInterface

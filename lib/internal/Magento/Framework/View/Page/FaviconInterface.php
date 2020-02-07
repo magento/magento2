@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Page;
  * Favicon interface
  *
  * @api
+ * @since 100.0.2
  */
 interface FaviconInterface
 {

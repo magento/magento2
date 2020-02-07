@@ -81,7 +81,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'performIdentityCheck', 'delete'])
+            ->setMethods(['getId', 'performIdentityCheck', 'delete', 'load'])
             ->getMock();
 
         $this->userFactoryMock = $this->getMockBuilder(\Magento\User\Model\UserFactory::class)
@@ -134,15 +134,18 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getPost')
-            ->willReturnMap([
-                ['user_id', $userId],
-                [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, $currentUserPassword],
-            ]);
+            ->willReturnMap(
+                [
+                    ['user_id', $userId],
+                    [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, $currentUserPassword],
+                ]
+            );
 
         $userMock = clone $currentUserMock;
 
         $this->userFactoryMock->expects($this->any())->method('create')->will($this->returnValue($userMock));
         $this->responseMock->expects($this->any())->method('setRedirect')->willReturnSelf();
+        $this->userMock->expects($this->any())->method('load')->with($userId)->willReturn($this->userFactoryMock);
         $this->userMock->expects($this->any())->method('delete')->willReturnSelf();
         $this->messageManagerMock->expects($this->once())->method($resultMethod);
 
@@ -172,10 +175,12 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getPost')
-            ->willReturnMap([
-                ['user_id', $userId],
-                [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, ''],
-            ]);
+            ->willReturnMap(
+                [
+                    ['user_id', $userId],
+                    [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, ''],
+                ]
+            );
 
         $result = $this->controller->execute();
         $this->assertNull($result);
@@ -191,8 +196,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'currentUserPassword' => '123123q',
-                'userId'              => 1,
-                'currentUserId'       => 2,
+                'userId'              => 2,
+                'currentUserId'       => 1,
                 'resultMethod'        => 'addSuccess',
             ],
             [

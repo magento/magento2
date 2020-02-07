@@ -30,7 +30,7 @@
         <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?= $block->escapeHtmlAttr($image->getValueId()) ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type) : ?>
             <td class="gallery" align="center" style="vertical-align:bottom;">
-            <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?= $block->escapeHtmlAttr($block->escapeJs($type)) ?>_<?= $block->escapeHtmlAttr($block->escapeJs($image->getValueId())) ?>');return false;">
+            <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>" target="_blank" onclick="imagePreview('<?= $block->escapeHtmlAttr($block->escapeJs($block->getElement()->getHtmlId())) ?>_image_<?= $block->escapeHtmlAttr($block->escapeJs($type)) ?>_<?= $block->escapeHtmlAttr($block->escapeJs($image->getValueId())) ?>');return false;">
             <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= $block->escapeHtmlAttr($type) ?>_<?= $block->escapeHtmlAttr($image->getValueId()) ?>" src="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @noEscape */ time() ?>" alt="<?= $block->escapeHtmlAttr($image->getValue()) ?>" title="<?= $block->escapeHtmlAttr($image->getValue()) ?>" height="25" class="small-image-preview v-middle"/></a><br/>
             <input type="file" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>_<?= $block->escapeHtmlAttr($type) ?>[<?= $block->escapeHtmlAttr($image->getValueId()) ?>]" size="1"></td>
         <?php endforeach; ?>

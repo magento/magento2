@@ -196,7 +196,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated 101.1.0 because resource models should be used directly
+     * @deprecated 102.0.0 because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -246,7 +246,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param string $type
      * @return bool
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function hasValues($type = null)
     {

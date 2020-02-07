@@ -553,6 +553,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Not add store ids to items
      *
      * @return $this
+     * @since 100.2.8
      */
     protected function prepareStoreId()
     {

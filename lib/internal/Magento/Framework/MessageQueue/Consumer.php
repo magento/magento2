@@ -240,7 +240,7 @@ class Consumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 102.0.4
      */
     private function getConsumerConfig()
     {
@@ -255,7 +255,7 @@ class Consumer implements ConsumerInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 102.0.4
      */
     private function getCommunicationConfig()
     {
@@ -271,7 +271,7 @@ class Consumer implements ConsumerInterface
      *
      * @return QueueRepository
      *
-     * @deprecated 100.2.0
+     * @deprecated 102.0.4
      */
     private function getQueueRepository()
     {
@@ -286,7 +286,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated 100.1.0
+     * @deprecated 102.0.4
      */
     private function getMessageController()
     {
@@ -302,7 +302,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageValidator
      *
-     * @deprecated 100.2.0
+     * @deprecated 102.0.4
      */
     private function getMessageValidator()
     {
@@ -318,7 +318,7 @@ class Consumer implements ConsumerInterface
      *
      * @return EnvelopeFactory
      *
-     * @deprecated 100.2.0
+     * @deprecated 102.0.4
      */
     private function getEnvelopeFactory()
     {

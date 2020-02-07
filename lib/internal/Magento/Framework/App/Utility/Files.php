@@ -1020,7 +1020,7 @@ class Files
     /**
      * Parse meta-info of a static file in module
      *
-     * @deprecated Replaced with method accumulateStaticFiles()
+     * @deprecated 102.0.4 Replaced with method accumulateStaticFiles()
      *
      * @param string $file
      * @return array

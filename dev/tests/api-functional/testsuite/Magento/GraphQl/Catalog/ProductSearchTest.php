@@ -365,7 +365,7 @@ QUERY;
         $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
         $out = '';
         // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento indexer:reindex", $out);
+        exec("php -f {$appDir}/bin/magento indexer:reindex catalog_category_product", $out);
         CacheCleaner::cleanAll();
     }
 

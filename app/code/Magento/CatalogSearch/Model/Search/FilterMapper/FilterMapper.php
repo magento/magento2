@@ -14,7 +14,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * This class applies filters to Select based on SelectContainer configuration
  *
- * @deprecated MySQL search engine is not recommended.
+ * @deprecated 101.0.0 MySQL search engine is not recommended.
  * @see \Magento\ElasticSearch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

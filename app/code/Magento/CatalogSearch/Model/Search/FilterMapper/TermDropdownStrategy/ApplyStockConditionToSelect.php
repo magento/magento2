@@ -14,7 +14,7 @@ use Magento\CatalogInventory\Model\Stock\Status;
 /**
  * Apply stock condition to select.
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class ApplyStockConditionToSelect

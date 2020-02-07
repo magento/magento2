@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
  * Class to work with archives
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractBackup implements BackupInterface, SourceFileInterface
 {
@@ -311,6 +312,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      * Check if keep files of backup
      *
      * @return bool
+     * @since 102.0.0
      */
     public function keepSourceFile()
     {
@@ -322,6 +324,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      *
      * @param bool $keepSourceFile
      * @return $this
+     * @since 102.0.0
      */
     public function setKeepSourceFile(bool $keepSourceFile)
     {

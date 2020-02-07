@@ -18,7 +18,7 @@ endif; ?>
     </div>
     <div class="admin__page-section-item-content">
         <?php  if ($order->getTracksCollection()->count()) : ?>
-            <p><a href="#" id="linkId" onclick="popWin('<?= $block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($order))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?= $block->escapeHtmlAttr(__('Track Order')) ?>"><?= $block->escapeHtml(__('Track Order')) ?></a></p>
+            <p><a href="#" id="linkId" onclick="popWin('<?= $block->escapeHtmlAttr($block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($order)))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?= $block->escapeHtmlAttr(__('Track Order')) ?>"><?= $block->escapeHtml(__('Track Order')) ?></a></p>
         <?php endif; ?>
         <?php if ($order->getShippingDescription()) : ?>
             <strong><?= $block->escapeHtml($order->getShippingDescription()) ?></strong>

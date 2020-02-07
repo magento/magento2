@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Adminhtml sales order view.
  * @api
+ * @since 100.2.2
  */
 class View extends OrderView
 {
@@ -59,6 +60,7 @@ class View extends OrderView
      *
      * @return void
      * @throws LocalizedException
+     * @since 100.2.2
      */
     protected function _construct()
     {
@@ -97,6 +99,7 @@ class View extends OrderView
      * @param Order $order
      * @return bool
      * @throws LocalizedException
+     * @since 100.2.2
      */
     public function canAuthorize(Order $order): bool
     {

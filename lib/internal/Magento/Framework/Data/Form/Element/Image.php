@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\Data\Form\Element;
+
+use Magento\Framework\UrlInterface;
+
 /**
  * Category form input image element
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Data\Form\Element;
-
-use Magento\Framework\UrlInterface;
-
 class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
@@ -54,6 +54,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
                 $url = $this->_urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]) . $url;
             }
+            $url = $this->_escaper->escapeUrl($url);
 
             $html = '<a href="' .
                 $url .
@@ -70,10 +71,10 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
                 '" id="' .
                 $this->getHtmlId() .
                 '_image" title="' .
-                $this->getValue() .
+                $this->_escaper->escapeHtmlAttr($this->getValue()) .
                 '"' .
                 ' alt="' .
-                $this->getValue() .
+                $this->_escaper->escapeHtmlAttr($this->getValue()) .
                 '" height="22" width="22" class="small-image-preview v-middle"  ' .
                 $this->_getUiId() .
                 ' />' .
@@ -127,7 +128,8 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _getHiddenInput()
     {
-        return '<input type="hidden" name="' . parent::getName() . '[value]" value="' . $this->getValue() . '" />';
+        return '<input type="hidden" name="' . parent::getName() . '[value]" value="' .
+            $this->_escaper->escapeHtmlAttr($this->getValue()) . '" />';
     }
 
     /**
