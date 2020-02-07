@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\TestFramework\Helper\Bootstrap as Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/product_downloadable_with_purchased_separately_links.php';
 
