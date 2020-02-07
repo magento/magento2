@@ -102,7 +102,7 @@ class Storage
             return array_slice($customerIds, $offset, $pageSize);
         };
         $offset = 0;
-        for ($idsChunk = $getChuck($offset); !empty($idsChunk); $offset += $pageSize, $getChuck($offset)) {
+        for ($idsChunk = $getChuck($offset); !empty($idsChunk); $offset += $pageSize, $idsChunk = $getChuck($offset)) {
             $chunkSelect = clone $select;
             $chunkSelect->where($tableId .'.parent_id IN (?)', $idsChunk);
             $addresses = $collection->getConnection()->fetchAll($chunkSelect);
