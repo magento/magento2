@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5922"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-30111"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>

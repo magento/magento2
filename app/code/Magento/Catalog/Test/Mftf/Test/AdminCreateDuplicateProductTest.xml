@@ -15,6 +15,9 @@
             <testCaseId value="MC-14714"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-30409"/>
+            </skip>
         </annotations>
 
         <before>
