@@ -31,20 +31,6 @@ define([
                 dataScope: 'magento'
             });
 
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('initConfig')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.initConfig;
-
-                expect(type).toEqual('function');
-            });
-
-            it('Check returned value if method called without arguments', function () {
-                expect(model.initConfig()).toBeDefined();
-            });
-
             it('Check returned value type if method called without arguments', function () {
                 var type = typeof model.initConfig();
 
@@ -70,20 +56,6 @@ define([
                 dataScope: 'magento'
             });
 
-            it('check for defined', function () {
-                expect(model.hasOwnProperty('getByIds')).toBeDefined();
-            });
-
-            it('check method type', function () {
-                expect(typeof model.getByIds).toEqual('function');
-            });
-
-            it('Check returned value if method called with argument', function () {
-                var ids = [1,2,3];
-
-                expect(model.getByIds(ids)).toBeDefined();
-            });
-
             it('check returned type if method called with argument', function () {
                 var ids = [1,2,3],
                     type = typeof model.getByIds(ids);
@@ -98,7 +70,13 @@ define([
             });
 
             it('Return array if "getByIds" has been called', function () {
-                var ids = [1];
+                var ids = [1],
+                    expectedValue = [
+                        {
+                            id_field_name: 'entity_id',
+                            entity_id: '1'
+                        }
+                    ];
 
                 model = new DataStorage({
                     dataScope: 'magento',
@@ -110,7 +88,7 @@ define([
                     }
                 });
 
-                expect(typeof model.getByIds(ids)).toEqual('object');
+                expect(model.getByIds(ids)).toEqual(expectedValue);
             });
 
         });
@@ -121,25 +99,15 @@ define([
                 dataScope: 'magento'
             });
 
-            it('check for defined', function () {
-                expect(model.hasOwnProperty('getIds')).toBeDefined();
-            });
-
-            it('check method type', function () {
-                expect(typeof model.getIds).toEqual('function');
-            });
-
-            it('check returned value if method called with argument', function () {
-                var ids = [1,2,3];
-
-                expect(model.getIds(ids)).toBeDefined();
-            });
-
-            it('check returned type if method called with argument', function () {
-                var ids = [1,2,3],
-                    type = typeof model.getIds(ids);
-
-                expect(type).toEqual('object');
+            it('check array of entity_id will return', function () {
+                var ids = [
+                    {
+                        id_field_name: 'entity_id',
+                        entity_id: '1'
+                    }
+                ],
+                expectedValue = ['1'];
+                expect(model.getIds(ids)).toEqual(expectedValue);
             });
 
         });
@@ -148,28 +116,6 @@ define([
 
             var model = new DataStorage({
                 dataScope: 'magento'
-            });
-
-            it('check for defined', function () {
-                expect(model.hasOwnProperty('getData')).toBeDefined();
-            });
-
-            it('check method type', function () {
-                expect(typeof model.getData).toEqual('function');
-            });
-
-            it('check returned value if method called with argument', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
-                    },
-                    sorting: {},
-                    paging: {}
-                };
-
-                expect(model.getData(params)).toBeDefined();
             });
 
             it('check returned type if method called with argument', function () {
@@ -332,16 +278,6 @@ define([
                 }
             });
 
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('updateData')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.updateData;
-
-                expect(type).toEqual('function');
-            });
-
             it('Check updateData has been called', function () {
                 var data = [{
                     id_field_name: 'entity_id',
@@ -355,16 +291,6 @@ define([
         describe('"requestData" method', function () {
             var model = new DataStorage({
                 dataScope: 'magento'
-            });
-
-            it('Check for defined', function () {
-                expect(model.hasOwnProperty('requestData')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.requestData;
-
-                expect(type).toEqual('function');
             });
 
             it('Check Ajax request', function () {
@@ -401,16 +327,6 @@ define([
                 dataScope: 'magento'
             });
 
-            it('Check for defined', function () {
-                expect(model.hasOwnProperty('getRequest')).toBeDefined();
-            });
-
-            it('Check method', function () {
-                var type = typeof model.getRequest;
-
-                expect(type).toEqual('function');
-            });
-
             it('check "getRequest" has been executed', function () {
                 var params = {
                     namespace: 'magento',
@@ -432,16 +348,6 @@ define([
         describe('"getRequestData" method', function () {
             var model = new DataStorage({
                 dataScope: 'magento'
-            });
-
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('getRequestData')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.getRequestData;
-
-                expect(type).toEqual('function');
             });
 
             it('check "getRequestData" has been executed', function () {
@@ -493,16 +399,6 @@ define([
         describe('"cacheRequest" method', function () {
             var model = new DataStorage({
                 dataScope: 'magento'
-            });
-
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('cacheRequest')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.cacheRequest;
-
-                expect(type).toEqual('function');
             });
 
             it('check "model._requests"', function () {
@@ -559,16 +455,6 @@ define([
                 dataScope: 'magento'
             });
 
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('clearRequests')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.clearRequests;
-
-                expect(type).toEqual('function');
-            });
-
             it('check "clearRequests" will empty _requests array', function () {
                 var params = {
                     namespace: 'magento',
@@ -600,16 +486,6 @@ define([
                 dataScope: 'magento'
             });
 
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('removeRequest')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.removeRequest;
-
-                expect(type).toEqual('function');
-            });
-
             it('check "removeRequest" is defined', function () {
                 var params = {
                     namespace: 'magento',
@@ -634,16 +510,6 @@ define([
                 dataScope: 'magento'
             });
 
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('wasRequested')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.wasRequested;
-
-                expect(type).toEqual('function');
-            });
-
             it('Return false if getRequest method returns false', function () {
                 var params = {
                     namespace: 'magento',
@@ -662,16 +528,6 @@ define([
         describe('"onRequestComplete" method', function () {
             var model = new DataStorage({
                 dataScope: 'magento'
-            });
-
-            it('Check for defined ', function () {
-                expect(model.hasOwnProperty('onRequestComplete')).toBeDefined();
-            });
-
-            it('Check method type', function () {
-                var type = typeof model.onRequestComplete;
-
-                expect(type).toEqual('function');
             });
 
             it('Check "updateData" method has been called', function () {
