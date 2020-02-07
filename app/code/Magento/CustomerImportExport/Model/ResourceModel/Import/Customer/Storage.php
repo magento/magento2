@@ -180,6 +180,18 @@ class Storage
     }
 
     /**
+     * Get previously loaded customer id.
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return int|null
+     */
+    public function getLoadedCustomerId(string $email, int $websiteId): ?int
+    {
+        return $this->_customerIds[mb_strtolower($email)][$websiteId] ?? null;
+    }
+
+    /**
      * Find customer store ID for unique pair of email and website ID.
      *
      * @param string $email

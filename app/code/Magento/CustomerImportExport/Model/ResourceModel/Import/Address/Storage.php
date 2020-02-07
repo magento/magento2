@@ -142,13 +142,7 @@ class Storage
         }
 
         $forCustomersIds = array_unique($forCustomersIds);
-        $customerIdsToUse = [];
-        foreach ($forCustomersIds as $customerId) {
-            if (!array_key_exists($customerId, $this->addresses)) {
-                $customerIdsToUse[] = (int) $customerId;
-            }
-        }
-
+        $customerIdsToUse = array_diff($forCustomersIds, array_keys($this->addresses));
         $this->loadAddresses($customerIdsToUse);
     }
 }
