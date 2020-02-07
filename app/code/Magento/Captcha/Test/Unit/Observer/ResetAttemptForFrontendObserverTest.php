@@ -28,7 +28,7 @@ class ResetAttemptForFrontendObserverTest extends TestCase
     public function testExecuteExpectsDeleteUserAttemptsCalled()
     {
         $logMock = $this->createMock(Log::class);
-        $logMock->expects($this->once())->method('deleteUserAttempts');
+        $logMock->expects($this->once())->method('deleteUserAttempts')->willReturnSelf();
 
         $resLogFactoryMock = $this->createMock(LogFactory::class);
         $resLogFactoryMock->expects($this->once())
@@ -47,6 +47,6 @@ class ResetAttemptForFrontendObserverTest extends TestCase
             ResetAttemptForFrontendObserver::class,
             ['resLogFactory' => $resLogFactoryMock]
         );
-        $observer->execute($eventObserverMock);
+        $this->assertInstanceOf(Log::class, $observer->execute($eventObserverMock));
     }
 }
