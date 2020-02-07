@@ -167,7 +167,7 @@ define([
                 this.options.actions.cancel.call(event, result);
             }
 
-            this.options.actions.always();
+            this.options.actions.always(event);
             this.element.bind('promptclosed', _.bind(this._remove, this));
 
             return this._super();
