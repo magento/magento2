@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
  * Fill quote with products for instant purchase.
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class QuoteFilling
 {
@@ -25,6 +26,7 @@ class QuoteFilling
      * @param array $productRequest
      * @return Quote
      * @throws LocalizedException if product can not be added to quote.
+     * @since 100.2.0
      */
     public function fillQuote(
         Quote $quote,

@@ -142,7 +142,7 @@ class Relation implements RelationInterface
     /**
      * Checks if address has chosen as default and has had an id
      *
-     * @deprecated Is not used anymore due to changes in logic of save of address.
+     * @deprecated 102.0.1 Is not used anymore due to changes in logic of save of address.
      *             If address was default and becomes not default than default address id for customer must be
      *             set to null
      * @param AbstractModel $object

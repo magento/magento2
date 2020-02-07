@@ -180,6 +180,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     }
 
     /**
+     * Retrieve current config file into
+     *
      * Returns file info array if we need to get file from already existing file.
      * Or returns null, if we need to get file from uploaded array.
      *
@@ -411,7 +413,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @return string
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -435,7 +437,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -524,6 +526,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     }
 
     /**
+     * Prepare size text format
+     *
      * @param array $value
      * @return string
      */

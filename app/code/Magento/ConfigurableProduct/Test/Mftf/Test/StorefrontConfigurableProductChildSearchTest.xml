@@ -140,6 +140,9 @@
             <deleteData createDataKey="createConfigProductAttributeMultiSelect" stepKey="deleteConfigProductAttributeMultiSelect"/>
             <deleteData createDataKey="createConfigProductAttributeSelect" stepKey="deleteConfigProductAttributeSelect"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Quick search the storefront for the first attribute option -->

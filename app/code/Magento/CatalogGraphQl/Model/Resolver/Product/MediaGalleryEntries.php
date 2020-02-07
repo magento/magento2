@@ -18,7 +18,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  * @inheritdoc
  *
  * Format a product's media gallery information to conform to GraphQL schema representation
- * @deprecated
+ * @deprecated 100.3.3
  */
 class MediaGalleryEntries implements ResolverInterface
 {

@@ -229,6 +229,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testEstimateByAddressWithInclExclTaxAndVATGroup()
     {
+        $this->markTestSkipped('MC-30817');
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');

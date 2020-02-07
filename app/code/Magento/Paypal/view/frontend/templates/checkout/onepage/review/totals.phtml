@@ -17,7 +17,7 @@
         <th class="mark" colspan="<?= /* @noEscape */ $_colspan ?>" scope="row">
             <?= $block->escapeHtml(__('Your credit card will be charged for')) ?>
         </th>
-        <td class="amount" data-th="<?= $block->escapeHtml(__('Your credit card will be charged for')) ?>">
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Your credit card will be charged for')) ?>">
             <?= /* @noEscape */ $block->displayBaseGrandtotal() ?>
         </td>
     </tr>

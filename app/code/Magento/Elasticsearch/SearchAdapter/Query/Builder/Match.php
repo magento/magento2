@@ -30,7 +30,7 @@ class Match implements QueryInterface
     private $fieldMapper;
 
     /**
-     * @deprecated
+     * @deprecated 100.3.2
      * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
      * @var PreprocessorInterface[]
      */
@@ -175,7 +175,7 @@ class Match implements QueryInterface
     /**
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *
-     * @deprecated
+     * @deprecated 100.3.2
      * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
      * @param string $value
      * @return string

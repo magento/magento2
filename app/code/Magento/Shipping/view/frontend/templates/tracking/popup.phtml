@@ -53,7 +53,7 @@ $results = $block->getTrackingInfo();
     <?php endif; ?>
     <div class="actions">
         <button type="button"
-                title="<?= $block->escapeHtml(__('Close Window')) ?>"
+                title="<?= $block->escapeHtmlAttr(__('Close Window')) ?>"
                 class="action close"
                 onclick="window.close(); window.opener.focus();">
             <span><?= $block->escapeHtml(__('Close Window')) ?></span>

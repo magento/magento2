@@ -41,7 +41,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         }">
                 <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
-                    <option value="<?= $block->escapeHtml($typeCode) ?>"
+                    <option value="<?= $block->escapeHtmlAttr($typeCode) ?>"
                             <?php if ($typeCode == $ccType) : ?>selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($typeName) ?>
                     </option>
@@ -81,7 +81,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         'validate-cc-exp':'#<?= /* @noEscape */ $code ?>_expiration_yr'
                         }">
                 <?php foreach ($block->getCcMonths() as $k => $v) : ?>
-                    <option value="<?= $block->escapeHtml($k) ?>"
+                    <option value="<?= $block->escapeHtmlAttr($k) ?>"
                             <?php if ($k == $ccExpMonth) : ?>selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($v) ?>
                     </option>
@@ -93,7 +93,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     data-container="<?= /* @noEscape */ $code ?>-cc-year"
                     data-validate="{required:true}">
                 <?php foreach ($block->getCcYears() as $k => $v) : ?>
-                    <option value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
+                    <option value="<?= /* @noEscape */ $k ? $block->escapeHtmlAttr($k) : '' ?>"
                             <?php if ($k == $ccExpYear) : ?>selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($v) ?>
                     </option>
@@ -113,7 +113,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         <div class="admin__field-control">
             <input type="text"
                    data-container="<?= /* @noEscape */ $code ?>-cc-cvv"
-                   title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+                   title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
                    class="admin__control-text cvv"
                    id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]"
                    value="<?= /* @noEscape */ $block->getInfoData('cc_cid') ?>"

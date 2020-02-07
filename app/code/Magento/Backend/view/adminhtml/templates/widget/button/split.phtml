@@ -26,7 +26,7 @@
                     </span>
                     <?php if (isset($option['hint'])) : ?>
                     <div class="tooltip" <?= /* @noEscape */ $block->getUiId('item', $key, 'tooltip') ?>>
-                        <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
+                        <a href="<?= $block->escapeUrl($option['hint']['href']) ?>" class="help">
                             <?= $block->escapeHtml($option['hint']['label']) ?>
                         </a>
                     </div>

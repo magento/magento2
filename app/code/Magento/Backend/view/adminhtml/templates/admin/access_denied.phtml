@@ -24,7 +24,7 @@
                     <a href="<?= $block->escapeUrl($_SERVER['HTTP_REFERER']) ?>">
                         <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
                 <?php else : ?>
-                    <a href="<?= $block->escapeHtmlAttr('javascript:history.back()') ?>">
+                    <a href="<?= $block->escapeUrl('javascript:history.back()') ?>">
                         <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
                 <?php endif ?>
             </span>

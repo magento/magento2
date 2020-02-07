@@ -18,6 +18,7 @@ use Magento\Framework\Validation\ValidationException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
+ * @since 100.0.2
  */
 class Uploader
 {
@@ -701,7 +702,7 @@ class Uploader
      *
      * @param string $fileName
      * @return string
-     * @deprecated
+     * @deprecated 101.0.4
      */
     public static function getDispretionPath($fileName)
     {
@@ -713,6 +714,7 @@ class Uploader
      *
      * @param string $fileName
      * @return string
+     * @since 101.0.4
      */
     public static function getDispersionPath($fileName)
     {

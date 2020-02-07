@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
  * A service for reading language package dictionaries
  *
  * @api
+ * @since 100.0.2
  */
 class Dictionary
 {
