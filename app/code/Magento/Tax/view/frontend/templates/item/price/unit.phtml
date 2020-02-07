@@ -4,26 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Tax\Block\Item\Price\Renderer */
 
 $_item = $block->getItem();
 ?>
-
-<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
-    <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
+    <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
         <?php $_incl = $_item->getPriceInclTax(); ?>
         <span class="cart-price">
-            <?= /* @escapeNotVerified */ $block->formatPrice($_incl) ?>
+            <?= /* @noEscape */ $block->formatPrice($_incl) ?>
         </span>
     </span>
 <?php endif; ?>
 
-<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
-    <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
+    <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
         <span class="cart-price">
-            <?= /* @escapeNotVerified */ $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>
+            <?= /* @noEscape */ $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>
         </span>
     </span>
 <?php endif; ?>

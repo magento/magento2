@@ -304,7 +304,8 @@
         "constraint": {
             "PRIMARY": true,
             "EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
-            "EAV_ATTRIBUTE_LABEL_STORE_ID_STORE_STORE_ID": true
+            "EAV_ATTRIBUTE_LABEL_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ATTRIBUTE_LABEL_STORE_ID_ATTRIBUTE_ID": true
         }
     },
     "eav_form_type": {

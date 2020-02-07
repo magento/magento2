@@ -5,159 +5,160 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model\Plugin;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Newsletter\Model\ResourceModel\Subscriber;
-use Magento\Store\Model\Store;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Newsletter\Model\Plugin\CustomerPlugin;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\Collection;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomerPluginTest extends \PHPUnit\Framework\TestCase
+/**
+ * Class to test Newsletter Plugin for customer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CustomerPluginTest extends TestCase
 {
     /**
-     * @var \Magento\Newsletter\Model\Plugin\CustomerPlugin
-     */
-    private $plugin;
-
-    /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriberFactory|MockObject
      */
     private $subscriberFactory;
 
     /**
-     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExtensionAttributesFactory|MockObject
      */
-    private $subscriber;
+    private $extensionFactory;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var CollectionFactory|MockObject
+     */
+    private $collectionFactory;
+
+    /**
+     * @var SubscriptionManagerInterface|MockObject
+     */
+    private $subscriptionManager;
+
+    /**
+     * @var Share|MockObject
+     */
+    private $shareConfig;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerPlugin
      */
-    private $extensionFactoryMock;
+    private $plugin;
 
     /**
-     * @var CustomerExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @inheritdoc
      */
-    private $customerExtensionMock;
-
-    /**
-     * @var Subscriber|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $subscriberResourceMock;
-
-    /**
-     * @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $customerMock;
-
-    /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeManagerMock;
-
     protected function setUp()
     {
-        $this->subscriberFactory = $this->getMockBuilder(\Magento\Newsletter\Model\SubscriberFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->subscriber = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
-            ->setMethods(
-                [
-                    'loadByEmail',
-                    'getId',
-                    'delete',
-                    'updateSubscription',
-                    'subscribeCustomerById',
-                    'unsubscribeCustomerById',
-                    'isSubscribed',
-                ]
-            )->disableOriginalConstructor()
-            ->getMock();
-        $this->extensionFactoryMock = $this->getMockBuilder(ExtensionAttributesFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->customerExtensionMock = $this->getMockBuilder(CustomerExtensionInterface::class)
-            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->subscriberResourceMock = $this->getMockBuilder(Subscriber::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->setMethods(['getExtensionAttributes'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-
-        $this->subscriberFactory->expects($this->any())->method('create')->willReturn($this->subscriber);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
+        $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
+        $this->extensionFactory = $this->createMock(ExtensionAttributesFactory::class);
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
+        $this->shareConfig = $this->createMock(Share::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->objectManager = new ObjectManager($this);
         $this->plugin = $this->objectManager->getObject(
-            \Magento\Newsletter\Model\Plugin\CustomerPlugin::class,
+            CustomerPlugin::class,
             [
                 'subscriberFactory' => $this->subscriberFactory,
-                'extensionFactory' => $this->extensionFactoryMock,
-                'subscriberResource' => $this->subscriberResourceMock,
-                'storeManager' => $this->storeManagerMock,
+                'extensionFactory' => $this->extensionFactory,
+                'collectionFactory' => $this->collectionFactory,
+                'subscriptionManager' => $this->subscriptionManager,
+                'shareConfig' => $this->shareConfig,
+                'storeManager' => $this->storeManager,
             ]
         );
     }
 
     /**
-     * @param bool $subscriptionOriginalValue
-     * @param bool $subscriptionNewValue
+     * Test to update customer subscription after save customer
+     *
+     * @param int|null $originalStatus
+     * @param bool|null $newValue
+     * @param bool|null $expectedSubscribe
      * @dataProvider afterSaveDataProvider
-     * @return void
      */
-    public function testAfterSave($subscriptionOriginalValue, $subscriptionNewValue)
+    public function testAfterSave(?int $originalStatus, ?bool $newValue, ?bool $expectedSubscribe)
     {
-        $customerId = 1;
-        /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $result */
-        $result = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        /** @var CustomerRepository | \PHPUnit_Framework_MockObject_MockObject $subject */
-        $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $storeId = 2;
+        $websiteId = 1;
+        $customerId = 3;
+        $customerEmail = 'email@example.com';
 
-        /** @var CustomerExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $resultExtensionAttributes */
-        $resultExtensionAttributes = $this->getMockBuilder(CustomerExtensionInterface::class)
-            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
-            ->getMockForAbstractClass();
-        $result->expects($this->atLeastOnce())->method('getId')->willReturn($customerId);
-        $result->expects($this->any())->method('getExtensionAttributes')->willReturn(null);
-        $this->extensionFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($resultExtensionAttributes);
-        $result->expects($this->once())
-            ->method('setExtensionAttributes')
-            ->with($resultExtensionAttributes)
+        $store = $this->createMock(StoreInterface::class);
+        $store->method('getId')->willReturn($storeId);
+        $store->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->method('getStore')->willReturn($store);
+
+        $subscriber = $this->createMock(Subscriber::class);
+        $subscriber->method('getStatus')->willReturn($originalStatus);
+        $subscriber->method('getEmail')->willReturn($customerEmail);
+        $subscriber->method('isSubscribed')->willReturn($originalStatus === Subscriber::STATUS_SUBSCRIBED);
+        $subscriber->expects($this->once())
+            ->method('loadByCustomer')
+            ->with($customerId, $websiteId)
             ->willReturnSelf();
-        $this->customerMock->expects($this->once())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->customerExtensionMock);
-        $resultExtensionAttributes->expects($this->any())
-            ->method('getIsSubscribed')
-            ->willReturn($subscriptionOriginalValue);
-        $this->customerExtensionMock->expects($this->any())
-            ->method('getIsSubscribed')
-            ->willReturn($subscriptionNewValue);
+        $subscriber->expects($this->once())
+            ->method('loadBySubscriberEmail')
+            ->with($customerEmail, $websiteId)
+            ->willReturnSelf();
+        $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        if ($subscriptionOriginalValue !== $subscriptionNewValue) {
-            if ($subscriptionNewValue) {
-                $this->subscriber->expects($this->once())->method('subscribeCustomerById')->with($customerId);
-            } else {
-                $this->subscriber->expects($this->once())->method('unsubscribeCustomerById')->with($customerId);
-            }
-            $this->subscriber->expects($this->once())->method('isSubscribed')->willReturn($subscriptionNewValue);
-            $resultExtensionAttributes->expects($this->once())->method('setIsSubscribed')->with($subscriptionNewValue);
+        $customerExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['getIsSubscribed']);
+        $customerExtension->method('getIsSubscribed')->willReturn($newValue);
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->method('getExtensionAttributes')->willReturn($customerExtension);
+
+        $resultIsSubscribed = $newValue ?? $originalStatus === Subscriber::STATUS_SUBSCRIBED;
+        if ($expectedSubscribe !== null) {
+            $resultSubscriber = $this->createMock(Subscriber::class);
+            $resultSubscriber->method('isSubscribed')->willReturn($resultIsSubscribed);
+            $this->subscriptionManager->expects($this->once())
+                ->method($expectedSubscribe ? 'subscribeCustomer' : 'unsubscribeCustomer')
+                ->with($customerId, $storeId)
+                ->willReturn($resultSubscriber);
+        } else {
+            $this->subscriptionManager->expects($this->never())->method('subscribeCustomer');
+            $this->subscriptionManager->expects($this->never())->method('unsubscribeCustomer');
         }
+        $resultExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['setIsSubscribed']);
+        $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
+        /** @var CustomerInterface|MockObject $result */
+        $result = $this->createMock(CustomerInterface::class);
+        $result->method('getId')->willReturn($customerId);
+        $result->method('getEmail')->willReturn($customerEmail);
+        $result->method('getExtensionAttributes')->willReturn($resultExtension);
 
-        $this->assertEquals($result, $this->plugin->afterSave($subject, $result, $this->customerMock));
+        /** @var CustomerRepository|MockObject $subject */
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $this->assertEquals($result, $this->plugin->afterSave($subject, $result, $customer));
     }
 
     /**
@@ -166,130 +167,135 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     public function afterSaveDataProvider()
     {
         return [
-            [true, true],
-            [false, false],
-            [true, false],
-            [false, true],
+            [null, null, null],
+            [null, true, true],
+            [null, false, null],
+            [Subscriber::STATUS_SUBSCRIBED, null, null],
+            [Subscriber::STATUS_SUBSCRIBED, true, null],
+            [Subscriber::STATUS_SUBSCRIBED, false, false],
+            [Subscriber::STATUS_UNSUBSCRIBED, null, null],
+            [Subscriber::STATUS_UNSUBSCRIBED, true, true],
+            [Subscriber::STATUS_UNSUBSCRIBED, false, null],
+            [Subscriber::STATUS_UNCONFIRMED, null, true],
+            [Subscriber::STATUS_UNCONFIRMED, true, true],
+            [Subscriber::STATUS_UNCONFIRMED, false, true],
         ];
     }
 
+    /**
+     * Test to delete subscriptions after delete customer
+     */
     public function testAfterDelete()
     {
-        $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $customer->expects($this->once())->method('getEmail')->willReturn('test@test.com');
-        $this->subscriber->expects($this->once())->method('loadByEmail')->with('test@test.com')->willReturnSelf();
-        $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
-        $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
+        $customerEmail = 'email@example.com';
+        $websiteId = 1;
+        $storeIds = [1, 2];
 
-        $this->assertEquals(true, $this->plugin->afterDelete($subject, true, $customer));
+        $subscriber = $this->createMock(Subscriber::class);
+        $subscriber->expects($this->once())->method('delete');
+        $collection = $this->createMock(Collection::class);
+        $collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('subscriber_email', $customerEmail)
+            ->willReturnSelf();
+        $collection->method('getIterator')->willReturn(new \ArrayIterator([$subscriber]));
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $this->shareConfig->method('isWebsiteScope')->willReturn(false);
+        $website = $this->createMock(Website::class);
+        $website->method('getStoreIds')->willReturn($storeIds);
+        $this->storeManager->method('getWebsite')->with($websiteId)->willReturn($website);
+
+        /** @var CustomerRepositoryInterface|MockObject $subject */
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->method('getEmail')->willReturn($customerEmail);
+
+        $this->assertTrue($this->plugin->afterDelete($subject, true, $customer));
     }
 
+    /**
+     * Test to delete subscriptions after delete customer by id
+     */
     public function testAroundDeleteById()
     {
         $customerId = 1;
+        $customerEmail = 'test@test.com';
+        $websiteId = 1;
+        $storeIds = [1, 2];
         $deleteCustomerById = function () {
             return true;
         };
-        $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $subject->expects($this->once())->method('getById')->willReturn($customer);
-        $customer->expects($this->once())->method('getEmail')->willReturn('test@test.com');
-        $this->subscriber->expects($this->once())->method('loadByEmail')->with('test@test.com')->willReturnSelf();
-        $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
-        $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())->method('getEmail')->willReturn($customerEmail);
+        /** @var CustomerRepositoryInterface|MockObject $subject */
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $subject->expects($this->once())->method('getById')->with($customerId)->willReturn($customer);
 
-        $this->assertEquals(true, $this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
-    }
-
-    /**
-     * @param int|null $subscriberStatusKey
-     * @param int|null $subscriberStatusValue
-     * @param bool $isSubscribed
-     * @dataProvider afterGetByIdDataProvider
-     * @return void
-     */
-    public function testAfterGetByIdCreatesExtensionAttributesIfItIsNotSet(
-        $subscriberStatusKey,
-        $subscriberStatusValue,
-        $isSubscribed
-    ) {
-        $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $subscriber = [$subscriberStatusKey => $subscriberStatusValue];
-        $this->prepareStoreData();
-
-        $this->extensionFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->customerExtensionMock);
-        $this->customerMock->expects($this->once())
-            ->method('setExtensionAttributes')
-            ->with($this->customerExtensionMock)
+        $subscriber = $this->createMock(Subscriber::class);
+        $subscriber->expects($this->once())->method('delete');
+        $collection = $this->createMock(Collection::class);
+        $collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('subscriber_email', $customerEmail)
             ->willReturnSelf();
-        $this->customerMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
-        $this->subscriberResourceMock->expects($this->once())
-            ->method('loadByCustomerData')
-            ->with($this->customerMock)
-            ->willReturn($subscriber);
-        $this->customerExtensionMock->expects($this->once())->method('setIsSubscribed')->with($isSubscribed);
+        $collection->method('getIterator')->willReturn(new \ArrayIterator([$subscriber]));
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $this->shareConfig->method('isWebsiteScope')->willReturn(false);
+        $website = $this->createMock(Website::class);
+        $website->method('getStoreIds')->willReturn($storeIds);
+        $this->storeManager->method('getWebsite')->with($websiteId)->willReturn($website);
 
-        $this->assertEquals(
-            $this->customerMock,
-            $this->plugin->afterGetById($subject, $this->customerMock)
-        );
+        $this->assertTrue($this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
     }
 
-    public function testAfterGetByIdSetsIsSubscribedFlagIfItIsNotSet()
+    /**
+     * Test to load extension attribute after get by id
+     */
+    public function testAfterGetByIdCreatesExtensionAttributes(): void
     {
-        $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $subscriber = ['subscriber_id' => 1, 'subscriber_status' => 1];
-        $this->prepareStoreData();
+        $storeId = 2;
+        $websiteId = 1;
+        $customerId = 3;
+        $customerEmail = 'email@example.com';
+        $subscribed = true;
 
-        $this->customerMock->expects($this->any())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->customerExtensionMock);
-        $this->customerExtensionMock->expects($this->any())
-            ->method('getIsSubscribed')
-            ->willReturn(null);
-        $this->subscriberResourceMock->expects($this->once())
-            ->method('loadByCustomerData')
-            ->with($this->customerMock)
-            ->willReturn($subscriber);
-        $this->customerExtensionMock->expects($this->once())
-            ->method('setIsSubscribed')
+        $store = $this->createMock(StoreInterface::class);
+        $store->method('getId')->willReturn($storeId);
+        $store->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->method('getStore')->willReturn($store);
+
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->method('getId')->willReturn($customerId);
+        $customer->method('getEmail')->willReturn($customerEmail);
+
+        $subscriber = $this->createMock(Subscriber::class);
+        $subscriber->method('getEmail')->willReturn($customerEmail);
+        $subscriber->method('isSubscribed')->willReturn($subscribed);
+        $subscriber->expects($this->once())
+            ->method('loadByCustomer')
+            ->with($customerId, $websiteId)
             ->willReturnSelf();
+        $subscriber->expects($this->once())
+            ->method('loadBySubscriberEmail')
+            ->with($customerEmail, $websiteId)
+            ->willReturnSelf();
+        $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $this->assertEquals(
-            $this->customerMock,
-            $this->plugin->afterGetById($subject, $this->customerMock)
+        $customerExtension = $this->createPartialMock(
+            CustomerExtensionInterface::class,
+            ['getIsSubscribed', 'setIsSubscribed']
         );
-    }
+        $customerExtension->expects($this->once())->method('setIsSubscribed')->with($subscribed);
+        $this->extensionFactory->expects($this->once())->method('create')->willReturn($customerExtension);
+        $customer->expects($this->once())->method('setExtensionAttributes')->with($customerExtension);
 
-    /**
-     * @return array
-     */
-    public function afterGetByIdDataProvider()
-    {
-        return [
-            ['subscriber_status', 1, true],
-            ['subscriber_status', 2, false],
-            ['subscriber_status', 3, false],
-            ['subscriber_status', 4, false],
-            [null, null, false],
-        ];
-    }
-
-    /**
-     * Prepare store information
-     *
-     * @return void
-     */
-    private function prepareStoreData()
-    {
-        $storeId = 1;
-        $storeMock = $this->createMock(Store::class);
-        $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        /** @var CustomerRepositoryInterface|MockObject $subject */
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $this->assertEquals(
+            $customer,
+            $this->plugin->afterGetById($subject, $customer)
+        );
     }
 }

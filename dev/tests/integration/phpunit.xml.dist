@@ -74,11 +74,10 @@
         <!--<const name="MONGODB_DATABASE_NAME" value="magento_integration_tests"/>-->
         <!-- Connection parameters for RabbitMQ tests -->
         <!--<const name="RABBITMQ_MANAGEMENT_PORT" value="15672"/>-->
+        <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
     </php>
     <!-- Test listeners -->
     <listeners>
-        <listener class="Magento\TestFramework\Event\PhpUnit"/>
-        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
         <listener class="Yandex\Allure\Adapter\AllureAdapter">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
@@ -126,5 +125,8 @@
                 </array>
             </arguments>
         </listener>
+        <!-- Run after AllureAdapter to allow it to initialize properly -->
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
+        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
     </listeners>
 </phpunit>

@@ -17,7 +17,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation2_RootCategory_AllFields">
-            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create root category with all fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -38,7 +37,6 @@
             <data name="category/data/meta_keywords" xsi:type="string">custom meta keywords %isolation%</data>
             <data name="category/data/meta_description" xsi:type="string">Custom meta description %isolation%</data>
             <data name="category/data/layout" xsi:type="string">2 columns with right bar</data>
-            <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;catalog.leftnav&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
             <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
@@ -58,7 +56,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation4_Subcategory_AllFields">
-            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create not anchor subcategory specifying all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -82,7 +79,6 @@
             <data name="category/data/meta_description" xsi:type="string">Custom meta description %isolation%</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <data name="category/data/layout" xsi:type="string">2 columns with right bar</data>
-            <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;content.aside&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
             <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
@@ -96,6 +92,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation5_Anchor_MostOfFields">
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -145,7 +142,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation8_WithProducts" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>

@@ -50,7 +50,7 @@ class Compare
         if (is_string($value) && $this->jsonValidator->isValid($value)) {
             $value = $this->serializer->unserialize($value);
             if (is_array($value)) {
-                unset($value['qty'], $value['uenc']);
+                unset($value['qty'], $value['uenc'], $value['related_product'], $value['item']);
                 $value = array_filter($value, function ($optionValue) {
                     return !empty($optionValue);
                 });

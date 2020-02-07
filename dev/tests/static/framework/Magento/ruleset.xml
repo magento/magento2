@@ -7,82 +7,12 @@
 -->
 <ruleset name="Magento">
     <description>Custom Magento coding standard.</description>
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2"/>
 
-    <rule ref="PSR2"/>
-
-    <rule ref="PSR2.Files.ClosingTag">
-        <exclude-pattern>*.phtml</exclude-pattern>
-    </rule>
-
-    <rule ref="Magento.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="120"/>
-            <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
-    <rule ref="Magento.LanguageConstructs.LanguageConstructs">
-        <include-pattern>*/app/code/*\.(?!phtml)</include-pattern>
-    </rule>
-    <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
-        <exclude-pattern>*/_files/*</exclude-pattern>
-    </rule>
-    <rule ref="Magento.Annotation.MethodArguments">
+    <!-- ToDo: Improve Annotation sniffs in magento/magento-coding-standard and remove from here. -->
+    <rule ref="Magento.Annotation">
         <exclude-pattern>*/_files/*</exclude-pattern>
         <exclude-pattern>*/Test/*</exclude-pattern>
         <exclude-pattern>*Test.php</exclude-pattern>
-        <exclude-pattern>*/Magento/Inventory*/*</exclude-pattern>
     </rule>
-    <rule ref="Magento.Annotation.MethodAnnotationStructure">
-        <include-pattern>*\.(php)</include-pattern>
-        <exclude-pattern>*/Test/*</exclude-pattern>
-        <exclude-pattern>*Test.php</exclude-pattern>
-        <exclude-pattern>*/_files/*</exclude-pattern>
-        <exclude-pattern>*/Magento/Inventory*/*</exclude-pattern>
-    </rule>
-    <rule ref="Magento.Annotation.ClassAnnotationStructure">
-        <include-pattern>*\.(php)</include-pattern>
-        <exclude-pattern>*/Test/*</exclude-pattern>
-        <exclude-pattern>*Test.php</exclude-pattern>
-        <exclude-pattern>*/_files/*</exclude-pattern>
-        <exclude-pattern>*/Magento/Inventory*/*</exclude-pattern>
-    </rule>
-    <rule ref="Magento.Functions.OutputBuffering">
-        <include-pattern>*/(app/code|vendor|setup/src|lib/internal/Magento)/*</include-pattern>
-        <exclude-pattern>*/lib/internal/Magento/Framework/Image/Adapter/Gd2.php</exclude-pattern>
-        <exclude-pattern>*/lib/internal/Magento/Framework/View/Result/Page.php</exclude-pattern>
-        <exclude-pattern>*/lib/internal/Magento/Framework/View/TemplateEngine/Php.php</exclude-pattern>
-        <exclude-pattern>*/Test/Unit/*</exclude-pattern>
-    </rule>
-    <rule ref="Magento.Variables.GlobalVariables">
-        <include-pattern>*/(app/code|vendor|setup/src)/*</include-pattern>
-        <exclude-pattern>*/setup/src/Magento/Setup/Controller/WebConfiguration.php</exclude-pattern>
-        <exclude-pattern>*/setup/src/Magento/Setup/Mvc/Bootstrap/InitParamListener.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Eav/Model/Attribute/Data/File.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Config/Model/Config/Reader/Source/Deployed/SettingChecker.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Backend/App/Area/FrontNameResolver.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Indexer/Console/Command/AbstractIndexerCommand.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Catalog/Model/Product/Option/Type/File/ValidatorFile.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Cron/Console/Command/CronCommand.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/ImportExport/Controller/Adminhtml/Import/Validate.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/OfflineShipping/Model/ResourceModel/Carrier/Tablerate.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Store/Model/Store.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Config/Model/Config/Processor/EnvironmentPlaceholder.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Config/Model/Config/Backend/Email/Logo.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Config/Model/Config/Backend/File/RequestData.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Config/App/Config/Source/EnvironmentConfigSource.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Theme/Controller/Adminhtml/Design/Config/FileUploader/Save.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Customer/Model/Metadata/Form/File.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Customer/Model/FileUploader.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Customer/Controller/Adminhtml/File/Address/Upload.php</exclude-pattern>
-        <exclude-pattern>*/app/code/Magento/Customer/Controller/Adminhtml/File/Customer/Upload.php</exclude-pattern>
-        <exclude-pattern>*/Test/Unit/*</exclude-pattern>
-    </rule>
-
-    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
-    <rule ref="Generic.Functions.CallTimePassByReference"/>
-    <rule ref="Generic.PHP.DeprecatedFunctions"/>
-
-    <rule ref="Squiz.Commenting.DocCommentAlignment"/>
-    <rule ref="Squiz.Functions.GlobalFunction"/>
-    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 </ruleset>

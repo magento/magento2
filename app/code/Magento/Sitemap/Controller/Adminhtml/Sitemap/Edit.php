@@ -1,25 +1,35 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Registry;
+use Magento\Sitemap\Controller\Adminhtml\Sitemap;
+
+/**
+ * Controller class Edit. Responsible for rendering of a sitemap edit page
+ */
+class Edit extends Sitemap implements HttpGetActionInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
+    public function __construct(Context $context, Registry $coreRegistry)
     {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -48,7 +58,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         }
 
         // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getFormData(true);
+        $data = $this->_objectManager->get(Session::class)->getFormData(true);
         if (!empty($data)) {
             $model->setData($data);
         }
@@ -62,6 +72,8 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $id ? __('Edit Sitemap') : __('New Sitemap')
         )->_addContent(
             $this->_view->getLayout()->createBlock(\Magento\Sitemap\Block\Adminhtml\Edit::class)
+        )->_addJs(
+            $this->_view->getLayout()->createBlock(Template::class)->setTemplate('Magento_Sitemap::js.phtml')
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Site Map'));
         $this->_view->getPage()->getConfig()->getTitle()->prepend(

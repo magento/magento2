@@ -4,14 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Backend\Block\Widget\Grid\Massaction
- */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 use Magento\Framework\Authorization;
+use Magento\Framework\Data\Collection\AbstractDb as Collection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 
+/**
+ * Test class for \Magento\Backend\Block\Widget\Grid\Massaction
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -53,6 +58,21 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
      * @var VisibilityChecker|\PHPUnit_Framework_MockObject_MockObject
      */
     private $visibilityCheckerMock;
+
+    /**
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $gridCollectionMock;
+
+    /**
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $gridCollectionSelectMock;
+
+    /**
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $connectionMock;
 
     protected function setUp()
     {
@@ -96,6 +116,18 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isAllowed'])
             ->getMock();
+
+        $this->gridCollectionMock = $this->createMock(Collection::class);
+        $this->gridCollectionSelectMock = $this->createMock(Select::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+
+        $this->gridCollectionMock->expects($this->any())
+            ->method('getSelect')
+            ->willReturn($this->gridCollectionSelectMock);
+
+        $this->gridCollectionMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -270,59 +302,38 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $items
-     * @param string $result
-     *
-     * @dataProvider dataProviderGetGridIdsJsonWithUseSelectAll
+     * Test for getGridIdsJson when select all functionality flag set to true.
      */
-    public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
+    public function testGetGridIdsJsonWithUseSelectAll()
     {
         $this->_block->setUseSelectAll(true);
 
-        if ($this->_block->getMassactionIdField()) {
-            $massActionIdField = $this->_block->getMassactionIdField();
-        } else {
-            $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
-        }
-
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->_gridMock->expects($this->once())
             ->method('getCollection')
-            ->willReturn($collectionMock);
-        $collectionMock->expects($this->once())
-            ->method('setPageSize')
-            ->with(0)
-            ->willReturnSelf();
-        $collectionMock->expects($this->once())
-            ->method('getColumnValues')
-            ->with($massActionIdField)
-            ->willReturn($items);
+            ->willReturn($this->gridCollectionMock);
 
-        $this->assertEquals($result, $this->_block->getGridIdsJson());
-    }
+        $this->gridCollectionSelectMock->expects($this->exactly(4))
+            ->method('reset')
+            ->withConsecutive(
+                [Select::ORDER],
+                [Select::LIMIT_COUNT],
+                [Select::LIMIT_OFFSET],
+                [Select::COLUMNS]
+            );
 
-    /**
-     * @return array
-     */
-    public function dataProviderGetGridIdsJsonWithUseSelectAll()
-    {
-        return [
-            [
-                [],
-                '',
-            ],
-            [
-                [1],
-                '1',
-            ],
-            [
-                [1, 2, 3],
-                '1,2,3',
-            ],
-        ];
+        $this->gridCollectionSelectMock->expects($this->once())
+            ->method('columns')
+            ->with('test_id');
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($this->gridCollectionSelectMock)
+            ->willReturn([1, 2, 3]);
+
+        $this->assertEquals(
+            '1,2,3',
+            $this->_block->getGridIdsJson()
+        );
     }
 
     /**

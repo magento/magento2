@@ -53,9 +53,7 @@ class Write extends Read implements WriteInterface
     protected function assertWritable($path)
     {
         if ($this->isWritable($path) === false) {
-            $path = (!$this->driver->isFile($path))
-                ? $this->getAbsolutePath($this->path, $path)
-                : $this->getAbsolutePath($path);
+            $path = $this->getAbsolutePath($path);
             throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable.', [$path]));
         }
     }

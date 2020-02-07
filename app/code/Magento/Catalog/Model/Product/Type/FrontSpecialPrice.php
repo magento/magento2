@@ -17,6 +17,9 @@ use Magento\Store\Api\Data\WebsiteInterface;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated
+ * @see \Magento\Catalog\Model\Product\Type\Price
  */
 class FrontSpecialPrice extends Price
 {
@@ -66,6 +69,8 @@ class FrontSpecialPrice extends Price
 
     /**
      * @inheritdoc
+     *
+     * @deprecated
      */
     protected function _applySpecialPrice($product, $finalPrice)
     {

@@ -45,6 +45,10 @@
 .page-actions {
     @_page-action__indent: 1.3rem;
 
+    &.floating-header {
+        &:extend(.page-actions-buttons all);
+    }
+
     .page-main-actions & {
         &._fixed {
             left: @page-wrapper__indent-left;

@@ -88,14 +88,14 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
 	    <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        
+
         <!-- Create the rule -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForRulesPage"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
@@ -122,14 +122,16 @@
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
         <waitForPageLoad stepKey="waitForAddToCart1"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!-- Add the second product to the cart -->
         <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
         <waitForPageLoad stepKey="waitForAddToCart2"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
 
         <!--View and edit cart-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickViewAndEditCartFromMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickViewAndEditCartFromMiniCart"/>
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="ABCD" stepKey="fillCouponCode" />
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>

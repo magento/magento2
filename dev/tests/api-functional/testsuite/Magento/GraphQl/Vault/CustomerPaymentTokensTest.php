@@ -14,6 +14,9 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\ResourceModel\PaymentToken as TokenResource;
 use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory;
 
+/**
+ * Tests for customer payment tokens
+ */
 class CustomerPaymentTokensTest extends GraphQlAbstract
 {
     /**
@@ -139,7 +142,12 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
         $this->assertTrue($response['deletePaymentToken']['result']);
         $this->assertEquals(1, count($response['deletePaymentToken']['customerPaymentTokens']['items']));
@@ -168,7 +176,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '');
+        $this->graphQlMutation($query, [], '');
     }
 
     /**
@@ -190,7 +198,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**

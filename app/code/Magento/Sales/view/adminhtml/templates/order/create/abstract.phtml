@@ -3,14 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <div class="admin__page-section-title">
-    <span class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
-    <?php if($block->getButtonsHtml()): ?>
+    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
+    <?php if ($block->getButtonsHtml()) : ?>
         <div class="actions"><?= $block->getButtonsHtml() ?></div>
     <?php endif; ?>
 </div>

@@ -403,7 +403,6 @@ class Tax extends CommonTaxCollector
         $total->setShippingTaxAmount($shippingTaxAmount);
         $total->setDiscountTaxCompensationAmount($discountTaxCompensation); // accessed via 'discount_tax_compensation'
         $total->setSubtotalInclTax($subtotalInclTax);
-        return;
     }
 
     /**

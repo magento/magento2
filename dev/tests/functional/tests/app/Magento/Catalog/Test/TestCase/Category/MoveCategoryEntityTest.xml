@@ -17,8 +17,7 @@
         </variation>
         <variation name="MoveCategoryEntityTestVariation2" summary="Move default subcategory with anchored parent to default subcategory" ticketId="MAGETWO-21202">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-65147: Category is not present in Layered navigation block when anchor is on</data>
-            <data name="childCategory/dataset" xsi:type="string">default_subcategory_with_anchored_parent</data>
+            <data name="childCategory/dataset" xsi:type="string">default_subcategory_with_anchored_parent_with_product</data>
             <data name="parentCategory/dataset" xsi:type="string">default</data>
             <data name="moveLevel" xsi:type="number">2</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryMovedMessage" />
@@ -28,9 +27,8 @@
         </variation>
         <variation name="MoveCategoryEntityTestVariation3" summary="Move default anchored subcategory with anchored parent to default subcategory" ticketId="MAGETWO-21202">
             <data name="tag" xsi:type="string">mftf_migrated:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-65147: Category is not present in Layered navigation block when anchor is on</data>
             <data name="childCategory/dataset" xsi:type="string">default_subcategory_with_anchored_parent</data>
-            <data name="childCategory/data/parent_id/dataset" xsi:type="string">default_anchor_subcategory_with_anchored_parent</data>
+            <data name="childCategory/data/parent_id/dataset" xsi:type="string">default_subcategory_with_anchored_parent_with_product</data>
             <data name="parentCategory/dataset" xsi:type="string">default_category</data>
             <data name="moveLevel" xsi:type="number">2</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryMovedMessage" />

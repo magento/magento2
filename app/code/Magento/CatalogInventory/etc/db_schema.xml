@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="cataloginventory_stock" resource="default" engine="innodb" comment="Cataloginventory Stock">
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Stock Id"/>
+                comment="Stock ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="varchar" name="stock_name" nullable="true" length="255" comment="Stock Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="stock_id"/>
@@ -22,11 +22,11 @@
     </table>
     <table name="cataloginventory_stock_item" resource="default" engine="innodb" comment="Cataloginventory Stock Item">
         <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Item Id"/>
+                comment="Item ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Product Id"/>
+                default="0" comment="Product ID"/>
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Stock Id"/>
+                default="0" comment="Stock ID"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="true" comment="Qty"/>
         <column xsi:type="decimal" name="min_qty" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Min Qty"/>
@@ -94,11 +94,11 @@
     <table name="cataloginventory_stock_status" resource="default" engine="innodb"
            comment="Cataloginventory Stock Status">
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Stock Id"/>
+                comment="Stock ID"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
@@ -121,11 +121,11 @@
     <table name="cataloginventory_stock_status_idx" resource="default" engine="innodb"
            comment="Cataloginventory Stock Status Indexer Idx">
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Stock Id"/>
+                comment="Stock ID"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
@@ -142,14 +142,14 @@
             <column name="website_id"/>
         </index>
     </table>
-    <table name="cataloginventory_stock_status_tmp" resource="default" engine="memory"
+    <table name="cataloginventory_stock_status_tmp" resource="default" engine="innodb"
            comment="Cataloginventory Stock Status Indexer Tmp">
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Stock Id"/>
+                comment="Stock ID"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"
@@ -159,21 +159,21 @@
             <column name="website_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="hash">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>
-        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="hash">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
     <table name="cataloginventory_stock_status_replica" resource="default" engine="innodb"
            comment="Cataloginventory Stock Status">
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Stock Id"/>
+                comment="Stock ID"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Qty"/>
         <column xsi:type="smallint" name="stock_status" padding="5" unsigned="true" nullable="false" identity="false"

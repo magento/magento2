@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -19,24 +20,16 @@ use Magento\Newsletter\Model\SubscriberFactory;
 class IsSubscribed implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
-     */
-    private $checkCustomerAccount;
-
-    /**
      * @var SubscriberFactory
      */
     private $subscriberFactory;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
      * @param SubscriberFactory $subscriberFactory
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
         SubscriberFactory $subscriberFactory
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
         $this->subscriberFactory = $subscriberFactory;
     }
 
@@ -50,12 +43,15 @@ class IsSubscribed implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+        /** @var CustomerInterface $customer */
+        $customer = $value['model'];
+        $customerId = (int)$customer->getId();
+        $websiteId = (int)$customer->getWebsiteId();
+        $status = $this->subscriberFactory->create()->loadByCustomer($customerId, $websiteId)->isSubscribed();
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        $status = $this->subscriberFactory->create()->loadByCustomerId((int)$currentUserId)->isSubscribed();
         return (bool)$status;
     }
 }

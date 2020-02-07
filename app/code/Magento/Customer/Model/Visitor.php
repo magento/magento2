@@ -12,8 +12,10 @@ use Magento\Framework\App\RequestSafetyInterface;
 /**
  * Class Visitor
  *
- * @package Magento\Customer\Model
+ *  Used to track sessions of the logged in customers
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
@@ -172,6 +174,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         if ($this->requestSafety->isSafeMethod()) {
             return $this;
         }
+
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -197,6 +200,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         }
 
         try {
+            if ($this->session->getSessionId() && $this->getSessionId() != $this->session->getSessionId()) {
+                $this->setSessionId($this->session->getSessionId());
+            }
             $this->save();
             $this->_eventManager->dispatch('visitor_activity_save', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());
@@ -263,7 +269,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Create binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteCreate($observer)
     {
@@ -281,7 +287,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Destroy binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteDestroy($observer)
     {

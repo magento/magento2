@@ -55,7 +55,7 @@
     object,
     video,
     embed {
-        height: auto;
+        max-height: 100%;
         max-width: 100%;
     }
 
@@ -103,13 +103,6 @@
     select:not([disabled]) {
         &:focus {
             .lib-css(box-shadow, @focus__box-shadow);
-        }
-    }
-
-    input[type="radio"],
-    input[type="checkbox"] {
-        &:focus { 
-            box-shadow: none;
         }
     }
 }

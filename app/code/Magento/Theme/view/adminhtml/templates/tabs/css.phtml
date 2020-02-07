@@ -3,9 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/** @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */
 ?>
-
-<?php /** @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */ ?>
 
 <?= $block->getFormHtml() ?>
 
@@ -20,7 +19,7 @@ require([
     $( '#css_file_uploader' ).fileupload({
         dataType: 'json',
         replaceFileInput: false,
-        url : '<?= /* @escapeNotVerified */ $block->getUrl('*/system_design_theme/uploadcss') ?>',
+        url : '<?= $block->escapeJs($block->escapeUrl($block->getUrl('*/system_design_theme/uploadcss'))) ?>',
         acceptFileTypes: /(.|\/)(css)$/i,
 
         /**

@@ -158,14 +158,9 @@ class DataFixture
      */
     private function getModulePath(string $fixture)
     {
-        $fixturePathParts = explode('::', $fixture, 2);
-        $moduleName = $fixturePathParts[0];
-        $fixtureFile = $fixturePathParts[1];
+        [$moduleName, $fixtureFile] = explode('::', $fixture, 2);
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var ComponentRegistrar $componentRegistrar */
-        $componentRegistrar = $objectManager->get(ComponentRegistrar::class);
-        $modulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        $modulePath = (new ComponentRegistrar())->getPath(ComponentRegistrar::MODULE, $moduleName);
 
         if ($modulePath === null) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -173,7 +168,7 @@ class DataFixture
             );
         }
 
-        return $modulePath . '/' . $fixtureFile;
+        return $modulePath . '/' . ltrim($fixtureFile, '/');
     }
 
     /**

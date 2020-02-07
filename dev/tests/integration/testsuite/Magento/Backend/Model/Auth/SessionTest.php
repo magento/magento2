@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Model\Auth;
+
+use Magento\TestFramework\Bootstrap as TestHelper;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
@@ -30,7 +34,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
@@ -52,8 +56,8 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     {
         if ($loggedIn) {
             $this->auth->login(
-                \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+                TestHelper::ADMIN_NAME,
+                TestHelper::ADMIN_PASSWORD
             );
         }
         $this->assertEquals($loggedIn, $this->authSession->isLoggedIn());

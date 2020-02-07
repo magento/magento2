@@ -8,7 +8,7 @@ namespace Magento\Captcha\Test\TestCase;
 
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnContactUsForm;
 use Magento\Contact\Test\Fixture\Comment;
-use Magento\Contact\Test\Page\ContactIndex;
+use Magento\Captcha\Test\Page\ContactIndexCaptcha as ContactIndex;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 

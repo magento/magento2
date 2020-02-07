@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Go to Address Book -->
+    <actionGroup name="StorefrontCustomerAddressBookNumberOfAddresses">
+        <annotations>
+            <description>Validate that the Customer Address count is present and correct on the Storefront Customer Dashboard page.</description>
+        </annotations>
+        <arguments>
+            <argument name="number" type="string"/>
+        </arguments>
+        
+        <see userInput="{{number}} Item" selector="{{StorefrontCustomerAddressesSection.numberOfAddresses}}" stepKey="checkNumberOfAddresses"/>
+    </actionGroup>
+</actionGroups>
