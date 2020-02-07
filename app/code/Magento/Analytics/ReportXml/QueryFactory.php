@@ -8,6 +8,9 @@ namespace Magento\Analytics\ReportXml;
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\DB\Select;
 
 /**
  * Creates Query object according to configuration
@@ -46,14 +49,20 @@ class QueryFactory
     private $selectHydrator;
 
     /**
+     * @var Json|null
+     */
+    private $jsonSerializer;
+
+    /**
      * QueryFactory constructor.
      *
-     * @param CacheInterface $queryCache
-     * @param SelectHydrator $selectHydrator
+     * @param CacheInterface         $queryCache
+     * @param SelectHydrator         $selectHydrator
      * @param ObjectManagerInterface $objectManager
-     * @param SelectBuilderFactory $selectBuilderFactory
-     * @param Config $config
-     * @param array $assemblers
+     * @param SelectBuilderFactory   $selectBuilderFactory
+     * @param Config                 $config
+     * @param array                  $assemblers
+     * @param Json|null              $jsonSerializer
      */
     public function __construct(
         CacheInterface $queryCache,
@@ -61,7 +70,8 @@ class QueryFactory
         ObjectManagerInterface $objectManager,
         SelectBuilderFactory $selectBuilderFactory,
         Config $config,
-        array $assemblers
+        array $assemblers,
+        Json $jsonSerializer = null
     ) {
         $this->config = $config;
         $this->selectBuilderFactory = $selectBuilderFactory;
@@ -69,12 +79,13 @@ class QueryFactory
         $this->queryCache = $queryCache;
         $this->objectManager = $objectManager;
         $this->selectHydrator = $selectHydrator;
+        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
      * Returns query connection name according to configuration
      *
-     * @param string $queryConfig
+     * @param  string $queryConfig
      * @return string
      */
     private function getQueryConnectionName($queryConfig)
@@ -89,7 +100,7 @@ class QueryFactory
     /**
      * Create query according to configuration settings
      *
-     * @param string $queryName
+     * @param  string $queryName
      * @return Query
      */
     private function constructQuery($queryName)
@@ -101,12 +112,29 @@ class QueryFactory
             $selectBuilder = $assembler->assemble($selectBuilder, $queryConfig);
         }
         $select = $selectBuilder->create();
+        return $this->createQueryObject(
+            $select,
+            $selectBuilder->getConnectionName(),
+            $queryConfig
+        );
+    }
+
+    /**
+     * Create query class using objectmanger
+     *
+     * @param  Select $select
+     * @param  string $connection
+     * @param  array  $queryConfig
+     * @return Query
+     */
+    private function createQueryObject($select, $connection, $queryConfig)
+    {
         return $this->objectManager->create(
             Query::class,
             [
                 'select' => $select,
                 'selectHydrator' => $this->selectHydrator,
-                'connectionName' => $selectBuilder->getConnectionName(),
+                'connectionName' => $connection,
                 'config' => $queryConfig
             ]
         );
@@ -115,26 +143,25 @@ class QueryFactory
     /**
      * Creates query by name
      *
-     * @param string $queryName
+     * @param  string $queryName
      * @return Query
      */
     public function create($queryName)
     {
         $cached = $this->queryCache->load($queryName);
         if ($cached) {
-            $queryData = json_decode($cached, true);
-            return $this->objectManager->create(
-                Query::class,
-                [
-                    'select' => $this->selectHydrator->recreate($queryData['select_parts']),
-                    'selectHydrator' => $this->selectHydrator,
-                    'connectionName' => $queryData['connectionName'],
-                    'config' => $queryData['config']
-                ]
+            $queryData = $this->jsonSerializer->unserialize($cached);
+            return $this->createQueryObject(
+                $this->selectHydrator->recreate($queryData['select_parts']),
+                $queryData['connectionName'],
+                $queryData['config']
             );
         }
         $query = $this->constructQuery($queryName);
-        $this->queryCache->save(json_encode($query), $queryName);
+        $this->queryCache->save(
+            $this->jsonSerializer->serialize($query),
+            $queryName
+        );
         return $query;
     }
 }
