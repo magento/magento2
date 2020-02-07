@@ -35,7 +35,7 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
                 }
             }
             if (!isset($sections[$actionName])) {
-                $sections[$actionName] = self::INVALIDATE_ALL_SECTIONS_MARKER;
+                $sections[$actionName][] = self::INVALIDATE_ALL_SECTIONS_MARKER;
             }
         }
         return [

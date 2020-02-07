@@ -73,10 +73,18 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 'sections' => [
-                    'customer/account/logout' => ['*'],
-                    'empty/test' => ['account'],
-                    'customer/account/editpost' => ['account'],
-                    'customer/account/createpost' => ['account', 'acc'],
+                    'sales/guest/reorder' => ['account'],
+                    'sales/order/reorder' => ['account', 'cart'],
+                    'stores/store/switch' => ['*'],
+                    'directory/currency/switch' => ['*'],
+                    'customer/account/logout' => ['account', 'cart'],
+                    'customer/account/editpost' => ['account', 'acc', 'cart'],
+                    'checkout/cart/delete' => ['*'],
+                    'customer/account/createpost' => ['*'],
+                    'catalog/product_compare/add' => ['*'],
+                    'catalog/product_compare/remove' => ['account', 'acc'],
+                    'catalog/product_compare/clear' => ['*'],
+                    'checkout/cart/add' => ['*'],
                 ],
             ],
             $this->converter->convert($this->configMergerClass->getDom())
