@@ -61,7 +61,7 @@ define([
             delete addressData['region_id'];
 
             if (addressData['custom_attributes']) {
-                addressData['custom_attributes'] = _.map(
+                addressData['custom_attributes'] = _.mapObject(
                     addressData['custom_attributes'],
                     function (value, key) {
                         return {
