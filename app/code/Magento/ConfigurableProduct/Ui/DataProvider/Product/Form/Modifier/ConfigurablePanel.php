@@ -490,7 +490,10 @@ class ConfigurablePanel extends AbstractModifier
                     'quantity_container' => $this->getColumn(
                         'quantity',
                         __('Quantity'),
-                        ['dataScope' => 'qty'],
+                        [
+                            'validation' => ['validate-number' => true],
+                            'imports' => ['handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal']
+                        ],
                         ['dataScope' => 'qty']
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
