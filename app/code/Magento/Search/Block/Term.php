@@ -41,15 +41,11 @@ class Term extends Template
     protected $_maxPopularity;
 
     /**
-     * Url factory
-     *
      * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
-     * Query collection factory
-     *
      * @var CollectionFactory
      */
     protected $_queryCollectionFactory;
