@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-30166"/>
+            </skip>
         </annotations>
 
         <before>
