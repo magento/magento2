@@ -79,7 +79,7 @@
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createPreReqSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <!--Step9. Click on *Cart* icon. Click on *View and Edit Cart* link. Change *Qty* value to *5.5*-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName(('$$createPreReqSimpleProduct.name$$'))}}" userInput="5.5" stepKey="fillQty2"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickOnUpdateShoppingCartButton"/>
         <seeInField userInput="5.5" selector="{{CheckoutCartProductSection.ProductQuantityByName(('$$createPreReqSimpleProduct.name$$'))}}" stepKey="seeInField2"/>

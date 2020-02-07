@@ -78,6 +78,13 @@ class ProductDataMapper implements BatchDataMapperInterface
     ];
 
     /**
+     * @var string[]
+     */
+    private $sortableAttributesValuesToImplode = [
+        'name',
+    ];
+
+    /**
      * Construction for DocumentDataMapper
      *
      * @param Builder $builder
@@ -86,6 +93,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param AdditionalFieldsProviderInterface $additionalFieldsProvider
      * @param DataProvider $dataProvider
      * @param array $excludedAttributes
+     * @param array $sortableAttributesValuesToImplode
      */
     public function __construct(
         Builder $builder,
@@ -93,12 +101,17 @@ class ProductDataMapper implements BatchDataMapperInterface
         DateFieldType $dateFieldType,
         AdditionalFieldsProviderInterface $additionalFieldsProvider,
         DataProvider $dataProvider,
-        array $excludedAttributes = []
+        array $excludedAttributes = [],
+        array $sortableAttributesValuesToImplode = []
     ) {
         $this->builder = $builder;
         $this->fieldMapper = $fieldMapper;
         $this->dateFieldType = $dateFieldType;
         $this->excludedAttributes = array_merge($this->defaultExcludedAttributes, $excludedAttributes);
+        $this->sortableAttributesValuesToImplode = array_merge(
+            $this->sortableAttributesValuesToImplode,
+            $sortableAttributesValuesToImplode
+        );
         $this->additionalFieldsProvider = $additionalFieldsProvider;
         $this->dataProvider = $dataProvider;
         $this->attributeOptionsCache = [];
@@ -241,6 +254,13 @@ class ProductDataMapper implements BatchDataMapperInterface
             }
         }
 
+        if ($attribute->getUsedForSortBy()
+            && in_array($attribute->getAttributeCode(), $this->sortableAttributesValuesToImplode)
+            && count($attributeValues) > 1
+        ) {
+            $attributeValues = [$productId => implode(' ', $attributeValues)];
+        }
+
         return $attributeValues;
     }
 
@@ -252,9 +272,14 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function prepareMultiselectValues(array $values): array
     {
-        return \array_merge(...\array_map(function (string $value) {
-            return \explode(',', $value);
-        }, $values));
+        return \array_merge(
+            ...\array_map(
+                function (string $value) {
+                    return \explode(',', $value);
+                },
+                $values
+            )
+        );
     }
 
     /**
@@ -285,9 +310,9 @@ class ProductDataMapper implements BatchDataMapperInterface
             return $attributeLabels;
         }
 
-        foreach ($options as $option) {
-            if (\in_array($option->getValue(), $attributeValues)) {
-                $attributeLabels[] = $option->getLabel();
+        foreach ($attributeValues as $attributeValue) {
+            if (isset($options[$attributeValue])) {
+                $attributeLabels[] = $options[$attributeValue]->getLabel();
             }
         }
 
@@ -304,7 +329,11 @@ class ProductDataMapper implements BatchDataMapperInterface
     {
         if (!isset($this->attributeOptionsCache[$attribute->getId()])) {
             $options = $attribute->getOptions() ?? [];
-            $this->attributeOptionsCache[$attribute->getId()] = $options;
+            $optionsByValue = [];
+            foreach ($options as $option) {
+                $optionsByValue[$option->getValue()] = $option;
+            }
+            $this->attributeOptionsCache[$attribute->getId()] = $optionsByValue;
         }
 
         return $this->attributeOptionsCache[$attribute->getId()];

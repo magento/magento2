@@ -459,17 +459,17 @@ class Package
      */
     public function getParentFiles($type = null)
     {
-        $files = [];
+        $files = [[]];
         foreach ($this->getParentPackages() as $parentPackage) {
             if ($type === null) {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-                $files = array_merge($files, $parentPackage->getFiles());
+                $files[] = $parentPackage->getFiles();
             } else {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-                $files = array_merge($files, $parentPackage->getFilesByType($type));
+                $files[] = $parentPackage->getFilesByType($type);
             }
         }
-        return $files;
+        return array_merge(...$files);
     }
 
     /**

@@ -54,6 +54,8 @@
                 default="1" comment="Template Actual"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true" comment="Added At"/>
         <column xsi:type="timestamp" name="modified_at" on_update="false" nullable="true" comment="Modified At"/>
+        <column xsi:type="boolean" name="is_legacy" nullable="false"
+                default="false" comment="Should the template render in legacy mode"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="template_id"/>
         </constraint>

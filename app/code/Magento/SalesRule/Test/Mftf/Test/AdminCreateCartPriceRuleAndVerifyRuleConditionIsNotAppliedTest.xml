@@ -85,7 +85,7 @@
         <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionNotApplied.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
 
         <!--Go to storefront page and verify created product-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="2" stepKey="fillProductQuantity"/>
@@ -103,7 +103,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsNotApplied(Shopping cart subtotal equals to grand total - price rule has not been applied)-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">

@@ -82,7 +82,6 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
         $expectedVars = [
             'reason' => $errorMessage,
             'checkoutType' => $checkoutType,
-            'dateAndTime' => $templateTimeMethod->invoke($this->paymentFailures),
             'customer' => 'John Smith',
             'customerEmail' => 'aaa@aaa.com',
             'paymentMethod' => 'Some Title Of The Method',
@@ -91,7 +90,10 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
             'total' => 'USD 30.0000',
             'billingAddress' => $this->quote->getBillingAddress(),
             'shippingAddress' => $this->quote->getShippingAddress(),
+            'billingAddressHtml' => $this->quote->getBillingAddress()->format('html'),
+            'shippingAddressHtml' => $this->quote->getShippingAddress()->format('html'),
         ];
+        unset($templateVars['dateAndTime']);
 
         $this->assertEquals($expectedVars, $templateVars);
     }

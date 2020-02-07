@@ -11,7 +11,9 @@
         "magento/module-config": "*",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
-        "magento/module-theme": "*"
+        "magento/module-theme": "*",
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-authorization": "*"
     },
     "type": "magento2-module",
     "license": [

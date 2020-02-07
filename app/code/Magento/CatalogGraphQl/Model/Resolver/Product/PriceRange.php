@@ -62,10 +62,16 @@ class PriceRange implements ResolverInterface
         $product = $value['model'];
         $product->unsetData('minimal_price');
 
-        return [
-            'minimum_price' => $this->getMinimumProductPrice($product, $store),
-            'maximum_price' => $this->getMaximumProductPrice($product, $store)
-        ];
+        $requestedFields = $info->getFieldSelection(10);
+        $returnArray = [];
+
+        if (isset($requestedFields['minimum_price'])) {
+            $returnArray['minimum_price'] =  $this->getMinimumProductPrice($product, $store);
+        }
+        if (isset($requestedFields['maximum_price'])) {
+            $returnArray['maximum_price'] =  $this->getMaximumProductPrice($product, $store);
+        }
+        return $returnArray;
     }
 
     /**
@@ -80,8 +86,9 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
-
-        return $this->formatPrice($regularPrice, $finalPrice, $store);
+        $minPriceArray = $this->formatPrice((float) $regularPrice, (float) $finalPrice, $store);
+        $minPriceArray['model'] = $product;
+        return $minPriceArray;
     }
 
     /**
@@ -96,8 +103,9 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMaximalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMaximalFinalPrice($product)->getValue();
-
-        return $this->formatPrice($regularPrice, $finalPrice, $store);
+        $maxPriceArray = $this->formatPrice((float) $regularPrice, (float) $finalPrice, $store);
+        $maxPriceArray['model'] = $product;
+        return $maxPriceArray;
     }
 
     /**
