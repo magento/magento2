@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

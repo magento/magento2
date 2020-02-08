@@ -12,17 +12,17 @@ namespace Magento\Checkout\Test\Unit\Model;
 class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $billingAddressManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMethodManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartManagementMock;
 
@@ -32,12 +32,12 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cartRepositoryMock;
 
@@ -181,7 +181,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
         $quoteBillingAddress->method('getId')->willReturn($quoteBillingAddressId);
         $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
-        
+
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $billingAddressMock->expects($this->once())->method('setCustomerId')->with($customerId);
         $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock));
@@ -189,7 +189,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $cartId
-     * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $billingAddressMock
      */
     private function getMockForAssignBillingAddress($cartId, $billingAddressMock)
     {

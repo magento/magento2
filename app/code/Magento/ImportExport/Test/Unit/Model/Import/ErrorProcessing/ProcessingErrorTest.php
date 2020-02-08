@@ -9,7 +9,7 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError
      */
     protected $model;
 

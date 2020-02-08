@@ -15,12 +15,12 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     /**
      * Subject of testing.
      *
-     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshot;
 

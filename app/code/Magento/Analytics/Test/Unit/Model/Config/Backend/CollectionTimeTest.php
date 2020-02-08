@@ -14,12 +14,12 @@ use Psr\Log\LoggerInterface;
 class CollectionTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 

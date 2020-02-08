@@ -16,12 +16,12 @@ use Magento\Framework\Phrase;
 class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CrontabManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CrontabManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $crontabManagerMock;
 
     /**
-     * @var TasksProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TasksProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tasksProviderMock;
 

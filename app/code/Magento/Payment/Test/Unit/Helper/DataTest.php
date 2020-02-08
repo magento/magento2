@@ -15,22 +15,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Helper\Data */
     private $helper;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $initialConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $methodFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $appEmulation;
 

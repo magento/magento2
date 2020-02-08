@@ -25,12 +25,12 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     private $viewModel;
 
     /**
-     * @var CatalogHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogHelper;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
@@ -40,7 +40,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var JsonHexTag|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonHexTag|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 

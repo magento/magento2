@@ -23,12 +23,12 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     private $attributeValidation;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
@@ -48,17 +48,17 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     private $isProceedMockCalled = false;
 
     /**
-     * @var AbstractBackend|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
     /**
-     * @var DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMock;
 

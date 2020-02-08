@@ -16,7 +16,7 @@ use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Store\Model\Store;
 use Magento\Framework\Event\ManagerInterface;
 
@@ -34,57 +34,57 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Group|Mock
+     * @var Group|MockObject
      */
     private $groupMock;
 
     /**
-     * @var GroupResource|Mock
+     * @var GroupResource|MockObject
      */
     private $groupResourceMock;
 
     /**
-     * @var Website|Mock
+     * @var Website|MockObject
      */
     private $websiteMock;
 
     /**
-     * @var WebsiteResource|Mock
+     * @var WebsiteResource|MockObject
      */
     private $websiteResourceMock;
 
     /**
-     * @var DataDifferenceCalculator|Mock
+     * @var DataDifferenceCalculator|MockObject
      */
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var WebsiteFactory|Mock
+     * @var WebsiteFactory|MockObject
      */
     private $websiteFactoryMock;
 
     /**
-     * @var StoreFactory|Mock
+     * @var StoreFactory|MockObject
      */
     private $storeFactoryMock;
 
     /**
-     * @var GroupFactory|Mock
+     * @var GroupFactory|MockObject
      */
     private $groupFactoryMock;
 
     /**
-     * @var Store|Mock
+     * @var Store|MockObject
      */
     private $storeMock;
 
     /**
-     * @var StoreResource|Mock
+     * @var StoreResource|MockObject
      */
     private $storeResourceMock;
 
     /**
-     * @var ManagerInterface|Mock
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 

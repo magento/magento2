@@ -38,7 +38,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     protected $entityType = 'invoice';
 
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactory;
 
@@ -48,12 +48,12 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     private $order;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Payment
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Payment
      */
     protected $paymentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface
      */
     protected $eventManagerMock;
 

@@ -19,22 +19,22 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CurrencysymbolFactory $mockSymbolFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|CurrencysymbolFactory $mockSymbolFactory
      */
     private $mockSymbolFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CurrencySymbol\Model\System\Currencysymbol $mockSymbol
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CurrencySymbol\Model\System\Currencysymbol $mockSymbol
      */
     private $mockSymbol;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer $mockEvent
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer $mockEvent
      */
     private $mockEventObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event $mockEvent
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event $mockEvent
      */
     private $mockEvent;
 

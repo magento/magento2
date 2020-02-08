@@ -26,47 +26,47 @@ class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
     private $returnTOStock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ReturnProcessor
+     * @var \PHPUnit\Framework\MockObject\MockObject|ReturnProcessor
      */
     private $returnProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoRepositoryInterface
      */
     private $creditmemoRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderRepositoryInterface
      */
     private $orderRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RefundOrderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RefundOrderInterface
      */
     private $refundOrderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoCreationArgumentsInterface
      */
     private $creditmemoCreationArgumentsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderInterface
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoInterface
      */
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StockConfigurationInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StockConfigurationInterface
      */
     private $stockConfigurationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoCreationArgumentsInterface
      */
     private $extensionAttributesMock;
 

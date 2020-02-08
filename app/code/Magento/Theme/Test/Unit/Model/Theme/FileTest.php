@@ -17,27 +17,27 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeFactory;
 
     /**
-     * @var FileServiceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileServiceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileServiceFactory;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceCollection;
 

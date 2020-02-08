@@ -21,22 +21,22 @@ class TransactionsTest extends \PHPUnit\Framework\TestCase
     protected $transactionsTab;
 
     /**
-     * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 

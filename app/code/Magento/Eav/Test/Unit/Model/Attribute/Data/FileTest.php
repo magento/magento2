@@ -14,12 +14,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Url\EncoderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Url\EncoderInterface
      */
     protected $urlEncoder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileValidatorMock;
 

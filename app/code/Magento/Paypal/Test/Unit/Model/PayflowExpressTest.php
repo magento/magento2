@@ -17,7 +17,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionRepository;
 
@@ -94,7 +94,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares payment info mock and adds it to the model
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getPreparedPaymentInfo()
     {
@@ -108,7 +108,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares capture transaction
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getCaptureTransaction()
     {

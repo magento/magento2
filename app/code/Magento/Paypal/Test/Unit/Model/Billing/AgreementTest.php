@@ -15,12 +15,12 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentDataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMethodInstanceMock;
 
@@ -99,7 +99,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $baData
-     * @return \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject|
+     * @return \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject|
      */
     private function importOrderPaymentCommonPart($baData)
     {

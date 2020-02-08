@@ -36,37 +36,37 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SelectBuilderForAttribute
+     * @var \PHPUnit\Framework\MockObject\MockObject|SelectBuilderForAttribute
      */
     private $selectBuilderForAttribute;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManager;
 

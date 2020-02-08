@@ -15,13 +15,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var  Form */
     protected $model;
 
-    /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Context |\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var  DataForm |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  DataForm |\PHPUnit\Framework\MockObject\MockObject */
     protected $dataForm;
 
-    /** @var  UrlInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  UrlInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
     protected function setUp()

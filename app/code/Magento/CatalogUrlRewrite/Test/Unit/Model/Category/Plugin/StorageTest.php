@@ -24,27 +24,27 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlFinderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlFinder;
 
     /**
-     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storage;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var ProductResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productResourceModel;
 
     /**
-     * @var UrlRewrite|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewrite|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlRewrite;
 

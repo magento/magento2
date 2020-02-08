@@ -34,7 +34,7 @@ class DumpTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeList;
 

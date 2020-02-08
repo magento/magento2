@@ -11,12 +11,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var  SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 

@@ -24,11 +24,11 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
      */
     protected $subtotalModel;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
@@ -83,7 +83,7 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
         // @TODO this is a wrong test and it does not check methods. Any digital value will be correct
         $priceCurrency->expects($this->any())->method('convert')->willReturn(1231313);
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
             \Magento\Quote\Model\Quote\Item::class,
             [
@@ -91,17 +91,17 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
                 'priceCurrency' => $priceCurrency,
             ]
         );
-        /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
             ['setTotalQty', 'getTotalQty', 'removeItem', 'getQuote']
         );
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getPrice')->will($this->returnValue($originalPrice));
 
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject $quote */
         $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $store = $this->objectManager->getObject(\Magento\Store\Model\Store::class);
         $store->setCurrentCurrency('');

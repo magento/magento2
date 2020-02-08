@@ -15,12 +15,12 @@ use Magento\Store\Model\StoreManagerInterface;
 class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | StoreManagerInterface
      */
     private $storeManagerMock;
 

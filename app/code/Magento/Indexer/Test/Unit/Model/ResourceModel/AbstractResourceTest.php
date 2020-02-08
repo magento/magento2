@@ -13,12 +13,12 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_tableStrategyInterface;
 

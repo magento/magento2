@@ -28,12 +28,12 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
     protected $_event;
 
     /**
-     * @var \Magento\Paypal\Model\Billing\Agreement Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Billing\Agreement Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_agreementFactory;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_checkoutSession;
 

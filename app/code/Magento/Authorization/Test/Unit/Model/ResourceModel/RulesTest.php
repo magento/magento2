@@ -27,42 +27,42 @@ class RulesTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\Acl\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclBuilderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Framework\Acl\RootResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\RootResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rootResourceMock;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclDataCacheMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Authorization\Model\Rules|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorization\Model\Rules|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ruleMock;
 

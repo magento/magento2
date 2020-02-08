@@ -154,7 +154,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getMatchQueryMock()
     {
@@ -171,7 +171,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getBoolQueryMock()
     {
@@ -188,7 +188,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getFilterQueryMock()
     {

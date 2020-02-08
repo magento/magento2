@@ -17,22 +17,22 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attrSetRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfig;
 
@@ -197,11 +197,11 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Set mock for attribute set validation
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $attributeSetMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $attributeSetMock
      * @param $setEntityTypeId
      */
     protected function setMockForValidation(
-        \PHPUnit_Framework_MockObject_MockObject $attributeSetMock,
+        \PHPUnit\Framework\MockObject\MockObject $attributeSetMock,
         $setEntityTypeId
     ) {
         $typeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);

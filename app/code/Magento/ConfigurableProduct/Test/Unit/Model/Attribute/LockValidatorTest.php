@@ -20,22 +20,22 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
@@ -84,7 +84,7 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @return EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMetaDataMock()
     {
@@ -121,7 +121,7 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
 
         $bind = ['attribute_id' => $attributeId, 'attribute_set_id' => $attributeSet];
 
-        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->setMethods(['getAttributeId', '__wakeup'])
             ->disableOriginalConstructor()

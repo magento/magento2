@@ -16,27 +16,27 @@ use Magento\Framework\FlagManager;
 class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Connector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Connector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectorMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 

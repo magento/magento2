@@ -19,16 +19,16 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  */
 class DataCategoryHashMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var CategoryRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryRepository|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryRepository;
 
-    /** @var CategoryResourceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryResourceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryResourceFactory;
 
-    /** @var Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Category|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryResource;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
     protected function setUp()

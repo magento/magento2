@@ -21,17 +21,17 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     protected $productId = 1;
 
     /**
-     * @var AbstractCarrierOnline|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCarrierOnline|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $carrier;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemData;
 

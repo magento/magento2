@@ -12,17 +12,17 @@ use Magento\Backend\Block\MenuItemChecker;
 class MenuItemCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $activeMenuItemMock;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuItemMock;
 
     /**
-     * @var Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuMock;
 

@@ -17,27 +17,27 @@ use Magento\Framework\Registry;
 class MoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
@@ -47,12 +47,12 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     private $moveController;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManager;
 

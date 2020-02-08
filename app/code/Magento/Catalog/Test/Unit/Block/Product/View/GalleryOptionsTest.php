@@ -25,12 +25,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Gallery|\PHPUnit_Framework_MockObject_MockObject
+     * @var Gallery|\PHPUnit\Framework\MockObject\MockObject
      */
     private $gallery;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
@@ -40,12 +40,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
     private $jsonSerializer;
 
     /**
-     * @var View|\PHPUnit_Framework_MockObject_MockObject
+     * @var View|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configView;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $viewConfig;
 

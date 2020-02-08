@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 class PagingTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -122,7 +122,7 @@ class PagingTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        /** @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
+        /** @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
         $dataProviderMock = $this->getMockBuilder(DataProviderInterface::class)->getMockForAbstractClass();
 
         $this->contextMock->expects($this->once())

@@ -17,37 +17,37 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentDataMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $abstractCollectionMock;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 

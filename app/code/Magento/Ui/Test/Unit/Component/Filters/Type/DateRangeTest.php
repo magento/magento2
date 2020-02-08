@@ -18,22 +18,22 @@ use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 class DateRangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentFactory;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterModifierMock;
 

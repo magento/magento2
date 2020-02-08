@@ -32,52 +32,52 @@ class CollectQuoteTest extends TestCase
     private $model;
 
     /**
-     * @var CustomerSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRepositoryMock;
 
     /**
-     * @var EstimateAddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EstimateAddressInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $estimateAddressFactoryMock;
 
     /**
-     * @var EstimateAddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EstimateAddressInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $estimateAddressMock;
 
     /**
-     * @var ShippingMethodManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingMethodManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMethodManagerMock;
 
     /**
-     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteRepositoryMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerMock;
 
     /**
-     * @var AddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressMock;
 

@@ -14,7 +14,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
@@ -58,7 +58,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param float $specialPrice
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected function prepareSaleableItem($specialPrice)
     {
@@ -88,7 +88,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $isValidInterval
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected function prepareLocaleDate($isValidInterval)
     {

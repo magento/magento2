@@ -13,7 +13,7 @@ namespace Magento\Customer\Test\Unit\Model\Backend;
 
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $_storeManager;
 
     /** @var \Magento\Customer\Model\Backend\Customer */

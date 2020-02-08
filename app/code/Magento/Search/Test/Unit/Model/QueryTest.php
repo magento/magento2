@@ -15,7 +15,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Search\Model\ResourceModel\Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\ResourceModel\Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 

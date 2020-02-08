@@ -16,7 +16,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
@@ -26,12 +26,12 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemo;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoice;
 
@@ -754,11 +754,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $creditmemoItemData array
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCreditmemoItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItem */
         $orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
             [
@@ -770,7 +770,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             $orderItem->setData($key, $value);
         }
 
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
+        /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject $creditmemoItem */
         $creditmemoItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
             [

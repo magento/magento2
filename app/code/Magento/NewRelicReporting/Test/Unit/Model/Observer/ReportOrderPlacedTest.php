@@ -18,17 +18,17 @@ class ReportOrderPlacedTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\OrdersFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\OrdersFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ordersFactory;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Orders|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Orders|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ordersModel;
 
@@ -67,7 +67,7 @@ class ReportOrderPlacedTest extends \PHPUnit\Framework\TestCase
      */
     public function testReportOrderPlacedModuleDisabledFromConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,7 +92,7 @@ class ReportOrderPlacedTest extends \PHPUnit\Framework\TestCase
         $testItemCount = null;
         $testTotalQtyOrderedCount = 1;
 
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();

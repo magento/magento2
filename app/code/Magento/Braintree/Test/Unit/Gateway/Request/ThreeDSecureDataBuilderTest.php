@@ -44,7 +44,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $billingAddressMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 

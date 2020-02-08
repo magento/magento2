@@ -16,7 +16,7 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupFactory;
 

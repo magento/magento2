@@ -26,7 +26,7 @@ class PlaceOrderPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet(string $paymentProviderCode, array $placeOrderList, $expectedResult)
     {
-        /** @var TMapFactory|\PHPUnit_Framework_MockObject_MockObject $tMapFactory */
+        /** @var TMapFactory|\PHPUnit\Framework\MockObject\MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

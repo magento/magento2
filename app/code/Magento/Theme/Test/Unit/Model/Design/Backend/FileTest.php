@@ -14,22 +14,22 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class FileTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $mediaDirectory;
 
-    /** @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
     /** @var File */
     protected $fileBackend;
 
     /**
-     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\File\Mime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mime;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     private $databaseHelper;
 
@@ -102,7 +102,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $class
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockObject($class, $methods = [])
     {
@@ -116,7 +116,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $class
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockObjectForAbstractClass($class)
     {

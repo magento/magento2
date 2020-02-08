@@ -19,17 +19,17 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var UserContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UserContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $userContextMock;
 
     /**
-     * @var ResourceOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceOrder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 

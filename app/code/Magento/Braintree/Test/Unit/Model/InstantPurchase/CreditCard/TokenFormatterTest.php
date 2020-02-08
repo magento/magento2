@@ -10,12 +10,12 @@ namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\CreditCard;
 use Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter as CreditCardTokenFormatter;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class TokenFormatterTest extends TestCase
 {
     /**
-     * @var PaymentTokenInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenInterface|MockObject
      */
     private $paymentTokenMock;
 

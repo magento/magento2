@@ -24,7 +24,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $saleableInterfaceMock;
 
     /** @var float */
@@ -33,28 +33,28 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
     /** @var float*/
     protected $baseAmount;
 
-    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundleCalculatorMock;
 
-    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject */
     protected $priceInfoMock;
 
-    /** @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit\Framework\MockObject\MockObject */
     protected $basePriceMock;
 
-    /** @var BundleOptionPrice|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var BundleOptionPrice|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundleOptionMock;
 
-    /** @var CustomOptionPrice|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomOptionPrice|\PHPUnit\Framework\MockObject\MockObject */
     protected $customOptionPriceMock;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var ProductCustomOptionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCustomOptionRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productOptionRepositoryMock;
 

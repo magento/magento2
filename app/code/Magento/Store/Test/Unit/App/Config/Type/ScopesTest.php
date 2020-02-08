@@ -19,7 +19,7 @@ class ScopesTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 

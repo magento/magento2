@@ -27,32 +27,32 @@ class SpecificationPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var BillingAgreementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BillingAgreementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $billingAgreementFactoryMock;
 
     /**
-     * @var SpecificationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SpecificationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $specificationMock;
 
     /**
-     * @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var BillingAgreementCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var BillingAgreementCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $billingAgreementCollectionMock;
 
     /**
-     * @var BillingAgreement|\PHPUnit_Framework_MockObject_MockObject
+     * @var BillingAgreement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $billingAgreementMock;
 

@@ -18,7 +18,7 @@ use Magento\Framework\DataObject;
 class TranslationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $source;
 

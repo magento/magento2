@@ -16,7 +16,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Theme\Model\Layout\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Layout\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 

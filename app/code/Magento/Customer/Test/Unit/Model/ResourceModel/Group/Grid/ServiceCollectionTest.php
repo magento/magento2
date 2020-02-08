@@ -30,7 +30,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Api\Data\GroupSearchResultsInterface */
     protected $searchResults;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject| */
+    /** @var \PHPUnit\Framework\MockObject\MockObject| */
     protected $groupRepositoryMock;
 
     /** @var ServiceCollection */

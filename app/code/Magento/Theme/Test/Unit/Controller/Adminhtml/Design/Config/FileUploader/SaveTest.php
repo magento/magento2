@@ -10,16 +10,16 @@ use Magento\Framework\Controller\ResultFactory;
 
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultFactory;
 
-    /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileProcessor;
 
     /** @var Save */

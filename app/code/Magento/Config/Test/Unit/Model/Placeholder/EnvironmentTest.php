@@ -9,7 +9,7 @@ use Magento\Config\Model\Placeholder\Environment;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Class EnvironmentTest

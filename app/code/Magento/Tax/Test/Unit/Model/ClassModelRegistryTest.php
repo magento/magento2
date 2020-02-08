@@ -19,12 +19,12 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModelFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\ClassModelFactory
      */
     private $classModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\ClassModel
      */
     private $classModelMock;
 

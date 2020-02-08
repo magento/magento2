@@ -26,50 +26,50 @@ class StockTest extends \PHPUnit\Framework\TestCase
     const ITEM_TABLE = 'testItemTableName';
 
     /**
-     * @var Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var Stock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stock;
 
     /**
-     * @var Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeMock;
 
     /**
-     * @var StockConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfiguration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Db_Statement_Interface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statementMock;
-    
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);

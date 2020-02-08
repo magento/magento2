@@ -16,7 +16,7 @@ use Magento\SalesRule\Model\DeltaPriceRound;
 class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrency;
 

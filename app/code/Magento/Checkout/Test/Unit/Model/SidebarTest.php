@@ -13,13 +13,13 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
     /** @var Sidebar */
     protected $sidebar;
 
-    /** @var \Magento\Checkout\Model\Cart|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\Cart|\PHPUnit\Framework\MockObject\MockObject */
     protected $cartMock;
 
-    /** @var \Magento\Checkout\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutHelperMock;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resolverMock;
 
     protected function setUp()

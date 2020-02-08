@@ -17,7 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection;
 class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductScopeRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productScopeRewriteGeneratorMock;
 

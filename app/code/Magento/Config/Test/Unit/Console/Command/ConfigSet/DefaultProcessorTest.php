@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for DefaultProcessor.
@@ -32,32 +32,32 @@ class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DeploymentConfig|Mock
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ConfigPathResolver|Mock
+     * @var ConfigPathResolver|MockObject
      */
     private $configPathResolverMock;
 
     /**
-     * @var PreparedValueFactory|Mock
+     * @var PreparedValueFactory|MockObject
      */
     private $preparedValueFactoryMock;
 
     /**
-     * @var Value|Mock
+     * @var Value|MockObject
      */
     private $valueMock;
 
     /**
-     * @var AbstractDb|Mock
+     * @var AbstractDb|MockObject
      */
     private $resourceModelMock;
 
     /**
-     * @var ConfigFactory|Mock
+     * @var ConfigFactory|MockObject
      */
     private $configFactory;
 

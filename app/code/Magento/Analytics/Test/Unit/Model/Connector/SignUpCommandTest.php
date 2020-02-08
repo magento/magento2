@@ -23,37 +23,37 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
     private $signUpCommand;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var IntegrationManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $integrationManagerMock;
 
     /**
-     * @var IntegrationToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $integrationToken;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseResolverMock;
 

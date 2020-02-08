@@ -8,17 +8,17 @@ namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var $_model \PHPUnit_Framework_MockObject_MockObject
+     * @var $_model \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 

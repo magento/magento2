@@ -9,7 +9,7 @@ use Magento\Integration\Model\Config\Integration\SchemaLocator;
 
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject */
     protected $moduleReader;
 
     /** @var string */

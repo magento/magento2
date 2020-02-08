@@ -9,22 +9,22 @@ use Magento\Cms\Controller\Adminhtml\Block\InlineEdit;
 
 class InlineEditTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Cms\Model\Block|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cms\Model\Block|\PHPUnit\Framework\MockObject\MockObject */
     protected $cmsBlock;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Cms\Api\BlockRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cms\Api\BlockRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $blockRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultJson;
 
     /** @var InlineEdit */

@@ -19,32 +19,32 @@ use Magento\Sales\Model\Service\InvoiceService;
 class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceService
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceService
      */
     private $invoiceServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceInterface
      */
     private $invoiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceDocumentFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceDocumentFactory
      */
     private $invoiceDocumentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCreationArgumentsInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCreationArgumentsInterface
      */
     private $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Order
+     * @var \PHPUnit\Framework\MockObject\MockObject|Order
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentCreationInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCommentCreationInterface
      */
     private $commentMock;
 

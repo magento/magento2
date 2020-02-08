@@ -13,22 +13,22 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
     protected $_plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeMock;
 
     /**
-     * @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 

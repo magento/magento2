@@ -17,19 +17,19 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\Link|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Link|\PHPUnit\Framework\MockObject\MockObject */
     protected $link;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
     /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql */
     protected $connection;
 
-    /** @var \Magento\ImportExport\Model\ImportFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\ImportFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $importFactory;
 
-    /** @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\Import|\PHPUnit\Framework\MockObject\MockObject */
     protected $import;
 
     protected function setUp()

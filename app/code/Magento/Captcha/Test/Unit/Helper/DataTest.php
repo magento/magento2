@@ -13,7 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
@@ -23,12 +23,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Captcha\Model\CaptchaFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Model\CaptchaFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 

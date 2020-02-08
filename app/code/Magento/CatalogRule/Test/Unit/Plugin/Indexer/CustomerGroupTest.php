@@ -13,14 +13,14 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
     /**
      * Rule processor mock
      *
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleProductProcessor;
 
     /**
      * Subject group
      *
-     * @var \Magento\Customer\Model\Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Group|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 

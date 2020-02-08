@@ -23,7 +23,7 @@ class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     private $availabilityChecker;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 

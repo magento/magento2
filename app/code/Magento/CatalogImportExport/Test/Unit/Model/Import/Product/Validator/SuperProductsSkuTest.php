@@ -7,7 +7,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\SuperProductsSku;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for SuperProductsSku
@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 class SuperProductsSkuTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SkuProcessor|Mock
+     * @var SkuProcessor|MockObject
      */
     private $skuProcessorMock;
 

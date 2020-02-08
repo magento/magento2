@@ -24,13 +24,13 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Webapi\Model\Soap\ServerFactory */
     protected $_soapServerFactory;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl\Generator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Soap\Wsdl\Generator|\PHPUnit\Framework\MockObject\MockObject */
     protected $wsdlGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_scopeConfig;
 
     protected function setUp()

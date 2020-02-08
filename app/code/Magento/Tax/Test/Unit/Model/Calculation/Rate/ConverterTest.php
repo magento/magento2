@@ -15,17 +15,17 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected $converter;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxRateDataObjectFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxRateTitleDataObjectFactory;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $format;
 

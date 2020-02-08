@@ -22,17 +22,17 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
     private $configModel;
 
     /**
-     * @var Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Type|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Consolidated\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Integration\Model\Config\Consolidated\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var  SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 

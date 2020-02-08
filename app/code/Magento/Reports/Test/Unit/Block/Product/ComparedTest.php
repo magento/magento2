@@ -18,7 +18,7 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
     private $sut;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 

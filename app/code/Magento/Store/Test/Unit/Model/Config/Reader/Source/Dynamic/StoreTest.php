@@ -24,37 +24,37 @@ use Magento\Framework\DataObject;
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteFactory;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|\PHPUnit\Framework\MockObject\MockObject
      */
     private $website;
 
     /**
-     * @var WebsiteSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteSource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteSource;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 

@@ -17,17 +17,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
     /**
-     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeState;
 
@@ -37,7 +37,7 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
     private $indexSwitcher;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 

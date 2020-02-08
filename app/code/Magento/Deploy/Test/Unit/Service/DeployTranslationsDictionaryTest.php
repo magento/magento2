@@ -11,9 +11,8 @@ use Magento\Deploy\Service\DeployStaticFile;
 use Magento\Framework\App\State;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Translation Dictionaries deploy service class unit tests
@@ -26,22 +25,22 @@ class DeployTranslationsDictionaryTest extends \PHPUnit\Framework\TestCase
     private $service;
 
     /**
-     * @var JsTranslationConfig|Mock
+     * @var JsTranslationConfig|MockObject
      */
     private $jsTranslationConfig;
 
     /**
-     * @var DeployStaticFile|Mock
+     * @var DeployStaticFile|MockObject
      */
     private $deployStaticFile;
 
     /**
-     * @var State|Mock
+     * @var State|MockObject
      */
     private $state;
 
     /**
-     * @var LoggerInterface|Mock
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 

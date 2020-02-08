@@ -16,19 +16,19 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderConfigMock;
 
-    /** @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentConfigMock;
 
-    /** @var \Magento\Config\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Config\Model\ResourceModel\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $coreResourceConfigMock;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject */
     protected $observerMock;
 
-    /** @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventMock;
 
     const ORDER_STATUS = 'status';

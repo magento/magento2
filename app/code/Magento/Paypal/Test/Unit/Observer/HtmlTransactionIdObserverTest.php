@@ -26,7 +26,7 @@ class HtmlTransactionIdObserverTest extends \PHPUnit\Framework\TestCase
     protected $_event;
 
     /**
-     * @var \Magento\Paypal\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paypalDataMock;
 

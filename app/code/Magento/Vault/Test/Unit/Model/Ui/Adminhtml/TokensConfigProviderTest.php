@@ -526,7 +526,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param int $atIndex
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createExpectedFilter($field, $value, $atIndex)
     {
@@ -553,7 +553,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      * @param int $customerId
      * @param int $entityId
      * @param string $vaultProviderCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getSearchCriteria($customerId, $entityId, $vaultProviderCode)
     {

@@ -17,7 +17,7 @@ class PageSizeProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Search\Model\EngineResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\EngineResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pageSizeBySearchEngineMock;
 

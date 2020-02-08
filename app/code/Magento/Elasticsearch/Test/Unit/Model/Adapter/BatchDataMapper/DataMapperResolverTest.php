@@ -18,12 +18,12 @@ class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DataMapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataMapperFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataMapperFactoryMock;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchDataMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataMapperEntity;
 

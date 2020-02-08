@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class MergeDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MergeDataProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergeDataProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlRewritesSet;
 

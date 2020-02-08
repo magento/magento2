@@ -13,17 +13,17 @@ class LogTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $compareItemMock;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logResourceMock;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 

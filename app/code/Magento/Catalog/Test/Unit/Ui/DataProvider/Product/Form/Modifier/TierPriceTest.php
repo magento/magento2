@@ -17,12 +17,12 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
 class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ProductPriceOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductPriceOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productPriceOptions;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayManager;
 

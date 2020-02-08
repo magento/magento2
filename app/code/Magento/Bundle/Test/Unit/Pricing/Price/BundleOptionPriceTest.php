@@ -26,17 +26,17 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saleableItemMock;
 
     /**
-     * @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleCalculatorMock;
 
     /**
-     * @var BundleOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var BundleOptions|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleOptionsMock;
 

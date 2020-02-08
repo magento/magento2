@@ -19,12 +19,12 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Downloadable\Model\Link\PurchasedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\Link\PurchasedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $purchasedFactory;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemsFactory;
 

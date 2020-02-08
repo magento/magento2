@@ -22,17 +22,17 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $target;
 
     /**
-     * @var TypeHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeHandler;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -42,7 +42,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linksFactory;
 

@@ -24,62 +24,62 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\ProductRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Interceptor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Type\Interceptor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productType;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionCollection;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectionCollection;
 
     /**
-     * @var \Magento\Bundle\Model\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $option;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\SelectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Bundle\Model\SelectionFactory
      */
     protected $bundleSelectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\ResourceModel\BundleFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Bundle\Model\ResourceModel\BundleFactory
      */
     protected $bundleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
      */
     protected $optionCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $link;
 
@@ -94,17 +94,17 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $optionIds = [1, 2, 3];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 

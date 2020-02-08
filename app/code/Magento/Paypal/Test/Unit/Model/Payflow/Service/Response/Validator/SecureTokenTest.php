@@ -21,7 +21,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var Transparent| \PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $payflowFacade;
 

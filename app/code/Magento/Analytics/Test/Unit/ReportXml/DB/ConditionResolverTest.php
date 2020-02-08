@@ -14,7 +14,7 @@ use Magento\Framework\DB\Sql\Expression;
 class ConditionResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -24,12 +24,12 @@ class ConditionResolverTest extends \PHPUnit\Framework\TestCase
     private $conditionResolver;
 
     /**
-     * @var SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectBuilderMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 

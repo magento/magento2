@@ -12,9 +12,8 @@ use Magento\Deploy\Service\DeployPackage;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\App\ResourceConnection;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Deployment Queue class unit tests
@@ -29,27 +28,27 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     private $queue;
 
     /**
-     * @var AppState|Mock
+     * @var AppState|MockObject
      */
     private $appState;
 
     /**
-     * @var LocaleResolver|Mock
+     * @var LocaleResolver|MockObject
      */
     private $localeResolver;
 
     /**
-     * @var ResourceConnection|Mock
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var LoggerInterface|Mock
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
     /**
-     * @var DeployPackage|Mock
+     * @var DeployPackage|MockObject
      */
     private $deployPackageService;
 

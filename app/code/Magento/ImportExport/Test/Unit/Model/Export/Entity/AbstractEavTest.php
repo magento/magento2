@@ -10,7 +10,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
     /**
      * Abstract eav export model
      *
-     * @var \Magento\ImportExport\Model\Export\Entity\AbstractEav|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Entity\AbstractEav|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -103,7 +103,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($testAttributeOptions)
         );
 
-        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject */
         $item = $this->getMockForAbstractClass(
             \Magento\Framework\Model\AbstractModel::class,
             [],

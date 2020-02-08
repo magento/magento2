@@ -9,12 +9,12 @@ namespace Magento\SalesRule\Test\Unit\Model\Plugin;
 class QuoteConfigProductAttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $plugin;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleResource;
 

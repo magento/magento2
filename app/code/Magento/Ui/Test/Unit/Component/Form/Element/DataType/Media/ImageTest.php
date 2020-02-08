@@ -17,17 +17,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ImageTest extends \Magento\Ui\Test\Unit\Component\Form\Element\DataType\MediaTest
 {
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var Size|\PHPUnit_Framework_MockObject_MockObject
+     * @var Size|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSize;
 

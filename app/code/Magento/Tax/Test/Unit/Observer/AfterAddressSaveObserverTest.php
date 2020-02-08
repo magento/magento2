@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
@@ -31,19 +31,19 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Module manager
      *
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheConfigMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $taxHelperMock;
 
@@ -122,7 +122,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->method('isCatalogPriceDisplayAffectedByTax')
             ->willReturn($isCatalogPriceDisplayAffectedByTax);
 
-        /* @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->getMock();

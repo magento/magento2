@@ -12,16 +12,16 @@ class FlushAllCacheTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Observer\FlushAllCache */
     private $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
     private $_configMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\PageCache\Cache */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\PageCache\Cache */
     private $_cacheMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer */
     private $observerMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Cache\Type */
     private $fullPageCacheMock;
 
     /**

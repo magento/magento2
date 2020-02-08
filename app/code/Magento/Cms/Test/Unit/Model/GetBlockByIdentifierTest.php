@@ -19,17 +19,17 @@ class GetBlockByIdentifierTest extends \PHPUnit\Framework\TestCase
     private $getBlockByIdentifierCommand;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Block
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\Block
      */
     private $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\BlockFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\BlockFactory
      */
     private $blockFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\ResourceModel\Block
      */
     private $blockResource;
 

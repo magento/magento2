@@ -16,17 +16,17 @@ use Magento\Downloadable\Helper\Download;
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $downloadFileMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectCopyServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelperMock;
 
@@ -36,12 +36,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $mockComponentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $linkMock;
 
@@ -68,7 +68,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->linkMock = $this->getMockBuilder(LinkInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $this->service = $objectManagerHelper->getObject(
             Builder::class,
             [

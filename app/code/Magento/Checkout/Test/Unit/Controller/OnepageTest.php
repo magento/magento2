@@ -19,32 +19,32 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Customer\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Response\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quote;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
@@ -85,7 +85,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())
             ->method('getEventManager')
             ->willReturn($this->eventManager);
-        
+
         $this->controller = $objectManager->getObject(
             \Magento\Checkout\Test\Unit\Controller\Stub\OnepageStub::class,
             [

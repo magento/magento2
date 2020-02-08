@@ -19,12 +19,12 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var AbstractConfigTesting|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractConfigTesting|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 

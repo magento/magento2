@@ -25,32 +25,32 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_pdfConfigMock;
 
     /**
-     * @var Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $databaseMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRendererMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentDataMock;
 

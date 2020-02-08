@@ -17,22 +17,22 @@ use Magento\Sales\Model\Order;
 class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $salesConfigMock;
 
     /**
-     * @var OrderedProductAvailabilityChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderedProductAvailabilityChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $checkerMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemMock;
 

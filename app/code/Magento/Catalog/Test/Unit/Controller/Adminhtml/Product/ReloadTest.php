@@ -35,47 +35,47 @@ class ReloadTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productBuilderMock;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var UiComponent|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponent|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentMock;
 
     /**
-     * @var ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processorMock;
 

@@ -15,7 +15,7 @@ class PresentationTest extends \PHPUnit\Framework\TestCase
     private $presentation;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute| \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 

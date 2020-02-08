@@ -26,22 +26,22 @@ use Psr\Log\LoggerInterface;
 class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentResourceInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoCommentResourceInterface
      */
     private $commentResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoCommentInterfaceFactory
      */
     private $commentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentSearchResultInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoCommentSearchResultInterfaceFactory
      */
     private $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionProcessorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CollectionProcessorInterface
      */
     private $collectionProcessor;
 
@@ -51,27 +51,27 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
     private $commentRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentSender
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoCommentSender
      */
     private $creditmemoCommentSender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoRepositoryInterface
      */
     private $creditmemoRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Creditmemo
+     * @var \PHPUnit\Framework\MockObject\MockObject|Creditmemo
      */
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Comment
+     * @var \PHPUnit\Framework\MockObject\MockObject|Comment
      */
     private $commentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     private $loggerMock;
 

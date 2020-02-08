@@ -21,19 +21,19 @@ use Psr\Log\LoggerInterface;
  */
 class GatewayTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Gateway|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Gateway|\PHPUnit\Framework\MockObject\MockObject */
     protected $object;
 
-    /** @var ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ZendClientFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $httpClientFactoryMock;
 
-    /** @var Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Random|\PHPUnit\Framework\MockObject\MockObject */
     protected $mathRandomMock;
 
-    /** @var Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Logger|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /** @var ZendClient|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ZendClient|\PHPUnit\Framework\MockObject\MockObject */
     protected $zendClientMock;
 
     protected function setUp()
@@ -72,7 +72,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedResponse = 'RESULT=0&RESPMSG=Approved&SECURETOKEN=8ZIaw2&SECURETOKENID=2481d53';
 
-        /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject $configInterfaceMock */
+        /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject $configInterfaceMock */
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $zendResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)
@@ -105,7 +105,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      */
     public function testPostRequestFail()
     {
-        /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject $configInterfaceMock */
+        /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject $configInterfaceMock */
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $zendResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)

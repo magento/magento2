@@ -18,7 +18,7 @@ class AddDirtyRulesNoticeTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 

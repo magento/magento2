@@ -23,7 +23,7 @@ class PermissionsTest extends TestCase
     private $permissions;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockAuthorization;
 

@@ -17,11 +17,11 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @inheritdoc
@@ -35,52 +35,52 @@ class ModeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Reader|Mock
+     * @var Reader|MockObject
      */
     private $readerMock;
 
     /**
-     * @var InputInterface|Mock
+     * @var InputInterface|MockObject
      */
     private $inputMock;
 
     /**
-     * @var OutputInterface|Mock
+     * @var OutputInterface|MockObject
      */
     private $outputMock;
 
     /**
-     * @var Writer|Mock
+     * @var Writer|MockObject
      */
     private $writerMock;
 
     /**
-     * @var MaintenanceMode|Mock
+     * @var MaintenanceMode|MockObject
      */
     private $maintenanceMock;
 
     /**
-     * @var Filesystem|Mock
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ConfigProvider|Mock
+     * @var ConfigProvider|MockObject
      */
     private $configProvider;
 
     /**
-     * @var ProcessorFacadeFactory|Mock
+     * @var ProcessorFacadeFactory|MockObject
      */
     private $processorFacadeFactory;
 
     /**
-     * @var ProcessorFacade|Mock
+     * @var ProcessorFacade|MockObject
      */
     private $processorFacade;
 
     /**
-     * @var EmulatedAdminhtmlAreaProcessor|Mock
+     * @var EmulatedAdminhtmlAreaProcessor|MockObject
      */
     private $emulatedAreaProcessor;
 

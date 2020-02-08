@@ -18,7 +18,7 @@ class DownloadsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repo
     protected $downloads;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateMock;
 

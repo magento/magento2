@@ -19,7 +19,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $attribute;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
@@ -189,7 +189,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param int $attributeId
      * @param string $attributeCode
      * @param int $sequence
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function mockAttributeById($attributeId, $attributeCode, $sequence = 0)
     {
@@ -205,7 +205,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param int $attributeId
      * @param string $attributeCode
      * @param int $sequence
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function mockAttributeByCode($attributeId, $attributeCode, $sequence = 0)
     {
@@ -220,7 +220,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $attributeId
      * @param string $attributeCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeMock($attributeId, $attributeCode)
     {

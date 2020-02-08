@@ -13,52 +13,52 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryData;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressFactory;
 
     /**
-     * @var \Magento\Customer\Model\AddressRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AddressRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRegistry;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressResourceModel;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressSearchResultsFactory;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customer;
 
     /**
-     * @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $address;
 
@@ -68,7 +68,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $repository;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 

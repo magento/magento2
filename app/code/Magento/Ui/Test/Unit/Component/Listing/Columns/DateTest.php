@@ -15,7 +15,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     const TEST_TIME = '2000-04-12 16:34:12';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -25,7 +25,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezoneMock;
 

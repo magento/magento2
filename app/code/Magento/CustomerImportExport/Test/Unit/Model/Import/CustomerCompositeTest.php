@@ -32,7 +32,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     protected $_addressAttributes = ['city', 'country', 'street'];
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_string;
 
@@ -67,13 +67,13 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     protected $_addressFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $errorAggregator;
 
@@ -84,7 +84,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $errorFactory;
 
@@ -244,7 +244,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getCustomerEntityMock()
     {
@@ -263,7 +263,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * @return Address|\PHPUnit\Framework\MockObject\MockObject
      */
     private function _getAddressEntityMock()
     {

@@ -23,32 +23,32 @@ class UpdateCommandTest extends \PHPUnit\Framework\TestCase
     private $updateCommand;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public $configMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseResolverMock;
 

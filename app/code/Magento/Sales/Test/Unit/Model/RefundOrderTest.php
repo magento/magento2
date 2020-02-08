@@ -34,92 +34,92 @@ use Psr\Log\LoggerInterface;
 class RefundOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var CreditmemoDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoDocumentFactoryMock;
 
     /**
-     * @var RefundAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $refundAdapterMock;
 
     /**
-     * @var OrderStateResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderStateResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderStateResolverMock;
 
     /**
-     * @var OrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Order\CreditmemoRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order\CreditmemoRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoRepositoryMock;
 
     /**
-     * @var NotifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notifierMock;
 
     /**
-     * @var RefundOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundOrder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $refundOrder;
 
     /**
-     * @var CreditmemoCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCreationArgumentsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoCommentCreationMock;
 
     /**
-     * @var CreditmemoCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoCreationArgumentsMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var CreditmemoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterInterface;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var RefundOrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundOrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $refundOrderValidatorMock;
 
     /**
-     * @var CreditmemoItemCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoItemCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoItemCreationMock;
 
     /**
-     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationMessagesMock;
 

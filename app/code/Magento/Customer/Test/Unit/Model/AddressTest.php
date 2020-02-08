@@ -22,17 +22,17 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $address;
 
     /**
-     * @var \Magento\Customer\Model\Customer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customer;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Address | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 

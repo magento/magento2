@@ -24,17 +24,17 @@ class RoundingErrorsTest extends \PHPUnit\Framework\TestCase
     private $roundingErrorsNotification;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var UrlInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TaxConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxConfig | \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxConfigMock;
 

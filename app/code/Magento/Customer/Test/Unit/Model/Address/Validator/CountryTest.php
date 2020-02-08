@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class CountryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject  */
     private $directoryDataMock;
 
     /** @var \Magento\Customer\Model\Address\Validator\Country  */
@@ -23,7 +23,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit\Framework\MockObject\MockObject
      */
     private $allowedCountriesReaderMock;
 

@@ -23,12 +23,12 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ProductFlatIndexerState|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFlatIndexerState|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerStateMock;
 
     /**
-     * @var ConfigData|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 

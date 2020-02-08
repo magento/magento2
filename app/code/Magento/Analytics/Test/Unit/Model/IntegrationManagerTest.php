@@ -16,22 +16,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $integrationServiceMock;
 
     /**
-     * @var OauthServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OauthServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $oauthServiceMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Integration|\PHPUnit_Framework_MockObject_MockObject
+     * @var Integration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $integrationMock;
 

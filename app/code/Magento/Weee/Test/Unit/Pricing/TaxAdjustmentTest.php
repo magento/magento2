@@ -16,17 +16,17 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 

@@ -16,7 +16,7 @@ class ExportSoldExcelTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
     protected $exportSoldExcel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateMock;
 

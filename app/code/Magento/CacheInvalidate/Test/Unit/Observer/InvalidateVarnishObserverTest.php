@@ -9,22 +9,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class InvalidateVarnishObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\Observer */
     protected $observerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\PageCache\Model\Config */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
     protected $purgeCache;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\ */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject\ */
     protected $observerObject;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Cache\Tag\Resolver */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Cache\Tag\Resolver */
     private $tagResolver;
 
     /**

@@ -19,12 +19,12 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool;
 class PlaceOrderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var PlaceOrderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceOrderPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $placeOrderPool;
 

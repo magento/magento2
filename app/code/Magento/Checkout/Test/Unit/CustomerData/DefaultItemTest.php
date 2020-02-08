@@ -25,7 +25,7 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
     private $configurationPool;
 
     /**
-     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemResolver;
 

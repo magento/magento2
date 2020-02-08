@@ -14,12 +14,12 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
     private $additionalBlock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 

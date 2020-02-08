@@ -12,27 +12,27 @@ use Magento\Customer\Model\FileUploader;
 class FileUploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerMetadataService;
 
     /**
-     * @var \Magento\Customer\Api\AddressMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AddressMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressMetadataService;
 
     /**
-     * @var \Magento\Customer\Model\Metadata\ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Metadata\ElementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementFactory;
 
     /**
-     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadata;
 

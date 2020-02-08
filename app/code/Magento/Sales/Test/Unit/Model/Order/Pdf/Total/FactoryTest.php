@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Total;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 

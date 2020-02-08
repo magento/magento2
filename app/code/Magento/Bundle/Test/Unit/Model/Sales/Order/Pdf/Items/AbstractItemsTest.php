@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items;
 
 class AbstractItemsTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderItem;
 
     /** @var \Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment $model */

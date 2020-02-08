@@ -13,17 +13,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $remoteAddressMock;
 
     /**
-     * @var \Magento\Framework\HTTP\Header | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\Header | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpHeaderMock;
 

@@ -18,23 +18,23 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
     private $requestValidator;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $storeManagerMock;
 
-    /** @var \Magento\Store\Api\Data\StoreInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Api\Data\StoreInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $storeMock;
 
     /**
-     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Webapi\Controller\Rest\Router\Route
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Webapi\Controller\Rest\Router\Route
      */
     private $routeMock;
 

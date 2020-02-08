@@ -20,17 +20,17 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Helper\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Helper\Context
      */
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Product\Configuration
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Helper\Product\Configuration
      */
     protected $productConfig;
 

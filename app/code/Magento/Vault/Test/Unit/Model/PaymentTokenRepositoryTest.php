@@ -83,7 +83,7 @@ class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 

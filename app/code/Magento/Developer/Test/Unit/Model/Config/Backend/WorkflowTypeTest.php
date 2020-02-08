@@ -20,12 +20,12 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     * @var CleanupFiles|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cleanerMock;
 

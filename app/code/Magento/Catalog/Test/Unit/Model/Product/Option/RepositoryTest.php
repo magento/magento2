@@ -21,27 +21,27 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $optionRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionResourceMock;
 
     /**
-     * @var ProductCustomOptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCustomOptionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 

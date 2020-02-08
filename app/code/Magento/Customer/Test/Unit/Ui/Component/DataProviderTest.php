@@ -25,27 +25,27 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Reporting | \PHPUnit_Framework_MockObject_MockObject
+     * @var Reporting | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $reporting;
 
     /**
-     * @var SearchCriteriaInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteria;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
     /**
-     * @var AttributeRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepository | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeRepository;
 
@@ -147,7 +147,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockSearchCriteria()
     {

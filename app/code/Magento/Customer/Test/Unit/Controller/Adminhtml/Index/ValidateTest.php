@@ -12,54 +12,54 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 class ValidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\CustomerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\CustomerInterface
      */
     protected $customer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Metadata\FormFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Metadata\FormFactory
      */
     protected $formFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Metadata\Form
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Metadata\Form
      */
     protected $form;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\ExtensibleDataObjectConverter
      */
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AccountManagementInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AccountManagementInterface
      */
     protected $customerAccountManagement;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\Result\JsonFactory */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\JsonFactory */
     protected $resultJsonFactory;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\Result\Json */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\Json */
     protected $resultJson;
 
     /** @var \Magento\Customer\Controller\Adminhtml\Index\Validate */

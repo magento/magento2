@@ -26,12 +26,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderMock;
 

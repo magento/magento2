@@ -29,37 +29,37 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchDataMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $batchDocumentDataMapper;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $clientConfig;
 
     /**
-     * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexBuilder;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
     /**
-     * @var ElasticsearchClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElasticsearchClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $client;
 
@@ -69,7 +69,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var IndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexNameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexNameResolver;
 

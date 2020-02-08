@@ -15,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
@@ -25,22 +25,22 @@ class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
     private $configPaths;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var WebsiteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var StoreConfigurationProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreConfigurationProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeConfigurationProvider;
 

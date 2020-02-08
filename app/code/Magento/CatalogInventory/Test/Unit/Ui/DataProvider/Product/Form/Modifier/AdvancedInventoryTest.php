@@ -19,27 +19,27 @@ use Magento\Store\Model\Store;
 class AdvancedInventoryTest extends AbstractModifierTest
 {
     /**
-     * @var StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockRegistryMock;
 
     /**
-     * @var StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockItemMock;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonValidatorMock;
 

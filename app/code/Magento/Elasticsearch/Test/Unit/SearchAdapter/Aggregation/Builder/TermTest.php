@@ -16,17 +16,17 @@ class TermTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestBuckedInterface;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderContainer;
 
     /**
-     * @var \Magento\Framework\Search\Request\Aggregation\TermBucket|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Aggregation\TermBucket|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bucket;
 

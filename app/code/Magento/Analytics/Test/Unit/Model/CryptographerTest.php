@@ -14,17 +14,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CryptographerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var EncodedContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextFactoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextMock;
 

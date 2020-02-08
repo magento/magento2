@@ -19,22 +19,22 @@ use Magento\Framework\ObjectManager\ObjectManager;
 
 class ImageFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ParamsBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $paramsBuilder;
 
-    /** @var  View|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  View|\PHPUnit\Framework\MockObject\MockObject */
     private $viewConfig;
 
-    /** @var  ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManager;
 
     /**
-     * @var ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var ViewAssetImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewAssetImageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $viewAssetImageFactory;
 

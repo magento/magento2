@@ -25,7 +25,7 @@ class CcTypeTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    /** @var \Magento\Braintree\Model\Adminhtml\Source\CcType|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Braintree\Model\Adminhtml\Source\CcType|\PHPUnit\Framework\MockObject\MockObject */
     private $ccTypeSource;
 
     protected function setUp()

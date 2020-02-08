@@ -11,7 +11,7 @@ namespace Magento\Cron\Test\Unit\Model;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Cron\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configData;
 

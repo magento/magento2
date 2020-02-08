@@ -19,37 +19,37 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Archive|\PHPUnit_Framework_MockObject_MockObject
+     * @var Archive|\PHPUnit\Framework\MockObject\MockObject
      */
     private $archiveMock;
 
     /**
-     * @var ReportWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportWriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportWriterMock;
 
     /**
-     * @var Cryptographer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Cryptographer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cryptographerMock;
 
     /**
-     * @var FileRecorder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileRecorder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileRecorderMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextMock;
 

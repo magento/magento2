@@ -22,37 +22,37 @@ use Symfony\Component\Console\Input\ArrayInputFactory;
 abstract class AbstractSampleDataCommandTest extends TestCase
 {
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryReadMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryWriteMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var Dependency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dependency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sampleDataDependencyMock;
 
     /**
-     * @var ArrayInputFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayInputFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayInputFactoryMock;
 
     /**
-     * @var Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var Application|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $applicationMock;
 
     /**
-     * @var ApplicationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApplicationFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $applicationFactoryMock;
 

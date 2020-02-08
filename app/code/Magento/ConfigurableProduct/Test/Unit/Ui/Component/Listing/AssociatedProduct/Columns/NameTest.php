@@ -24,17 +24,17 @@ class NameTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var UiElementProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiElementProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiElementProcessorMock;
 

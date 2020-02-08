@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Data\Condition;
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogRule\Api\Data\ConditionInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogRule\Api\Data\ConditionInterfaceFactory
      */
     protected $conditionFactoryMock;
 

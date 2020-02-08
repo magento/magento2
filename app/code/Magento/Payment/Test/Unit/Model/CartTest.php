@@ -12,10 +12,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart */
     protected $_model;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_eventManagerMock;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_salesModelMock;
 
     protected function setUp()

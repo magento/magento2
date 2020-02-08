@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class FieldTest extends TestCase
 {
     /**
-     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $structureElementMock;
 

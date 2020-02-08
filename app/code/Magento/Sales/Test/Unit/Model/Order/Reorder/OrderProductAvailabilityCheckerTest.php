@@ -22,17 +22,17 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     private $productAvailabilityChecks;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemMock;
 
     /**
-     * @var OrderItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemInterfaceMock;
 
     /**
-     * @var ConfigurableChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableCheckerMock;
 

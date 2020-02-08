@@ -52,7 +52,7 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
             ->with($baseCurrencies, $allowCurrencies)
             ->willReturn($currencyRates);
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
         $layoutMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],

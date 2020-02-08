@@ -19,7 +19,7 @@ class FullTest extends TestCase
     private $objectManager;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
@@ -27,7 +27,7 @@ class FullTest extends TestCase
      * @var Full
      */
     private $full;
-    
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

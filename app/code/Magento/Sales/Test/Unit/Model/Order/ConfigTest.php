@@ -19,12 +19,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $salesConfig;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderStatusCollectionFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\StatusFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\StatusFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $statusFactoryMock;
 
@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $orderStatusModel;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 

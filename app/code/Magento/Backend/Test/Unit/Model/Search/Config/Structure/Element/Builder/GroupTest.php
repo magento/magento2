@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class GroupTest extends TestCase
 {
     /**
-     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $structureElementMock;
 

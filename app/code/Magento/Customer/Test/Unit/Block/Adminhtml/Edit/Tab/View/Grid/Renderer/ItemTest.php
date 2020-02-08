@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View\Grid\Renderer
 
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $item;
 
     /** @var  \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item */

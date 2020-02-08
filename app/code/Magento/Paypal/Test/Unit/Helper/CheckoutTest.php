@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order;
 class CheckoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 

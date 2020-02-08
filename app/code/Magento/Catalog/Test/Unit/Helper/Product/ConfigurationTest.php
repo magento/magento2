@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product;
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 

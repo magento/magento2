@@ -60,22 +60,22 @@ class RssTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\App\FeedFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\FeedFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $feedFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\FeedInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\FeedInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $feedMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

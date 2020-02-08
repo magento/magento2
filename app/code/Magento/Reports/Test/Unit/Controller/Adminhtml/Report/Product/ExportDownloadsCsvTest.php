@@ -16,7 +16,7 @@ class ExportDownloadsCsvTest extends \Magento\Reports\Test\Unit\Controller\Admin
     protected $exportDownloadsCsv;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateMock;
 

@@ -17,7 +17,7 @@ use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConcealInProduction|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConcealInProduction|\PHPUnit\Framework\MockObject\MockObject
      */
     private $concealInProductionMock;
 
@@ -27,7 +27,7 @@ class ConcealInProductionWithoutScdOnDemandTest extends \PHPUnit\Framework\TestC
     private $model;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 

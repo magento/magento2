@@ -28,32 +28,32 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $builderMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldMapperMock;
 
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateFieldTypeMock;
 
     /**
-     * @var AdditionalFieldsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdditionalFieldsProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $additionalFieldsProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProvider;
 
@@ -193,9 +193,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      * Return attribute mock
      *
      * @param array attributeData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getAttribute(array $attributeData): \PHPUnit_Framework_MockObject_MockObject
+    private function getAttribute(array $attributeData): \PHPUnit\Framework\MockObject\MockObject
     {
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeData['code']);

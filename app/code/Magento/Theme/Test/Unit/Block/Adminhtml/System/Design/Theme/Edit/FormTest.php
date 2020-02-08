@@ -19,18 +19,18 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtml()
     {
-        /** @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject $customerHelper */
+        /** @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject $customerHelper */
         $formFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Framework\Data\Form|\PHPUnit_Framework_MockObject_MockObject $customerHelper */
+        /** @var \Magento\Framework\Data\Form|\PHPUnit\Framework\MockObject\MockObject $customerHelper */
         $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->setMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject $customerHelper */
+        /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject $customerHelper */
         $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
 

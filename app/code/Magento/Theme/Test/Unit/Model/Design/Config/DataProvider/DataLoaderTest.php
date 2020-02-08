@@ -17,32 +17,32 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataPersistor;
 
     /**
-     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfigRepository;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfig;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfigData;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfigExtension;
 

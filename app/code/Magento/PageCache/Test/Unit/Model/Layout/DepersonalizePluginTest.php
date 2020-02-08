@@ -17,22 +17,22 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageSessionMock;
 
     /**
-     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $depersonalizeCheckerMock;
 

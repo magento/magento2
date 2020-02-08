@@ -19,19 +19,19 @@ use Magento\Framework\DB\TemporaryTableService;
  */
 class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit\Framework\MockObject\MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataProductMapMock;
 
-    /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TemporaryTableService|\PHPUnit\Framework\MockObject\MockObject */
     private $temporaryTableServiceMock;
 
-    /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     private $connectionMock;
 
-    /** @var DataProductUrlRewriteDatabaseMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductUrlRewriteDatabaseMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
     protected function setUp()

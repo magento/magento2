@@ -22,17 +22,17 @@ class BuilderTest extends TestCase
     protected $model;
 
     /**
-     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $structureElementMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ElementBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $structureElementUrlParamsBuilderMock;
 

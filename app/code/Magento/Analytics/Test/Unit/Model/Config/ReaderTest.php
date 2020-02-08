@@ -16,17 +16,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mapperMock;
 
     /**
-     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerXmlMock;
 
     /**
-     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerDbMock;
 

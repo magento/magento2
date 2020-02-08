@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CountryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collection;
 

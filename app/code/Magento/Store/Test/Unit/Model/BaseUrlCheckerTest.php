@@ -25,7 +25,7 @@ class BaseUrlCheckerTest extends \PHPUnit\Framework\TestCase
     /**
      * Holder for Config mock.
      *
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
@@ -51,7 +51,7 @@ class BaseUrlCheckerTest extends \PHPUnit\Framework\TestCase
         $scheme = 'testScheme';
         $host = 'testHost';
         $requestUri = 'testRequestUri';
-        /** @var Http|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var Http|\PHPUnit\Framework\MockObject\MockObject $request */
         $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -28,12 +28,12 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $field;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -125,7 +125,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UiComponentInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|UiComponentInterface
      */
     protected function getWrappedComponentMock()
     {
@@ -154,7 +154,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject[]|UiComponentInterface[]
+     * @return \PHPUnit\Framework\MockObject\MockObject[]|UiComponentInterface[]
      */
     protected function getComponentsMock()
     {

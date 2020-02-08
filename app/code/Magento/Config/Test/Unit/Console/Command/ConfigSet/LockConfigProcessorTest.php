@@ -15,7 +15,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for ShareProcessor.
@@ -31,27 +31,27 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PreparedValueFactory|Mock
+     * @var PreparedValueFactory|MockObject
      */
     private $preparedValueFactory;
 
     /**
-     * @var DeploymentConfig\Writer|Mock
+     * @var DeploymentConfig\Writer|MockObject
      */
     private $deploymentConfigWriterMock;
 
     /**
-     * @var ArrayManager|Mock
+     * @var ArrayManager|MockObject
      */
     private $arrayManagerMock;
 
     /**
-     * @var ConfigPathResolver|Mock
+     * @var ConfigPathResolver|MockObject
      */
     private $configPathResolver;
 
     /**
-     * @var Value|Mock
+     * @var Value|MockObject
      */
     private $valueMock;
 

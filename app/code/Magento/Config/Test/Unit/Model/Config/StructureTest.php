@@ -11,7 +11,7 @@ use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Data;
 use Magento\Config\Model\Config\Structure\Element\FlyweightFactory;
 use Magento\Config\Model\Config\Structure\Element\Iterator\Tab as TabIterator;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Structure.
@@ -21,27 +21,27 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Structure|Mock
+     * @var Structure|MockObject
      */
     protected $_model;
 
     /**
-     * @var FlyweightFactory|Mock
+     * @var FlyweightFactory|MockObject
      */
     protected $_flyweightFactory;
 
     /**
-     * @var TabIterator|Mock
+     * @var TabIterator|MockObject
      */
     protected $_tabIteratorMock;
 
     /**
-     * @var Data|Mock
+     * @var Data|MockObject
      */
     protected $_structureDataMock;
 
     /**
-     * @var ScopeDefiner|Mock
+     * @var ScopeDefiner|MockObject
      */
     protected $_scopeDefinerMock;
 
@@ -218,7 +218,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedType
      * @param string $expectedId
      * @param string $expectedPath
-     * @return Mock
+     * @return MockObject
      */
     private function getElementReturnsEmptyElementIfNotExistingElementIsRequested(
         $expectedType,
@@ -280,7 +280,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     /**
      * Build mock element
      *
-     * @return Mock
+     * @return MockObject
      */
     private function getElementPathReturnsProperElementByPath()
     {
@@ -405,7 +405,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Mock
+     * @return MockObject
      */
     private function getElementReturnsProperElementByPathCachesObject()
     {

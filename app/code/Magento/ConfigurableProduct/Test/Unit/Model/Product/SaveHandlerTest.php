@@ -230,12 +230,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for options save
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $attribute
+     * @param \PHPUnit\Framework\MockObject\MockObject $attribute
      * @param $sku
      * @param $id
      * @return void
      */
-    private function processSaveOptions(\PHPUnit_Framework_MockObject_MockObject $attribute, $sku, $id)
+    private function processSaveOptions(\PHPUnit\Framework\MockObject\MockObject $attribute, $sku, $id)
     {
         $attribute->expects(static::once())
             ->method('setId')

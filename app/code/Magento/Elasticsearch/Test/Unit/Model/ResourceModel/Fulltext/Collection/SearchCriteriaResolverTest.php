@@ -18,7 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilder;
 

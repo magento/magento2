@@ -16,27 +16,27 @@ use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BookmarkRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var BookmarkRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bookmarkRepository;
 
     /**
-     * @var \Magento\Ui\Api\Data\BookmarkInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Ui\Api\Data\BookmarkInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bookmarkMock;
 
     /**
-     * @var \Magento\Ui\Model\ResourceModel\Bookmark|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Ui\Model\ResourceModel\Bookmark|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bookmarkResourceMock;
 
     /**
-     * @var \Magento\Ui\Api\Data\BookmarkSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Ui\Api\Data\BookmarkSearchResultsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 

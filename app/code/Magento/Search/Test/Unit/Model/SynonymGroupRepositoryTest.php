@@ -13,12 +13,12 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Search\Model\SynonymGroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\SynonymGroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factory;
 
     /**
-     * @var \Magento\Search\Model\ResourceModel\SynonymGroup|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\ResourceModel\SynonymGroup|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceModel;
 

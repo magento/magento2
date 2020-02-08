@@ -24,47 +24,47 @@ use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ChangeDetector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChangeDetector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $changeDetectorMock;
 
     /**
-     * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImporterPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configImporterPoolMock;
 
     /**
-     * @var ImporterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImporterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $importerFactoryMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hash|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configHashMock;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $outputMock;
 
     /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inputMock;
 
     /**
-     * @var YesNo|\PHPUnit_Framework_MockObject_MockObject
+     * @var YesNo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $questionPerformerMock;
 

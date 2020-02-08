@@ -12,7 +12,7 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 

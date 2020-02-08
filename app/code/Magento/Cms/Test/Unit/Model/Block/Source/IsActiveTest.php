@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IsActiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var Block|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsBlockMock;
 

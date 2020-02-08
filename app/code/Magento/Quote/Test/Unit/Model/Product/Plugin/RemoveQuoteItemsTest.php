@@ -13,7 +13,7 @@ class RemoveQuoteItemsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Product\QuoteItemsCleanerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Product\QuoteItemsCleanerInterface
      */
     private $quoteItemsCleanerMock;
 

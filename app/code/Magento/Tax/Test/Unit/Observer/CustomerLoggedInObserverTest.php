@@ -143,7 +143,7 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getGroupId')
             ->willReturn(1);
 
-        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

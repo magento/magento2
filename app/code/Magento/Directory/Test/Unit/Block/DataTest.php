@@ -26,34 +26,34 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var  Data */
     private $block;
 
-    /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Context |\PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
-    /** @var  HelperData |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  HelperData |\PHPUnit\Framework\MockObject\MockObject */
     private $helperDataMock;
 
-    /** @var  Config |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Config |\PHPUnit\Framework\MockObject\MockObject */
     private $cacheTypeConfigMock;
 
-    /** @var  CountryCollectionFactory |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CountryCollectionFactory |\PHPUnit\Framework\MockObject\MockObject */
     private $countryCollectionFactoryMock;
 
-    /** @var  ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ScopeConfigInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfigMock;
 
-    /** @var  StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $storeManagerMock;
 
-    /** @var  Store |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Store |\PHPUnit\Framework\MockObject\MockObject */
     private $storeMock;
 
-    /** @var  CountryCollection |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CountryCollection |\PHPUnit\Framework\MockObject\MockObject */
     private $countryCollectionMock;
 
-    /** @var  LayoutInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  LayoutInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $layoutMock;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
     protected function setUp()
@@ -275,7 +275,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param $defaultCountry
      * @param $options
      * @param $resultHtml
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockElementHtmlSelect($defaultCountry, $options, $resultHtml)
     {

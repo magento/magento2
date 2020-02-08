@@ -17,7 +17,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $clientConfig;
 

@@ -18,7 +18,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
     protected $state;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 

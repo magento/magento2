@@ -20,27 +20,27 @@ use PHPUnit\Framework\TestCase;
 class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
 {
     /**
-     * @var Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventMock;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $observerMock;
 
     /**
-     * @var GaDataHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var GaDataHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $googleAnalyticsDataMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 

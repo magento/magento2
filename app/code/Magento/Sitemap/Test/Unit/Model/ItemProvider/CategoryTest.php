@@ -74,7 +74,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getCategoryFactoryMock($returnValue)
     {
@@ -91,7 +91,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getItemFactoryMock()
     {
@@ -112,7 +112,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getConfigReaderMock()
     {
@@ -129,7 +129,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getCategoryCollectionMock($returnValue)
     {

@@ -13,17 +13,17 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Url
      */
     protected $customerUrl;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Checkout\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\Helper\Data
      */
     protected $checkoutData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Url\Helper\Data
      */
     protected $coreUrl;
 

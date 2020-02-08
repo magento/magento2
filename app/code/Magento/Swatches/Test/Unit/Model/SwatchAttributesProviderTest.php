@@ -20,22 +20,22 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
     private $swatchAttributeProvider;
 
     /**
-     * @var Configurable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Configurable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeConfigurable;
 
     /**
-     * @var SwatchAttributeCodes|\PHPUnit_Framework_MockObject_MockObject
+     * @var SwatchAttributeCodes|\PHPUnit\Framework\MockObject\MockObject
      */
     private $swatchAttributeCodes;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
     /**
-     * @var SwatchAttributeType | \PHPUnit_Framework_MockObject_MockObject
+     * @var SwatchAttributeType | \PHPUnit\Framework\MockObject\MockObject
      */
     private $swatchTypeChecker;
 

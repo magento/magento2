@@ -30,32 +30,32 @@ class WebsitesTest extends AbstractModifierTest
     const SECOND_WEBSITE_ID = 2;
 
     /**
-     * @var WebsiteRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteRepositoryMock;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeRepositoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteMock;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $secondWebsiteMock;
 
@@ -65,12 +65,12 @@ class WebsitesTest extends AbstractModifierTest
     protected $assignedWebsites;
 
     /**
-     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var Group|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupMock;
 
     /**
-     * @var StoreView|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreView|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeViewMock;
 

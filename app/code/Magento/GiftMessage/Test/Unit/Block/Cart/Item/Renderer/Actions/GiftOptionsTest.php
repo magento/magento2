@@ -16,13 +16,13 @@ class GiftOptionsTest extends \PHPUnit\Framework\TestCase
     /** @var GiftOptions */
     protected $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var LayoutProcessorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LayoutProcessorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $layoutProcessorMock;
 
-    /** @var Encoder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Encoder|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonEncoderMock;
 
     /** @var array  */
@@ -59,7 +59,7 @@ class GiftOptionsTest extends \PHPUnit\Framework\TestCase
     public function testGetJsLayout()
     {
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()

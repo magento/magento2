@@ -15,7 +15,7 @@ use Magento\Framework\App\State;
 class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\Mode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Deploy\Model\Mode|\PHPUnit\Framework\MockObject\MockObject
      */
     private $modeMock;
 
@@ -25,7 +25,7 @@ class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 

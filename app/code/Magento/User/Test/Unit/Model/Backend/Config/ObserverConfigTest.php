@@ -43,7 +43,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ConfigInterface
      */
     private $backendConfigMock;
 

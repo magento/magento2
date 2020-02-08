@@ -24,7 +24,7 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\MessageQueue\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageQueueConfig;
 

@@ -30,17 +30,17 @@ class JwtParserTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Config
+     * @var \PHPUnit\Framework\MockObject\MockObject | Config
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | JwtManagement
+     * @var \PHPUnit\Framework\MockObject\MockObject | JwtManagement
      */
     private $jwtManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | JwtPayloadValidatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | JwtPayloadValidatorInterface
      */
     private $jwtPayloadValidatorMock;
 

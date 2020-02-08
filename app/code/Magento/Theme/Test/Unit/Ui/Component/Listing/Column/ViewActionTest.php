@@ -25,7 +25,7 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 

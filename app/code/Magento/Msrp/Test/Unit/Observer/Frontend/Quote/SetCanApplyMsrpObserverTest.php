@@ -15,14 +15,14 @@ class SetCanApplyMsrpObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\Msrp\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Msrp\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $canApplyMsrpMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $msrpMock;
 
     protected function setUp()

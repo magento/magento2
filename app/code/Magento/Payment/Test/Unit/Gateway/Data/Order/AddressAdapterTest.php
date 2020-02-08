@@ -17,7 +17,7 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var OrderAddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAddressInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderAddressMock;
 

@@ -13,12 +13,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Product
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $subjectMock;
 
@@ -33,7 +33,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $rollbackClosureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 

@@ -28,47 +28,47 @@ class PublicationDecoratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Temporary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Temporary|\PHPUnit\Framework\MockObject\MockObject
      */
     private $temporaryFileMock;
 
     /**
-     * @var Publisher|\PHPUnit_Framework_MockObject_MockObject
+     * @var Publisher|\PHPUnit\Framework\MockObject\MockObject
      */
     private $publisherMock;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepositoryMock;
 
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $relatedAssetMock;
 
     /**
-     * @var Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var Import|\PHPUnit\Framework\MockObject\MockObject
      */
     private $importGeneratorMock;
 
     /**
-     * @var LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localAssetMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 

@@ -20,12 +20,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $_storageRoot;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Helper\Storage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperStorage;
 
@@ -40,22 +40,22 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $_storageModel;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlDecoder;
 
@@ -194,7 +194,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _prepareUploader()
     {

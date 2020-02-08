@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 
@@ -19,7 +19,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 

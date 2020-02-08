@@ -20,28 +20,28 @@ class CleanCacheTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for context
      *
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
      * Subject mock
      *
-     * @var \Magento\Framework\Indexer\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
     /**
      * Event manager mock
      *
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
      * Cache mock
      *
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 

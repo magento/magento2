@@ -21,12 +21,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleResource;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 

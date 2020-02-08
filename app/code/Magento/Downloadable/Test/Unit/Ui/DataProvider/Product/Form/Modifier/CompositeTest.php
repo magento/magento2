@@ -22,17 +22,17 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var ModifierFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $modifierFactoryMock;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -42,7 +42,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     protected $composite;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $modifierMock;
 

@@ -27,32 +27,32 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var SaveHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaveHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saveHandler;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepository;
 
     /**
-     * @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupManagement;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoll;
 
     /**
-     * @var Tierprice|\PHPUnit_Framework_MockObject_MockObject
+     * @var Tierprice|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tierPriceResource;
 
@@ -104,7 +104,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $linkField = 'entity_id';
         $productId = 10;
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData','setData', 'getStoreId'])
@@ -123,7 +123,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $store->expects($this->atLeastOnce())->method('getWebsiteId')->willReturn(0);
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'isScopeGlobal'])
@@ -158,7 +158,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithException(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'isScopeGlobal'])
@@ -166,7 +166,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
         $this->attributeRepository->expects($this->atLeastOnce())->method('get')->with('tier_price')
             ->willReturn($attribute);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData','setData', 'getStoreId', 'getOrigData'])

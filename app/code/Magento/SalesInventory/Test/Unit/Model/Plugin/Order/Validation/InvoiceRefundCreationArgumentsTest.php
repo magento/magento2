@@ -26,42 +26,42 @@ class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var ReturnValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReturnValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $returnValidatorMock;
 
     /**
-     * @var CreditmemoCreationArgumentsExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCreationArgumentsExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesMock;
 
     /**
-     * @var CreditmemoCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCreationArgumentsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoCreationArgumentsMock;
 
     /**
-     * @var RefundInvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundInvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $refundInvoiceValidatorMock;
 
     /**
-     * @var InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validateResultMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var CreditmemoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoMock;
 

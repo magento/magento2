@@ -11,27 +11,27 @@ use Magento\Framework\Indexer\StateInterface;
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var IndexerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerFactoryMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexersFactoryMock;
 
     /**
-     * @var \Magento\Framework\Mview\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewProcessorMock;
 

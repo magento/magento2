@@ -23,22 +23,22 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var DataObject | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObject;
 
     /**
-     * @var DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectFactory;
 
     /**
-     * @var ConfigurableItemOptionValueFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableItemOptionValueFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemOptionValueFactory;
 
     /**
-     * @var ConfigurableItemOptionValueInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableItemOptionValueInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemOptionValue;
 

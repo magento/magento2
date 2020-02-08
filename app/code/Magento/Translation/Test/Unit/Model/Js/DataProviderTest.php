@@ -27,27 +27,27 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var Files|\PHPUnit_Framework_MockObject_MockObject
+     * @var Files|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesUtilityMock;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileReadMock;
 
     /**
-     * @var Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translateMock;
 

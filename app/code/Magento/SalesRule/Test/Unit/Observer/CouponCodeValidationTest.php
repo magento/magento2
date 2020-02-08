@@ -17,7 +17,7 @@ use Magento\SalesRule\Api\Exception\CodeRequestLimitException;
 use Magento\SalesRule\Model\Spi\CodeLimitManagerInterface;
 use Magento\SalesRule\Observer\CouponCodeValidation;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class CouponCodeValidationTest
@@ -30,32 +30,32 @@ class CouponCodeValidationTest extends TestCase
     private $couponCodeValidation;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|CodeLimitManagerInterface
+     * @var MockObject|CodeLimitManagerInterface
      */
     private $codeLimitManagerMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|CartRepositoryInterface
+     * @var MockObject|CartRepositoryInterface
      */
     private $cartRepositoryMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|SearchCriteriaBuilder
+     * @var MockObject|SearchCriteriaBuilder
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Observer
+     * @var MockObject|Observer
      */
     private $observerMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $quoteMock;
 

@@ -14,7 +14,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactoryMock;
 

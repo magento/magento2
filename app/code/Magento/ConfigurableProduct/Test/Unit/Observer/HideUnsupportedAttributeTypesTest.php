@@ -44,11 +44,11 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param RequestInterface|\PHPUnit_Framework_MockObject_MockObject $request
+     * @param RequestInterface|\PHPUnit\Framework\MockObject\MockObject $request
      * @param array $supportedTypes
      * @return HideUnsupportedAttributeTypes
      */
-    private function createTarget(\PHPUnit_Framework_MockObject_MockObject $request, array $supportedTypes = [])
+    private function createTarget(\PHPUnit\Framework\MockObject\MockObject $request, array $supportedTypes = [])
     {
         return $this->objectManager->getObject(
             HideUnsupportedAttributeTypes::class,
@@ -86,11 +86,11 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject|null $form
-     * @return EventObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject|null $form
+     * @return EventObserver|\PHPUnit\Framework\MockObject\MockObject
      * @internal param null|MockObject $block
      */
-    private function createEventMock(\PHPUnit_Framework_MockObject_MockObject $form = null)
+    private function createEventMock(\PHPUnit\Framework\MockObject\MockObject $form = null)
     {
         $event = $this->getMockBuilder(EventObserver::class)
             ->setMethods(['getForm', 'getBlock'])

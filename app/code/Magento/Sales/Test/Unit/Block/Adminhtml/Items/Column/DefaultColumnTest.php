@@ -18,7 +18,7 @@ class DefaultColumnTest extends \PHPUnit\Framework\TestCase
     protected $defaultColumn;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 

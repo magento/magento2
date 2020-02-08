@@ -18,7 +18,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Catalog helper
      *
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helper;
 

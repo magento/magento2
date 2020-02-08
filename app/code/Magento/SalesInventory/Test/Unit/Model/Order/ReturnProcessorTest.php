@@ -23,52 +23,52 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 class ReturnProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderInterface
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoInterface
      */
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StockManagementInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StockManagementInterface
      */
     private $stockManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
     private $stockIndexerProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
     private $priceIndexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StoreManagerInterface
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderItemRepositoryInterface
      */
     private $orderItemRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoItemInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoItemInterface
      */
     private $creditmemoItemMock;
 
     /** @var  ReturnProcessor */
     private $returnProcessor;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|OrderItemInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|OrderItemInterface */
     private $orderItemMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|StoreInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|StoreInterface */
     private $storeMock;
 
     public function setUp()

@@ -21,22 +21,22 @@ use Magento\Framework\DB\TemporaryTableService;
  */
 class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit\Framework\MockObject\MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataCategoryMapMock;
 
-    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataCategoryUsedInProductsMapMock;
 
-    /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TemporaryTableService|\PHPUnit\Framework\MockObject\MockObject */
     private $temporaryTableServiceMock;
 
-    /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     private $connectionMock;
 
-    /** @var DataCategoryUrlRewriteDatabaseMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUrlRewriteDatabaseMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
     protected function setUp()

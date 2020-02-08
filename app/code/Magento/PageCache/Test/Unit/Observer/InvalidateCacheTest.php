@@ -11,14 +11,14 @@ class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Observer\InvalidateCache */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
     protected $_configMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\TypeListInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\TypeListInterface */
     protected $_typeListMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject|
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject|
      */
     protected $observerMock;
 

@@ -8,12 +8,12 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 class CatalogAttributeSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Observer\CheckSalesRulesAvailability|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Observer\CheckSalesRulesAvailability|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkSalesRulesAvailability;
 

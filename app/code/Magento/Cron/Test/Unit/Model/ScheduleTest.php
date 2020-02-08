@@ -27,12 +27,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     protected $resourceJobMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $timezoneConverter;
 
     /**
-     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTimeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeFactory;
 

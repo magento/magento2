@@ -14,7 +14,7 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $estimatorMock;
 

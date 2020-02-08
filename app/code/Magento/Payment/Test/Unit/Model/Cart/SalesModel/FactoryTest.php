@@ -10,7 +10,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Factory */
     protected $_model;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
     protected function setUp()

@@ -12,19 +12,19 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 class EntryConverterPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter
      */
     protected $imageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter
      */
     protected $videoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject
      */
     protected $dataObjectMock;
 

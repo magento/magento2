@@ -10,16 +10,16 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files */
     protected $controller;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\PHPUnit\Framework\MockObject\MockObject*/
     protected $objectManager;
 
-    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
-    /** @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Helper\Storage|\PHPUnit\Framework\MockObject\MockObject */
     protected $storage;
 
-    /** @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Helper\Storage|\PHPUnit\Framework\MockObject\MockObject */
     protected $storageHelper;
 
     protected function setUp()

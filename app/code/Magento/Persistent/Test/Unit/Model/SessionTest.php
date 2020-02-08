@@ -13,17 +13,17 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     protected $session;
 
     /**
-     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieMetadataFactoryMock;
 

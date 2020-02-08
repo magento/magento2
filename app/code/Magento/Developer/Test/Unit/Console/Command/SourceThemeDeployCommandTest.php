@@ -40,17 +40,17 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     private $sourceThemeDeployCommand;
 
     /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locale|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorMock;
 
     /**
-     * @var Publisher|\PHPUnit_Framework_MockObject_MockObject
+     * @var Publisher|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetPublisherMock;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepositoryMock;
 
@@ -81,7 +81,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $assetMock = $this->getMockBuilder(LocalInterface::class)
@@ -140,7 +140,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteIncorrectThemeFormat()
     {
-        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $this->validatorMock->expects(self::once())
@@ -169,7 +169,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteNonExistingValue()
     {
-        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $assetMock = $this->getMockBuilder(LocalInterface::class)
@@ -210,7 +210,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return InputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getInputMock(array $valueMap = [])
     {

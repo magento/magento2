@@ -21,47 +21,47 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\ResourceModel\Block
      */
     protected $blockResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Block
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\Block
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\BlockInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Api\Data\BlockInterface
      */
     protected $blockData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\BlockSearchResultsInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Api\Data\BlockSearchResultsInterface
      */
     protected $blockSearchResult;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper
      */
     protected $dataHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Reflection\DataObjectProcessor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 

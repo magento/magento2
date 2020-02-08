@@ -24,12 +24,12 @@ use Magento\Framework\Stdlib\ArrayUtils;
 class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\BundleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\BundleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleFactory;
 
     /**
-     * @var \Magento\Bundle\Model\SelectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\SelectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleModelSelection;
 
@@ -39,47 +39,47 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bundleCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogData;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Bundle\Model\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bundleOptionFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockState;
 
     /**
-     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogProduct;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrency;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
@@ -89,7 +89,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $serializer;
 
     /**
-     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayUtility;
 
@@ -197,31 +197,31 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedWithoutOptions()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -240,12 +240,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter', 'getOptionsCollection', 'getOptionsIds', 'getSelectionsCollection'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
@@ -294,19 +294,19 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedWithShoppingCart()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
         $priceModel = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Price::class)
             ->setMethods(['getSelectionFinalTotalPrice'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -322,7 +322,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(
                 [
@@ -338,12 +338,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
             ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $selection = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -360,7 +360,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -382,7 +382,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(
                 [
@@ -396,7 +396,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
@@ -538,19 +538,19 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedEmptyShoppingCart()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
         $priceModel = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Price::class)
             ->setMethods(['getSelectionFinalTotalPrice'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -566,7 +566,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(
                 [
@@ -582,12 +582,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
             ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $selection = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -604,7 +604,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -626,12 +626,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter', 'prepareForCart'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
@@ -763,19 +763,19 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedStringInResult()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
         $priceModel = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Price::class)
             ->setMethods(['getSelectionFinalTotalPrice'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -791,7 +791,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(
                 [
@@ -807,12 +807,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
             ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $selection = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -829,7 +829,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -851,12 +851,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter', 'prepareForCart'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
@@ -987,14 +987,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedWithoutSelections()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
@@ -1010,13 +1010,13 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -1036,12 +1036,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
@@ -1096,36 +1096,36 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedSelectionsSelectionIdsExists()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
             ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $selection = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['__wakeup', 'isSalable', 'getOptionId'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -1144,12 +1144,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById', 'appendSelections'])
             ->disableOriginalConstructor()
@@ -1223,36 +1223,36 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedSelectRequiredOptions()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SelectionCollection $selectionCollection */
         $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
             ->setMethods(['getItems', 'getSize'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $selection = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['__wakeup', 'isSalable', 'getOptionId'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -1271,12 +1271,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems', 'getItemById'])
             ->disableOriginalConstructor()
@@ -1354,13 +1354,13 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     {
         $exceptedResult = 'String message';
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getItems', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -1387,26 +1387,26 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedAllRequiredOption()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -1425,12 +1425,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['setStoreFilter'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Collection $optionCollection */
         $optionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
@@ -1488,26 +1488,26 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareForCartAdvancedSpecifyProductOptions()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
             ->setMethods(
                 ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        /* @var $option \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
@@ -1857,10 +1857,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $selectionIds
-     * @param \PHPUnit_Framework_MockObject_MockObject $productMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $productMock
      * @param int $getSelectionsIndex
      * @param int $getSelectionsIdsIndex
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSelectionsByIdsMock($selectionIds, $productMock, $getSelectionsIndex, $getSelectionsIdsIndex)
     {
@@ -2296,7 +2296,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $id
      * @param int $selectionQty
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getRequiredOptionMock($id, $selectionQty)
     {
@@ -2334,7 +2334,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $selectedOptions
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getSelectionCollectionMock(array $selectedOptions)
     {
@@ -2353,7 +2353,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getOptionCollectionMock(array $options)
     {
@@ -2371,7 +2371,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $isManageStock
-     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getStockItem($isManageStock)
     {
@@ -2384,10 +2384,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject|DefaultType $group
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option $option
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject $buyRequest
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product
+     * @param \PHPUnit\Framework\MockObject\MockObject|DefaultType $group
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject $buyRequest
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $product
      * @return void
      */
     protected function parentClass($group, $option, $buyRequest, $product)
@@ -2488,7 +2488,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getSelectionCollection()
     {
@@ -2713,7 +2713,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare product mock for testing.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getProductMock()
     {

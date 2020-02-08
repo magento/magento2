@@ -8,22 +8,22 @@ namespace Magento\SalesRule\Test\Unit\Cron;
 class AggregateSalesReportCouponsDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Cron\AggregateSalesReportCouponsData|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Cron\AggregateSalesReportCouponsData|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Locale\Resolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\Resolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolver;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDate;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportRule;
 

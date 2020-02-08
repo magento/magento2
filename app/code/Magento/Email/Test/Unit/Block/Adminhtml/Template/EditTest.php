@@ -18,12 +18,12 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configStructureMock;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailConfigMock;
 
@@ -37,7 +37,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 

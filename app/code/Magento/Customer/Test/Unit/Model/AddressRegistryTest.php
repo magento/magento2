@@ -15,7 +15,7 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressFactory;
 

@@ -22,7 +22,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     protected $session;
 
     /**
-     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storageMock;
 

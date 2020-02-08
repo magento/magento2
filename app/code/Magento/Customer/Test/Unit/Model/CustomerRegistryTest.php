@@ -20,12 +20,12 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
     private $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customer;
 

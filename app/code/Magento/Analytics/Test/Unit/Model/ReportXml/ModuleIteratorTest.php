@@ -16,12 +16,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ModuleIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ModuleManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManagerMock;
 
     /**
-     * @var ModuleIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleIterator;
 

@@ -10,12 +10,12 @@ use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor as SkuProcesso
 class SkuProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
     /**
-     * @var SkuProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var SkuProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $skuProcessor;
 

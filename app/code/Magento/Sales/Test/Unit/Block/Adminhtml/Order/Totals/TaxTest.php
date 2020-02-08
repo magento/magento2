@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Totals;
 
 class TaxTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
     private $taxMock;
 
     protected function setUp()

@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\StateResolver;
 class StateResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Order
+     * @var \PHPUnit\Framework\MockObject\MockObject|Order
      */
     private $orderMock;
 

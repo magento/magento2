@@ -17,27 +17,27 @@ use Magento\Framework\FlagFactory;
 class HashTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configHashGeneratorMock;
 
     /**
-     * @var DataCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataCollector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfigCollectorMock;
 
     /**
-     * @var FlagFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagFactoryMock;
 
     /**
-     * @var FlagResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagResourceMock;
 
     /**
-     * @var Flag|\PHPUnit_Framework_MockObject_MockObject
+     * @var Flag|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagMock;
 

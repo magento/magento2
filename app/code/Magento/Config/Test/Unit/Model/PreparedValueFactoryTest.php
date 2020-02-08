@@ -18,7 +18,7 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Store\Model\ScopeTypeNormalizer;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @inheritdoc
@@ -28,52 +28,52 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 class PreparedValueFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var StructureFactory|Mock
+     * @var StructureFactory|MockObject
      */
     private $structureFactoryMock;
 
     /**
-     * @var BackendFactory|Mock
+     * @var BackendFactory|MockObject
      */
     private $valueFactoryMock;
 
     /**
-     * @var Value|Mock
+     * @var Value|MockObject
      */
     private $valueMock;
 
     /**
-     * @var Structure|Mock
+     * @var Structure|MockObject
      */
     private $structureMock;
 
     /**
-     * @var Field|Mock
+     * @var Field|MockObject
      */
     private $fieldMock;
 
     /**
-     * @var ScopeConfigInterface|Mock
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var ScopeResolverPool|Mock
+     * @var ScopeResolverPool|MockObject
      */
     private $scopeResolverPoolMock;
 
     /**
-     * @var ScopeResolver|Mock
+     * @var ScopeResolver|MockObject
      */
     private $scopeResolverMock;
 
     /**
-     * @var ScopeInterface|Mock
+     * @var ScopeInterface|MockObject
      */
     private $scopeMock;
 
     /**
-     * @var ScopeTypeNormalizer|Mock
+     * @var ScopeTypeNormalizer|MockObject
      */
     private $scopeTypeNormalizer;
 
@@ -166,7 +166,7 @@ class PreparedValueFactoryTest extends \PHPUnit\Framework\TestCase
                 ->method('getId')
                 ->willReturn($scopeId);
         }
-        /** @var Group|Mock $groupMock */
+        /** @var Group|MockObject $groupMock */
         $groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
             ->getMock();

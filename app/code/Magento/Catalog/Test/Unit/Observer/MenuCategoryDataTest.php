@@ -16,22 +16,22 @@ class MenuCategoryDataTest extends \PHPUnit\Framework\TestCase
     protected $_observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Category
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Helper\Category
      */
     protected $_catalogCategory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Category
      */
     protected $_childrenCategory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Category
      */
     protected $_category;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
      */
     protected $_categoryFlatState;
 

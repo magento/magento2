@@ -20,17 +20,17 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 
     /**
-     * @var ResponseHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $successResponseHandlerMock;
 
     /**
-     * @var ResponseHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notFoundResponseHandlerMock;
 

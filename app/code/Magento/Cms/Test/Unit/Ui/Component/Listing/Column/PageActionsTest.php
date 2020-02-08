@@ -18,7 +18,7 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
         $pageId = 1;
         // Create Mocks and SUT
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $urlBuilderMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlBuilderMock */
         $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

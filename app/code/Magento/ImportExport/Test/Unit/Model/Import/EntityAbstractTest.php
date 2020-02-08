@@ -18,7 +18,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     /**
      * Abstract import entity model
      *
-     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -562,11 +562,11 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
      * Create source adapter mock and set it into model object which tested in this class
      *
      * @param array $columns value which will be returned by method getColNames()
-     * @return \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _createSourceAdapterMock(array $columns)
     {
-        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject */
         $source = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],

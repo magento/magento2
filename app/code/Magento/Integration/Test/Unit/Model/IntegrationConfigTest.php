@@ -20,17 +20,17 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
     private $integrationConfigModel;
 
     /**
-     * @var TypeIntegration|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeIntegration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Integration\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Integration\Model\Config\Integration\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 

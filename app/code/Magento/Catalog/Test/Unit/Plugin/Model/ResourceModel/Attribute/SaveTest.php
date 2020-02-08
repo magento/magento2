@@ -14,7 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Attribute;
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
@@ -24,12 +24,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     protected $save;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeList;
 

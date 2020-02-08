@@ -42,7 +42,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $paymentDOMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 

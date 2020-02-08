@@ -17,22 +17,22 @@ use Magento\Eav\Model\Entity\Attribute;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheStateMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var AttributeResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceMock;
 

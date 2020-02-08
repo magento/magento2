@@ -24,17 +24,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $collection;
 
     /**
-     * @var EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezoneMock;
 
     /**
-     * @var ReportCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 

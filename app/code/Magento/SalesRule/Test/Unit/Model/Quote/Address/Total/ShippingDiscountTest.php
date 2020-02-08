@@ -21,27 +21,27 @@ use Magento\Quote\Model\Quote\Address\Total;
 class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Validator
+     * @var \PHPUnit\Framework\MockObject\MockObject | Validator
      */
     protected $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject | Quote
      */
     private $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Total
+     * @var \PHPUnit\Framework\MockObject\MockObject | Total
      */
     private $totalMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Address
+     * @var \PHPUnit\Framework\MockObject\MockObject | Address
      */
     private $addressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ShippingAssignmentInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ShippingAssignmentInterface
      */
     private $shippingAssignmentMock;
 

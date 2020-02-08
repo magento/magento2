@@ -14,10 +14,10 @@ use Zend\Soap\Wsdl;
  */
 class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Soap\Wsdl|\PHPUnit\Framework\MockObject\MockObject */
     protected $_wsdl;
 
     /** @var ComplexTypeStrategy */

@@ -19,22 +19,22 @@ use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website as Websit
 class WeeeTest extends AbstractModifierTest
 {
     /**
-     * @var SourceCountry|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceCountry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sourceCountryMock;
 
     /**
-     * @var EavAttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavAttributeFactoryMock;
 
     /**
-     * @var EavAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavAttributeMock;
 
     /**
-     * @var WebsiteManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteManagerMock;
 

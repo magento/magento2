@@ -16,12 +16,12 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $order;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pdf;
 

@@ -17,7 +17,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirect
 class RowParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var  ColumnResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var  ColumnResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $columnResolverMock;
 
@@ -27,7 +27,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     private $rowParser;
 
     /**
-     * @var LocationDirectory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocationDirectory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $locationDirectoryMock;
 

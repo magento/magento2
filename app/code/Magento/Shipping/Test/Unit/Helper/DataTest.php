@@ -26,12 +26,12 @@ class DataTest extends TestCase
     private $helper;
 
     /**
-     * @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlDecoderMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 

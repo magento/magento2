@@ -9,12 +9,12 @@ namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Tax\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxConfig;
 

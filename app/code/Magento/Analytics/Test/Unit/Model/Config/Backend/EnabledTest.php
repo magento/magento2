@@ -16,17 +16,17 @@ use Psr\Log\LoggerInterface;
 class EnabledTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionHandlerMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 

@@ -23,17 +23,17 @@ class BundlePriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrencyMock;
 
     /**
-     * @var PriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoFactory;
 
     /**
-     * @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormattedPriceInfoBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formattedPriceInfoBuilder;
 

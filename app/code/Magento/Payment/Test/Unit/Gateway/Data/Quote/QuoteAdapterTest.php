@@ -18,12 +18,12 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CartInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressAdapterFactoryMock;
 

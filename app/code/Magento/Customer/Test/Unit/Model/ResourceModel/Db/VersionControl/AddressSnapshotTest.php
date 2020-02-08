@@ -15,7 +15,7 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataMock;
 

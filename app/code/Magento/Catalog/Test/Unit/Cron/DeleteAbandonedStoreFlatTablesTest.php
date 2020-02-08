@@ -23,7 +23,7 @@ class DeleteAbandonedStoreFlatTablesTest extends \PHPUnit\Framework\TestCase
     private $deleteAbandonedStoreFlatTables;
 
     /**
-     * @var Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 

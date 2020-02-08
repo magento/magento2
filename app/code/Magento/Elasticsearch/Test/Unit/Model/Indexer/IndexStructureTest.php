@@ -16,17 +16,17 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Elasticsearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\Model\Adapter\Elasticsearch|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapter;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeInterface;
 

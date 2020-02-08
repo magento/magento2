@@ -22,32 +22,32 @@ use Magento\Persistent\Model\Session;
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|Context
      */
     private $context;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|SessionHelper
+     * @var  \PHPUnit\Framework\MockObject\MockObject|SessionHelper
      */
     private $helper;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|DataHelper
+     * @var  \PHPUnit\Framework\MockObject\MockObject|DataHelper
      */
     private $dataHelper;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|CheckoutSession
+     * @var  \PHPUnit\Framework\MockObject\MockObject|CheckoutSession
      */
     private $checkoutSession;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|SessionFactory
+     * @var  \PHPUnit\Framework\MockObject\MockObject|SessionFactory
      */
     private $sessionFactory;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|Session
+     * @var  \PHPUnit\Framework\MockObject\MockObject|Session
      */
     private $session;
 

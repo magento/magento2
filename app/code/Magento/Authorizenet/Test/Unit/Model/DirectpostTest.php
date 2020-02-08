@@ -27,9 +27,8 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
-use PHPUnit\Framework\MockObject_MockBuilder;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
 /**
@@ -48,57 +47,57 @@ class DirectpostTest extends TestCase
     protected $directpost;
 
     /**
-     * @var ScopeConfigInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var InfoInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var InfoInterface|MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var HelperData|PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|MockObject
      */
     protected $dataHelperMock;
 
     /**
-     * @var ResponseFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseFactory|MockObject
      */
     protected $responseFactoryMock;
 
     /**
-     * @var TransactionRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionRepository|MockObject
      */
     protected $transactionRepositoryMock;
 
     /**
-     * @var Response|PHPUnit_Framework_MockObject_MockObject
+     * @var Response|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var TransactionService|PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionService|MockObject
      */
     protected $transactionServiceMock;
 
     /**
-     * @var ZendClient|PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|MockObject
      */
     protected $httpClientMock;
 
     /**
-     * @var Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $requestFactory;
 
     /**
-     * @var PaymentFailuresInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|MockObject
      */
     private $paymentFailures;
 
     /**
-     * @var ZendClientFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClientFactory|MockObject
      */
     private $httpClientFactoryMock;
 
@@ -836,7 +835,7 @@ class DirectpostTest extends TestCase
 
     /**
      * Get mock for order
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getOrderMock()
     {

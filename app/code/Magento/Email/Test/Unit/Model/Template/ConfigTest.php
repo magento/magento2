@@ -22,27 +22,27 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Email\Model\Template\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dataStorage;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themePackages;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirFactory;
 

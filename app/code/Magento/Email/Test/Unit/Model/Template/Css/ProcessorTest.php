@@ -17,12 +17,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetRepository;
 
     /**
-     * @var FallbackContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var FallbackContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fallbackContext;
 

@@ -21,19 +21,19 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Logger|\PHPUnit\Framework\MockObject\MockObject */
     private $viewerLoggerMock;
 
-    /** @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $productMetadataMock;
 
-    /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|\PHPUnit\Framework\MockObject\MockObject */
     private $sessionMock;
 
-    /** @var  Log|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Log|\PHPUnit\Framework\MockObject\MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
+    /** @var  $cacheStorageMock \PHPUnit\Framework\MockObject\MockObject|CacheInterface */
     private $cacheStorageMock;
 
     public function setUp()

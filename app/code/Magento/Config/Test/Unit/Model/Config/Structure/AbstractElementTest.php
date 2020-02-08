@@ -17,17 +17,17 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\AbstractElement | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Structure\AbstractElement | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementVisibilityMock;
 

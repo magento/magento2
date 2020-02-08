@@ -16,17 +16,17 @@ class ThemeDependencyCheckerTest extends \PHPUnit\Framework\TestCase
     private $themeDependencyChecker;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeCollection;
 
     /**
-     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeProvider;
 
     /**
-     * @var \Magento\Theme\Model\Theme\ThemePackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme\ThemePackageInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themePackageInfo;
 

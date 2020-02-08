@@ -20,27 +20,27 @@ use Magento\Catalog\Model\ProductIdLocatorInterface;
 class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TierPricePersistence|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPricePersistence|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tierPricePersistence;
 
     /**
-     * @var TierPriceValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPriceValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tierPriceValidator;
 
     /**
-     * @var TierPriceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPriceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tierPriceFactory;
 
     /**
-     * @var PriceIndexerProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceIndexerProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceIndexProcessor;
 
     /**
-     * @var ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductIdLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productIdLocator;
 

@@ -19,82 +19,82 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $globalConfigMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Info|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentInfoMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentHelperMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRendererMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Container\Template|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateContainerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity|\PHPUnit\Framework\MockObject\MockObject
      */
     private $identityContainerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderBuilderFactoryMock;
 

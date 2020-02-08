@@ -18,12 +18,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceFactoryMock;
 
@@ -112,13 +112,13 @@ class GridTest extends \PHPUnit\Framework\TestCase
      * @param \Magento\Framework\DataObject $filterData
      * @param string $resourceCollectionName
      * @param int $collectionSize
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function buildBaseCollectionMock(
         \Magento\Framework\DataObject $filterData,
         string $resourceCollectionName,
         int $collectionSize
-    ): \PHPUnit_Framework_MockObject_MockObject {
+    ): \PHPUnit\Framework\MockObject\MockObject {
         $collectionMock = $this->getMockBuilder($resourceCollectionName)
             ->disableOriginalConstructor()
             ->getMock();

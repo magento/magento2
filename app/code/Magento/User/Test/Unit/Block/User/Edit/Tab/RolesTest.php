@@ -16,10 +16,10 @@ class RolesTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\User\Block\User\Edit\Tab\Roles */
     protected $model;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestInterfaceMock;
 
     protected function setUp()

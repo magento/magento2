@@ -31,41 +31,41 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayUtils;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var ImagesConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImagesConfigFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imagesConfigFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $galleryImagesConfigMock;
 
-    /** @var  UrlBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  UrlBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $urlBuilder;
 
     protected function setUp()

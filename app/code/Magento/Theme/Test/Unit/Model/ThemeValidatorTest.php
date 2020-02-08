@@ -17,17 +17,17 @@ class ThemeValidatorTest extends \PHPUnit\Framework\TestCase
     protected $themeValidator;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeProvider;
 
     /**
-     * @var \Magento\Framework\App\Config\Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\Value|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configData;
 

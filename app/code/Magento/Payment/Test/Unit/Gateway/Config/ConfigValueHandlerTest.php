@@ -17,7 +17,7 @@ class ConfigValueHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 

@@ -23,41 +23,41 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cache;
 
     /**
-     * @var \Magento\Cron\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_config;
 
     /**
-     * @var \Magento\Cron\Model\ScheduleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\ScheduleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scheduleFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\Console\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\ShellInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ShellInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_shell;
 
-    /** @var \Magento\Cron\Model\ResourceModel\Schedule\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cron\Model\ResourceModel\Schedule\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $_collection;
 
     /**
@@ -76,22 +76,22 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 
     /**
-     * @var \Magento\Framework\Lock\LockManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Lock\LockManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockManagerMock;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduleResource;
 
@@ -535,7 +535,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             'setFinishedAt',
             '__wakeup',
         ];
-        /** @var \Magento\Cron\Model\Schedule|\PHPUnit_Framework_MockObject_MockObject $schedule */
+        /** @var \Magento\Cron\Model\Schedule|\PHPUnit\Framework\MockObject\MockObject $schedule */
         $schedule = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
         )->setMethods(

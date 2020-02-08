@@ -12,17 +12,17 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model\ResourceModel\Operation
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Framework\EntityManager\TypeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\TypeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeResolver;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 

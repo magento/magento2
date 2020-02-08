@@ -12,17 +12,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataMock;
 
@@ -32,7 +32,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     private $readHandler;
 
     /**
-     * @var \Magento\Framework\Model\Entity\ScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Entity\ScopeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolverMock;
 

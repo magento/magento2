@@ -23,32 +23,32 @@ use Magento\Framework\AuthorizationInterface;
 class CategoriesTest extends AbstractModifierTest
 {
     /**
-     * @var CategoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryCollectionFactoryMock;
 
     /**
-     * @var DbHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dbHelperMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var CategoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryCollectionMock;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 

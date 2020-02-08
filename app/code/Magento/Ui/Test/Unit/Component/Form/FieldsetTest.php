@@ -24,7 +24,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     protected $fieldset;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 

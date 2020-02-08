@@ -20,22 +20,22 @@ class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
     private $subscriptionStatusLabel;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractElementMock;
 
     /**
-     * @var SubscriptionStatusProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionStatusProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionStatusProviderMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formMock;
 

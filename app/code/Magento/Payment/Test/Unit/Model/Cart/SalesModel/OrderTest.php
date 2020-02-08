@@ -10,7 +10,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Order */
     protected $_model;
 
-    /** @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject */
     protected $_orderMock;
 
     protected function setUp()

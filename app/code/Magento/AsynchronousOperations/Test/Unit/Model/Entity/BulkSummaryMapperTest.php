@@ -19,27 +19,27 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMetadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
@@ -91,7 +91,7 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
             ->method('fetchOne')
             ->with($this->selectMock)
             ->willReturn($identifier);
-        
+
         $this->assertEquals($result, $this->model->entityToDatabase($entityType, $data));
     }
 

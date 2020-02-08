@@ -19,17 +19,17 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var Range|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $range;
 
     /**
-     * @var Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var Term|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $term;
 
     /**
-     * @var Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var Wildcard|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wildcard;
 

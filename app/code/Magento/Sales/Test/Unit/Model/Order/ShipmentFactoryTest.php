@@ -21,14 +21,14 @@ class ShipmentFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Order converter mock.
      *
-     * @var \Magento\Sales\Model\Convert\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Convert\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converter;
 
     /**
      * Shipment track factory mock.
      *
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $trackFactory;
 

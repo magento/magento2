@@ -27,17 +27,17 @@ class CurrencyConfigTest extends TestCase
     private $testSubject;
 
     /**
-     * @var System|\PHPUnit_Framework_MockObject_MockObject
+     * @var System|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appState;
 
@@ -82,7 +82,7 @@ class CurrencyConfigTest extends TestCase
             ->method('getAreaCode')
             ->willReturn($areCode);
 
-        /** @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject $store */
+        /** @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject $store */
         $store = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getCode'])
             ->disableOriginalConstructor()

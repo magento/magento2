@@ -19,47 +19,47 @@ use Magento\Theme\Model\Theme;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\FlyweightFactory
      */
     protected $themeFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     protected $resourceCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Domain\Factory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\Domain\Factory
      */
     protected $domainFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Validator
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\Validator
      */
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\CustomizationFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\CustomizationFactory
      */
     protected $customizationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ThemeFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\ThemeFactory
      */
     private $themeModelFactory;
 

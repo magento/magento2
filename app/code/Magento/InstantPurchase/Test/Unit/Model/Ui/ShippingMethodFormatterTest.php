@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ShippingMethodFormatterTest extends TestCase
 {
     /**
-     * @var ShippingMethodFormatter|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingMethodFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMethodFormatter;
 

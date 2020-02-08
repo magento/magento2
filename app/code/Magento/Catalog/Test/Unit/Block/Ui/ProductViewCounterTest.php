@@ -27,57 +27,57 @@ use Magento\Store\Model\StoreManager;
 class ProductViewCounterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Ui\ProductViewCounter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Ui\ProductViewCounter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productViewCounter;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var ProductRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var ProductRenderCollectorComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRenderCollectorComposite|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRenderCollectorCompositeMock;
 
     /**
-     * @var Hydrator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hydrator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hydratorMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializeMock;
 
     /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var ProductRenderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRenderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRenderFactoryMock;
 

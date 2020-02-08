@@ -19,12 +19,12 @@ class CustomerGroupRetrieverTest extends \PHPUnit\Framework\TestCase
     private $retriever;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteSession;
 
     /**
-     * @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupManagement;
 

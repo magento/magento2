@@ -22,17 +22,17 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
     /**
-     * @var ClientFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientFactory;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientConfig;
 

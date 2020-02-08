@@ -18,7 +18,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     private $response;
 
     /**
-     * @var \Magento\Framework\File\Transfer\Adapter\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\File\Transfer\Adapter\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transferAdapter;
 

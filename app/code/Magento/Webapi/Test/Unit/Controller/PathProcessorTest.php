@@ -13,10 +13,10 @@ use Magento\Store\Model\Store;
  */
 class PathProcessorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Store\Model\StoreManagerInterface */
     private $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Locale\ResolverInterface */
     private $localeResolverMock;
 
     /** @var \Magento\Webapi\Controller\PathProcessor */

@@ -24,47 +24,47 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $systemStoreMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configFactoryMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $coreConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheTypeListMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -183,7 +183,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     private function expectSaveOfCustomSymbols(array $configValue)
     {
         /**
-         * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Config\Model\Config|\PHPUnit\Framework\MockObject\MockObject
          */
         $configMock = $this->getMockBuilder(\Magento\Config\Model\Config::class)
             ->disableOriginalConstructor()
@@ -287,17 +287,17 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     ) {
         $customSymbolsSerialized = '{"USD":"custom $"}';
         /**
-         * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
          */
         $websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', 'getConfig']);
 
         /**
-         * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Store\Model\Group|\PHPUnit\Framework\MockObject\MockObject
          */
         $groupMock = $this->createPartialMock(\Magento\Store\Model\Group::class, ['getId', 'getWebsiteId']);
 
         /**
-         * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
          */
         $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getGroupId']);
 

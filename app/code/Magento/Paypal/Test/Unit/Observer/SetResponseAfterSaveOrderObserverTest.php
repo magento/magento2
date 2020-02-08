@@ -26,17 +26,17 @@ class SetResponseAfterSaveOrderObserverTest extends \PHPUnit\Framework\TestCase
     protected $_event;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \Magento\Paypal\Helper\Hss|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Helper\Hss|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paypalHssMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 

@@ -13,7 +13,7 @@ class DailyCatalogUpdateTest extends \PHPUnit\Framework\TestCase
     /**
      * Processor
      *
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleProductProcessor;
 

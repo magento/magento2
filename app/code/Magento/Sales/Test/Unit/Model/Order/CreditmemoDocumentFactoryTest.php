@@ -31,67 +31,67 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CreditmemoDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factory;
 
     /**
-     * @var CreditmemoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoFactoryMock;
 
     /**
-     * @var CreditmemoCommentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCommentInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentFactoryMock;
 
     /**
-     * @var HydratorPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var HydratorPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hydratorPoolMock;
 
     /**
-     * @var HydratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HydratorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hydratorMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var CreditmemoItemCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoItemCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoItemCreationMock;
 
     /**
-     * @var CreditmemoCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentCreationMock;
 
     /**
-     * @var CreditmemoCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCreationArgumentsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentCreationArgumentsMock;
 
     /**
-     * @var Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $creditmemoMock;
 
     /**
-     * @var CreditmemoCommentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCommentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 

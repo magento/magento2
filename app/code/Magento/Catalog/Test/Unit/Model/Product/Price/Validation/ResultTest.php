@@ -22,12 +22,12 @@ class ResultTest extends TestCase
     private $model;
 
     /**
-     * @var PriceUpdateResultInterfaceFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var PriceUpdateResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceUpdateResultFactory;
 
     /**
-     * @var ObjectManagerHelper|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 

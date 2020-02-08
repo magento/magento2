@@ -16,17 +16,17 @@ use Magento\Downloadable\Model\Sample\Builder;
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $downloadFileMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectCopyServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelperMock;
 
@@ -36,12 +36,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $mockComponentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sampleMock;
 
@@ -123,7 +123,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->sampleMock->expects($this->once())->method('setSampleFile')->with($fileName);
         $this->sampleMock->expects($this->once())->method('setSortOrder')->with(1);
         $this->service->setData($data);
-        
+
         $this->service->build($this->sampleMock);
     }
 }

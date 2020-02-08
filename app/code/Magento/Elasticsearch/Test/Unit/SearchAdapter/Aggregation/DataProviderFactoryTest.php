@@ -15,7 +15,7 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
@@ -60,7 +60,7 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var DataProviderInterface $dataProvider */
         $dataProvider = $this->getMockBuilder(DataProviderInterface::class)
             ->getMockForAbstractClass();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $queryContainerMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $queryContainerMock */
         $queryContainerMock = $this->getMockBuilder(QueryContainer::class)
             ->setMethods(['getQuery'])
             ->disableOriginalConstructor()
@@ -75,7 +75,7 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
         $dataProvider = $this->getMockBuilder(DataProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $queryContainer */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $queryContainer */
         $queryContainer = $this->getMockBuilder(QueryContainer::class)
             ->setMethods(['getQuery'])
             ->disableOriginalConstructor()

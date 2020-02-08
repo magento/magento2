@@ -10,13 +10,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ChildrenCategoriesProviderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $category;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $connection;
 
     /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */

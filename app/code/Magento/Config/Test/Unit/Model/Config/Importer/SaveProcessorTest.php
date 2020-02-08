@@ -12,7 +12,7 @@ use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Stdlib\ArrayUtils;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for SaveProcessor.
@@ -27,27 +27,27 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ArrayUtils|Mock
+     * @var ArrayUtils|MockObject
      */
     private $arrayUtilsMock;
 
     /**
-     * @var PreparedValueFactory|Mock
+     * @var PreparedValueFactory|MockObject
      */
     private $valueFactoryMock;
 
     /**
-     * @var ScopeConfigInterface|Mock
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Value|Mock
+     * @var Value|MockObject
      */
     private $valueMock;
 
     /**
-     * @var AbstractCurrency|Mock
+     * @var AbstractCurrency|MockObject
      */
     private $currencyValueMock;
 

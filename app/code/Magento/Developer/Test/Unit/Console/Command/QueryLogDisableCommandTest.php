@@ -21,12 +21,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 class QueryLogDisableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig\Writer
      */
     private $configWriter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Developer\Console\Command\QueryLogEnableCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Developer\Console\Command\QueryLogEnableCommand
      */
     private $command;
 

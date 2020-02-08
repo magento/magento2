@@ -13,12 +13,12 @@ class OrdersUpdaterTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_registry;
 
     /**
-     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_agreementResource;
 

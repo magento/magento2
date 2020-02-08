@@ -21,34 +21,34 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $productFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $statusFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $reviewSummaryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $summaryModMock;
 
-    /** @var \Magento\Review\Model\Review\Summary|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Review\Model\Review\Summary|\PHPUnit\Framework\MockObject\MockObject */
     protected $summaryMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlInterfaceMock;
 
-    /** @var \Magento\Review\Model\ResourceModel\Review|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Review\Model\ResourceModel\Review|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
     /** @var int */

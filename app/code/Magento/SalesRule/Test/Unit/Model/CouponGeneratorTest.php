@@ -25,17 +25,17 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
     private $couponGenerator;
 
     /**
-     * @var CouponManagementService|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponManagementService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $couponManagementServiceMock;
 
     /**
-     * @var CouponGenerationSpecInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponGenerationSpecInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generationSpecFactoryMock;
 
     /**
-     * @var CouponGenerationSpecInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponGenerationSpecInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generationSpecMock;
 

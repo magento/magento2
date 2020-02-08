@@ -20,17 +20,17 @@ class BeforeAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Registry |\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
     /**
-     * @var HelperAddress |\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperAddress |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperAddress;
 

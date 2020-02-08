@@ -31,47 +31,47 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Quote\Model\SubmitQuoteValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\SubmitQuoteValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $submitQuoteValidator;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\ToOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\ToOrder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressToOrder;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Payment\ToOrderPayment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Payment\ToOrderPayment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quotePaymentToOrderPayment;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\ToOrderAddress|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\ToOrderAddress|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressToOrderAddress;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\ToOrderItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\ToOrderItem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemToOrderItem;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Payment\ToOrderPayment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Payment\ToOrderPayment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderManagement;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 
@@ -81,57 +81,57 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     protected $customerManagement;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteIdMock;
 
@@ -141,22 +141,22 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $addressRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress|\PHPUnit\Framework\MockObject\MockObject
      */
     private $remoteAddressMock;
 
     /**
-     * @var \Magento\Quote\Model\QuoteIdMaskFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteIdMaskFactoryMock;
 
@@ -765,7 +765,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerGroupId')
             ->with(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\QuoteManagement $service */
         $service = $this->getMockBuilder(\Magento\Quote\Model\QuoteManagement::class)
             ->setMethods(['submit'])
             ->setConstructorArgs(
@@ -829,7 +829,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $remoteAddress = '192.168.1.10';
         $forwardedForIp = '192.168.1.11';
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\QuoteManagement $service */
         $service = $this->getMockBuilder(\Magento\Quote\Model\QuoteManagement::class)
             ->setMethods(['submit'])
             ->setConstructorArgs(
@@ -926,7 +926,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param array $quoteItems
      * @param \Magento\Quote\Model\Quote\Address|null $shippingAddress
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getQuote(
         $isGuest,
@@ -1017,7 +1017,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @param array $items
      * @param $quoteId
      * @param OrderAddressInterface $shippingAddress
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareOrderFactory(
         \Magento\Sales\Api\Data\OrderInterface $baseOrder,
@@ -1232,7 +1232,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @param array $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createPartialMockForAbstractClass($className, $methods = [])
     {

@@ -26,7 +26,7 @@ class ModuleServiceTest extends \PHPUnit\Framework\TestCase
     private $moduleService;
 
     /**
-     * @var ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleListMock;
 

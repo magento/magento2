@@ -16,13 +16,13 @@ class InstructionsConfigProviderTest extends \PHPUnit\Framework\TestCase
     /** @var InstructionsConfigProvider */
     protected $model;
 
-    /** @var AbstractMethod|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractMethod|\PHPUnit\Framework\MockObject\MockObject */
     protected $methodOneMock;
 
-    /** @var AbstractMethod|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractMethod|\PHPUnit\Framework\MockObject\MockObject */
     protected $methodTwoMock;
 
-    /** @var Escaper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Escaper|\PHPUnit\Framework\MockObject\MockObject */
     protected $escaperMock;
 
     protected function setUp()

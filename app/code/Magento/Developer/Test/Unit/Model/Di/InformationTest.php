@@ -19,7 +19,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ConfigInterface
      */
     private $objectManagerConfig;
 

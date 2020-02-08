@@ -207,7 +207,7 @@ class SessionTest extends TestCase
 
     /**
      * @param int $customerId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function prepareLoginDataMock($customerId)
     {

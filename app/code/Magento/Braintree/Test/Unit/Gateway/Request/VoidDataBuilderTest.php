@@ -32,7 +32,7 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $paymentMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 

@@ -20,77 +20,77 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $category;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\StateKey|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Category\StateKey|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateKeyGenerator;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\StateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\StateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $state;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\CollectionFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Category\CollectionFilter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFilter;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collection;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProvider;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Filter\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filter;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractFilter;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $currentCategory;
 

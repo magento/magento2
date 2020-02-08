@@ -17,12 +17,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailConfig;
 

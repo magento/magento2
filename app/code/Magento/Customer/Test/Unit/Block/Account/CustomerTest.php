@@ -10,7 +10,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Block\Account\Customer */
     private $block;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $httpContext;
 
     protected function setUp()

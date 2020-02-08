@@ -18,22 +18,22 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     private $downloadablePlugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\Data\ProductExtensionInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Api\Data\ProductExtensionInterface
      */
     private $extensionAttributesMock;
 

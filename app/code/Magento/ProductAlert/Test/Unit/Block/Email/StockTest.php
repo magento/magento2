@@ -11,17 +11,17 @@ namespace Magento\ProductAlert\Test\Unit\Block\Email;
 class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Email\Stock
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Block\Email\Stock
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filter\Input\MaliciousCode
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filter\Input\MaliciousCode
      */
     protected $_filter;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageBuilder;
 

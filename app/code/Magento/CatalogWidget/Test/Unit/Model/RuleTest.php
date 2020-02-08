@@ -18,7 +18,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $rule;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $combineFactory;
 

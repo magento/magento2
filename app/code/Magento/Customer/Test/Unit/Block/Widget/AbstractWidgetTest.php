@@ -18,7 +18,7 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
 
     const FORMAT_S = '%s';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Address */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Helper\Address */
     private $_addressHelper;
 
     /** @var AbstractWidget */

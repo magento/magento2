@@ -11,7 +11,7 @@ use Magento\CatalogRule\Model\Indexer\IndexerTableSwapper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Magento\CatalogRule\Model\Indexer\IndexerTableSwapper class.
@@ -19,22 +19,22 @@ use PHPUnit_Framework_MockObject_MockObject;
 class IndexerTableSwapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResourceConnection|PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $adapterInterfaceMock;
 
     /**
-     * @var \Zend_Db_Statement_Interface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Db_Statement_Interface|MockObject
      */
     private $statementInterfaceMock;
 
     /**
-     * @var Table|PHPUnit_Framework_MockObject_MockObject
+     * @var Table|MockObject
      */
     private $tableMock;
 

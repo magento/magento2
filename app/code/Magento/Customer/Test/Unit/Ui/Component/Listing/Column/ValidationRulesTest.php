@@ -13,7 +13,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
     /** @var ValidationRules */
     protected $validationRules;
 
-    /** @var ValidationRuleInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ValidationRuleInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $validationRule;
 
     protected function setUp()

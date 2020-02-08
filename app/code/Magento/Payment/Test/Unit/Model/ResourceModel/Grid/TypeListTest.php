@@ -14,7 +14,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     protected $typesArrayModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 

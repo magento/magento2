@@ -21,27 +21,27 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /** @var Index */
     private $model;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $loggerMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $responseMock;
 
     /**
-     * @var IpnFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IpnFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ipnFactoryMock;
 
     /**
-     * @var OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 

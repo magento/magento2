@@ -11,7 +11,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processingErrorFactoryMock;
 

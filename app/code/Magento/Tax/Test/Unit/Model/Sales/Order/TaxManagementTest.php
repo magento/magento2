@@ -20,12 +20,12 @@ class TaxManagementTest extends \PHPUnit\Framework\TestCase
     private $taxManagement;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxItemResourceMock;
 

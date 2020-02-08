@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class CustomerAddressesFormatterTest extends TestCase
 {
     /**
-     * @var CustomerAddressesFormatter|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressesFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressesFormatter;
 

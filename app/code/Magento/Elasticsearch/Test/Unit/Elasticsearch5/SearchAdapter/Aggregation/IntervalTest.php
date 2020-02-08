@@ -31,42 +31,42 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionManager;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldMapper;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientConfig;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var CustomerSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSession;
 
     /**
-     * @var ElasticsearchClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElasticsearchClient|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchIndexNameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchIndexNameResolver;
 

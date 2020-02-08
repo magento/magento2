@@ -20,7 +20,7 @@ class PaymentMethodTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentHelper;
 

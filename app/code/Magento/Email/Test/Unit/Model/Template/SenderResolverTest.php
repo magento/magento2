@@ -23,7 +23,7 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
     private $senderResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 

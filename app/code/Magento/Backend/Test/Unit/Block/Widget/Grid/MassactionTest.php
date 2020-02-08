@@ -25,37 +25,37 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Grid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Grid|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_gridMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var VisibilityChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisibilityChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $visibilityCheckerMock;
 

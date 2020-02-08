@@ -18,22 +18,22 @@ use Magento\SalesInventory\Model\Order\ReturnValidator;
 class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderItemRepositoryInterface
      */
     private $orderItemRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoInterface
      */
     private $creditMemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoItemInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoItemInterface
      */
     private $creditMemoItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderItemInterface
      */
     private $orderItemMock;
 

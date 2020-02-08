@@ -20,22 +20,22 @@ use Magento\Store\Model\ScopeInterface;
 class RendererFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rendererMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 

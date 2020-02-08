@@ -10,16 +10,16 @@ use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Rendere
 
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configManager;
 
-    /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $productConfigMock;
 
     /** @var Renderer */

@@ -20,21 +20,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * Core store config mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
      * Quote mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
     /**
      * Checkout session mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Checkout\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Checkout\Model\Session
      */
     protected $checkoutSessionMock;
 

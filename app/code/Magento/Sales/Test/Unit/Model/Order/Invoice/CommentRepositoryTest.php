@@ -26,22 +26,22 @@ use Psr\Log\LoggerInterface;
 class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentResourceInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCommentResourceInterface
      */
     private $commentResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCommentInterfaceFactory
      */
     private $commentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentSearchResultInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCommentSearchResultInterfaceFactory
      */
     private $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionProcessorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CollectionProcessorInterface
      */
     private $collectionProcessor;
 
@@ -51,27 +51,27 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
     private $commentRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentSender
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCommentSender
      */
     private $invoiceCommentSender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceRepositoryInterface
      */
     private $invoiceRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Invoice
+     * @var \PHPUnit\Framework\MockObject\MockObject|Invoice
      */
     private $invoiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Comment
+     * @var \PHPUnit\Framework\MockObject\MockObject|Comment
      */
     private $commentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     private $loggerMock;
 

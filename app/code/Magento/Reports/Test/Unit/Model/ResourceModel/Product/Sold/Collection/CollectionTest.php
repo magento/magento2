@@ -21,7 +21,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
@@ -33,7 +33,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSelectCountSql()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $collection \PHPUnit\Framework\MockObject\MockObject */
         $collection = $this->getMockBuilder(Collection::class)
             ->setMethods(['getSelect'])
             ->disableOriginalConstructor()

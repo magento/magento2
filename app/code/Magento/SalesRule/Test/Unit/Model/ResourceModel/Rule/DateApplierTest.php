@@ -13,7 +13,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\DateApplier;
 class DateApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DateApplier|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateApplier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
@@ -38,7 +38,7 @@ class DateApplierTest extends \PHPUnit\Framework\TestCase
     public function testApplyDate()
     {
         $className = \Magento\Framework\DB\Select::class;
-        /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
+        /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject $select */
         $select = $this->createMock($className);
 
         $select->expects($this->exactly(2))

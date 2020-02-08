@@ -17,27 +17,27 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Customer\Model\FileUploaderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\FileUploaderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileUploaderFactory;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactory;
 
     /**
-     * @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerMetadataService;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 

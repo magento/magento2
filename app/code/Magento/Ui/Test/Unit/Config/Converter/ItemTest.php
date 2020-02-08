@@ -22,7 +22,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     private $domXpath;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlConverter;
 

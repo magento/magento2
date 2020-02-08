@@ -16,17 +16,17 @@ use Magento\Framework\Registry;
 class AccountConfirmationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AccountConfirmation|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountConfirmation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $accountConfirmation;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 

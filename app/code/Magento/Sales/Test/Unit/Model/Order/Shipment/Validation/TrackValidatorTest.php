@@ -21,12 +21,12 @@ class TrackValidatorTest extends \PHPUnit\Framework\TestCase
     private $validator;
 
     /**
-     * @var ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
     /**
-     * @var ShipmentTrackInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentTrackInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentTrackMock;
 

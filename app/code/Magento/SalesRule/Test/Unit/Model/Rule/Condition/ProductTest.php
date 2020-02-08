@@ -33,37 +33,37 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /** @var SalesRuleProduct */
     protected $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendHelperMock;
 
-    /** @var Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $configMock;
 
-    /** @var ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $productFactoryMock;
 
-    /** @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $productRepositoryMock;
 
-    /** @var Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $productMock;
 
-    /** @var Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $collectionMock;
 
     /** @var FormatInterface */
     protected $format;
 
-    /** @var AttributeLoaderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AttributeLoaderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeLoaderInterfaceMock;
 
-    /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $adapterInterfaceMock;
 
-    /** @var Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $selectMock;
 
     /**
@@ -212,7 +212,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateCategoriesIgnoresVisibility(): void
     {
-        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /* @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
@@ -225,7 +225,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('setQuoteItemPrice')
             ->willReturnSelf();
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|\PHPUnit\Framework\MockObject\MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
@@ -261,7 +261,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getAttribute')
             ->willReturn('');
 
-        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /* @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData',])
@@ -284,7 +284,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->with('quote_item_price')
             ->willReturn($productPrice);
 
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|\PHPUnit\Framework\MockObject\MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', 'getProduct',])

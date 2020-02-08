@@ -26,7 +26,7 @@ use Magento\Vault\Observer\PaymentTokenAssigner;
 class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PaymentTokenManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentTokenManagement;
 
@@ -179,7 +179,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit_Framework_MockObject_MockObject|Observer
+     * @return \PHPUnit\Framework\MockObject\MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {

@@ -21,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 class PreprocessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasResolver;
 
@@ -81,7 +81,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 

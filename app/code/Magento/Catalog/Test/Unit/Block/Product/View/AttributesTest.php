@@ -28,32 +28,32 @@ class AttributesTest extends TestCase
     private $phrase;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     private $attribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
      */
     private $frontendAttribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     private $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\Template\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Element\Template\Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Registry
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Registry
      */
     private $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
      */
     private $priceCurrencyInterface;
 

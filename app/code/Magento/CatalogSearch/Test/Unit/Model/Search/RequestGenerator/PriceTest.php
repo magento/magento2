@@ -21,10 +21,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var  Price */
     private $price;
 
-    /** @var  Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Attribute|\PHPUnit\Framework\MockObject\MockObject */
     private $attribute;
 
-    /** @var  \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfigMock;
 
     protected function setUp()

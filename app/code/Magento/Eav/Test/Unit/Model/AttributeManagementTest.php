@@ -28,42 +28,42 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     private $attributeManagement;
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $setRepositoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityTypeFactoryMock;
 
     /**
-     * @var AttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupRepositoryMock;
 
     /**
-     * @var AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactoryMock;
 

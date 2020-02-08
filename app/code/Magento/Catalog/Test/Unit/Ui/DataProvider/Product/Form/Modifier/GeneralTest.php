@@ -19,7 +19,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 class GeneralTest extends AbstractModifierTest
 {
     /**
-     * @var AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 

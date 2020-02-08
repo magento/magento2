@@ -13,7 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Logger\Monolog;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @inheritdoc
@@ -26,12 +26,12 @@ class SyslogTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|Mock
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var DeploymentConfig|Mock
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 

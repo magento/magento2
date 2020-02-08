@@ -11,7 +11,7 @@ use Magento\Ui\Config\ConverterInterface;
 class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 

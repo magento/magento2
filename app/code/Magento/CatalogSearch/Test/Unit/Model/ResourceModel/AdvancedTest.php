@@ -30,7 +30,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareCondition($backendType, $value, $expected)
     {
-        /** @var Attribute|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
+        /** @var Attribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType'])
             ->disableOriginalConstructor()

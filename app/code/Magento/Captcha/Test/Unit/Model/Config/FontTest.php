@@ -26,7 +26,7 @@ class FontTest extends TestCase
     private $model;
 
     /**
-     * @var HelperData|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperDataMock;
 

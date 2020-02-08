@@ -11,10 +11,10 @@ use Psr\Log\LoggerInterface;
 
 class LoggerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Logger | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var Logger | \PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
-    /** @var LoggerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $loggerMock;
 
     protected function setUp()

@@ -14,7 +14,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**}
-     * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 

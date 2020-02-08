@@ -18,22 +18,22 @@ class CronTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Cron\ReportModulesInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Cron\ReportModulesInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportModulesInfoMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Cron\ReportCounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Cron\ReportCounts|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportCountsMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportNewRelicCronMock;
 

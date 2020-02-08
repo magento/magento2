@@ -18,7 +18,7 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
     /**
      * Get Mocks for StoreManager so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getStoreManager()
     {
@@ -44,7 +44,7 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
     /**
      * Get mock for UniversalFactory so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getUniversalFactory()
     {

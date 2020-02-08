@@ -10,7 +10,7 @@ use Magento\User\Model\UserValidationRules;
 class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Validator\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validator;
 

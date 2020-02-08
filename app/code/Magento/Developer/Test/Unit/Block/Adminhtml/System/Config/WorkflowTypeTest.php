@@ -24,7 +24,7 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementMock;
 
@@ -34,7 +34,7 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $context;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 

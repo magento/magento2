@@ -9,12 +9,12 @@ namespace Magento\SalesRule\Test\Unit\Model\System\Config\Source\Coupon;
 class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\System\Config\Source\Coupon\Format|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\System\Config\Source\Coupon\Format|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Helper\Coupon|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Helper\Coupon|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesRuleCoupon;
 

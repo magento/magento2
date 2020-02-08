@@ -26,32 +26,32 @@ class GaTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var Ga | \PHPUnit_Framework_MockObject_MockObject
+     * @var Ga | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $gaBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $salesOrderCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $googleAnalyticsDataMock;
 
@@ -185,7 +185,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
         ];
         $this->gaBlock->setData('page_name', $pageName);
         $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
-        
+
         $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 
@@ -193,7 +193,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
      * Create Order mock with $orderItemCount items
      *
      * @param int $orderItemCount
-     * @return Order|\PHPUnit_Framework_MockObject_MockObject
+     * @return Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createOrderMock($orderItemCount = 1)
     {
@@ -220,7 +220,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @return Collection | \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createCollectionMock()
     {

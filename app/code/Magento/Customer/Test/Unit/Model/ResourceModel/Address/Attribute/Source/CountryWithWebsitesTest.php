@@ -16,17 +16,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $countriesFactoryMock;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\AllowedCountries | \PHPUnit\Framework\MockObject\MockObject
      */
     private $allowedCountriesMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
@@ -36,7 +36,7 @@ class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
     private $countryByWebsite;
 
     /**
-     * @var Share | \PHPUnit_Framework_MockObject_MockObject
+     * @var Share | \PHPUnit\Framework\MockObject\MockObject
      */
     private $shareConfigMock;
 

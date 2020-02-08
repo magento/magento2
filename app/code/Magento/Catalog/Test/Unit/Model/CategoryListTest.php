@@ -31,27 +31,27 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryCollectionFactory;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessor;
 
     /**
-     * @var CategorySearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategorySearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categorySearchResultsFactory;
 
     /**
-     * @var CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryRepository;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessorMock;
 
@@ -94,7 +94,7 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
         $categoryFirst = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
         $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
 
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteria */
+        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();

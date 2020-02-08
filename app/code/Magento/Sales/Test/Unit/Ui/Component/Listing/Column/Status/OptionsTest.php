@@ -20,7 +20,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 

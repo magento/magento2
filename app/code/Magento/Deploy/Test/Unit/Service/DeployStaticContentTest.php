@@ -21,9 +21,8 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\ObjectManagerInterface;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Static Content deploy service class unit tests
@@ -33,32 +32,32 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeployStaticContent|Mock
+     * @var DeployStaticContent|MockObject
      */
     private $service;
 
     /**
-     * @var DeployStrategyFactory|Mock
+     * @var DeployStrategyFactory|MockObject
      */
     private $deployStrategyFactory;
 
     /**
-     * @var QueueFactory|Mock
+     * @var QueueFactory|MockObject
      */
     private $queueFactory;
 
     /**
-     * @var LoggerInterface|Mock
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
     /**
-     * @var ObjectManagerInterface|Mock
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var StorageInterface|Mock
+     * @var StorageInterface|MockObject
      */
     private $versionStorage;
 

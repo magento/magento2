@@ -18,12 +18,12 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Cms\Helper\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Helper\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mockCmsPage;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mockResourcePage;
 

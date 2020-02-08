@@ -13,7 +13,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var \Magento\GoogleOptimizer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GoogleOptimizer\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helper;
 

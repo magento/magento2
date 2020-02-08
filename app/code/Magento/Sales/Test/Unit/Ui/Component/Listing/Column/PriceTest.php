@@ -22,7 +22,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyMock;
 

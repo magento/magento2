@@ -25,7 +25,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
      */
     protected $aclRetriever;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Role $roleMock */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Role $roleMock */
     protected $roleMock;
 
     protected function setup()
@@ -85,7 +85,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
     {
         $this->roleMock = $this->createPartialMock(\Magento\Authorization\Model\Role::class, ['getId', '__wakeup']);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RoleCollection $roleCollectionMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|RoleCollection $roleCollectionMock */
         $roleCollectionMock = $this->createPartialMock(
             \Magento\Authorization\Model\ResourceModel\Role\Collection::class,
             ['setUserFilter', 'getFirstItem']
@@ -93,7 +93,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
         $roleCollectionMock->expects($this->any())->method('setUserFilter')->will($this->returnSelf());
         $roleCollectionMock->expects($this->any())->method('getFirstItem')->will($this->returnValue($this->roleMock));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RoleCollectionFactory $roleCollectionFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|RoleCollectionFactory $roleCollectionFactoryMock */
         $roleCollectionFactoryMock = $this->createPartialMock(
             \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class,
             ['create']
@@ -102,7 +102,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($roleCollectionMock)
         );
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Authorization\Model\Rules $rulesMock1 */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Authorization\Model\Rules $rulesMock1 */
         $rulesMock1 = $this->createPartialMock(
             \Magento\Authorization\Model\Rules::class,
             ['getResourceId', '__wakeup']
@@ -110,14 +110,14 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
         $rulesMock1->expects($this->any())->method('getResourceId')->will(
             $this->returnValue('Magento_Backend::dashboard')
         );
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Authorization\Model\Rules $rulesMock1 */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Authorization\Model\Rules $rulesMock1 */
         $rulesMock2 = $this->createPartialMock(
             \Magento\Authorization\Model\Rules::class,
             ['getResourceId', '__wakeup']
         );
         $rulesMock2->expects($this->any())->method('getResourceId')->will($this->returnValue('Magento_Cms::page'));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RulesCollection $rulesCollectionMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|RulesCollection $rulesCollectionMock */
         $rulesCollectionMock = $this->createPartialMock(
             \Magento\Authorization\Model\ResourceModel\Rules\Collection::class,
             ['getByRoles', 'load', 'getItems']
@@ -128,7 +128,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue([$rulesMock1, $rulesMock2])
         );
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RulesCollectionFactory $rulesCollectionFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|RulesCollectionFactory $rulesCollectionFactoryMock */
         $rulesCollectionFactoryMock = $this->createPartialMock(
             \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class,
             ['create']
@@ -137,12 +137,12 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($rulesCollectionMock)
         );
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Acl $aclMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Acl $aclMock */
         $aclMock = $this->createPartialMock(\Magento\Framework\Acl::class, ['has', 'isAllowed']);
         $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
         $aclMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Acl\Builder $aclBuilderMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Acl\Builder $aclBuilderMock */
         $aclBuilderMock = $this->createPartialMock(\Magento\Framework\Acl\Builder::class, ['getAcl']);
         $aclBuilderMock->expects($this->any())->method('getAcl')->will($this->returnValue($aclMock));
 

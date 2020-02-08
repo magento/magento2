@@ -24,27 +24,27 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var PageResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourcePageMock;
 
     /**
-     * @var AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourcesMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 

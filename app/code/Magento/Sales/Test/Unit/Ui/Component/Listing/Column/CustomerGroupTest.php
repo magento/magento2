@@ -20,7 +20,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupRepository;
 

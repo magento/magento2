@@ -21,7 +21,7 @@ class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 

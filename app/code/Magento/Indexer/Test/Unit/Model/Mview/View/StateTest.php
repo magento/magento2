@@ -13,22 +13,22 @@ class StateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_registryMock;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceCollectionMock;
 

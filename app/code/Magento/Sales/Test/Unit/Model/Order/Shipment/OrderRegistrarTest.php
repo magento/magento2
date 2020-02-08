@@ -13,12 +13,12 @@ class OrderRegistrarTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
@@ -58,7 +58,7 @@ class OrderRegistrarTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getShipmentItemMock()
     {

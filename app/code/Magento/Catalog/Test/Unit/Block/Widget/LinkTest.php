@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use RuntimeException;
 
@@ -31,12 +31,12 @@ use RuntimeException;
 class LinkTest extends TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|UrlFinderInterface
+     * @var MockObject|UrlFinderInterface
      */
     protected $urlFinder;
 
@@ -46,7 +46,7 @@ class LinkTest extends TestCase
     protected $block;
 
     /**
-     * @var AbstractResource|PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|MockObject
      */
     protected $entityResource;
 

@@ -16,12 +16,12 @@ use Magento\Framework\View\Element\UiComponent\Context;
 class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 

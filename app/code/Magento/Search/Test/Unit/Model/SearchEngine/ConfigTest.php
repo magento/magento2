@@ -7,7 +7,7 @@ namespace Magento\Search\Test\Unit\Model\SearchEngine;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Search\Model\SearchEngine\Config\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Search\Model\SearchEngine\Config\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataStorageMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */

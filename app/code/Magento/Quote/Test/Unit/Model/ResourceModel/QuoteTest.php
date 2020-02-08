@@ -18,17 +18,17 @@ use Magento\SalesSequence\Model\Manager;
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceManagerMock;
 
     /**
-     * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceMock;
 

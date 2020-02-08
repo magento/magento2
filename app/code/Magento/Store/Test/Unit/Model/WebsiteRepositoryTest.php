@@ -16,17 +16,17 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteCollectionFactoryMock;
 
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $appConfigMock;
 

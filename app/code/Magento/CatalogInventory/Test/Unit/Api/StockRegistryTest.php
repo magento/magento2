@@ -23,37 +23,37 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
     protected $stockRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryProvider;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItem;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatus;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 

@@ -15,7 +15,7 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization\FileInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\Customization\FileInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $file;
 

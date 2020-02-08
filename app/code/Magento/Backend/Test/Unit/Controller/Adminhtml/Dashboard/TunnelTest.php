@@ -11,22 +11,22 @@ namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 class TunnelTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRaw;
 
@@ -57,7 +57,7 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\HTTP\ZendClient::class,
             ['setUri', 'setParameterGet', 'setConfig', 'request', 'getHeaders']
         );
-        /** @var $helper \Magento\Backend\Helper\Dashboard\Data|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $helper \Magento\Backend\Helper\Dashboard\Data|\PHPUnit\Framework\MockObject\MockObject */
         $helper = $this->createPartialMock(\Magento\Backend\Helper\Dashboard\Data::class, ['getChartDataHash']);
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
 
@@ -119,7 +119,7 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
             ->with('ga')
             ->will($this->returnValue(urlencode(base64_encode(json_encode([1])))));
         $this->_request->expects($this->at(1))->method('getParam')->with('h')->will($this->returnValue($fixture));
-        /** @var $helper \Magento\Backend\Helper\Dashboard\Data|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $helper \Magento\Backend\Helper\Dashboard\Data|\PHPUnit\Framework\MockObject\MockObject */
         $helper = $this->createPartialMock(\Magento\Backend\Helper\Dashboard\Data::class, ['getChartDataHash']);
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
 
@@ -161,12 +161,12 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
      *
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\App\Response\Http|null $response
-     * @return \Magento\Backend\Controller\Adminhtml\Dashboard|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Backend\Controller\Adminhtml\Dashboard|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _factory($request, $response = null)
     {
         if (!$response) {
-            /** @var $response \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+            /** @var $response \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
             $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
             $response->headersSentThrowsException = false;
         }

@@ -16,17 +16,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tokenMock;
 

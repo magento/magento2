@@ -16,29 +16,29 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
      * @var Confirmation
      */
     private $model;
-    
+
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerUrlMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
@@ -59,7 +59,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-        
+
         $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -84,7 +84,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
-        
+
         $this->requestMock->expects($this->once())->method('getPost')->with('email')->willReturn(null);
 
         $resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)

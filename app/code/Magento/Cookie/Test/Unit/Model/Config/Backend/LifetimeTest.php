@@ -13,10 +13,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LifetimeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | CookieLifetimeValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleResource */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\ModuleResource */
     private $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Lifetime */

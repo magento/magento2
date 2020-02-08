@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class ListingTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 

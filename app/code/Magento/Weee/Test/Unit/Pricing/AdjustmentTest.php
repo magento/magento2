@@ -19,12 +19,12 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 

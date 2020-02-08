@@ -38,62 +38,62 @@ class QuoteRepositoryTest extends TestCase
     private $model;
 
     /**
-     * @var CartInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cartFactoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var CartSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartSearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultsDataFactory;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteCollectionMock;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var LoadHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoadHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loadHandlerMock;
 
     /**
-     * @var LoadHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoadHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saveHandlerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteCollectionFactoryMock;
 

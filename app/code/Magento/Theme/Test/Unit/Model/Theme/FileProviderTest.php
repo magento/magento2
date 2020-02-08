@@ -15,7 +15,7 @@ class FileProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $file;
 

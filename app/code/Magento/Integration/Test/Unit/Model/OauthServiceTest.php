@@ -21,20 +21,20 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
 
     const VALUE_TOKEN_TYPE = 'access';
 
-    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $_consumerFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Provider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\Token\Provider|\PHPUnit\Framework\MockObject\MockObject */
     protected $_tokenProviderMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Consumer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\Consumer|\PHPUnit\Framework\MockObject\MockObject */
     private $_consumerMock;
 
-    /** @var \Magento\Integration\Model\Integration|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Integration|\PHPUnit\Framework\MockObject\MockObject */
     private $_emptyConsumerMock;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\Oauth\Token|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_tokenMock;
 
@@ -45,7 +45,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
     private $_consumerData;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_tokenFactoryMock;
 

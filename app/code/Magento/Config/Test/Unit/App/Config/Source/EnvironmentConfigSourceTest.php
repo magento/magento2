@@ -13,12 +13,12 @@ use Magento\Framework\Stdlib\ArrayManager;
 class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayManagerMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $placeholderMock;
 
@@ -35,7 +35,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
             ->getMockForAbstractClass();
 
-        /** @var PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject $placeholderFactoryMock */
+        /** @var PlaceholderFactory|\PHPUnit\Framework\MockObject\MockObject $placeholderFactoryMock */
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

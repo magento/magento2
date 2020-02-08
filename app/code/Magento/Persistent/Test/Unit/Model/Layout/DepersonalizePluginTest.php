@@ -11,7 +11,7 @@ namespace Magento\Persistent\Test\Unit\Model\Layout;
 class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentSessionMock;
 
@@ -26,7 +26,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $depersonalizeCheckerMock;
 
@@ -61,7 +61,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterGenerateXml()
     {
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],
@@ -71,7 +71,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
             true,
             ['isCacheable']
         );
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject $resultMock */
         $resultMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],
@@ -90,7 +90,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterGenerateXmlNoDepersonalize()
     {
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],
@@ -100,7 +100,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
             true,
             ['isCacheable']
         );
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject $resultMock */
         $resultMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],

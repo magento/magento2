@@ -11,22 +11,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CombineTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Condition\Combine | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\Condition\Combine | \PHPUnit\Framework\MockObject\MockObject
      */
     private $combine;
 
     /**
-     * @var \Magento\Rule\Model\ConditionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\ConditionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var  \Magento\SalesRule\Model\Rule\Condition\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\SalesRule\Model\Rule\Condition\Product | \PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionObjectMock;
 

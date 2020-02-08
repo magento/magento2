@@ -19,7 +19,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     protected $mediaDatabase;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $deploymentConfig;
 

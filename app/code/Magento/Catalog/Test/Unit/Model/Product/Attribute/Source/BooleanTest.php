@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean as BooleanSource;
 class BooleanTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeFactoryMock;
 

@@ -24,17 +24,17 @@ class RssTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Review\Model\Rss|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\Rss|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rss;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 

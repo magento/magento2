@@ -21,12 +21,12 @@ class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApply()
     {
-        /** @var Filter|\PHPUnit_Framework_MockObject_MockObject $filterMock */
+        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -47,12 +47,12 @@ class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyWithoutCondition()
     {
-        /** @var Filter|\PHPUnit_Framework_MockObject_MockObject $filterMock */
+        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

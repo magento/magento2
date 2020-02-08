@@ -107,7 +107,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit_Framework_MockObject_MockObject|Observer
+     * @return \PHPUnit\Framework\MockObject\MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {

@@ -22,17 +22,17 @@ class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $decoder;
 
     /**
-     * @var WebhookMessageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebhookMessageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $webhookMessageFactory;
 
     /**
-     * @var WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebhookRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $webhookRequest;
 

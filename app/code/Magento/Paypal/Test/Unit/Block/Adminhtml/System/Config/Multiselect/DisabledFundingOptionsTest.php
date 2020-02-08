@@ -31,12 +31,12 @@ class DisabledFundingOptionsTest extends TestCase
     private $element;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\View\Helper\Js|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Helper\Js|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsHelper;
 

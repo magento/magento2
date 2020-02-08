@@ -20,13 +20,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrencyMock;
 
-    /** @var PriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $priceInfoFactory;
 
-    /** @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $priceMock;
 
     protected function setUp()

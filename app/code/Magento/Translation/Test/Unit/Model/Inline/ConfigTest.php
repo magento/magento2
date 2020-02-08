@@ -15,12 +15,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Developer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Developer\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 

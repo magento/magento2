@@ -17,16 +17,16 @@ use \Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
  */
 class StrategyMapperTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  BaseSelectAttributesSearchStrategy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  BaseSelectAttributesSearchStrategy|\PHPUnit\Framework\MockObject\MockObject */
     private $baseSelectAttributeSearchStrategyMock;
 
-    /** @var  BaseSelectFullTextSearchStrategy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  BaseSelectFullTextSearchStrategy|\PHPUnit\Framework\MockObject\MockObject */
     private $baseSelectFullTextSearchStrategyMock;
 
-    /** @var  SelectContainer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SelectContainer|\PHPUnit\Framework\MockObject\MockObject */
     private $selectContainerMock;
 
-    /** @var  StrategyMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StrategyMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $strategyMapper;
 
     protected function setUp()

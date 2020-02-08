@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class PricesTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $localeFormatMock;
 

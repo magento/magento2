@@ -17,7 +17,7 @@ class ExportSearchCsvTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
@@ -27,7 +27,7 @@ class ExportSearchCsvTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 

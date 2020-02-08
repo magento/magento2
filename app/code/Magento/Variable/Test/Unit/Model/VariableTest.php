@@ -16,17 +16,17 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\ResourceModel\Variable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceCollectionMock;
 

@@ -15,12 +15,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Item\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Item\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 

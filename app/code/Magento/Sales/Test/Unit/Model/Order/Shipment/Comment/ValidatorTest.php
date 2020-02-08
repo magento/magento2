@@ -17,7 +17,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentModelMock;
 

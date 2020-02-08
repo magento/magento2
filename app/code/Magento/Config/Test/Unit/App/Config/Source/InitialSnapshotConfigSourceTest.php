@@ -9,7 +9,7 @@ use Magento\Config\App\Config\Source\InitialSnapshotConfigSource;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\FlagManager;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @inheritdoc
@@ -22,17 +22,17 @@ class InitialSnapshotConfigSourceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var FlagManager|Mock
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var DataObjectFactory|Mock
+     * @var DataObjectFactory|MockObject
      */
     private $dataObjectFactoryMock;
 
     /**
-     * @var DataObject|Mock
+     * @var DataObject|MockObject
      */
     private $dataObjectMock;
 

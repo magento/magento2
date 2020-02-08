@@ -19,7 +19,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designPackage;
 

@@ -22,17 +22,17 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     private $relationsDataSaver;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Relation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Relation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRelationMock;
 

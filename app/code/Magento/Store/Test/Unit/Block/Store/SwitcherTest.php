@@ -16,22 +16,22 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\StoreFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\GroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\GroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeGroupFactoryMock;
 
@@ -88,13 +88,13 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        /** @var AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var AbstractCollection|\PHPUnit\Framework\MockObject\MockObject */
         $storeCollectionMock =
             $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['addWebsiteFilter', 'load'])
                 ->getMockForAbstractClass();
-        /** @var AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var AbstractCollection|\PHPUnit\Framework\MockObject\MockObject */
         $groupCollectionMock =
             $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class)
                 ->disableOriginalConstructor()

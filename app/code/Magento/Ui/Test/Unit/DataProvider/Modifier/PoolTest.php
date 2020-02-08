@@ -22,17 +22,17 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var ModifierFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderMockOne;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderMockTwo;
 

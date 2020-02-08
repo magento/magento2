@@ -23,17 +23,17 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $securityConfigMock;
 
     /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @var Collection | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 

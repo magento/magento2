@@ -10,12 +10,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\MediaStorage\Helper\File\Storage\Database
      */
     private $databaseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem
      */
     private $filesystemMock;
 

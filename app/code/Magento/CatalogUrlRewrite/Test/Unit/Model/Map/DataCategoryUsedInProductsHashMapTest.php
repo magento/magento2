@@ -19,19 +19,19 @@ use Magento\Framework\App\ResourceConnection;
  */
 class DataCategoryUsedInProductsHashMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit\Framework\MockObject\MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataCategoryMapMock;
 
-    /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataProductMapMock;
 
-    /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     private $connectionMock;
 
-    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
     protected function setUp()

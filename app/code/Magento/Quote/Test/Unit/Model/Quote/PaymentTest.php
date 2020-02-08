@@ -24,17 +24,17 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SpecificationFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|SpecificationFactory
      */
     private $specificationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonValidatorMock;
 

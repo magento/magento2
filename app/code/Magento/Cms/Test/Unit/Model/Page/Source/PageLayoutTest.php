@@ -13,12 +13,12 @@ use Magento\Framework\View\PageLayout\Config;
 class PageLayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builderMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageLayoutConfigMock;
 

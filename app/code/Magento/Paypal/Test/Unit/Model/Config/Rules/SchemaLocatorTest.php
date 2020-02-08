@@ -18,7 +18,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     protected $schemaLocator;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerMock;
 

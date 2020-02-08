@@ -39,7 +39,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $productFactory;
 
     /**
-     * @var SalableProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var SalableProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $salableProcessor;
 
@@ -58,7 +58,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
@@ -68,27 +68,27 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableAttributeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $typeConfigurableFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $productCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepository;
 
@@ -98,27 +98,27 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $objectHelper;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
@@ -452,7 +452,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $configurableAttributes = '_cache_instance_configurable_attributes';
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['hasData', 'getId'])
             ->disableOriginalConstructor()
@@ -468,7 +468,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $configurableAttributes = '_cache_instance_configurable_attributes';
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getData', 'hasData', 'setData', 'getId'])
             ->disableOriginalConstructor()

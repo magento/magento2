@@ -26,32 +26,32 @@ class StopwordsTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var LocaleResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolver;
 
     /**
-     * @var ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactory;
 
     /**
-     * @var ConfigCache|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigCache|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configCache;
 
     /**
-     * @var EsConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EsConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $esConfig;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

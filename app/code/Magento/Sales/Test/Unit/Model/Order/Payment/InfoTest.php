@@ -17,19 +17,19 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentHelperMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $encryptorInterfaceMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $methodInstanceMock;
 
     protected function setUp()

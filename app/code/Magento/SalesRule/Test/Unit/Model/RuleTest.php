@@ -13,17 +13,17 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $coupon;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\SalesRule\Model\Rule\Condition\CombineFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\SalesRule\Model\Rule\Condition\CombineFactory
      */
     protected $conditionCombineFactoryMock;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $condProdCombineFactoryMock;
 
@@ -114,7 +114,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupProdConditionMock()
     {
@@ -137,7 +137,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupConditionMock()
     {

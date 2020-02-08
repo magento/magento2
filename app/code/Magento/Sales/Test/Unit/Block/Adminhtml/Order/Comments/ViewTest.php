@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Comments;
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Helper\Admin|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Helper\Admin|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adminHelperMock;
 

@@ -33,7 +33,7 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
     private $countryOfManufacture;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

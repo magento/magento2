@@ -22,12 +22,12 @@ use Magento\Framework\App\Config;
 class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var StoreFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeFactory;
 
     /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeCollectionFactory;
 
@@ -42,7 +42,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
     private $storeRepository;
 
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $appConfigMock;
 

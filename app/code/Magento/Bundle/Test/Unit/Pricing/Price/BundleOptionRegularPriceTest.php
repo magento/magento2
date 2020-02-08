@@ -32,17 +32,17 @@ class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saleableItemMock;
 
     /**
-     * @var Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleCalculatorMock;
 
     /**
-     * @var BundleOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var BundleOptions|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleOptionsMock;
 

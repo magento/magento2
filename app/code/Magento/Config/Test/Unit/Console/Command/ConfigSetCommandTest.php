@@ -14,7 +14,7 @@ use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -30,27 +30,27 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var EmulatedAdminhtmlAreaProcessor|Mock
+     * @var EmulatedAdminhtmlAreaProcessor|MockObject
      */
     private $emulatedAreProcessorMock;
 
     /**
-     * @var ChangeDetector|Mock
+     * @var ChangeDetector|MockObject
      */
     private $changeDetectorMock;
 
     /**
-     * @var ProcessorFacadeFactory|Mock
+     * @var ProcessorFacadeFactory|MockObject
      */
     private $processorFacadeFactoryMock;
 
     /**
-     * @var DeploymentConfig|Mock
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ProcessorFacade|Mock
+     * @var ProcessorFacade|MockObject
      */
     private $processorFacadeMock;
 

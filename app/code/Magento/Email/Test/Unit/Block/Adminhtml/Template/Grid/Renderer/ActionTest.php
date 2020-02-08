@@ -16,7 +16,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $columnMock;
 

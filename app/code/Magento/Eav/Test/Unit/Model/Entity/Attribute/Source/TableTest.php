@@ -24,37 +24,37 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
-     *      | \PHPUnit_Framework_MockObject_MockObject
+     *      | \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $attrOptionFactory;
 
     /**
-     * @var AbstractSource | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractSource | \PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 
     /**
-     * @var AbstractAttribute | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute | \PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractAttributeMock;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var AttributeOptionCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeOptionCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeOptionCollectionMock;
 

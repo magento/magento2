@@ -20,7 +20,7 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
     /**
      * Payment config mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Payment\Model\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Payment\Model\Config
      */
     protected $paymentConfigMock;
 

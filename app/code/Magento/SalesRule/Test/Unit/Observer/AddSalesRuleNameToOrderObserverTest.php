@@ -8,17 +8,17 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Model\Coupon|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Coupon|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $couponMock;
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleFactory;
 

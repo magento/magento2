@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Helper;
 class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutFactoryMock;
 

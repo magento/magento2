@@ -25,17 +25,17 @@ use Magento\Ui\Component\MassAction\Filter;
 class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentFactoryMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $filterBuilderMock;
 
@@ -48,27 +48,27 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProviderMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractDbMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 

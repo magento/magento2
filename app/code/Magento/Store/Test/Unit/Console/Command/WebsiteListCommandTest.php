@@ -23,7 +23,7 @@ class WebsiteListCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\WebsiteRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteRepositoryMock;
 

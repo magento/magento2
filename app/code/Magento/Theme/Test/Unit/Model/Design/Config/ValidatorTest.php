@@ -16,17 +16,17 @@ use Magento\Theme\Model\Design\Config\Validator;
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Mail\TemplateInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\TemplateInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateFactory;
 
     /**
-     * @var \Magento\Framework\Mail\TemplateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\TemplateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $template;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $designConfig;
 

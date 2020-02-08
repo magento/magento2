@@ -14,7 +14,7 @@ class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
     private $modelRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteRepositoryMock;
 

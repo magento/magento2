@@ -14,10 +14,10 @@ class FreeTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Method\Free */
     protected $methodFree;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $currencyPrice;
 
     protected function setUp()

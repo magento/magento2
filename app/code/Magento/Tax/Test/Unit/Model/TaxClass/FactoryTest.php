@@ -12,7 +12,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $classType
      * @param string $className
-     * @param \PHPUnit_Framework_MockObject_MockObject $classTypeMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $classTypeMock
      */
     public function testCreate($classType, $className, $classTypeMock)
     {

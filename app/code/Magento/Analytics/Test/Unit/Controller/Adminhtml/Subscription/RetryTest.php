@@ -18,22 +18,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class RetryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionHandlerMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 

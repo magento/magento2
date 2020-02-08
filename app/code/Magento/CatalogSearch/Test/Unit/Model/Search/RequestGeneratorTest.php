@@ -20,7 +20,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator */
     protected $object;
 
-    /** @var  CollectionFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CollectionFactory | \PHPUnit\Framework\MockObject\MockObject */
     protected $productAttributeCollectionFactory;
 
     protected function setUp()
@@ -189,11 +189,11 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
      * Create attribute mock
      *
      * @param $attributeOptions
-     * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeMock($attributeOptions)
     {
-        /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(

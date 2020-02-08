@@ -16,37 +16,37 @@ use Magento\Customer\Model\Context;
 class SidebarTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Reorder\Sidebar|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Block\Reorder\Sidebar|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCollectionFactory;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCollection;
 
@@ -55,11 +55,11 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 

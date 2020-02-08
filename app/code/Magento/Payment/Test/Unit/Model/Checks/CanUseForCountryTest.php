@@ -16,7 +16,7 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
     const EXPECTED_COUNTRY_ID = 1;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryProvider;
 

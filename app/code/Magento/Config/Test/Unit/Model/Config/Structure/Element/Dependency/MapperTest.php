@@ -37,7 +37,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configStructureMock;
 
@@ -51,7 +51,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock of dependency field factory
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fieldFactoryMock;
 
@@ -207,7 +207,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      * @param bool $isFieldVisible
      * @param string $fieldId
      * @param string $mockClassName
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getDependencyField($isValueSatisfy, $isFieldVisible, $fieldId, $mockClassName)
     {
@@ -247,7 +247,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      * @param bool $isVisible
      * @param string $path
      * @param string $mockClassName
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getField($isVisible, $path, $mockClassName)
     {

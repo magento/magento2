@@ -22,27 +22,27 @@ use Magento\Store\Api\Data\StoreInterface;
 class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Button | \PHPUnit_Framework_MockObject_MockObject
+     * @var Button | \PHPUnit\Framework\MockObject\MockObject
      */
     private $block;
 
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context | \PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 

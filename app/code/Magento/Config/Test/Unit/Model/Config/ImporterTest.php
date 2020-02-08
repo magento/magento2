@@ -16,7 +16,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Importer.
@@ -32,47 +32,47 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var FlagManager|Mock
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var Flag|Mock
+     * @var Flag|MockObject
      */
     private $flagMock;
 
     /**
-     * @var ArrayUtils|Mock
+     * @var ArrayUtils|MockObject
      */
     private $arrayUtilsMock;
 
     /**
-     * @var PreparedValueFactory|Mock
+     * @var PreparedValueFactory|MockObject
      */
     private $valueFactoryMock;
 
     /**
-     * @var ScopeConfigInterface|Mock
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var State|Mock
+     * @var State|MockObject
      */
     private $stateMock;
 
     /**
-     * @var ScopeInterface|Mock
+     * @var ScopeInterface|MockObject
      */
     private $scopeMock;
 
     /**
-     * @var Value|Mock
+     * @var Value|MockObject
      */
     private $valueMock;
 
     /**
-     * @var SaveProcessor|Mock
+     * @var SaveProcessor|MockObject
      */
     private $saveProcessorMock;
 

@@ -25,7 +25,7 @@ class CheckoutTotalsJsLayoutDataProviderTest extends TestCase
     private $dataProvider;
 
     /**
-     * @var TaxConfig|PHPUnit_Framework_MockObject_MockObject
+     * @var TaxConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $taxConfigMock;
 

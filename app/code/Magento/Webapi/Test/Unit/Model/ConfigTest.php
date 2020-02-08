@@ -18,17 +18,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var Webapi|\PHPUnit_Framework_MockObject_MockObject
+     * @var Webapi|\PHPUnit\Framework\MockObject\MockObject
      */
     private $webapiCacheMock;
 
     /**
-     * @var Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

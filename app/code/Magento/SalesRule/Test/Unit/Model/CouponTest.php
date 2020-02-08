@@ -11,12 +11,12 @@ namespace Magento\SalesRule\Test\Unit\Model;
 class CouponTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
@@ -53,7 +53,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetRule()
     {
-        /** @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $ruleMock */
+        /** @var \Magento\SalesRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject $ruleMock */
         $ruleMock = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['getId', '__wakeup']);
         $ruleMock->expects($this->once())->method('getId');
 

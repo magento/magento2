@@ -16,17 +16,17 @@ class SendTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\SendFriend\Model\SendFriend
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\SendFriend\Model\SendFriend
      */
     protected $sendfriendMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\UrlInterface
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $requestMock;
 

@@ -16,27 +16,27 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Newsletter\Model\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\Template|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $template;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subscriber;
 
     /**
-     * @var \Magento\Newsletter\Model\Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\Queue|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $queue;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 

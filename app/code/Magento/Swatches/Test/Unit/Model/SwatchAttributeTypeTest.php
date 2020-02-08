@@ -130,7 +130,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
         $json = new Json();
         $encodedAdditionData = $json->serialize([Swatch::SWATCH_INPUT_TYPE_KEY => Swatch::SWATCH_INPUT_TYPE_TEXT]);
 
-        /** @var AttributeInterface | \PHPUnit_Framework_MockObject_MockObject $attributeMock */
+        /** @var AttributeInterface | \PHPUnit\Framework\MockObject\MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasData', 'getData', 'setData'])
@@ -154,7 +154,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @param mixed $getDataReturns
      * @param bool $hasDataReturns
-     * @return AttributeInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @return AttributeInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createAttributeMock($getDataReturns, bool $hasDataReturns = true)
     {

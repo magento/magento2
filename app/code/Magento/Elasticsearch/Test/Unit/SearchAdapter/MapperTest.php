@@ -22,17 +22,17 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $queryBuilder;
 
     /**
-     * @var MatchQueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var MatchQueryBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $matchQueryBuilder;
 
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 

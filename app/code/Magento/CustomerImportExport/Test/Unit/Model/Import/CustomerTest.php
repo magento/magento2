@@ -17,7 +17,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Customer entity import model
      *
-     * @var Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -75,7 +75,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mock for import with custom behavior test
      *
-     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getModelMockForTestImportDataWithCustomBehaviour()
     {
@@ -155,7 +155,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $modelMock->expects($this->any())
             ->method('getErrorAggregator')
             ->will($this->returnValue($errorAggregator));
-        /** @var \PHPUnit_Framework_MockObject_MockObject $storageMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $storageMock */
         $storageMock = $this->createMock(Storage::class);
         $storageMock->expects($this->any())->method('prepareCustomers');
         $modelMock->expects($this->any())
@@ -210,7 +210,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $entitiesToCreate
      * @param array $entitiesToUpdate
-     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     public function validateSaveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
@@ -225,7 +225,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * Validation method for _deleteCustomerEntities
      *
      * @param array $customerIdsToDelete
-     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     public function validateDeleteCustomerEntities(array $customerIdsToDelete)
     {

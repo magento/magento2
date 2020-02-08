@@ -17,27 +17,27 @@ class RelationTest extends \PHPUnit\Framework\TestCase
     protected $relationProcessor;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentResourceMock;
 

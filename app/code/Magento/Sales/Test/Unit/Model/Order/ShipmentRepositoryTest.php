@@ -24,17 +24,17 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Sales resource metadata.
      *
-     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 

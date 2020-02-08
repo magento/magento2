@@ -13,12 +13,12 @@ use Magento\Sales\Setup\SerializedDataConverter;
 class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var Serialize|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializeMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonMock;
 

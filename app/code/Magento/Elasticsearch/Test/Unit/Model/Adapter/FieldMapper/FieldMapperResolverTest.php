@@ -17,7 +17,7 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -27,7 +27,7 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $fieldMappers;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldMapperEntity;
 

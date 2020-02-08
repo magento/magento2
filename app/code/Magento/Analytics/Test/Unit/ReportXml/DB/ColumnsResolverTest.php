@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectBuilderMock;
 
@@ -26,12 +26,12 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
     private $columnsResolver;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 

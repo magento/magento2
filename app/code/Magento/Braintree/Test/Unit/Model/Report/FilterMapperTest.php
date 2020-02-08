@@ -18,17 +18,17 @@ use Magento\Braintree\Model\Report\FilterMapper;
 class FilterMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BraintreeSearchAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeSearchAdapter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $braintreeSearchAdapterMock;
 
     /**
-     * @var AppliersPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppliersPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appliersPoolMock;
 
     /**
-     * @var ApplierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApplierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $applierMock;
 

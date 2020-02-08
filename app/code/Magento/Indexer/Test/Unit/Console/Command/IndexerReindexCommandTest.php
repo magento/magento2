@@ -31,17 +31,17 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $command;
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var DependencyInfoProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyInfoProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dependencyInfoProviderMock;
 
@@ -226,11 +226,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array|null $methods
      * @param array $data
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|StateInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StateInterface
      */
     private function getStateMock(array $methods = null, array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|StateInterface $state */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
             ->setMethods($methods)
             ->disableOriginalConstructor()

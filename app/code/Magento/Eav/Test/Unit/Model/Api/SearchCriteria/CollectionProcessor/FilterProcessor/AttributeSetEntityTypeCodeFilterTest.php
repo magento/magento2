@@ -19,7 +19,7 @@ class AttributeSetEntityTypeCodeFilterTest extends \PHPUnit\Framework\TestCase
     private $filter;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 

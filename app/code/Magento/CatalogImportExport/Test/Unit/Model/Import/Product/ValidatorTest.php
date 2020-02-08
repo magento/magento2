@@ -21,13 +21,13 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     protected $validators = [];
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var Validator\Media|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Validator\Media|\PHPUnit\Framework\MockObject\MockObject */
     protected $validatorOne;
 
-    /** @var Validator\Website|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Validator\Website|\PHPUnit\Framework\MockObject\MockObject */
     protected $validatorTwo;
 
     protected function setUp()

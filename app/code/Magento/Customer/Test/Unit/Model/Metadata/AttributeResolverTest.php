@@ -15,7 +15,7 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
     /** @var AttributeResolver */
     protected $model;
 
-    /** @var AttributeMetadataDataProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AttributeMetadataDataProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataDataProviderMock;
 
     protected function setUp()
@@ -34,7 +34,7 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
         $entityType = 'type';
         $attributeCode = 'code';
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -42,7 +42,7 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-        /** @var Attribute|\PHPUnit_Framework_MockObject_MockObject $modelMock */
+        /** @var Attribute|\PHPUnit\Framework\MockObject\MockObject $modelMock */
         $modelMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,7 +64,7 @@ class AttributeResolverTest extends \PHPUnit\Framework\TestCase
         $entityType = 'type';
         $attributeCode = 'code';
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

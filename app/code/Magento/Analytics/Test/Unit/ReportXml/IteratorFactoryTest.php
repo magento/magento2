@@ -11,12 +11,12 @@ use Magento\Framework\ObjectManagerInterface;
 class IteratorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \IteratorIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \IteratorIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorIteratorMock;
 

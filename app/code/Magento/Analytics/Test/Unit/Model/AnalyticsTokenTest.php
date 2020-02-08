@@ -14,17 +14,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 

@@ -24,7 +24,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|FilterManager
      */
     private $filterManagerMock;
 

@@ -43,7 +43,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $productOptionExtensionAttributes;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
     protected function setUp()

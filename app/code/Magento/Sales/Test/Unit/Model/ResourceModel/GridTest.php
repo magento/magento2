@@ -23,12 +23,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
     private $grid;
 
     /**
-     * @var NotSyncedDataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotSyncedDataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notSyncedDataProvider;
 
     /**
-     * @var ConnectionAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 

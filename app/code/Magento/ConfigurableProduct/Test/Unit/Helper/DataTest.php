@@ -12,22 +12,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productMock;
 
     /**
-     * @var UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageUrlBuilder;
 

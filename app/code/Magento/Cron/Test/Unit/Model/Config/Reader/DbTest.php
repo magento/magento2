@@ -16,12 +16,12 @@ use Magento\GoogleAdwords\Block\Code;
 class DbTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Cron\Model\Config\Converter\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\Config\Converter\Db|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 

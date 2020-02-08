@@ -15,12 +15,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $responseFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Model\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 

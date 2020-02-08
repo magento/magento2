@@ -23,9 +23,9 @@ class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
      * @var ObjectManager
      */
     private $objectManagerHelper;
-    
+
     /**
-     * @var Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var Status|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockStatusResourceMock;
 
@@ -35,10 +35,10 @@ class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $optionSelectBuilderMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
-    
+
     protected function setUp()
     {
         $this->stockStatusResourceMock = $this->getMockBuilder(Status::class)

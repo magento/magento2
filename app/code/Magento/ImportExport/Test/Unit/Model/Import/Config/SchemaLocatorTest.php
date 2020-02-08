@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import\Config;
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReaderMock;
 

@@ -23,7 +23,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteFactory;
 

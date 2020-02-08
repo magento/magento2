@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 

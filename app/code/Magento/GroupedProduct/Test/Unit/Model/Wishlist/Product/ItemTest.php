@@ -19,12 +19,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 

@@ -12,12 +12,12 @@ use Magento\Framework\App\DeploymentConfig;
 class DataCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImporterPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configImporterPoolMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 

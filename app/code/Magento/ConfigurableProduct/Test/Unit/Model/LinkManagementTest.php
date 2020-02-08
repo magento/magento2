@@ -15,12 +15,12 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class LinkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
@@ -30,7 +30,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableType;
 
@@ -40,7 +40,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelperMock;
 

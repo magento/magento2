@@ -11,17 +11,17 @@ use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexBuilder;
 
     /**
-     * @var AbstractIndexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractIndexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexer;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 

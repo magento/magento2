@@ -20,17 +20,17 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $zeroTotalMock;
 
@@ -312,7 +312,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         );
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
 
-        /** @var \Magento\Quote\Model\Quote\Payment|\PHPUnit_Framework_MockObject_MockObject $methodMock */
+        /** @var \Magento\Quote\Model\Quote\Payment|\PHPUnit\Framework\MockObject\MockObject $methodMock */
         $methodMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Payment::class, ['setChecks', 'getData']);
         $methodMock->expects($this->once())
             ->method('setChecks')

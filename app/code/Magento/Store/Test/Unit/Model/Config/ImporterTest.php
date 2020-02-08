@@ -10,7 +10,7 @@ use Magento\Store\Model\Config\Importer;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Importer.
@@ -26,32 +26,32 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Importer\DataDifferenceCalculator|Mock
+     * @var Importer\DataDifferenceCalculator|MockObject
      */
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var Importer\Processor\ProcessorFactory|Mock
+     * @var Importer\Processor\ProcessorFactory|MockObject
      */
     private $processorFactoryMock;
 
     /**
-     * @var Importer\Processor\ProcessorInterface|Mock
+     * @var Importer\Processor\ProcessorInterface|MockObject
      */
     private $processorMock;
 
     /**
-     * @var StoreManager|Mock
+     * @var StoreManager|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var CacheInterface|Mock
+     * @var CacheInterface|MockObject
      */
     private $cacheManagerMock;
 
     /**
-     * @var Website|Mock
+     * @var Website|MockObject
      */
     private $resourceMock;
 

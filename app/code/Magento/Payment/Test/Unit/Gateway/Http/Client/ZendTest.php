@@ -20,27 +20,27 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
     /**
-     * @var ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClientFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendClientFactoryMock;
 
     /**
-     * @var ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $clientMock;
 
     /**
-     * @var TransferInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransferInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $transferObjectMock;
 
     /**
-     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 

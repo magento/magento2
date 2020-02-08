@@ -21,27 +21,27 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\SetFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\SetFactory
      */
     protected $attributeSetFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\EntityFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\EntityFactory
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ProductFactory
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
      */
     protected $stockConfiguration;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $configurableProduct;
 
@@ -51,7 +51,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
     protected $objectHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 

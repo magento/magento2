@@ -13,12 +13,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
@@ -28,7 +28,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_schemaLocator;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validationState;
 

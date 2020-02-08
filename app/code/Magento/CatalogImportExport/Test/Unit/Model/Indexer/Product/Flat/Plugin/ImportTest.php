@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $processorMock;
 
@@ -20,12 +20,12 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flatStateMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 

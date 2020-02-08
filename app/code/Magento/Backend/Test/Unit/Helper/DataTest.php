@@ -13,7 +13,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_frontResolverMock;
 

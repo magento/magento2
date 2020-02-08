@@ -21,17 +21,17 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Data\StoreConfigFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Data\StoreConfigFactory
      */
     protected $storeConfigFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
@@ -57,7 +57,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $storeConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getStoreMock(array $storeConfig)
     {

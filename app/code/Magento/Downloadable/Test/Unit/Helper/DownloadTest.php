@@ -23,22 +23,22 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /** @var DownloadHelper */
     protected $_helper;
 
-    /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $_filesystemMock;
 
-    /** @var FileReadInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FileReadInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_handleMock;
 
-    /** @var DirReadInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DirReadInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_workingDirectoryMock;
 
-    /** @var DownloadableFile|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DownloadableFile|\PHPUnit\Framework\MockObject\MockObject */
     protected $_downloadableFileMock;
 
-    /** @var  \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Session\SessionManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionManager;
 
-    /** @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileReadFactory;
 
     /** @var bool Result of function_exists() */

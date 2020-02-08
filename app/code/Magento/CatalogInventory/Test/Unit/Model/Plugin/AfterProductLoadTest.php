@@ -15,17 +15,17 @@ class AfterProductLoadTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductExtensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productExtensionFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productExtensionMock;
 

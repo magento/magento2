@@ -20,7 +20,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 

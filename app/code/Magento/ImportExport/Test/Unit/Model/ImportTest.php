@@ -21,94 +21,94 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Entity adapter.
      *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityAdapter;
 
     /**
      * Import export data
      *
-     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importExportData = null;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Entity\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Entity\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importData;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_csvFactory;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_httpFactory;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistry;
 
     /**
-     * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_behaviorFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_coreConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $import;
 
     /**
-     * @var \Magento\ImportExport\Model\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\History|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_varDirectory;
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_driver;
 
     /**
-     * @var ProcessingErrorAggregatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorAggregatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $errorAggregatorMock;
 

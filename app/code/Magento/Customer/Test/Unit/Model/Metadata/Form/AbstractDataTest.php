@@ -17,16 +17,16 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Test\Unit\Model\Metadata\Form\ExtendsAbstractData */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     protected $_localeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Locale\ResolverInterface */
     protected $_localeResolverMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
     protected $_attributeMock;
 
     /** @var string */

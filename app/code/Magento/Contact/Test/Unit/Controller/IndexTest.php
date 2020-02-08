@@ -22,7 +22,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Module config instance
      *
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 

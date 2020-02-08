@@ -73,26 +73,26 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     private $fileMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var ItemProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemProviderMock;
 
     /**
-     * @var ConfigReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
@@ -402,7 +402,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedFile
      * @param int $expectedWrites
      * @param array $robotsInfo
-     * @return Sitemap|PHPUnit_Framework_MockObject_MockObject
+     * @return Sitemap|\PHPUnit\Framework\MockObject\MockObject
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareSitemapModelMock(
@@ -508,7 +508,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * Get model mock object
      *
      * @param bool $mockBeforeSave
-     * @return Sitemap|PHPUnit_Framework_MockObject_MockObject
+     * @return Sitemap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getModelMock($mockBeforeSave = false)
     {

@@ -21,7 +21,7 @@ class ObserverTest extends TestCase
     private $model;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 

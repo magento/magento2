@@ -72,7 +72,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getItemFactoryMock()
     {
@@ -94,7 +94,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getCmsPageFactoryMock($returnValue)
     {
@@ -111,7 +111,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getConfigReaderMock()
     {
@@ -128,7 +128,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getCmsPageCollectionMock($returnValue)
     {

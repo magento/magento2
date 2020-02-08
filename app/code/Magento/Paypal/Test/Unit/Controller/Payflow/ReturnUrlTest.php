@@ -92,7 +92,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentFailures;
 

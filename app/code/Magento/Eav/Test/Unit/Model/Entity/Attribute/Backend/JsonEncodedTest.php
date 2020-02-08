@@ -16,12 +16,12 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -96,7 +96,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
         // save twice
         $this->model->beforeSave($product);
         $this->model->beforeSave($product);
-        
+
         // check it is encoded only once
         $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
     }

@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model\Config\Importer;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\ScopeInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @inheritdoc
@@ -21,7 +21,7 @@ class DataDifferenceCalculatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ConfigSourceInterface|Mock
+     * @var ConfigSourceInterface|MockObject
      */
     private $runtimeConfigSourceMock;
 

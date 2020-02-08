@@ -12,16 +12,16 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService */
     protected $storeViewService;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $connection;
 
-    /** @var  \Magento\Framework\Db\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Db\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
     protected function setUp()

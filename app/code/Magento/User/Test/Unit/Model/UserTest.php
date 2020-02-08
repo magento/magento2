@@ -21,7 +21,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /** @var User */
     private $model;
 
-    /** @var UserHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UserHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $userDataMock;
 
     /**

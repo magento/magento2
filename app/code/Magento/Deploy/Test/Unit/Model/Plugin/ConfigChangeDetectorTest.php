@@ -19,17 +19,17 @@ class ConfigChangeDetectorTest extends \PHPUnit\Framework\TestCase
     private $configChangeDetectorPlugin;
 
     /**
-     * @var ChangeDetector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChangeDetector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $changeDetectorMock;
 
     /**
-     * @var FrontControllerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontControllerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $frontControllerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 

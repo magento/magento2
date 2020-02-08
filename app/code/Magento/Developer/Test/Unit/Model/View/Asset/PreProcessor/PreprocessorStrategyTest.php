@@ -28,27 +28,27 @@ class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
     private $preprocessorStrategy;
 
     /**
-     * @var FrontendCompilation|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendCompilation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $frontendCompilationMock;
 
     /**
-     * @var AlternativeSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AlternativeSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $alternativeSourceMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectMangerMock;
 
@@ -148,7 +148,7 @@ class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChainMock()
     {

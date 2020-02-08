@@ -28,12 +28,12 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     private $customerGroup = Group::NOT_LOGGED_IN_ID;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
@@ -43,12 +43,12 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     private $quantity = 3.;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $calculator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 
@@ -58,17 +58,17 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrencyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $groupManagement;
 
     /**
-     * @var \Magento\Customer\Model\Group\RetrieverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Group\RetrieverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerGroupRetriever;
 
@@ -354,7 +354,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSavePercent($basePrice, $tierPrice, $savedPercent)
     {
-        /** @var AmountInterface|\PHPUnit_Framework_MockObject_MockObject $amount */
+        /** @var AmountInterface|\PHPUnit\Framework\MockObject\MockObject $amount */
         $amount = $this->getMockForAbstractClass(AmountInterface::class);
 
         $amount->expects($this->any())

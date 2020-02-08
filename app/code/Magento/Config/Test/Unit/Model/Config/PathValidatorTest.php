@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\PathValidator;
 use Magento\Config\Model\Config\Structure;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for PathValidator.
@@ -23,7 +23,7 @@ class PathValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Structure|Mock
+     * @var Structure|MockObject
      */
     private $structureMock;
 

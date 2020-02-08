@@ -16,7 +16,7 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 

@@ -22,19 +22,19 @@ use Magento\Framework\View\DesignLoader;
  */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ImageFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ImageFactory | \PHPUnit\Framework\MockObject\MockObject */
     private $imageFactory;
 
-    /** @var  \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\State | \PHPUnit\Framework\MockObject\MockObject */
     private $state;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
-    /** @var  DesignInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  DesignInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $design;
 
-    /** @var DesignLoader | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var DesignLoader | \PHPUnit\Framework\MockObject\MockObject*/
     private $designLoader;
 
     /** @var  Image */
@@ -43,7 +43,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $imageCodes = ['widget_recently_viewed'];
 
-    /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $imageInterfaceFactory;
 
     public function setUp()

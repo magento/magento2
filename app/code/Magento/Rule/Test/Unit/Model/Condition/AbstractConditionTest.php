@@ -9,7 +9,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition;
 class AbstractConditionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AbstractCondition|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCondition|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_condition;
 

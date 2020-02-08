@@ -17,12 +17,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCollection;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCollectionFactory;
 

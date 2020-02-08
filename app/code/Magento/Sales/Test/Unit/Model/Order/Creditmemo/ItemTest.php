@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemFactoryMock;
 

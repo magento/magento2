@@ -22,7 +22,7 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerCollectionFactory;
 

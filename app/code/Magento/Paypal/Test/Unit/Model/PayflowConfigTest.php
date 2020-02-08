@@ -20,17 +20,17 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodInterfaceMock;
 
     /**
-     * @var PayflowConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var PayflowConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 

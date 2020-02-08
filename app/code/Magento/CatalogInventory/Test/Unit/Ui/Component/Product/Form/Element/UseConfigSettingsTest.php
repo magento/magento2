@@ -19,12 +19,12 @@ class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -34,7 +34,7 @@ class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
     private $useConfigSettings;
 
     /**
-     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonValidatorMock;
 
@@ -83,7 +83,7 @@ class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
         $processorMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\Processor::class);
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
-        /** @var ValueSourceInterface|\PHPUnit_Framework_MockObject_MockObject $source */
+        /** @var ValueSourceInterface|\PHPUnit\Framework\MockObject\MockObject $source */
         $source = $this->createMock(ValueSourceInterface::class);
         $source->expects($this->once())
             ->method('getValue')

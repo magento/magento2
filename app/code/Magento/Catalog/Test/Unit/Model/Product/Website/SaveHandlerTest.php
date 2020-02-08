@@ -18,16 +18,16 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  ResourceModel\Website\Link | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResourceModel\Website\Link | \PHPUnit\Framework\MockObject\MockObject */
     private $productWebsiteLink;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
     /** @var SaveHandler */
     private $saveHandler;
 
-    /** @var  ProductInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ProductInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $product;
 
     public function setUp()

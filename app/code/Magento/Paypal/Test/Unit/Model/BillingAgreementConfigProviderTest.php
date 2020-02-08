@@ -13,12 +13,12 @@ use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currentCustomerMock;
 
     /**
-     * @var AgreementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AgreementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $agreementFactoryMock;
 

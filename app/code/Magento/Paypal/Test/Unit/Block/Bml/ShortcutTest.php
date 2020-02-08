@@ -19,13 +19,13 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentHelperMock;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject */
     protected $randomMock;
 
-    /** @var \Magento\Paypal\Helper\Shortcut\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Helper\Shortcut\ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $paypalShortcutHelperMock;
 
     protected function setUp()

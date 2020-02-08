@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model\Menu\Config;
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReaderMock;
 

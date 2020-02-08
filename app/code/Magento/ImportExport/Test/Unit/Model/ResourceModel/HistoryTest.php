@@ -18,7 +18,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\History|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyResourceModel;
 

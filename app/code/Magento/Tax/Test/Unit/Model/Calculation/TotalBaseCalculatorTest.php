@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $totalBaseCalculator;
 
     public function testCalculateWithTaxInPrice()

@@ -10,17 +10,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxClassRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 

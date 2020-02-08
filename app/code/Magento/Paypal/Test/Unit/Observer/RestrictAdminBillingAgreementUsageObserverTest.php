@@ -30,7 +30,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\
     protected $_event;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authorization;
 

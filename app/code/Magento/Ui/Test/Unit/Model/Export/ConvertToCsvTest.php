@@ -25,32 +25,32 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var DirectoryWriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryWriteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $directory;
 
     /**
-     * @var Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var Filter | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
     /**
-     * @var MetadataProvider | \PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataProvider | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataProvider;
 
     /**
-     * @var FileWriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileWriteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stream;
 
     /**
-     * @var UiComponentInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $component;
 

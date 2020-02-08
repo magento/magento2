@@ -13,7 +13,7 @@ use Magento\Framework\DataObject;
 class BooleanTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractAttribute
+     * @var \PHPUnit\Framework\MockObject\MockObject|AbstractAttribute
      */
     private $attributeMock;
 

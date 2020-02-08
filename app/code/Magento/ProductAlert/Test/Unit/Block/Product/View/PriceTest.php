@@ -11,27 +11,27 @@ namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Helper\Data
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected $_product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Registry
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Registry
      */
     protected $_registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Price
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Block\Product\View\Price
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
      */
     protected $_layout;
 

@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CollectDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ExportDataHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExportDataHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exportDataHandlerMock;
 
     /**
-     * @var SubscriptionStatusProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionStatusProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionStatusMock;
 

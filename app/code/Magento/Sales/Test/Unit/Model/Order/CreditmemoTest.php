@@ -21,7 +21,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderRepository;
 
@@ -31,12 +31,12 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected $creditmemo;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmItemCollectionFactoryMock;
 
@@ -143,7 +143,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->with($this->creditmemo);
         $items[] = $itemMock;
 
-        /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
+        /** @var ItemCollection|\PHPUnit\Framework\MockObject\MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
         )
@@ -172,7 +172,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->method('setCreditmemo');
         $items[] = $itemMock;
 
-        /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
+        /** @var ItemCollection|\PHPUnit\Framework\MockObject\MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
         )

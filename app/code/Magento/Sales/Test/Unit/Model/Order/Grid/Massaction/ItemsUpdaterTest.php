@@ -14,7 +14,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
     protected $itemUpdater;
 
     /**
-     * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationMock;
 

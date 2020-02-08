@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import;
 class SourceAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model = null;
 

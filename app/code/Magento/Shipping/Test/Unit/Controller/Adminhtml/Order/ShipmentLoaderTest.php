@@ -24,37 +24,37 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentRepositoryMock;
 
     /**
-     * @var ShipmentDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $documentFactoryMock;
 
     /**
-     * @var ShipmentTrackCreationInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentTrackCreationInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $trackFactoryMock;
 
     /**
-     * @var ShipmentItemCreationInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentItemCreationInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 

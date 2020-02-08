@@ -14,7 +14,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleResource;
 
@@ -24,7 +24,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $genericClosure;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $abstractModel;
 

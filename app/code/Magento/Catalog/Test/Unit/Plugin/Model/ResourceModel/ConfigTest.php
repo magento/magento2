@@ -12,16 +12,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $cache;
 
-    /** @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $cacheState;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Config|\PHPUnit\Framework\MockObject\MockObject */
     private $subject;
 
     protected function setUp()

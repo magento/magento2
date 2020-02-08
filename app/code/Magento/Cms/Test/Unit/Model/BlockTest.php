@@ -34,17 +34,17 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var BlockResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 

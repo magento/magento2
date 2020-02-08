@@ -16,12 +16,12 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $firstVisibilityMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $secondVisibilityMock;
 

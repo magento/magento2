@@ -22,12 +22,12 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Elasticsearch\Client|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Elasticsearch\Client|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $elasticsearchClientMock;
 
     /**
-     * @var \Elasticsearch\Namespaces\IndicesNamespace|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Elasticsearch\Namespaces\IndicesNamespace|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indicesMock;
 

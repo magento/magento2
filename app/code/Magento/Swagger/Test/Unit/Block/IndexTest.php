@@ -18,12 +18,12 @@ use Magento\SwaggerWebapi\Model\SchemaType\Rest;
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SchemaTypeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SchemaTypeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $schemaTypeMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 

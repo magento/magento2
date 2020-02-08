@@ -17,27 +17,27 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_gridMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -125,13 +125,13 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
         $this->_block->setUseSelectAll(true);
-        
+
         if ($this->_block->getMassactionIdField()) {
             $massActionIdField = $this->_block->getMassactionIdField();
         } else {
             $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
         }
-        
+
         $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

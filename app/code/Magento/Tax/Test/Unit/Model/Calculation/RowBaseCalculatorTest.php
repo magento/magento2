@@ -14,7 +14,7 @@ use \Magento\Tax\Model\Calculation\RowBaseCalculator;
  */
 class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
-    /** @var RowBaseCalculator | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var RowBaseCalculator | \PHPUnit\Framework\MockObject\MockObject */
     protected $rowBaseCalculator;
 
     public function testCalculateWithTaxInPrice()

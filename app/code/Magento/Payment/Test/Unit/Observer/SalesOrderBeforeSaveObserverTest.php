@@ -16,10 +16,10 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject */
     protected $observerMock;
 
-    /** @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventMock;
 
     protected function setUp()
@@ -197,7 +197,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $methodCode
      * @param array $orderMethods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function _getPreparedOrderMethod($methodCode, $orderMethods = [])
     {
@@ -219,10 +219,10 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets never expectation for order methods listed in $method
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $order
+     * @param \PHPUnit\Framework\MockObject\MockObject $order
      * @param array $methods
      */
-    private function _prepareNeverInvokedOrderMethods(\PHPUnit_Framework_MockObject_MockObject $order, $methods = [])
+    private function _prepareNeverInvokedOrderMethods(\PHPUnit\Framework\MockObject\MockObject $order, $methods = [])
     {
         foreach ($methods as $method) {
             $order->expects($this->never())->method($method);

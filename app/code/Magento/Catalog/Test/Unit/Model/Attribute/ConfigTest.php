@@ -13,7 +13,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Attribute\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dataStorage;
 

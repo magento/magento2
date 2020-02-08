@@ -32,7 +32,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ValidatorResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorResultFactoryMock;
 

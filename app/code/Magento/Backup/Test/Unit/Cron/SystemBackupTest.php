@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class SystemBackupTest extends TestCase
 {
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 

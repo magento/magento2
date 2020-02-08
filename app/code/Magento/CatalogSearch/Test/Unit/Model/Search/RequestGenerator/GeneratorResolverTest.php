@@ -14,13 +14,13 @@ class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
     /** @var  GeneratorResolver */
     private $resolver;
 
-    /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $defaultGenerator;
 
-    /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $datetimeGenerator;
 
-    /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $rangeGenerator;
 
     protected function setUp()

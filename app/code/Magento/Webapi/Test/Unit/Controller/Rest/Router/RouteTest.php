@@ -20,7 +20,7 @@ class RouteTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 

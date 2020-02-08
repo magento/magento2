@@ -30,17 +30,17 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|WebsiteRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|WebsiteRepositoryInterface
      */
     private $websiteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GroupRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|GroupRepositoryInterface
      */
     private $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StoreRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StoreRepositoryInterface
      */
     private $storeRepositoryMock;
 

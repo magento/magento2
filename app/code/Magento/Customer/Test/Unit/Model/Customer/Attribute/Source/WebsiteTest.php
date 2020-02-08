@@ -13,13 +13,13 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     /** @var Website */
     protected $model;
 
-    /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $collectionFactoryMock;
 
-    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $optionFactoryMock;
 
-    /** @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeMock;
 
     protected function setUp()

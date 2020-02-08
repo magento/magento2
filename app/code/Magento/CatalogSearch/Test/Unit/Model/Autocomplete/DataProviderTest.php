@@ -16,17 +16,17 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Search\Model\Query |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\Query |\PHPUnit\Framework\MockObject\MockObject
      */
     private $query;
 
     /**
-     * @var \Magento\Search\Model\Autocomplete\ItemFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\Autocomplete\ItemFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemFactory;
 
     /**
-     * @var \Magento\Search\Model\ResourceModel\Query\Collection |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\ResourceModel\Query\Collection |\PHPUnit\Framework\MockObject\MockObject
      */
     private $suggestCollection;
 

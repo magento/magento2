@@ -32,22 +32,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Escaper
+     * @var \PHPUnit\Framework\MockObject\MockObject|Escaper
      */
     private $escaper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|FilterManager
      */
     private $filter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ScopeConfigInterface
      */
     private $scopeConfig;
 

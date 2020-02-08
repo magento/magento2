@@ -28,12 +28,12 @@ class DataTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var StoreVariables|PHPUnit_Framework_MockObject_MockObject
+     * @var StoreVariables|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storesVariablesMock;
 
     /**
-     * @var VariableCollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var VariableCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $variableCollectionFactoryMock;
 

@@ -13,7 +13,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $finalPriceModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 

@@ -16,7 +16,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var Cart|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Cart|\PHPUnit\Framework\MockObject\MockObject */
     protected $cartHelperMock;
 
     protected function setUp()
@@ -40,7 +40,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $json = '{json;}';
 
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()

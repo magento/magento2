@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Admin;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 

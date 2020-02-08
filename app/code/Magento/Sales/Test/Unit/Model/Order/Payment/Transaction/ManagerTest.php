@@ -19,7 +19,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $manager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMock;
 

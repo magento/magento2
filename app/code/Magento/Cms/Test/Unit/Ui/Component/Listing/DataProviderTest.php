@@ -17,27 +17,27 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Reporting|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Reporting|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportingMock;
 
     /**
-     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestInterfaceMock;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterBuilderMock;
 
@@ -83,7 +83,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock */
+        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('get')

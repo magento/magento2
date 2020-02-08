@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $processorMock;
 

@@ -26,13 +26,13 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     const VALUE_INTEGRATION_CONSUMER_ID = 1;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $_integrationFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $_integrationMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $_emptyIntegrationMock;
 
     /** @var \Magento\Integration\Model\IntegrationService */

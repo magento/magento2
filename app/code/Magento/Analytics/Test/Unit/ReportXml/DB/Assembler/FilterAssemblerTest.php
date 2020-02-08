@@ -16,12 +16,12 @@ class FilterAssemblerTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\NameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\NameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nameResolverMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectBuilderMock;
 
@@ -31,7 +31,7 @@ class FilterAssemblerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\ConditionResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\ConditionResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionResolverMock;
 

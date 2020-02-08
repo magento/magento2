@@ -32,7 +32,7 @@ use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 class AddTrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentLoader;
 
@@ -42,47 +42,47 @@ class AddTrackTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $response;
 
     /**
-     * @var  ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $view;
 
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultPageMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pageConfigMock;
 
     /**
-     * @var Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pageTitleMock;
 
     /**
-     * @var ShipmentTrackInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentTrackInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $trackFactory;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rawResult;
 

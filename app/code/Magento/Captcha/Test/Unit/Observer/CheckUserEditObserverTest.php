@@ -12,28 +12,28 @@ use Magento\Customer\Model\AuthenticationInterface;
  */
 class CheckUserEditObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Captcha\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Captcha\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $helperMock;
 
-    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject */
     protected $actionFlagMock;
 
-    /* @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /* @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManagerMock;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectMock;
 
-    /** @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit\Framework\MockObject\MockObject */
     protected $captchaStringResolverMock;
 
-    /** @var AuthenticationInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AuthenticationInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $authenticationMock;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerSessionMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfigMock;
 
     /** @var \Magento\Captcha\Observer\CheckUserEditObserver */

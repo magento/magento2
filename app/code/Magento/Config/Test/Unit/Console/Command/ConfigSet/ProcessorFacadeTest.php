@@ -19,7 +19,7 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for ProcessorFacade.
@@ -35,32 +35,32 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ValidatorInterface|Mock
+     * @var ValidatorInterface|MockObject
      */
     private $scopeValidatorMock;
 
     /**
-     * @var PathValidator|Mock
+     * @var PathValidator|MockObject
      */
     private $pathValidatorMock;
 
     /**
-     * @var ConfigSetProcessorFactory|Mock
+     * @var ConfigSetProcessorFactory|MockObject
      */
     private $configSetProcessorFactoryMock;
 
     /**
-     * @var ConfigSetProcessorInterface|Mock
+     * @var ConfigSetProcessorInterface|MockObject
      */
     private $processorMock;
 
     /**
-     * @var Hash|Mock
+     * @var Hash|MockObject
      */
     private $hashMock;
 
     /**
-     * @var Config|Mock
+     * @var Config|MockObject
      */
     private $configMock;
 

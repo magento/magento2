@@ -14,37 +14,37 @@ use Magento\Framework\Convert\DataSize;
 class ServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Uploader\Service
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Uploader\Service
      */
     protected $_service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\Uploader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\Uploader
      */
     protected $_uploader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\Size
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\File\Size
      */
     protected $_fileSizeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Convert\DataSize
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Convert\DataSize
      */
     protected $dataSize;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
      */
     protected $_directoryMock;
 

@@ -32,12 +32,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 class OrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemCollectionFactoryMock;
 
@@ -47,7 +47,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     protected $order;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
@@ -57,52 +57,52 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     protected $incrementId;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Item | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Item | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $item;
 
     /**
-     * @var HistoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var HistoryCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesOrderCollectionFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesOrderCollectionMock;
 
     /**
-     * @var ProductCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCollectionFactoryMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolver;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $timezone;
 
     /**
-     * @var OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemRepository;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilder;
 
@@ -928,9 +928,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare payment for the order
      *
-     * @param \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject $order
+     * @param \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject $order
      * @param array $mockedMethods
-     * @return \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _prepareOrderPayment($order, $mockedMethods = [])
     {

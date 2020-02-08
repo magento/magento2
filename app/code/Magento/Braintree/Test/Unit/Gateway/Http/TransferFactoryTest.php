@@ -25,7 +25,7 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
     private $transferMock;
 
     /**
-     * @var TransferBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransferBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transferBuilder;
 

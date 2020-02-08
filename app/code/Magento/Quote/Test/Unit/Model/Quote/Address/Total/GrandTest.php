@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\Total\Grand;
 use Magento\Framework\Pricing\PriceCurrencyInterface as PriceRounder;
-use PHPUnit_Framework_MockObject_MockObject as ObjectMock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class GrandTest extends TestCase
 {
     /**
-     * @var PriceRounder|ObjectMock
+     * @var PriceRounder|MockObject
      */
     private $priceRounder;
 

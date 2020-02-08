@@ -16,22 +16,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class SubscriptionUpdateHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
@@ -67,7 +67,7 @@ class SubscriptionUpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();

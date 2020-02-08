@@ -14,7 +14,7 @@ class RateTest extends \PHPUnit\Framework\TestCase
     protected $objectHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 

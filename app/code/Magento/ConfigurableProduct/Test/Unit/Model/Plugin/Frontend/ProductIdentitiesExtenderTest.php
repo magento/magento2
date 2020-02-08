@@ -17,7 +17,7 @@ use Magento\Catalog\Model\Product;
 class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Configurable
+     * @var \PHPUnit\Framework\MockObject\MockObject|Configurable
      */
     private $configurableTypeMock;
 

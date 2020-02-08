@@ -11,7 +11,7 @@ namespace Magento\Cms\Test\Unit\Model\Config\Source;
 class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 

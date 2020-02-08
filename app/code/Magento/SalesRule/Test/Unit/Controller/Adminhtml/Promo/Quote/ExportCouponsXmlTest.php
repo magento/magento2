@@ -27,7 +27,7 @@ class ExportCouponsXmlTest extends TestCase
     private $controller;
 
     /**
-     * @var FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
@@ -37,7 +37,7 @@ class ExportCouponsXmlTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 

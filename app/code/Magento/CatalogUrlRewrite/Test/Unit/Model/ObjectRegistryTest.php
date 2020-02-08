@@ -13,7 +13,7 @@ class ObjectRegistryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry */
     protected $objectRegistry;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject */
     protected $object;
 
     protected function setUp()

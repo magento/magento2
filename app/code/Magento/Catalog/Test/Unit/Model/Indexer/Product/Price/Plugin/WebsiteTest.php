@@ -20,17 +20,17 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\DimensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\DimensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dimensionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tableMaintainer;
 
     /**
-     * @var DimensionModeConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     * @var DimensionModeConfiguration|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dimensionModeConfiguration;
 

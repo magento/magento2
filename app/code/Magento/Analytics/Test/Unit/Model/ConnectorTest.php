@@ -12,7 +12,7 @@ use Magento\Analytics\Model\Connector\SignUpCommand;
 class ConnectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -22,7 +22,7 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
     private $connector;
 
     /**
-     * @var SignUpCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var SignUpCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $signUpCommandMock;
 

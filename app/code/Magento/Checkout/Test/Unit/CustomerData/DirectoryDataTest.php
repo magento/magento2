@@ -22,7 +22,7 @@ class DirectoryDataTest extends TestCase
     private $model;
 
     /**
-     * @var HelperData|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryHelperMock;
 

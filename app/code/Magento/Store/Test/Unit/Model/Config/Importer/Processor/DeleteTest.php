@@ -19,7 +19,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Delete processor.
@@ -35,62 +35,62 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Registry|Mock
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var DataDifferenceCalculator|Mock
+     * @var DataDifferenceCalculator|MockObject
      */
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var ManagerInterface|Mock
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var WebsiteRepository|Mock
+     * @var WebsiteRepository|MockObject
      */
     private $websiteRepositoryMock;
 
     /**
-     * @var StoreRepository|Mock
+     * @var StoreRepository|MockObject
      */
     private $storeRepositoryMock;
 
     /**
-     * @var Collection|Mock
+     * @var Collection|MockObject
      */
     private $groupCollectionMock;
 
     /**
-     * @var Group|Mock
+     * @var Group|MockObject
      */
     private $groupMock;
 
     /**
-     * @var GroupResource|Mock
+     * @var GroupResource|MockObject
      */
     private $groupResourceMock;
 
     /**
-     * @var Website|Mock
+     * @var Website|MockObject
      */
     private $websiteMock;
 
     /**
-     * @var WebsiteResource|Mock
+     * @var WebsiteResource|MockObject
      */
     private $websiteResourceMock;
 
     /**
-     * @var Store|Mock
+     * @var Store|MockObject
      */
     private $storeMock;
 
     /**
-     * @var StoreResource|Mock
+     * @var StoreResource|MockObject
      */
     private $storeResourceMock;
 

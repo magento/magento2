@@ -17,14 +17,14 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Command being tested
      *
-     * @var IndexerShowDimensionsModeCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerShowDimensionsModeCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $command;
 
     /**
      * ScopeConfigInterface
      *
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
@@ -34,7 +34,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     private $indexers;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 

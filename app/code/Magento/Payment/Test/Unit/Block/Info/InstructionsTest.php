@@ -12,7 +12,7 @@ namespace Magento\Payment\Test\Unit\Block\Info;
 class InstructionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Info|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_info;
 

@@ -18,12 +18,12 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressAdapterFactoryMock;
 

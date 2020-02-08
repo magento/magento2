@@ -9,19 +9,19 @@ use Magento\GiftMessage\Block\Cart\GiftOptions;
 
 class GiftOptionsTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\GiftMessage\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\GiftMessage\Model\CompositeConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $compositeConfigProvider;
 
-    /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $layoutProcessorMock;
 
     /** @var \Magento\GiftMessage\Block\Cart\GiftOptions */
     protected $model;
 
-    /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\Encoder|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonEncoderMock;
 
     /** @var array  */

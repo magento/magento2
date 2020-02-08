@@ -20,26 +20,26 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $observerMock;
 
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheConfigMock;
 
     /**
-     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $weeeHelperMock;
 
@@ -117,7 +117,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->willReturn($isEnabledWeee);
 
-        /* @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->getMock();

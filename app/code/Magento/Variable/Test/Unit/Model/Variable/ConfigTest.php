@@ -22,12 +22,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepoMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
@@ -42,17 +42,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $jsPluginSourceUrl = 'js-plugin-source';
 
     /**
-     * @var Variables|\PHPUnit_Framework_MockObject_MockObject
+     * @var Variables|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeVariablesMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customVarsCollectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customVarsCollectionMock;
 

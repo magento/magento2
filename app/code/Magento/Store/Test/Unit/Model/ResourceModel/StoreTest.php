@@ -18,15 +18,15 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
-    /** @var  Select | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Select | \PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 

@@ -21,7 +21,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var Form */
     protected $form;
 
-    /** @var  Http|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var  Http|\PHPUnit\Framework\MockObject\MockObject  */
     protected $requestMock;
 
     protected function setUp()

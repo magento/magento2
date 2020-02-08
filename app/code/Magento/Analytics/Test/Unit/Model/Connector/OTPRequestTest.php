@@ -23,27 +23,27 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseResolverMock;
 
@@ -71,7 +71,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
         $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->subject = new OTPRequest(
             $this->analyticsTokenMock,
             $this->httpClientMock,

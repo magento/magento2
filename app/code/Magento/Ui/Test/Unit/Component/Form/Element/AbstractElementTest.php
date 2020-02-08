@@ -26,12 +26,12 @@ abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processorMock;
 

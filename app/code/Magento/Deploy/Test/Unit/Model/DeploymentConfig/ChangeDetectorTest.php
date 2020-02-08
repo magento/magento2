@@ -13,17 +13,17 @@ use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 class ChangeDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hash|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configHashMock;
 
     /**
-     * @var HashGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var HashGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hashGeneratorMock;
 
     /**
-     * @var DataCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataCollector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfigCollectorMock;
 

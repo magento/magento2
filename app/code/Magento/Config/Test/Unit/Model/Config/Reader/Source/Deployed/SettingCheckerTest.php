@@ -18,17 +18,17 @@ use Magento\Framework\App\DeploymentConfig;
 class SettingCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $placeholderMock;
 
     /**
-     * @var Config\ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config\ScopeCodeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCodeResolverMock;
 

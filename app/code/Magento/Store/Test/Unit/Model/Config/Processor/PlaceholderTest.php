@@ -16,7 +16,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Store\Model\Config\Placeholder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Config\Placeholder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configPlaceholderMock;
 

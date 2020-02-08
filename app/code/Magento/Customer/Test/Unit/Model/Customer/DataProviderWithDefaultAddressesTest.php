@@ -27,42 +27,42 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
     private const ATTRIBUTE_CODE = 'test-code';
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var CustomerCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerCollectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $countryFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerMock;
 
     /**
-     * @var CustomerCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerCollectionMock;
 
     /**
-     * @var FileUploaderDataResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileUploaderDataResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileUploaderDataResolver;
 
     /**
-     * @var AttributeMetadataResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataResolver;
 
@@ -247,7 +247,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $customerAttributes
-     * @return Type|\PHPUnit_Framework_MockObject_MockObject
+     * @return Type|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTypeCustomerMock($customerAttributes = [])
     {
@@ -270,7 +270,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @return AbstractAttribute[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return AbstractAttribute[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     protected function getAttributeMock($options = []): array
     {

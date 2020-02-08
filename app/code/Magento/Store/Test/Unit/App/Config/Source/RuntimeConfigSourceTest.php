@@ -18,7 +18,7 @@ use Magento\Store\App\Config\Source\RuntimeConfigSource;
 class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
@@ -28,12 +28,12 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
     private $configSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 

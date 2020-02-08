@@ -19,7 +19,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
@@ -29,7 +29,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface |  \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface |  \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 

@@ -12,34 +12,34 @@ namespace Magento\Swatches\Test\Unit\Block\LayeredNavigation;
  */
 class RenderLayeredTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $eavAttributeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $layerAttributeFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $layerAttributeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $swatchHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mediaHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $filterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $block;
 
     protected function setUp()
@@ -92,7 +92,7 @@ class RenderLayeredTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSwatchData()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $item */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $item */
         $item1 = $this->createMock(\Magento\Catalog\Model\Layer\Filter\Item::class);
         $item2 = $this->createMock(\Magento\Catalog\Model\Layer\Filter\Item::class);
         $item3 = $this->createMock(\Magento\Catalog\Model\Layer\Filter\Item::class);

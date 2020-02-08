@@ -19,7 +19,7 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Processor as CatalogInventorySt
 class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
@@ -29,7 +29,7 @@ class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var DependencyInfoProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyInfoProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $providerMock;
 

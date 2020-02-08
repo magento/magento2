@@ -13,12 +13,12 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Block\Item\Price\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemPriceRenderer;
 
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultColumnRenderer;
 

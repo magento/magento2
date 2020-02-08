@@ -30,32 +30,32 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
     private $deleteOutdatedPriceValues;
 
     /**
-     * @var AttributeRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ScopeConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbAdapterMock;
 
     /**
-     * @var BackendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeBackendMock;
 

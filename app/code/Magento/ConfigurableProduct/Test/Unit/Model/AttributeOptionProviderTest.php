@@ -33,37 +33,37 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractAttribute;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResource;
 
     /**
-     * @var OptionSelectBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionSelectBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionSelectBuilder;
 
@@ -119,12 +119,12 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
             ->willReturn($this->scope);
-        
+
         $this->optionSelectBuilder->expects($this->any())
             ->method('getSelect')
             ->with($this->abstractAttribute, 4, $this->scope)
             ->willReturn($this->select);
-        
+
         $this->attributeResource->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -161,7 +161,7 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
                 ['value' => 14, 'label' => 'Option Value for index 14'],
                 ['value' => 15, 'label' => 'Option Value for index 15']
             ]);
-        
+
         $this->abstractAttribute->expects($this->any())
             ->method('getSource')
             ->willReturn($source);

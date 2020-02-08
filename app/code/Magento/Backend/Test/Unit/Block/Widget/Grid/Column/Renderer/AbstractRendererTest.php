@@ -8,12 +8,12 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 class AbstractRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Widget\Grid\Column|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Grid\Column|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $columnMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectMock;
 

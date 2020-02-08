@@ -11,12 +11,12 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth\Token;
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 

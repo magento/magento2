@@ -25,12 +25,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var CollectionByPagesIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionByPagesIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
@@ -39,7 +39,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->iteratorMock = $this->createMock(
             CollectionByPagesIterator::class
         );
-        /** @var \PHPUnit_Framework_MockObject_MockObject|CollectionByPagesIteratorFactory $iteratorFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|CollectionByPagesIteratorFactory $iteratorFactoryMock */
         $iteratorFactoryMock = $this->createMock(
             CollectionByPagesIteratorFactory::class
         );
@@ -47,14 +47,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->iteratorMock);
         $this->collectionMock = $this->createMock(Collection::class);
-        /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $collectionFactoryMock */
+        /** @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject $collectionFactoryMock */
         $collectionFactoryMock = $this->createMock(
             CollectionFactory::class
         );
         $collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->collectionMock);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $selectMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $selectMock */
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())
             ->method('getPart')

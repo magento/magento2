@@ -21,12 +21,12 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     private $validator;
 
     /**
-     * @var ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
     /**
-     * @var ShipmentItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentItemMock;
 

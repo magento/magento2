@@ -27,32 +27,32 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     private $import;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var RowParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var RowParser|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rowParserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $columnResolverFactoryMock;
 
     /**
-     * @var DataHashGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataHashGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataHashGeneratorMock;
 
@@ -220,7 +220,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $lines
-     * @return ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createFileMock(array $lines)
     {

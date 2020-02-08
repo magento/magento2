@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataInterfaceMock;
 

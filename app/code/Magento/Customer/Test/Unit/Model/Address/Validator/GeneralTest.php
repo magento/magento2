@@ -11,10 +11,10 @@ namespace Magento\Customer\Test\Unit\Model\Address\Validator;
  */
 class GeneralTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject  */
     private $directoryDataMock;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject  */
     private $eavConfigMock;
 
     /** @var \Magento\Customer\Model\Address\Validator\General  */

@@ -14,7 +14,7 @@ use Magento\Framework\App\State;
 class ConcealInProductionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 

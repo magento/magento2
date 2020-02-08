@@ -14,12 +14,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -36,7 +36,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionSystemAttribute()
     {
-        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -111,7 +111,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionNewUserDefinedAttribute()
     {
-        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -212,7 +212,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionNoValue()
     {
-        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 

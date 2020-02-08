@@ -19,11 +19,11 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
@@ -143,7 +143,7 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $item
+     * @param \PHPUnit\Framework\MockObject\MockObject $item
      * @param bool $canReturnToStock
      * @param int|null $productId
      * @param bool $manageStock

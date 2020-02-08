@@ -20,22 +20,22 @@ class BookmarkManagementTest extends \PHPUnit\Framework\TestCase
     protected $bookmarkManagement;
 
     /**
-     * @var \Magento\Ui\Api\BookmarkRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Ui\Api\BookmarkRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bookmarkRepository;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorization\Model\UserContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $userContext;
 

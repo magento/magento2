@@ -19,27 +19,27 @@ use Magento\Framework\App\Config\Value;
 class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCodeResolver;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configItem;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configItemTwo;
 

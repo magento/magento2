@@ -13,7 +13,7 @@ class WebsiteManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websitesFactoryMock;
 

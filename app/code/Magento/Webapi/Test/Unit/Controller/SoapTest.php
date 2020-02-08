@@ -43,12 +43,12 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     protected $_errorProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\ResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     protected $_appStateMock;
 
@@ -60,7 +60,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_soapServerMock = $this->getMockBuilder(\Magento\Webapi\Model\Soap\Server::class)

@@ -16,17 +16,17 @@ use Magento\Store\Model\ScopeInterface;
 class TransportInterfacePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TransportInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransportInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transportMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Callable|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Callable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $proceedMock;
 

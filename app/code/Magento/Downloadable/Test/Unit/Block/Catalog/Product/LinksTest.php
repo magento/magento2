@@ -21,22 +21,22 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     protected $linksBlock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoder;
 
@@ -159,7 +159,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $linkPrice
      * @param $linkId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLinkMock($linkPrice, $linkId)
     {

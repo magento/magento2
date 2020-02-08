@@ -19,12 +19,12 @@ use Magento\Framework\App\Config\Initial\Converter;
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var GroupsConfigModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupsConfigModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupsConfigMock;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 

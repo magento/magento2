@@ -17,7 +17,7 @@ use Magento\Framework\UrlInterface;
 class SystemTest extends AbstractModifierTest
 {
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 

@@ -15,7 +15,7 @@ use Magento\Msrp\Model\Config as MsrpConfig;
 class MsrpTest extends AbstractModifierTest
 {
     /**
-     * @var MsrpConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var MsrpConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $msrpConfigMock;
 

@@ -15,12 +15,12 @@ class MassDeleteTest extends AbstractMassActionTest
     protected $massDeleteController;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockCollectionMock;
 
@@ -83,7 +83,7 @@ class MassDeleteTest extends AbstractMassActionTest
     /**
      * Create Cms Block Collection Mock
      *
-     * @return \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getBlockMock()
     {

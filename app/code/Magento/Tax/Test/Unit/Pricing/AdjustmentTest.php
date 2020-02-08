@@ -18,12 +18,12 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogHelper;
 

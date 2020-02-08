@@ -26,7 +26,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\Queue\TransportBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Class TransportBuilderTest
@@ -46,32 +45,32 @@ class TransportBuilderTest extends TestCase
     protected $builder;
 
     /**
-     * @var FactoryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var FactoryInterface|MockObject
      */
     protected $templateFactoryMock;
 
     /**
-     * @var Message|PHPUnit_Framework_MockObject_MockObject
+     * @var Message|MockObject
      */
     protected $messageMock;
 
     /**
-     * @var ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var SenderResolverInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var SenderResolverInterface|MockObject
      */
     protected $senderResolverMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $mailTransportFactoryMock;
 
     /**
-     * @var MessageInterfaceFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var MessageInterfaceFactory|MockObject
      */
     private $messageFactoryMock;
 

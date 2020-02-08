@@ -17,7 +17,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 

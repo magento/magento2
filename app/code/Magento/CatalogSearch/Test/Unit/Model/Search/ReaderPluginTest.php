@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 class ReaderPluginTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestGenerator;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */

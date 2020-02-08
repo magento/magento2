@@ -33,22 +33,22 @@ use Magento\Framework\DB\Select;
 class IndexBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DimensionsProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var DimensionsProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dimensionsProcessor;
 
     /**
-     * @var SelectContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectContainerBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectContainerBuilder;
 
     /**
-     * @var BaseSelectStrategyMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseSelectStrategyMapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $baseSelectStrategyMapper;
 
     /**
-     * @var FilterMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterMapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterMapper;
 

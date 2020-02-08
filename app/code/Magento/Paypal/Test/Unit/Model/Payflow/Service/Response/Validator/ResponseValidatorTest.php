@@ -24,12 +24,12 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
     protected $responseValidator;
 
     /**
-     * @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var Transparent|\PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $payflowFacade;
 

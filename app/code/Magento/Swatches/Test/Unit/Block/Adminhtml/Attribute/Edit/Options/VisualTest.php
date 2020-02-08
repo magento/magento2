@@ -16,7 +16,7 @@ use Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual;
 class VisualTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Visual
+     * @var \PHPUnit\Framework\MockObject\MockObject|Visual
      */
     private $model;
 

@@ -18,32 +18,32 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class FileRecorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FileInfoManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoManagerMock;
 
     /**
-     * @var FileInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoFactoryMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var FileInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextMock;
 

@@ -28,37 +28,37 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var OrderSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderSender|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderSenderMock;
 
     /**
-     * @var InvoiceSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceSender|\PHPUnit\Framework\MockObject\MockObject
      */
     private $invoiceSender;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $observerMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMock;
 

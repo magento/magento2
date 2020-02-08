@@ -21,22 +21,22 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productContextMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryMock;
 
     /**
-     * @var ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageBuilder;
 
@@ -170,7 +170,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->method('getMinSaleQty')
             ->will($this->returnValue($minSale));
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $productMock */
+        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $productMock */
         $this->assertEquals($result, $this->block->getMinimalQty($productMock));
     }
 

@@ -18,16 +18,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
-    /** @var  \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Directory\Model\CurrencyFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $currencyFactory;
 
     protected function setUp()

@@ -15,27 +15,27 @@ use Magento\Ui\Component\Form\Field;
 class ResetButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ContextInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ContextInterface
      */
     private $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | UiComponentFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | UiComponentFactory
      */
     private $componentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |
+     * @var \PHPUnit\Framework\MockObject\MockObject |
      */
     private $processorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |
+     * @var \PHPUnit\Framework\MockObject\MockObject |
      */
     private $wrappingComponentMock;
 
@@ -77,7 +77,7 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
             $this->scopeConfigMock
         );
     }
-    
+
     public function testPrepare()
     {
         $robotsContent = "Content";

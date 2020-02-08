@@ -18,17 +18,17 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileReadFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileRead;
 
     /**
-     * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleDirResolverMock;
 

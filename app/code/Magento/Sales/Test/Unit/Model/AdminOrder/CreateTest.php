@@ -46,12 +46,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $adminOrderCreate;
 
     /**
-     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteRepository;
 
     /**
-     * @var QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteFactory;
 

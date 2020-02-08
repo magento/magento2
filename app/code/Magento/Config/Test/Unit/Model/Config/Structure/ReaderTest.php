@@ -16,27 +16,27 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $reader;
 
     /**
-     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileResolverMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Structure\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
     /**
-     * @var \Magento\Config\Model\Config\SchemaLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\SchemaLocator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $schemaLocatorMock;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validationStateMock;
 
     /**
-     * @var \Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $compilerMock;
 
@@ -117,7 +117,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('system.xml', 'global')
             ->willReturn($fileList);
-        
+
         $this->assertEquals($expectedResult, $this->reader->read());
     }
 }

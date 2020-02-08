@@ -39,17 +39,17 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     private $logger;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject;
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject;
      */
     private $storeManagerInterfaceMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 

@@ -25,32 +25,32 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceMock;
 
     /**
-     * @var PriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoFactory;
 
     /**
-     * @var PriceInfoExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributes;
 
     /**
-     * @var PriceInfoExtensionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoExtensionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoExtensionFactory;
 
     /**
-     * @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormattedPriceInfoBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formattedPriceInfoBuilder;
 

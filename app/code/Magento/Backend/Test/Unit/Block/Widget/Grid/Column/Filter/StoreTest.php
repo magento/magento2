@@ -16,13 +16,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\DB\Helper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Helper|\PHPUnit\Framework\MockObject\MockObject */
     protected $helper;
 
-    /** @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
     protected function setUp()

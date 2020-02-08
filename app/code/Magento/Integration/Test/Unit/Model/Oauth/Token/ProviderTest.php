@@ -18,22 +18,22 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Integration\Model\Oauth\Token\Provider */
     protected $tokenProvider;
 
-    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $consumerFactoryMock;
 
-    /** @var \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $tokenFactoryMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Framework\Oauth\ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Oauth\ConsumerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $consumerMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestTokenMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit\Framework\MockObject\MockObject */
     protected $accessTokenMock;
 
     protected function setUp()

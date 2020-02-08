@@ -24,22 +24,22 @@ class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
     protected $clearProductUrlsObserver;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlPersist;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observer;
 
     /**
-     * @var Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $importProduct;
 

@@ -13,7 +13,7 @@ namespace Magento\Cms\Test\Unit\Model\Config\Source;
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 

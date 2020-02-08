@@ -12,17 +12,17 @@ use Magento\Search\Model\AdapterFactory;
 class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterFactory;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $engineResolverMock;
 

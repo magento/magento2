@@ -22,37 +22,37 @@ class StockRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Stock |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockResourceMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\StockFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\StockFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockFactoryMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockCollectionMock;
 
     /**
-     * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $queryBuilderFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mapperMock;
 
     /**
-     * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryStorage;
 

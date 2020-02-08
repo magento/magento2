@@ -506,7 +506,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Get new object mock for \Magento\Catalog\Model\Product\Option
      *
-     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getNewOptionMock()
     {

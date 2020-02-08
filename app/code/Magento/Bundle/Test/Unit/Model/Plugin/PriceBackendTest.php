@@ -19,13 +19,13 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
     /** @var  PriceBackend */
     private $priceBackendPlugin;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $priceAttributeMock;
 
     /** @var  \Closure */
     private $closure;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $productMock;
 
     protected function setUp()

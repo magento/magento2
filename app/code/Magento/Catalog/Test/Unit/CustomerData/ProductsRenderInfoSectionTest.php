@@ -24,22 +24,22 @@ class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject */
     protected $searchCriteriaBuilderMock;
 
-    /** @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject */
     protected $filterBuilderMock;
 
-    /** @var \Magento\Catalog\Model\ProductRenderList |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductRenderList |\PHPUnit\Framework\MockObject\MockObject */
     protected $productRenderRepositoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $synchronizerMock;
 
-    /** @var \Magento\Framework\EntityManager\Hydrator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\EntityManager\Hydrator|\PHPUnit\Framework\MockObject\MockObject */
     protected $hydratorMock;
 
     protected function setUp()

@@ -14,10 +14,10 @@ class CcGenericConfigProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CcGenericConfigProvider */
     protected $model;
 
-    /** @var CcConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CcConfig|\PHPUnit\Framework\MockObject\MockObject */
     protected $ccConfigMock;
 
-    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentHelperMock;
 
     protected function setUp()

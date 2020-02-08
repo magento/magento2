@@ -21,7 +21,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
     private $mappableConditionProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
@@ -31,7 +31,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $customConditionProcessorBuilderMock;
 
@@ -1011,7 +1011,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $subConditions
      * @param $aggregator
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockForCombinedCondition($subConditions, $aggregator)
     {
@@ -1029,7 +1029,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $attribute
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockForSimpleCondition($attribute)
     {

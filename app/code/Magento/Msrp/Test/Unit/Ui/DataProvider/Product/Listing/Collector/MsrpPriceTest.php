@@ -26,27 +26,27 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrencyMock;
 
-    /** @var \Magento\Msrp\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Msrp\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $msrpHelperMock;
 
-    /** @var \Magento\Msrp\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Msrp\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $configMock;
 
     /**
-     * @var \Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $msrpPriceInfoFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $adjustmentCalculator;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoExtensionFactory;
 

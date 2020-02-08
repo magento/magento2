@@ -20,7 +20,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileResolver;
 

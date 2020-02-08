@@ -21,22 +21,22 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
     private $selectHydrator;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -169,7 +169,7 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider recreateWithExpressionDataProvider
      * @param array $selectParts
      * @param array $expectedParts
-     * @param \PHPUnit_Framework_MockObject_MockObject[] $expressionMocks
+     * @param \PHPUnit\Framework\MockObject\MockObject[] $expressionMocks
      */
     public function testRecreateWithExpression(
         array $selectParts,

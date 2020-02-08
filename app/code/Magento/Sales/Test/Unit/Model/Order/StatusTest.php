@@ -14,17 +14,17 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -128,8 +128,8 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve prepared for test \Magento\Sales\Model\Order\Status
      *
-     * @param null|\PHPUnit_Framework_MockObject_MockObject $resource
-     * @param null|\PHPUnit_Framework_MockObject_MockObject $eventDispatcher
+     * @param null|\PHPUnit\Framework\MockObject\MockObject $resource
+     * @param null|\PHPUnit\Framework\MockObject\MockObject $eventDispatcher
      * @return \Magento\Sales\Model\Order\Status
      */
     protected function _getPreparedModel($resource = null, $eventDispatcher = null)

@@ -24,12 +24,12 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
     private $windowsSmtpConfig;
 
     /**
-     * @var OsInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var OsInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $osInfoMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 

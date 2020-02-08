@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,37 +26,37 @@ class InitialThemeSourceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DeploymentConfig|Mock
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ThemeFactory|Mock
+     * @var ThemeFactory|MockObject
      */
     private $themeFactoryMock;
 
     /**
-     * @var DataObjectFactory|Mock
+     * @var DataObjectFactory|MockObject
      */
     private $dataObjectFactoryMock;
 
     /**
-     * @var DataObject|Mock
+     * @var DataObject|MockObject
      */
     private $dataObjectMock;
 
     /**
-     * @var Theme|Mock
+     * @var Theme|MockObject
      */
     private $themeMock;
 
     /**
-     * @var AdapterInterface|Mock
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|Mock
+     * @var Select|MockObject
      */
     private $selectMock;
 

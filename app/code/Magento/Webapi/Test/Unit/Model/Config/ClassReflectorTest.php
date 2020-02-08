@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Model\Config;
  */
 class ClassReflectorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $_typeProcessor;
 
     /** @var \Magento\Webapi\Model\Config\ClassReflector */

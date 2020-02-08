@@ -18,7 +18,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\GroupedImportExport\Model\Export\RowCustomizer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GroupedImportExport\Model\Export\RowCustomizer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rowCustomizerMock;
 

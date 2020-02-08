@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order;
 class CanInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Validation\CanInvoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Validation\CanInvoice|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
@@ -24,12 +24,12 @@ class CanInvoiceTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemMock;
 

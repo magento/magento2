@@ -10,7 +10,7 @@ use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Compact deployment service class implementation unit tests
@@ -27,14 +27,14 @@ class CompactDeployTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock of package pool object
      *
-     * @var PackagePool|Mock
+     * @var PackagePool|MockObject
      */
     private $packagePool;
 
     /**
      * Mock of deployment queue object
      *
-     * @var Queue|Mock
+     * @var Queue|MockObject
      */
     private $queue;
 

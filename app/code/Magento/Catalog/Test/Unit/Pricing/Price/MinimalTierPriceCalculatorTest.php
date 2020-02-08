@@ -27,22 +27,22 @@ class MinimalTierPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saleable;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfo;
 
     /**
-     * @var TierPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     private $price;
 
     /**
-     * @var CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $calculator;
 

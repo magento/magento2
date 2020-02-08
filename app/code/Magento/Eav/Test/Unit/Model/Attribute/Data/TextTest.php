@@ -202,7 +202,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
         );
 
         /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|
-         * \PHPUnit_Framework_MockObject_MockObject
+         * \PHPUnit\Framework\MockObject\MockObject
          */
         $attribute = $this->getMockBuilder($attributeClass)
             ->setMethods(['_init'])

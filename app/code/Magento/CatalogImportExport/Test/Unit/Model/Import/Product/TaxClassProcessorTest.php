@@ -24,7 +24,7 @@ class TaxClassProcessorTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxClassProcessor;
 

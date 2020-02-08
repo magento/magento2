@@ -14,13 +14,13 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     /** @var Server */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\DeploymentConfig */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\RequestInterface */
     protected $requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\UrlInterface */
     protected $urlBuilderMock;
 
     protected function setUp()
