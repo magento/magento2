@@ -12,21 +12,22 @@ use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ClientResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ClientResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientResolver|MockObject
      */
     private $model;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|MockObject
      */
     private $engineResolverMock;
 

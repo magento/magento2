@@ -8,6 +8,7 @@ namespace Magento\AdvancedSearch\Test\Unit\Model;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,12 +18,12 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|MockObject
      */
     protected $engineResolverMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
@@ -47,8 +48,7 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
             ->willReturn('my_engine');
 
         /**
-         * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|
-         *     \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|MockObject
          */
         $suggestedQueriesMock = $this->createMock(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class);
         $suggestedQueriesMock->expects($this->any())

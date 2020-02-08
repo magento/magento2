@@ -8,6 +8,7 @@ namespace Magento\AdvancedSearch\Test\Unit\Controller\Adminhtml\Search\System\Co
 use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class TestConnectionTest
@@ -17,32 +18,32 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 class TestConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var ClientResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientResolver|MockObject
      */
     private $clientResolverMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     private $clientMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|MockObject
      */
     private $resultJson;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|MockObject
      */
     private $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Filter\StripTags|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\StripTags|MockObject
      */
     private $tagFilterMock;
 

@@ -19,6 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\Layer as SearchLayer;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,32 +39,32 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Resolver
+     * @var MockObject|Resolver
      */
     private $layerResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SearchLayer
+     * @var MockObject|SearchLayer
      */
     private $searchLayerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RecommendationsFactory
+     * @var MockObject|RecommendationsFactory
      */
     private $recommendationsFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Recommendations
+     * @var MockObject|Recommendations
      */
     private $recommendationsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Resolver
+     * @var MockObject|Resolver
      */
     private $queryResultFactory;
 

@@ -8,31 +8,32 @@ namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup;
 use Magento\Framework\Search\EngineResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Group
+     * @var MockObject|\Magento\Customer\Model\ResourceModel\Group
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface
+     * @var MockObject|\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface
      */
     protected $customerOptionsMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|MockObject
      */
     protected $engineResolverMock;
 
