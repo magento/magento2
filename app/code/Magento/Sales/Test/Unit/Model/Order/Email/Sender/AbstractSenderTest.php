@@ -168,8 +168,8 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendCopyToExpects
      */
     protected function stepSend(
         \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendExpects,
