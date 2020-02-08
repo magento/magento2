@@ -48,7 +48,7 @@
         <actionGroup ref="FilterProductGridBySetNewFromDateActionGroup" stepKey="filterProductGridToCheckSetAsNewColumn"/>
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnFirstRowProductGrid"/>
         <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProductForm"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAndCloseProductForm"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="expandFilters"/>
         <seeInField selector="{{AdminProductGridFilterSection.newFromDateFilter}}" userInput="05/16/2018" stepKey="checkForNewFromDate"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdown2"/>
