@@ -11,7 +11,7 @@ use Magento\Signifyd\Model\Config;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Json\EncoderInterface;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
 {

@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\TaxAddressManager;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
 {

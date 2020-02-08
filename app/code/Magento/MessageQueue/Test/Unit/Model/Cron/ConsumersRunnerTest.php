@@ -6,7 +6,7 @@
 namespace Magento\MessageQueue\Test\Unit\Model\Cron;
 
 use Magento\Framework\MessageQueue\ConnectionTypeResolver;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
