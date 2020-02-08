@@ -34,7 +34,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     private $objectManagerInterface;
 
     /**
-     * @var FactoryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var FactoryOptions|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionsMock;
 

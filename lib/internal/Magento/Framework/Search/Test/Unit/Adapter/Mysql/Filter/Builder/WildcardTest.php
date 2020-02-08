@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class WildcardTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestFilter;
 
@@ -21,7 +21,7 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionManager;
 

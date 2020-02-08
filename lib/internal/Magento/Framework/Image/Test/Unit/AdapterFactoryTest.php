@@ -10,7 +10,7 @@ use \Magento\Framework\Image\AdapterFactory;
 class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Image\Adapter\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\Adapter\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 

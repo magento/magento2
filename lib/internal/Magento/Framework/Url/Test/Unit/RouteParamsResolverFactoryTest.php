@@ -12,7 +12,7 @@ class RouteParamsResolverFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Url\RouteParamsResolverFactory */
     protected $object;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManager;
 
     protected function setUp()

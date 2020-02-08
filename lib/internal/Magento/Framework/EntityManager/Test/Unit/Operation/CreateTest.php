@@ -19,22 +19,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var CreateMain|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreateMain|\PHPUnit\Framework\MockObject\MockObject
      */
     private $createMain;
 
     /**
-     * @var SequenceApplier|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceApplier|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceApplier;
 

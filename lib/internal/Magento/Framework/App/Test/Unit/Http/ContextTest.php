@@ -22,7 +22,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

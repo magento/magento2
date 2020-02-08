@@ -20,13 +20,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class CompiledTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    /** @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var DefinitionInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var DefinitionInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $definitionsMock;
 
     /** @var Compiled */

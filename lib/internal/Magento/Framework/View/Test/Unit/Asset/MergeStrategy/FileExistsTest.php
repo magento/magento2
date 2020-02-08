@@ -12,17 +12,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileExistsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
      */
     private $mergerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $dirMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\File
      */
     private $resultAsset;
 

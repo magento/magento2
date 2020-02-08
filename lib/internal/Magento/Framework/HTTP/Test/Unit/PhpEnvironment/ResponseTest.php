@@ -9,10 +9,10 @@ use \Magento\Framework\HTTP\PhpEnvironment\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
     protected $response;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\Headers */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Zend\Http\Headers */
     protected $headers;
 
     protected function setUp()

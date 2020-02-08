@@ -12,38 +12,38 @@ namespace Magento\Framework\View\Test\Unit;
 class FileSystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_templateFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_localeFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_staticFileResolution;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailTemplateFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_assetRepo;
 

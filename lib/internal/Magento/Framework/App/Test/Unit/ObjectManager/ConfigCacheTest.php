@@ -15,12 +15,12 @@ class ConfigCacheTest extends \PHPUnit\Framework\TestCase
     private $configCache;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigCache|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager\ConfigCache|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheFrontendMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

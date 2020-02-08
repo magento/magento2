@@ -28,27 +28,27 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 

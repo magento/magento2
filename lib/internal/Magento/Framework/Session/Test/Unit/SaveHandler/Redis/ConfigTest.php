@@ -11,17 +11,17 @@ use Magento\Framework\Session\SaveHandler\Redis\Config;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 

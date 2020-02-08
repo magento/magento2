@@ -79,7 +79,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         protected $cookieManager;
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|CookieScopeInterface
+         * @var \PHPUnit\Framework\MockObject\MockObject|CookieScopeInterface
          */
         protected $scopeMock;
 
@@ -89,22 +89,22 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         public static $isSetCookieInvoked;
 
         /**
-         * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\App\Request\Http | \PHPUnit\Framework\MockObject\MockObject
          */
         protected $requestMock;
 
         /**
-         * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit\Framework\MockObject\MockObject
          */
         protected $readerMock;
 
         /**
-         * @var LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+         * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
          */
         protected $loggerMock;
 
         /**
-         * @var HttpHeader | \PHPUnit_Framework_MockObject_MockObject
+         * @var HttpHeader | \PHPUnit\Framework\MockObject\MockObject
          */
         protected $httpHeaderMock;
 

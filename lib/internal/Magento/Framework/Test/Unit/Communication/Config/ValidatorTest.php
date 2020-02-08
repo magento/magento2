@@ -17,12 +17,12 @@ use Magento\Framework\Reflection\TypeProcessor;
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeProcessor;
 
     /**
-     * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodsMap;
 

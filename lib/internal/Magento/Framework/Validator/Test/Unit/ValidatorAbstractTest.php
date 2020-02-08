@@ -29,7 +29,7 @@ class ValidatorAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Get translator object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\AbstractAdapter
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Translate\AbstractAdapter
      */
     protected function _getTranslator()
     {

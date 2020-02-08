@@ -21,7 +21,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
     protected $bodyGenerator;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 

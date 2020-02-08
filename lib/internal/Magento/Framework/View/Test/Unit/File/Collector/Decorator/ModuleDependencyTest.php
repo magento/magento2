@@ -14,12 +14,12 @@ class ModuleDependencyTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_fileSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_moduleListMock;
 

@@ -29,27 +29,27 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configScopeMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var ObjectManagerInterface||\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface||\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 

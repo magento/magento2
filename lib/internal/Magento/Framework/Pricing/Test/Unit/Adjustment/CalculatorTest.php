@@ -17,7 +17,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\AmountFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $amountFactoryMock;
 

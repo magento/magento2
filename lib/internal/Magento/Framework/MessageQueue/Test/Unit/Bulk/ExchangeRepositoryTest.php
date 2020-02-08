@@ -12,7 +12,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Bulk;
 class ExchangeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exchangeFactory;
 

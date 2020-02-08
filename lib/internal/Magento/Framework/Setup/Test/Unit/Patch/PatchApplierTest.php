@@ -32,52 +32,52 @@ use Magento\Framework\Setup\Patch\PatchRegistryFactory;
 class PatchApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PatchRegistryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchRegistryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchRegistryFactoryMock;
 
     /**
-     * @var PatchReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataPatchReaderMock;
 
     /**
-     * @var PatchReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $schemaPatchReaderMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ModuleResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleResourceMock;
 
     /**
-     * @var PatchHistory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchHistory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchHistoryMock;
 
     /**
-     * @var PatchFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchFactoryMock;
 
     /**
-     * @var \Magento\Framework\Setup\SetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SetupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $schemaSetupMock;
 
     /**
-     * @var ModuleDataSetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleDataSetupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleDataSetupMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -87,12 +87,12 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     private $patchApllier;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var PatchBackwardCompatability |\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchBackwardCompatability |\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchBackwardCompatability;
 
@@ -622,7 +622,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @param array $items
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\IteratorAggregate
+     * @return \PHPUnit\Framework\MockObject\MockObject|\IteratorAggregate
      * @throws \Exception
      */
     private function createAggregateIteratorMock($className, array $items = [], array $methods = [])
@@ -630,9 +630,6 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         if (!in_array(ltrim(\IteratorAggregate::class, '\\'), class_implements($className))) {
             throw new \Exception('Mock possible only for classes that implement IteratorAggregate interface.');
         }
-        /**
-         * PHPUnit_Framework_MockObject_MockObject
-         */
         $someIterator = $this->createMock(\ArrayIterator::class);
 
         $mockIteratorAggregate = $this->getMockBuilder($className)

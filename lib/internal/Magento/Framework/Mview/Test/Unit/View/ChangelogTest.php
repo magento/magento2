@@ -21,12 +21,12 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     /**
      * Mysql PDO DB adapter mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResourceConnection
      */
     protected $resourceMock;
 

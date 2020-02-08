@@ -19,7 +19,7 @@ class DependencyInfoProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 

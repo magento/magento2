@@ -24,7 +24,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGmtTimestamp($input)
     {
-        /** @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject $timezone */
+        /** @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject $timezone */
         $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
@@ -38,7 +38,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
      */
     public function testTimestamp($input)
     {
-        /** @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject $timezone */
+        /** @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject $timezone */
         $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 

@@ -13,12 +13,12 @@ class ReverseResolverTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Framework\Module\Dir|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleDirs;
 

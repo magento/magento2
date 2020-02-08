@@ -16,7 +16,7 @@ use \Magento\Framework\Event\ObserverFactory;
 class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 

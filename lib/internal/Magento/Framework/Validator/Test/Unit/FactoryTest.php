@@ -11,22 +11,22 @@ namespace Magento\Framework\Validator\Test\Unit;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\Validator\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorConfigMock;
 
     /**
-     * @var \Magento\Framework\Config\FileIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileIteratorMock;
 

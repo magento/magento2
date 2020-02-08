@@ -15,12 +15,12 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
     private $factory;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $documentFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 

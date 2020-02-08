@@ -12,7 +12,7 @@ class HostCheckerTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Url\HostChecker */
     private $object;
 
-    /** @var \Magento\Framework\Url\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Url\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeResolver;
 
     /**

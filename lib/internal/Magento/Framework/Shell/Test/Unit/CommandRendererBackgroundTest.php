@@ -17,7 +17,7 @@ class CommandRendererBackgroundTest extends \PHPUnit\Framework\TestCase
     protected $testCommand = 'php -r test.php';
 
     /**
-     * @var \Magento\Framework\OsInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\OsInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $osInfo;
 

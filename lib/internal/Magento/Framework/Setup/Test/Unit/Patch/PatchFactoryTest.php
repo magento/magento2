@@ -26,7 +26,7 @@ class PatchFactoryTest extends \PHPUnit\Framework\TestCase
     private $patchFactory;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 

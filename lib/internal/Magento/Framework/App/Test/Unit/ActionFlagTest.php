@@ -13,7 +13,7 @@ class ActionFlagTest extends \PHPUnit\Framework\TestCase
     protected $_actionFlag;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 

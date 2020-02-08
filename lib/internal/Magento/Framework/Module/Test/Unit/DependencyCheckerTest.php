@@ -10,27 +10,27 @@ use \Magento\Framework\Module\DependencyChecker;
 class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Module\DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\DependencyChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $checker;
 
     /**
-     * @var \Magento\Framework\Module\PackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\PackageInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packageInfoMock;
 
     /**
-     * @var \Magento\Framework\Module\PackageInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\PackageInfoFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packageInfoFactoryMock;
 
     /**
-     * @var \Magento\Framework\Module\ModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $listMock;
 
     /**
-     * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loaderMock;
 

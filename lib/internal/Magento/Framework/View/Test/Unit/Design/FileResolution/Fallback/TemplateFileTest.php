@@ -18,17 +18,17 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class TemplateFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resolver;
 
     /**
-     * @var MinifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MinifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $minifier;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $state;
 
@@ -38,12 +38,12 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetConfig;
 

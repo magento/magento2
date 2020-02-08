@@ -15,12 +15,12 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RuleInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RuleInterface
      */
     protected $ruleNonModular;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RuleInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RuleInterface
      */
     protected $ruleModular;
 

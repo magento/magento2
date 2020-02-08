@@ -16,32 +16,32 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 class MagentoImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $design;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSource;
 
     /**
-     * @var \Magento\Framework\Css\PreProcessor\ErrorHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Css\PreProcessor\ErrorHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $errorHandler;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
     /**
-     * @var ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeProvider;
 

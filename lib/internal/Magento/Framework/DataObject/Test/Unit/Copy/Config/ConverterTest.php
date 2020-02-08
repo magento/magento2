@@ -10,7 +10,7 @@ namespace Magento\Framework\DataObject\Test\Unit\Copy\Config;
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject\Copy\Config\Converter
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject\Copy\Config\Converter
      */
     protected $_model;
 

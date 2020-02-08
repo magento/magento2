@@ -31,23 +31,23 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $attributeValueFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $customAttributeTypeLocator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject  */
     protected $objectManagerMock;
 
     /** @var  \Magento\Framework\Reflection\MethodsMap */
     protected $methodsMap;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $fieldNamer;
 
     /**
-     * @var ServiceTypeToEntityTypeMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceTypeToEntityTypeMap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serviceTypeToEntityTypeMap;
 

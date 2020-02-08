@@ -11,13 +11,13 @@ use Magento\Framework\Search\Request\Query\BoolExpression;
 
 class QueryContainerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
     private $select;
 
-    /** @var MatchContainerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MatchContainerFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $matchContainerFactory;
 
-    /** @var \Magento\Framework\Search\Request\QueryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Search\Request\QueryInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $requestQuery;
 
     /** @var \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer */

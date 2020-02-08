@@ -27,12 +27,12 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
     protected $_resourcesMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $relationProcessorMock;
 
@@ -267,7 +267,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
 
     public function testLoad()
     {
-        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -595,14 +595,14 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $model */
+        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $model */
         $model = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMockForAbstractClass();
         $model->expects($this->any())->method('getConnection')->willReturn($connection);
 
-        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();

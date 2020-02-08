@@ -10,7 +10,7 @@ use \Magento\Framework\View\Design\Theme\FlyweightFactory;
 class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\ThemeProviderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\ThemeProviderInterface
      */
     protected $themeProviderMock;
 

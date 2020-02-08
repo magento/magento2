@@ -15,7 +15,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
     protected $defaultRenderer;
 
     /**
-     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererMock;
 

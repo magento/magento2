@@ -11,17 +11,17 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 

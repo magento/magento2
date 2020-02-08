@@ -17,12 +17,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \Magento\Framework\Backup\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backupFactoryMock;
 

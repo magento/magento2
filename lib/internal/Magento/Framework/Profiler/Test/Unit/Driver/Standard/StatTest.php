@@ -316,7 +316,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
             $this->_executeTimerAction($action, $timerId, $time, $realMemory, $emallocMemory);
         }
         foreach ($expects as $expectedData) {
-            /** @var bool|int|PHPUnit_Framework_Constraint $expectedValue */
+            /** @var bool|int|\PHPUnit\Framework\Constraint\Constraint $expectedValue */
             list($timerId, $key, $expectedValue) = array_values($expectedData);
             if (!is_scalar($expectedValue)) {
                 $expectedValue->evaluate($this->_stat->fetch($timerId, $key));

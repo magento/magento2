@@ -15,7 +15,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * \Magento\Framework\Filesystem\Driver
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 
@@ -27,7 +27,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * \Magento\Framework\Filesystem\File\ReadFactory
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactory;
 

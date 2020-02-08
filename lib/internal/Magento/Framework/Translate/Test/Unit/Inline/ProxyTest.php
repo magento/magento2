@@ -10,12 +10,12 @@ use \Magento\Framework\Translate\Inline\Proxy;
 class ProxyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translateMock;
 

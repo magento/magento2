@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AggregationResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var AggregationResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregationResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $specificAggregationResolver;
 

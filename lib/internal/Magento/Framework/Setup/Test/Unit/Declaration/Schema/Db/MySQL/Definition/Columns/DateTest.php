@@ -25,17 +25,17 @@ class DateTest extends \PHPUnit\Framework\TestCase
     private $date;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -66,7 +66,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var BooleanColumn|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var BooleanColumn|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(BooleanColumn::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -9,7 +9,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 class ProxyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 

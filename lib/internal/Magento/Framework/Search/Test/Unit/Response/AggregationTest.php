@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AggregationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Response\Aggregation |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Response\Aggregation |\PHPUnit\Framework\MockObject\MockObject
      */
     private $aggregation;
 

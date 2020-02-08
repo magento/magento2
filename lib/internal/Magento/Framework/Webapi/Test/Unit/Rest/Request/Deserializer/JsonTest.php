@@ -7,7 +7,7 @@ namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
 class JsonTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_helperFactoryMock;
 
     /** @var \Magento\Framework\Webapi\Rest\Request\Deserializer\Json */
@@ -16,10 +16,10 @@ class JsonTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\Decoder */
     protected $decoderMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
     protected function setUp()

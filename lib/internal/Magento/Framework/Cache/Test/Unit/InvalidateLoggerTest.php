@@ -11,13 +11,13 @@ namespace Magento\Framework\Cache\Test\Unit;
 
 class InvalidateLoggerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Request\Http */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Request\Http */
     protected $requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Psr\Log\LoggerInterface */
     protected $loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Cache\InvalidateLogger */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Cache\InvalidateLogger */
     protected $invalidateLogger;
 
     /** @var string */

@@ -39,17 +39,17 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementFactoryMock;
 
     /**
-     * @var DbSchemaReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbSchemaReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbSchemaReaderMock;
 
     /**
-     * @var Sharding|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sharding|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shardingMock;
 

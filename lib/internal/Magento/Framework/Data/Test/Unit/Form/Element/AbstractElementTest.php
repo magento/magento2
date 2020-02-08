@@ -11,22 +11,22 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_escaperMock;
 

@@ -22,7 +22,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoderMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
     /** @var \Psr\Log\LoggerInterface */

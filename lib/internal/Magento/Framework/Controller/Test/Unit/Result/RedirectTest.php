@@ -17,16 +17,16 @@ class RedirectTest extends TestCase
     /** @var \Magento\Framework\Controller\Result\Redirect */
     protected $redirect;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectInterface;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlInterface;
 
-    /** @var HttpResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HttpResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
     protected function setUp()

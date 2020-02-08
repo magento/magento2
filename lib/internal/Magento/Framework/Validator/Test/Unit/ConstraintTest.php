@@ -17,7 +17,7 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validatorMock;
 

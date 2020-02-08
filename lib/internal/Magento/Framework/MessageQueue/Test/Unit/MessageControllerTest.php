@@ -13,7 +13,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 class MessageControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockFactory;
 

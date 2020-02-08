@@ -27,27 +27,27 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\ValidatorFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ValidatorFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorFactoryMock;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 

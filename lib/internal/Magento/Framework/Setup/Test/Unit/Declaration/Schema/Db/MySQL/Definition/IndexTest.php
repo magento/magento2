@@ -29,7 +29,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $index;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -54,7 +54,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
-        /** @var IndexDto|\PHPUnit_Framework_MockObject_MockObject $index */
+        /** @var IndexDto|\PHPUnit\Framework\MockObject\MockObject $index */
         $index = $this->getMockBuilder(IndexDto::class)
             ->disableOriginalConstructor()
             ->getMock();

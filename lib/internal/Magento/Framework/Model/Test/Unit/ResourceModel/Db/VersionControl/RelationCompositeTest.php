@@ -17,7 +17,7 @@ class RelationCompositeTest extends \PHPUnit\Framework\TestCase
     protected $entityRelationComposite;
 
     /**
-     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $modelMock;
 
@@ -27,7 +27,7 @@ class RelationCompositeTest extends \PHPUnit\Framework\TestCase
     protected $relationProcessorMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 

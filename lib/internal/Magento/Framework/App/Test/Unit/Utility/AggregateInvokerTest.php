@@ -15,7 +15,7 @@ class AggregateInvokerTest extends \PHPUnit\Framework\TestCase
     protected $_invoker;
 
     /**
-     * @var \PHPUnit\Framework\TestCase|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\TestCase|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_testCase;
 

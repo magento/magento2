@@ -18,17 +18,17 @@ use Magento\Framework\Phrase;
 class ConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configuration;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageEncoder;
 
     /**
-     * @var \Magento\Framework\MessageQueue\QueueRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\QueueRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queueRepository;
 
@@ -38,27 +38,27 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     private $callbackInvoker;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $consumerConfig;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageController|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageController|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageController;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\Communication\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Communication\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $communicationConfig;
 
@@ -68,17 +68,17 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     private $consumer;
 
     /**
-     * @var PoisonPillReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PoisonPillReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $poisonPillRead;
 
     /**
-     * @var PoisonPillCompareInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PoisonPillCompareInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $poisonPillCompare;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 

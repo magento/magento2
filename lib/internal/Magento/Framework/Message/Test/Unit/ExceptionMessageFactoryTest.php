@@ -11,7 +11,7 @@ use Magento\Framework\Message\MessageInterface;
 class ExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Message\Factory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Factory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactoryMock;
 

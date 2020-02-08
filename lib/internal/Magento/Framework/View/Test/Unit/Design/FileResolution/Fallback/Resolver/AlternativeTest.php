@@ -12,12 +12,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class AlternativeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directory;
 
     /**
-     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rule;
 

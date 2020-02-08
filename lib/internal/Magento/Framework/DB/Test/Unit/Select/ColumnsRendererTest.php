@@ -19,12 +19,12 @@ class ColumnsRendererTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\DB\Platform\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Platform\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 

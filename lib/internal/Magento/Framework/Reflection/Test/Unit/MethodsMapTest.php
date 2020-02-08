@@ -20,7 +20,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
     /**

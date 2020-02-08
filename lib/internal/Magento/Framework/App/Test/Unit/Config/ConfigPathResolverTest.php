@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * {@inheritdoc}
@@ -20,7 +20,7 @@ class ConfigPathResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeCodeResolver|Mock
+     * @var ScopeCodeResolver|MockObject
      */
     private $scopeCodeResolverMock;
 

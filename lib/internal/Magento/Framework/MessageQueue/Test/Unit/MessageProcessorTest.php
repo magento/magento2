@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class MessageProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\MessageStatusProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageStatusProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageStatusProcessor;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 

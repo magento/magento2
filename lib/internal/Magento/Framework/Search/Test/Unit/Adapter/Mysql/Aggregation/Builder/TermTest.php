@@ -19,22 +19,22 @@ class TermTest extends \PHPUnit\Framework\TestCase
     private $term;
 
     /**
-     * @var Metrics|\PHPUnit_Framework_MockObject_MockObject
+     * @var Metrics|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metricsBuilder;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var RequestBucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestBucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bucket;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProvider;
 
@@ -95,7 +95,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
         $this->dataProvider->expects($this->once())->method('getDataSet')->willReturn($this->select);
         $this->dataProvider->expects($this->once())->method('execute')->willReturn($this->select);
 
-        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
+        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit\Framework\MockObject\MockObject $table */
         $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -138,7 +138,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     break;
             }
         };
-        /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $objectManager \PHPUnit\Framework\MockObject\MockObject */
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 

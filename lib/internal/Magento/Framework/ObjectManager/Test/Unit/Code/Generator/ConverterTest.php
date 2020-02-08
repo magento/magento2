@@ -25,7 +25,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $resultClassName;
 
     /**
-     * @var Io | \PHPUnit_Framework_MockObject_MockObject
+     * @var Io | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 
@@ -35,12 +35,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected $generator;
 
     /**
-     * @var \Magento\Framework\Code\Generator\ClassGenerator | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\ClassGenerator | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $classGenerator;
 
     /**
-     * @var \Magento\Framework\Code\Generator\DefinedClasses | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\DefinedClasses | \PHPUnit\Framework\MockObject\MockObject
      */
     private $definedClassesMock;
 

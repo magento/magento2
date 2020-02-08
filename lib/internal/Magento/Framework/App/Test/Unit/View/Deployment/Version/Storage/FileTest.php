@@ -16,7 +16,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $directory;
 

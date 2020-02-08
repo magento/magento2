@@ -13,17 +13,17 @@ use Magento\Framework\App\ScopeInterface;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCodeResolver;
 
     /**
-     * @var ConfigTypeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigTypeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configType;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
 

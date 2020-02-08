@@ -33,7 +33,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $name
      * @param \Magento\Framework\Event | null $event
-     * @return \Magento\Framework\Event\Observer |\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Event\Observer |\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObserverMock($name, $event = null)
     {

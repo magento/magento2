@@ -159,7 +159,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param integer $cacheInvalidationTime
-     * @return \Magento\Framework\Cache\Backend\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Cache\Backend\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getDatabaseMock($cacheInvalidationTime)
     {
@@ -176,7 +176,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param integer $dataModificationTime
-     * @return \Cm_Cache_Backend_File|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Cm_Cache_Backend_File|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getFileMock($dataModificationTime, $cacheResult)
     {

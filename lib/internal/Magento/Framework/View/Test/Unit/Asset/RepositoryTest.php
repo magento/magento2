@@ -23,52 +23,52 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     private $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $designMock;
 
     /**
-     * @var ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeProvider;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Source|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\File\FallbackContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File\FallbackContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fallbackFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\File\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File\ContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\RemoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\RemoteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $remoteFactoryMock;
 

@@ -10,12 +10,12 @@ use Magento\Framework\Module\PackageInfo;
 class PackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reader;
 
@@ -25,7 +25,7 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
     private $packageInfo;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

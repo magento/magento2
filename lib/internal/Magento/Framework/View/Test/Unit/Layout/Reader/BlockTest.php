@@ -18,17 +18,17 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduledStructure;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerPool;
 

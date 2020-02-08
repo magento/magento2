@@ -11,7 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class VersionTest

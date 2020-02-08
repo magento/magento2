@@ -30,27 +30,27 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var DataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfigFactory;
 
     /**
-     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfig;
 
     /**
-     * @var ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerPool;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 

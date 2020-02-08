@@ -24,7 +24,7 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     private $patchHistory;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -45,9 +45,9 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testFixPatch()
     {
-        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
+        /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
         $patch1 = $this->createMock(PatchInterface::class);
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
         $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
@@ -68,9 +68,9 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testFixAppliedPatch()
     {
-        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
+        /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
         $patch1 = $this->createMock(PatchInterface::class);
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
         $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
@@ -90,9 +90,9 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testFixPatchTwice()
     {
-        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
+        /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
         $patch = $this->createMock(PatchInterface::class);
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
         $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $this->resourceConnectionMock->expects($this->any())

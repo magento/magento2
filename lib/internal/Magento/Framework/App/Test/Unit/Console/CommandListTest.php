@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
 class CommandListTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Console\CommandList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Console\CommandList
      */
     private $commandList;
 

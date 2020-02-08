@@ -16,7 +16,7 @@ use Magento\Framework\Unserialize\Unserialize;
 class UnserializeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var Serialize|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

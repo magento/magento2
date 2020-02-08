@@ -63,7 +63,7 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
     protected $_deploymentConfigMerged;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $reader;
 
