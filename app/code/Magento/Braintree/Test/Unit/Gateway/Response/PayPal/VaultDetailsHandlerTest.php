@@ -20,7 +20,7 @@ use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\PaymentToken;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler.
@@ -119,7 +119,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        
+
         $this->handler = new VaultDetailsHandler(
             $this->paymentTokenFactoryMock,
             $this->paymentExtensionFactoryMock,
@@ -139,7 +139,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->with($this->paymentTokenMock);
         $this->paymentExtensionMock->method('getVaultPaymentToken')
             ->willReturn($this->paymentTokenMock);
-        
+
         $this->paymentDataObjectMock->method('getPayment')
             ->willReturn($this->paymentInfoMock);
 
@@ -154,7 +154,7 @@ class VaultDetailsHandlerTest extends TestCase
         $expirationDate = '2017-07-05 00:00:00';
         $this->dateTimeFactoryMock->method('create')
             ->willReturn($dateTime);
-        
+
         $this->handler->handle($this->subject, $response);
 
         $extensionAttributes = $this->paymentInfoMock->getExtensionAttributes();

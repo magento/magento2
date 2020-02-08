@@ -14,7 +14,7 @@ use Magento\Signifyd\Model\MessageGenerators\GeneratorException;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
 use Magento\Signifyd\Model\OrderStateService;
 use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Contains tests with different negative and positive scenarios for case updating service.

@@ -7,7 +7,7 @@
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
 use Magento\Sales\Exception\DocumentValidationException;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Xml\Security;
 use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

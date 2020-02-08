@@ -10,7 +10,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class TokenUiComponentProviderTest
@@ -52,7 +52,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         $this->tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
 
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        
+
         $this->paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $this->componentProvider = new TokenUiComponentProvider(
@@ -78,11 +78,11 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         $this->componentFactory->expects(static::once())
             ->method('create')
             ->willReturn($this->tokenComponent);
-        
+
         $this->paymentToken->expects(static::once())
             ->method('getPublicHash')
             ->willReturn($hash);
-        
+
         $this->urlBuilder->expects(static::once())
             ->method('getUrl');
 

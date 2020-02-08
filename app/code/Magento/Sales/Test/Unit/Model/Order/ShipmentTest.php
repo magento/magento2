@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ShipmentTest extends \PHPUnit\Framework\TestCase
 {

@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Observer\PlaceOrder;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 class PlaceOrderTest extends \PHPUnit\Framework\TestCase

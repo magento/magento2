@@ -6,7 +6,7 @@
 namespace Magento\Tax\Test\Unit\Observer;
 
 use Magento\Tax\Api\TaxAddressManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Customer logged in observer test

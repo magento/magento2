@@ -12,7 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
 use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCount;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Checkout\Helper\Data;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Result\Page;

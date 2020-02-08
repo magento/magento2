@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Contains tests for case updating service factory.

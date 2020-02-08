@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Model\MessageGenerators\PatternGenerator;
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Contains tests for messages generators factory.

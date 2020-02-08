@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {

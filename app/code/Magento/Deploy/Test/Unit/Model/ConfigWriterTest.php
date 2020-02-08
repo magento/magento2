@@ -12,7 +12,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ConfigWriterTest extends \PHPUnit\Framework\TestCase
 {

@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Test\Unit\Model;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class SignifydOrderSessionIdTest tests that SignifydOrderSessionId class dependencies

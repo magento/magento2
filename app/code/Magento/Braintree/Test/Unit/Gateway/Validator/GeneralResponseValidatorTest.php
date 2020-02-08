@@ -12,7 +12,7 @@ use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class GeneralResponseValidatorTest

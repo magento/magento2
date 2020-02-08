@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Tax\Block\Item\Price\Renderer;
 use Magento\Tax\Plugin\Checkout\CustomerData\Cart;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CartTest extends TestCase
 {
@@ -57,7 +57,7 @@ class CartTest extends TestCase
 
         $this->checkoutSession->method('getQuote')
             ->willReturn($this->quote);
-        
+
         $this->cart = new Cart(
             $this->checkoutSession,
             $this->checkoutHelper,

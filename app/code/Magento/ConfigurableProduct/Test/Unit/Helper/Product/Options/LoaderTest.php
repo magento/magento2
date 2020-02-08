@@ -13,7 +13,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class LoaderTest
@@ -82,7 +82,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $attributes = [$attribute];
-        
+
         $iterator = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $iterator->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator($attributes));

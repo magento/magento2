@@ -18,7 +18,7 @@ use Magento\Shipping\Model\Shipping;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit tests for \Magento\Shipping\Model\Shipping class.

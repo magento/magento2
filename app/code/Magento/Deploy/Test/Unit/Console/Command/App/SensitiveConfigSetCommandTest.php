@@ -12,7 +12,7 @@ use Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\Console\Cli;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

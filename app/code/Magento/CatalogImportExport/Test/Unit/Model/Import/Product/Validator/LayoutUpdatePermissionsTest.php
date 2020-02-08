@@ -13,7 +13,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions;
 use Magento\Framework\AuthorizationInterface;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test validation for layout update permissions

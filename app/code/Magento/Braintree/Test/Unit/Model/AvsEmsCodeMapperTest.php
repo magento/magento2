@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model;
 use Magento\Braintree\Model\AvsEmsCodeMapper;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
 {

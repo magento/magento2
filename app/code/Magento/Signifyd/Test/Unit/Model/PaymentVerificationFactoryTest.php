@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Payment\Gateway\ConfigInterface;
 
 class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase

@@ -20,7 +20,7 @@ use Magento\Sales\Block\Adminhtml\Order\Address\Form;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Backend\Model\Session\Quote as QuoteSession;
 
 /**

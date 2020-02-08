@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\Service;
 use Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class CreditmemoServiceTest

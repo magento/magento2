@@ -14,7 +14,7 @@ use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test validation for layout update

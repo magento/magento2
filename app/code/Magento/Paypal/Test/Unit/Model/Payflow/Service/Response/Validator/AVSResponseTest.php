@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AVSResponseTest extends \PHPUnit\Framework\TestCase
 {

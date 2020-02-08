@@ -6,7 +6,7 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Block;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SearchDataTest extends \PHPUnit\Framework\TestCase
 {

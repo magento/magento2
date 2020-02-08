@@ -11,7 +11,7 @@ use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorInterface;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
 class CollectorFactoryTest extends \PHPUnit\Framework\TestCase

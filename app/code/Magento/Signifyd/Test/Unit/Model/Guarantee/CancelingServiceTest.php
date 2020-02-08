@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\Guarantee\CancelGuaranteeAbility;
 use Magento\Signifyd\Model\Guarantee\CancelingService;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**

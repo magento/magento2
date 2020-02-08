@@ -12,7 +12,7 @@ use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\OfflinePayments\Model\Checkmo;
 
 class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase

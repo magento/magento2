@@ -19,7 +19,7 @@ use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessage;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**

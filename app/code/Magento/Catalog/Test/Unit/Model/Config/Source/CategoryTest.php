@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {

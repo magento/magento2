@@ -12,7 +12,7 @@ use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Options;
 
 use Magento\Ui\Component\Form\AttributeMapper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * LayoutProcessorTest covers a list of variations for checkout layout processor

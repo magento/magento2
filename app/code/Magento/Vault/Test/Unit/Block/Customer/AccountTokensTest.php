@@ -12,7 +12,7 @@ use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\CreditCardTokenFactory;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\PaymentToken;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class AccountTokensTest

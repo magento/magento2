@@ -9,7 +9,7 @@ use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
 {

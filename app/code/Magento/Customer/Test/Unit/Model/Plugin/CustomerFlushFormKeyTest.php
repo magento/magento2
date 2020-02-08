@@ -12,7 +12,7 @@ use Magento\Framework\Data\Form\FormKey as DataFormKey;
 use Magento\Framework\Event\Observer;
 use Magento\PageCache\Observer\FlushFormKey;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CustomerFlushFormKeyTest extends TestCase
 {
