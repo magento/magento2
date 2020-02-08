@@ -7,21 +7,22 @@ namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPri
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $validator;
 
     /**
-     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $validators;
 
     /**
-     * @var RowValidatorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RowValidatorInterface|MockObject
      */
     protected $validatorTest;
 

@@ -6,27 +6,28 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
-use Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
+use Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|MockObject
      */
     private $indexer;
 
     /**
-     * @var Import |\PHPUnit_Framework_MockObject_MockObject
+     * @var Import|MockObject
      */
     private $import;
 
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing|MockObject
      */
     private $advancedPricing;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|MockObject
      */
     private $indexerRegistry;
 

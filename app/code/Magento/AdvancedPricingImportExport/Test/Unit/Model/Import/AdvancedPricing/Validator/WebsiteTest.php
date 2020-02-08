@@ -7,21 +7,22 @@
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\WebSite|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\WebSite|MockObject
      */
     protected $webSiteModel;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|MockObject
      */
     protected $storeResolver;
 
     /**
-     * @var  AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var  AdvancedPricing\Validator\Website|MockObject
      */
     protected $website;
 

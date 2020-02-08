@@ -9,6 +9,7 @@ namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -22,57 +23,57 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     const LINK_FIELD = 'linkField';
 
     /**
-     * @var ResourceFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceFactory|MockObject
      */
     protected $resourceFactory;
 
     /**
-     * @var \Magento\Catalog\Helper\Data |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|MockObject
      */
     protected $catalogData;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|MockObject
      */
     protected $storeResolver;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product|MockObject
      */
     protected $importProduct;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|MockObject
      */
     protected $productModel;
 
     /**
-     * @var AdvancedPricing\Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator|MockObject
      */
     protected $validator;
 
     /**
-     * @var AdvancedPricing\Validator\Website |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\Website|MockObject
      */
     protected $websiteValidator;
 
     /**
-     * @var AdvancedPricing\Validator\TierPrice |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\TierPrice|MockObject
      */
     protected $tierPriceValidator;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Helper |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper|MockObject
      */
     protected $resourceHelper;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject
      */
     protected $dataSourceModel;
 
@@ -82,22 +83,22 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|MockObject
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|MockObject
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Helper\Data|MockObject
      */
     protected $importExportData;
 
@@ -112,7 +113,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $oldSkus;
 
     /**
-     * @var AdvancedPricing |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing |MockObject
      */
     protected $advancedPricing;
 
@@ -1027,7 +1028,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      *
      * @param array $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \ReflectionException
      */
     private function getAdvancedPricingMock($methods = [])

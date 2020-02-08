@@ -7,6 +7,7 @@
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -14,22 +15,22 @@ use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as Advanced
 class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\GroupRepositoryInterface|MockObject
      */
     protected $groupRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|MockObject
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|MockObject
      */
     protected $storeResolver;
 
     /**
-     * @var AdvancedPricing\Validator\TierPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\TierPrice|MockObject
      */
     protected $tierPrice;
 
