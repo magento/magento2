@@ -22,6 +22,7 @@ define([
             isZipRequired: true,
             isCountryRequired: true,
             currentRegion: null,
+            currentRegionValue: null,
             isMultipleCountriesAllowed: true
         },
 
@@ -30,19 +31,34 @@ define([
          * @private
          */
         _create: function () {
+            var regionInput = $(this.options.regionInputId);
+
             this._initCountryElement();
 
-            this.currentRegionOption = this.options.currentRegion;
             this.regionTmpl = mageTemplate(this.options.regionTemplate);
+            this.currentRegionOption = {};
+            this.currentRegionValue = {};
+
+            if (this.options.currentRegion) {
+                this.currentRegionOption[this.element.val()] = this.options.currentRegion;
+            }
+
+            if (this.options.currentRegionValue) {
+                this.currentRegionValue[this.element.val()] = this.options.currentRegionValue;
+            }
 
             this._updateRegion(this.element.find('option:selected').val());
 
             $(this.options.regionListId).on('change', $.proxy(function (e) {
                 this.setOption = false;
-                this.currentRegionOption = $(e.target).val();
+                this.currentRegionOption[this.element.val()] = $(e.target).val();
             }, this));
 
-            $(this.options.regionInputId).on('focusout', $.proxy(function () {
+            regionInput.on('change', $.proxy(function (e) {
+                this.currentRegionValue[this.element.val()] = $(e.target).val();
+            }, this));
+
+            regionInput.on('focusout', $.proxy(function () {
                 this.setOption = true;
             }, this));
         },
@@ -161,22 +177,17 @@ define([
 
             this._clearError();
             this._checkRegionRequired(country);
-
-            $(regionList).find('option:selected').removeAttr('selected');
-            regionInput.val('');
+            this._removeSelectOptions(regionList);
 
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
-                this._removeSelectOptions(regionList);
                 $.each(this.options.regionJson[country], $.proxy(function (key, value) {
                     this._renderSelectOption(regionList, key, value);
                 }, this));
 
-                if (this.currentRegionOption) {
-                    regionList.val(this.currentRegionOption);
-                }
-
-                if (this.setOption) {
+                if (this.currentRegionOption[country]) {
+                    regionList.val(this.currentRegionOption[country]);
+                } else if (this.setOption) {
                     regionList.find('option').filter(function () {
                         return this.text === regionInput.val();
                     }).attr('selected', true);
@@ -201,8 +212,6 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
-                this._removeSelectOptions(regionList);
-
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     container.addClass('required').show();
@@ -213,6 +222,12 @@ define([
                     }
                     container.removeClass('required');
                     regionInput.removeClass('required-entry');
+                }
+
+                if (this.currentRegionValue[country]) {
+                    regionInput.val(this.currentRegionValue[country]);
+                } else {
+                    regionInput.val('');
                 }
 
                 regionList.removeClass('required-entry').prop('disabled', 'disabled').hide();
