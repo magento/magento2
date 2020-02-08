@@ -58,6 +58,6 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
 
         $cvv = $additionalInfo[Info::PAYPAL_CVV2MATCH];
 
-        return isset(self::$cvvMap[$cvv]) ? self::$cvvMap[$cvv] : self::$notProvidedCode;
+        return self::$cvvMap[$cvv] ?? self::$notProvidedCode;
     }
 }

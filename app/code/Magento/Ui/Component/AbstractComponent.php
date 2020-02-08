@@ -178,7 +178,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getComponent($name)
     {
-        return isset($this->components[$name]) ? $this->components[$name] : null;
+        return $this->components[$name] ?? null;
     }
 
     /**

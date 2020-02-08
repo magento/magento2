@@ -156,10 +156,10 @@ class AttributeRepository
      * Return customer group's metadata by given group code
      *
      * @param string $code
-     * @return []
+     * @return string null
      */
     public function getMetadataByCode($code)
     {
-        return isset($this->getList()[$code]) ? $this->getList()[$code] : null;
+        return $this->getList()[$code] ?? null;
     }
 }

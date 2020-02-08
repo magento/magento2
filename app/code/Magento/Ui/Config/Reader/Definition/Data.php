@@ -123,7 +123,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     public function get($key, $default = null)
     {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
+        return $this->data[$key] ?? $default;
     }
 
     /**

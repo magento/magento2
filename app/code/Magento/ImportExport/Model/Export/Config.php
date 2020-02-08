@@ -48,7 +48,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
     public function getEntityTypes($entity)
     {
         $entities = $this->getEntities();
-        return isset($entities[$entity]) ? $entities[$entity]['types'] : [];
+        return $entities[$entity]['types'] ?? [];
     }
 
     /**
