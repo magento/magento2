@@ -18,5 +18,5 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Security\Api\Data\UserExpirationInterface" type="Magento\Security\Model\UserExpiration"/>
+    <preference for="Magento\Security\Model\UserExpirationInterface" type="Magento\Security\Model\UserExpiration"/>
 </config>

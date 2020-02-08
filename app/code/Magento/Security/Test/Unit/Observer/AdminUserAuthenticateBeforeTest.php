@@ -48,7 +48,7 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
     private $eventMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Model\UserExpiration
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Model\UserExpirationInterface
      */
     private $userExpirationMock;
 
@@ -77,8 +77,8 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
         $this->eventObserverMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getUsername']);
         $this->userExpirationMock = $this->createPartialMock(
-            \Magento\Security\Model\UserExpiration::class,
-            ['getId', 'getExpiresAt', 'setId', 'setExpiresAt']
+            \Magento\Security\Model\UserExpirationInterface::class,
+            ['getUserId', 'getExpiresAt', 'setUserId', 'setExpiresAt']
         );
     }
 

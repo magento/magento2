@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Security\Api\Data;
+namespace Magento\Security\Model;
 
 /**
  * Interface UserExpirationInterface to be used as a DTO for expires_at property on User model.

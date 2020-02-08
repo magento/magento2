@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Security\Model\ResourceModel\UserExpiration;
 
 /**
- * Class CollectionTest
+ * Test UserExpiration collection filters.
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {

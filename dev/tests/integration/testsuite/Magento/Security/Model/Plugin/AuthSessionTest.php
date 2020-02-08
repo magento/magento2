@@ -159,8 +159,9 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\User\Model\User $user */
         $user = $this->objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $userExpirationFactory = $this->objectManager->create(\Magento\Security\Model\UserExpirationFactory::class);
-        /** @var \Magento\Security\Model\UserExpiration $userExpiration */
+        $userExpirationFactory =
+            $this->objectManager->create(\Magento\Security\Model\UserExpirationInterfaceFactory::class);
+        /** @var \Magento\Security\Model\UserExpirationInterface $userExpiration */
         $userExpiration = $userExpirationFactory->create();
         $userExpiration->setId($user->getId())
             ->setExpiresAt($expireDate->format('Y-m-d H:i:s'))

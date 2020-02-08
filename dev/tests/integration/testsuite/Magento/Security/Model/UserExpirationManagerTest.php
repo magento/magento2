@@ -156,8 +156,8 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
     {
         $expireDate = new \DateTime();
         $expireDate->modify('-10 days');
-        /** @var \Magento\Security\Model\UserExpiration $userExpiration */
-        $userExpiration = $this->objectManager->create(\Magento\Security\Model\UserExpiration::class);
+        /** @var \Magento\Security\Model\UserExpirationInterface $userExpiration */
+        $userExpiration = $this->objectManager->create(\Magento\Security\Model\UserExpirationInterface::class);
         $userExpiration->setId($user->getId())
             ->setExpiresAt($expireDate->format('Y-m-d H:i:s'))
             ->save();

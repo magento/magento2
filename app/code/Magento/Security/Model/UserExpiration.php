@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
-use Magento\Security\Api\Data\UserExpirationInterface;
-
 /**
  * Admin User Expiration model.
  */

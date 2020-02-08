@@ -24,7 +24,7 @@ class AdminUserForm
     private $userExpirationResource;
 
     /**
-     * @var \Magento\Security\Model\UserExpirationFactory
+     * @var \Magento\Security\Model\UserExpirationInterfaceFactory
      */
     private $userExpirationFactory;
 
