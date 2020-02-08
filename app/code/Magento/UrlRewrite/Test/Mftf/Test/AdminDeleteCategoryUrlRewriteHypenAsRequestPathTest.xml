@@ -14,6 +14,7 @@
             <title value="Delete category URL rewrite, hyphen as request path"/>
             <description value="Delete category URL rewrite, hyphen as request path"/>
             <testCaseId value="MC-5348" />
+            <severity value="MAJOR"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
         </annotations>

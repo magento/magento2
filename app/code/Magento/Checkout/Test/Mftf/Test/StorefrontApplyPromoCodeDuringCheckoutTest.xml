@@ -54,7 +54,7 @@
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
 
-         <!-- Click Apply Discount Code: section is expanded. Input promo code, apply and see success message -->
+        <!-- Click Apply Discount Code: section is expanded. Input promo code, apply and see success message -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
             <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
         </actionGroup>
