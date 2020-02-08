@@ -5,15 +5,17 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message\Media\Synchronization;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_syncFlagMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_fileStorage;
 

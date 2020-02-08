@@ -9,6 +9,8 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Model;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 class NotificationServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -21,7 +23,7 @@ class NotificationServiceTest extends \PHPUnit\Framework\TestCase
     {
         /**
          * @var
-         *  $notificationFactory \PHPUnit_Framework_MockObject_MockObject|\Magento\AdminNotification\Model\InboxFactory
+         *  $notificationFactory MockObject|\Magento\AdminNotification\Model\InboxFactory
          */
         $notificationFactory = $this->createPartialMock(
             \Magento\AdminNotification\Model\InboxFactory::class,

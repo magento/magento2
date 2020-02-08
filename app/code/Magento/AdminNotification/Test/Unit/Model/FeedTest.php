@@ -8,6 +8,7 @@ namespace Magento\AdminNotification\Test\Unit\Model;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -20,34 +21,34 @@ class FeedTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\AdminNotification\Model\InboxFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\AdminNotification\Model\InboxFactory|MockObject */
     protected $inboxFactory;
 
-    /** @var \Magento\AdminNotification\Model\Inbox|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\AdminNotification\Model\Inbox|MockObject */
     protected $inboxModel;
 
-    /** @var \Magento\Framework\HTTP\Adapter\CurlFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\HTTP\Adapter\CurlFactory|MockObject */
     protected $curlFactory;
 
-    /** @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\HTTP\Adapter\Curl|MockObject */
     protected $curl;
 
-    /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\ConfigInterface|MockObject */
     protected $backendConfig;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\CacheInterface|MockObject */
     protected $cacheManager;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\State|MockObject */
     protected $appState;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\DeploymentConfig|MockObject */
     protected $deploymentConfig;
 
-    /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ProductMetadata|MockObject */
     protected $productMetadata;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|MockObject */
     protected $urlBuilder;
 
     protected function setUp()

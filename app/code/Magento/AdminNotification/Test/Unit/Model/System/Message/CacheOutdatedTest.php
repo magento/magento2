@@ -5,20 +5,22 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheTypeListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_urlInterfaceMock;
 
