@@ -75,6 +75,28 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
+     * Convert the custom attributes array format to map format
+     *
+     * The method \Magento\Framework\Reflection\DataObjectProcessor::buildOutputDataArray generates a custom_attributes
+     * array representation where each custom attribute is a sub-array with a `attribute_code and value key.
+     * This method maps such an array to the plain code => value map format exprected by filterCustomAttributes
+     *
+     * @param array[] $customAttributesData
+     * @return array
+     */
+    private function flattenCustomAttributesArrayToMap(array $customAttributesData): array
+    {
+        return array_reduce(
+            $customAttributesData,
+            function (array $acc, array $customAttribute): array {
+                $acc[$customAttribute['attribute_code']] = $customAttribute['value'];
+                return $acc;
+            },
+            []
+        );
+    }
+
+    /**
      * Verify custom attributes set on $data and unset if not a valid custom attribute
      *
      * @param array $data
@@ -85,9 +107,12 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (empty($data[self::CUSTOM_ATTRIBUTES])) {
             return $data;
         }
-        $customAttributesCodes = $this->getCustomAttributesCodes();
+        if (isset($data[self::CUSTOM_ATTRIBUTES][0])) {
+            $data[self::CUSTOM_ATTRIBUTES] = $this->flattenCustomAttributesArrayToMap($data[self::CUSTOM_ATTRIBUTES]);
+        }
+        $customAttributesCodes         = $this->getCustomAttributesCodes();
         $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
-            (array)$data[self::CUSTOM_ATTRIBUTES],
+            (array) $data[self::CUSTOM_ATTRIBUTES],
             array_flip($customAttributesCodes)
         );
         foreach ($data[self::CUSTOM_ATTRIBUTES] as $code => $value) {
@@ -102,8 +127,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * Initialize customAttributes based on existing data
-     *
-     * @return $this
      */
     protected function initializeCustomAttributes()
     {
