@@ -2335,7 +2335,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->getTypeInstance()->setImageFromChildProduct($this);
 
-        return (string)$this->getData('image');
+        return $this->getData('image');
     }
 
     /**
