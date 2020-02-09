@@ -51,7 +51,7 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        <comment userInput="remove me" stepKey="disableWYSIWYG"/>
 
         <!-- Create new virtual product -->
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createVirtualProduct">
@@ -185,6 +185,6 @@
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
 
-        <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+        <comment userInput="remove me" stepKey="enableWYSIWYG"/>
     </test>
 </tests>

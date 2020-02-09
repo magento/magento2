@@ -72,6 +72,8 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
