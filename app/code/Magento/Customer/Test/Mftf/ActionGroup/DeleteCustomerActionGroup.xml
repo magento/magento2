@@ -28,5 +28,6 @@
         <waitForPageLoad stepKey="waitForDeleteItemPopup" time="10"/>
         <click stepKey="clickOnOk" selector="{{CustomersPageSection.ok}}"/>
         <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="10"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>
