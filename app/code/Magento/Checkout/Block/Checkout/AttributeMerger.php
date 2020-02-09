@@ -197,7 +197,7 @@ class AttributeMerger
                 ? $additionalConfig['sortOrder']
                 : $attributeConfig['sortOrder'],
             'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
-            'options' => $this->getFieldOptions($attributeConfig),
+            'options' => $this->getFieldOptions($attributeCode, $attributeConfig),
             'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
             'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
@@ -385,7 +385,7 @@ class AttributeMerger
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function getFieldOptions(array $attributeConfig)
+    protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
         return $attributeConfig['options'] ?? [];
     }
