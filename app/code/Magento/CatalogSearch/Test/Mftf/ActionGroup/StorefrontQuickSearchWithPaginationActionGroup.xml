@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontQuickSearchWithPaginationActionGroup">
+        <annotations>
+            <description>Navigate to catalog search page with prepared GET params to get search results with particular page number.</description>
+        </annotations>
+        <arguments>
+            <argument name="phrase" type="string" defaultValue="{{_defaultProduct.name}}"/>
+            <argument name="pageNumber" type="string" defaultValue="1"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCatalogSearchPage.url}}?q={{phrase}}&amp;p={{pageNumber}}" stepKey="navigateToCatalogSearchPageWithPreparedRequest"/>
+        <waitForPageLoad stepKey="waitForCatalogSearchPageLoad"/>
+    </actionGroup>
+</actionGroups>
