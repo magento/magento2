@@ -29,6 +29,9 @@
         <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues" />
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton" />
         <actionGroup ref="VerifyCreatedCmsPage" stepKey="verifyCmsPage" />
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
+            <argument name="UrlKey" value="{{_defaultCmsPage.identifier}}"/>
+        </actionGroup>
     </test>
     <test name="AdminConfigDefaultCMSPageLayoutFromConfigurationSettingTest">
         <annotations>
