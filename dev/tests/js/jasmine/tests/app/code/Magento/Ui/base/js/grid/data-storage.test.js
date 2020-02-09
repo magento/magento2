@@ -7,257 +7,186 @@
 /*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
 define([
     'jquery',
-    'mageUtils',
-    'underscore',
     'Magento_Ui/js/grid/data-storage'
-], function ($, utils, _, DataStorage) {
+], function ($, DataStorage) {
     'use strict';
 
     describe('Magento_Ui/js/grid/data-storage', function () {
 
-        describe('constructor', function () {
-            it('converts dataScope property to array', function () {
+        describe('"initConfig" method', function () {
+
+            it('returns self', function () {
+                var model = new DataStorage({
+                    dataScope: 'magento'
+                });
+
+                expect(model.initConfig()).toEqual(model);
+            });
+
+            it('changes string dataScope property to an array', function () {
                 var model = new DataStorage({
                     dataScope: 'magento'
                 });
 
                 expect(model.dataScope).toEqual(['magento']);
             });
-        });
 
-        describe('"initConfig" method', function () {
+            it('changes empty string dataScope property to an empty array', function () {
+                var model = new DataStorage({
+                    dataScope: ''
+                });
 
-            var model = new DataStorage({
-                dataScope: 'magento'
+                expect(model.dataScope).toEqual([]);
             });
 
-            it('Check returned value type if method called without arguments', function () {
-                var type = typeof model.initConfig();
+            it('doesn\'t change non-string dataScope property', function () {
+                var testScope = {
+                        testKey: 'test value'
+                    },
+                    model = new DataStorage({
+                        dataScope: testScope
+                    });
 
-                expect(type).toEqual('object');
+                expect(model.dataScope).toEqual(testScope);
             });
 
-            it('Check this.dataScope property (is modify in initConfig method)', function () {
-                model.dataScope = null;
-                model.initConfig();
-                expect(typeof model.dataScope).toEqual('object');
-            });
-
-            it('Check this._requests property (is modify in initConfig method)', function () {
+            it('initializes _requests property as an empty array', function () {
+                var model = new DataStorage();
                 model._requests = null;
                 model.initConfig();
-                expect(typeof model._requests).toEqual('object');
+                expect(model._requests).toEqual([]);
             });
         });
 
         describe('"getByIds" method', function () {
 
-            var model = new DataStorage({
-                dataScope: 'magento'
+            it('returns false if data for ids is missing', function () {
+                var model = new DataStorage();
+
+                expect(model.getByIds([1,2,3])).toEqual(false);
             });
 
-            it('check returned type if method called with argument', function () {
-                var ids = [1,2,3],
-                    type = typeof model.getByIds(ids);
-
-                expect(type).toEqual('boolean');
-            });
-
-            it('Return false if "getByIds" has been called', function () {
-                var ids = [1,2,3];
-
-                expect(model.getByIds(ids)).toEqual(false);
-            });
-
-            it('Return array if "getByIds" has been called', function () {
-                var ids = [1],
-                    expectedValue = [
-                        {
-                            id_field_name: 'entity_id',
-                            entity_id: '1'
+            it('returns array of items', function () {
+                var item = {
+                        id_field_name: 'entity_id',
+                        entity_id: '1'
+                    },
+                    model = new DataStorage({
+                        data: {
+                            1: item
                         }
-                    ];
+                    });
 
-                model = new DataStorage({
-                    dataScope: 'magento',
-                    data: {
-                        1: {
-                            id_field_name: 'entity_id',
-                            entity_id: '1'
-                        }
-                    }
-                });
-
-                expect(model.getByIds(ids)).toEqual(expectedValue);
+                expect(model.getByIds([1])).toEqual([item]);
             });
 
         });
 
         describe('"getIds" method', function () {
 
-            var model = new DataStorage({
-                dataScope: 'magento'
+            it('returns an array of entity_id\'s from provided data', function () {
+                var model = new DataStorage(),
+                    ids = [
+                        {
+                            id_field_name: 'entity_id',
+                            entity_id: '1'
+                        },
+                        {
+                            id_field_name: 'entity_id',
+                            entity_id: '54'
+                        }
+                    ];
+
+                expect(model.getIds(ids)).toEqual(['1', '54']);
             });
 
-            it('check array of entity_id will return', function () {
-                var ids = [
-                    {
-                        id_field_name: 'entity_id',
-                        entity_id: '1'
-                    }
-                ],
-                expectedValue = ['1'];
-                expect(model.getIds(ids)).toEqual(expectedValue);
+            it('returns an array of entity_id\'s from stored data if no arguments provided', function () {
+                var model = new DataStorage({
+                        data: {
+                            1: {
+                                id_field_name: 'entity_id',
+                                entity_id: '1'
+                            },
+                            2: {
+                                id_field_name: 'entity_id',
+                                entity_id: '42'
+                            },
+                        }
+                    });
+
+                expect(model.getIds()).toEqual(['1', '42']);
             });
 
         });
 
         describe('"getData" method', function () {
 
-            var model = new DataStorage({
-                dataScope: 'magento'
-            });
+            var model = new DataStorage();
 
-            it('check returned type if method called with argument', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
-                    },
-                    sorting: {},
-                    paging: {}
-                },
-                    type = typeof model.getData(params);
-
-                expect(type).toEqual('object');
-            });
-
-            it('check "clearRequests" has been called', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
-                    },
-                    sorting: {},
-                    paging: {}
-                };
+            it('returns the result of requestData method if scope have been changed', function () {
+                var requestDataResult = 'requestDataResult';
 
                 spyOn(model, 'clearRequests');
-                spyOn(model, 'hasScopeChanged').and.callFake(function () {
-                    return true;
-                });
-                model.getData(params);
+                spyOn(model, 'hasScopeChanged').and.returnValue(true);
+                spyOn(model, 'requestData').and.returnValue(requestDataResult);
+                expect(model.getData()).toEqual(requestDataResult);
                 expect(model.clearRequests).toHaveBeenCalled();
             });
 
-            it('check "getRequest" has been called', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
-                    },
-                    sorting: {},
-                    paging: {}
-                };
+            it('returns the cached result if scope have not been changed', function () {
+                var cachedRequestDataResult = 'cachedRequestDataResult';
 
-                spyOn(model, 'getRequest');
-                spyOn(model, 'hasScopeChanged').and.callFake(function () {
-                    return false;
-                });
-                model.getData(params);
-                expect(model.getRequest).toHaveBeenCalled();
+                spyOn(model, 'clearRequests');
+                spyOn(model, 'requestData');
+                spyOn(model, 'hasScopeChanged').and.returnValue(false);
+                spyOn(model, 'getRequest').and.returnValue(true);
+                spyOn(model, 'getRequestData').and.returnValue(cachedRequestDataResult);
+
+                expect(model.getData()).toEqual(cachedRequestDataResult);
+                expect(model.clearRequests).not.toHaveBeenCalled();
+                expect(model.requestData).not.toHaveBeenCalled();
             });
 
-            it('it returns cached request data if a cached request exists and no refresh option is provided', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
-                    },
-                    sorting: {},
-                    paging: {}
-                },
-                    options = {
-                        refresh: false
-                    };
-
-                spyOn(model, 'getRequestData');
-                spyOn(model, 'getRequest').and.callFake(function () {
-                    return true;
-                });
-                model.getData(params, options);
-                expect(model.getRequestData).toHaveBeenCalled();
-            });
-
-            it('if refresh option is true so it will ignore cache and execute the requestData function', function () {
-                var params = {
-                        namespace: 'magento',
-                        search: '',
-                        filters: {
-                            store_id: 0
-                        },
-                        sorting: {},
-                        paging: {}
-                    },
+            it('returns the result of requestData method if refresh option is provided', function () {
+                var requestDataResult = 'requestDataResult',
                     options = {
                         refresh: true
                     };
 
-                spyOn(model, 'requestData');
-                spyOn(model, 'getRequest').and.callFake(function () {
-                    return false;
-                });
-                model.getData(params, options);
-                expect(model.requestData).toHaveBeenCalled();
+                spyOn(model, 'getRequest').and.returnValue(true);
+                spyOn(model, 'clearRequests');
+                spyOn(model, 'hasScopeChanged').and.returnValue(true);
+                spyOn(model, 'requestData').and.returnValue(requestDataResult);
+                expect(model.getData({}, options)).toEqual(requestDataResult);
+                expect(model.clearRequests).toHaveBeenCalled();
             });
 
         });
 
         describe('"hasScopeChanged" method', function () {
-            it('is function', function () {
-                var model = new DataStorage({
-                    dataScope: ''
-                });
-
-                expect(model.hasScopeChanged).toBeDefined();
-                expect(typeof model.hasScopeChanged).toEqual('function');
-            });
 
             it('returns false if no requests have been made', function () {
-                var model = new DataStorage({
-                    dataScope: ''
-                });
+                var model = new DataStorage();
 
                 expect(model.hasScopeChanged()).toBeFalsy();
             });
 
-            it('tells whether parameters defined in the dataScope property have changed', function () {
-                var params, newParams, model;
-
-                params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
+            it('returns true for not cached params', function () {
+                var params = {
+                        search: '1',
+                        filters: {
+                            store_id: 0
+                        }
                     },
-                    sorting: {},
-                    paging: {}
-                };
-
-                newParams = utils.extend({}, params, {
-                    search: 'magento',
-                    filters: {
-                        store_id: 1
-                    }
-                });
-
-                model = new DataStorage({
-                    dataScope: 'filters.store_id'
-                });
+                    newParams = {
+                        search: '2',
+                        filters: {
+                            store_id: 1
+                        }
+                    },
+                    model = new DataStorage({
+                        dataScope: 'filters.store_id'
+                    });
 
                 model.cacheRequest({
                     totalRecords: 0
@@ -275,50 +204,47 @@ define([
                     url: 'magento.com',
                     method: 'GET',
                     dataType: 'json'
+                },
+                data: {
+                    1: {
+                        id_field_name: 'entity_id',
+                        entity_id: '1',
+                        field: 'value'
+                    },
                 }
             });
 
-            it('Check updateData has been called', function () {
+            it('updates data items', function () {
                 var data = [{
                     id_field_name: 'entity_id',
-                    entity_id: '1'
+                    entity_id: '1',
+                    field: 'updatedValue'
                 }];
 
-                expect(model.updateData(data)).toBeTruthy();
+                expect(model.updateData(data)).toEqual(model);
+                expect(model.getByIds([1])).toEqual(data);
             });
         });
 
         describe('"requestData" method', function () {
-            var model = new DataStorage({
-                dataScope: 'magento'
-            });
+            var model = new DataStorage();
 
             it('Check Ajax request', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    filters: {
-                        store_id: 0
-                    },
-                    sorting: {},
-                    paging: {}
-                },
-                query = utils.copy(params);
+                var result = 'result';
 
-                spyOn(model, 'onRequestComplete');
-                spyOn($, 'ajax').and.callFake(function () {
-                    return {
-                        /**
-                         * Success result for ajax request
-                         */
-                        done: function () {
-                            model.onRequestComplete(model, query);
-                        }
-                    };
+                spyOn(model, 'onRequestComplete').and.returnValue(result);
+                spyOn($, 'ajax').and.returnValue({
+                    /**
+                     * Success result for ajax request
+                     *
+                     * @param handler
+                     * @returns {*}
+                     */
+                    done: function (handler) {
+                        return handler();
+                    }
                 });
-                model.requestData(params);
-                expect($.ajax).toHaveBeenCalled();
-                expect(model.onRequestComplete).toHaveBeenCalled();
+                expect(model.requestData({})).toEqual(result);
             });
         });
 
@@ -327,72 +253,54 @@ define([
                 dataScope: 'magento'
             });
 
-            it('check "getRequest" has been executed', function () {
+            it('returns cached request', function () {
                 var params = {
-                    namespace: 'magento',
-                    search: '',
-                    sorting: {},
-                    paging: {}
-                };
+                        namespace: 'magento',
+                        search: '',
+                        sorting: {},
+                        paging: {}
+                    },
+                    request = {
+                        ids: ['1'],
+                        params: params,
+                        totalRecords: 1,
+                        errorMessage: ''
+                    };
 
-                model._requests.push({
-                    ids: ['1'],
-                    params: params,
-                    totalRecords: 1,
-                    errorMessage: ''
-                });
-                expect(model.getRequest(params)).toBeTruthy();
+                model._requests.push(request);
+                expect(model.getRequest(params)).toEqual(request);
             });
         });
 
         describe('"getRequestData" method', function () {
-            var model = new DataStorage({
-                dataScope: 'magento'
-            });
-
-            it('check "getRequestData" has been executed', function () {
+            it('returns request data', function () {
                 var request = {
-                    ids: [1,2,3]
-                };
-
-                expect(model.getRequestData(request)).toBeTruthy();
-            });
-
-            it('check "getByIds" has been executed', function () {
-                var request = {
-                    ids: [1,2,3]
-                };
-
-                spyOn(model, 'getByIds');
-                model.getRequestData(request);
-                expect(model.getByIds).toHaveBeenCalled();
-            });
-
-            it('check "delay" function has been executed', function () {
-                var request = {
-                    ids: [1,2,3],
-                    totalRecords: 3,
-                    errorMessage: ''
-                };
-
-                spyOn(_, 'delay');
-                model.getRequestData(request);
-                expect(_.delay).toHaveBeenCalled();
-            });
-
-            it('check "delay" function has not been executed', function () {
-                var request = {
-                        ids: [1,2,3],
-                        totalRecords: 3,
+                        ids: [1,2],
+                        totalRecords: 2,
                         errorMessage: ''
-                    };
-                model = new DataStorage({
-                    dataScope: 'magento',
-                    cachedRequestDelay: 0
-                });
-                spyOn(_, 'delay');
-                model.getRequestData(request);
-                expect(_.delay).not.toHaveBeenCalled();
+                    },
+                    items = [
+                        {
+                            id_field_name: 'entity_id',
+                            entity_id: '1'
+                        },
+                        {
+                            id_field_name: 'entity_id',
+                            entity_id: '2'
+                        }
+                    ],
+                    result = {
+                        items: items,
+                        totalRecords: 2,
+                        errorMessage: ''
+                    },
+                    model = new DataStorage({
+                        cachedRequestDelay: 0
+                    });
+                spyOn(model, 'getByIds').and.returnValue(items);
+                model.getRequestData(request).then(function (promiseResult) {
+                    expect(promiseResult).toEqual(result)
+                })
             });
         });
 
@@ -401,73 +309,83 @@ define([
                 dataScope: 'magento'
             });
 
-            it('check "model._requests"', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: '',
-                    sorting: {},
-                    paging: {}
-                },
-                data = {
-                    items: ['1','2','3'],
-                    totalRecords: 3
-                };
-
-                spyOn(model, 'removeRequest');
-                spyOn(model, 'getIds').and.callFake(function () {
-                    return ['1','2','3'];
-                });
-                model.cacheRequest(data, params);
-                expect(typeof model._requests).toEqual('object');
-                expect(model.getIds).toHaveBeenCalled();
-                expect(model.removeRequest).not.toHaveBeenCalled();
-            });
-
-            it('check "removeRequest" is executed', function () {
+            it('adds the request to the cache', function () {
                 var params = {
                         namespace: 'magento',
                         search: '',
                         sorting: {},
                         paging: {}
                     },
+                    ids = ['1','2','3'],
                     data = {
-                        items: ['1','2','3'],
-                        totalRecords: 3
+                        items: ids,
+                        totalRecords: 3,
+                        errorMessage: ''
+                    },
+                    request = {
+                        ids: ids,
+                        params: params,
+                        totalRecords: 3,
+                        errorMessage: ''
                     };
 
                 spyOn(model, 'removeRequest');
-                spyOn(model, 'getRequest').and.callFake(function () {
-                    return true;
-                });
-                spyOn(model, 'getIds').and.callFake(function () {
-                    return ['1','2','3'];
-                });
+                spyOn(model, 'getIds').and.returnValue(ids);
                 model.cacheRequest(data, params);
-                expect(typeof model._requests).toEqual('object');
-                expect(model.getIds).toHaveBeenCalled();
-                expect(model.removeRequest).toHaveBeenCalled();
+                expect(model.getRequest(params)).toEqual(request);
+                expect(model.removeRequest).not.toHaveBeenCalled();
+            });
+
+            it('overwrites the previously cached request for the same params', function () {
+                var params = {
+                        namespace: 'magento',
+                        search: '',
+                        sorting: {},
+                        paging: {}
+                    },
+                    ids = ['1','2','3'],
+                    firstData = {
+                        items: ids,
+                        totalRecords: 3,
+                        errorMessage: ''
+                    },
+                    secondData = {
+                        items: ids,
+                        totalRecords: 3,
+                        errorMessage: 'Error message'
+                    },
+                    firstRequest = {
+                        ids: ids,
+                        params: params,
+                        totalRecords: 3,
+                        errorMessage: ''
+                    },
+                    secondRequest = {
+                        ids: ids,
+                        params: params,
+                        totalRecords: 3,
+                        errorMessage: 'Error message'
+                    };
+
+                spyOn(model, 'getIds').and.returnValue(ids);
+                model.cacheRequest(firstData, params);
+                expect(model.getRequest(params)).toEqual(firstRequest);
+                model.cacheRequest(secondData, params);
+                expect(model.getRequest(params)).toEqual(secondRequest);
             });
         });
 
         describe('"clearRequests" method', function () {
 
-            var model = new DataStorage({
-                dataScope: 'magento'
-            });
-
-            it('check "clearRequests" will empty _requests array', function () {
-                var params = {
-                    namespace: 'magento',
-                    search: 'magento',
-                    filters: {
-                        store_id: 1
-                    }
-                };
-
-                model = new DataStorage({
-                    dataScope: 'magento',
-                    _requests: []
-                });
+            it('removes all cached requests', function () {
+                var model = new DataStorage(),
+                    params = {
+                        namespace: 'magento',
+                        search: 'magento',
+                        filters: {
+                            store_id: 1
+                        }
+                    };
 
                 model._requests.push({
                     ids: ['1','2','3','4'],
@@ -482,26 +400,26 @@ define([
 
         describe('"removeRequest" method', function () {
 
-            var model = new DataStorage({
-                dataScope: 'magento'
-            });
+            var model = new DataStorage();
 
-            it('check "removeRequest" is defined', function () {
+            it('removes the request from the cache', function () {
                 var params = {
-                    namespace: 'magento',
-                    search: 'magento',
-                    filters: {
-                        store_id: 1
-                    }
-                },
-                request = [{
-                    ids: [1,2,3],
-                    params: params,
-                    totalRecords: 3,
-                    errorMessage: 'errorMessage'
-                }];
+                        namespace: 'magento',
+                        search: '',
+                        sorting: {},
+                        paging: {}
+                    },
+                    request = {
+                        ids: ['1','2','3'],
+                        params: params,
+                        totalRecords: 3,
+                        errorMessage: ''
+                    };
 
-                expect(model.removeRequest(request)).toBeDefined();
+                model._requests = [request];
+                expect(model.getRequest(params)).toEqual(request);
+                model.removeRequest(request);
+                expect(model.getRequest(params)).toBeFalsy();
             });
         });
 
@@ -510,7 +428,7 @@ define([
                 dataScope: 'magento'
             });
 
-            it('Return false if getRequest method returns false', function () {
+            it('returns false if request is not present in cache', function () {
                 var params = {
                     namespace: 'magento',
                     search: '',
@@ -518,61 +436,60 @@ define([
                     paging: {}
                 };
 
-                spyOn(model, 'getRequest').and.callFake(function () {
-                    return false;
-                });
                 expect(model.wasRequested(params)).toBeFalsy();
+            });
+
+            it('returns true if request is present in cache', function () {
+                var params = {
+                    namespace: 'magento',
+                    search: '',
+                    sorting: {},
+                    paging: {}
+                },
+                request = {
+                    ids: ['1','2','3'],
+                    params: params,
+                    totalRecords: 3,
+                    errorMessage: ''
+                };
+
+                model._requests = [request];
+
+                expect(model.wasRequested(params)).toBeTruthy();
             });
         });
 
         describe('"onRequestComplete" method', function () {
-            var model = new DataStorage({
-                dataScope: 'magento'
-            });
 
-            it('Check "updateData" method has been called', function () {
-                var data = {
-                    items: [{
-                        id_field_name: 'entity_id',
-                        entity_id: '1'
-                    }]
-                },
-                params = {
-                    namespace: 'magento',
-                    search: '',
-                    sorting: {},
-                    paging: {}
-                };
+            it('updates data and does not cache the request if caching is disabled', function () {
+                var model = new DataStorage({
+                        cacheRequests: false
+                    }),
+                    data = {
+                        items: []
+                    },
+                    params = {};
 
-                spyOn(model, 'updateData').and.callFake(function () {
-                    return data;
-                });
+                spyOn(model, 'updateData');
+                spyOn(model, 'cacheRequest');
                 model.onRequestComplete(params, data);
                 expect(model.updateData).toHaveBeenCalled();
+                expect(model.cacheRequest).not.toHaveBeenCalled();
             });
 
-            it('Check "cacheRequest" method has been called', function () {
-                var data = {
-                    items: [{
-                        id_field_name: 'entity_id',
-                        entity_id: '1'
-                    }]
-                },
-                params = {
-                    namespace: 'magento',
-                    search: '',
-                    sorting: {},
-                    paging: {}
-                };
+            it('updates data and adds the request to cache if caching is enabled', function () {
+                var model = new DataStorage({
+                        cacheRequests: true
+                    }),
+                    data = {
+                        items: []
+                    },
+                    params = {};
 
-                model = new DataStorage({
-                    dataScope: 'magento',
-                    cacheRequests: true
-                });
-                spyOn(model, 'cacheRequest').and.callFake(function () {
-                    return data;
-                });
+                spyOn(model, 'updateData');
+                spyOn(model, 'cacheRequest');
                 model.onRequestComplete(params, data);
+                expect(model.updateData).toHaveBeenCalled();
                 expect(model.cacheRequest).toHaveBeenCalled();
             });
         });
