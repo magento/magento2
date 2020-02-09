@@ -100,9 +100,9 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('get')
             ->withConsecutive(
-                [ 'category_id' => $categoryIds[0]],
-                [ 'category_id' => $categoryIds[1]],
-                [ 'category_id' => $categoryIds[2]]
+                [$categoryIds[0], $storeId],
+                [$categoryIds[1], $storeId],
+                [$categoryIds[2], $storeId],
             )
             ->will($this->returnValue($category));
         $this->categoryRegistry->expects($this->any())->method('getList')
