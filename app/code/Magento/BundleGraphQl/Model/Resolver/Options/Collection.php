@@ -115,7 +115,7 @@ class Collection
 
         $this->extensionAttributesJoinProcessor->process($optionsCollection);
         if (empty($optionsCollection->getData())) {
-            return null;
+            return [];
         }
 
         /** @var \Magento\Bundle\Model\Option $option */
