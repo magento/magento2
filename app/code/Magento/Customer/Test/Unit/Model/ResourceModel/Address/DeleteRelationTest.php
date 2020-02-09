@@ -35,12 +35,12 @@ class DeleteRelationTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteRelation($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        /** @var AbstractModel | \PHPUnit\Framework\MockObject\MockObject $addressModel  */
+        /** @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject $addressModel  */
         $addressModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIsCustomerSaveTransaction', 'getId', 'getResource'])
             ->getMock();
-        /** @var \Magento\Customer\Model\Customer | \PHPUnit\Framework\MockObject\MockObject $customerModel */
+        /** @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject $customerModel */
         $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultBilling', 'getDefaultShipping', 'getId'])

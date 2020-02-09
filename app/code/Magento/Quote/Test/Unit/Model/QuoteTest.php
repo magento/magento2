@@ -96,37 +96,37 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     protected $quotePaymentCollectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $criteriaBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensibleDataObjectConverterMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DataObject\Copy|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectCopyServiceMock;
 

@@ -16,7 +16,7 @@ class ExcelFactoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 

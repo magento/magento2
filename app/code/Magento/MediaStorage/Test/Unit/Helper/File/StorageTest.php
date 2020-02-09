@@ -14,16 +14,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage\File|\PHPUnit\Framework\MockObject\MockObject  */
     protected $filesystemStorageMock;
 
-    /** @var \Magento\MediaStorage\Helper\File\Storage\Database | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject  */
     protected $coreFileStorageDbMock;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage|\PHPUnit\Framework\MockObject\MockObject  */
     protected $storageMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $configMock;
 
     /** @var  Storage */

@@ -26,7 +26,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $websiteCollectionFactoryMock;
 
     /**
-     * @var Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appConfigMock;
 

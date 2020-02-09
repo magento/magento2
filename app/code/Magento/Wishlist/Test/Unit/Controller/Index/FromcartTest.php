@@ -31,52 +31,52 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var WishlistProviderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var WishlistProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistProvider;
 
     /**
-     * @var WishlistHelper | \PHPUnit\Framework\MockObject\MockObject
+     * @var WishlistHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistHelper;
 
     /**
-     * @var CheckoutCart | \PHPUnit\Framework\MockObject\MockObject
+     * @var CheckoutCart|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cart;
 
     /**
-     * @var CartHelper | \PHPUnit\Framework\MockObject\MockObject
+     * @var CartHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartHelper;
 
     /**
-     * @var Escaper | \PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
     /**
-     * @var Http | \PHPUnit\Framework\MockObject\MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var MessageManager | \PHPUnit\Framework\MockObject\MockObject
+     * @var MessageManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var ResultFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactory;
 
     /**
-     * @var ResultRedirect | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResultRedirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirect;
 

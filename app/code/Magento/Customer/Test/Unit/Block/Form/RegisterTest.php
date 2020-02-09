@@ -30,25 +30,25 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     const REGION_ID_ATTRIBUTE_VALUE = '12';
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Directory\Helper\Data */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Directory\Helper\Data */
     private $directoryHelperMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface */
     private $_scopeConfig;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\Manager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\Manager */
     private $_moduleManager;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Url */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Url */
     private $_customerUrl;
 
     /** @var Register */
     private $_block;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Newsletter\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Newsletter\Model\Config */
     private $newsletterConfig;
 
     protected function setUp()

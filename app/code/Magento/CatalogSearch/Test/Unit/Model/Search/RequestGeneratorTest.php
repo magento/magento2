@@ -20,7 +20,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator */
     protected $object;
 
-    /** @var  CollectionFactory | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  CollectionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $productAttributeCollectionFactory;
 
     protected function setUp()

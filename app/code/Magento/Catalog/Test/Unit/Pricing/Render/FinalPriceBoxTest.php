@@ -40,7 +40,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     protected $priceBox;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 

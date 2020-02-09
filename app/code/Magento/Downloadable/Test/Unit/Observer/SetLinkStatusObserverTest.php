@@ -24,32 +24,32 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
     private $setLinkStatusObserver;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|CollectionFactory
      */
     private $itemsFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\Observer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer
      */
     private $observerMock;
 

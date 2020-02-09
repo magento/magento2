@@ -20,7 +20,7 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
     private $aggregations = [];
 
     /**
-     * @var \Magento\Framework\Search\Response\QueryResponse | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Search\Response\QueryResponse|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryResponse;
 

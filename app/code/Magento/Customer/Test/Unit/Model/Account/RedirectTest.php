@@ -26,62 +26,62 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Session
      */
     protected $customerSession;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     protected $store;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\UrlInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\UrlInterface
      */
     protected $url;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Url\DecoderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Url\DecoderInterface
      */
     protected $urlDecoder;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Url
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Url
      */
     protected $customerUrl;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Controller\Result\Redirect
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\Redirect
      */
     protected $resultRedirect;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Controller\Result\Forward
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\Forward
      */
     protected $resultForward;
 
     /**
-     * @var ResultFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactory;
 
     /**
-     * @var HostChecker | \PHPUnit\Framework\MockObject\MockObject
+     * @var HostChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hostChecker;
 

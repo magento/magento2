@@ -17,7 +17,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $dirMock;
 
     /** @var  Media */

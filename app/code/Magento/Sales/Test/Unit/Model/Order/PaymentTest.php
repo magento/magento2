@@ -49,17 +49,17 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Directory\Model\PriceCurrency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \Magento\Directory\Model\Currency | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Directory\Model\Currency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyMock;
 
@@ -94,22 +94,22 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     protected $creditmemoFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditMemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
 
     protected $transactionBuilderMock;
@@ -1640,7 +1640,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
      */
     protected function mockGetDefaultStatus($state, $status, $allStatuses = [])
     {
-        /** @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject $orderConfigMock */
+        /** @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject $orderConfigMock */
         $orderConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStateStatuses', 'getStateDefaultStatus'])

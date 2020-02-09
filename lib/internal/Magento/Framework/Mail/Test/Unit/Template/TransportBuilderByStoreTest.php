@@ -16,12 +16,12 @@ class TransportBuilderByStoreTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Mail\Message | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Mail\Message|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageMock;
 
     /**
-     * @var \Magento\Framework\Mail\Template\SenderResolverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Mail\Template\SenderResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $senderResolverMock;
 

@@ -59,22 +59,22 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $option;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Bundle\Model\SelectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\SelectionFactory
      */
     protected $bundleSelectionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Bundle\Model\ResourceModel\BundleFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\ResourceModel\BundleFactory
      */
     protected $bundleFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\ResourceModel\Option\CollectionFactory
      */
     protected $optionCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 

@@ -8,16 +8,16 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 /** Test Magento\Customer\Model\Metadata\Form\Multiline */
 abstract class AbstractFormTestCase extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     protected $localeMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Locale\ResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Locale\ResolverInterface */
     protected $localeResolverMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Psr\Log\LoggerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface */
     protected $loggerMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
     protected $attributeMetadataMock;
 
     protected function setUp()

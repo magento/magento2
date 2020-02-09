@@ -89,22 +89,22 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         public static $isSetCookieInvoked;
 
         /**
-         * @var \Magento\Framework\App\Request\Http | \PHPUnit\Framework\MockObject\MockObject
+         * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
          */
         protected $requestMock;
 
         /**
-         * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit\Framework\MockObject\MockObject
+         * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface|\PHPUnit\Framework\MockObject\MockObject
          */
         protected $readerMock;
 
         /**
-         * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
+         * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
          */
         protected $loggerMock;
 
         /**
-         * @var HttpHeader | \PHPUnit\Framework\MockObject\MockObject
+         * @var HttpHeader|\PHPUnit\Framework\MockObject\MockObject
          */
         protected $httpHeaderMock;
 

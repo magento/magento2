@@ -26,7 +26,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
     protected $weeeCollector;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 

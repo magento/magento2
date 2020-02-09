@@ -23,7 +23,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     protected $quoteValidator;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 

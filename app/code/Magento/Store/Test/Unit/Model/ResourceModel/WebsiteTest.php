@@ -21,7 +21,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $resourceMock;
 
-    /** @var  Select | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
     /**

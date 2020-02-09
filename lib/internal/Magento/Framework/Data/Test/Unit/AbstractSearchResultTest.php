@@ -18,17 +18,17 @@ class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
     protected $searchResult;
 
     /**
-     * @var \Magento\Framework\DB\QueryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DB\QueryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $query;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactory;
 
     /**
-     * @var \Magento\Framework\Api\CriteriaInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Api\CriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $criteria;
 

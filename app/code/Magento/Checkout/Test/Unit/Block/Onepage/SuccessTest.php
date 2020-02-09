@@ -25,12 +25,12 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     protected $layout;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
     /**
-     * @var \Magento\Checkout\Model\Session | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 

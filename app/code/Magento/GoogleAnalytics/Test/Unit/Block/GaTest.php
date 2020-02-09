@@ -26,7 +26,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var Ga | \PHPUnit\Framework\MockObject\MockObject
+     * @var Ga|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $gaBlock;
 
@@ -220,7 +220,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Collection | \PHPUnit\Framework\MockObject\MockObject
+     * @return Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createCollectionMock()
     {

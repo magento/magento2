@@ -20,7 +20,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Escaper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Escaper
      */
     protected $escaper;
 

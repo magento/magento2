@@ -13,12 +13,12 @@ use \Magento\Framework\Pricing\Render\AbstractAdjustment;
 class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AbstractAdjustment | \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAdjustment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 

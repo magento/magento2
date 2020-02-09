@@ -45,7 +45,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\TranslateInterface */
     protected $_translatorMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Event\ManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface */
     protected $eventManagerMock;
 
     protected function setUp()

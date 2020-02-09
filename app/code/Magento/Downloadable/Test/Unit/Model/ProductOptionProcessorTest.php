@@ -20,27 +20,27 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var DataObject | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObject;
 
     /**
-     * @var DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObjectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectFactory;
 
     /**
-     * @var DataObjectHelper | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelper;
 
     /**
-     * @var DownloadableOptionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var DownloadableOptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadableOptionFactory;
 
     /**
-     * @var DownloadableOptionInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var DownloadableOptionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadableOption;
 

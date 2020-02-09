@@ -15,17 +15,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ToOrderPaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Api\OrderPaymentRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Api\OrderPaymentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderPaymentRepositoryMock;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DataObject\Copy|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Payment | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Quote\Model\Quote\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 

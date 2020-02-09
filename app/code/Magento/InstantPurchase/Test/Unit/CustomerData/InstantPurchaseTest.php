@@ -33,52 +33,52 @@ class InstantPurchaseTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CustomerData | \PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerData;
 
     /**
-     * @var Session | \PHPUnit\Framework\MockObject\MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSession;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var InstantPurchaseModel | \PHPUnit\Framework\MockObject\MockObject
+     * @var InstantPurchaseModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $instantPurchase;
 
     /**
-     * @var PaymentTokenFormatter | \PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentTokenFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentTokenFormatter;
 
     /**
-     * @var CustomerAddressesFormatter | \PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerAddressesFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressesFormatter;
 
     /**
-     * @var ShippingMethodFormatter | \PHPUnit\Framework\MockObject\MockObject
+     * @var ShippingMethodFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMethodFormatter;
 
     /**
-     * @var Store | \PHPUnit\Framework\MockObject\MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var Customer | \PHPUnit\Framework\MockObject\MockObject
+     * @var Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customer;
 
     /**
-     * @var InstantPurchaseOption | \PHPUnit\Framework\MockObject\MockObject
+     * @var InstantPurchaseOption|\PHPUnit\Framework\MockObject\MockObject
      */
     private $instantPurchaseOption;
 

@@ -19,22 +19,22 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var QuoteItemQtyList| \PHPUnit\Framework\MockObject\MockObject
+     * @var QuoteItemQtyList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemQtyList;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStateMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\StockStateProviderInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\CatalogInventory\Model\StockStateProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockStateProviderMock;
 

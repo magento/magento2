@@ -9,17 +9,17 @@ namespace Magento\Captcha\Test\Unit\Model\Customer\Plugin;
 class AjaxLoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Checkout\Model\Session
      */
     protected $sessionManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Captcha\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Captcha\Helper\Data
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Controller\Result\JsonFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\JsonFactory
      */
     protected $jsonFactoryMock;
 
@@ -39,12 +39,12 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Controller\Ajax\Login
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Controller\Ajax\Login
      */
     protected $loginControllerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Serialize\Serializer\Json
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Serialize\Serializer\Json
      */
     protected $serializerMock;
 

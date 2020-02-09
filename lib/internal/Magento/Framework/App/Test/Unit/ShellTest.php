@@ -11,10 +11,10 @@ use Magento\Framework\Shell\Response;
 
 class ShellTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Psr\Log\LoggerInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface */
     private $loggerMock;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Shell\Driver */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Shell\Driver */
     private $driverMock;
 
     /** @var  \Magento\Framework\App\Shell */

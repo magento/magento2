@@ -43,77 +43,77 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     private $address;
 
     /**
-     * @var \Magento\Quote\Model\Quote | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quote;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeList;
 
     /**
-     * @var \Magento\Framework\App\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var RateRequestFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var RateRequestFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestFactory;
 
     /**
-     * @var RateFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var RateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRateFactory;
 
     /**
-     * @var RateCollectionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var RateCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rateCollectionFactory;
 
     /**
-     * @var RateCollectorInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var RateCollectorInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rateCollector;
 
     /**
-     * @var RateCollectorInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var RateCollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rateCollection;
 
     /**
-     * @var CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemCollectionFactory;
 
     /**
-     * @var RegionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var RegionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $regionFactory;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var WebsiteInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var WebsiteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $website;
 
     /**
-     * @var Region | \PHPUnit\Framework\MockObject\MockObject
+     * @var Region|\PHPUnit\Framework\MockObject\MockObject
      */
     private $region;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 

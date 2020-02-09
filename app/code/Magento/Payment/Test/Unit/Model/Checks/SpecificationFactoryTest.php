@@ -16,7 +16,7 @@ class SpecificationFactoryTest extends \PHPUnit\Framework\TestCase
     const SPECIFICATION_KEY = 'specification';
 
     /**
-     * @var \Magento\Payment\Model\Checks\CompositeFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Payment\Model\Checks\CompositeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_compositeFactory;
 

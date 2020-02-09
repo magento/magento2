@@ -33,7 +33,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Model under test
      *
-     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Code\Generator\EntityAbstract|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 

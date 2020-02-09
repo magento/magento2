@@ -17,12 +17,12 @@ use Magento\Store\Model\Store;
 class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SubscriptionUpdateHandler | \PHPUnit\Framework\MockObject\MockObject
+     * @var SubscriptionUpdateHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionUpdateHandlerMock;
 
     /**
-     * @var Value | \PHPUnit\Framework\MockObject\MockObject
+     * @var Value|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configValueMock;
 

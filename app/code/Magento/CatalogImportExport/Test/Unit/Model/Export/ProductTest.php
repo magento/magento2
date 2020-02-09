@@ -103,7 +103,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $metadataPool;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $writer;
 

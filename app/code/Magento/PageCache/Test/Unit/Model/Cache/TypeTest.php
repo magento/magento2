@@ -10,10 +10,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Model\Cache\Type */
     protected $model;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\ManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface */
     protected $eventManagerMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Cache\Type\FrontendPool */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Type\FrontendPool */
     protected $cacheFrontendPoolMock;
 
     protected function setUp()

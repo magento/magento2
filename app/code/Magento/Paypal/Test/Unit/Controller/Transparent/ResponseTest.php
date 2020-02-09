@@ -49,7 +49,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     private $responseValidatorMock;
 
     /**
-     * @var Transparent | \PHPUnit\Framework\MockObject\MockObject
+     * @var Transparent|\PHPUnit\Framework\MockObject\MockObject
      */
     private $payflowFacade;
 
@@ -192,7 +192,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\View\Layout | \PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getLayoutMock()
     {

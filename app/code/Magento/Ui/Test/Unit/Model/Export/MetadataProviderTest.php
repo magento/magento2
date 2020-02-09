@@ -26,17 +26,17 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
+     * @var Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filter;
 
     /**
-     * @var TimezoneInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDate;
 
     /**
-     * @var ResolverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolver;
 

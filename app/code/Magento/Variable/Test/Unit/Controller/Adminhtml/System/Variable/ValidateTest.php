@@ -28,17 +28,17 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Variable\Controller\Adminhtml\System\Variable\Validate | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Variable\Controller\Adminhtml\System\Variable\Validate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validateMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 

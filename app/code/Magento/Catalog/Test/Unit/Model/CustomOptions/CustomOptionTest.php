@@ -17,14 +17,14 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var \Magento\Framework\Api\ExtensionAttributesFactory | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $extensionAttributesFactoryMock;
 
-    /** @var \Magento\Catalog\Api\Data\CustomOptionExtensionInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Catalog\Api\Data\CustomOptionExtensionInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $extensionMock;
 
     /**
-     * @var FileProcessor | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileProcessor;
 

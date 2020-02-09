@@ -44,7 +44,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Writer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 

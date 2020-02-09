@@ -28,42 +28,42 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var Session | \PHPUnit\Framework\MockObject\MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var AccountManagementInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var AccountManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var Url | \PHPUnit\Framework\MockObject\MockObject
+     * @var Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formkeyValidator;
 
     /**
-     * @var AccountRedirect | \PHPUnit\Framework\MockObject\MockObject
+     * @var AccountRedirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountRedirect;
 
     /**
-     * @var Http | \PHPUnit\Framework\MockObject\MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var Redirect | \PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirect;
 
@@ -78,12 +78,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
     protected $redirect;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 

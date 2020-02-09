@@ -32,10 +32,10 @@ class SeverityTest extends TestCase
     {
         parent::setUp();
 
-        /** @var Inbox |MockObject $inboxMock */
+        /** @var Inbox|MockObject $inboxMock */
         $inboxMock = $this->getMockBuilder(Inbox::class)->disableOriginalConstructor()->getMock();
 
-        /** @var Context | MockObject $contextMock */
+        /** @var Context|MockObject $contextMock */
         $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
 
         $this->sut = new Severity($contextMock, $inboxMock);
@@ -43,7 +43,7 @@ class SeverityTest extends TestCase
 
     public function testShouldRenderSeverity() : void
     {
-        /** @var Column | MockObject $columnMock */
+        /** @var Column|MockObject $columnMock */
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndex'])

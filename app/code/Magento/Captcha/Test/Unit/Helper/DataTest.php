@@ -23,12 +23,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Captcha\Model\CaptchaFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Captcha\Model\CaptchaFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 

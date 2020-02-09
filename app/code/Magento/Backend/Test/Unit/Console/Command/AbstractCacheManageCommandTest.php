@@ -13,7 +13,7 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
     /** @var  string */
     protected $cacheEventName;
 
-    /** @var  \Magento\Framework\Event\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventManagerMock;
 
     protected function setUp()

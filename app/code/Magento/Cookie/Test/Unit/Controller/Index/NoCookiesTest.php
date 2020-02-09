@@ -15,27 +15,27 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface
      */
     private $eventManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Response\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Response\Http
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Response\RedirectInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Response\RedirectInterface
      */
     private $redirectResponseMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\ViewInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ViewInterface
      */
     protected $viewMock;
 

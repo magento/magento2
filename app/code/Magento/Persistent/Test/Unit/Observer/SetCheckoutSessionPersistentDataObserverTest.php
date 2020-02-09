@@ -19,32 +19,32 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
     private $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Data| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Persistent\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Persistent\Helper\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionHelperMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Persistent\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $persistentSessionMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 

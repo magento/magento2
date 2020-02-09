@@ -13,7 +13,7 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * Payment data
      *
-     * @var \Magento\Payment\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paymentData;
 

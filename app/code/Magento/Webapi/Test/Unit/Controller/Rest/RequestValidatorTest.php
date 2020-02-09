@@ -34,7 +34,7 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
     private $authorizationMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Webapi\Controller\Rest\Router\Route
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Webapi\Controller\Rest\Router\Route
      */
     private $routeMock;
 

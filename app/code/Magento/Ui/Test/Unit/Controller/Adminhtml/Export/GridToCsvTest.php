@@ -18,17 +18,17 @@ class GridToCsvTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var ConvertToCsv | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConvertToCsv|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converter;
 
     /**
-     * @var FileFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactory;
 

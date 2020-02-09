@@ -58,27 +58,27 @@ class SaveTest extends TestCase
     ];
 
     /**
-     * @var MockObject | ResourceConnection
+     * @var MockObject|ResourceConnection
      */
     private $resourceConnectionMock;
 
     /**
-     * @var MockObject | DataExtractorInterface
+     * @var MockObject|DataExtractorInterface
      */
     private $loggerMock;
 
     /**
-     * @var MockObject | LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $extractorMock;
 
     /**
-     * @var MockObject | AdapterInterface
+     * @var MockObject|AdapterInterface
      */
     private $adapterMock;
 
     /**
-     * @var MockObject | AssetInterface
+     * @var MockObject|AssetInterface
      */
     private $mediaAssetMock;
 

@@ -17,37 +17,37 @@ use Magento\Framework\App\State;
 class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\AppInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\AppInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $application;
 
     /**
-     * @var \Magento\Framework\App\ObjectManagerFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\ObjectManagerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dirs;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configDir;
 
     /**
-     * @var MaintenanceMode | \PHPUnit\Framework\MockObject\MockObject
+     * @var MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $maintenanceMode;
 
@@ -57,12 +57,12 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     protected $deploymentConfig;
 
     /**
-     * @var \Magento\Framework\App\Bootstrap | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Bootstrap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bootstrapMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $remoteAddress;
 

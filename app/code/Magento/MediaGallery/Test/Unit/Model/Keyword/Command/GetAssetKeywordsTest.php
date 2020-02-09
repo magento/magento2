@@ -29,12 +29,12 @@ class GetAssetKeywordsTest extends TestCase
     private $sut;
 
     /**
-     * @var ResourceConnection | MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionStub;
 
     /**
-     * @var KeywordInterfaceFactory | MockObject
+     * @var KeywordInterfaceFactory|MockObject
      */
     private $assetKeywordFactoryStub;
 

@@ -19,7 +19,7 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     private $authorization;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Authorization\Model\UserContextInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Authorization\Model\UserContextInterface
      */
     private $userContextMock;
 

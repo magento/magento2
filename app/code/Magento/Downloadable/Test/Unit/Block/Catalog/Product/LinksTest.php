@@ -31,12 +31,12 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoder;
 

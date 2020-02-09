@@ -12,10 +12,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    /** @var \Magento\Framework\Json\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Framework\Json\DecoderInterface | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\Framework\Json\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $jsonDecoderMock;
 
     protected function setUp()

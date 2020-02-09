@@ -15,7 +15,7 @@ class PageCachePluginTest extends \PHPUnit\Framework\TestCase
     /** @var PageCachePlugin */
     private $plugin;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\PageCache\Cache*/
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\PageCache\Cache*/
     private $subjectMock;
 
     protected function setUp()

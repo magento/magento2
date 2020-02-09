@@ -21,12 +21,12 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
     private $rateRegistry;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\RateFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\Calculation\RateFactory
      */
     private $rateModelFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\Rate
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\Calculation\Rate
      */
     private $rateModelMock;
 

@@ -52,7 +52,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
     private $select;
 
     /**
-     * @var DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 

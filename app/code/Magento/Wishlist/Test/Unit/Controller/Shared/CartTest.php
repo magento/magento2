@@ -48,7 +48,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /** @var  CartHelper |\PHPUnit\Framework\MockObject\MockObject */
     protected $cartHelper;
 
-    /** @var  Quote | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Quote|\PHPUnit\Framework\MockObject\MockObject */
     protected $quote;
 
     /** @var  OptionCollection |\PHPUnit\Framework\MockObject\MockObject */

@@ -20,7 +20,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ConfigInterface
      */
     protected $securityConfigMock;
 

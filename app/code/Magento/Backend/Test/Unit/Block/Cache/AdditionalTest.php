@@ -19,7 +19,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\App\State | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 

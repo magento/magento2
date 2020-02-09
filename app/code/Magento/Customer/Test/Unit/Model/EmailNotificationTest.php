@@ -427,7 +427,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('resolve')
             ->with($sender, $defaultStoreId)
             ->willReturn($senderValues);
-        /** @var CustomerInterface | \PHPUnit\Framework\MockObject\MockObject $customer */
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')

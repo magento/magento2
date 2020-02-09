@@ -24,27 +24,27 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
-     *      | \PHPUnit\Framework\MockObject\MockObject
+     *     |\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attrOptionFactory;
 
     /**
-     * @var AbstractSource | \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractSource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 
     /**
-     * @var AbstractAttribute | \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractAttributeMock;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 

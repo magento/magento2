@@ -17,17 +17,17 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem\Directory\Write
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Write
      */
     protected $directoryWriteMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject |\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 

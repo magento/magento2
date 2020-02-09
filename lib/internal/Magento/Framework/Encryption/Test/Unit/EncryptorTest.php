@@ -46,7 +46,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->randomGeneratorMock = $this->createMock(Random::class);
-        /** @var DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject $deploymentConfigMock */
+        /** @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')

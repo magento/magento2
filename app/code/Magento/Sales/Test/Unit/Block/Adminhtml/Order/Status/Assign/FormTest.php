@@ -19,17 +19,17 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactory;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 

@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 class RequestQuantityProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResolverInterface | MockObject
+     * @var ResolverInterface|MockObject
      */
     private $localeResolver;
 

@@ -14,10 +14,10 @@ use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 
 class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    /** @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $securityConfigMock;
 
     /** @var  \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory */

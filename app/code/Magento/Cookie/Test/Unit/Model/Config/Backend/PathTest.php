@@ -13,10 +13,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PathTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject | CookiePathValidator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|CookiePathValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\ModuleResource */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\ModuleResource */
     private $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Path */

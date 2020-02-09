@@ -37,7 +37,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     private $responseMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Webapi\Controller\Rest\Router\Route
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Webapi\Controller\Rest\Router\Route
      */
     private $routeMock;
 
@@ -62,17 +62,17 @@ class RestTest extends \PHPUnit\Framework\TestCase
     private $serviceInputProcessorMock;
 
     /**
-     * @var \Magento\Webapi\Model\Rest\Swagger\Generator | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $swaggerGeneratorMock;
 
     /**
-     * @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
@@ -89,7 +89,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     private $asyncRequestProcessor;
 
     /**
-     * @var  \Magento\Webapi\Controller\Rest\RequestProcessorPool | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Webapi\Controller\Rest\RequestProcessorPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestProcessorPool;
 
@@ -274,7 +274,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Webapi\Controller\Rest\Router\Route | \PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Webapi\Controller\Rest\Router\Route|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getRouteMock()
     {

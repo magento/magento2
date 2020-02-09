@@ -12,16 +12,16 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
  */
 class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment|\PHPUnit\Framework\MockObject\MockObject */
     protected $reviewPayment;
 
-    /** @var  \Magento\Backend\App\Action\Context| \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
     /** @var  \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderMock;
 
-    /** @var  \Magento\Backend\Model\View\Result\RedirectFactory | \PHPUnit\Framework\MockObject\MockObject*/
+    /** @var  \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject*/
     protected $resultRedirectFactoryMock;
 
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */

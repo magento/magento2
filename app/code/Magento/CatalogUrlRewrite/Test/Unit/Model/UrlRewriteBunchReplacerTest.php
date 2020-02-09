@@ -11,7 +11,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 class UrlRewriteBunchReplacerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var UrlPersistInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlPersistMock;
 

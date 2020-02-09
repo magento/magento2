@@ -21,7 +21,7 @@ class LogLastLoginAtObserverTest extends \PHPUnit\Framework\TestCase
     protected $logLastLoginAtObserver;
 
     /**
-     * @var Logger | \PHPUnit\Framework\MockObject\MockObject
+     * @var Logger|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 

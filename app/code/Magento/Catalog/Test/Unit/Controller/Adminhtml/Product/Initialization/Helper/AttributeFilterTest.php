@@ -47,7 +47,7 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $expectedProductData,
         $initialProductData
     ) {
-        /** @var MockObject | Product $productMockMap */
+        /** @var MockObject|Product $productMockMap */
         $productMockMap = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'getAttributes'])
@@ -225,7 +225,7 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $returnArray = [];
         foreach ($useDefaults as $attributecode => $isDefault) {
             if ($isDefault === '1') {
-                /** @var Attribute | MockObject $attribute */
+                /** @var Attribute|MockObject $attribute */
                 $attribute = $this->getMockBuilder(Attribute::class)
                     ->disableOriginalConstructor()
                     ->getMock();

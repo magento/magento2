@@ -21,42 +21,42 @@ class AreaTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigLoader | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\ObjectManager\ConfigLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $diConfigLoaderMock;
 
     /**
-     * @var \Magento\Framework\TranslateInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translatorMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\DesignInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designMock;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \Magento\Framework\View\DesignExceptions | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\DesignExceptions|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designExceptionsMock;
 

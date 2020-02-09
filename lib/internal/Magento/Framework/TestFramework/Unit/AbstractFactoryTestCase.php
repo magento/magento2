@@ -29,7 +29,7 @@ abstract class AbstractFactoryTestCase extends \PHPUnit\Framework\TestCase
     protected $instanceClassName;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 

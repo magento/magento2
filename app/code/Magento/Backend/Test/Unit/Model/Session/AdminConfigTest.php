@@ -12,12 +12,12 @@ namespace Magento\Backend\Test\Unit\Model\Session;
 class AdminConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\ValidatorFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\ValidatorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorFactory;
 
@@ -27,7 +27,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Backend\Model\UrlFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Backend\Model\UrlFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backendUrlFactory;
 

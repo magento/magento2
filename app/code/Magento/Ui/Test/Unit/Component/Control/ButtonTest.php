@@ -21,19 +21,19 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     protected $button;
 
     /**
-     * @var Context| \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UrlInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
      * Escaper
      *
-     * @var Escaper| \PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 

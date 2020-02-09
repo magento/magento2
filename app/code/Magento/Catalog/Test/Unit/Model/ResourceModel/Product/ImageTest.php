@@ -28,17 +28,17 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var AdapterInterface | MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var Generator | MockObject
+     * @var Generator|MockObject
      */
     protected $generatorMock;
 
     /**
-     * @var ResourceConnection | MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
@@ -208,7 +208,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('fetchAll')
             ->will($this->returnCallback($fetchResultsCallback));
 
-        /** @var Select | MockObject $selectMock */
+        /** @var Select|MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -255,7 +255,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('fetchAll')
             ->will($this->returnCallback($fetchResultsCallback));
 
-        /** @var Select | MockObject $selectMock */
+        /** @var Select|MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -318,7 +318,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param Select | MockObject $selectMock
+     * @param Select|MockObject $selectMock
      * @param int $batchCount
      * @return \Closure
      */

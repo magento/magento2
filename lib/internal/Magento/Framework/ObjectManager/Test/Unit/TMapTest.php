@@ -14,12 +14,12 @@ require_once __DIR__ . '/_files/TMap/TInterface.php';
 class TMapTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $om;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\ObjectManager\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ConfigInterface
      */
     private $omConfig;
 

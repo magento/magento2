@@ -14,32 +14,32 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $memorizer;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogConfig;
 

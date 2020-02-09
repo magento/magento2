@@ -15,7 +15,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Interception\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Interception\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $interceptionConfig;
 

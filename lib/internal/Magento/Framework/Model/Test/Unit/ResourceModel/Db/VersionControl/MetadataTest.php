@@ -18,17 +18,17 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     protected $entityMetadata;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\AbstractModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Model\AbstractModel
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection;
 

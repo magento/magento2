@@ -27,22 +27,22 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var Session | \PHPUnit\Framework\MockObject\MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var AbstractAction | \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAction|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
     /**
-     * @var Http | \PHPUnit\Framework\MockObject\MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var ActionFlag | \PHPUnit\Framework\MockObject\MockObject
+     * @var ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlag;
 

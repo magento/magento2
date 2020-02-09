@@ -33,7 +33,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'r';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 

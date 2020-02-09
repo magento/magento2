@@ -60,12 +60,12 @@ class SourceTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var ChainFactoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ChainFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $chainFactory;
 
     /**
-     * @var Chain | \PHPUnit\Framework\MockObject\MockObject
+     * @var Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private $chain;
 

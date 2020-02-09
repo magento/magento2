@@ -8,7 +8,7 @@ namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 

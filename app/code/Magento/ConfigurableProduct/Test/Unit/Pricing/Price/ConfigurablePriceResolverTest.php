@@ -21,12 +21,12 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     protected $resolver;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $configurable;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
      */
     protected $priceResolver;
 

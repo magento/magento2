@@ -22,19 +22,19 @@ use Magento\Framework\View\DesignLoader;
  */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ImageFactory | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var ImageFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $imageFactory;
 
-    /** @var  \Magento\Framework\App\State | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject */
     private $state;
 
-    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
-    /** @var  DesignInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  DesignInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $design;
 
-    /** @var DesignLoader | \PHPUnit\Framework\MockObject\MockObject*/
+    /** @var DesignLoader|\PHPUnit\Framework\MockObject\MockObject*/
     private $designLoader;
 
     /** @var  Image */

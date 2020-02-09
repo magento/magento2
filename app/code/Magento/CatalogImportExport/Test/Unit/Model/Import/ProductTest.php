@@ -29,19 +29,19 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     const ENTITY_ID = 13;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface| MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject */
     protected $_connection;
 
-    /** @var \Magento\Framework\Json\Helper\Data| MockObject */
+    /** @var \Magento\Framework\Json\Helper\Data|MockObject */
     protected $jsonHelper;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data| MockObject */
+    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject */
     protected $_dataSourceModel;
 
-    /** @var \Magento\Framework\App\ResourceConnection| MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|MockObject */
     protected $resource;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Helper| MockObject */
+    /** @var \Magento\ImportExport\Model\ResourceModel\Helper|MockObject */
     protected $_resourceHelper;
 
     /** @var \Magento\Framework\Stdlib\StringUtils|MockObject */

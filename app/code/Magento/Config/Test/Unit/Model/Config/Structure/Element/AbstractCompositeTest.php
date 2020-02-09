@@ -29,7 +29,7 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
     protected $_iteratorMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 

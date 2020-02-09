@@ -21,7 +21,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
     private $reviewSummaryCollectionFactoryMock;
 
     /**
-     * @var \Magento\Review\Model\ReviewSummary | MockObject
+     * @var \Magento\Review\Model\ReviewSummary|MockObject
      */
     private $reviewSummary;
 

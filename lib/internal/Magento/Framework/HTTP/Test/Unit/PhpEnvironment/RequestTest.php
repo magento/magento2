@@ -17,17 +17,17 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieReader;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 

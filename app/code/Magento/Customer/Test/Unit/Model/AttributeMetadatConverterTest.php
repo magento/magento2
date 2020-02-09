@@ -18,29 +18,29 @@ use Magento\Customer\Model\AttributeMetadataConverter;
 class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OptionInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var OptionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionFactory;
 
     /**
-     * @var ValidationRuleInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ValidationRuleInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationRuleFactory;
 
     /**
-     * @var AttributeMetadataInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeMetadataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelper;
 
     /** @var  AttributeMetadataConverter */
     private $model;
 
-    /** @var  \Magento\Customer\Model\Attribute | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  \Magento\Customer\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     private $attribute;
 
     public function setUp()

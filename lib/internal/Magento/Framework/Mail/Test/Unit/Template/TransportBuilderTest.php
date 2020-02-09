@@ -43,27 +43,27 @@ class TransportBuilderTest extends TestCase
     protected $builder;
 
     /**
-     * @var FactoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var FactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $templateFactoryMock;
 
     /**
-     * @var Message | \PHPUnit\Framework\MockObject\MockObject
+     * @var Message|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageMock;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var SenderResolverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var SenderResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $senderResolverMock;
 
     /**
-     * @var MessageInterfaceFactory| \PHPUnit\Framework\MockObject\MockObject
+     * @var MessageInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactoryMock;
 

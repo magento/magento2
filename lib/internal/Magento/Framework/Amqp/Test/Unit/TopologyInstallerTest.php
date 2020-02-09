@@ -27,12 +27,12 @@ class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $topologyConfigMock;
 
     /**
-     * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 

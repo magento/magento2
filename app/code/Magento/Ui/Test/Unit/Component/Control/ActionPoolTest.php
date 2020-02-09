@@ -24,32 +24,32 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
     protected $actionPool;
 
     /**
-     * @var Context| \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ItemFactory| \PHPUnit\Framework\MockObject\MockObject
+     * @var ItemFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemFactoryMock;
 
     /**
-     * @var AbstractBlock| \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $toolbarBlockMock;
 
     /**
-     * @var UiComponentInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentInterfaceMock;
 
     /**
-     * @var Object[]| \PHPUnit\Framework\MockObject\MockObject
+     * @var Object[]|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $items;
 
     /**
-     * @var LayoutInterface[]| \PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutInterface[]|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 

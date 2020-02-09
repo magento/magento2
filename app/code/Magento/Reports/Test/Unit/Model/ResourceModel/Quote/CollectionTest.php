@@ -43,7 +43,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $entityFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
      */
     protected $entitySnapshotMock;
 

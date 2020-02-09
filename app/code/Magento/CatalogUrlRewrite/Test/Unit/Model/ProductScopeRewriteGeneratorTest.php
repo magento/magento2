@@ -35,7 +35,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $objectRegistryFactory;
 
-    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
     /** @var  ProductScopeRewriteGenerator */

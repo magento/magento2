@@ -22,7 +22,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\AbstractElement | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Config\Model\Config\Structure\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 

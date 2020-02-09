@@ -23,32 +23,32 @@ class LinkProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var LinkInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var LinkInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linkInterfaceFactoryMock;
 
     /**
-     * @var FileInfoManager | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileInfoManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoManagerMock;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerInterfaceMock;
 
     /**
-     * @var LinkInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var LinkInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linkInterfaceMock;
 
     /**
-     * @var FileInfo | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoMock;
 
     /**
-     * @var Store | \PHPUnit\Framework\MockObject\MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 

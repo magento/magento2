@@ -25,27 +25,27 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Reporting | \PHPUnit\Framework\MockObject\MockObject
+     * @var Reporting|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reporting;
 
     /**
-     * @var SearchCriteriaInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteria;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var FilterBuilder | \PHPUnit\Framework\MockObject\MockObject
+     * @var FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
     /**
-     * @var AttributeRepository | \PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeRepository;
 

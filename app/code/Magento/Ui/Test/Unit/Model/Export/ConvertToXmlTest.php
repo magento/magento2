@@ -32,42 +32,42 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Filesystem | \PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
+     * @var Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
     /**
-     * @var MetadataProvider | \PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataProvider;
 
     /**
-     * @var ExcelFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ExcelFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $excelFactory;
 
     /**
-     * @var SearchResultIteratorFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var SearchResultIteratorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $iteratorFactory;
 
     /**
-     * @var DirectoryWriteInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var DirectoryWriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directory;
 
     /**
-     * @var FileWriteInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileWriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stream;
 
     /**
-     * @var UiComponentInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $component;
 

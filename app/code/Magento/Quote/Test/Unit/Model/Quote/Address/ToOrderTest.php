@@ -13,17 +13,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ToOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DataObject\Copy|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderDataFactoryMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 

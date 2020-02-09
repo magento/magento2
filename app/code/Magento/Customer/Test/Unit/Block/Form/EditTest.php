@@ -33,7 +33,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit\Framework\MockObject\MockObject $context */
+        /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject $context */
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getScopeConfig')

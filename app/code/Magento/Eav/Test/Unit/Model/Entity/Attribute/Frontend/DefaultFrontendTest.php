@@ -25,32 +25,32 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var BooleanFactory | MockObject
+     * @var BooleanFactory|MockObject
      */
     private $booleanFactory;
 
     /**
-     * @var Serializer| MockObject
+     * @var Serializer|MockObject
      */
     private $serializer;
 
     /**
-     * @var StoreManagerInterface | MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface | MockObject
+     * @var StoreInterface|MockObject
      */
     private $store;
 
     /**
-     * @var CacheInterface | MockObject
+     * @var CacheInterface|MockObject
      */
     private $cache;
 
     /**
-     * @var AbstractAttribute | MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $attribute;
 
@@ -60,7 +60,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     private $cacheTags;
 
     /**
-     * @var AbstractSource | MockObject
+     * @var AbstractSource|MockObject
      */
     private $source;
 
@@ -102,7 +102,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 
     public function testGetClassEmpty()
     {
-        /** @var AbstractAttribute | MockObject $attribute */
+        /** @var AbstractAttribute|MockObject $attribute */
         $attribute = $this->createAttribute();
         $attribute->method('getIsRequired')
             ->willReturn(false);
@@ -127,7 +127,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetClass(String $validationRule, String $expectedClass): void
     {
-        /** @var AbstractAttribute | MockObject $attribute */
+        /** @var AbstractAttribute|MockObject $attribute */
         $attribute = $this->createAttribute();
         $attribute->method('getIsRequired')
             ->willReturn(true);
@@ -194,7 +194,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     /**
      * Entity attribute factory.
      *
-     * @return AbstractAttribute | MockObject
+     * @return AbstractAttribute|MockObject
      */
     private function createAttribute()
     {

@@ -19,27 +19,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\App\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Backend\App\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backendConfigMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRegistryMock;
 
     /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $encryptorMock;
 
     /**
-     * @var CustomerRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Data\CustomerSecure | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Model\Data\CustomerSecure|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSecureMock;
 
@@ -54,7 +54,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     private $dateTimeMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerAuthUpdate | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Model\CustomerAuthUpdate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAuthUpdate;
 

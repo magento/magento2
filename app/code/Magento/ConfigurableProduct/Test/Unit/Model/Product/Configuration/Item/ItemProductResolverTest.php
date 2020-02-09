@@ -21,15 +21,15 @@ class ItemProductResolverTest extends TestCase
 {
     /** @var ItemProductResolver */
     private $model;
-    /** @var ItemInterface | MockObject */
+    /** @var ItemInterface|MockObject */
     private $item;
-    /** @var Product | MockObject */
+    /** @var Product|MockObject */
     private $parentProduct;
-    /** @var  ScopeConfigInterface | MockObject */
+    /** @var  ScopeConfigInterface|MockObject */
     private $scopeConfig;
-    /** @var OptionInterface | MockObject */
+    /** @var OptionInterface|MockObject */
     private $option;
-    /** @var Product | MockObject */
+    /** @var Product|MockObject */
     private $childProduct;
 
     /**

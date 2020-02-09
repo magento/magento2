@@ -31,47 +31,47 @@ class FormTest extends \PHPUnit\Framework\TestCase
     private $form;
 
     /**
-     * @var Context | MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var Registry | MockObject
+     * @var Registry|MockObject
      */
     private $registry;
 
     /**
-     * @var FormFactory | MockObject
+     * @var FormFactory|MockObject
      */
     private $formFactory;
 
     /**
-     * @var Source | MockObject
+     * @var Source|MockObject
      */
     private $rateSource;
 
     /**
-     * @var TaxRuleRepositoryInterface | MockObject
+     * @var TaxRuleRepositoryInterface|MockObject
      */
     private $taxRuleRepository;
 
     /**
-     * @var TaxClassRepositoryInterface | MockObject
+     * @var TaxClassRepositoryInterface|MockObject
      */
     private $taxClassRepository;
 
     /**
-     * @var Customer | MockObject
+     * @var Customer|MockObject
      */
     private $taxClassCustomer;
 
     /**
-     * @var Product | MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var UrlInterface | MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilder;
 

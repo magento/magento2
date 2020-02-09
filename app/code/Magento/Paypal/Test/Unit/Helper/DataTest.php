@@ -29,7 +29,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $paymentMethodInstanceFactory;
 
     /**
-     * @var \Magento\Paypal\Model\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Paypal\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 

@@ -11,17 +11,17 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 

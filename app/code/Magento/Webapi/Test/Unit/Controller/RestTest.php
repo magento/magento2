@@ -33,7 +33,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     protected $_responseMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Webapi\Controller\Rest\Router\Route
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Webapi\Controller\Rest\Router\Route
      */
     protected $_routeMock;
 
@@ -58,32 +58,32 @@ class RestTest extends \PHPUnit\Framework\TestCase
     protected $serviceInputProcessorMock;
 
     /**
-     * @var \Magento\Webapi\Model\Rest\Swagger\Generator | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $swaggerGeneratorMock;
 
     /**
-     * @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var  \Magento\Webapi\Controller\Rest\SchemaRequestProcessor | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Webapi\Controller\Rest\SchemaRequestProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $schemaRequestProcessor;
 
     /**
-     * @var  \Magento\Webapi\Controller\Rest\SynchronousRequestProcessor | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Webapi\Controller\Rest\SynchronousRequestProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $synchronousRequestProcessor;
 
     /**
-     * @var  \Magento\Webapi\Controller\Rest\RequestProcessorPool | \PHPUnit\Framework\MockObject\MockObject
+     * @var  \Magento\Webapi\Controller\Rest\RequestProcessorPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestProcessorPool;
 
@@ -268,7 +268,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Webapi\Controller\Rest\Router\Route | \PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Webapi\Controller\Rest\Router\Route|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getRouteMock()
     {

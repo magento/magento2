@@ -1056,7 +1056,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * Return Shipping Assignment Mock.
      *
-     * @return ShippingAssignment | MockObject
+     * @return ShippingAssignment|MockObject
      */
     private function getShippingAssignmentMock(): MockObject
     {
@@ -1108,7 +1108,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * Return Customer Address Mock
      *
      * @param $customerAddressId
-     * @return Address | MockObject
+     * @return Address|MockObject
      */
     private function getCustomerAddressMock($customerAddressId): MockObject
     {

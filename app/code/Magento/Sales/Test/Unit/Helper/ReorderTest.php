@@ -16,22 +16,22 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Store
      */
     protected $storeParam;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Order
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
 

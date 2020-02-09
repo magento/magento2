@@ -28,7 +28,7 @@ class AssignOrderToCustomerObserverTest extends TestCase
     /** @var OrderRepositoryInterface|MockObject */
     protected $orderRepositoryMock;
 
-    /** @var CustomerAssignment | MockObject */
+    /** @var CustomerAssignment|MockObject */
     protected $assignmentMock;
 
     /**

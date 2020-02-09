@@ -11,17 +11,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ImageMagickTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject |\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $writeMock;
 

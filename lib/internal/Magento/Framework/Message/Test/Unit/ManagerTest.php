@@ -57,12 +57,12 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     protected $messageMock;
 
     /**
-     * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     /**
-     * @var ExceptionMessageLookupFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ExceptionMessageLookupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exceptionMessageFactory;
 

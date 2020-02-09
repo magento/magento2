@@ -27,7 +27,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
     protected $devHelperMock;
 
     /**
-     * @var DebugHintsFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var DebugHintsFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $debugHintsFactory;
 

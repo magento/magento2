@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
 
 class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ResourceModel\Website\Link | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResourceModel\Website\Link|\PHPUnit\Framework\MockObject\MockObject */
     private $websiteLink;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject  */

@@ -16,7 +16,7 @@ use Magento\GoogleAdwords\Block\Code;
 class DbTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 

@@ -13,14 +13,14 @@ use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
  */
 class DomainTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Domain */
     protected $domain;
 
     /**
-     * @var  CookieDomainValidator | \PHPUnit\Framework\MockObject\MockObject
+     * @var  CookieDomainValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 

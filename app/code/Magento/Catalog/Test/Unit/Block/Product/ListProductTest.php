@@ -52,27 +52,27 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
     protected $typeInstanceMock;
 
     /**
-     * @var Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catCollectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $prodCollectionMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $toolbarMock;
 

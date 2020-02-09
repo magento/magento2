@@ -17,34 +17,34 @@ use PHPUnit\Framework\MockObject\MockObject;
 class CustomerFlushFormKeyTest extends TestCase
 {
     /**
-     * @var CookieFormKey | MockObject
+     * @var CookieFormKey|MockObject
      */
     private $cookieFormKey;
 
     /**
-     * @var Session | MockObject
+     * @var Session|MockObject
      */
     private $customerSession;
 
     /**
-     * @var DataFormKey | MockObject
+     * @var DataFormKey|MockObject
      */
     private $dataFormKey;
 
     protected function setUp()
     {
 
-        /** @var CookieFormKey | MockObject */
+        /** @var CookieFormKey|MockObject */
         $this->cookieFormKey = $this->getMockBuilder(CookieFormKey::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var DataFormKey | MockObject */
+        /** @var DataFormKey|MockObject */
         $this->dataFormKey = $this->getMockBuilder(DataFormKey::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Session | MockObject */
+        /** @var Session|MockObject */
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])

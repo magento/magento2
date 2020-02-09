@@ -187,7 +187,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitForm($sectionIsVisible)
     {
-        /** @var \Magento\Config\Block\System\Config\Form | \PHPUnit\Framework\MockObject\MockObject $object */
+        /** @var \Magento\Config\Block\System\Config\Form|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->_objectBuilder->setMethods(['_initGroup'])->getMock();
         $object->setData('scope_id', 1);
         $this->_formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_formMock));
@@ -251,7 +251,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitGroup($shouldCloneFields, $prefixes, $callNum)
     {
-        /** @var \Magento\Config\Block\System\Config\Form | \PHPUnit\Framework\MockObject\MockObject $object */
+        /** @var \Magento\Config\Block\System\Config\Form|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->_objectBuilder->setMethods(['initFields'])->getMock();
         $this->_formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_formMock));
         $this->_formMock->expects($this->once())->method('setParent')->with($object);

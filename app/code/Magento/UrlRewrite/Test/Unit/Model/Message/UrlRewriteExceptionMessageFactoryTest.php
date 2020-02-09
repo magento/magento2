@@ -12,12 +12,12 @@ use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Message\Factory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Message\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactoryMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 

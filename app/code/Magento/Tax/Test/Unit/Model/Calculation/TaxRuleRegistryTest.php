@@ -21,12 +21,12 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\RuleFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\Calculation\RuleFactory
      */
     private $taxRuleModelFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\Rule
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\Calculation\Rule
      */
     private $taxRuleModelMock;
 

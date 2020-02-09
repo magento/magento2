@@ -13,7 +13,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Payment config model
      *
-     * @var \Magento\Payment\Model\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Payment\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paymentConfig;
 

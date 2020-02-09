@@ -45,7 +45,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_directoryMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
     protected function setUp()

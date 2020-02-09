@@ -16,7 +16,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Weee helper mock
      *
-     * @var \Magento\Weee\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Weee\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelperMock;
 

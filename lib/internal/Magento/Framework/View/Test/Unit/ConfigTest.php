@@ -16,11 +16,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\View\Asset\Repository | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject */
     protected $repositoryMock;
 
     /**
-     * @var \Magento\Framework\Config\ViewFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Config\ViewFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewConfigFactoryMock;
 

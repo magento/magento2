@@ -46,19 +46,19 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     /**#@-*/
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject | AttributeMetadataInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|AttributeMetadataInterface */
     private $attribute;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Options */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Options */
     private $_options;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Escaper */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Escaper */
     private $_escaper;
 
     /** @var  Name */
     private $_block;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\CustomerMetadataInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\CustomerMetadataInterface */
     private $customerMetadata;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AddressMetadataInterface */

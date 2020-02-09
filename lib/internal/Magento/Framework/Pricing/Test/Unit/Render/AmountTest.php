@@ -33,7 +33,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     protected $rendererPool;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
@@ -43,7 +43,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Pricing\Amount\AmountInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $amount;
 

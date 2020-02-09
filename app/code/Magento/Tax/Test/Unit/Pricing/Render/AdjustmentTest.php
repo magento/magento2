@@ -23,14 +23,14 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Price currency model mock
      *
-     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Directory\Model\PriceCurrency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Price helper mock
      *
-     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 

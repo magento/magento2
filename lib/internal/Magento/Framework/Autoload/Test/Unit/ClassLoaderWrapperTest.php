@@ -18,7 +18,7 @@ class ClassLoaderWrapperTest extends \PHPUnit\Framework\TestCase
     const DEFAULT_PREPEND = false;
 
     /**
-     * @var ClassLoader | \PHPUnit\Framework\MockObject\MockObject
+     * @var ClassLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $autoloaderMock;
 

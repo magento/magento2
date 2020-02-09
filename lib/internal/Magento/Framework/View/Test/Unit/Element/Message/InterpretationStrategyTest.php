@@ -14,22 +14,22 @@ use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RenderersPool | \PHPUnit\Framework\MockObject\MockObject
+     * @var RenderersPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $renderersPool;
 
     /**
-     * @var MessageConfigurationsPool | \PHPUnit\Framework\MockObject\MockObject
+     * @var MessageConfigurationsPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageConfigurationsPool;
 
     /**
-     * @var RendererInterface  | \PHPUnit\Framework\MockObject\MockObject
+     * @var RendererInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $renderer;
 
     /**
-     * @var MessageInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageMock;
 

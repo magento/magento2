@@ -35,7 +35,7 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
     private $productMock;
 
     /**
-     * @var SwatchAttributeType | \PHPUnit\Framework\MockObject\MockObject
+     * @var SwatchAttributeType|\PHPUnit\Framework\MockObject\MockObject
      */
     private $swatchTypeChecker;
 

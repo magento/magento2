@@ -18,12 +18,12 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Read | \PHPUnit\Framework\MockObject\MockObject
+     * @var Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeDirectory;
 
     /**
-     * @var Factory | \PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactory;
 

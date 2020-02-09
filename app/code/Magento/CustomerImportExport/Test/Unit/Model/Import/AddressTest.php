@@ -37,7 +37,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $_websites = [1 => 'website1', 2 => 'website2'];
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Store\Model\StoreManager  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManager  */
     protected $_storeManager;
 
     /**

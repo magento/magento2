@@ -28,22 +28,22 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \'Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject|\'Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\AccountManagementInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AccountManagementInterface
      */
     protected $customerAccountManagementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject\Copy
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject\Copy
      */
     protected $objectCopyServiceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
 

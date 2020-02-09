@@ -65,7 +65,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
     protected $addressMock;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 

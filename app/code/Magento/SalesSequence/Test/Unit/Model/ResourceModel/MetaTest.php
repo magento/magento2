@@ -13,32 +13,32 @@ use Magento\SalesSequence\Model\ResourceModel\Meta;
 class MetaTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbContext;
 
     /**
-     * @var \Magento\SalesSequence\Model\MetaFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesSequence\Model\MetaFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metaFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesSequence\Model\Meta|\PHPUnit\Framework\MockObject\MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesSequence\Model\Profile|\PHPUnit\Framework\MockObject\MockObject
      */
     private $profile;
 
     /**
-     * @var \Magento\SalesSequence\Model\ResourceModel\Profile | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesSequence\Model\ResourceModel\Profile|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceProfile;
 
@@ -48,12 +48,12 @@ class MetaTest extends \PHPUnit\Framework\TestCase
     private $resource;
 
     /**
-     * @var Resource | \PHPUnit\Framework\MockObject\MockObject
+     * @var Resource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Select | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 

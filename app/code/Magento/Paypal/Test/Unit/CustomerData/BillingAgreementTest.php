@@ -17,12 +17,12 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var CurrentCustomer | \PHPUnit\Framework\MockObject\MockObject
+     * @var CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $currentCustomer;
 
     /**
-     * @var Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalData;
 

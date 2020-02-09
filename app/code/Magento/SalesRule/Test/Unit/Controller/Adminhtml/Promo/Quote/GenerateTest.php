@@ -45,13 +45,13 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateMock;
 
-    /** @var  ObjectManager | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var  CouponGenerator | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  CouponGenerator|\PHPUnit\Framework\MockObject\MockObject */
     private $couponGenerator;
 
-    /** @var  CouponGenerationSpecInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  CouponGenerationSpecInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $couponGenerationSpec;
 
     /**

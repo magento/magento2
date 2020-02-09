@@ -47,7 +47,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     protected $order;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
@@ -57,7 +57,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     protected $incrementId;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Item | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $item;
 
@@ -67,7 +67,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     protected $historyCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
