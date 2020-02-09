@@ -42,7 +42,7 @@ class RenderTest extends TestCase
         $cspRendererMock->expects($this->once())->method('render');
 
         $objectManagerHelper = new ObjectManager($this);
-        /** @var MockObject|Render $renderObserver */
+        /** @var Render $renderObserver */
         $renderObserver = $objectManagerHelper->getObject(
             Render::class,
             ['cspRenderer' => $cspRendererMock]
