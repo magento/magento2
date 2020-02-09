@@ -93,8 +93,8 @@
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "@stable",
         "phpstan/phpstan": "^0.12.3",
-        "phpunit/phpunit": "~6.5.0",
-        "sebastian/phpcpd": "~3.0.0",
+        "phpunit/phpunit": "^7.5",
+        "sebastian/phpcpd": "^4.1",
         "squizlabs/php_codesniffer": "~3.4.0"
     },
     "suggest": {
