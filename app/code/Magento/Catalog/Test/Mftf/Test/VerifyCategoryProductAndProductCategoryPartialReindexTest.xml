@@ -55,7 +55,8 @@
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
 
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <wait stepKey="waitBeforeRunCronIndex" time="30"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
@@ -138,7 +139,8 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
 
         <!-- Run cron -->
-        <magentoCron stepKey="runMagentoCron" groups="index"/>
+        <wait stepKey="waitBeforeRunMagentoCron" time="30"/>
+        <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -198,7 +200,8 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
 
         <!-- Run Cron once to reindex product changes -->
-        <magentoCron stepKey="runCronIndexAfterProductAssignToCategory" groups="index"/>
+        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="30"/>
+        <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 
