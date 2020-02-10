@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
 
 /**
@@ -137,11 +138,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($serviceMetadata);
         $this->typeProcessorMock->expects($this->any())
             ->method('getTypeData')
-            ->willReturnMap(
-                [
-                    ['TestModule5V2EntityAllSoapAndRest', $typeData],
-                ]
-            );
+            ->willReturnMap($typeData);
 
         $this->typeProcessorMock->expects($this->any())
             ->method('isTypeSimple')
@@ -169,6 +166,96 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public function generateDataProvider()
     {
         return [
+            [
+                [
+                    'methods' => [
+                        'execute' => [
+                            'method' => 'execute',
+                            'inputRequired' => false,
+                            'isSecure' => false,
+                            'resources' => [
+                                "anonymous"
+                            ],
+                            'methodAlias' => 'execute',
+                            'parameters' => [],
+                            'documentation' => 'Do Magic!',
+                            'interface' => [
+                                'in' => [
+                                    'parameters' => [
+                                        'searchRequest' => [
+                                            'type' => 'DreamVendorDreamModuleApiDataSearchRequestInterface',
+                                            'required' => true,
+                                            'documentation' => ""
+                                        ]
+                                    ]
+                                ],
+                                'out' => [
+                                    'parameters' => [
+                                        'result' => [
+                                            'type' => 'DreamVendorDreamModuleApiDataSearchResultInterface',
+                                            'documentation' => null,
+                                            'required' => true
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'class' => 'DreamVendor\DreamModule\Api\ExecuteStuff',
+                    'description' => '',
+                    'routes' => [
+                        '/V1/dream-vendor/dream-module/execute-stuff' => [
+                            'GET' => [
+                                'method' => 'execute',
+                                'parameters' => []
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    [
+                        'DreamVendorDreamModuleApiDataSearchRequestInterface',
+                        [
+                            'documentation' => '',
+                            'parameters' => [
+                                'stuff' => [
+                                    'type' => 'DreamVendorDreamModuleApiDataStuffInterface',
+                                    'required' => true,
+                                    'documentation' => 'Empty Extension Point'
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'DreamVendorDreamModuleApiDataSearchResultInterface',
+                        [
+                            'documentation' => '',
+                            'parameters' => [
+                                'totalCount' => [
+                                    'type' => 'int',
+                                    'required' => true,
+                                    'documentation' => 'Processed count.'
+                                ],
+                                'stuff' => [
+                                    'type' => 'DreamVendorDreamModuleApiDataStuffInterface',
+                                    'required' => true,
+                                    'documentation' => 'Empty Extension Point'
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'DreamVendorDreamModuleApiDataStuffInterface',
+                        [
+                            'documentation' => '',
+                            'parameters' => []
+                        ]
+                    ]
+                ],
+                // @codingStandardsIgnoreStart
+                '{"swagger":"2.0","info":{"version":"","title":""},"host":"magento.host","basePath":"/rest/default","schemes":["http://"],"tags":[{"name":"testModule5AllSoapAndRestV2","description":""}],"paths":{"/V1/dream-vendor/dream-module/execute-stuff":{"get":{"tags":["testModule5AllSoapAndRestV2"],"description":"Do Magic!","operationId":"operationNameGet","consumes":["application/json","application/xml"],"produces":["application/json","application/xml"],"responses":{"200":{"description":"200 Success.","schema":{"$ref":"#/definitions/dream-vendor-dream-module-api-data-search-result-interface"}},"default":{"description":"Unexpected error","schema":{"$ref":"#/definitions/error-response"}}}}}},"definitions":{"error-response":{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"errors":{"$ref":"#/definitions/error-errors"},"code":{"type":"integer","description":"Error code"},"parameters":{"$ref":"#/definitions/error-parameters"},"trace":{"type":"string","description":"Stack trace"}},"required":["message"]},"error-errors":{"type":"array","description":"Errors list","items":{"$ref":"#/definitions/error-errors-item"}},"error-errors-item":{"type":"object","description":"Error details","properties":{"message":{"type":"string","description":"Error message"},"parameters":{"$ref":"#/definitions/error-parameters"}}},"error-parameters":{"type":"array","description":"Error parameters list","items":{"$ref":"#/definitions/error-parameters-item"}},"error-parameters-item":{"type":"object","description":"Error parameters item","properties":{"resources":{"type":"string","description":"ACL resource"},"fieldName":{"type":"string","description":"Missing or invalid field name"},"fieldValue":{"type":"string","description":"Incorrect field value"}}},"dream-vendor-dream-module-api-data-search-result-interface":{"type":"object","description":"","properties":{"total_count":{"type":"integer","description":"Processed count."},"stuff":{"$ref":"#/definitions/dream-vendor-dream-module-api-data-stuff-interface"}},"required":["total_count","stuff"]},"dream-vendor-dream-module-api-data-stuff-interface":{"type":"object","description":""}}}'
+                // @codingStandardsIgnoreEnd
+            ],
             [
                 [
                     'methods' => [
@@ -213,12 +300,17 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    'documentation' => 'Some Data Object',
-                    'parameters' => [
-                        'price' => [
-                            'type' => 'int',
-                            'required' => true,
-                            'documentation' => ""
+                    [
+                        'TestModule5V2EntityAllSoapAndRest',
+                        [
+                            'documentation' => 'Some Data Object',
+                            'parameters' => [
+                                'price' => [
+                                    'type' => 'int',
+                                    'required' => true,
+                                    'documentation' => ""
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -261,12 +353,17 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    'documentation' => 'Some Data Object',
-                    'parameters' => [
-                        'price' => [
-                            'type' => 'int',
-                            'required' => true,
-                            'documentation' => ""
+                    [
+                        'TestModule5V2EntityAllSoapAndRest',
+                        [
+                            'documentation' => 'Some Data Object',
+                            'parameters' => [
+                                'price' => [
+                                    'type' => 'int',
+                                    'required' => true,
+                                    'documentation' => ""
+                                ]
+                            ]
                         ]
                     ]
                 ],

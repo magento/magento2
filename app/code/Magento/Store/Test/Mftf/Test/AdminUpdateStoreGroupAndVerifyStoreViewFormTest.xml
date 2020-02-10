@@ -44,7 +44,7 @@
         <click selector="{{AdminStoresGridSection.firstRow}}" stepKey="clickFirstRow"/>
         <waitForPageLoad stepKey="AdminSystemStoreGroupPageToOpen"/>
         <!--Update created Store group as per requirement-->
-        <actionGroup ref="CreateCustomStore" stepKey="createNewCustomStoreGroup">
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createNewCustomStoreGroup">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="Default Category"/>

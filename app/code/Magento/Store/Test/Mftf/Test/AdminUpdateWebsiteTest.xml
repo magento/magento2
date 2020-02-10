@@ -34,7 +34,7 @@
         </after>
 
         <!--Search created custom website in grid-->
-        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeWebsiteInGrid">
+        <actionGroup ref="AssertWebsiteInGridActionGroup" stepKey="seeWebsiteInGrid">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
         </actionGroup>
         <click selector="{{AdminStoresGridSection.websiteName(customWebsite.name)}}" stepKey="clickWebsiteFirstRowInGrid"/>
@@ -46,12 +46,12 @@
         </actionGroup>
 
         <!--Search updated custom website(from above step) in grid and verify AssertWebsiteInGrid-->
-        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeUpdatedWebsiteInGrid">
+        <actionGroup ref="AssertWebsiteInGridActionGroup" stepKey="seeUpdatedWebsiteInGrid">
             <argument name="websiteName" value="{{updateCustomWebsite.name}}"/>
         </actionGroup>
 
         <!--Verify updated website name and updated websitecode on website form (AssertWebsiteForm and AssertWebsiteOnStoreForm)-->
-        <actionGroup ref="AssertWebsiteForm" stepKey="seeUpdatedWebsiteForm">
+        <actionGroup ref="AssertWebsiteFormActionGroup" stepKey="seeUpdatedWebsiteForm">
             <argument name="websiteName" value="{{updateCustomWebsite.name}}"/>
             <argument name="websiteCode" value="{{updateCustomWebsite.code}}"/>
         </actionGroup>

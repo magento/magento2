@@ -73,7 +73,7 @@
         </annotations>
 
         <remove keyForRemoval="filterCustomer"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters" before="selectCustomer"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" before="selectCustomer"/>
         <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
     </test>
 </tests>

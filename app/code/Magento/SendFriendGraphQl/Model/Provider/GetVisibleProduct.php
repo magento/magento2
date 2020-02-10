@@ -49,8 +49,9 @@ class GetVisibleProduct
             $product = $this->productRepository->getById($productId);
 
             if (!in_array(
-                $product->getVisibility(),
-                $this->visibility->getVisibleInCatalogIds()
+                (int) $product->getVisibility(),
+                $this->visibility->getVisibleInSiteIds(),
+                true
             )) {
                 throw new GraphQlNoSuchEntityException(
                     __("The product that was requested doesn't exist. Verify the product and try again.")

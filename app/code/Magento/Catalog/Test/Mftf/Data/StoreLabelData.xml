@@ -72,4 +72,12 @@
         <data key="store_id">1</data>
         <data key="label">Red</data>
     </entity>
+    <entity name="Option11Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">Blue</data>
+    </entity>
+    <entity name="Option11Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">Blue</data>
+    </entity>
 </entities>

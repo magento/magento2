@@ -28,32 +28,32 @@
         <!--Create product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateSimpleProduct">
             <argument name="product" value="SimpleProduct3"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillSimpleProductMain">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillSimpleProductMain">
             <argument name="product" value="SimpleProduct3"/>
         </actionGroup>
 
         <!-- Add image to product -->
-        <actionGroup ref="addProductImage" stepKey="addImageForProductSimple">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProductSimple">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage">
+        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="SimpleProduct3"/>
         </actionGroup>
 
         <!-- Assert product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductImageStorefrontProductPage">
             <argument name="product" value="SimpleProduct3"/>
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>

@@ -152,7 +152,7 @@ class Full extends AbstractAction
      *
      * @return $this
      */
-    public function execute(): self
+    public function execute(): Full
     {
         $this->createTables();
         $this->clearReplicaTables();

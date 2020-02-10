@@ -11,7 +11,8 @@ define([
     'underscore',
     'mage/template',
     'matchMedia',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
@@ -29,7 +30,7 @@ define([
     $.widget('mage.quickSearch', {
         options: {
             autocomplete: 'off',
-            minSearchLength: 2,
+            minSearchLength: 3,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
             template:

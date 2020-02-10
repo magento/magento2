@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 ?>
+<?php /* @var \Magento\Framework\View\Element\Template $block */ ?>
 <?php $_shipment = $block->getShipment() ?>
 <?php
 /* @var \Magento\Sales\Model\Order $_order */
@@ -24,7 +24,11 @@ $_order = $block->getOrder() ?>
             <?php foreach ($trackCollection as $_item) : ?>
                 <tr>
                     <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
-                    <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
+                    <td>
+                        <a href="<?= $block->escapeUrl($block->getTrackingUrl()->getUrl($_item)) ?>" target="_blank">
+                            <?= $block->escapeHtml($_item->getNumber()) ?>
+                        </a>
+                    </td>
                 </tr>
             <?php endforeach ?>
             </tbody>

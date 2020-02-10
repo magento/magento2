@@ -80,17 +80,25 @@ class DisabledFundingOptionsTest extends TestCase
     ) {
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnCallback(function ($param) use ($requestCountry) {
-                if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
-                    return $requestCountry;
-                }
-                return $param;
-            }));
+            ->will(
+                $this->returnCallback(
+                    function ($param) use ($requestCountry) {
+                        if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
+                            return $requestCountry;
+                        }
+                        return $param;
+                    }
+                )
+            );
         $this->config->expects($this->any())
             ->method('getMerchantCountry')
-            ->will($this->returnCallback(function () use ($merchantCountry) {
-                return $merchantCountry;
-            }));
+            ->will(
+                $this->returnCallback(
+                    function () use ($merchantCountry) {
+                        return $merchantCountry;
+                    }
+                )
+            );
         $this->model->render($this->element);
         $payPalCreditOption = [
             'value' => 'CREDIT',
@@ -113,9 +121,9 @@ class DisabledFundingOptionsTest extends TestCase
             [null, 'US', true],
             ['US', 'US', true],
             ['US', 'GB', true],
-            ['GB', 'GB', false],
-            ['GB', 'US', false],
-            ['GB', null, false],
+            ['GB', 'GB', true],
+            ['GB', 'US', true],
+            ['GB', null, true],
         ];
     }
 

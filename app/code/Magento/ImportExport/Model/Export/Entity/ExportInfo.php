@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use \Magento\ImportExport\Api\Data\ExportInfoInterface;
+use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
 
 /**
  * Class ExportInfo implementation for ExportInfoInterface.
  */
-class ExportInfo implements ExportInfoInterface
+class ExportInfo implements ExtendedExportInfoInterface
 {
     /**
      * @var string
@@ -38,6 +38,11 @@ class ExportInfo implements ExportInfoInterface
      * @var mixed
      */
     private $exportFilter;
+
+    /**
+     * @var mixed
+     */
+    private $skipAttr;
 
     /**
      * @inheritdoc
@@ -117,5 +122,21 @@ class ExportInfo implements ExportInfoInterface
     public function setExportFilter($exportFilter)
     {
         $this->exportFilter = $exportFilter;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSkipAttr()
+    {
+        return $this->skipAttr;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSkipAttr($skipAttr)
+    {
+        $this->skipAttr = $skipAttr;
     }
 }

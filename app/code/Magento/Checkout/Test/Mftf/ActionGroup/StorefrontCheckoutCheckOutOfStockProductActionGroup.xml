@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCheckoutCheckOutOfStockProductActionGroup">
+        <annotations>
+            <description>Validates that the 'Out of Stock' Error Message is present and correct on the Storefront Checkout page for the provided Product.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
         </arguments>
+        
         <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="1 product requires your attention." stepKey="seeErrorMessage"/>
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{product.name}}" stepKey="seeProductName"/>
         <see selector="{{CheckoutCartProductSection.messageErrorItem}}" userInput="Availability: Out of stock" stepKey="seeProductOutOfStock"/>

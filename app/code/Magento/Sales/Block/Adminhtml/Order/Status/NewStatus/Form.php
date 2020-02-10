@@ -56,9 +56,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['name' => 'label', 'label' => __('Status Label'), 'class' => 'required-entry', 'required' => true]
         );
 
-        if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->_addStoresFieldset($model, $form);
-        }
+        $this->_addStoresFieldset($model, $form);
 
         if ($model) {
             $form->addValues($model->getData());
@@ -80,10 +78,31 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _addStoresFieldset($model, $form)
     {
         $labels = $model ? $model->getStoreLabels() : [];
-        $fieldset = $form->addFieldset(
-            'store_labels_fieldset',
-            ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope']
-        );
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            $fieldset = $form->addFieldset(
+                'store_labels_fieldset',
+                ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope no-margin-top-tooltip']
+            );
+        } else {
+            $fieldset = $form->addFieldset(
+                'store_labels_fieldset',
+                ['legend' => __('Frontend Label')]
+            );
+            $store = $this->_storeManager->getDefaultStoreView();
+            $fieldset->addField(
+                "store_label_{$store->getId()}",
+                'text',
+                [
+                    'name' => 'store_labels[' . $store->getId() . ']',
+                    'required' => false,
+                    'label' => $store->getName(),
+                    'value' => isset($labels[$store->getId()]) ? $labels[$store->getId()] : '',
+                    'fieldset_html_class' => 'store'
+                ]
+            );
+            return ;
+        }
+
         $renderer = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset::class
         );
