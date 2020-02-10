@@ -299,9 +299,6 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $references
      * @param array $constraints
      * @param array $indexes
-     * @expectedException \Exception
-     * @expectedExceptionMessage
-     * User Warning: Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table
      */
     public function testBuildUnknownIndexColumn(array $columns, array $references, array $constraints, array $indexes)
     {
@@ -314,6 +311,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         $schema = $this->objectManagerHelper->getObject(
             Schema::class,
             ['resourceConnection' => $resourceConnectionMock]
+        );
+        $this->expectException(\PHPUnit\Framework\Exception::class);
+        $this->expectExceptionMessage(
+            'User Warning: Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table.'
         );
         $this->model->build($schema);
     }

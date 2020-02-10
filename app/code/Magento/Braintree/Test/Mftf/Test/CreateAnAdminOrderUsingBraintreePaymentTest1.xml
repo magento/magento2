@@ -18,70 +18,96 @@
             <testCaseId value="MAGETWO-93677"/>
             <group value="braintree"/>
             <skip>
-                <issueId value="MQE-1187" />
+                <issueId value="MQE-1576"/>
             </skip>
         </annotations>
-
-
         <before>
             <!--Login As Admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!--CreateNewProduct-->
-            <actionGroup ref="CreateNewProductActionGroup" stepKey="CreateNewProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
 
             <!--Create New Customer-->
-            <actionGroup ref="CreateCustomerActionGroup" stepKey="CreateCustomer"/>
-
+            <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
         </before>
 
 
         <!--Configure Braintree-->
-        <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
+        <actionGroup ref="ConfigureBraintreeActionGroup" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
-        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
-        <actionGroup ref="AdminCreateRole" stepKey="AdminCreateNewRole"/>
+        <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoToUserRoles"/>
+        <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
+        <actionGroup ref="AdminCreateNewRoleActionGroup" stepKey="AdminCreateNewRole"/>
 
-        <!--Create New User With Specific Role-->
-        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
-        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
+        <!--Create new admin user-->
+        <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoToAllUsers"/>
+        <waitForPageLoad stepKey="waitForUsers" time="15"/>
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="AdminCreateNewUser">
+            <argument name="role" value="role"/>
+            <argument name="User" value="NewAdmin"/>
+        </actionGroup>
 
         <!--SignOut-->
-        <actionGroup ref="SignOut" stepKey="signOutFromAdmin"/>
+        <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
 
-        <!--SignIn New User-->
+        <!--Log in as new user-->
         <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
-        <actionGroup ref="CreateNewOrderActionGroup" stepKey="createNewOrder"/>
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
 
+        <!--Add Product to Order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!--Fill Order Customer Information-->
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!--Select Shipping-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"/>
+        <waitForPageLoad stepKey="waitForShippingToFinish"/>
+
+        <!--Pay with Braintree -->
+        <actionGroup ref="useBraintreeForMasterCard" stepKey="selectCardWithBraintree"/>
+
+        <!--Submit Order-->
+        <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage"/>
 
         <after>
+            <!-- Disable BrainTree -->
+            <actionGroup ref="DisableBraintreeActionGroup" stepKey="disableBrainTree"/>
+
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!--Delete Product-->
-            <actionGroup ref="DeleteProductActionGroup" stepKey="DeleteAllProducts">
-                <argument name="productName" value="NewProductData.ProductName"/>
-            </actionGroup>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete Customer-->
-            <actionGroup ref="DeleteCustomerActionGroup" stepKey="DeleteCustomer">
-                <argument name="lastName" value="NewCustomerData.LastName"/>
-            </actionGroup>
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete User -->
-            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
-            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
+            <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoBackToAllUsers"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
 
             <!--Delete Role-->
-            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
+            <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoBackToUserRoles"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
-
         </after>
-
     </test>
 </tests>

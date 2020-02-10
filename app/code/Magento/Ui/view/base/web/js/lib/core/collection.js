@@ -15,7 +15,7 @@ define([
     'use strict';
 
     /**
-     * Removes non plain object items from the specfied array.
+     * Removes non plain object items from the specified array.
      *
      * @param {Array} container - Array whose value should be filtered.
      * @returns {Array}
@@ -215,6 +215,19 @@ define([
         },
 
         /**
+         * Checks if the specified region has any elements
+         * associated with it.
+         *
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        regionHasElements: function (name) {
+            var region = this.getRegion(name);
+
+            return region().length > 0;
+        },
+
+        /**
          * Replaces specified regions' data with a provided one.
          * Creates region if it was not created yet.
          *
@@ -310,7 +323,7 @@ define([
          * @private
          *
          * @param {Array} args - An array of arguments to pass to the next delegation call.
-         * @returns {Array} An array of delegation resutls.
+         * @returns {Array} An array of delegation results.
          */
         _delegate: function (args) {
             var result;

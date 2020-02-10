@@ -10,6 +10,9 @@ use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Around plugin for login action.
+ */
 class AjaxLogin
 {
     /**
@@ -61,6 +64,8 @@ class AjaxLogin
     }
 
     /**
+     * Check captcha data on login action.
+     *
      * @param \Magento\Customer\Controller\Ajax\Login $subject
      * @param \Closure $proceed
      * @return $this
@@ -94,18 +99,20 @@ class AjaxLogin
             if ($formId === $loginFormId) {
                 $captchaModel = $this->helper->getCaptcha($formId);
                 if ($captchaModel->isRequired($username)) {
-                    $captchaModel->logAttempt($username);
                     if (!$captchaModel->isCorrect($captchaString)) {
                         $this->sessionManager->setUsername($username);
+                        $captchaModel->logAttempt($username);
                         return $this->returnJsonError(__('Incorrect CAPTCHA'));
                     }
                 }
+                $captchaModel->logAttempt($username);
             }
         }
         return $proceed();
     }
 
     /**
+     * Format JSON response.
      *
      * @param \Magento\Framework\Phrase $phrase
      * @return \Magento\Framework\Controller\Result\Json

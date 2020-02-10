@@ -98,7 +98,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @exceptedExceptionMessage The quote item isn't found. Verify the item and try again.
+     * @expectedExceptionMessage The quote item isn't found. Verify the item and try again.
      */
     public function testCheckQuoteItemWithException()
     {

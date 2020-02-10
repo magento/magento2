@@ -33,15 +33,25 @@ class UrlBuilder
      */
     public function getUrl($routePath, $scope, $store)
     {
-        $this->frontendUrlBuilder->setScope($scope);
-        $href = $this->frontendUrlBuilder->getUrl(
-            $routePath,
-            [
-                '_current' => false,
-                '_nosid' => true,
-                '_query' => [\Magento\Store\Model\StoreManagerInterface::PARAM_NAME => $store]
-            ]
-        );
+        if ($scope) {
+            $this->frontendUrlBuilder->setScope($scope);
+            $href = $this->frontendUrlBuilder->getUrl(
+                $routePath,
+                [
+                    '_current' => false,
+                    '_nosid' => true,
+                    '_query' => [\Magento\Store\Model\StoreManagerInterface::PARAM_NAME => $store]
+                ]
+            );
+        } else {
+            $href = $this->frontendUrlBuilder->getUrl(
+                $routePath,
+                [
+                    '_current' => false,
+                    '_nosid' => true
+                ]
+            );
+        }
 
         return $href;
     }

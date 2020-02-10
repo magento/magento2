@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\GraphQl\Controller\GraphQl" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator" />
     <type name="Magento\Authorization\Model\CompositeUserContext">
         <arguments>
             <argument name="userContexts" xsi:type="array">
@@ -27,9 +28,9 @@
     </type>
     <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
         <arguments>
-            <argument name="graphQlHeaders" xsi:type="array">
-                <item name="Content-Type" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\ContentTypeProcessor</item>
-                <item name="Store" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="ContentTypeValidator" xsi:type="object">Magento\GraphQl\Controller\HttpRequestValidator\ContentTypeValidator</item>
+                <item name="VerbValidator" xsi:type="object">Magento\GraphQl\Controller\HttpRequestValidator\HttpVerbValidator</item>
             </argument>
         </arguments>
     </type>

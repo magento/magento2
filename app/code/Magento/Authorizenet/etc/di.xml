@@ -35,4 +35,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Authorizenet\Block\Adminhtml\Order\View\Info\PaymentDetails">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Authorizenet\Model\Directpost</argument>
+        </arguments>
+    </type>
 </config>

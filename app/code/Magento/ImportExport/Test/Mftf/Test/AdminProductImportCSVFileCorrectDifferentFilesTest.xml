@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductImportCSVFileCorrectDifferentFilesTest">
+        <annotations>
+            <description value="Product import from CSV file correct from different files."/>
+            <features value="Import/Export"/>
+            <stories value="Product Import"/>
+            <title value="Product import from CSV file correct from different files."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17104"/>
+            <useCaseId value="MAGETWO-70803"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Logout from Admin-->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Check data products with add/update behavior-->
+        <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="BB-ProductsWorking.csv"/>
+        </actionGroup>
+        <see selector="{{AdminImportMainSection.messageSuccess}}" userInput='File is valid! To start import process press "Import" button' stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts1">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="BB-Products.csv"/>
+        </actionGroup>
+        <see selector="{{AdminImportMainSection.messageError}}" userInput='Curly quotes used instead of straight quotes in row(s): 84, 85' stepKey="seeErrorMessage"/>
+    </test>
+</tests>

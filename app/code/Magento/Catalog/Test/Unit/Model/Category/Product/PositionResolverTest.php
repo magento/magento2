@@ -107,7 +107,7 @@ class PositionResolverTest extends \PHPUnit\Framework\TestCase
         $this->select->expects($this->once())
             ->method('where')
             ->willReturnSelf();
-        $this->select->expects($this->once())
+        $this->select->expects($this->exactly(2))
             ->method('order')
             ->willReturnSelf();
         $this->select->expects($this->once())

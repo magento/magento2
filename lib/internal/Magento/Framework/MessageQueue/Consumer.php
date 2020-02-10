@@ -38,7 +38,7 @@ class Consumer implements ConsumerInterface
     private $messageEncoder;
 
     /**
-     * @var CallbackInvoker
+     * @var CallbackInvokerInterface
      */
     private $invoker;
 
@@ -80,7 +80,7 @@ class Consumer implements ConsumerInterface
     /**
      * Initialize dependencies.
      *
-     * @param CallbackInvoker $invoker
+     * @param CallbackInvokerInterface $invoker
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
@@ -89,7 +89,7 @@ class Consumer implements ConsumerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        CallbackInvoker $invoker,
+        CallbackInvokerInterface $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
@@ -103,7 +103,7 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {

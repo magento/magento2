@@ -21,7 +21,7 @@
         <column xsi:type="bigint" name="bigint_default_nullable" padding="2" nullable="true" default="123"
                 unsigned="true"/>
         <column xsi:type="bigint" name="bigint_not_default_not_nullable" nullable="false" unsigned="false"/>
-        <constraint xsi:type="primary" name="tinyint_primary">
+        <constraint xsi:type="primary" referenceId="tinyint_primary">
             <column name="tinyint_ref"/>
         </constraint>
     </table>
@@ -29,7 +29,7 @@
         <column xsi:type="int" name="int_auto_increment_with_nullable" padding="15" unsigned="true" nullable="true"/>
         <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
                 unsigned="true" nullable="true"/>
-        <constraint xsi:type="unique" name="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
+        <constraint xsi:type="unique" referenceId="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
             <column name="int_auto_increment_with_nullable"/>
         </constraint>
     </table>
@@ -52,15 +52,15 @@
         <column xsi:type="boolean" name="boolean" default="true"/>
         <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
         <!--Constraints-->
-        <constraint xsi:type="unique" name="TEST_TABLE_SMALLINT_BIGINT">
+        <constraint xsi:type="unique" referenceId="TEST_TABLE_SMALLINT_BIGINT">
             <column name="smallint"/>
             <column name="bigint"/>
         </constraint>
-        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
                     column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION"/>
         <!--Indexes-->
-        <index name="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
+        <index referenceId="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
             <column name="tinyint"/>
             <column name="bigint"/>
         </index>

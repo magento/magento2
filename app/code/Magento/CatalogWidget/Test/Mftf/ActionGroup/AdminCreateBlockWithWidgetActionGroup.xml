@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateBlockWithWidget">
+        <annotations>
+            <description>Inserts a Widget into a Block on the Block creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="addCondition" type="string"/>
+            <argument name="isCondition" type="string"/>
+            <argument name="fieldCondition" type="string"/>
+        </arguments>
+
+        <click stepKey="clickShowHideButton" selector="{{BlockWYSIWYGSection.ShowHideBtn}}"/>
+        <waitForElementVisible stepKey="waitForInsertWidgetButton" selector="{{CatalogWidgetSection.insertWidgetButton}}"/>
+
+        <selectOption stepKey="selectAllStoreView" userInput="All Store Views" selector="{{CatalogWidgetSection.storeViewOption}}"/>
+        <fillField selector="{{BlockContentSection.TextArea}}" userInput="" stepKey="makeContentFieldEmpty"/>
+
+        <click selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="clickInsertWidgetButton"/>
+        <waitForElementVisible stepKey="waitForInsertWidgetFrame" selector="{{InsertWidgetSection.widgetTypeDropDown}}" time="10"/>
+
+        <selectOption selector="{{InsertWidgetSection.widgetTypeDropDown}}" userInput="Catalog Products List" stepKey="selectCatalogProductListOption"/>
+        <waitForElementVisible stepKey="waitForConditionsElementBecomeAvailable" selector="{{InsertWidgetSection.conditionsAddButton}}"/>
+
+        <click selector="{{InsertWidgetSection.conditionsAddButton}}" stepKey="clickToAddCondition"/>
+        <waitForElementVisible stepKey="waitForSelectBoxOpened" selector="{{InsertWidgetSection.conditionsSelectBox}}"/>
+
+        <selectOption selector="{{InsertWidgetSection.conditionsSelectBox}}" userInput="{{addCondition}}" stepKey="selectConditionsSelectBox"/>
+        <waitForElementVisible stepKey="seeConditionsAdded" selector="{{InsertWidgetSection.addCondition('1')}}"/>
+
+        <click selector="{{InsertWidgetSection.conditionIs}}" stepKey="clickToConditionIs"/>
+        <selectOption selector="{{InsertWidgetSection.conditionOperator('1')}}" stepKey="selectOperatorGreaterThan" userInput="{{isCondition}}"/>
+
+        <click selector="{{InsertWidgetSection.addCondition('1')}}" stepKey="clickAddConditionItem"/>
+        <waitForElementVisible stepKey="waitForConditionFieldOpened" selector="{{InsertWidgetSection.conditionField('1')}}"/>
+
+        <fillField selector="{{InsertWidgetSection.conditionField('1')}}" stepKey="setOperator" userInput="{{fieldCondition}}"/>
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
+
+        <waitForElementVisible stepKey="waitForInsertWidgetSaved" selector="{{InsertWidgetSection.save}}"/>
+        <click stepKey="clickSaveButton" selector="{{InsertWidgetSection.save}}"/>
+        <see userInput="You saved the block." stepKey="seeSavedBlockMsgOnForm"/>
+    </actionGroup>
+</actionGroups>

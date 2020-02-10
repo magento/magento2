@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * Catalog product option date type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -147,7 +148,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareForCart()
     {
         if ($this->getIsValid() && $this->getUserValue() !== null) {
-            $option = $this->getOption();
             $value = $this->getUserValue();
 
             if (isset($value['date_internal']) && $value['date_internal'] != '') {
@@ -159,7 +159,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             if ($this->_dateExists()) {
                 if ($this->useCalendar()) {
-                    $timestamp += $this->_localeDate->date($value['date'], null, true, false)->getTimestamp();
+                    $timestamp += $this->_localeDate->date($value['date'], null, false, false)->getTimestamp();
                 } else {
                     $timestamp += mktime(0, 0, 0, $value['month'], $value['day'], $value['year']);
                 }

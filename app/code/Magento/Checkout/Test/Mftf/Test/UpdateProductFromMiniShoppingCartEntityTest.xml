@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateProductFromMiniShoppingCartEntityTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Check updating product from mini shopping cart"/>
+            <description value="Update Product Qty on Mini Shopping Cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15068"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!--Create product according to dataset.-->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
+
+            <!--Add product to cart-->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+        </after>
+
+        <actionGroup ref="StorefrontUpdateProductQtyMiniShoppingCartActionGroup" stepKey="updateProductQty">
+            <argument name="product" value="$$createProduct$$" />
+            <argument name="quote" value="simpleOrderQty2" />
+        </actionGroup>
+
+        <!-- Perform all assertions -->
+        <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="checkSummary">
+            <argument name="dataQuote" value="simpleOrderQty2"/>
+        </actionGroup>
+    </test>
+</tests>

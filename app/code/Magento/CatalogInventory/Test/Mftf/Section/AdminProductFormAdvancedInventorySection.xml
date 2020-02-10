@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormAdvancedInventorySection">
+        <element name="enableQtyIncrements" type="select" selector="//*[@name='product[stock_data][enable_qty_increments]']"/>
+        <element name="enableQtyIncrementsOptions" type="select" selector="//*[@name='product[stock_data][enable_qty_increments]']//option[contains(@value, '{{var1}}')]" parameterized="true"/>
+        <element name="enableQtyIncrementsUseConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_enable_qty_inc]']"/>
+        <element name="qtyUsesDecimals" type="select" selector="//*[@name='product[stock_data][is_qty_decimal]']"/>
+        <element name="qtyUsesDecimalsOptions" type="select" selector="//*[@name='product[stock_data][is_qty_decimal]']//option[contains(@value, '{{var1}}')]" parameterized="true"/>
+        <element name="qtyIncrements" type="input" selector="//input[@name='product[stock_data][qty_increments]']"/>
+        <element name="qtyIncrementsUseConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_qty_increments]']"/>
+        <element name="doneButton" type="button" selector="//aside[contains(@class,'product_form_product_form_advanced_inventory_modal')]//button[contains(@data-role,'action')]" timeout="5"/>
+        <element name="useConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_manage_stock]']"/>
+        <element name="manageStock" type="select" selector="//*[@name='product[stock_data][manage_stock]']" timeout="30"/>
+        <element name="advancedInventoryCloseButton" type="button" selector=".product_form_product_form_advanced_inventory_modal button.action-close" timeout="30"/>
+        <element name="miniQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_min_sale_qty]']"/>
+        <element name="miniQtyAllowedInCart" type="input" selector="//*[@name='product[stock_data][min_sale_qty]']"/>
+        <element name="maxiQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_max_sale_qty]']"/>
+        <element name="maxiQtyAllowedInCart" type="input" selector="//*[@name='product[stock_data][max_sale_qty]']"/>
+        <element name="notifyBelowQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_notify_stock_qty]']"/>
+        <element name="notifyBelowQty" type="input" selector="//*[@name='product[stock_data][notify_stock_qty]']"/>
+        <element name="advancedInventoryQty" type="input" selector="//div[@class='modal-inner-wrap']//input[@name='product[quantity_and_stock_status][qty]']"/>
+        <element name="advancedInventoryStockStatus" type="select" selector="//div[@class='modal-inner-wrap']//select[@name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="outOfStockThreshold" type="select" selector="//*[@name='product[stock_data][min_qty]']" timeout="30"/>
+        <element name="minQtyConfigSetting" type="checkbox" selector="//input[@name='product[stock_data][use_config_min_qty]']" timeout="30"/>
+        <element name="advancedInventoryModal" type="block" selector=".product_form_product_form_advanced_inventory_modal[data-role=modal]"/>
+        <element name="maxiQtyAllowedInCartError" type="text" selector="[name='product[stock_data][max_sale_qty]'] + label.admin__field-error"/>
+    </section>
+</sections>

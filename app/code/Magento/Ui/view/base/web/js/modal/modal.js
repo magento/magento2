@@ -14,7 +14,8 @@ define([
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
@@ -131,7 +132,10 @@ define([
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-            $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
+
+            if (this.options.trigger) {
+                $(document).on('click', this.options.trigger, _.bind(this.toggleModal, this));
+            }
             this._on(this.modal.find(this.options.modalCloseBtn), {
                 'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
             });
@@ -188,7 +192,7 @@ define([
          * @param {String} title
          */
         setTitle: function (title) {
-            var $title = $(this.options.modalTitle),
+            var $title = this.modal.find(this.options.modalTitle),
                 $subTitle = this.modal.find(this.options.modalSubTitle);
 
             $title.text(title);
@@ -363,14 +367,7 @@ define([
             this.modal.data('active', false);
 
             if (this.overlay) {
-                // In cases when one modal is closed but there is another modal open (e.g. admin notifications)
-                // to avoid collisions between overlay and modal zIndexes
-                // overlay zIndex is set to be less than modal one
-                if (this._getVisibleCount() === 1) {
-                    this.overlay.zIndex(this.prevOverlayIndex - 1);
-                } else {
-                    this.overlay.zIndex(this.prevOverlayIndex);
-                }
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 

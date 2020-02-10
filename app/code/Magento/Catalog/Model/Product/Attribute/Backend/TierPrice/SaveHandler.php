@@ -18,7 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 /**
  * Process tier price data for handled new product
  */
-class SaveHandler implements ExtensionInterface
+class SaveHandler extends AbstractHandler
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -29,11 +29,6 @@ class SaveHandler implements ExtensionInterface
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
     private $attributeRepository;
-
-    /**
-     * @var \Magento\Customer\Api\GroupManagementInterface
-     */
-    private $groupManagement;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -59,9 +54,10 @@ class SaveHandler implements ExtensionInterface
         MetadataPool $metadataPool,
         Tierprice $tierPriceResource
     ) {
+        parent::__construct($groupManagement);
+
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
-        $this->groupManagement = $groupManagement;
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
     }
@@ -72,8 +68,6 @@ class SaveHandler implements ExtensionInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -114,58 +108,5 @@ class SaveHandler implements ExtensionInterface
         }
 
         return $entity;
-    }
-
-    /**
-     * Get additional tier price fields
-     *
-     * @param array $objectArray
-     * @return array
-     */
-    private function getAdditionalFields(array $objectArray): array
-    {
-        $percentageValue = $this->getPercentage($objectArray);
-        return [
-            'value' => $percentageValue ? null : $objectArray['price'],
-            'percentage_value' => $percentageValue ?: null,
-        ];
-    }
-
-    /**
-     * Check whether price has percentage value.
-     *
-     * @param array $priceRow
-     * @return int|null
-     */
-    private function getPercentage(array $priceRow): ?int
-    {
-        return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? (int)$priceRow['percentage_value']
-            : null;
-    }
-
-    /**
-     * Prepare tier price data by provided price row data
-     *
-     * @param array $data
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function prepareTierPrice(array $data): array
-    {
-        $useForAllGroups = (int)$data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
-        $customerGroupId = $useForAllGroups ? 0 : $data['cust_group'];
-        $tierPrice = array_merge(
-            $this->getAdditionalFields($data),
-            [
-                'website_id' => $data['website_id'],
-                'all_groups' => (int)$useForAllGroups,
-                'customer_group_id' => $customerGroupId,
-                'value' => $data['price'] ?? null,
-                'qty' => (int)$data['price_qty']
-            ]
-        );
-
-        return $tierPrice;
     }
 }

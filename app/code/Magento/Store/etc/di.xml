@@ -236,6 +236,7 @@
     <type name="Magento\Framework\App\ScopeResolverPool">
         <arguments>
             <argument name="scopeResolvers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
                 <item name="store" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="stores" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="group" xsi:type="object">Magento\Store\Model\Resolver\Group</item>
@@ -435,6 +436,7 @@
                 <item name="cleanTargetUrl" xsi:type="object">Magento\Store\Model\StoreSwitcher\CleanTargetUrl</item>
                 <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
                 <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
+                <item name="hashProcessor" xsi:type="object" sortOrder="1000">Magento\Store\Model\StoreSwitcher\HashProcessor</item>
             </argument>
         </arguments>
     </type>

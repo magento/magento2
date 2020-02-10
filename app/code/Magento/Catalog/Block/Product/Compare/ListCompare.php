@@ -122,12 +122,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getAddToWishlistParams($product)
     {
-        $continueUrl = $this->urlEncoder->encode($this->getUrl('customer/account'));
-        $urlParamName = Action::PARAM_NAME_URL_ENCODED;
-
-        $continueUrlParams = [$urlParamName => $continueUrl];
-
-        return $this->_wishlistHelper->getAddParams($product, $continueUrlParams);
+        return $this->_wishlistHelper->getAddParams($product);
     }
 
     /**

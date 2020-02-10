@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 
+/**
+ * Pricestep Helper
+ */
 class Pricestep extends \Magento\Framework\Data\Form\Element\Text
 {
     /**
@@ -40,7 +43,7 @@ class Pricestep extends \Magento\Framework\Data\Form\Element\Text
             $disabled = true;
         }
 
-        parent::addClass('validate-number validate-number-range number-range-0.01-1000000000');
+        parent::addClass('validate-number validate-number-range number-range-0.01-9999999999999999');
         $html = parent::getElementHtml();
         $htmlId = 'use_config_' . $this->getHtmlId();
         $html .= '<br/><input id="' . $htmlId . '" name="use_config[]" value="' . $this->getId() . '"';

@@ -107,9 +107,9 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_headerCount = 0;
 
     /**
-     * Set request timeout, msec
+     * Set request timeout
      *
-     * @param int $value
+     * @param int $value value in seconds
      * @return void
      */
     public function setTimeout($value)
@@ -357,6 +357,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected function makeRequest($method, $uri, $params = [])
     {
         $this->_ch = curl_init();
+        $this->curlOption(CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
@@ -422,6 +423,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     public function doError($string)
     {
+        //  phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
     }
 
@@ -438,7 +440,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     {
         if ($this->_headerCount == 0) {
             $line = explode(" ", trim($data), 3);
-            if (count($line) != 3) {
+            if (count($line) < 2) {
                 $this->doError("Invalid response line returned from server: " . $data);
             }
             $this->_responseStatus = (int)$line[1];

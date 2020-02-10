@@ -96,7 +96,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -117,7 +117,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
@@ -213,7 +213,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -227,18 +227,19 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
-            <argument name="product" value="ApiConfigurableProduct"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct">
+            <argument name="product" value="$$createConfigProduct$$" />
+        </actionGroup>
 
         <!-- Open the wizard for editing configurations and fill out a new attribute -->
         <click stepKey="clickEditConfig" selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"/>
         <waitForPageLoad stepKey="waitForEditConfig"/>
         <click stepKey="clickNextWizard" selector="{{AdminCreateProductConfigurationsPanel.next}}"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click stepKey="createNewValue" selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}"/>
         <fillField stepKey="fillNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" userInput="simple"/>
         <click stepKey="confirmNewAttribute" selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}"/>
@@ -264,7 +265,7 @@
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
 
         <!-- Find the simple product that we just created using the product grid and delete it -->
-        <actionGroup ref="deleteProductBySku" stepKey="findCreatedProduct2">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}2-simple"/>
         </actionGroup>
     </test>

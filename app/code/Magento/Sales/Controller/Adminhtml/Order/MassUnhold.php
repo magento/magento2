@@ -5,13 +5,19 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 
-class MassUnhold extends AbstractMassAction
+/**
+ * Class MassUnhold, change status for select orders
+ *
+ * @package Magento\Sales\Controller\Adminhtml\Order
+ */
+class MassUnhold extends AbstractMassAction implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -24,6 +30,8 @@ class MassUnhold extends AbstractMassAction
     private $orderManagement;
 
     /**
+     * Class constructor
+     *
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory

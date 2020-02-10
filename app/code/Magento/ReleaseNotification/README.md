@@ -1,4 +1,4 @@
- # Magento_ReleaseNotification Module
+# Magento_ReleaseNotification module
 
 The **Release Notification Module** serves to provide a notification delivery platform for displaying new features of a Magento installation or upgrade as well as any other required release notifications.
 
@@ -50,4 +50,4 @@ A clickable link to internal or external content in any text field will be creat
 
 ### Link Format Example:
 
-The text: `http://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](http://devdocs.magento.com/).
+The text: `https://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](https://devdocs.magento.com/).

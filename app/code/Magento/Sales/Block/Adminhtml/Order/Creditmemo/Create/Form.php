@@ -26,7 +26,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve source
      *
-     * @return \Magento\Sales\Model\Order\Invoice
+     * @return \Magento\Sales\Model\Order\Creditmemo
      */
     public function getSource()
     {

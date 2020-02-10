@@ -9,7 +9,10 @@ use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 
 class BundleTest extends AbstractProductExportImportTestCase
 {
-    public function exportImportDataProvider()
+    /**
+     * @return array
+     */
+    public function exportImportDataProvider(): array
     {
         return [
             // @todo uncomment after MAGETWO-49677 resolved
@@ -45,17 +48,13 @@ class BundleTest extends AbstractProductExportImportTestCase
         ];
     }
 
-    public function importReplaceDataProvider()
-    {
-        return $this->exportImportDataProvider();
-    }
-
     /**
-     * @param \Magento\Catalog\Model\Product $expectedProduct
-     * @param \Magento\Catalog\Model\Product $actualProduct
+     * @inheritdoc
      */
-    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
-    {
+    protected function assertEqualsSpecificAttributes(
+        \Magento\Catalog\Model\Product $expectedProduct,
+        \Magento\Catalog\Model\Product $actualProduct
+    ): void {
         $expectedBundleProductOptions = $expectedProduct->getExtensionAttributes()->getBundleProductOptions();
         $actualBundleProductOptions = $actualProduct->getExtensionAttributes()->getBundleProductOptions();
 

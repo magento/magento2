@@ -3,16 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\App\Action;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Add wishlist item to shopping cart and remove from wishlist controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Wishlist\Controller\AbstractIndex
+class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -183,7 +186,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
                     'You added %1 to your shopping cart.',
                     $this->escaper->escapeHtml($item->getProduct()->getName())
                 );
-                $this->messageManager->addSuccess($message);
+                $this->messageManager->addSuccessMessage($message);
             }
 
             if ($this->cartHelper->getShouldRedirectToCart()) {
@@ -195,12 +198,12 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
                 }
             }
         } catch (ProductException $e) {
-            $this->messageManager->addError(__('This product(s) is out of stock.'));
+            $this->messageManager->addErrorMessage(__('This product(s) is out of stock.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addNotice($e->getMessage());
+            $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $configureUrl;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
 
         $this->helper->calculate();
@@ -211,7 +214,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
             $resultJson->setData(['backUrl' => $redirectUrl]);
             return $resultJson;
         }
-        
+
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
     }

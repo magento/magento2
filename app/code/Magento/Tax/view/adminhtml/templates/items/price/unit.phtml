@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
@@ -13,24 +12,24 @@
 $_item = $block->getItem();
 ?>
 
-<?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
+<?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices() || $this->helper(\Magento\Tax\Helper\Data::class)->displaySalesPriceExclTax()) : ?>
     <div class="price-excl-tax">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
-            <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
+        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices()) : ?>
+            <span class="label"><?= $block->escapeHtml(__('Excl. Tax')) ?>:</span>
         <?php endif; ?>
 
-        <?= /* @escapeNotVerified */ $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
+        <?= /* @noEscape */ $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
     </div>
 <?php endif; ?>
-<?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
+<?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices() || $this->helper(\Magento\Tax\Helper\Data::class)->displaySalesPriceInclTax()) : ?>
     <div class="price-incl-tax">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
-            <span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
+        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices()) : ?>
+            <span class="label"><?= $block->escapeHtml(__('Incl. Tax')) ?>:</span>
         <?php endif; ?>
-        <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
-        <?php $_baseIncl = $this->helper('Magento\Checkout\Helper\Data')->getBasePriceInclTax($_item); ?>
+        <?php $_incl = $this->helper(\Magento\Checkout\Helper\Data::class)->getPriceInclTax($_item); ?>
+        <?php $_baseIncl = $this->helper(\Magento\Checkout\Helper\Data::class)->getBasePriceInclTax($_item); ?>
 
-        <?= /* @escapeNotVerified */ $block->displayPrices($_baseIncl, $_incl) ?>
+        <?= /* @noEscape */ $block->displayPrices($_baseIncl, $_incl) ?>
 
     </div>
 <?php endif; ?>

@@ -11,6 +11,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class OrderCommentAddTest
+ *
  * @package Magento\Sales\Service\V1
  */
 class OrderStatusHistoryAddTest extends WebapiAbstract
@@ -48,7 +49,7 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
             OrderStatusHistoryInterface::CREATED_AT => null,
             OrderStatusHistoryInterface::PARENT_ID => $order->getId(),
             OrderStatusHistoryInterface::ENTITY_NAME => null,
-            OrderStatusHistoryInterface::STATUS => null,
+            OrderStatusHistoryInterface::STATUS => $order->getStatus(),
             OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT => 1,
         ];
 
@@ -69,25 +70,27 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
 
         //Verification
         $comments = $order->load($order->getId())->getAllStatusHistory();
+        $comment = reset($comments);
 
-        $commentData = reset($comments);
-        foreach ($commentData as $key => $value) {
-            $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::COMMENT],
-                $statusHistoryComment->getComment()
-            );
-            $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::PARENT_ID],
-                $statusHistoryComment->getParentId()
-            );
-            $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED],
-                $statusHistoryComment->getIsCustomerNotified()
-            );
-            $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT],
-                $statusHistoryComment->getIsVisibleOnFront()
-            );
-        }
+        $this->assertEquals(
+            $commentData[OrderStatusHistoryInterface::COMMENT],
+            $comment->getComment()
+        );
+        $this->assertEquals(
+            $commentData[OrderStatusHistoryInterface::PARENT_ID],
+            $comment->getParentId()
+        );
+        $this->assertEquals(
+            $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED],
+            $comment->getIsCustomerNotified()
+        );
+        $this->assertEquals(
+            $commentData[OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT],
+            $comment->getIsVisibleOnFront()
+        );
+        $this->assertEquals(
+            $commentData[OrderStatusHistoryInterface::STATUS],
+            $comment->getStatus()
+        );
     }
 }

@@ -27,9 +27,9 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 class Login extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var \Magento\Customer\Model\Session
      */
-    protected $session;
+    protected $customerSession;
 
     /**
      * @var AccountManagementInterface
@@ -107,7 +107,6 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
 
     /**
      * Get account redirect.
-     * For release backward compatibility.
      *
      * @deprecated 100.0.10
      * @return AccountRedirect
@@ -133,6 +132,8 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
     }
 
     /**
+     * Initializes config dependency.
+     *
      * @deprecated 100.0.10
      * @return ScopeConfigInterface
      */
@@ -145,6 +146,8 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
     }
 
     /**
+     * Sets config dependency.
+     *
      * @deprecated 100.0.10
      * @param ScopeConfigInterface $value
      * @return void
@@ -188,7 +191,6 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
                 $credentials['password']
             );
             $this->customerSession->setCustomerDataAsLoggedIn($customer);
-            $this->customerSession->regenerateId();
             $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
             if ($this->cookieManager->getCookie('mage-cache-sessid')) {
                 $metadata = $this->cookieMetadataFactory->createCookieMetadata();
@@ -199,25 +201,15 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
             }
-        } catch (EmailNotConfirmedException $e) {
-            $response = [
-                'errors' => true,
-                'message' => $e->getMessage()
-            ];
-        } catch (InvalidEmailOrPasswordException $e) {
-            $response = [
-                'errors' => true,
-                'message' => $e->getMessage()
-            ];
         } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         } catch (\Exception $e) {
             $response = [
                 'errors' => true,
-                'message' => __('Invalid login or password.')
+                'message' => __('Invalid login or password.'),
             ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

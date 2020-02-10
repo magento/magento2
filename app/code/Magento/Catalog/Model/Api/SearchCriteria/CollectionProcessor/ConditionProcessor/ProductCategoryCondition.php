@@ -38,6 +38,7 @@ class ProductCategoryCondition implements CustomConditionInterface
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -104,7 +105,7 @@ class ProductCategoryCondition implements CustomConditionInterface
             }
         }
 
-        return array_unique(array_merge($categoryIds, ...$childCategoryIds));
+        return array_map('intval', array_unique(array_merge($categoryIds, ...$childCategoryIds)));
     }
 
     /**

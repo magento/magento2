@@ -24,12 +24,28 @@ define([
                 return true;
             }).and.callThrough(),
             mocks = {
+                'Magento_Checkout/js/model/checkout-data-resolver': {
+
+                    /** Stub */
+                    applyBillingAddress: function () {
+                        return true;
+                    },
+
+                    /** Stub */
+                    resolveBillingAddress: function () {
+                        return true;
+                    }
+                },
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),
                     paymentMethod: ko.observable(),
-                    totals: ko.observable({})
+                    totals: ko.observable({}),
 
+                    /** Stub */
+                    isVirtual: function () {
+                        return false;
+                    }
                 },
                 'Magento_Checkout/js/action/set-payment-information': setPaymentMock,
                 'Magento_Checkout/js/model/payment/additional-validators': {
@@ -61,7 +77,7 @@ define([
                         name: 'test',
                         index: 'test',
                         item: {
-                            method: 'paypal_express_bml'
+                            method: 'payflow_express_bml'
                         }
                     });
 

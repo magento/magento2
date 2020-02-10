@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <!--Main test-->
@@ -40,7 +40,7 @@
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Recently Viewed Products" stepKey="selectRecentlyViewedProducts" />
@@ -72,7 +72,7 @@
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

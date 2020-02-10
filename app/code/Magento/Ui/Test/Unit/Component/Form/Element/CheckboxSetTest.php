@@ -15,13 +15,16 @@ use Magento\Ui\Component\Form\Element\CheckboxSet;
 class CheckboxSetTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
         return CheckboxSet::class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testGetComponentName()
     {
         $this->assertSame(CheckboxSet::NAME, $this->getModel()->getComponentName());

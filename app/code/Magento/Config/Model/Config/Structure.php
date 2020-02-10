@@ -292,6 +292,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             foreach ($section['children'] as $group) {
                 if (isset($group['children'])) {
                     $path = $section['id'] . '/' . $group['id'];
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                     $result = array_merge(
                         $result,
                         $this->_getGroupFieldPathsByAttribute(
@@ -337,7 +338,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Collects config paths and their structure paths from configuration files.
      * Returns the map of config paths and their structure paths.
-     *
      * All paths are declared in module's system.xml.
      *
      * ```xml
@@ -394,12 +394,12 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
 
         foreach ($elements as $element) {
             if (isset($element['children'])) {
-                $result = array_replace_recursive(
+                $result = array_merge_recursive(
                     $result,
                     $this->getFieldsRecursively($element['children'])
                 );
             } else {
-                if ($element['_elementType'] === 'field' && isset($element['label'])) {
+                if ($element['_elementType'] === 'field') {
                     $structurePath = (isset($element['path']) ? $element['path'] . '/' : '') . $element['id'];
                     $configPath = isset($element['config_path']) ? $element['config_path'] : $structurePath;
 

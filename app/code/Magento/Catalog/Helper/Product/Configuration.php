@@ -55,6 +55,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Json $serializer
+     * @param Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

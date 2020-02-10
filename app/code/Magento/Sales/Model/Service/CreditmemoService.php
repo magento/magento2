@@ -98,7 +98,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * Cancel an existing creditmemo
      *
      * @param int $id Credit Memo Id
-     * @return bool
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -202,7 +202,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The most money available to refund is %1.',
-                    $creditmemo->getOrder()->formatBasePrice($baseAvailableRefund)
+                    $creditmemo->getOrder()->getBaseCurrency()->formatTxt($baseAvailableRefund)
                 )
             );
         }
@@ -210,7 +210,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * Gets the instance of RefundAdapterInterface
+     * Initializes RefundAdapterInterface dependency.
      *
      * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      * @deprecated 100.1.3
@@ -225,7 +225,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * Gets instance of ResourceConnection.
+     * Initializes ResourceConnection dependency.
      *
      * @return \Magento\Framework\App\ResourceConnection|mixed
      * @deprecated 100.1.3
@@ -240,7 +240,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * Gets instance of OrderRepositoryInterface.
+     * Initializes OrderRepositoryInterface dependency.
      *
      * @return \Magento\Sales\Api\OrderRepositoryInterface
      * @deprecated 100.1.3
@@ -255,7 +255,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * Gets instance of InvoiceRepositoryInterface
+     * Initializes InvoiceRepositoryInterface dependency.
      *
      * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      * @deprecated 100.1.3

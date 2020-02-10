@@ -13,7 +13,9 @@ class LoadTest extends \Magento\TestFramework\TestCase\AbstractController
         $expected = [
             'message' => 'The &quot;section&lt;invalid&quot; section source isn&#039;t supported.',
         ];
-        $this->dispatch('/customer/section/load/?sections=section<invalid&update_section_id=false&_=147066166394');
+        $this->dispatch(
+            '/customer/section/load/?sections=section<invalid&force_new_section_timestamp=false&_=147066166394'
+        );
         self::assertEquals(json_encode($expected), $this->getResponse()->getBody());
     }
 }

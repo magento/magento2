@@ -140,6 +140,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice">
         <arguments>
             <argument name="excludeAdjustments" xsi:type="array">
@@ -211,6 +218,19 @@
         <arguments>
             <argument name="productTypeChildrenValidationMap" xsi:type="array">
                 <item name="bundle" xsi:type="boolean">false</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="price_type" xsi:type="string">catalog_product</item>
+                    <item name="price_view" xsi:type="string">catalog_product</item>
+                    <item name="shipment_type" xsi:type="string">catalog_product</item>
+                    <item name="sku_type" xsi:type="string">catalog_product</item>
+                    <item name="weight_type" xsi:type="string">catalog_product</item>
+                </item>
             </argument>
         </arguments>
     </type>

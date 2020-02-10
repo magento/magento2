@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateRoleActionGroup">
+        <annotations>
+            <description>Goes to the Admin Edit Role page. Fills in the provided User details. Add the provided Role. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="restrictedRole"/>
+            <argument name="User"/>
+        </arguments>
+
+        <amOnPage url="{{AdminEditRolePage.url}}" stepKey="navigateToNewRole"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{User.name}}" stepKey="fillRoleName"/>
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterPassword"/>
+        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab"/>
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.roleScopes}}"  stepKey="waitForScopeSelection"/>
+        <selectOption selector="{{AdminEditRoleResourcesSection.resourceAccess}}" userInput="0" stepKey="selectResourceAccessCustom"/>
+        <waitForElementVisible stepKey="waitForElementVisible" selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}" time="30"/>
+        <click stepKey="clickContentBlockCheckbox" selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"/>
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+</actionGroups>

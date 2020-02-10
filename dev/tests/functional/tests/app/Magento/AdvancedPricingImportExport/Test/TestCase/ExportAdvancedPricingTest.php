@@ -11,6 +11,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Store\Test\Fixture\Website;
+use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
  * Preconditions:
@@ -65,16 +66,23 @@ class ExportAdvancedPricingTest extends Injectable
     private $catalogProductIndex;
 
     /**
-     * Prepare test data.
+     * Cron command
      *
-     * @param CatalogProductIndex $catalogProductIndex
+     * @var Cron
+     */
+    private $cron;
+
+    /**
+     * Run cron before tests running
+     *
+     * @param Cron $cron
      * @return void
      */
     public function __prepare(
-        CatalogProductIndex $catalogProductIndex
+        Cron $cron
     ) {
-        $catalogProductIndex->open();
-        $catalogProductIndex->getProductGrid()->massaction([], 'Delete', true, 'Select All');
+        $cron->run();
+        $cron->run();
     }
 
     /**
@@ -84,18 +92,21 @@ class ExportAdvancedPricingTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @param AdminExportIndex $adminExportIndex
      * @param CatalogProductIndex $catalogProductIndexPage
+     * @param Cron $cron
      * @return void
      */
     public function __inject(
         TestStepFactory $stepFactory,
         FixtureFactory $fixtureFactory,
         AdminExportIndex $adminExportIndex,
-        CatalogProductIndex $catalogProductIndexPage
+        CatalogProductIndex $catalogProductIndexPage,
+        Cron $cron
     ) {
         $this->stepFactory = $stepFactory;
         $this->fixtureFactory = $fixtureFactory;
         $this->adminExportIndex = $adminExportIndex;
         $this->catalogProductIndex = $catalogProductIndexPage;
+        $this->cron = $cron;
     }
 
     /**
@@ -130,9 +141,13 @@ class ExportAdvancedPricingTest extends Injectable
             $website->persist();
             $this->setupCurrencyForCustomWebsite($website, $currencyCustomWebsite);
         }
+        $this->cron->run();
+        $this->cron->run();
         $products = $this->prepareProducts($products, $website);
+        $this->cron->run();
+        $this->cron->run();
         $this->adminExportIndex->open();
-
+        $this->adminExportIndex->getExportedGrid()->deleteAllExportedFiles();
         $exportData = $this->fixtureFactory->createByCode(
             'exportData',
             [
@@ -150,7 +165,8 @@ class ExportAdvancedPricingTest extends Injectable
         if (!empty($advancedPricingAttributes)) {
             $products = [$products[0]];
         }
-
+        $this->cron->run();
+        $this->cron->run();
         return [
             'products' => $products
         ];
@@ -191,6 +207,9 @@ class ExportAdvancedPricingTest extends Injectable
      */
     public function prepareProducts(array $products, Website $website = null)
     {
+        $this->catalogProductIndex->open();
+        $this->catalogProductIndex->getProductGrid()->massaction([], 'Delete', true, 'Select All');
+
         if (empty($products)) {
             return null;
         }

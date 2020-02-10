@@ -24,13 +24,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     protected $_eventManager = null;
 
     /**
-     * AbstractEav constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param null $connectionName
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -70,7 +68,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     /**
      * Rebuild index data by entities
      *
-     *
      * @param int|array $processIds
      * @return $this
      * @throws \Exception
@@ -88,8 +85,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
     /**
      * Rebuild index data by attribute id
-     * If attribute is not indexable remove data by attribute
      *
+     * If attribute is not indexable remove data by attribute
      *
      * @param int $attributeId
      * @param bool $isIndexable
@@ -245,7 +242,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
     /**
      * Retrieve condition for retrieve indexable attribute select
-     * the catalog/eav_attribute table must have alias is ca
+     *
+     * The catalog/eav_attribute table must have alias is ca
      *
      * @return string
      */

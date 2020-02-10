@@ -7,43 +7,48 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Cms;
 
-use Magento\Cms\Model\Block;
-use Magento\Cms\Model\GetBlockByIdentifier;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Widget\Model\Template\FilterEmulate;
 
+/**
+ * Get CMS Block test
+ */
 class CmsBlockTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var BlockRepositoryInterface
      */
-    private $objectManager;
+    private $blockRepository;
+
+    /**
+     * @var FilterEmulate
+     */
+    private $filterEmulate;
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->blockRepository = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class);
+        $this->filterEmulate = Bootstrap::getObjectManager()->get(FilterEmulate::class);
     }
 
     /**
      * Verify the fields of CMS Block selected by identifiers
      *
-     * @magentoApiDataFixture Magento/Cms/_files/block.php
+     * @magentoApiDataFixture Magento/Cms/_files/blocks.php
      */
-    public function testGetCmsBlocksByIdentifiers()
+    public function testGetCmsBlock()
     {
-        /** @var StoreManagerInterface $storeManager */
-        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $storeId = (int)$storeManager->getStore()->getId();
-        $cmsBlock = $this->objectManager->get(GetBlockByIdentifier::class)->execute("fixture_block", $storeId);
+        $cmsBlock = $this->blockRepository->getById('enabled_block');
         $cmsBlockData = $cmsBlock->getData();
-        /** @var FilterEmulate $widgetFilter */
-        $widgetFilter = $this->objectManager->get(FilterEmulate::class);
-        $renderedContent = $widgetFilter->setUseSessionInUrl(false)->filter($cmsBlock->getContent());
+        $renderedContent = $this->filterEmulate->filter($cmsBlock->getContent());
+
         $query =
             <<<QUERY
 {
-  cmsBlocks(identifiers: "fixture_block") {
+  cmsBlocks(identifiers: "enabled_block") {
     items {
       identifier
       title
@@ -52,34 +57,63 @@ class CmsBlockTest extends GraphQlAbstract
   }
 }
 QUERY;
-
         $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('cmsBlocks', $response);
-        $this->assertArrayHasKey('items', $response['cmsBlocks']);
-        $this->assertArrayHasKey('content', $response['cmsBlocks']['items'][0]);
-        $this->assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
-        $this->assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
-        $this->assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
+
+        self::assertArrayHasKey('cmsBlocks', $response);
+        self::assertArrayHasKey('items', $response['cmsBlocks']);
+
+        self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
+        self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
+    }
+
+    /**
+     * Verify the fields of CMS Block selected by block_id
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/blocks.php
+     */
+    public function testGetCmsBlockByBlockId()
+    {
+        $cmsBlock = $this->blockRepository->getById('enabled_block');
+        $cmsBlockData = $cmsBlock->getData();
+        $blockId = $cmsBlockData['block_id'];
+        $renderedContent = $this->filterEmulate->filter($cmsBlock->getContent());
+
+        $query =
+            <<<QUERY
+{
+  cmsBlocks(identifiers: "$blockId") {
+    items {
+      identifier
+      title
+      content
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('cmsBlocks', $response);
+        self::assertArrayHasKey('items', $response['cmsBlocks']);
+        self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
+        self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
     }
 
     /**
      * Verify the message when CMS Block is disabled
      *
-     * @magentoApiDataFixture Magento/Cms/_files/block.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The CMS block with the "disabled_block" ID doesn't exist
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/blocks.php
      */
-    public function testGetDisabledCmsBlockByIdentifiers()
+    public function testGetDisabledCmsBlock()
     {
-        /** @var StoreManagerInterface $storeManager */
-        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $storeId = (int)$storeManager->getStore()->getId();
-        $cmsBlockId = $this->objectManager->get(GetBlockByIdentifier::class)
-            ->execute("fixture_block", $storeId)
-            ->getId();
-        $this->objectManager->get(Block::class)->load($cmsBlockId)->setIsActive(0)->save();
         $query =
             <<<QUERY
 {
-  cmsBlocks(identifiers: "fixture_block") {
+  cmsBlocks(identifiers: "disabled_block") {
     items {
       identifier
       title
@@ -88,16 +122,16 @@ QUERY;
   }
 }
 QUERY;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('No such entity.');
         $this->graphQlQuery($query);
     }
 
     /**
      * Verify the message when identifiers were not specified
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage "identifiers" of CMS blocks should be specified
      */
-    public function testGetCmsBlockBypassingIdentifiers()
+    public function testGetCmsBlocksWithoutIdentifiers()
     {
         $query =
             <<<QUERY
@@ -111,21 +145,21 @@ QUERY;
   }
 }
 QUERY;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('"identifiers" of CMS blocks should be specified');
         $this->graphQlQuery($query);
     }
 
     /**
      * Verify the message when CMS Block with such identifiers does not exist
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The CMS block with the "nonexistent_id" ID doesn't exist.
      */
     public function testGetCmsBlockByNonExistentIdentifier()
     {
         $query =
             <<<QUERY
 {
-  cmsBlocks(identifiers: "0") {
+  cmsBlocks(identifiers: "nonexistent_id") {
     items {
       identifier
       title
@@ -134,9 +168,39 @@ QUERY;
   }
 }
 QUERY;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The CMS block with the "0" ID doesn\'t exist.');
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * Verify the fields of CMS Block selected by identifiers
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/blocks.php
+     */
+    public function testGetEnabledAndDisabledCmsBlockInOneRequest()
+    {
+        $query =
+            <<<QUERY
+{
+  cmsBlocks(identifiers: ["enabled_block", "disabled_block"]) {
+    items {
+      identifier
+    }
+  }
+}
+QUERY;
+
+        try {
+            $this->graphQlQuery($query);
+            self::fail('Response should contains errors.');
+        } catch (ResponseContainsErrorsException $e) {
+            $responseData = $e->getResponseData();
+        }
+
+        self::assertNotEmpty($responseData);
+        self::assertEquals('enabled_block', $responseData['data']['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals(
+            'The CMS block with the "disabled_block" ID doesn\'t exist.',
+            $responseData['errors'][0]['message']
+        );
     }
 }

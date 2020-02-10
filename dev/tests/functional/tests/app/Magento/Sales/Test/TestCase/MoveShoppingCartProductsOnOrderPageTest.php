@@ -144,6 +144,7 @@ class MoveShoppingCartProductsOnOrderPageTest extends Injectable
         )->run();
         $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $this->catalogProductView->getViewBlock()->addToCart($product);
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         //Steps
         $this->customerIndex->open();

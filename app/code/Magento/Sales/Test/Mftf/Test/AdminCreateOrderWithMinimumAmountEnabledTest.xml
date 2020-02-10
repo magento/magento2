@@ -37,9 +37,10 @@
 
         <!--Admin creates order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrder"/>
-        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="navigateToNewOrderPage"/>
-
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerSingleStoreActionGroup" stepKey="navigateToNewOrderPage"/>
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectFirstStoreViewIfAppears"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearedAfterStoreSelected"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
 
@@ -48,12 +49,15 @@
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmail"/>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
 
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal"/>
@@ -68,12 +72,12 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
         <assertNotEmpty actual="$orderId" stepKey="assertOrderIdIsNotEmpty"/>
-        <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation">
+        <actionGroup ref="VerifyBasicOrderInformationActionGroup" stepKey="verifyOrderInformation">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
             <argument name="billingAddress" value="US_Address_TX"/>
         </actionGroup>
-        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeSimpleProductInItemsOrdered">
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="seeSimpleProductInItemsOrdered">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
     </test>

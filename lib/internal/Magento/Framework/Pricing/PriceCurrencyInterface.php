@@ -13,9 +13,6 @@ namespace Magento\Framework\Pricing;
  */
 interface PriceCurrencyInterface
 {
-    /**
-     * Default precision
-     */
     const DEFAULT_PRECISION = 2;
 
     /**
@@ -47,7 +44,7 @@ interface PriceCurrencyInterface
      * @param int $precision
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
-     * @return float
+     * @return string
      */
     public function format(
         $amount,
@@ -78,6 +75,7 @@ interface PriceCurrencyInterface
     /**
      * Round price
      *
+     * @deprecated
      * @param float $price
      * @return float
      */
@@ -93,6 +91,8 @@ interface PriceCurrencyInterface
     public function getCurrency($scope = null, $currency = null);
 
     /**
+     * Get currency symbol
+     *
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string

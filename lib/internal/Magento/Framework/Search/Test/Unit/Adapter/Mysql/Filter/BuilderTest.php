@@ -29,7 +29,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $preprocessor;
 
     /**
-     * @var ConditionManager|\PHPUnit_Framework_MockObject_MockObject $conditionManager
+     * @var ConditionManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $conditionManager;
 

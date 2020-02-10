@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="customer">
+            <group id="captcha" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1">
+                <field id="forms" translate="label comment" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <comment>CAPTCHA for "Create user", "Forgot password", "Payflow Pro" forms is always enabled if chosen.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

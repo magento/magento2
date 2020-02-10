@@ -10,12 +10,13 @@ use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search indexer plugin for catalog product.
  */
 class Product extends AbstractPlugin
 {
     /**
+     * Reindex on product save.
+     *
      * @param ResourceProduct $productResource
      * @param \Closure $proceed
      * @param AbstractModel $product
@@ -42,6 +43,8 @@ class Product extends AbstractPlugin
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param ResourceProduct $productResource
      * @param \Closure $proceed
      * @param AbstractModel $product

@@ -27,6 +27,7 @@ Submit,Submit
 "Letters, numbers, spaces or underscores only please","Letters, numbers, spaces or underscores only please"
 "Letters only please","Letters only please"
 "No white space please","No white space please"
+"No marginal white space please","No marginal white space please"
 "Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx","Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx"
 "A positive or negative non-decimal number please","A positive or negative non-decimal number please"
 "The specified vehicle identification number (VIN) is invalid.","The specified vehicle identification number (VIN) is invalid."

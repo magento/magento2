@@ -11,10 +11,10 @@
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Queue ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Queue name"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="unique" name="QUEUE_NAME">
+        <constraint xsi:type="unique" referenceId="QUEUE_NAME">
             <column name="name"/>
         </constraint>
     </table>
@@ -23,7 +23,7 @@
                 comment="Message ID"/>
         <column xsi:type="varchar" name="topic_name" nullable="true" length="255" comment="Message topic"/>
         <column xsi:type="longtext" name="body" nullable="true" comment="Message body"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
     </table>
@@ -41,19 +41,19 @@
                 comment="Message status in particular queue"/>
         <column xsi:type="smallint" name="number_of_trials" padding="5" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Number of trials to processed failed message processing"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_STATUS_MESSAGE_ID_QUEUE_MESSAGE_ID"
+        <constraint xsi:type="foreign" referenceId="QUEUE_MESSAGE_STATUS_MESSAGE_ID_QUEUE_MESSAGE_ID"
                     table="queue_message_status" column="message_id" referenceTable="queue_message" referenceColumn="id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_STATUS_QUEUE_ID_QUEUE_ID" table="queue_message_status"
+        <constraint xsi:type="foreign" referenceId="QUEUE_MESSAGE_STATUS_QUEUE_ID_QUEUE_ID" table="queue_message_status"
                     column="queue_id" referenceTable="queue" referenceColumn="id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="QUEUE_MESSAGE_STATUS_QUEUE_ID_MESSAGE_ID">
+        <constraint xsi:type="unique" referenceId="QUEUE_MESSAGE_STATUS_QUEUE_ID_MESSAGE_ID">
             <column name="queue_id"/>
             <column name="message_id"/>
         </constraint>
-        <index name="QUEUE_MESSAGE_STATUS_STATUS_UPDATED_AT" indexType="btree">
+        <index referenceId="QUEUE_MESSAGE_STATUS_STATUS_UPDATED_AT" indexType="btree">
             <column name="status"/>
             <column name="updated_at"/>
         </index>

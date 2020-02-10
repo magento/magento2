@@ -15,13 +15,16 @@ use Magento\Ui\Component\Form\Element\RadioSet;
 class RadioSetTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
         return RadioSet::class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testGetComponentName()
     {
         $this->assertSame(RadioSet::NAME, $this->getModel()->getComponentName());

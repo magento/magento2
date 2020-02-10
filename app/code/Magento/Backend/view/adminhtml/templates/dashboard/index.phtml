@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
@@ -17,13 +14,13 @@ require([
 
 window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
-<?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
-    ajaxBlockParam = 'block/tab_<?= /* @escapeNotVerified */ $tabId ?>/';
-    ajaxBlockUrl = '<?= $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
+    <?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId) : ?>
+    ajaxBlockParam = 'block/tab_<?= $block->escapeJs($tabId) ?>/';
+    ajaxBlockUrl = '<?= $block->escapeJs($block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => ''])) ?>' + ajaxBlockParam + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
-            tabContentElementId = '<?= /* @escapeNotVerified */ $block->getChildBlock('diagrams')->getId() ?>_<?= /* @escapeNotVerified */ $tabId ?>_content';
+            tabContentElementId = '<?= $block->escapeJs($block->getChildBlock('diagrams')->getId()) ?>_<?= $block->escapeJs($tabId) ?>_content';
             try {
                 if (transport.responseText.isJSON()) {
                     var response = transport.responseText.evalJSON()
@@ -44,8 +41,8 @@ window.changeDiagramsPeriod = function(periodObj) {
             }
         }
     });
-<?php endforeach; ?>
-    ajaxBlockUrl = '<?= $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => '']) ?>' + periodParam;
+    <?php endforeach; ?>
+    ajaxBlockUrl = '<?= $block->escapeJs($block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => ''])) ?>' + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
@@ -93,15 +90,15 @@ window.changeDiagramsPeriod = function(periodObj) {
     <div class="dashboard-secondary col-m-4 col-m-pull-8">
         <?= $block->getChildHtml('sales') ?>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Last Orders') ?></div>
+            <div class="dashboard-item-title"><?= $block->escapeHtml(__('Last Orders')) ?></div>
             <?= $block->getChildHtml('lastOrders') ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Last Search Terms') ?></div>
+            <div class="dashboard-item-title"><?= $block->escapeHtml(__('Last Search Terms')) ?></div>
             <?= $block->getChildHtml('lastSearches') ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?= /* @escapeNotVerified */ __('Top Search Terms') ?></div>
+            <div class="dashboard-item-title"><?= $block->escapeHtml(__('Top Search Terms')) ?></div>
             <?= $block->getChildHtml('topSearches') ?>
         </div>
     </div>

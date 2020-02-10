@@ -6,9 +6,9 @@
 
 namespace Magento\Mtf\Client\Element;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Typified element class for conditions.
@@ -136,6 +136,13 @@ class ConditionsElement extends SimpleElement
     protected $chooserGridLocator = 'div[id*=chooser]';
 
     /**
+     * Datepicker xpath.
+     *
+     * @var string
+     */
+    private $datepicker = './/*[contains(@class,"ui-datepicker-trigger")]';
+
+    /**
      * Key of last find param.
      *
      * @var int
@@ -189,10 +196,14 @@ class ConditionsElement extends SimpleElement
     protected $exception;
 
     /**
-     * Set value to conditions.
+     * Condition option text selector.
      *
-     * @param string $value
-     * @return void
+     * @var string
+     */
+    private $conditionOptionTextSelector = '//option[normalize-space(text())="%s"]';
+
+    /**
+     * @inheritdoc
      */
     public function setValue($value)
     {
@@ -261,7 +272,7 @@ class ConditionsElement extends SimpleElement
         $this->addCondition($condition['type'], $context);
         $createdCondition = $context->find($this->created, Locator::SELECTOR_XPATH);
         $this->waitForCondition($createdCondition);
-        $this->fillCondition($condition['rules'], $createdCondition);
+        $this->fillCondition($condition['rules'], $createdCondition, $condition['type']);
     }
 
     /**
@@ -278,10 +289,16 @@ class ConditionsElement extends SimpleElement
         $count = 0;
 
         do {
-            $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
-
             try {
-                $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($type);
+                $specificType = $newCondition->find(
+                    sprintf($this->conditionOptionTextSelector, $type),
+                    Locator::SELECTOR_XPATH
+                )->isPresent();
+                $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
+                $condition = $specificType
+                    ? $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'selectcondition')
+                    : $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select');
+                $condition->setValue($type);
                 $isSetType = true;
             } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
                 $isSetType = false;
@@ -302,13 +319,14 @@ class ConditionsElement extends SimpleElement
      *
      * @param array $rules
      * @param ElementInterface $element
+     * @param string|null $type
      * @return void
      * @throws \Exception
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function fillCondition(array $rules, ElementInterface $element)
+    protected function fillCondition(array $rules, ElementInterface $element, $type = null)
     {
         $this->resetKeyParam();
         foreach ($rules as $rule) {
@@ -329,7 +347,7 @@ class ConditionsElement extends SimpleElement
 
                     if ($this->fillGrid($rule, $param)) {
                         $isSet = true;
-                    } elseif ($this->fillSelect($rule, $param)) {
+                    } elseif ($this->fillSelect($rule, $param, $type)) {
                         $isSet = true;
                     } elseif ($this->fillText($rule, $param)) {
                         $isSet = true;
@@ -386,11 +404,15 @@ class ConditionsElement extends SimpleElement
      *
      * @param string $rule
      * @param ElementInterface $param
+     * @param string|null $type
      * @return bool
      */
-    protected function fillSelect($rule, ElementInterface $param)
+    protected function fillSelect($rule, ElementInterface $param, $type = null)
     {
-        $value = $param->find('select', Locator::SELECTOR_TAG_NAME, 'select');
+        //Avoid confusion between regions like: "Baja California" and "California".
+        $value = strpos($type, 'State/Province') === false
+            ? $param->find('select', Locator::SELECTOR_TAG_NAME, 'select')
+            : $param->find('select', Locator::SELECTOR_TAG_NAME, 'selectstate');
         if ($value->isVisible()) {
             $value->setValue($rule);
             $this->click();
@@ -411,7 +433,16 @@ class ConditionsElement extends SimpleElement
     {
         $value = $param->find('input', Locator::SELECTOR_TAG_NAME);
         if ($value->isVisible()) {
-            $value->setValue($rule);
+            if (!$value->getAttribute('readonly')) {
+                $value->setValue($rule);
+            } else {
+                $datepicker = $param->find(
+                    $this->datepicker,
+                    Locator::SELECTOR_XPATH,
+                    DatepickerElement::class
+                );
+                $datepicker->setValue($rule);
+            }
 
             $apply = $param->find('.//*[@class="rule-param-apply"]', Locator::SELECTOR_XPATH);
             if ($apply->isVisible()) {

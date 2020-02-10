@@ -38,6 +38,8 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent->expects($this->any())->method('getName')->willReturn('dispatch');
+
         $contentArray = '{"disable":false}';
         $request->expects($this->any())->method('getContent')->willReturn($contentArray);
 

@@ -9,6 +9,7 @@ namespace Magento\EavGraphQl\Model\Resolver;
 
 use Magento\EavGraphQl\Model\Resolver\DataProvider\AttributeOptions as AttributeOptionsDataProvider;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -46,7 +47,7 @@ class AttributeOptions implements ResolverInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -56,51 +57,59 @@ class AttributeOptions implements ResolverInterface
         array $args = null
     ) : Value {
 
-        return $this->valueFactory->create(function () use ($value) {
-            $entityType = $this->getEntityType($value);
-            $attributeCode = $this->getAttributeCode($value);
+        return $this->valueFactory->create(
+            function () use ($value) {
+                $entityType = $this->getEntityType($value);
+                $attributeCode = $this->getAttributeCode($value);
 
-            $optionsData = $this->getAttributeOptionsData($entityType, $attributeCode);
-            return $optionsData;
-        });
+                $optionsData = $this->getAttributeOptionsData($entityType, $attributeCode);
+                return $optionsData;
+            }
+        );
     }
 
     /**
-     * @param array $value
-     * @return int
-     * @throws GraphQlInputException
-     */
-    private function getEntityType(array $value): int
-    {
-        if (!isset($value['entity_type'])) {
-            throw new GraphQlInputException(__('"Entity type should be specified'));
-        }
-
-        return (int)$value['entity_type'];
-    }
-
-    /**
+     * Get entity type
+     *
      * @param array $value
      * @return string
-     * @throws GraphQlInputException
+     * @throws LocalizedException
+     */
+    private function getEntityType(array $value): string
+    {
+        if (!isset($value['entity_type'])) {
+            throw new LocalizedException(__('"Entity type should be specified'));
+        }
+
+        return $value['entity_type'];
+    }
+
+    /**
+     * Get attribute code
+     *
+     * @param array $value
+     * @return string
+     * @throws LocalizedException
      */
     private function getAttributeCode(array $value): string
     {
         if (!isset($value['attribute_code'])) {
-            throw new GraphQlInputException(__('"Attribute code should be specified'));
+            throw new LocalizedException(__('"Attribute code should be specified'));
         }
 
         return $value['attribute_code'];
     }
 
     /**
-     * @param int $entityType
+     * Get attribute options data
+     *
+     * @param string $entityType
      * @param string $attributeCode
      * @return array
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
-    private function getAttributeOptionsData(int $entityType, string $attributeCode): array
+    private function getAttributeOptionsData(string $entityType, string $attributeCode): array
     {
         try {
             $optionsData = $this->attributeOptionsDataProvider->getData($entityType, $attributeCode);

@@ -6,9 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
-/**
- * Class DiscountTest
- */
 class DiscountTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,6 +33,11 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderItemMock;
 
+    /**
+     * @var \Magento\Tax\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $taxConfig;
+
     protected function setUp()
     {
         $this->orderMock = $this->createPartialMock(
@@ -54,7 +56,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
                 'setBaseDiscountAmount', 'isLast'
             ]);
-        $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount();
+        $this->taxConfig = $this->createMock(\Magento\Tax\Model\Config::class);
+
+        $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount($this->taxConfig);
     }
 
     public function testCollect()
@@ -267,6 +271,32 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                     [1, 'base', true, 1]
                 ]
             );
+        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage You can not refund shipping if there is no shipping amount.
+     */
+    public function testCollectNonZeroShipping()
+    {
+        $this->creditmemoMock->expects($this->once())
+            ->method('setDiscountAmount')
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('setBaseDiscountAmount')
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+        $this->creditmemoMock->expects($this->once())
+            ->method('getBaseShippingAmount')
+            ->willReturn('10.0000');
+        $this->orderMock->expects($this->never())
+            ->method('getBaseShippingDiscountAmount');
+        $this->orderMock->expects($this->once())
+            ->method('getBaseShippingAmount')
+            ->willReturn('0.0000');
         $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
     }
 }

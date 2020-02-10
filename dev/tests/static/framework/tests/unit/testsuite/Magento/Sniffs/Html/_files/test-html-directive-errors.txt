@@ -1,0 +1,46 @@
+------------------------------------------------------------------------------------------------------------------------------------
+FOUND 20 ERRORS AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------------------------------------------
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badif().bad"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badif3()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badDepend().bad"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badForLoop()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad()|alsobad"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad($bad.param())"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad.baz()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad.trans()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "bad.bad()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "bad.multiline()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badif2()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badif4()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badif5()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.baddepend2()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badFor()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.badFor()|alsobad"
+ 1 | ERROR | Template @vars comment block contains invalid label.
+   |       | Label for variable "var bad.multiline()" is empty.
+ 1 | ERROR | Template @vars comment block is missing a variable used in the template.
+   |       | Missing variable: var foo.undeclared.baz
+ 1 | ERROR | Template @vars comment block is missing a variable used in the template.
+   |       | Missing variable: var undeclared.var.error
+------------------------------------------------------------------------------------------------------------------------------------
+
+

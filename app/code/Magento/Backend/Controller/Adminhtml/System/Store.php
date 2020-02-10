@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
  * Store controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Store extends Action
 {
@@ -86,6 +87,8 @@ abstract class Store extends Action
      * Backup database
      *
      * @return bool
+     *
+     * @deprecated Backup module is to be removed.
      */
     protected function _backupDatabase()
     {

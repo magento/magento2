@@ -20,7 +20,7 @@
         .lib-form-fieldset();
 
         &:last-child {
-            margin-bottom: 0;
+            margin-bottom: @indent__base;
         }
 
         > .field,
@@ -104,6 +104,10 @@
         .select-styling();
     }
 
+    select.admin__control-multiselect {
+        height: auto;
+    }
+
     .field-error,
     div.mage-error[generated] {
         margin-top: 7px;
@@ -111,6 +115,18 @@
 
     .field-error {
         .lib-form-validation-note();
+    }
+
+    .product-options-wrapper {
+        .date {
+            &.required {
+                div[for*='options'] {
+                    &.mage-error {
+                        display: none !important;
+                    }
+                }
+            }
+        }
     }
 
     //  TEMP

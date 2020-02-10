@@ -19,8 +19,8 @@ use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
  * The main idea of this strategy is using eav index table as main table for query
  * in case when search request requires search by attributes
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
 {

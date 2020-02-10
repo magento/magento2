@@ -21,6 +21,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Checkout
 {
@@ -356,12 +357,14 @@ class Checkout
         if (isset($params['config']) && $params['config'] instanceof PaypalConfig) {
             $this->_config = $params['config'];
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Config instance is required.');
         }
 
         if (isset($params['quote']) && $params['quote'] instanceof \Magento\Quote\Model\Quote) {
             $this->_quote = $params['quote'];
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Quote instance is required.');
         }
     }
@@ -606,10 +609,12 @@ class Checkout
      * export shipping address in case address absence
      *
      * @param string $token
+     * @param string|null $payerIdentifier
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function returnFromPaypal($token)
+    public function returnFromPaypal($token, string $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -628,10 +633,9 @@ class Checkout
             if ($shippingAddress) {
                 if ($exportedShippingAddress && $isButton) {
                     $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
-                    // PayPal doesn't provide detailed shipping info: prefix, middlename, lastname, suffix
+                    // PayPal doesn't provide detailed shipping info: prefix, middlename, suffix
                     $shippingAddress->setPrefix(null);
                     $shippingAddress->setMiddlename(null);
-                    $shippingAddress->setLastname(null);
                     $shippingAddress->setSuffix(null);
                     $shippingAddress->setCollectShippingRates(true);
                     $shippingAddress->setSameAsBilling(0);
@@ -685,7 +689,8 @@ class Checkout
         $payment = $quote->getPayment();
         $payment->setMethod($this->_methodType);
         $this->_paypalInfo->importToPayment($this->_getApi(), $payment);
-        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $this->_getApi()->getPayerId())
+        $payerId = $payerIdentifier ? : $this->_getApi()->getPayerId();
+        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $payerId)
             ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token);
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
@@ -1033,7 +1038,7 @@ class Checkout
 
         // Magento will transfer only first 10 cheapest shipping options if there are more than 10 available.
         if (count($options) > 10) {
-            usort($options, [get_class($this), 'cmpShippingOptions']);
+            usort($options, [$this, 'cmpShippingOptions']);
             array_splice($options, 10);
             // User selected option will be always included in options list
             if ($userSelectedOption !== null && !in_array($userSelectedOption, $options)) {
@@ -1054,7 +1059,7 @@ class Checkout
      * @param \Magento\Framework\DataObject $option2
      * @return int
      */
-    protected static function cmpShippingOptions(DataObject $option1, DataObject $option2)
+    protected function cmpShippingOptions(DataObject $option1, DataObject $option2)
     {
         return $option1->getAmount() <=> $option2->getAmount();
     }
@@ -1072,6 +1077,7 @@ class Checkout
      */
     protected function _matchShippingMethodCode(Address $address, $selectedCode)
     {
+        $address->collectShippingRates();
         $options = $this->_prepareShippingOptions($address, false);
         foreach ($options as $option) {
             if ($selectedCode === $option['code'] // the proper case as outlined in documentation

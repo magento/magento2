@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -16,7 +16,8 @@ define([
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
-            qtyInfo: '#qty'
+            qtyInfo: '#qty',
+            actionElement: '[data-action="add-to-wishlist"]'
         },
 
         /** @inheritdoc */
@@ -30,8 +31,10 @@ define([
         _bind: function () {
             var options = this.options,
                 dataUpdateFunc = '_updateWishlistData',
+                validateProductQty = '_validateWishlistQty',
                 changeCustomOption = 'change ' + options.customOptionsInfo,
                 changeQty = 'change ' + options.qtyInfo,
+                updateWishlist = 'click ' + options.actionElement,
                 events = {},
                 key;
 
@@ -45,6 +48,7 @@ define([
 
             events[changeCustomOption] = dataUpdateFunc;
             events[changeQty] = dataUpdateFunc;
+            events[updateWishlist] = validateProductQty;
 
             for (key in options.productType) {
                 if (options.productType.hasOwnProperty(key) && options.productType[key] + 'Info' in options) {
@@ -79,7 +83,9 @@ define([
                     $(element).is('textarea') ||
                     $('#' + element.id + ' option:selected').length
                 ) {
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    if ($(element).data('selector') || $(element).attr('name')) {
+                        dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    }
 
                     return;
                 }
@@ -162,18 +168,12 @@ define([
                 $.each(elementValue, function (key, option) {
                     data[elementName + '[' + option + ']'] = option;
                 });
-            } else {
-                if (elementValue) { //eslint-disable-line no-lonely-if
-                    if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
-                        elementName = elementName.substring(0, elementName.length - 2);
+            } else if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
+                elementName = elementName.substring(0, elementName.length - 2);
 
-                        if (elementValue) { //eslint-disable-line max-depth
-                            data[elementName + '[' + elementValue + ']'] = elementValue;
-                        }
-                    } else {
-                        data[elementName] = elementValue;
-                    }
-                }
+                data[elementName + '[' + elementValue + ']'] = elementValue;
+            } else {
+                data[elementName] = elementValue;
             }
 
             return data;
@@ -224,6 +224,23 @@ define([
 
                 $(form).attr('action', action).submit();
             });
+        },
+
+        /**
+         * Validate product quantity before updating Wish List
+         *
+         * @param {jQuery.Event} event
+         * @private
+         */
+        _validateWishlistQty: function (event) {
+            var element = $(this.options.qtyInfo);
+
+            if (!(element.validation() && element.validation('isValid'))) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                return;
+            }
         }
     });
 

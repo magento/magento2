@@ -15,9 +15,6 @@
             <description value="Admin should be able to set/edit all the basic product attributes when creating/editing a bundle product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-222"/>
-            <skip>
-                <issueId value="MQE-1214"/>
-            </skip>
             <group value="Bundle"/>
         </annotations>
         <before>
@@ -27,7 +24,7 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create attribute set-->
-        <actionGroup ref="CreateDefaultAttributeSet" stepKey="createDefaultAttributeSet">
+        <actionGroup ref="CreateDefaultAttributeSetActionGroup" stepKey="createDefaultAttributeSet">
             <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
 
@@ -94,14 +91,14 @@
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="Italy" stepKey="seeCountryOfManufacture"/>
 
         <!--Create second attribute set for edit-->
-        <actionGroup ref="CreateDefaultAttributeSet" stepKey="createSecondAttributeSet">
+        <actionGroup ref="CreateDefaultAttributeSetActionGroup" stepKey="createSecondAttributeSet">
             <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
         </actionGroup>
 
         <!--Filter catalog-->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>

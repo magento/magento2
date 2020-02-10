@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Model\Entity\Attribute;
 
@@ -12,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -327,7 +329,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * Set attribute model
+     * Set attribute model class.
      *
      * @param array $data
      * @return $this
@@ -418,7 +420,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Returns default value
      *
-     * @return string|int|bool|float
+     * @return string|null
      * @codeCoverageIgnore
      */
     public function getDefaultValue()
@@ -812,7 +814,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             if ($this->isStatic()) {
                 $this->_dataTable = $this->getEntityType()->getValueTablePrefix();
             } else {
-                $backendTable = trim($this->_getData('backend_table'));
+                $backendTable = trim((string)$this->_getData('backend_table'));
                 if (empty($backendTable)) {
                     $entityTable = [$this->getEntityType()->getEntityTablePrefix(), $this->getBackendType()];
                     $backendTable = $this->getResource()->getTable($entityTable);

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -16,44 +17,42 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class RevokeCustomerTokenTest extends GraphQlAbstract
 {
     /**
-     * Verify customers with valid credentials
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testRevokeCustomerTokenValidCredentials()
     {
         $query = <<<QUERY
             mutation {
-                revokeCustomerToken
+                revokeCustomerToken {
+                    result
+                }
             }
 QUERY;
 
         $userName = 'customer@example.com';
         $password = 'password';
         /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()
-            ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
+        $customerTokenService = ObjectManager::getInstance()->get(CustomerTokenServiceInterface::class);
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertTrue($response['revokeCustomerToken']);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        $this->assertTrue($response['revokeCustomerToken']['result']);
     }
 
     /**
-     * Verify guest customers
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testRevokeCustomerTokenForGuestCustomer()
     {
         $query = <<<QUERY
             mutation {
-                revokeCustomerToken
+                revokeCustomerToken {
+                    result
+                }
             }
 QUERY;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'GraphQL response contains errors: Current customer' . ' ' .
-            'does not have access to the resource "customer"'
-        );
-        $this->graphQlQuery($query, [], '');
+        $this->graphQlMutation($query, [], '');
     }
 }

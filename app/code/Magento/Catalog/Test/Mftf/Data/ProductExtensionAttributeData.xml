@@ -17,4 +17,16 @@
     <entity name="EavStock10" type="product_extension_attribute">
         <requiredEntity type="stock_item">Qty_10</requiredEntity>
     </entity>
+    <entity name="EavStock1" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_1</requiredEntity>
+    </entity>
+    <entity name="EavStock0" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_0</requiredEntity>
+    </entity>
+    <entity name="EavStock777" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_777</requiredEntity>
+    </entity>
+    <entity name="EavStock25" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_25</requiredEntity>
+    </entity>
 </entities>

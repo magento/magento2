@@ -3,423 +3,156 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Developer\Test\Unit\Console\Command;
 
-use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Setup\JsonPersistor;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
+use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand as GenerateCommand;
+use Magento\Developer\Model\Setup\Declaration\Schema\WhitelistGenerator;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\ConfigurationMismatchException as ConfigException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Unit test for whitelist generation command.
+ * Class TablesWhitelistGenerateCommandTest
  *
  * @package Magento\Developer\Test\Unit\Console\Command
  */
-class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
+class TablesWhitelistGenerateCommandTest extends TestCase
 {
-    /**
-     * @var TablesWhitelistGenerateCommand
-     */
-    private $model;
+    // Exception Messages!
+    const CONFIG_EXCEPTION_MESSAGE = 'Configuration Exception Message';
+    const EXCEPTION_MESSAGE = 'General Exception Message';
 
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
+    /** @var WhitelistGenerator|MockObject $whitelistGenerator */
+    private $whitelistGenerator;
 
-    /**
-     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $componentRegistrarMock;
+    /** @var GenerateCommand $instance */
+    private $instance;
 
-    /**
-     * @var ReaderComposite|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $readerCompositeMock;
-
-    /**
-     * @var JsonPersistor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $jsonPersistorMock;
-
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
-        $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
+        $this->whitelistGenerator = $this->getMockBuilder(WhitelistGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readerCompositeMock = $this->getMockBuilder(ReaderComposite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->jsonPersistorMock = $this->getMockBuilder(JsonPersistor::class)
-            ->getMock();
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $this->objectManagerHelper->getObject(
-            TablesWhitelistGenerateCommand::class,
-            [
-                'componentRegistrar' => $this->componentRegistrarMock,
-                'readerComposite' => $this->readerCompositeMock,
-                'jsonPersistor' => $this->jsonPersistorMock
-            ]
-        );
+
+        $this->instance = new GenerateCommand($this->whitelistGenerator);
     }
 
     /**
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * Test case for success scenario
+     *
+     * @param string $arguments
+     * @param string $expected
+     *
+     * @dataProvider successDataProvider
      */
-    public function whitelistTableProvider()
+    public function testCommandSuccess(string $arguments, string $expected)
+    {
+        $this->whitelistGenerator->expects($this->once())
+            ->method('generate')
+            ->with($arguments);
+
+        $commandTest = $this->execute($arguments);
+        $this->assertEquals($expected, $commandTest->getStatusCode());
+        $this->assertEquals('', $commandTest->getDisplay());
+    }
+
+    /**
+     * Test case for failure scenario
+     *
+     * @param string $arguments
+     * @param string $expected
+     * @param \Exception|ConfigException $exception
+     * @param string $output
+     *
+     * @dataProvider failureDataProvider
+     */
+    public function testCommandFailure(string $arguments, string $expected, $exception, string $output)
+    {
+        $this->whitelistGenerator->expects($this->once())
+            ->method('generate')
+            ->with($arguments)
+            ->willReturnCallback(
+                function () use ($exception) {
+                    throw $exception;
+                }
+            );
+
+        $commandTest = $this->execute($arguments);
+        $this->assertEquals($expected, $commandTest->getStatusCode());
+        $this->assertEquals($output . PHP_EOL, $commandTest->getDisplay());
+    }
+
+    /**
+     * Data provider for success test case
+     *
+     * @return array
+     */
+    public function successDataProvider()
     {
         return [
             [
-                'moduleName' => 'SomeModule',
-                'whitelist' => [
-                    'primary' => [
-                        'table' =>
-                            [
-                                'patch_list' =>
-                                    [
-                                        'column' =>
-                                            [
-                                                'patch_id' =>
-                                                    [
-                                                        'type' => 'int',
-                                                        'name' => 'patch_id',
-                                                        'identity' => 'true',
-                                                        'comment' => 'Patch Auto Increment',
-                                                    ],
-                                                'patch_name' =>
-                                                    [
-                                                        'type' => 'varchar',
-                                                        'name' => 'patch_name',
-                                                        'length' => '1024',
-                                                        'nullable' => 'false',
-                                                        'comment' => 'Patch Class Name',
-                                                    ],
-                                            ],
-                                        'constraint' =>
-                                            [
-                                                'PRIMARY' =>
-                                                    [
-                                                        'column' =>
-                                                            [
-                                                                'patch_id' => 'patch_id',
-                                                            ],
-                                                        'type' => 'primary',
-                                                        'name' => 'PRIMARY',
-                                                    ],
-                                            ],
-                                        'name' => 'patch_list',
-                                        'resource' => 'default',
-                                        'comment' => 'List of data/schema patches',
-                                    ],
-                            ],
-                    ],
-                    'SomeModule' => [
-                        'table' => [
-                            'first_table' => [
-                                'disabled' => false,
-                                'name' => 'first_table',
-                                'resource' => 'default',
-                                'engine' => 'innodb',
-                                'column' => [
-                                    'first_column' => [
-                                        'name' => 'first_column',
-                                        'xsi:type' => 'integer',
-                                        'nullable' => 1,
-                                        'unsigned' => '0',
-                                    ],
-                                    'second_column' => [
-                                        'name' => 'second_column',
-                                        'xsi:type' => 'date',
-                                        'nullable' => 0,
-                                    ]
-                                ],
-                                'index' => [
-                                    'TEST_INDEX' => [
-                                        'name' => 'TEST_INDEX',
-                                        'indexType' => 'btree',
-                                        'columns' => [
-                                            'first_column'
-                                        ]
-                                    ]
-                                ],
-                                'constraint' => [
-                                    'foreign' => [
-                                        'some_foreign_constraint' => [
-                                            'referenceTable' => 'table',
-                                            'referenceColumn' => 'column',
-                                            'table' => 'first_table',
-                                            'column' => 'first_column'
-                                        ]
-                                    ],
-                                    'primary' => [
-                                        'PRIMARY' => [
-                                            'xsi:type' => 'primary',
-                                            'name' => 'PRIMARY',
-                                            'columns' => [
-                                                'second_column'
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                ],
-                'expected' => [
-                    'SomeModule' => [
-                        'first_table' => [
-                            'column' => [
-                                'first_column' => true,
-                                'second_column' => true,
-                            ],
-                            'index' => [
-                                'TEST_INDEX' => true,
-                            ],
-                            'constraint' => [
-                                'foreign' => true,
-                                'primary' => true,
-                            ]
-                        ]
-                    ]
-                ]
+                'all',
+                Cli::RETURN_SUCCESS,
+
             ],
             [
-                'moduleName' => false,
-                'whitelist' => [
-                    'primary' => [
-                        'table' =>
-                            [
-                                'patch_list' =>
-                                    [
-                                        'column' =>
-                                            [
-                                                'patch_id' =>
-                                                    [
-                                                        'type' => 'int',
-                                                        'name' => 'patch_id',
-                                                        'identity' => 'true',
-                                                        'comment' => 'Patch Auto Increment',
-                                                    ],
-                                                'patch_name' =>
-                                                    [
-                                                        'type' => 'varchar',
-                                                        'name' => 'patch_name',
-                                                        'length' => '1024',
-                                                        'nullable' => 'false',
-                                                        'comment' => 'Patch Class Name',
-                                                    ],
-                                            ],
-                                        'constraint' =>
-                                            [
-                                                'PRIMARY' =>
-                                                    [
-                                                        'column' =>
-                                                            [
-                                                                'patch_id' => 'patch_id',
-                                                            ],
-                                                        'type' => 'primary',
-                                                        'name' => 'PRIMARY',
-                                                    ],
-                                            ],
-                                        'name' => 'patch_list',
-                                        'resource' => 'default',
-                                        'comment' => 'List of data/schema patches',
-                                    ],
-                            ],
-                    ],
-                    'SomeModule' => [
-                        'table' => [
-                            'first_table' => [
-                                'disabled' => false,
-                                'name' => 'first_table',
-                                'resource' => 'default',
-                                'engine' => 'innodb',
-                                'column' => [
-                                    'first_column' => [
-                                        'name' => 'first_column',
-                                        'xsi:type' => 'integer',
-                                        'nullable' => 1,
-                                        'unsigned' => '0',
-                                    ],
-                                    'second_column' => [
-                                        'name' => 'second_column',
-                                        'xsi:type' => 'date',
-                                        'nullable' => 0,
-                                    ]
-                                ],
-                                'index' => [
-                                    'TEST_INDEX' => [
-                                        'name' => 'TEST_INDEX',
-                                        'indexType' => 'btree',
-                                        'columns' => [
-                                            'first_column'
-                                        ]
-                                    ]
-                                ],
-                                'constraint' => [
-                                    'foreign' => [
-                                        'some_foreign_constraint' => [
-                                            'referenceTable' => 'table',
-                                            'referenceColumn' => 'column',
-                                            'table' => 'first_table',
-                                            'column' => 'first_column'
-                                        ]
-                                    ],
-                                    'primary' => [
-                                        'PRIMARY' => [
-                                            'xsi:type' => 'primary',
-                                            'name' => 'PRIMARY',
-                                            'columns' => [
-                                                'second_column'
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                    'Module2' => [
-                        'table' => [
-                            'second_table' => [
-                                'disabled' => false,
-                                'name' => 'second_table',
-                                'resource' => 'default',
-                                'engine' => 'innodb',
-                                'column' => [
-                                    'first_column' => [
-                                        'name' => 'first_column',
-                                        'xsi:type' => 'integer',
-                                        'nullable' => 1,
-                                        'unsigned' => '0',
-                                    ],
-                                    'second_column' => [
-                                        'name' => 'second_column',
-                                        'xsi:type' => 'date',
-                                        'nullable' => 0,
-                                    ]
-                                ],
-                                'index' => [
-                                    'TEST_INDEX' => [
-                                        'name' => 'TEST_INDEX',
-                                        'indexType' => 'btree',
-                                        'columns' => [
-                                            'first_column'
-                                        ]
-                                    ]
-                                ],
-                                'constraint' => [
-                                    'foreign' => [
-                                        'some_foreign_constraint' => [
-                                            'referenceTable' => 'table',
-                                            'referenceColumn' => 'column',
-                                            'table' => 'second_table',
-                                            'column' => 'first_column'
-                                        ]
-                                    ],
-                                    'primary' => [
-                                        'PRIMARY' => [
-                                            'xsi:type' => 'primary',
-                                            'name' => 'PRIMARY',
-                                            'columns' => [
-                                                'second_column'
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-                'expected' => [
-                    'SomeModule' => [
-                        'first_table' => [
-                            'column' => [
-                                'first_column' => true,
-                                'second_column' => true,
-                            ],
-                            'index' => [
-                                'TEST_INDEX' => true,
-                            ],
-                            'constraint' => [
-                                'foreign' => true,
-                                'primary' => true,
-                            ]
-                        ]
-                    ],
-                    'Module2' => [
-                        'second_table' => [
-                            'column' => [
-                                'first_column' => true,
-                                'second_column' => true,
-                            ],
-                            'index' => [
-                                'TEST_INDEX' => true,
-                            ],
-                            'constraint' => [
-                                'foreign' => true,
-                                'primary' => true,
-                            ]
-                        ]
-                    ]
-                ]
+                'Module_Name',
+                Cli::RETURN_SUCCESS
             ]
         ];
     }
 
     /**
-     * @dataProvider whitelistTableProvider
-     * @param string $moduleName
-     * @param array $whiteListTables
-     * @param array $expected
+     * Data provider for failure test case
+     *
+     * @return array
      */
-    public function testCommand($moduleName, array $whiteListTables, array $expected)
+    public function failureDataProvider()
     {
-        $commandTester = new CommandTester($this->model);
-        $options = !$moduleName ? [] : ['--module-name' => $moduleName];
+        return [
+            [
+                'all',
+                Cli::RETURN_FAILURE,
+                new ConfigException(__('Configuration Exception Message')),
+                self::CONFIG_EXCEPTION_MESSAGE
+            ],
+            [
+                'Module_Name',
+                Cli::RETURN_FAILURE,
+                new ConfigException(__('Configuration Exception Message')),
+                self::CONFIG_EXCEPTION_MESSAGE
+            ],
+            [
+                'all',
+                Cli::RETURN_FAILURE,
+                new \Exception(self::EXCEPTION_MESSAGE),
+                self::EXCEPTION_MESSAGE
+            ],
+            [
+                'Module_Name',
+                Cli::RETURN_FAILURE,
+                new \Exception(self::EXCEPTION_MESSAGE),
+                self::EXCEPTION_MESSAGE
+            ]
+        ];
+    }
 
-        if (!$moduleName) {
-            $this->componentRegistrarMock->expects(self::once())
-                ->method('getPaths')
-                ->willReturn(['SomeModule' => 1, 'Module2' => 2]);
-            $this->readerCompositeMock->expects(self::exactly(3))
-                ->method('read')
-                ->withConsecutive(['SomeModule'], ['primary'], ['Module2'])
-                ->willReturnOnConsecutiveCalls(
-                    $whiteListTables['SomeModule'],
-                    $whiteListTables['primary'],
-                    $whiteListTables['Module2']
-                );
-            $this->jsonPersistorMock->expects(self::exactly(2))
-                ->method('persist')
-                ->withConsecutive(
-                    [
-                        $expected['SomeModule'],
-                        '/etc/db_schema_whitelist.json'
-                    ],
-                    [
-                        $expected['Module2'],
-                        '/etc/db_schema_whitelist.json'
-                    ]
-                );
-        } else {
-            $this->readerCompositeMock->expects(self::exactly(2))
-                ->method('read')
-                ->withConsecutive([$moduleName], ['primary'])
-                ->willReturnOnConsecutiveCalls($whiteListTables['SomeModule'], $whiteListTables['primary']);
-            $this->jsonPersistorMock->expects(self::once())
-                ->method('persist')
-                ->with(
-                    $expected['SomeModule'],
-                    '/etc/db_schema_whitelist.json'
-                );
-        }
-        $commandTester->execute($options);
+    /**
+     * Execute command test class for symphony
+     *
+     * @param string $arguments
+     *
+     * @return CommandTester
+     */
+    private function execute(string $arguments)
+    {
+        $commandTest = new CommandTester($this->instance);
+        $commandTest->execute(['--' . GenerateCommand::MODULE_NAME_KEY => $arguments]);
+
+        return $commandTest;
     }
 }

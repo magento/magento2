@@ -18,7 +18,7 @@
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_avs_street_does_not_match</data>
-            <data name="expectedErrorMessage" xsi:type="string">A server error stopped your order from being placed. Please try to place your order again.</data>
+            <data name="expectedErrorMessage" xsi:type="string">Transaction has been declined</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>
         <variation name="OnePageCheckoutDeclinedTestWithAVSZIP" summary="Place order via Payflow Pro with AVS ZIP verification fail" ticketId="MAGETWO-37483">
@@ -30,7 +30,7 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
-            <data name="expectedErrorMessage" xsi:type="string">A server error stopped your order from being placed. Please try to place your order again.</data>
+            <data name="expectedErrorMessage" xsi:type="string">Transaction has been declined</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_avs_zip</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
@@ -46,7 +46,7 @@
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_cvv_mismatch</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_avs_security_code_does_not_match</data>
-            <data name="expectedErrorMessage" xsi:type="string">A server error stopped your order from being placed. Please try to place your order again.</data>
+            <data name="expectedErrorMessage" xsi:type="string">Transaction has been declined</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>
     </testCase>

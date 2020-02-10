@@ -32,6 +32,9 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject */
     private $_tokenMock;
 
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $manager;
+
     protected function setUp()
     {
         $this->_tokenFactoryMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
@@ -67,11 +70,14 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Integration\Model\CredentialsValidator::class
         )->disableOriginalConstructor()->getMock();
 
+        $this->manager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+
         $this->_tokenService = new \Magento\Integration\Model\CustomerTokenService(
             $this->_tokenFactoryMock,
             $this->_accountManagementMock,
             $this->_tokenModelCollectionFactoryMock,
-            $this->validatorHelperMock
+            $this->validatorHelperMock,
+            $this->manager
         );
     }
 
