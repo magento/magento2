@@ -3,17 +3,12 @@ declare(strict_types=1);
 
 namespace Chechur\Blog\Controller\Adminhtml\Post;
 
-
-use Chechur\Blog\Model\PostFactory;
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\RedirectFactory;
-use Magento\Framework\View\Result\PageFactory;
 
 class Save extends Action
 {
     /**
-     *
+     * Constanta
      */
     const ADMIN_RESOURCE = 'Post';
 
@@ -46,10 +41,10 @@ class Save extends Action
      * @param \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
      */
     public function __construct(
-        Context $context,
-        PageFactory $resultPageFactory,
-        PostFactory $postFactory,
-        RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Chechur\Blog\Model\PostFactory $postFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
     )
     {
@@ -81,21 +76,31 @@ class Save extends Action
             $data = array_filter($data, function ($value) {
                 return $value !== '';
             });
-
             $post->setData($data);
 
             try {
                 $post->save();
-                $this->messageManager->addSuccess(__('Successfully saved the item.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
-                return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
-                return $resultRedirect->setPath('*/*/edit', ['id' => $post->getId()]);
-            }
-        }
+                $this->messageManager->addSuccessMessage(__('You saved the Post.'));
+                $this->dataPersistor->clear('chechur_blog_post');
 
+                if ($this->getRequest()->getParam('back')) {
+                    return $resultRedirect->setPath('*/*/edit', ['id' => $post->getId()]);
+                }
+                return $resultRedirect->setPath('*/*/');
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager
+                    ->addExceptionMessage($e, __('Something went wrong while saving the Post.'));
+            }
+
+            $this->dataPersistor->set('chechur_blog_post', $data);
+            return $resultRedirect->setPath('*/*/edit',
+                [
+                    'post_id' => $this->getRequest()->getParam('post_id')
+                ]
+            );
+        }
         return $resultRedirect->setPath('*/*/');
     }
 

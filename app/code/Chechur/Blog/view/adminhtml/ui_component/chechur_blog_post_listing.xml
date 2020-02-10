@@ -43,7 +43,7 @@
     <listingToolbar name="listing_top">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="sticky" xsi:type="boolean">true</item>
+                <item name="sticky" xsi:type="boolean">false</item>
             </item>
         </argument>
         <bookmark name="bookmarks"/>
@@ -107,7 +107,6 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">contact</item>
                     <item name="dataScope" xsi:type="string">theme</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Theme</item>
@@ -124,7 +123,6 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">contact</item>
                     <item name="dataScope" xsi:type="string">type</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Type</item>
@@ -141,7 +139,6 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">contact</item>
                     <item name="dataScope" xsi:type="string">post_content</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Post Content</item>
@@ -151,19 +148,15 @@
                 </item>
             </argument>
         </column>
-        <column name="image">
+        <column name="image" class="Chechur\Blog\Ui\Component\Listing\Column\Image">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">contact</item>
-                    <item name="dataScope" xsi:type="string">image</item>
-                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="altField" xsi:type="string">name</item>
+                    <item name="has_preview" xsi:type="string">1</item>
                     <item name="label" xsi:type="string" translate="true">Image</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
         </column>
@@ -175,7 +168,6 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">contact</item>
                     <item name="dataScope" xsi:type="string">created_at</item>
                     <item name="label" xsi:type="string" translate="true">Created at</item>
                     <item name="validation" xsi:type="array">
@@ -192,7 +184,6 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">contact</item>
                     <item name="dataScope" xsi:type="string">updated_at</item>
                     <item name="label" xsi:type="string" translate="true">Updated at</item>
                     <item name="validation" xsi:type="array">

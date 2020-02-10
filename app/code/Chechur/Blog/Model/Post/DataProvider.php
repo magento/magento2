@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace Chechur\Blog\Model\Post;
 
 use Chechur\Blog\Model\ResourceModel\Post\CollectionFactory;
-use Magento\Framework\App\Request\DataPersistorInterfacer;
-use Magento\Framework\ObjectManager\ObjectManager;
-use Chechur\Blog\Model\Post\FileInfo;
-use Magento\Framework\Filesystem;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -16,9 +14,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected $collection;
 
-    private $dataPersistor;
-
+    /**
+     * @var
+     */
     protected $_loadedData;
+
+    /**
+     * @var \Magento\Framework\App\Request\DataPersistorInterface
+     */
+    private $dataPersistor;
 
     /**
      * DataProvider constructor.
@@ -26,7 +30,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param $primaryFieldName
      * @param $requestFieldName
      * @param CollectionFactory $postCollectionFactory
-     * @param DataPersistorInterfacer $dataPersistor
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
      */
@@ -35,13 +39,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $postCollectionFactory,
-        DataPersistorInterfacer $dataPersistor,
+        DataPersistorInterface $dataPersistor,
+        StoreManagerInterface $storeManager,
         array $meta = [],
         array $data = []
     )
     {
         $this->collection = $postCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
+        $this->storeManager = $storeManager;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
@@ -56,6 +62,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         foreach ($items as $action) {
             $this->_loadedData[$action->getId()]['contact'] = $action->getData();
+            if ($action->getImage()) {
+                $m['image'][0]['name'] = $action->getImage();
+                $m['image'][0]['url'] = $this->getMediaUrl() . $action->getImage();
+                $fullData = $this->_loadedData;
+                $this->_loadedData[$action->getId()] = array_merge($fullData[$action->getId()], $m);
+            }
+        }
+
+        $data = $this->dataPersistor->get('chechur_blog_post_form_data_source');
+
+        if (!empty($data)) {
+            $action = $this->collection->getNewEmptyItem();
+            $action->setData($data);
+            $this->_loadedData[$action->getId()] = $action->getData();
+            $this->dataPersistor->clear('chechur_blog_post_form_data_source');
         }
 
         return $this->_loadedData;

@@ -117,7 +117,7 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">fileUploader</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
-                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="previewTmpl" xsi:type="string">Chechur_Blog/image-preview</item>
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">40</item>
                     <item name="uploaderConfig" xsi:type="array">

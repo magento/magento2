@@ -20,7 +20,7 @@ $_postName = $block->escapeHtml($block->getTitle(), null);
                         <div class="post-content">
                             <h2 align="center"><?= $post->getTheme() ?></h2><br>
                             <?php if(!empty($post->getImage())): ?>
-                                <img src="<?= $post->getImage()?>" width="100" height="100" align="right">
+                                <img src="<?= $block->getImageUrl($post->getImage())?>" width="100" height="100" align="right">
                             <?php endif;?>
                             <p align="justify"><?= $post->getPostContent() ?></p><br>
 
