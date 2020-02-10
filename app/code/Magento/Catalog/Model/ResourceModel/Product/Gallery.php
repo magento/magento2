@@ -174,7 +174,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $output = [];
         $linkField = $this->metadata->getLinkField();
         $select = $this->createBatchBaseSelect($storeId)
-            ->where('cpe.' . $linkField . ' IN (?)', $entityIds);
+            ->where('cpe.entity_id IN (?)', $entityIds);
         if (!$preserveSortOrder) {
             //  due to performance consideration it is better to do not use sorting for this query
             $select->reset(Select::ORDER);
