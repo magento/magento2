@@ -27,14 +27,14 @@
             </after>
 
             <!--Create store view-->
-            <actionGroup ref="CreateStoreView" stepKey="createStoreView">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createStoreView">
                 <argument name="storeView" value="storeViewDataDisabled"/>
                 <argument name="storeGroupName" value="_defaultStoreGroup.name"/>
                 <argument name="storeViewStatus" value="storeViewDataDisabled.is_active"/>
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
             <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">

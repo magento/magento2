@@ -69,7 +69,7 @@
         <grabTextFrom selector="{{AdminCartPriceRulesFormSection.generatedCouponByIndex('1')}}" stepKey="grabCouponCode"/>
 
         <!-- Create a product to check the storefront -->
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
