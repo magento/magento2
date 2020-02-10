@@ -16,7 +16,7 @@ use Magento\Framework\App\Response\Http;
  */
 class AsyncCssPlugin
 {
-    private const XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
+    const XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
 
     /**
      * @var ScopeConfigInterface
@@ -60,7 +60,7 @@ class AsyncCssPlugin
                     $loadCssAsync = sprintf(
                         '<link rel="preload" as="style" media="%s"' .
                          ' onload="this.onload=null;this.rel=\'stylesheet\'"' .
-                        ' href="%s">',
+                        ' href="%s" />',
                         $media,
                         $href
                     );
