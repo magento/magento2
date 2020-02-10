@@ -25,14 +25,23 @@
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
 
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-
             <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+
+            <!-- Delete all search terms -->
+            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
+            <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+            <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
+            <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
+
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">
