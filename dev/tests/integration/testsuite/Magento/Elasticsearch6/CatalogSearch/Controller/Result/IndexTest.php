@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch6\CatalogSearch\Controller\Result;
 
 use Magento\CatalogSearch\Controller\Result\IndexTest as CatalogSearchIndexTest;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 
 /**
  * Test cases for catalog quick search using Elasticsearch 6.0+ search engine.
@@ -23,7 +24,7 @@ class IndexTest extends CatalogSearchIndexTest
      * @magentoAppArea frontend
      * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
-     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
      * @dataProvider searchStringDataProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
@@ -32,6 +33,11 @@ class IndexTest extends CatalogSearchIndexTest
      */
     public function testExecute(string $searchString): void
     {
+        $checker = $this->_objectManager->get(ElasticsearchVersionChecker::class);
+
+        if ($checker->execute() !== 6) {
+            $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
+        }
         parent::testExecute($searchString);
     }
 }

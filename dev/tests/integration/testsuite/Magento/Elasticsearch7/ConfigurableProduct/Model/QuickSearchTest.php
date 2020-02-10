@@ -5,24 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\ConfigurableProduct\Model;
+namespace Magento\Elasticsearch7\ConfigurableProduct\Model;
 
 use Magento\ConfigurableProduct\Model\QuickSearchTest as ConfigurableProductQuickSearchTest;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test cases related to find configurable product via quick search using Elasticsearch 6.0+ search engine.
+ * Test cases related to find configurable product via quick search using Elasticsearch 7.0+ search engine.
  *
  * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
- * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+ * @magentoDataFixture Magento/Elasticsearch7/_files/full_reindex.php
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  */
 class QuickSearchTest extends ConfigurableProductQuickSearchTest
 {
-
     /**
      * @inheritdoc
      */
@@ -30,7 +29,7 @@ class QuickSearchTest extends ConfigurableProductQuickSearchTest
     {
         $checker = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class);
 
-        if ($checker->execute() !== 6) {
+        if ($checker->execute() !== 7) {
             $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
         }
         parent::setUp();
@@ -38,11 +37,11 @@ class QuickSearchTest extends ConfigurableProductQuickSearchTest
     }
 
     /**
-     * Assert that configurable child products has not found by query using Elasticsearch 6.0+ search engine.
+     * Assert that configurable child products has not found by query using Elasticsearch 7.0+ search engine.
      *
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      *
      * @return void
      */
@@ -53,11 +52,11 @@ class QuickSearchTest extends ConfigurableProductQuickSearchTest
 
     /**
      * Assert that child product of configurable will be available by search after
-     * set to product visibility by catalog and search using Elasticsearch 6.0+ search engine.
+     * set to product visibility by catalog and search using Elasticsearch 7.0+ search engine.
      *
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      *
      * @dataProvider productAvailabilityInSearchByVisibilityDataProvider
      *
@@ -71,11 +70,11 @@ class QuickSearchTest extends ConfigurableProductQuickSearchTest
     }
 
     /**
-     * Assert that configurable product was found by option value using Elasticsearch 6.0+ search engine.
+     * Assert that configurable product was found by option value using Elasticsearch 7.0+ search engine.
      *
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      *
      * @return void
      */

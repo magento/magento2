@@ -18,22 +18,22 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ElasticsearchClient
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Elasticsearch\Client|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $elasticsearchClientMock;
+    private $elasticsearchClientMock;
 
     /**
      * @var \Elasticsearch\Namespaces\IndicesNamespace|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indicesMock;
+    private $indicesMock;
 
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * Setup

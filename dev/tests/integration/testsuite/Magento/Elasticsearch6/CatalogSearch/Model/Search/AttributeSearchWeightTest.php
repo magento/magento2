@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch6\CatalogSearch\Model\Search;
 
 use Magento\CatalogSearch\Model\Search\AttributeSearchWeightTest as CatalogSearchAttributeSearchWeightTest;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test founded products order after quick search with changed attribute search weight
@@ -22,7 +24,7 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
      *
      * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
-     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
      * @dataProvider attributeSearchWeightDataProvider
      * @magentoDbIsolation enabled
      *
@@ -39,6 +41,11 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
         array $expectedProductNames
     ): void {
         $this->markTestSkipped('This test need stabilization. MC-29260');
+
+        $checker = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class);
+        if ($checker->execute() !== 6) {
+            $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
+        }
         parent::testAttributeSearchWeight($searchQuery, $attributeWeights, $expectedProductNames);
     }
 

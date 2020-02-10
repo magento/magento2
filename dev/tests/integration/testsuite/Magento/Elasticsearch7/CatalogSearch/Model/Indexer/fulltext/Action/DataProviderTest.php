@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\CatalogSearch\Model\Indexer\fulltext\Action;
+namespace Magento\Elasticsearch7\CatalogSearch\Model\Indexer\fulltext\Action;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProviderTest as CatalogSearchDataProviderTest;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
@@ -19,9 +19,9 @@ class DataProviderTest extends CatalogSearchDataProviderTest
     /**
      * Search product by custom attribute value.
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoDataFixture Magento/Elasticsearch7/_files/full_reindex.php
      * @magentoDbIsolation disabled
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
@@ -31,7 +31,7 @@ class DataProviderTest extends CatalogSearchDataProviderTest
     {
         $checker = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class);
 
-        if ($checker->execute() !== 6) {
+        if ($checker->execute() !== 7) {
             $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
         }
         parent::testSearchProductByAttribute();

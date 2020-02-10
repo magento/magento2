@@ -5,39 +5,39 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\CatalogSearch\Controller\Advanced;
+namespace Magento\Elasticsearch7\CatalogSearch\Controller\Result;
 
-use Magento\CatalogSearch\Controller\Advanced\ResultTest as CatalogSearchResultTest;
+use Magento\CatalogSearch\Controller\Result\IndexTest as CatalogSearchIndexTest;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 
 /**
- * Test cases for catalog advanced search using Elasticsearch 6.0+ search engine.
+ * Test cases for catalog quick search using Elasticsearch 7.0+ search engine.
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  */
-class ResultTest extends CatalogSearchResultTest
+class IndexTest extends CatalogSearchIndexTest
 {
     /**
-     * Advanced search test by difference product attributes.
+     * Quick search test by difference product attributes.
      *
      * @magentoAppArea frontend
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoDataFixture Magento/Elasticsearch7/_files/full_reindex.php
      * @dataProvider searchStringDataProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
-     * @param array $searchParams
+     * @param string $searchString
      * @return void
      */
-    public function testExecute(array $searchParams): void
+    public function testExecute(string $searchString): void
     {
         $checker = $this->_objectManager->get(ElasticsearchVersionChecker::class);
 
-        if ($checker->execute() !== 6) {
+        if ($checker->execute() !== 7) {
             $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
         }
-        parent::testExecute($searchParams);
+        parent::testExecute($searchString);
     }
 }

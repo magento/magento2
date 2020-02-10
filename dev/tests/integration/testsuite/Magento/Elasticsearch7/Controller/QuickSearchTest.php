@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\Controller;
+namespace Magento\Elasticsearch7\Controller;
 
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -29,7 +29,7 @@ class QuickSearchTest extends AbstractController
         parent::setUp();
         $checker = $this->_objectManager->get(ElasticsearchVersionChecker::class);
 
-        if ($checker->execute() !== 6) {
+        if ($checker->execute() !== 7) {
             $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
         }
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
@@ -43,15 +43,16 @@ class QuickSearchTest extends AbstractController
      * @magentoConfigFixture fixturestore_store catalog/layered_navigation/price_range_calculation improved
      * @magentoConfigFixture fixturestore_store catalog/layered_navigation/one_price_interval 1
      * @magentoConfigFixture fixturestore_store catalog/layered_navigation/interval_division_limit 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoConfigFixture default_store catalog/search/elasticsearch6_index_prefix storefront_quick_search
-     * @magentoConfigFixture fixturestore_store catalog/search/elasticsearch6_index_prefix storefront_quick_search
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
+     * @magentoConfigFixture default_store catalog/search/elasticsearch7_index_prefix storefront_quick_search
+     * @magentoConfigFixture fixturestore_store catalog/search/elasticsearch7_index_prefix storefront_quick_search
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoDataFixture Magento/Elasticsearch7/_files/full_reindex.php
      */
     public function testQuickSearchWithImprovedPriceRangeCalculation()
     {
+
         $secondStore = $this->storeManager->getStore('fixturestore');
         $this->storeManager->setCurrentStore($secondStore);
 
