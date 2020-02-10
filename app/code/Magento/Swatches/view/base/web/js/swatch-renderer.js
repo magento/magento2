@@ -759,7 +759,7 @@ define([
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
+                    this._getSelectedOptionPriceIndex(),
                     $widget.options.jsonConfig.optionPrices,
                     $priceBox
                 ]);
@@ -769,6 +769,22 @@ define([
             }
 
             $input.trigger('change');
+        },
+
+        /**
+         * Get selected option price index
+         *
+         * @return {String|undefined}
+         * @private
+         */
+        _getSelectedOptionPriceIndex: function () {
+            var allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+
+            if (_.isEmpty(allowedProduct)) {
+                return undefined;
+            }
+
+            return allowedProduct;
         },
 
         /**
