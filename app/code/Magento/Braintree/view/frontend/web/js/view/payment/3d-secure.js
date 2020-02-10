@@ -154,6 +154,7 @@ define([
                         // `liabilityShifted` indicates that 3DS worked and authentication succeeded
                         // if `liabilityShifted` and `liabilityShiftPossible` are false - card is ineligible for 3DS
                         if (payload.liabilityShifted || !payload.liabilityShifted && !payload.liabilityShiftPossible) {
+                            fullScreenLoader.stopLoader();
                             context.paymentPayload.nonce = payload.nonce;
                             self.state.resolve();
                         } else {
