@@ -333,6 +333,9 @@
             <testCaseId value="MC-14785"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-30161">[FT][2.3.5] Test QuickSearchAndAddToCart fails on Jenkins</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
