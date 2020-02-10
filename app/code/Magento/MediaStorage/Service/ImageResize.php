@@ -15,17 +15,18 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Image;
 use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
-use \Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
-use Magento\Theme\Model\ResourceModel\Theme\Collection;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
 use Magento\Theme\Model\Theme;
 
 /**
@@ -76,24 +77,20 @@ class ImageResize
     private $themeCustomizationConfig;
 
     /**
-     * @var Collection
+     * @var ThemeCollection
      */
     private $themeCollection;
 
     /**
-     * @var Filesystem
+     * @var WriteInterface
      */
     private $mediaDirectory;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var Database
+     * @var FileStorageDatabase
      */
     private $fileStorageDatabase;
+
     /**
      * @var StoreManagerInterface
      */
@@ -108,9 +105,9 @@ class ImageResize
      * @param ViewConfig $viewConfig
      * @param AssertImageFactory $assertImageFactory
      * @param ThemeCustomizationConfig $themeCustomizationConfig
-     * @param Collection $themeCollection
+     * @param ThemeCollection $themeCollection
      * @param Filesystem $filesystem
-     * @param Database $fileStorageDatabase
+     * @param FileStorageDatabase $fileStorageDatabase
      * @param StoreManagerInterface $storeManager
      * @throws \Magento\Framework\Exception\FileSystemException
      * @internal param ProductImage $gallery
@@ -125,9 +122,9 @@ class ImageResize
         ViewConfig $viewConfig,
         AssertImageFactory $assertImageFactory,
         ThemeCustomizationConfig $themeCustomizationConfig,
-        Collection $themeCollection,
+        ThemeCollection $themeCollection,
         Filesystem $filesystem,
-        Database $fileStorageDatabase = null,
+        FileStorageDatabase $fileStorageDatabase = null,
         StoreManagerInterface $storeManager = null
     ) {
         $this->appState = $appState;
@@ -140,9 +137,8 @@ class ImageResize
         $this->themeCustomizationConfig = $themeCustomizationConfig;
         $this->themeCollection = $themeCollection;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->filesystem = $filesystem;
         $this->fileStorageDatabase = $fileStorageDatabase ?:
-            ObjectManager::getInstance()->get(Database::class);
+            ObjectManager::getInstance()->get(FileStorageDatabase::class);
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
