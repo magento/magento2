@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -14,11 +15,12 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Search\Api\SearchInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
+use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
  * Full text search for catalog using given search criteria.
  */
-class Search
+class Search implements ProductQueryInterface
 {
     /**
      * @var SearchInterface
@@ -31,7 +33,7 @@ class Search
     private $searchResultFactory;
 
     /**
-     * @var \Magento\Search\Model\Search\PageSizeProvider
+     * @var PageSizeProvider
      */
     private $pageSizeProvider;
 
@@ -51,20 +53,27 @@ class Search
     private $productsProvider;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
-     * @param \Magento\Search\Model\Search\PageSizeProvider $pageSize
+     * @param PageSizeProvider $pageSize
      * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         SearchInterface $search,
         SearchResultFactory $searchResultFactory,
-        \Magento\Search\Model\Search\PageSizeProvider $pageSize,
+        PageSizeProvider $pageSize,
         SearchCriteriaInterfaceFactory $searchCriteriaFactory,
         FieldSelection $fieldSelection,
-        ProductSearch $productsProvider
+        ProductSearch $productsProvider,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -72,21 +81,23 @@ class Search
         $this->searchCriteriaFactory = $searchCriteriaFactory;
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Return results of full text catalog search of given term, and will return filtered results if filter is specified
+     * Return product search results using Search API
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $args
      * @param ResolveInfo $info
      * @return SearchResult
      * @throws \Exception
      */
     public function getResult(
-        SearchCriteriaInterface $searchCriteria,
+        array $args,
         ResolveInfo $info
     ): SearchResult {
         $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
+        $searchCriteria = $this->buildSearchCriteria($args, $info);
 
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
@@ -130,5 +141,21 @@ class Search
                 'totalPages' => $maxPages,
             ]
         );
+    }
+
+    /**
+     * Build search criteria from query input args
+     *
+     * @param array $args
+     * @param ResolveInfo $info
+     * @return SearchCriteriaInterface
+     */
+    private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
+    {
+        $productFields = (array)$info->getFieldSelection(1);
+        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
+        $searchCriteria = $this->searchCriteriaBuilder->build($args, $includeAggregations);
+
+        return $searchCriteria;
     }
 }
