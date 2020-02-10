@@ -18,9 +18,6 @@
             <testCaseId value="MAGETWO-58718"/>
             <group value="product"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MC-13841"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login Admin -->
@@ -50,7 +47,7 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <!-- Clear Filter Store -->
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetFiltersOnStorePage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetFiltersOnStorePage"/>
             <!-- Delete Category and Simple Product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -73,8 +70,8 @@
         </actionGroup>
 
         <!-- Upload Image English -->
-        <actionGroup ref="addProductImage" stepKey="uploadImageEnglish"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="uploadImageEnglish"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
         <!-- Switch to the French store view -->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewFrenchProduct">
@@ -82,19 +79,19 @@
         </actionGroup>
 
         <!-- Upload Image French -->
-        <actionGroup ref="addProductImage" stepKey="uploadImageFrench">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="uploadImageFrench">
             <argument name="image" value="Magento3"/>
         </actionGroup>
         <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRole1">
             <argument name="image" value="Magento3"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
 
         <!-- Switch to the All store view -->
         <actionGroup ref="AdminSwitchToAllStoreViewActionGroup" stepKey="switchAllStoreViewProduct"/>
 
         <!-- Upload Image All Store View -->
-        <actionGroup ref="addProductImage" stepKey="uploadImageAllStoreView">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="uploadImageAllStoreView">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRole">
@@ -105,10 +102,11 @@
         <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openDescriptionDropDown"/>
         <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="This is the long description" stepKey="fillLongDescription"/>
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="This is the short description" stepKey="fillShortDescription"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Go to Product Page and see Default Store View-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToDefaultStorefrontProductPage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(TestImageNew.filename)}}" time="30" stepKey="waitImageToBeLoaded"/>
         <seeElement selector="{{StorefrontProductMediaSection.productImageActive(TestImageNew.filename)}}" stepKey="seeActiveImageDefault"/>
 
         <!-- English Switch Store View and see English Store View -->
@@ -120,6 +118,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc(ProductImage.fileName)}}" stepKey="seeThumb"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductPage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(ProductImage.filename)}}" time="30" stepKey="waitImageToBeLoaded2"/>
         <seeElement selector="{{StorefrontProductMediaSection.productImageActive(ProductImage.filename)}}" stepKey="seeActiveImageEnglish"/>
 
         <!-- Switch France Store View and see France Store View -->
@@ -131,6 +130,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc(Magento3.fileName)}}" stepKey="seeThumb1"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
         <waitForPageLoad time="30" stepKey="waitForProductPage1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(Magento3.filename)}}" time="30" stepKey="waitImageToBeLoaded3"/>
         <seeElement selector="{{StorefrontProductMediaSection.productImageActive(Magento3.filename)}}" stepKey="seeActiveImageFrance"/>
     </test>
 </tests>

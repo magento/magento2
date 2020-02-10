@@ -3,18 +3,27 @@
 
 interface ProductInterface {
     url_key: String @doc(description: "The part of the URL that identifies the product")
-    url_path: String @doc(description: "The part of the URL that precedes the url_key")
+    url_suffix: String @doc(description: "The part of the product URL that is appended after the url key") @resolver(class: "Magento\\CatalogUrlRewriteGraphQl\\Model\\Resolver\\ProductUrlSuffix")
+    url_path: String @deprecated(reason: "Use product's `canonical_url` or url rewrites instead")
     url_rewrites: [UrlRewrite] @doc(description: "URL rewrites list") @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite")
+}
+
+interface CategoryInterface {
+    url_suffix: String @doc(description: "The part of the category URL that is appended after the url key") @resolver(class: "Magento\\CatalogUrlRewriteGraphQl\\Model\\Resolver\\CategoryUrlSuffix")
 }
 
 input ProductFilterInput {
     url_key: FilterTypeInput @doc(description: "The part of the URL that identifies the product")
-    url_path: FilterTypeInput @doc(description: "The part of the URL that precedes the url_key")
+    url_path: FilterTypeInput @deprecated(reason: "Use product's `canonical_url` or url rewrites instead")
+}
+
+input ProductAttributeFilterInput {
+    url_key: FilterEqualTypeInput @doc(description: "The part of the URL that identifies the product")
 }
 
 input ProductSortInput {
     url_key: SortEnum @doc(description: "The part of the URL that identifies the product")
-    url_path: SortEnum @doc(description: "The part of the URL that precedes the url_key")
+    url_path: SortEnum @deprecated(reason: "Use product's `canonical_url` or url rewrites instead")
 }
 
 enum UrlRewriteEntityTypeEnum @doc(description: "This enumeration defines the entity type.") {

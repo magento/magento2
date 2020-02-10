@@ -208,6 +208,20 @@
                     <dataScope>header_logo_alt</dataScope>
                 </settings>
             </field>
+            <field name="header_translate_title" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Translate Title</label>
+                    <dataScope>header_translate_title</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
         </fieldset>
         <fieldset name="footer">
             <settings>

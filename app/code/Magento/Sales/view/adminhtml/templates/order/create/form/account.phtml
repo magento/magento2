@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account */
 ?>
 
-<div class="admin__page-section-title <?= /* @escapeNotVerified */ $block->getHeaderCssClass() ?>">
-    <span class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
+<div class="admin__page-section-title <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
+    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
     <div class="actions"></div>
 </div>
-<div id="customer_account_fieds" class="admin__page-section-content">
+<div id="customer_account_fields" class="admin__page-section-content">
     <?= $block->getForm()->getHtml() ?>
 </div>
 
 <script>
     require(["prototype", "Magento_Sales/order/create/form"], function(){
-        order.accountFieldsBind($('customer_account_fieds'));
+        order.accountFieldsBind($('customer_account_fields'));
     });
 </script>

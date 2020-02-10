@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-76273"/>
             <group value="category"/>
+            <skip>
+                <issueId value="MC-30720"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleSubCategoryOne"/>
@@ -29,6 +32,7 @@
             <createData entity="_defaultProduct" stepKey="productTwo">
                 <requiredEntity createDataKey="simpleSubCategoryOne"/>
             </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="runIndexerCron"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>

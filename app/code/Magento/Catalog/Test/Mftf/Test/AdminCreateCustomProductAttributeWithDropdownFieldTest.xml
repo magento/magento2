@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-10905"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15474"/>
+            </skip>
         </annotations>
 
         <before>
@@ -35,7 +38,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
 
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteCreatedAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
 
@@ -47,7 +50,7 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!-- Select Created Product-->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createConfigProduct.sku$$)}}"/>

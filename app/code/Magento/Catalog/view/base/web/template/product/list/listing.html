@@ -25,15 +25,15 @@
                                 <render args="$col.getBody()"/>
                             </fastForEach>
 
-                            <div if="getRegion('action-primary-area')().length || getRegion('action-secondary-area')().length"
+                            <div if="regionHasElements('action-primary-area') || regionHasElements('action-secondary-area')"
                                  class="product-item-actions">
-                                <div class="actions-primary" if="getRegion('action-primary-area')().length">
+                                <div class="actions-primary" if="regionHasElements('action-primary-area')">
                                     <fastForEach args="data: getRegion('action-primary-area'), as: '$col'" >
                                         <render args="$col.getBody()"/>
                                     </fastForEach>
                                 </div>
 
-                                <div if="getRegion('action-secondary-area')().length"
+                                <div if="regionHasElements('action-secondary-area')"
                                      class="actions-secondary"
                                      data-role="add-to-links">
                                     <fastForEach args="data: getRegion('action-secondary-area'), as: '$col'" >
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
 
-                            <div if="getRegion('description-area')().length"
+                            <div if="regionHasElements('description-area')"
                                  class="product-item-description">
                                 <fastForEach args="data: getRegion('description-area'), as: '$col'" >
                                     <render args="$col.getBody()"/>

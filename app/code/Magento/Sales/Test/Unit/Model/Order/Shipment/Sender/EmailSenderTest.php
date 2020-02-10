@@ -249,7 +249,7 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         if (!$configValue || $forceSyncMode) {
             $transport = [
@@ -279,11 +279,15 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
                 ->method('setTemplateVars')
                 ->with($transport->getData());
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')
                     ->willReturn($this->senderMock);

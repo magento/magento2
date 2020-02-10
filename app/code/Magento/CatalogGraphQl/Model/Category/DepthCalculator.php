@@ -26,7 +26,7 @@ class DepthCalculator
         $depth = count($selections) ? 1 : 0;
         $childrenDepth = [0];
         foreach ($selections as $node) {
-            if ($node->kind === 'InlineFragment') {
+            if ($node->kind === 'InlineFragment' || null !== $node->alias) {
                 continue;
             }
 

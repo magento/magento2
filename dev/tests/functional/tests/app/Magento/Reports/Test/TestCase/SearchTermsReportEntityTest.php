@@ -96,7 +96,7 @@ class SearchTermsReportEntityTest extends Injectable
      */
     protected function createProducts($product, $countProduct)
     {
-        $name = 'simpleProductName' . mt_rand();
+        $name = 'simpleProductName' . random_int(0, PHP_INT_MAX);
         for ($i = 0; $i < $countProduct; $i++) {
             $productFixture = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',

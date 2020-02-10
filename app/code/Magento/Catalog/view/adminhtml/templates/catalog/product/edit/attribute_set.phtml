@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
- /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
+/* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
 ?>
 <script id="product-template-selector-template" type="text/x-magento-template">
 <% if (!data.term && data.items.length && !data.allShown()) { %>
@@ -32,7 +32,7 @@
             }
         });
         $suggest
-            .mage('suggest',<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions()) ?>)
+            .mage('suggest',<?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getSelectorOptions()) ?>)
             .on('suggestselect', function (e, ui) {
                 if (ui.item.id) {
                     $('[data-form=edit-product]').trigger('changeAttributeSet', ui.item);

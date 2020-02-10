@@ -11,6 +11,7 @@
     <test name="StorefrontProductNameMinicartOnCheckoutPageDifferentStoreViewsTest">
         <annotations>
             <features value="Checkout"/>
+            <stories value="Minicart"/>
             <title value="Checking Product name in Minicart and on Checkout page with different store views"/>
             <description value="Checking Product name in Minicart and on Checkout page with different store views"/>
             <severity value="MAJOR"/>
@@ -44,7 +45,7 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
 
         <!--Switch to second store view and change the product name-->
-        <actionGroup ref="SwitchToTheNewStoreView" stepKey="switchToCustomStoreView">
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchToCustomStoreView">
             <argument name="storeViewName" value="{{customStore.name}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -55,7 +56,7 @@
         <!--Add product to cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$$"/>
         </actionGroup>
 

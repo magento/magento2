@@ -350,6 +350,13 @@ class SchemaBuilder
             if ($constraintData['type'] === 'foreign') {
                 $constraintData['column'] = $this->getColumnByName($constraintData['column'], $table);
                 $referenceTableData = $this->tablesData[$constraintData['referenceTable']];
+
+                if ($this->isDisabled($referenceTableData)) {
+                    throw new \LogicException(
+                        sprintf('The reference table named "%s" is disabled', $referenceTableData['name'])
+                    );
+                }
+
                 //If we are referenced to the same table we need to specify it
                 //Get table name from resource connection regarding prefix settings
                 $refTableName = $this->resourceConnection->getTableName($referenceTableData['name']);

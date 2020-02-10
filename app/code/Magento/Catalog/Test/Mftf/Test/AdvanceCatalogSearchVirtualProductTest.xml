@@ -33,7 +33,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+            <createData entity="ApiVirtualProductWithDescriptionAndUnderscoredSku" stepKey="product"/>
         </before>
     </test>
     <test name="AdvanceCatalogSearchVirtualProductByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">

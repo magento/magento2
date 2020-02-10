@@ -16,5 +16,6 @@
         <element name="customerName" type="text" selector=".order-account-information table tr:first-of-type > td span"/>
         <element name="customerEmail" type="text" selector=".order-account-information table tr:nth-of-type(2) > td a"/>
         <element name="customerGroup" type="text" selector=".order-account-information table tr:nth-of-type(3) > td"/>
+        <element name="invoiceNoteComment" type="text" selector="div.note-list-comment"/>
     </section>
 </sections>

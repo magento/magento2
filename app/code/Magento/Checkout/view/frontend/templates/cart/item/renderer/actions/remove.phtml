@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove */
 ?>
 <a href="#"
    title="<?= $block->escapeHtml(__('Remove item')) ?>"
    class="action action-delete"
-   data-post='<?= /* @escapeNotVerified */ $block->getDeletePostJson() ?>'>
+   data-post='<?= /* @noEscape */ $block->getDeletePostJson() ?>'>
     <span>
-        <?= /* @escapeNotVerified */ __('Remove item') ?>
+        <?= $block->escapeHtml(__('Remove item')) ?>
     </span>
 </a>

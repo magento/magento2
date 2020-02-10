@@ -5,7 +5,7 @@
  */
 ?>
 <fieldset class="fieldset">
-    <legend class="legend"><span><?= /* @escapeNotVerified */ __('Role Users') ?></span></legend>
+    <legend class="legend"><span><?= $block->escapeHtml(__('Role Users')) ?></span></legend>
     <br />
     <?= $block->getGridHtml() ?>
 </fieldset>

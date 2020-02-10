@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\File\Uploader;
+
 /**
  * Catalog image uploader
  */
@@ -189,17 +191,24 @@ class ImageUploader
      * Checking file for moving and move it
      *
      * @param string $imageName
-     *
+     * @param bool $returnRelativePath
      * @return string
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function moveFileFromTmp($imageName)
+    public function moveFileFromTmp($imageName, $returnRelativePath = false)
     {
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        $baseImagePath = $this->getFilePath(
+            $basePath,
+            Uploader::getNewFileName(
+                $this->mediaDirectory->getAbsolutePath(
+                    $this->getFilePath($basePath, $imageName)
+                )
+            )
+        );
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
 
         try {
@@ -217,7 +226,7 @@ class ImageUploader
             );
         }
 
-        return $imageName;
+        return $returnRelativePath ? $baseImagePath : $imageName;
     }
 
     /**

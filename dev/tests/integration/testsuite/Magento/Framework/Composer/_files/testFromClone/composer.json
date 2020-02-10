@@ -7,7 +7,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.5.22|~5.6.0|~7.0.0",
+        "php": "~5.5.22||~5.6.0||~7.0.0",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -17,7 +17,6 @@
         "ext-intl": "*",
         "ext-mcrypt": "*",
         "ext-simplexml": "*",
-        "ext-spl": "*",
         "lib-libxml": "*",
         "composer/composer": "1.0.0-alpha9",
         "magento/magento-composer-installer": "*",

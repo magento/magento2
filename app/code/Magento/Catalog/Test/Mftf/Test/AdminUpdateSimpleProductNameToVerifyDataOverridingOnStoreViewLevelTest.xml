@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
@@ -32,7 +32,7 @@
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{defaultSimpleProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
@@ -44,7 +44,7 @@
         <!-- Search default simple product in grid -->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGrid">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
@@ -52,9 +52,14 @@
 
         <!-- Assign simple product to created store view -->
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="clickCategoryStoreViewDropdownToggle"/>
+        <waitForPageLoad stepKey="waitForStoreViewDropdown"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(customStoreFR.name)}}" stepKey="waitForStoreViewOption"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(customStoreFR.name)}}" stepKey="selectCategoryStoreViewOption"/>
+        <waitForPageLoad stepKey="waitForAcceptModal"/>
+        <waitForElementVisible selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="waitForAcceptButton"/>
         <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="clickAcceptButton"/>
         <waitForPageLoad stepKey="waitForThePageToLoad"/>
+        <waitForElementNotVisible selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="waitForAcceptButtonGone"/>
         <uncheckOption selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckProductStatus"/>
 
         <!-- Update default simple product with name -->
