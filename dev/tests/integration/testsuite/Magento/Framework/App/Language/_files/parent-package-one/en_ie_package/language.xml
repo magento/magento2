@@ -7,7 +7,7 @@
 -->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/Language/package.xsd">
     <code>en_US</code>
-    <vendor>bar</vendor>
-    <package>en_us</package>
+    <vendor>parent-package-one</vendor>
+    <package>en_ie_package</package>
     <sort_order>0</sort_order>
 </language>
