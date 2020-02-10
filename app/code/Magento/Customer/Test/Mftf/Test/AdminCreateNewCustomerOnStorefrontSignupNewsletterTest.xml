@@ -49,6 +49,6 @@
         <waitForPageLoad stepKey="waitForEditLinkLoad"/>
         <click selector="{{AdminEditCustomerInformationSection.newsLetter}}" stepKey="clickNewsLetter"/>
         <waitForPageLoad stepKey="waitForNewsletterTabToOpen"/>
-        <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedToNewsletter}}" stepKey="seeAssertSubscribedToNewsletterCheckboxIsChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedStatus('1')}}" stepKey="seeAssertSubscribedToNewsletterCheckboxIsChecked"/>
     </test>
 </tests>

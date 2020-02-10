@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Exception;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -38,9 +39,7 @@ class OrdersTest extends GraphQlAbstract
 query {
   customerOrders {
     items {
-      id
-      increment_id
-      created_at
+      order_number
       grand_total
       status
     }
@@ -54,27 +53,27 @@ QUERY;
 
         $expectedData = [
             [
-                'increment_id' => '100000002',
+                'order_number' => '100000002',
                 'status' => 'processing',
                 'grand_total' => 120.00
             ],
             [
-                'increment_id' => '100000003',
+                'order_number' => '100000003',
                 'status' => 'processing',
                 'grand_total' => 130.00
             ],
             [
-                'increment_id' => '100000004',
+                'order_number' => '100000004',
                 'status' => 'closed',
                 'grand_total' => 140.00
             ],
             [
-                'increment_id' => '100000005',
+                'order_number' => '100000005',
                 'status' => 'complete',
                 'grand_total' => 150.00
             ],
             [
-                'increment_id' => '100000006',
+                'order_number' => '100000006',
                 'status' => 'complete',
                 'grand_total' => 160.00
             ]
@@ -84,21 +83,40 @@ QUERY;
 
         foreach ($expectedData as $key => $data) {
             $this->assertEquals(
-                $data['increment_id'],
-                $actualData[$key]['increment_id'],
-                "increment_id is different than the expected for order - " . $data['increment_id']
+                $data['order_number'],
+                $actualData[$key]['order_number'],
+                "order_number is different than the expected for order - " . $data['order_number']
             );
             $this->assertEquals(
                 $data['grand_total'],
                 $actualData[$key]['grand_total'],
-                "grand_total is different than the expected for order - " . $data['increment_id']
+                "grand_total is different than the expected for order - " . $data['order_number']
             );
             $this->assertEquals(
                 $data['status'],
                 $actualData[$key]['status'],
-                "status is different than the expected for order - " . $data['increment_id']
+                "status is different than the expected for order - " . $data['order_number']
             );
         }
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
+     */
+    public function testOrdersQueryNotAuthorized()
+    {
+        $query = <<<QUERY
+{
+  customerOrders {
+    items {
+      increment_id
+      grand_total
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
     }
 
     /**

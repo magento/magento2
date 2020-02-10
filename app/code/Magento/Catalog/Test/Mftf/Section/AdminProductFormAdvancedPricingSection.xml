@@ -21,9 +21,9 @@
         <element name="productTierPriceFixedPriceInput" type="input" selector="[name='product[tier_price][{{var1}}][price]']" parameterized="true"/>
         <element name="productTierPricePercentageValuePriceInput" type="input" selector="[name='product[tier_price][{{var1}}][percentage_value]']" parameterized="true"/>
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
-        <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary" timeout="5"/>
+        <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary" timeout="30"/>
         <element name="msrp" type="input" selector="//input[@name='product[msrp]']" timeout="30"/>
         <element name="msrpType" type="select" selector="//select[@name='product[msrp_display_actual_price_type]']" timeout="30"/>
-        <element name="save" type="button" selector="#save-button"/>
+        <element name="save" type="button" selector="#save-button" timeout="30"/>
     </section>
 </sections>

@@ -18,7 +18,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Test for \Magento\MediaStorage\Console\Command\ImagesResizeCommand.
- *
  */
 class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
 {
@@ -53,16 +52,29 @@ class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
     private $fileName;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->fileName = 'image.jpg';
+        parent::setUp();
+
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->fileName = 'image.jpg';
         $this->command = $this->objectManager->get(ImagesResizeCommand::class);
         $this->tester = new CommandTester($this->command);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Test that catalog:image:resize command executed successfully with missing image file
+     *
+     * @magentoDataFixture Magento/MediaStorage/_files/product_with_missed_image.php
+     */
+    public function testRunResizeWithMissingFile()
+    {
+        $this->tester->execute([]);
+        $this->assertContains('original image not found', $this->tester->getDisplay());
     }
 
     /**
@@ -95,13 +107,19 @@ class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->tester->execute([]);
         $this->assertContains('Wrong file', $this->tester->getDisplay());
+        $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
     }
 
     /**
-     * @inheritDoc
+     * Test that catalog:image:resize command executes successfully in database storage mode
+     * with file missing from local folder
+     *
+     * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
+     * @magentoDataFixture Magento/MediaStorage/_files/product_with_missed_image.php
      */
-    public function tearDown()
+    public function testDatabaseStorageMissingFile()
     {
-        $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
+        $this->tester->execute([]);
+        $this->assertContains('Product images resized successfully', $this->tester->getDisplay());
     }
 }

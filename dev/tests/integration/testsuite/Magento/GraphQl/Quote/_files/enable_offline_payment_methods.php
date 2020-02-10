@@ -3,7 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
+/**
+ * @deprecated use next @magentoConfigFixture instead:
+ * @magentoConfigFixture default_store payment/banktransfer/active 1
+ * @magentoConfigFixture default_store payment/cashondelivery/active 1
+ * @magentoConfigFixture default_store payment/checkmo/active 1
+ * @magentoConfigFixture default_store payment/purchaseorder/active 1
+ * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
+ */
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\Storage\Writer;

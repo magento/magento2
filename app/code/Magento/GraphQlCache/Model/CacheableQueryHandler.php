@@ -9,6 +9,7 @@ namespace Magento\GraphQlCache\Model;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
@@ -53,29 +54,20 @@ class CacheableQueryHandler
      * Set cache validity to the cacheableQuery after resolving any resolver or evaluating a promise in a query
      *
      * @param array $resolvedValue
-     * @param Field $field
+     * @param array $cacheAnnotation Eg: ['cacheable' => true, 'cacheTag' => 'someTag', cacheIdentity=>'\Mage\Class']
      * @return void
      */
-    public function handleCacheFromResolverResponse(array $resolvedValue, Field $field) : void
+    public function handleCacheFromResolverResponse(array $resolvedValue, array $cacheAnnotation) : void
     {
-        $cache = $field->getCache();
-        $cacheIdentityClass = $cache['cacheIdentity'] ?? '';
-        $cacheable = $cache['cacheable'] ?? true;
-        $cacheTag = $cache['cacheTag'] ?? null;
+        $cacheable = $cacheAnnotation['cacheable'] ?? true;
+        $cacheIdentityClass = $cacheAnnotation['cacheIdentity'] ?? '';
 
-        $cacheTags = [];
-        if ($cacheTag && $this->request->isGet()) {
-            if (!empty($cacheIdentityClass)) {
-                $cacheIdentity = $this->identityPool->get($cacheIdentityClass);
-                $cacheTagIds = $cacheIdentity->getIdentities($resolvedValue);
-                if (!empty($cacheTagIds)) {
-                    $cacheTags[] = $cacheTag;
-                    foreach ($cacheTagIds as $cacheTagId) {
-                        $cacheTags[] = $cacheTag . '_' . $cacheTagId;
-                    }
-                }
-            }
+        if ($this->request instanceof Http && $this->request->isGet() && !empty($cacheIdentityClass)) {
+            $cacheIdentity = $this->identityPool->get($cacheIdentityClass);
+            $cacheTags = $cacheIdentity->getIdentities($resolvedValue);
             $this->cacheableQuery->addCacheTags($cacheTags);
+        } else {
+            $cacheable = false;
         }
         $this->setCacheValidity($cacheable);
     }

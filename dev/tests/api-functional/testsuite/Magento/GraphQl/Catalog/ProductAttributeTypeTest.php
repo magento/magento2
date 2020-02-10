@@ -50,7 +50,8 @@ class ProductAttributeTypeTest extends GraphQlAbstract
     {
       attribute_code
       attribute_type
-      entity_type      
+      entity_type
+      input_type
     } 
   }
  }
@@ -71,7 +72,8 @@ QUERY;
             \Magento\Catalog\Api\Data\ProductInterface::class
         ];
         $attributeTypes = ['String', 'Int', 'Float','Boolean', 'Float'];
-        $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $response);
+        $inputTypes = ['textarea', 'select', 'price', 'boolean', 'price'];
+        $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $inputTypes, $response);
     }
 
     /**
@@ -121,7 +123,8 @@ QUERY;
     {
       attribute_code
       attribute_type
-      entity_type      
+      entity_type
+      input_type
     } 
   }
  }
@@ -154,7 +157,16 @@ QUERY;
             'CustomerDataRegionInterface',
             'ProductMediaGallery'
         ];
-        $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $response);
+        $inputTypes = [
+            'select',
+            'multiselect',
+            'select',
+            'select',
+            'text',
+            'text',
+            'gallery'
+        ];
+        $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $inputTypes, $response);
     }
 
     /**
@@ -213,11 +225,17 @@ QUERY;
      * @param array $attributeTypes
      * @param array $expectedAttributeCodes
      * @param array $entityTypes
+     * @param array $inputTypes
      * @param array $actualResponse
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $actualResponse)
-    {
+    private function assertAttributeType(
+        $attributeTypes,
+        $expectedAttributeCodes,
+        $entityTypes,
+        $inputTypes,
+        $actualResponse
+    ) {
         $attributeMetaDataItems = array_map(null, $actualResponse['customAttributeMetadata']['items'], $attributeTypes);
 
         foreach ($attributeMetaDataItems as $itemIndex => $itemArray) {
@@ -225,8 +243,9 @@ QUERY;
                 $attributeMetaDataItems[$itemIndex][0],
                 [
                     "attribute_code" => $expectedAttributeCodes[$itemIndex],
-                    "attribute_type" =>$attributeTypes[$itemIndex],
-                    "entity_type" => $entityTypes[$itemIndex]
+                    "attribute_type" => $attributeTypes[$itemIndex],
+                    "entity_type" => $entityTypes[$itemIndex],
+                    "input_type" => $inputTypes[$itemIndex]
                 ]
             );
         }

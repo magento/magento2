@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontEmailNoteMessageOnCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided 'Email Address' message is present on the Storefront Checkout page under the 'Email Address' field.</description>
+        </annotations>
         <arguments>
-            <argument name="message" type="string" defaultValue="You can create an account after checkout." />
+            <argument name="message" type="string" defaultValue="You can create an account after checkout."/>
         </arguments>
+
         <waitForElementVisible selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailNoteMessage}}" stepKey="waitForFormValidation"/>
         <see selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailNoteMessage}}" userInput="{{message}}" stepKey="seeTheNoteMessageIsDisplayed"/>
     </actionGroup>

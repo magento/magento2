@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Framework\Event\Observer;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
@@ -19,6 +20,14 @@ use Magento\Store\Model\Store;
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
+
+    /**
+     * Reserved endpoint names.
+     *
+     * @var string[]
+     */
+    private $invalidValues = [];
+
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
      */
@@ -40,21 +49,33 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     private $categoryRepository;
 
     /**
+     * @var \Magento\Backend\App\Area\FrontNameResolver
+     */
+    private $frontNameResolver;
+
+    /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver
+     * @param string[] $invalidValues
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         StoreViewService $storeViewService,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver = null,
+        array $invalidValues = []
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->storeViewService = $storeViewService;
         $this->categoryRepository = $categoryRepository;
+        $this->frontNameResolver = $frontNameResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Backend\App\Area\FrontNameResolver::class);
+        $this->invalidValues = $invalidValues;
     }
 
     /**
@@ -68,13 +89,15 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
-        $useDefaultAttribute = !$category->isObjectNew() && !empty($category->getData('use_default')['url_key']);
+        $useDefaultAttribute = !empty($category->getData('use_default')['url_key']);
         if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             $this->updateUrlKey($category, $resultUrlKey);
-        } else if ($useDefaultAttribute) {
-            $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
-            $this->updateUrlKey($category, $resultUrlKey);
+        } elseif ($useDefaultAttribute) {
+            if (!$category->isObjectNew() && $category->getStoreId() === Store::DEFAULT_STORE_ID) {
+                $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
+                $this->updateUrlKey($category, $resultUrlKey);
+            }
             $category->setUrlKey(null)->setUrlPath(null);
         }
     }
@@ -92,6 +115,17 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if (empty($urlKey)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
         }
+
+        if (in_array($urlKey, $this->getInvalidValues())) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'URL key "%1" matches a reserved endpoint name (%2). Use another URL key.',
+                    $urlKey,
+                    implode(', ', $this->getInvalidValues())
+                )
+            );
+        }
+
         $category->setUrlKey($urlKey)
             ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
         if (!$category->isObjectNew()) {
@@ -100,6 +134,16 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $this->updateUrlPathForChildren($category);
             }
         }
+    }
+
+    /**
+     * Get reserved endpoint names.
+     *
+     * @return array
+     */
+    private function getInvalidValues()
+    {
+        return array_unique(array_merge($this->invalidValues, [$this->frontNameResolver->getFrontName()]));
     }
 
     /**

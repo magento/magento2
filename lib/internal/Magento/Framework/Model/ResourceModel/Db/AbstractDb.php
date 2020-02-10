@@ -157,14 +157,9 @@ abstract class AbstractDb extends AbstractResource
      * Provide variables to serialize
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff($properties, ['_resources', '_connections']);
         return $properties;
@@ -174,14 +169,9 @@ abstract class AbstractDb extends AbstractResource
      * Restore global dependencies
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\App\ResourceConnection::class);
     }
@@ -372,7 +362,7 @@ abstract class AbstractDb extends AbstractResource
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-        
+
         return $this;
     }
 
@@ -550,6 +540,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @throws LocalizedException
      */
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -561,6 +552,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
+     * @throws LocalizedException
      */
     public function hasDataChanged($object)
     {
@@ -742,6 +734,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @throws LocalizedException
      */
     protected function prepareDataForUpdate($object)
     {
@@ -796,6 +789,24 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Check if column data type is numeric
+     *
+     * Based on column description
+     *
+     * @param array $columnDescription
+     * @return bool
+     */
+    private function isNumericValue(array $columnDescription): bool
+    {
+        $result = true;
+        if (!empty($columnDescription['DATA_TYPE'])
+            && in_array($columnDescription['DATA_TYPE'], ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'])) {
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
      * Update existing object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -804,29 +815,35 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $connection = $this->getConnection();
+        $tableDescription = $connection->describeTable($this->getMainTable());
+        $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
+        $condition  = (!$this->isNumericValue($tableDescription[$this->getIdFieldName()]))
+            ? sprintf('%s=%d', $this->getIdFieldName(), $preparedValue)
+            : $connection->quoteInto($this->getIdFieldName() . '=?', $preparedValue);
+
         /**
          * Not auto increment primary key support
          */
         if ($this->_isPkAutoIncrement) {
             $data = $this->prepareDataForUpdate($object);
             if (!empty($data)) {
-                $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                $connection->update($this->getMainTable(), $data, $condition);
             }
         } else {
-            $select = $this->getConnection()->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable(),
                 [$this->getIdFieldName()]
             )->where(
                 $condition
             );
-            if ($this->getConnection()->fetchOne($select) !== false) {
+            if ($connection->fetchOne($select) !== false) {
                 $data = $this->prepareDataForUpdate($object);
                 if (!empty($data)) {
-                    $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                    $connection->update($this->getMainTable(), $data, $condition);
                 }
             } else {
-                $this->getConnection()->insert(
+                $connection->insert(
                     $this->getMainTable(),
                     $this->_prepareDataForSave($object)
                 );

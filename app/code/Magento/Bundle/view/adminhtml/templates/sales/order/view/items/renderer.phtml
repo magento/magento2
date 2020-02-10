@@ -154,7 +154,7 @@
         </td>
         <td class="col-discont">
             <?php if ($block->canShowPriceInfo($_item)) : ?>
-                <?= $block->escapeHtml($block->displayPriceAttribute('discount_amount')) ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?>
             <?php else : ?>
                 &nbsp;
             <?php endif; ?>

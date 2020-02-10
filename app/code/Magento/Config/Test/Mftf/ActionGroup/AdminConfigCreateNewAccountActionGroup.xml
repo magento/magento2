@@ -9,15 +9,19 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SetGroupForValidVATIdIntraUnionActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Customer Configuration'. Sets the 'Group For Valid VAT ID Intra Union' option. Clicks on the Save button. Validates the Save message is present.</description>
+        </annotations>
         <arguments>
             <argument name="value" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminStoresCustomerConfigurationPage.url}}" stepKey="navigateToCustomerConfigurationPage" />
+
+        <amOnPage url="{{AdminStoresCustomerConfigurationPage.url}}" stepKey="navigateToCustomerConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandCreateNewAccountOptionsTab" selector="{{AdminStoresCustomerConfigurationSection.createNewAccOpt}}" dependentSelector="{{AdminStoresCustomerConfigurationSection.enableAutoAssignCustomerGroup}}" visible="false"/>
         <waitForElementVisible selector="{{AdminStoresCustomerConfigurationSection.createNewAccOpt}}" stepKey="waitForElementsAppeared"/>
         <selectOption selector="{{AdminStoresCustomerConfigurationSection.groupForValidVATIdIntraUnion}}" userInput="{{value}}" stepKey="selectValue"/>
-        <click selector="{{AdminStoresCustomerConfigurationSection.createNewAccOpt}}" stepKey="collapseTab" />
+        <click selector="{{AdminStoresCustomerConfigurationSection.createNewAccOpt}}" stepKey="collapseTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForConfigSaved"/>
         <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>

@@ -13,4 +13,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\UrlResolverIdentity">
+        <arguments>
+            <argument name="urlResolverIdentities" xsi:type="array">
+                <item name="cms_page" xsi:type="object">Magento\CmsUrlRewriteGraphQl\Model\Resolver\UrlRewrite\CmsUrlResolverIdentity</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

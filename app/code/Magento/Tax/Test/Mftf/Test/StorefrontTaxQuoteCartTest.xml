@@ -17,16 +17,13 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-295"/>
             <group value="Tax"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -35,11 +32,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -79,7 +76,7 @@
             </actionGroup>
 
             <!-- Ensure tax won't be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -106,7 +103,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -116,7 +113,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxCA"/>
         </actionGroup>
 
@@ -144,7 +141,7 @@
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -153,11 +150,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -197,7 +194,7 @@
             </actionGroup>
 
             <!-- Ensure tax won't be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
@@ -223,7 +220,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -233,7 +230,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxCA"/>
         </actionGroup>
 
@@ -260,7 +257,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -269,11 +266,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -304,7 +301,7 @@
             </actionGroup>
 
             <!-- Ensure tax won't be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -333,7 +330,7 @@
         <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -343,7 +340,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxNY"/>
         </actionGroup>
 
@@ -370,7 +367,7 @@
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
-            <actionGroup ref="editTaxConfigurationByUI" stepKey="fillDefaultTaxForms"/>
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
@@ -379,11 +376,11 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
@@ -414,7 +411,7 @@
             </actionGroup>
 
             <!-- Ensure tax won't be shown in the cart -->
-            <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
@@ -444,7 +441,7 @@
         <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -454,7 +451,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxNY"/>
         </actionGroup>
 

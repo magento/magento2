@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Controller\Download;
 
+use Magento\Catalog\Model\Product\SalabilityChecker;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 
 /**
@@ -18,7 +20,24 @@ use Magento\Framework\App\ResponseInterface;
 class Sample extends \Magento\Downloadable\Controller\Download
 {
     /**
-     * Download sample action
+     * @var SalabilityChecker
+     */
+    private $salabilityChecker;
+
+    /**
+     * @param Context $context
+     * @param SalabilityChecker|null $salabilityChecker
+     */
+    public function __construct(
+        Context $context,
+        SalabilityChecker $salabilityChecker = null
+    ) {
+        parent::__construct($context);
+        $this->salabilityChecker = $salabilityChecker ?: $this->_objectManager->get(SalabilityChecker::class);
+    }
+
+    /**
+     * Download sample action.
      *
      * @return ResponseInterface
      */
@@ -27,7 +46,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
         $sampleId = $this->getRequest()->getParam('sample_id', 0);
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $this->_objectManager->create(\Magento\Downloadable\Model\Sample::class)->load($sampleId);
-        if ($sample->getId()) {
+        if ($sample->getId() && $this->salabilityChecker->isSalable($sample->getProductId())) {
             $resource = '';
             $resourceType = '';
             if ($sample->getSampleType() == DownloadHelper::LINK_TYPE_URL) {
@@ -49,6 +68,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
                 );
             }
         }
+
         return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 }

@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAddNewCustomerAddressActionGroup">
-        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
+        <annotations>
+            <description>Goes to the Storefront Customer Add New Address page. Fills in the provided Address details. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="Address"/>
         </arguments>
+
+        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
         <fillField  stepKey="fillFirstName" userInput="{{Address.firstname}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
         <fillField  stepKey="fillLastName" userInput="{{Address.lastname}}" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
         <fillField  stepKey="fillCompanyName" userInput="{{Address.company}}" selector="{{StorefrontCustomerAddressFormSection.company}}"/>
@@ -25,11 +29,16 @@
         <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
         <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
     </actionGroup>
+
     <actionGroup name="StorefrontAddCustomerDefaultAddressActionGroup">
-        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
+        <annotations>
+            <description>Goes to the Storefront Customer Add New Default Address page. Fills in the provided Address details. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="Address"/>
         </arguments>
+
+        <amOnPage url="customer/address/new/" stepKey="OpenCustomerAddNewAddress"/>
         <fillField  stepKey="fillFirstName" userInput="{{Address.firstname}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
         <fillField  stepKey="fillLastName" userInput="{{Address.lastname}}" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
         <fillField  stepKey="fillCompanyName" userInput="{{Address.company}}" selector="{{StorefrontCustomerAddressFormSection.company}}"/>
