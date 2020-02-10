@@ -13,7 +13,7 @@
             <description>Click on the Add to Cart button. Validates that the Success Message is present.</description>
         </annotations>
         <arguments>
-            <argument name="productName"/>
+            <argument name="productName" type="string" defaultValue="{{ApiSimpleProduct.name}}"/>
         </arguments>
 
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
