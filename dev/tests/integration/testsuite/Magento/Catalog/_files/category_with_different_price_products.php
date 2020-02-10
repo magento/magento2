@@ -52,9 +52,9 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setStatus(Status::STATUS_ENABLED);
 $productRepository->save($product);
 
-$product = $productFactory->create();
-$product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId($product->getDefaultAttributeSetId())
+$product2 = $productFactory->create();
+$product2->setTypeId(Type::TYPE_SIMPLE)
+    ->setAttributeSetId($product2->getDefaultAttributeSetId())
     ->setStoreId(Store::DEFAULT_STORE_ID)
     ->setWebsiteIds([1])
     ->setName('Simple Product With Price 20')
@@ -65,4 +65,4 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setCategoryIds([$category->getId()])
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED);
-$productRepository->save($product);
+$productRepository->save($product2);
