@@ -346,6 +346,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Setup\Patch\Data\MySQLCatalogSearchTableCreation">
+        <arguments>
+            <argument name="dimensionProvider" xsi:type="object" shared="false">
+                Magento\Store\Model\StoreDimensionProvider
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
         <arguments>
             <argument name="priceTableResolver" xsi:type="object">

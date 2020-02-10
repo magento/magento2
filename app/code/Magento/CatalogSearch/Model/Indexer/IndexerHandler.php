@@ -26,7 +26,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var IndexStructureInterface
      */
-    private $indexStructure;
+    public $indexStructure;
 
     /**
      * @var array
