@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image;
 
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder\Theme;
+use Magento\Framework\App\Area;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Image Placeholder provider
@@ -27,23 +29,31 @@ class Placeholder
     private $assetRepository;
 
     /**
-     * @var Theme
+     * @var StoreManagerInterface
      */
-    private $theme;
+    private $storeManager;
+
+    /**
+     * @var Emulation
+     */
+    private $appEmulation;
 
     /**
      * @param PlaceholderFactory $placeholderFactory
      * @param AssetRepository $assetRepository
-     * @param Theme $theme
+     * @param StoreManagerInterface $storeManager
+     * @param Emulation $appEmulation
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         AssetRepository $assetRepository,
-        Theme $theme
+        StoreManagerInterface $storeManager,
+        Emulation $appEmulation
     ) {
         $this->placeholderFactory = $placeholderFactory;
         $this->assetRepository = $assetRepository;
-        $this->theme = $theme;
+        $this->storeManager = $storeManager;
+        $this->appEmulation = $appEmulation;
     }
 
     /**
@@ -61,9 +71,12 @@ class Placeholder
             return $imageAsset->getUrl();
         }
 
-        return $this->assetRepository->getUrlWithParams(
-            "Magento_Catalog::images/product/placeholder/{$imageType}.jpg",
-            $this->theme->getThemeData()
-        );
+        $storeId = $this->storeManager->getStore()->getId();
+
+        $this->appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
+        $url = $this->assetRepository->getUrl("Magento_Catalog::images/product/placeholder/{$imageType}.jpg");
+        $this->appEmulation->stopEnvironmentEmulation();
+
+        return $url;
     }
 }
