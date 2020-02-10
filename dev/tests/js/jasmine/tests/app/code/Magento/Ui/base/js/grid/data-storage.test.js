@@ -5,6 +5,8 @@
 
 /*eslint max-nested-callbacks: 0*/
 /*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
+/*eslint newline-after-var: ["error", "always"]*/
+/*eslint-env es6*/
 define([
     'jquery',
     'Magento_Ui/js/grid/data-storage'
@@ -52,6 +54,7 @@ define([
 
             it('initializes _requests property as an empty array', function () {
                 var model = new DataStorage();
+
                 model._requests = null;
                 model.initConfig();
                 expect(model._requests).toEqual([]);
@@ -110,7 +113,7 @@ define([
                             2: {
                                 id_field_name: 'entity_id',
                                 entity_id: '42'
-                            },
+                            }
                         }
                     });
 
@@ -129,8 +132,10 @@ define([
                 spyOn(model, 'clearRequests');
                 spyOn(model, 'hasScopeChanged').and.returnValue(true);
                 spyOn(model, 'requestData').and.returnValue(requestDataResult);
+                spyOn(model, 'getRequest');
                 expect(model.getData()).toEqual(requestDataResult);
                 expect(model.clearRequests).toHaveBeenCalled();
+                expect(model.getRequest).not.toHaveBeenCalled();
             });
 
             it('returns the cached result if scope have not been changed', function () {
@@ -210,7 +215,7 @@ define([
                         id_field_name: 'entity_id',
                         entity_id: '1',
                         field: 'value'
-                    },
+                    }
                 }
             });
 
@@ -237,7 +242,7 @@ define([
                     /**
                      * Success result for ajax request
                      *
-                     * @param handler
+                     * @param {Function} handler
                      * @returns {*}
                      */
                     done: function (handler) {
@@ -297,10 +302,11 @@ define([
                     model = new DataStorage({
                         cachedRequestDelay: 0
                     });
+
                 spyOn(model, 'getByIds').and.returnValue(items);
                 model.getRequestData(request).then(function (promiseResult) {
-                    expect(promiseResult).toEqual(result)
-                })
+                    expect(promiseResult).toEqual(result);
+                });
             });
         });
 
