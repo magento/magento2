@@ -108,6 +108,7 @@ class Attribute extends AbstractDb
         if ($data) {
             $object->setData($data);
             $this->_afterLoad($object);
+            $object->setOrigData();
             return true;
         }
         return false;

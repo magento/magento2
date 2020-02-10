@@ -261,10 +261,10 @@ class Save extends Attribute implements HttpPostActionInterface
             $model->addData($data);
 
             if (!$attributeId) {
-                $model->setEntityTypeId($this->_entityTypeId);
                 $model->setIsUserDefined(1);
             }
 
+            $model->setEntityTypeId($this->_entityTypeId);
             $groupCode = $this->getRequest()->getParam('group');
             if ($setId && $groupCode) {
                 // For creating product attribute on product page we need specify attribute set and group

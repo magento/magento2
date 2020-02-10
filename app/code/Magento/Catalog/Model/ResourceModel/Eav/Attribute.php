@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -200,6 +201,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
                 }
             }
         }
+
+        $this->validateEntityType();
+
         if ($this->getFrontendInput() == 'price') {
             if (!$this->getBackendModel()) {
                 $this->setBackendModel(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class);
@@ -900,5 +904,24 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     {
         $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
         return $this;
+    }
+
+    /**
+     * Entity type for existing attribute shouldn't be changed.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateEntityType(): void
+    {
+        $attributeId = $this->getId();
+
+        if ($attributeId !== null) {
+            $origEntityTypeId = $this->getOrigData('entity_type_id');
+
+            if (($origEntityTypeId !== null) && ((int)$this->getEntityTypeId() !== (int)$origEntityTypeId)) {
+                throw new LocalizedException(__('Do not change entity type.'));
+            }
+        }
     }
 }
