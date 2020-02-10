@@ -109,6 +109,9 @@
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Create three configurable products with options -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>

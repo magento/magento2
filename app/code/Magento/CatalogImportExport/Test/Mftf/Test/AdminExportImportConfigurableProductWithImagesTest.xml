@@ -153,6 +153,9 @@
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
             <!-- Admin logout-->
             <actionGroup ref="logout" stepKey="adminLogout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Go to System > Export -->

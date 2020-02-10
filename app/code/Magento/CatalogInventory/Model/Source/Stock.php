@@ -43,7 +43,7 @@ class Stock extends AbstractSource
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
     {
         $collection->getSelect()->joinLeft(
-            ['stock_item_table' => 'cataloginventory_stock_item'],
+            ['stock_item_table' => $collection->getTable('cataloginventory_stock_item')],
             "e.entity_id=stock_item_table.product_id",
             []
         );
