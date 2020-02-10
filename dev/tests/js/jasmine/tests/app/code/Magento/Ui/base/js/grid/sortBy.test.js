@@ -1,13 +1,14 @@
 define([
     'Magento_Ui/js/grid/sortBy'
-], function (sortBy) {
+], function (SortBy) {
     'use strict';
+
     describe('Magento_Ui/js/grid/sortBy', function () {
 
         var sortByObj;
 
         beforeEach(function () {
-            sortByObj = new sortBy({
+            sortByObj = new SortBy({
                 options: []
             });
         });
@@ -20,6 +21,7 @@ define([
                         index: 'name'
                     }],
                     options = [];
+
                 sortByObj.preparedOptions(columns);
                 expect(sortByObj.options).toEqual(options);
             });
@@ -34,6 +36,7 @@ define([
                         value: 'name',
                         label: 'magento'
                     }];
+
                 sortByObj.preparedOptions(columns);
                 expect(sortByObj.options).toEqual(options);
             });
@@ -44,6 +47,7 @@ define([
                         label: 'magento',
                         index: 'name'
                     }];
+
                 sortByObj.preparedOptions(columns);
                 expect(sortByObj.isVisible()).toBeTruthy();
             });
@@ -54,6 +58,7 @@ define([
                     label: 'magento',
                     index: 'name'
                 }];
+
                 sortByObj.preparedOptions(columns);
                 expect(sortByObj.isVisible()).toBeFalsy();
             });
@@ -64,6 +69,7 @@ define([
                     field: 'selectedOption',
                     direction: 'desc'
                 };
+
                 spyOn(sortByObj, 'selectedOption').and.returnValue('selectedOption');
                 sortByObj.applyChanges();
                 expect(sortByObj.applied()).toEqual(applied);
