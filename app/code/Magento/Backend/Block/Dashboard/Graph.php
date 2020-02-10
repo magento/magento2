@@ -234,7 +234,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 case '1y':
                 case '2y':
                     $d = $dateStart->format('Y-m');
-                    $dateStart->modify('+1 month');
+                    $dateStart->modify('first day of next month');
                     break;
                 default:
                     $d = $dateStart->format('Y-m-d H:00');
