@@ -1173,7 +1173,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             }
             $attribute = $this->_eavConfig->getAttribute($entity->getType(), $attributeCode);
             if ($attribute && !$attribute->isStatic()) {
-                $tableAttributes[$attribute->getBackendTable()][] = $attributeId;
+                $tableAttributes[$attribute->getBackendTable()][] = (int) $attributeId;
                 if (!isset($attributeTypes[$attribute->getBackendTable()])) {
                     $attributeTypes[$attribute->getBackendTable()] = $attribute->getBackendType();
                 }
