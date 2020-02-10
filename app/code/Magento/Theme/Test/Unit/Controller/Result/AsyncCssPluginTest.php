@@ -59,9 +59,9 @@ class AsyncCssPluginTest extends TestCase
     /**
      * Data Provider for before send response
      *
-     * @return void
+     * @return array
      */
-    public function sendResponseDataProvider()
+    public function sendResponseDataProvider(): array
     {
         return [
             [
