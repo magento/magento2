@@ -55,7 +55,7 @@
             <argument name="parentCategory" value="$simpleSubCategoryTwo.name$"/>
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="openHomePageFirst"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened1"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatTopCategoryIsSubCategoryTwo"/>
         <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="mouseOverSubCategoryTwo"/>
@@ -97,7 +97,7 @@
             <argument name="parentCategory" value="Default Category"/>
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="openHomePageSecond"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened2"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="verifyThatSubCategoryOneIsTopCategory"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatSubCategoryTwoIsTopCategory"/>
