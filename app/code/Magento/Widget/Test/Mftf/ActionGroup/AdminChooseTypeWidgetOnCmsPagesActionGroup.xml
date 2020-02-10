@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+   <actionGroup name="AdminChooseTypeWidgetOnCmsPagesActionGroup">
+       <annotations>
+           <description>Goes to the CMS Page creation page. Create and choose a widget type the provided Widget.</description>
+       </annotations>
+       <arguments>
+           <argument name="widget" type="string" defaultValue="{{ProductsListWidget.type}}"/>
+       </arguments>
+
+       <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
+       <waitForPageLoad stepKey="waitForCmsList"/>
+       <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
+       <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
+       <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
+       <waitForPageLoad stepKey="waitForContentSection"/>
+       <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+       <waitForPageLoad stepKey="waitForSlideOut"/>
+       <selectOption selector="{{WidgetSection.WidgetType}}" userInput="{{widget}}" stepKey="selectWidgetType"/>
+       <waitForPageLoad stepKey="waitForWidgetOptions"/>
+
+   </actionGroup>
+</actionGroups>
