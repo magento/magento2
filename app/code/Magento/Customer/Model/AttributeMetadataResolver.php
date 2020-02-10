@@ -15,7 +15,6 @@ use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\PrefixSuffixWi
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Field;
@@ -94,8 +93,8 @@ class AttributeMetadataResolver
      * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
-     * @param GroupManagement|null $groupManagement
-     * @param PrefixSuffixWithWebsites|null $prefixSuffixWithWebsites
+     * @param GroupManagement $groupManagement
+     * @param PrefixSuffixWithWebsites $prefixSuffixWithWebsites
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
@@ -103,17 +102,16 @@ class AttributeMetadataResolver
         FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
         ShareConfig $shareConfig,
-        ?GroupManagement $groupManagement = null,
-        ?PrefixSuffixWithWebsites $prefixSuffixWithWebsites = null
+        GroupManagement $groupManagement,
+        PrefixSuffixWithWebsites $prefixSuffixWithWebsites
     ) {
         $this->countryWithWebsiteSource = $countryWithWebsiteSource;
         $this->eavValidationRules = $eavValidationRules;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->context = $context;
         $this->shareConfig = $shareConfig;
-        $this->groupManagement = $groupManagement ?? ObjectManager::getInstance()->get(GroupManagement::class);
-        $this->prefixSuffixWithWebsites = $prefixSuffixWithWebsites ?? ObjectManager::getInstance()
-            ->get(PrefixSuffixWithWebsites::class);
+        $this->groupManagement = $groupManagement;
+        $this->prefixSuffixWithWebsites = $prefixSuffixWithWebsites;
     }
 
     /**
