@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\ViewModel\Product\Listing;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * Check is available add to compare.
@@ -16,16 +17,16 @@ use Magento\Framework\Data\Helper\PostHelper;
 class PreparePostData implements ArgumentInterface
 {
     /**
-     * @var PostHelper
+     * @var UrlHelper
      */
-    private $postHelper;
+    private $urlHelper;
 
     /**
-     * @param PostHelper $postHelper
+     * @param UrlHelper $urlHelper
      */
-    public function __construct(PostHelper $postHelper)
+    public function __construct(UrlHelper $urlHelper)
     {
-        $this->postHelper = $postHelper;
+        $this->urlHelper = $urlHelper;
     }
 
     /**
@@ -33,10 +34,13 @@ class PreparePostData implements ArgumentInterface
      *
      * @param string $url
      * @param array $data
-     * @return string
+     * @return array
      */
-    public function getPostData(string $url, array $data = []):string
+    public function getPostData(string $url, array $data = []):array
     {
-        return (string) $this->postHelper->getPostData($url, $data);
+        if (!isset($data[ActionInterface::PARAM_NAME_URL_ENCODED])) {
+            $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl();
+        }
+        return ['action' => $url, 'data' => $data];
     }
 }
