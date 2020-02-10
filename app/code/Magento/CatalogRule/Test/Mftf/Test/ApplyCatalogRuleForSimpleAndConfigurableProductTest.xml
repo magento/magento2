@@ -114,6 +114,11 @@
         <!-- Navigate to category on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
 
+        <!-- Sort products By Price -->
+        <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
+        <!-- Set Ascending Direction -->
+        <actionGroup ref="StorefrontCategoryPageSortAscendingActionGroup" stepKey="setAscendingDirection"/>
+
         <!-- Check simple product name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
             <argument name="productInfo" value="$createSimpleProduct.name$"/>
