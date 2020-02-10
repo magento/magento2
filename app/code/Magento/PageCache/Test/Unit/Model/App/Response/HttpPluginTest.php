@@ -3,76 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-// @codingStandardsIgnoreStart
-namespace Magento\PageCache\Model\App\Response {
-    $mockPHPFunctions = false;
+namespace Magento\PageCache\Test\Unit\Model\App\Response;
 
-    function headers_sent()
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\MediaStorage\Model\File\Storage\Response as FileResponse;
+use Magento\PageCache\Model\App\Response\HttpPlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests \Magento\PageCache\Model\App\Response\HttpPlugin.
+ */
+class HttpPluginTest extends TestCase
+{
+    /**
+     * @var HttpPlugin
+     */
+    private $httpPlugin;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
     {
-        global $mockPHPFunctions;
-        if ($mockPHPFunctions) {
-            return false;
-        }
-
-        return call_user_func_array('\headers_sent', func_get_args());
+        parent::setUp();
+        $this->httpPlugin = new HttpPlugin();
     }
-}
 
-namespace Magento\PageCache\Test\Unit\Model\App\Response {
-
-    use Magento\Framework\App\Response\Http;
-    use Magento\MediaStorage\Model\File\Storage\Response;
-    use Magento\PageCache\Model\App\Response\HttpPlugin;
-
-    // @codingStandardsIgnoreEnd
-
-    class HttpPluginTest extends \PHPUnit\Framework\TestCase
+    /**
+     * @param string $responseClass
+     * @param bool $headersSent
+     * @param int $sendVaryCalled
+     * @return void
+     *
+     * @dataProvider beforeSendResponseDataProvider
+     */
+    public function testBeforeSendResponse(string $responseClass, bool $headersSent, int $sendVaryCalled): void
     {
-        /**
-         * @inheritdoc
-         */
-        protected function setUp()
-        {
-            global $mockPHPFunctions;
-            $mockPHPFunctions = true;
-        }
+        /** @var HttpResponse|MockObject $responseMock */
+        $responseMock = $this->createMock($responseClass);
+        $responseMock->expects($this->any())->method('headersSent')->willReturn($headersSent);
+        $responseMock->expects($this->exactly($sendVaryCalled))->method('sendVary');
 
-        /**
-         * @inheritdoc
-         */
-        protected function tearDown()
-        {
-            global $mockPHPFunctions;
-            $mockPHPFunctions = false;
-        }
+        $this->httpPlugin->beforeSendResponse($responseMock);
+    }
 
-        /**
-         * @param string $responseInstanceClass
-         * @param int $sendVaryCalled
-         * @return void
-         *
-         * @dataProvider beforeSendResponseDataProvider
-         */
-        public function testBeforeSendResponse(string $responseInstanceClass, int $sendVaryCalled): void
-        {
-            /** @var Http | \PHPUnit_Framework_MockObject_MockObject $responseMock */
-            $responseMock = $this->createMock($responseInstanceClass);
-            $responseMock->expects($this->exactly($sendVaryCalled))
-                ->method('sendVary');
-            $plugin = new HttpPlugin();
-            $plugin->beforeSendResponse($responseMock);
-        }
-
-        /**
-         * @return array
-         */
-        public function beforeSendResponseDataProvider(): array
-        {
-            return [
-                [Http::class, 1],
-                [Response::class, 0]
-            ];
-        }
+    /**
+     * @return array
+     */
+    public function beforeSendResponseDataProvider(): array
+    {
+        return [
+            'http_response_headers_not_sent' => [HttpResponse::class, false, 1],
+            'http_response_headers_sent' => [HttpResponse::class, true, 0],
+            'file_response_headers_not_sent' => [FileResponse::class, false, 0],
+            'file_response_headers_sent' => [FileResponse::class, true, 0],
+        ];
     }
 }
