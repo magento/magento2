@@ -475,7 +475,7 @@ class Address extends AbstractCustomer
 
         $ids = [];
         foreach ($customersPresent as $customerData) {
-            $id = $this->getCustomerStorage()->getCustomerId(
+            $id = $this->getCustomerStorage()->getLoadedCustomerId(
                 $customerData['email'],
                 $customerData['website_id']
             );
