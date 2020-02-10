@@ -5,8 +5,6 @@
 
 /*eslint max-nested-callbacks: 0*/
 /*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
-/*eslint newline-after-var: ["error", "always"]*/
-/*eslint-env es6*/
 define([
     'jquery',
     'Magento_Ui/js/grid/data-storage'
