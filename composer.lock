@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "988eebffd81167973e4a51d7efd5be46",
+    "content-hash": "7b6381bcafc7f064e10ee71099b7d50b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -88,16 +88,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.10.6",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf"
+                "reference": "389fb68de15660e39b055d149d31f3708b5d6cbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
-                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/389fb68de15660e39b055d149d31f3708b5d6cbc",
+                "reference": "389fb68de15660e39b055d149d31f3708b5d6cbc",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2018-09-24T16:02:07+00:00"
+            "time": "2019-03-03T04:04:49+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -830,6 +830,7 @@
                 }
             ],
             "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "abandoned": true,
             "time": "2018-07-31T13:22:33+00:00"
         },
         {
@@ -880,6 +881,7 @@
                 "Guzzle",
                 "stream"
             ],
+            "abandoned": true,
             "time": "2014-10-12T19:18:40+00:00"
         },
         {
