@@ -294,7 +294,7 @@ class ImageResize
     }
 
     /**
-     * Resize image.
+     * Resize image if not already resized before
      *
      * @param array $imageParams
      * @param string $originalImagePath
@@ -303,13 +303,48 @@ class ImageResize
     private function resize(array $imageParams, string $originalImagePath, string $originalImageName)
     {
         unset($imageParams['id']);
-        $image = $this->makeImage($originalImagePath, $imageParams);
         $imageAsset = $this->assertImageFactory->create(
             [
                 'miscParams' => $imageParams,
                 'filePath' => $originalImageName,
             ]
         );
+        $imageAssetPath = $imageAsset->getPath();
+        $usingDbAsStorage = $this->fileStorageDatabase->checkDbUsage();
+        $mediaStorageFilename = $this->mediaDirectory->getRelativePath($imageAssetPath);
+
+        $alreadyResized = $usingDbAsStorage ?
+            $this->fileStorageDatabase->fileExists($mediaStorageFilename) :
+            $this->mediaDirectory->isFile($imageAssetPath);
+
+        if (!$alreadyResized) {
+            $this->generateResizedImage(
+                $imageParams,
+                $originalImagePath,
+                $imageAssetPath,
+                $usingDbAsStorage,
+                $mediaStorageFilename
+            );
+        }
+    }
+
+    /**
+     * Generate resized image
+     *
+     * @param array $imageParams
+     * @param string $originalImagePath
+     * @param string $imageAssetPath
+     * @param bool $usingDbAsStorage
+     * @param string $mediaStorageFilename
+     */
+    private function generateResizedImage(
+        array $imageParams,
+        string $originalImagePath,
+        string $imageAssetPath,
+        bool $usingDbAsStorage,
+        string $mediaStorageFilename
+    ) {
+        $image = $this->makeImage($originalImagePath, $imageParams);
 
         if ($imageParams['image_width'] !== null && $imageParams['image_height'] !== null) {
             $image->resize($imageParams['image_width'], $imageParams['image_height']);
@@ -335,11 +370,10 @@ class ImageResize
             $image->watermark($this->getWatermarkFilePath($imageParams['watermark_file']));
         }
 
-        $image->save($imageAsset->getPath());
+        $image->save($imageAssetPath);
 
-        if ($this->fileStorageDatabase->checkDbUsage()) {
-            $mediastoragefilename = $this->mediaDirectory->getRelativePath($imageAsset->getPath());
-            $this->fileStorageDatabase->saveFile($mediastoragefilename);
+        if ($usingDbAsStorage) {
+            $this->fileStorageDatabase->saveFile($mediaStorageFilename);
         }
     }
 
