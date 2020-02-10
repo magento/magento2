@@ -13,115 +13,93 @@ use Magento\Csp\Model\Mode\Data\ModeConfigured;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
- * Unit Test for \Magento\Csp\Model\Mode\ConfigManager
+ * Test for \Magento\Csp\Model\Mode\ConfigManager
  */
 class ConfigManagerTest extends TestCase
 {
-    const STUB_REPORT_ONLY = true;
-    const STUB_AREA_CODE_OTHER = 'other';
-
-    /**
-     * @var MockObject|ScopeConfigInterface
-     */
-    private $configMock;
-
-    /**
-     * @var MockObject|Store
-     */
-    private $storeModelMock;
-
-    /**
-     * @var MockObject|State
-     */
-    private $stateMock;
-
     /**
      * @var ConfigManager
      */
     private $model;
 
     /**
-     * @inheritDoc
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+     * @var Store|MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @var State|MockObject
+     */
+    private $stateMock;
+
+    /**
+     * Set Up
      */
     protected function setUp()
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->storeModelMock = $this->createMock(Store::class);
+        $objectManager = new ObjectManager($this);
+
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
         $this->stateMock = $this->createMock(State::class);
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
+        $this->model = $objectManager->getObject(
             ConfigManager::class,
             [
-                'config' => $this->configMock,
-                'storeModel' => $this->storeModelMock,
+                'config' => $this->scopeConfigMock,
+                'storeModel' => $this->storeMock,
                 'state' => $this->stateMock
             ]
         );
     }
 
     /**
-     * Test case with correct Area codes.
+     * Test throwing an exception for non storefront or admin areas
      *
-     * @param string $area
-     * @param string $pathReportOnly
-     * @param string $pathReportUri
-     * @dataProvider dataProviderGetConfiguredWithCorrectArea
+     * @return void
      */
-    public function testGetConfiguredWithCorrectArea(string $area, string $pathReportOnly, string $pathReportUri)
+    public function testThrownExceptionForCrontabArea()
     {
-        $this->stateMock->expects($this->once())->method('getAreaCode')->willReturn($area);
-
-        $this->configMock->expects($this->once())->method('getValue')->with($pathReportUri);
-        $this->configMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with($pathReportOnly)
-            ->willReturn(self::STUB_REPORT_ONLY);
-
-        $this->assertInstanceOf(ModeConfigured::class, $this->model->getConfigured());
-    }
-
-    /**
-     * Data Provider with appropriate areas.
-     *
-     * @return array
-     */
-    public function dataProviderGetConfiguredWithCorrectArea(): array
-    {
-        return [
-            [
-                'area' => Area::AREA_ADMINHTML,
-                'pathReportOnly' => 'csp/mode/admin/report_only',
-                'pathReportUri' => 'csp/mode/admin/report_uri'
-            ],
-            [
-                'area' => Area::AREA_FRONTEND,
-                'pathReportOnly' => 'csp/mode/storefront/report_only',
-                'pathReportUri' => 'csp/mode/storefront/report_uri'
-            ]
-        ];
-    }
-
-    /**
-     * Test case with an inappropriate Area code.
-     */
-    public function testGetConfiguredWithWrongArea()
-    {
-        $this->stateMock->expects($this->once())
+        $this->stateMock->expects($this->any())
             ->method('getAreaCode')
-            ->willReturn(self::STUB_AREA_CODE_OTHER);
+            ->willReturn(Area::AREA_CRONTAB);
 
-        $this->configMock->expects($this->never())->method('isSetFlag');
-        $this->configMock->expects($this->never())->method('getValue');
-        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('CSP can only be configured for storefront or admin area');
+        $this->expectException(RuntimeException::class);
 
         $this->model->getConfigured();
+    }
+
+    /**
+     * Test returning the configured CSP for admin area
+     *
+     * @return void
+     */
+    public function testConfiguredCSPForAdminArea()
+    {
+        $this->stateMock->expects($this->any())
+            ->method('getAreaCode')
+            ->willReturn(Area::AREA_ADMINHTML);
+        $this->scopeConfigMock->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturn(true);
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn('testReportUri');
+        $result = $this->model->getConfigured();
+
+        $this->assertInstanceOf(ModeConfigured::class, $result);
     }
 }
