@@ -309,7 +309,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
             $cacheManager->expects($this->exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
             $cacheManager->expects($this->exactly(3))->method('clean');
-            $cacheManager->expects($this->exactly(3))->method('getStatus')->willReturn([]);
+            $cacheManager->expects($this->exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -412,7 +412,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
+                        [print_r(['foo' => 1, 'bar' => 1], true)],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
@@ -463,7 +463,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
+                        [print_r(['foo' => 1, 'bar' => 1], true)],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
