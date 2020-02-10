@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  * Class to test bundle prices
  *
  * @magentoDbIsolation disabled
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends TestCase
