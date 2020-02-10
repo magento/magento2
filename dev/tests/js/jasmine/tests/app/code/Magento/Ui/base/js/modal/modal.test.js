@@ -11,13 +11,24 @@ define([
 
     describe('ui/js/modal/modal', function () {
 
-        var element = $('<div>Element</div>'),
+        var element,
+            modal;
+
+        beforeEach(function () {
+            element = $('<div id="element">Element</div>');
             modal = element.modal({}).data('mage-modal');
 
-        $(element).append('<h1 class="modal-title"' +
-            ' data-role="title">Title</h1>' +
-            '<span class="modal-subtitle"' +
-            ' data-role="subTitle"></span>');
+            $(element).append('<h1 class="modal-title"' +
+                ' data-role="title">Title</h1>' +
+                '<span class="modal-subtitle"' +
+                ' data-role="subTitle"></span>');
+        });
+
+        afterEach(function () {
+            $('.modal-title').remove();
+            $('#element').remove();
+
+        });
 
         it('Check for modal definition', function () {
             expect(modal).toBeDefined();
@@ -32,12 +43,12 @@ define([
             expect($(modal).length).toEqual(1);
         });
 
-        it('Verify setTitle() method set title', function () {
+        it('Verify set title', function () {
             var newTitle = 'New modal title';
 
             modal.setTitle(newTitle);
             expect($(modal.options.modalTitle).text()).toContain(newTitle);
-            expect($(modal.options.modalTitle).find(modal.options.modalSubTitle).length).toBe(2);
+            expect($(modal.options.modalTitle).find(modal.options.modalSubTitle).length).toBe(1);
         });
     });
 });
