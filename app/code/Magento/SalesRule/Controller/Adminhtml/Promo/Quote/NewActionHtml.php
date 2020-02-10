@@ -26,6 +26,8 @@ class NewActionHtml extends Quote implements HttpPostActionInterface
             ->getParam('id');
         $formName = $this->getRequest()
             ->getParam('form_namespace');
+        $jsFormObject = $this->getRequest()
+            ->getParam('form');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -45,7 +47,7 @@ class NewActionHtml extends Quote implements HttpPostActionInterface
         }
 
         if ($model instanceof AbstractCondition) {
-            $model->setJsFormObject($formName);
+            $model->setJsFormObject($jsFormObject);
             $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {
