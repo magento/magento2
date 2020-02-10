@@ -6,4 +6,4 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_us', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'devdoc_en_ak', __DIR__);
