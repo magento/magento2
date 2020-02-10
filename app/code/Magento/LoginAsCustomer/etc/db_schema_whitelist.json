@@ -1,0 +1,20 @@
+{
+    "login_as_customer_log": {
+        "column": {
+            "login_id": true,
+            "customer_id": true,
+            "admin_id": true,
+            "secret": true,
+            "used": true,
+            "created_at": true
+        },
+        "index": {
+            "LOGIN_AS_CUSTOMER_LOG_CUSTOMER_ID_ADMIN_ID": true,
+            "LOGIN_AS_CUSTOMER_LOG_CUSTOMER_ID": true,
+            "LOGIN_AS_CUSTOMER_LOG_ADMIN_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
