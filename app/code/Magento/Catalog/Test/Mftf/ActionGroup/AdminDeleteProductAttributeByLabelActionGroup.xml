@@ -13,7 +13,7 @@
             <description>Goes to the Admin Product Attributes grid page. Filters the grid for the provided Product Attribute (Label). Deletes the Product Attribute from the grid. Validates that the Success Message is present.</description>
         </annotations>
         <arguments>
-            <argument name="productAttributeLabel" type="string" defaultValue="ProductAttributeFrontendLabel.label"/>
+            <argument name="productAttributeLabel" type="string" defaultValue="{{ProductAttributeFrontendLabel.label}}"/>
         </arguments>
 
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
