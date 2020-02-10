@@ -273,7 +273,7 @@ class Samples extends AbstractModifier
             'elementTmpl' => 'Magento_Downloadable/components/file-uploader',
             'fileInputName' => 'samples',
             'uploaderConfig' => [
-                'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                'url' => $this->urlBuilder->getUrl(
                     'adminhtml/downloadable_file/upload',
                     ['type' => 'samples', '_secure' => true]
                 ),

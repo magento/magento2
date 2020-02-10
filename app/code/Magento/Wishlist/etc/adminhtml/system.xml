@@ -13,6 +13,9 @@
             <resource>Magento_Wishlist::config_wishlist</resource>
             <group id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Share Options</label>
+                <depends>
+                    <field id="*/general/active">1</field>
+                </depends>
                 <field id="email_identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
@@ -42,11 +45,17 @@
                 <field id="show_in_sidebar" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show in Sidebar</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
                 </field>
             </group>
-            <group id="wishlist_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="wishlist_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1">
                 <label>My Wish List Link</label>
-                <field id="use_qty" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <depends>
+                    <field id="*/general/active">1</field>
+                </depends>
+                <field id="use_qty" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Display Wish List Summary</label>
                     <source_model>Magento\Wishlist\Model\Config\Source\Summary</source_model>
                 </field>
