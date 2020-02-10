@@ -57,8 +57,8 @@
     </actionGroup>
     <actionGroup name="SubmitCreditMemoActionGroup">
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitButtonEnabled"/>
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitButtonEnabled"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="clickSubmitCreditMemo"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}$grabOrderId" stepKey="seeViewOrderPageCreditMemo"/>
