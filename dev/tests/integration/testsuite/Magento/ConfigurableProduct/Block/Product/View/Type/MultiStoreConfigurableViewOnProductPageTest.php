@@ -17,6 +17,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
+use Magento\Store\Api\StoreRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,6 +48,9 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /** @var ExecuteInStoreContext */
     private $executeInStoreContext;
 
+    /** @var StoreRepositoryInterface */
+    private $storeRepository;
+
     /**
      * @inheritdoc
      */
@@ -62,6 +66,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
+        $this->storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
     }
 
     /**
@@ -182,9 +187,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
      */
     private function prepareConfigurableProduct(string $sku, string $storeCode): void
     {
+        $storeId = $this->storeRepository->get($storeCode)->getId();
         $product = $this->productRepository->get($sku, false, null, true);
         $productToUpdate = $product->getTypeInstance()->getUsedProductCollection($product)
-            ->setPageSize(1)->getFirstItem();
+            ->addStoreFilter($storeId)->setPageSize(1)->getFirstItem();
+
         $this->assertNotEmpty($productToUpdate->getData(), 'Configurable product does not have a child');
         $this->executeInStoreContext->execute($storeCode, [$this, 'setProductDisabled'], $productToUpdate);
     }
