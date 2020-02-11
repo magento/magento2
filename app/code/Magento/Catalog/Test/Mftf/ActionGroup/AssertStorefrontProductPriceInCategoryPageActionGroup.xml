@@ -18,7 +18,6 @@
             <argument name="productPrice" type="string" defaultValue="{{productWithHTMLEntityOne.price}}"/>
         </arguments>
 
-        <!-- Go to storefront category page, assert product visibility -->
         <amOnPage url="{{StorefrontCategoryPage.url(categoryUrl)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <see userInput="{{productPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="assertProductPrice"/>

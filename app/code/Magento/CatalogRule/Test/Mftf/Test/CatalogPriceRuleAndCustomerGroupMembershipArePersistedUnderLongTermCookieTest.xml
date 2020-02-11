@@ -25,9 +25,7 @@
             <createData entity="productWithHTMLEntityOne" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer">
-                <field key="group_id">1</field>
-            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!--Delete all Catalog Price Rule if exist-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
@@ -46,7 +44,7 @@
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="clickSaveAndApplyRule"/>
 
             <!-- Perform reindex -->
- 	 	 	<magentoCLI command="indexer:reindex" arguments="catalogrule_rule" stepKey="reindex"/>
+            <magentoCLI command="indexer:reindex" arguments="catalogrule_rule" stepKey="reindex"/>
         </before>
         <after>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
@@ -94,7 +92,7 @@
 
         <!--Click the *Not you?* link and check the price for Simple Product-->
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNotYouLink"/>
-        <actionGroup ref="AssertDefaultWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomerAfterLogout"/>
+        <actionGroup ref="AssertStorefrontDefaultWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomerAfterLogout"/>
         <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceInCategoryPageAfterLogout">
             <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
             <argument name="productName" value="$createProduct.name$"/>
