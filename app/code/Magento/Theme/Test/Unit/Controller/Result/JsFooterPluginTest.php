@@ -66,7 +66,7 @@ class JsFooterPluginTest extends TestCase
     public function sendResponseDataProvider(): array
     {
         return [
-            [
+            'content_with_script_tag' => [
                 "content" => "<body><h1>Test Title</h1>" .
                     "<script type=\"text/x-magento-init\">test</script>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
@@ -78,12 +78,12 @@ class JsFooterPluginTest extends TestCase
                     "<script type=\"text/x-magento-init\">test</script>" .
                     "\n</body>"
             ],
-            [
+            'content_with_config_disable' => [
                 "content" => "<body><p>Test Content</p></body>",
                 "flag" => false,
                 "result" => "<body><p>Test Content</p></body>"
             ],
-            [
+            'content_without_script_tag' => [
                 "content" => "<body><p>Test Content</p></body>",
                 "flag" => true,
                 "result" => "<body><p>Test Content</p>\n</body>"
@@ -129,10 +129,10 @@ class JsFooterPluginTest extends TestCase
     public function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
-            [
+            'empty_array' => [
                 'content' => []
             ],
-            [
+            'null' => [
                 'content' => NULL
             ]
         ];
