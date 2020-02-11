@@ -170,7 +170,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getMediaRecords(int $storeId, array $entityIds, bool $preserveSortOrder = false) : array
     {
         $output = [];
-        $linkField = $this->metadata->getLinkField();
         $select = $this->createBatchBaseSelect($storeId)
             ->where('cpe.entity_id IN (?)', $entityIds);
         if (!$preserveSortOrder) {
