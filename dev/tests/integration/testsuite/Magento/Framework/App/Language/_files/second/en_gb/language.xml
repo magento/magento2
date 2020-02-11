@@ -10,5 +10,5 @@
     <vendor>second</vendor>
     <package>en_gb</package>
     <sort_order>0</sort_order>
-    <use package="en_us" vendor="first"/>
+    <use package="en_az" vendor="first"/>
 </language>

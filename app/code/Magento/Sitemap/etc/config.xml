@@ -25,6 +25,10 @@
                 <changefreq>daily</changefreq>
                 <image_include>all</image_include>
             </product>
+            <store>
+                <priority>1</priority>
+                <changefreq>daily</changefreq>
+            </store>
             <generate>
                 <enabled>0</enabled>
                 <error_email />
