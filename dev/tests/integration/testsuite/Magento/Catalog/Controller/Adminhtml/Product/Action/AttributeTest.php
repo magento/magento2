@@ -228,7 +228,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var ProductRepository $repository */
-        $repository = Bootstrap::getObjectManager()->create(
+        $repository = Bootstrap::getObjectManager()->get(
             ProductRepository::class
         );
         $product = $repository->get('simple');
