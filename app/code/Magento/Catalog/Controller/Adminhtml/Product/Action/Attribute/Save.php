@@ -14,7 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class Save
+ * Class responsible for saving product attributes.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
@@ -117,9 +117,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $websiteId = $this->attributeHelper->getStoreWebsiteId($storeId);
         $productIds = $this->attributeHelper->getProductIds();
 
-        $attributesData = $this->sanitizeProductAttributes($attributesData);
-
         try {
+            $attributesData = $this->sanitizeProductAttributes($attributesData);
             $this->publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -147,10 +146,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
         foreach ($attributesData as $attributeCode => $value) {
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+            $data = ObjectManager::getInstance()->create(\Magento\Catalog\Model\Product::class);
+
             if (!$attribute->getAttributeId()) {
                 unset($attributesData[$attributeCode]);
                 continue;
             }
+
+            $data->setData($attributeCode, $value);
+            $attribute->getBackend()->validate($data);
+
             if ($attribute->getBackendType() === 'datetime') {
                 if (!empty($value)) {
                     $filterInput = new \Zend_Filter_LocalizedToNormalized(['date_format' => $dateFormat]);

@@ -5,7 +5,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
+use Magento\Backend\Model\Session;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -13,6 +15,7 @@ use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -61,8 +64,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        /** @var $session \Magento\Backend\Model\Session */
-        $session = $objectManager->get(\Magento\Backend\Model\Session::class);
+        /** @var $session Session */
+        $session = $objectManager->get(Session::class);
         $session->setProductIds([1]);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
@@ -108,8 +111,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $product->save();
 
-        /** @var $session \Magento\Backend\Model\Session */
-        $session = $objectManager->get(\Magento\Backend\Model\Session::class);
+        /** @var $session Session */
+        $session = $objectManager->get(Session::class);
         $session->setProductIds([$product->getId()]);
         $this->getRequest()->setParam('attributes', $attributes);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -161,8 +164,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        /** @var $session \Magento\Backend\Model\Session */
-        $session = $objectManager->get(\Magento\Backend\Model\Session::class);
+        /** @var $session Session */
+        $session = $objectManager->get(Session::class);
         $session->setProductIds([1, 2]);
 
         $this->getRequest()->setParam('attributes', $attributes);
@@ -213,5 +216,38 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             ['arguments' => ['visibility' => Visibility::VISIBILITY_BOTH]],
             ['arguments' => ['visibility' => Visibility::VISIBILITY_IN_CATALOG]]
         ];
+    }
+
+    /**
+     * Assert that custom layout update can not be change for existing entity.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testSaveActionCantChangeCustomLayoutUpdate(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepository $repository */
+        $repository = Bootstrap::getObjectManager()->create(
+            ProductRepository::class
+        );
+        $product = $repository->get('simple');
+
+        $product->setOrigData('custom_layout_update', 'test');
+        $product->setData('custom_layout_update', 'test');
+        $product->save();
+        /** @var $session Session */
+        $session = $objectManager->get(Session::class);
+        $session->setProductIds([$product->getId()]);
+        $this->getRequest()->setParam('attributes', ['custom_layout_update' => 'test2']);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+
+        $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
+
+        $this->assertSessionMessages(
+            $this->equalTo(['Custom layout update text cannot be changed, only removed']),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->assertEquals('test', $product->getData('custom_layout_update'));
     }
 }
