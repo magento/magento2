@@ -140,12 +140,10 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Create base load select
      *
-     * Misleading method, methods relies on autoincrement field instead of entity ID
-     *
      * @param int $entityId
      * @param int $storeId
      * @param int $attributeId
-     * @deprecated
+     * @deprecated Misleading method, methods relies on autoincrement field instead of entity ID
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @since 101.0.0
@@ -196,7 +194,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) Media gallery doesn't support other attributes  than media_galley
      * @since 101.0.1
      */
     public function createBatchBaseSelect($storeId, $attributeId = null)
