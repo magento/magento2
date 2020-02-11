@@ -57,8 +57,6 @@
             </createData>
             <!-- Create Customer with filled Shipping & Billing Address -->
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
-
-            <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
         </before>
 
         <after>
@@ -85,7 +83,6 @@
                 <argument name="postcode" value=""/>
                 <argument name="street" value=""/>
             </actionGroup>
-            <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
