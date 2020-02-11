@@ -130,8 +130,8 @@ class Timezone implements TimezoneInterface
     public function getDateFormatWithLongYear()
     {
         return preg_replace(
-            '/(?<!y)yy(?!y)/',
-            'Y',
+            ['/(?<!y)yy(?!y)/','/d/'],
+            ['Y','dd'],
             $this->getDateFormat()
         );
     }
