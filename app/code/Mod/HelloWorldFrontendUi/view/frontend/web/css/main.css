@@ -1,0 +1,20 @@
+.myTextarea{
+    width: 50%; !important;
+}
+
+.ko-btn {
+    height: 33px !important;;
+    margin-bottom: 3px;
+}
+
+.hidden-btn {
+    display: none;
+}
+
+.extra-comment{
+    width: 40%;
+    border-radius: 10px;
+    border-color: black;
+    border: solid;
+    padding-left: 1%;
+}

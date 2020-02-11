@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
+    <comment_saver class="Mod\HelloWorldFrontendUi\Component\CommentSaver">
+        <argument name="data" xsi:type="array">
+            <item name="template" xsi:type="string">templates/commentSaver</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Mod_HelloWorldFrontendUi/js/mod_comment_saver_component</item>
+            </item>
+        </argument>
+    </comment_saver>
+</components>

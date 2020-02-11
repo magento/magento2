@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mod_HelloWorldFrontendUi::css/main.css"/>
+    </head>
+    <update handle="extra_review_product_form_component"/>
+    <body>
+        <referenceBlock name="product.info.details">
+            <block class="Mod\HelloWorldFrontendUi\Block\ExtraReview" name="extra.reviews.tab" as="extra_reviews"
+                   template="Mod_HelloWorldFrontendUi::extrareview.phtml" group="detailed_info" cacheable="false">
+                <arguments>
+                    <argument name="sort_order" xsi:type="string">40</argument>
+                </arguments>
+                <block class="Mod\HelloWorldFrontendUi\Block\Form" name="extra.review.form"
+                       template="Mod_HelloWorldFrontendUi::form.phtml" cacheable="false"/>
+                <uiComponent name="comment_saver"/>
+                <block class="Mod\HelloWorldFrontendUi\Block\CommentsList" name="extra.review.list"
+                       template="Mod_HelloWorldFrontendUi::commentslist.phtml" cacheable="false"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

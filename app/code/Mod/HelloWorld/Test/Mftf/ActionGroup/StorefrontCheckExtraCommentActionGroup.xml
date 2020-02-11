@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckExtraCommentActionGroup">
+        <annotations>
+            <description>Goes to the Storefront and checks for extra comment.</description>
+        </annotations>
+        <arguments>
+            <argument name="ExtraComment" defaultValue="ExtraCommentEntity"/>
+            <argument name="comment" type="string" defaultValue="{{ExtraCommentEntity.comment}}"/>
+        </arguments>
+
+        <click stepKey="clickOnExtraCommentsTab" selector="{{StoreFrontExtraCommentsSection.commentsTab}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <see stepKey="seeComment" userInput="{{comment}}" selector="{{StoreFrontExtraCommentsSection.commentText}}"/>
+    </actionGroup>
+</actionGroups>

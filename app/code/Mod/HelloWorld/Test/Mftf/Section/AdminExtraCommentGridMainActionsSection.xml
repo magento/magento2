@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminExtraCommentGridMainActionsSection">
+        <element name="approve" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Approve']"/>
+        <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']"/>
+        <element name="actions" type="text" selector=".action-select"/>
+        <element name="commentCheckbox" type="text" selector="//*[contains(@class, 'data-grid-cell-content') and text()='{{arg}}']/parent::td/preceding-sibling::td/label[contains(@class, 'data-grid-checkbox-cell-inner')]" parameterized="true"/>
+        <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
+    </section>
+</sections>
+

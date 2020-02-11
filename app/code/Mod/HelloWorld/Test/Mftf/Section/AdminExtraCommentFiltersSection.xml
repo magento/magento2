@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminExtraCommentFiltersSection">
+        <element name="filtersButton" type="button" selector="//div[@class='data-grid-filters-actions-wrap']//button[contains(.,'Filters')]" timeout="30"/>
+        <element name="customerIdInput" type="input" selector="input[name=customer_id]"/>
+        <element name="productSkuInput" type="input" selector="input[name=product_sku]"/>
+        <element name="extraCommentInput" type="input" selector="input[name=extra_comment]"/>
+        <element name="apply" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="clearAllFilters" type="text" selector=".admin__current-filters-actions-wrap.action-clear"/>
+        <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear" timeout="30"/>
+    </section>
+</sections>

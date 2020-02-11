@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateExtraCustomerTest">
+        <annotations>
+            <features value="ExtraCustomer"/>
+            <stories value="Create a Customer with extra abilities and add extra comment"/>
+            <title value="Admin should be able to create a customer via the storefront"/>
+            <description value="Admin should be able to create a customer via the storefront"/>
+            <severity value="CRITICAL"/>
+            <group value="extracustomer"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createExtraProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createExtraProduct" stepKey="deleteExtraProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="SignUpNewExtraUserFromStorefrontActionGroup" stepKey="SignUpNewExtraUser">
+            <argument name="ExtraCustomer" value="ExtraCustomerEntityOne"/>
+        </actionGroup>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="OpenEditExtraCustomerFromAdminActionGroup" stepKey="openEditExtraCustomerPage">
+            <argument name="ExtraCustomer" value="ExtraCustomerEntityOne"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openExtraProductFrontPage1">
+            <argument name="productUrlKey" value="$$createExtraProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddExtraCommentActionGroup" stepKey="AddExtraCommentFromFront">
+            <argument name="ExtraComment" value="ExtraCommentEntity"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminApproveExtraCommentActionGroup" stepKey="approveExtraComment">
+            <argument name="productSku" value="$$createExtraProduct.sku$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openExtraProductFrontPage2">
+            <argument name="productUrlKey" value="$$createExtraProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckExtraCommentActionGroup" stepKey="CheckExtraCommentFromFront">
+            <argument name="ExtraComment" value="ExtraCommentEntity"/>
+        </actionGroup>
+    </test>
+</tests>

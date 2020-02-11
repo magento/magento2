@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminApproveExtraCommentActionGroup">
+        <annotations>
+            <description>Goes to the Extra comments grid page. Check the row for the provided comment. Approve the Extra comment.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku"/>
+        </arguments>
+        
+        <amOnPage url="{{AdminExtraCommentPage.url}}" stepKey="navigateToExtraCommentPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminExtraCommentFiltersSection.filtersButton}}" stepKey="openFilter"/>
+        <fillField userInput="{{productSku}}" selector="{{AdminExtraCommentFiltersSection.productSkuInput}}" stepKey="filterComment"/>
+        <click selector="{{AdminExtraCommentFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForFilter"/>
+        <click selector="{{AdminExtraCommentGridSection.selectFirstRow}}" stepKey="checkComment"/>
+        <click stepKey="openActions" selector="{{AdminExtraCommentGridMainActionsSection.actions}}"/>
+        <waitForPageLoad stepKey="waitActions"/>
+        <click stepKey="approve" selector="{{AdminExtraCommentGridMainActionsSection.approve}}"/>
+        <waitForPageLoad stepKey="waitForConfirmationAlert"/>
+        <click stepKey="accept" selector="{{AdminExtraCommentGridMainActionsSection.ok}}"/>
+        <see stepKey="seeSuccessMessage" userInput="were approved."/>
+    </actionGroup>
+</actionGroups>

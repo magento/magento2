@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /** @var $block \Mod\HelloWorldFrontendUi\Block\CommentsList */ ?>
+<h2><b>Extra comments:</b></h2>
+<div class="comments-list">
+    <?php /* @noEscape */
+    foreach ($block->getCommentList() as $comment): ?>
+        <div class="extra-comment">
+            <p><b>Name:</b> <?= /* @noEscape */
+                $block->getCustomerName($comment['customer_id']) ?></p>
+            <b>Comment:</b>
+            <span class="extra-comment-child"><?= /* @noEscape */ $comment['extra_comment'] ?></span>
+            <br/>
+        </div>
+        <br/>
+    <?php endforeach; ?>
+    <?= /* @noEscape */
+     $block->checkIsEmpty(); ?>
+</div>

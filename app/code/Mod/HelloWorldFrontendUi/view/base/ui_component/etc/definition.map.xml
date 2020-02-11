@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.map.xsd">
+    <component name="comment_saver">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" type="string" xsi:type="xpath">@provider</item>
+                    <item name="component" type="string" xsi:type="xpath">@component</item>
+                    <item name="template" type="string" xsi:type="xpath">@template</item>
+                    <item name="sortOrder" type="number" xsi:type="xpath">@sortOrder</item>
+                    <item name="displayArea" type="string" xsi:type="xpath">@displayArea</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
+</components>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<comment_saver xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <dataSource name="comment_saver_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Mod\HelloWorldFrontendUi\Model\DataProvider</argument>
+            <argument name="name" xsi:type="string">comment_saver_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+    </dataSource>
+    <htmlContent name="first_ever_child">
+        <argument name="block" xsi:type="object">Magento\Framework\View\Element\Text</argument>
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Mod\HelloWorldFrontendUi\js\mod_comment_saver_component</item>
+            </item>
+        </argument>
+    </htmlContent>
+</comment_saver>

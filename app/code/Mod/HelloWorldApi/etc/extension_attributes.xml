@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="extra_abilities" type="Mod\HelloWorldApi\Api\Data\ExtraAbilitiesInterface[]">
+            <resources>
+                <resource ref="Magento_Customer::customer"/>
+            </resources>
+        </attribute>
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="extra_comments" type="Mod\HelloWorldApi\Api\Data\ExtraCommentInterface[]">
+            <resources>
+                <resource ref="Magento_Customer::customer"/>
+            </resources>
+        </attribute>
+    </extension_attributes>
+</config>

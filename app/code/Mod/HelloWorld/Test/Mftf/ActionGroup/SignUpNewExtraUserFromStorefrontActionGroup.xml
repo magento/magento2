@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SignUpNewExtraUserFromStorefrontActionGroup">
+        <annotations>
+            <description>Goes to the Storefront. Clicks on 'Create Account'. Fills in the provided Customer details, than goes to backend and create product and add extra ability to customer and than adds an extra comment.</description>
+        </annotations>
+        <arguments>
+            <argument name="ExtraCustomer" defaultValue="ExtraCustomerEntityOne"/>
+            <argument name="email" type="string" defaultValue="{{ExtraCustomerEntityOne.email}}"/>
+            <argument name="firstname" type="string" defaultValue="{{ExtraCustomerEntityOne.firstname}}"/>
+            <argument name="lastname" type="string" defaultValue="{{ExtraCustomerEntityOne.lastname}}"/>
+            <argument name="password" type="string" defaultValue="{{ExtraCustomerEntityOne.password}}"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <fillField  stepKey="fillFirstName" userInput="{{firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
+        <fillField  stepKey="fillEmail" userInput="{{email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="{{password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+        <fillField  stepKey="fillConfirmPassword" userInput="{{password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
+        <see stepKey="seeFirstName" userInput="{{firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeLastName" userInput="{{lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeEmail" userInput="{{email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+    </actionGroup>
+</actionGroups>
