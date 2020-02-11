@@ -7,23 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
-use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
+use Magento\CatalogSearch\Model\Indexer\IndexStructure;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Framework\Indexer\ConfigInterface;
 
 /**
  * This patch will create catalogsearch_fulltext tables in MySQL DB.
- *
- * @package Magento\CatalogSearch\Setup\Patch\Data
  */
 class MySQLCatalogSearchTableCreation implements \Magento\Framework\Setup\Patch\DataPatchInterface
 {
     /**
-     * @var IndexerHandlerFactory
+     * @var IndexStructure
      */
-    private $indexerHandlerFactory;
+    private $indexStructure;
 
     /**
      * @var DimensionProviderInterface
@@ -36,28 +33,19 @@ class MySQLCatalogSearchTableCreation implements \Magento\Framework\Setup\Patch\
     private $searchEngineResolver;
 
     /**
-     * @var array index structure
-     */
-    protected $data;
-
-    /**
      * MySQLCatalogSearchTableCreation constructor.
-     * @param IndexerHandlerFactory $indexerHandlerFactory
+     * @param IndexStructure $indexStructure
      * @param DimensionProviderInterface $dimensionProvider
      * @param EngineResolverInterface $searchEngineResolver
-     * @param ConfigInterface $indexerConfig
-     * @return void
      */
     public function __construct(
-        IndexerHandlerFactory $indexerHandlerFactory,
+        IndexStructure $indexStructure,
         DimensionProviderInterface $dimensionProvider,
-        EngineResolverInterface $searchEngineResolver,
-        ConfigInterface $indexerConfig
+        EngineResolverInterface $searchEngineResolver
     ) {
-        $this->indexerHandlerFactory = $indexerHandlerFactory;
+        $this->indexStructure = $indexStructure;
         $this->dimensionProvider = $dimensionProvider;
         $this->searchEngineResolver = $searchEngineResolver;
-        $this->data = $indexerConfig->getIndexer(Fulltext::INDEXER_ID);
     }
 
     /**
@@ -66,14 +54,8 @@ class MySQLCatalogSearchTableCreation implements \Magento\Framework\Setup\Patch\
     public function apply()
     {
         if ($this->searchEngineResolver->getCurrentSearchEngine() === 'mysql') {
-            $saveHandler = $this->indexerHandlerFactory->create(
-                [
-                    'data' => $this->data,
-                ]
-            );
-
             foreach ($this->dimensionProvider->getIterator() as $dimension) {
-                $saveHandler->indexStructure->create($this->data['indexer_id'], [], $dimension);
+                $this->indexStructure->create(Fulltext::INDEXER_ID, [], $dimension);
             }
         }
     }
