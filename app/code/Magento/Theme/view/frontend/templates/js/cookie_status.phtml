@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div id="cookie-status" style="display: none">
+    <?= $block->escapeHtml(__('The store will not work correctly in the case when cookies are disabled.')); ?>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "cookieStatus": {}
+        }
+    }
+</script>
+
+
