@@ -66,14 +66,13 @@ class RelatedTest extends AbstractLinksTest
         $html = $this->block->toHtml();
         $this->assertNotEmpty($html);
         $this->assertNotContains($relatedProduct->getName(), $html);
-        $this->assertCount(0, $this->block->getItems());
+        $this->assertEmpty($this->block->getItems());
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testLinkedProductsPosition(): void
     {
