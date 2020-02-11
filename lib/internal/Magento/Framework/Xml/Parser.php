@@ -124,7 +124,7 @@ class Parser
                     }
                     break;
                 case XML_CDATA_SECTION_NODE:
-                    $content = $node->nodeValue;
+                    $content .= $node->nodeValue;
                     break;
                 case XML_TEXT_NODE:
                     if (trim($node->nodeValue) !== '') {
