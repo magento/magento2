@@ -218,9 +218,9 @@ define([
             var isValid = false;
 
             // check that required fields are not empty
-            if (shippingAddress.firstname && shippingAddress.lastname && shippingAddress.telephone
-                && shippingAddress.street && shippingAddress.city && shippingAddress.regionCode
-                && shippingAddress.postcode && shippingAddress.countryId) {
+            if (shippingAddress.firstname && shippingAddress.lastname && shippingAddress.telephone &&
+                shippingAddress.street && shippingAddress.city && shippingAddress.regionCode &&
+                shippingAddress.postcode && shippingAddress.countryId) {
                 isValid = true;
             }
 
