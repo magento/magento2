@@ -6,9 +6,11 @@
 declare(strict_types=1);
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use \Magento\Customer\Model\Data\CustomerFactory;
+use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\Math\Random;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -18,16 +20,20 @@ $accountManagment = $objectManager->get(AccountManagementInterface::class);
 $customerFactory = $objectManager->get(CustomerFactory::class);
 /** @var Random $random */
 $random = $objectManager->get(Random::class);
-/** @var StoreManagerInterface $storeManager */
-$storeManager = $objectManager->get(StoreManagerInterface::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $customer = $customerFactory->create();
-$defaultStore = $storeManager->getDefaultStoreView();
-$websiteId = $defaultStore->getWebsiteId();
+$website = $websiteRepository->get('base');
+$defaultStoreId = $website->getDefaultStore()->getId();
+/** @var AttributeRepository $attributeRepository */
+$attributeRepository = $objectManager->get(AttributeRepository::class);
+$gender = $attributeRepository->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'gender')
+    ->getSource()->getOptionId('Male');
 
-$customer->setWebsiteId($websiteId)
+$customer->setWebsiteId($website->getId())
     ->setEmail('unconfirmedcustomer@example.com')
     ->setGroupId(1)
-    ->setStoreId($defaultStore->getId())
+    ->setStoreId($defaultStoreId)
     ->setPrefix('Mr.')
     ->setFirstname('John')
     ->setMiddlename('A')
@@ -35,8 +41,7 @@ $customer->setWebsiteId($websiteId)
     ->setSuffix('Esq.')
     ->setDefaultBilling(1)
     ->setDefaultShipping(1)
-    ->setTaxvat('12')
     ->setConfirmation($random->getUniqueHash())
-    ->setGender(1);
+    ->setGender($gender);
 
 $accountManagment->createAccount($customer, 'Qwert12345');
