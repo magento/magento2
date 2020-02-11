@@ -41,7 +41,7 @@ try {
 }
 
 $ruleCollection = $ruleCollectionFactory->create();
-$ruleCollection->addFieldToFilter('name', ['eq' => 'Rule for bundle product']);
+$ruleCollection->addFieldToFilter('name', 'Rule for bundle product');
 $ruleCollection->setPageSize(1);
 $catalogRule = $ruleCollection->getFirstItem();
 

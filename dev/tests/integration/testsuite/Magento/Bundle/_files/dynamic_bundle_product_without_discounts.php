@@ -10,16 +10,13 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
 
 require __DIR__ . '/../../../Magento/Catalog/_files/category_with_different_price_products.php';
 
-/** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-$defaultWebsiteId = $websiteRepository->get('base')->getId();
 /** @var PrepareBundleLinks $prepareBundleLinks */
 $prepareBundleLinks = $objectManager->get(PrepareBundleLinks::class);
+$defaultWebsiteId = $storeManager->getWebsite('base')->getId();
 
 $bundleProduct = $productFactory->create();
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)

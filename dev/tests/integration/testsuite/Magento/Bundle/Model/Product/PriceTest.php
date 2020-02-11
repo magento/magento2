@@ -10,12 +10,6 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
-use Magento\CatalogRule\Api\Data\RuleInterface;
-use Magento\CatalogRule\Api\Data\RuleInterfaceFactory;
-use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
-use Magento\CatalogRule\Model\Rule\Condition\Combine;
-use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -30,13 +24,11 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
+ * @magentoAppArea frontend
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends TestCase
 {
-    /** @var int */
-    private $defaultWebsiteId;
-
     /** @var ObjectManagerInterface */
     private $objectManager;
 
@@ -58,15 +50,6 @@ class PriceTest extends TestCase
     /** @var GetCategoryByName */
     private $getCategoryByName;
 
-    /** @var RuleInterfaceFactory */
-    private $catalogRuleFactory;
-
-    /** @var CatalogRuleRepositoryInterface */
-    private $catalogRuleRepository;
-
-    /** @var CollectionFactory */
-    private $ruleCollectionFactory;
-
     /**
      * @inheritdoc
      */
@@ -80,26 +63,6 @@ class PriceTest extends TestCase
         $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->getCategoryByName = $this->objectManager->get(GetCategoryByName::class);
-        $this->catalogRuleFactory = $this->objectManager->get(RuleInterfaceFactory::class);
-        $this->catalogRuleRepository = $this->objectManager->get(CatalogRuleRepositoryInterface::class);
-        $this->ruleCollectionFactory = $this->objectManager->get(CollectionFactory::class);
-        $this->defaultWebsiteId = (int)$this->websiteRepository->get('base')->getId();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $ruleCollection = $this->ruleCollectionFactory->create();
-        $ruleCollection->addFieldToFilter('name', ['eq' => 'Test category rule']);
-        $ruleCollection->setPageSize(1);
-        $catalogRule = $ruleCollection->getFirstItem();
-        if ($catalogRule->getId()) {
-            $this->catalogRuleRepository->delete($catalogRule);
-        }
-
-        parent::tearDown();
     }
 
     /**
@@ -110,8 +73,6 @@ class PriceTest extends TestCase
     public function testGetTierPrice(): void
     {
         $product = $this->productRepository->get('bundle-product');
-        // fixture
-
         // Note that this is really not the "tier price" but the "tier discount percentage"
         // so it is expected to be increasing instead of decreasing
         $this->assertEquals(8.0, $this->priceModel->getTierPrice(2, $product));
@@ -168,7 +129,6 @@ class PriceTest extends TestCase
      * Fixed Bundle Product with catalog price rule
      * @magentoDataFixture Magento/Bundle/_files/fixed_bundle_product_without_discounts.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_apply_as_percentage_of_original_not_logged_user.php
-     * @magentoAppArea frontend
      *
      * @return void
      */
@@ -176,14 +136,8 @@ class PriceTest extends TestCase
     {
         $this->checkBundlePrices(
             'fixed_bundle_product_without_discounts',
-            [
-                'price' => 50,
-                'final_price' => 45,
-                'min_price' => 45,
-                'max_price' => 75,
-                'tier_price' => null,
-            ],
-            [55, 56.25, 70]
+            ['price' => 50, 'final_price' => 45, 'min_price' => 45, 'max_price' => 75, 'tier_price' => null],
+            ['simple1' => 55, 'simple2' => 56.25, 'simple3' => 70]
         );
     }
 
@@ -197,14 +151,8 @@ class PriceTest extends TestCase
     {
         $this->checkBundlePrices(
             'fixed_bundle_product_without_discounts',
-            [
-                'price' => 50,
-                'final_price' => 50,
-                'min_price' => 60,
-                'max_price' => 75,
-                'tier_price' => null,
-            ],
-            [60, 62.5, 75]
+            ['price' => 50, 'final_price' => 50, 'min_price' => 60, 'max_price' => 75, 'tier_price' => null],
+            ['simple1' => 60, 'simple2' => 62.5, 'simple3' => 75]
         );
     }
 
@@ -218,14 +166,8 @@ class PriceTest extends TestCase
     {
         $this->checkBundlePrices(
             'fixed_bundle_product_with_special_price',
-            [
-                'price' => 50,
-                'final_price' => 40,
-                'min_price' => 48,
-                'max_price' => 60,
-                'tier_price' => null,
-            ],
-            [48, 50, 60]
+            ['price' => 50, 'final_price' => 40, 'min_price' => 48, 'max_price' => 60, 'tier_price' => null],
+            ['simple1' => 48, 'simple2' => 50, 'simple3' => 60]
         );
     }
 
@@ -239,297 +181,261 @@ class PriceTest extends TestCase
     {
         $this->checkBundlePrices(
             'fixed_bundle_product_with_tier_price',
-            [
-                'price' => 50,
-                'final_price' => 50,
-                'min_price' => 60,
-                'max_price' => 75,
-                'tier_price' => 60,
-            ],
-            [45, 46.88, 56.25]
+            ['price' => 50, 'final_price' => 50, 'min_price' => 60, 'max_price' => 75, 'tier_price' => 60],
+            ['simple1' => 45, 'simple2' => 46.88, 'simple3' => 56.25]
         );
     }
 
     /**
-     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_tier_price.php
-     * @dataProvider dataProviderForBundleProductWithTierPrice
-     * @magentoAppArea frontend
-     *
-     * @param string $updateAction
-     * @param array $expectedData
-     * @return void
-     */
-    public function testDynamicBundleProductWithTierPrice(string $updateAction, array $expectedData): void
-    {
-        $this->prepareDataToTest($updateAction);
-        $this->checkBundlePrices(
-            'dynamic_bundle_product_with_tier_price',
-            $expectedData['bundle_index_prices'],
-            $expectedData['prices_with_chosen_option']
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderForBundleProductWithTierPrice(): array
-    {
-        return [
-            'Dynamic Bundle Product with tier price + options with special prices' => [
-                'action' => 'add_special_prices',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 8,
-                        'max_price' => 15,
-                        'tier_price' => 8,
-                    ],
-                    'prices_with_chosen_option' => [6, 11.25]
-                ],
-            ],
-            'Dynamic Bundle Product with tier price + options with tier prices' => [
-                'action' => 'add_tier_prices',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 8,
-                        'max_price' => 17,
-                        'tier_price' => 8,
-                    ],
-                    'prices_with_chosen_option' => [6, 12.75]
-                ],
-            ],
-            'Dynamic Bundle Product with tier price + options without discounts' => [
-                'action' => '',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 10,
-                        'max_price' => 20,
-                        'tier_price' => 10,
-                    ],
-                    'prices_with_chosen_option' => [7.5, 15]
-                ],
-            ],
-            'Dynamic Bundle Product with tier price + options with catalog rule' => [
-                'action' => 'create_catalog_rule',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 7.5,
-                        'max_price' => 15,
-                        'tier_price' => 7.5,
-                    ],
-                    'prices_with_chosen_option' => [5.63, 11.25]
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_special_price.php
-     * @dataProvider dataProviderForBundleProductWithSpecialPrice
-     * @magentoAppArea frontend
-     *
-     * @param string $updateAction
-     * @param array $expectedData
-     * @return void
-     */
-    public function testDynamicBundleProductWithSpecialPrice(string $updateAction, array $expectedData): void
-    {
-        $this->prepareDataToTest($updateAction);
-        $this->checkBundlePrices(
-            'dynamic_bundle_product_with_special_price',
-            $expectedData['bundle_index_prices'],
-            $expectedData['prices_with_chosen_option']
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderForBundleProductWithSpecialPrice(): array
-    {
-        return [
-            'Dynamic Bundle Product with special price + options with special prices' => [
-                'action' => 'add_special_prices',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 6,
-                        'max_price' => 11.25,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [6, 11.25]
-                ],
-            ],
-            'Dynamic Bundle Product with special price + options with tier prices' => [
-                'action' => 'add_tier_prices',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 6,
-                        'max_price' => 12.75,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [6, 12.75]
-                ],
-            ],
-            'Dynamic Bundle Product with special price + options without discounts' => [
-                'action' => '',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 7.5,
-                        'max_price' => 15,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [7.5, 15]
-                ],
-            ],
-            'Dynamic Bundle Product with special price + options with catalog rule' => [
-                'action' => 'create_catalog_rule',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 5.625,
-                        'max_price' => 11.25,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [5.63, 11.25]
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_catalog_rule.php
-     * @magentoAppArea frontend
-     * @dataProvider dataProviderForBundleProduct
-     *
-     * @param string $updateAction
-     * @param array $expectedData
-     * @return void
-     */
-    public function testDynamicBundleProductWithCatalogPriceRule(string $updateAction, array $expectedData): void
-    {
-        $this->prepareDataToTest($updateAction);
-        $this->checkBundlePrices(
-            'dynamic_bundle_product_with_catalog_rule',
-            $expectedData['bundle_index_prices'],
-            $expectedData['prices_with_chosen_option']
-        );
-    }
-
-    /**
+     * Dynamic Bundle Product without discount + options without discounts
      * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_without_discounts.php
-     * @dataProvider dataProviderForBundleProduct
-     * @magentoAppArea frontend
      *
-     * @param string $updateAction
-     * @param array $expectedData
      * @return void
      */
-    public function testDynamicBundleProductWithoutDiscounts(string $updateAction, array $expectedData): void
+    public function testDynamicBundleProductWithoutDiscountAndOptionsWithoutDiscounts(): void
     {
-        $this->prepareDataToTest($updateAction);
         $this->checkBundlePrices(
             'dynamic_bundle_product_without_discounts',
-            $expectedData['bundle_index_prices'],
-            $expectedData['prices_with_chosen_option']
+            ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null],
+            ['simple1000' => 10, 'simple1001' => 20]
         );
     }
 
     /**
-     * @return array
+     * Dynamic Bundle Product without discount + options with special price
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_without_discounts.php
+     *
+     * @return void
      */
-    public function dataProviderForBundleProduct(): array
+    public function testDynamicBundleProductWithoutDiscountsAndOptionsWithSpecialPrices(): void
     {
-        return [
-            'Dynamic Bundle Product with catalog price rule + options with special prices' => [
-                'action' => 'add_special_prices',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 8,
-                        'max_price' => 15,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [8, 15]
-                ]
-            ],
-            'Dynamic Bundle Product with catalog price rule + options with tier prices' => [
-                'action' => 'add_tier_prices',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 8,
-                        'max_price' => 17,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [8, 17]
-                ]
-            ],
-            'Dynamic Bundle Product with catalog price rule + options without discounts' => [
-                'action' => '',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 10,
-                        'max_price' => 20,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [10, 20]
-                ]
-            ],
-            'Dynamic Bundle Product with catalog price rule + options with catalog rule' => [
-                'action' => 'create_catalog_rule',
-                'expected_data' => [
-                    'bundle_index_prices' => [
-                        'price' => 0,
-                        'final_price' => 0,
-                        'min_price' => 7.5,
-                        'max_price' => 15,
-                        'tier_price' => null,
-                    ],
-                    'prices_with_chosen_option' => [7.5, 15]
-                ],
-            ],
-        ];
+        $this->updateProducts($this->specialPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_without_discounts',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 8, 'max_price' => 15, 'tier_price' => null],
+            ['simple1000' => 8, 'simple1001' => 15]
+        );
     }
 
     /**
-     * Prepare data to test.
+     * Dynamic Bundle Product without discount + options with tier prices
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_without_discounts.php
      *
-     * @param string $updateAction
      * @return void
      */
-    private function prepareDataToTest(string $updateAction): void
+    public function testDynamicBundleProductWithoutDiscountsAndOptionsWithTierPrices(): void
     {
-        switch ($updateAction) {
-            case 'add_special_prices':
-                $this->updateProducts($this->specialPricesForOptionsData());
-                break;
-            case 'add_tier_prices':
-                $this->updateProducts($this->tierPricesForOptionsData());
-                break;
-            case 'create_catalog_rule':
-                $this->createCatalogRule();
-                break;
-            default:
-                break;
-        }
+        $this->updateProducts($this->tierPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_without_discounts',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 8, 'max_price' => 17, 'tier_price' => null],
+            ['simple1000' => 8, 'simple1001' => 17]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product without discounts + options with catalog rule
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_without_discounts.php
+     * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_for_category_999.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithoutDiscountsAndOptionsWithCatalogPriceRule(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_without_discounts',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 7.5, 'max_price' => 15, 'tier_price' => null],
+            ['simple1000' => 7.5, 'simple1001' => 15]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with tier price + options without discounts
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_tier_price.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithTierPriceAndOptionsWithoutDiscounts(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_tier_price',
+            ['price' => 0,'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => 10],
+            ['simple1000' => 7.5, 'simple1001' => 15]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with tier price + options with special prices
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_tier_price.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithTierPriceAndOptionsWithSpecialPrices(): void
+    {
+        $this->updateProducts($this->specialPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_tier_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 8, 'max_price' => 15, 'tier_price' => 8],
+            ['simple1000' => 6, 'simple1001' => 11.25]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with tier price + options with tier price
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_tier_price.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithTierPriceAndOptionsWithTierPrices(): void
+    {
+        $this->updateProducts($this->tierPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_tier_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 8, 'max_price' => 17, 'tier_price' => 8],
+            ['simple1000' => 6, 'simple1001' => 12.75]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with tier price + options with catalog rule
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_tier_price.php
+     * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_for_category_999.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithTierPriceAndOptionsWithCatalogPriceRule(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_tier_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 7.5, 'max_price' => 15, 'tier_price' => 7.5],
+            ['simple1000' => 5.63, 'simple1001' => 11.25]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with special price + options without discounts
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_special_price.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithSpecialPriceAndOptionsWithoutDiscounts(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_special_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 7.5, 'max_price' => 15, 'tier_price' => null],
+            ['simple1000' => 7.5, 'simple1001' => 15]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with special price + options with special prices
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_special_price.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithSpecialPriceAndOptionsWithSpecialPrices(): void
+    {
+        $this->updateProducts($this->specialPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_special_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 6, 'max_price' => 11.25, 'tier_price' => null],
+            ['simple1000' => 6, 'simple1001' => 11.25]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with special price + options with tier prices
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_special_price.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithSpecialPriceAndOptionsWithTierPrices(): void
+    {
+        $this->updateProducts($this->tierPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_special_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 6, 'max_price' => 12.75, 'tier_price' => null],
+            ['simple1000' => 6, 'simple1001' => 12.75]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with special price + options with catalog price rule
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_special_price.php
+     * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_for_category_999.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithSpecialPriceAndOptionsWithCatalogPriceRule(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_special_price',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 5.625, 'max_price' => 11.25, 'tier_price' => null],
+            ['simple1000' => 5.63, 'simple1001' => 11.25]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with catalog price rule + options without discounts
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_catalog_rule.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithCatalogPriceRuleAndOptionsWithoutDiscounts(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_catalog_rule',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null],
+            ['simple1000' => 10, 'simple1001' => 20]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with catalog price rule + options with catalog price rule
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_catalog_rule.php
+     * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_for_category_999.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithCatalogPriceRuleAndOptionsWithCatalogPriceRule(): void
+    {
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_catalog_rule',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 7.5, 'max_price' => 15, 'tier_price' => null],
+            ['simple1000' => 7.5, 'simple1001' => 15]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with catalog price rule + options with special prices
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_catalog_rule.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithCatalogPriceRuleAndOptionsWithSpecialPrices(): void
+    {
+        $this->updateProducts($this->specialPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_catalog_rule',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 8, 'max_price' => 15, 'tier_price' => null],
+            ['simple1000' => 8, 'simple1001' => 15]
+        );
+    }
+
+    /**
+     * Dynamic Bundle Product with catalog price rule + options with tier price
+     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_catalog_rule.php
+     *
+     * @return void
+     */
+    public function testDynamicBundleProductWithCatalogPriceRuleAndOptionsWithTierPrice(): void
+    {
+        $this->updateProducts($this->tierPricesForOptionsData());
+        $this->checkBundlePrices(
+            'dynamic_bundle_product_with_catalog_rule',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 8, 'max_price' => 17, 'tier_price' => null],
+            ['simple1000' => 8, 'simple1001' => 17]
+        );
     }
 
     /**
@@ -538,6 +444,7 @@ class PriceTest extends TestCase
      * @param string $sku
      * @param array $indexPrices
      * @param array $expectedPrices
+     * @return void
      */
     private function checkBundlePrices(string $sku, array $indexPrices, array $expectedPrices): void
     {
@@ -558,7 +465,7 @@ class PriceTest extends TestCase
         $data = $this->getPriceIndexDataByProductId->execute(
             $productId,
             Group::NOT_LOGGED_IN_ID,
-            $this->defaultWebsiteId
+            (int)$this->websiteRepository->get('base')->getId()
         );
         $data = reset($data);
         foreach ($expectedPrices as $column => $price) {
@@ -571,15 +478,17 @@ class PriceTest extends TestCase
      *
      * @param ProductInterface $bundle
      * @param array $expectedPrices
+     * @return void
      */
     private function assertPriceWithChosenOption(ProductInterface $bundle, array $expectedPrices): void
     {
-        $option = $bundle->getExtensionAttributes()->getBundleProductOptions()[0];
-        foreach ($option->getProductLinks() as $id => $productLink) {
+        $option = $bundle->getExtensionAttributes()->getBundleProductOptions()[0] ?? null;
+        $this->assertNotNull($option);
+        foreach ($option->getProductLinks() as $productLink) {
             $bundle->addCustomOption('bundle_selection_ids', $this->json->serialize([$productLink->getId()]));
             $bundle->addCustomOption('selection_qty_' . $productLink->getId(), 1);
             $this->assertEquals(
-                round($expectedPrices[$id], 2),
+                round($expectedPrices[$productLink->getSku()], 2),
                 round($this->priceModel->getFinalPrice(1, $bundle), 2)
             );
         }
@@ -588,50 +497,16 @@ class PriceTest extends TestCase
     /**
      * Update products.
      *
-     * @param array $data
+     * @param array $products
      * @return void
      */
-    private function updateProducts(array $data): void
+    private function updateProducts(array $products): void
     {
-        foreach ($data as $sku => $updateData) {
+        foreach ($products as $sku => $updateData) {
             $product = $this->productRepository->get($sku);
             $product->addData($updateData);
             $this->productRepository->save($product);
         }
-    }
-
-    /**
-     * Create catalog rule.
-     *
-     * @return void
-     */
-    private function createCatalogRule(): void
-    {
-        $category = $this->getCategoryByName->execute('Category 999');
-        $ruleData = [
-            RuleInterface::NAME => 'Test category rule',
-            RuleInterface::IS_ACTIVE => 1,
-            'website_ids' => [$this->defaultWebsiteId],
-            'customer_group_ids' => Group::NOT_LOGGED_IN_ID,
-            RuleInterface::DISCOUNT_AMOUNT => 25,
-            RuleInterface::SIMPLE_ACTION => 'by_percent',
-            'conditions' => [
-                '1' => [
-                    'type' => Combine::class,
-                    'aggregator' => 'all',
-                    'value' => '1',
-                ],
-                '1--1' => [
-                    'type' => Product::class,
-                    'attribute' => 'category_ids',
-                    'operator' => '==',
-                    'value' => $category->getId(),
-                ],
-            ],
-        ];
-        $catalogRule = $this->catalogRuleFactory->create();
-        $catalogRule->loadPost($ruleData);
-        $this->catalogRuleRepository->save($catalogRule);
     }
 
     /**

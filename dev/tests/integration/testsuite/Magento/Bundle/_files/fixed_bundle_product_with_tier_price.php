@@ -84,7 +84,7 @@ $bundleProduct = $prepareBundleLinks->execute($bundleProduct, $bundleOptionsData
 $tierPriceExtensionAttribute = $tierPriceExtensionAttributesFactory->create(
     [
         'data' => [
-            'website_id' => $websiteRepository->get('admin')->getId(),
+            'website_id' => 0,
             'percentage_value' => 25,
         ]
     ]

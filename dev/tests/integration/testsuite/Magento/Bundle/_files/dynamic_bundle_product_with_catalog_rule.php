@@ -17,14 +17,10 @@ use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Customer\Model\Group;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
 
 require __DIR__ . '/../../../Magento/Catalog/_files/category_with_different_price_products.php';
 
-/** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-$defaultWebsiteId = $websiteRepository->get('base')->getId();
 /** @var PrepareBundleLinks $prepareBundleLinks */
 $prepareBundleLinks = $objectManager->get(PrepareBundleLinks::class);
 /** @var RuleInterfaceFactory $catalogRuleFactory */
@@ -33,11 +29,12 @@ $catalogRuleFactory = $objectManager->get(RuleInterfaceFactory::class);
 $catalogRuleRepository = $objectManager->get(CatalogRuleRepositoryInterface::class);
 /** @var IndexBuilder $indexBuilder */
 $indexBuilder = $objectManager->get(IndexBuilder::class);
+$defaultWebsiteId = $storeManager->getWebsite('base')->getId();
 
 $category = $categoryFactory->create();
 $category->isObjectNew(true);
 $category->setName('Category with bundle product and rule')
-    ->setParentId(2)
+    ->setParentId($categoryHelper->getId())
     ->setIsActive(true)
     ->setPosition(1);
 $category = $categoryRepository->save($category);
