@@ -649,8 +649,8 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $this->addCountryFactory($api);
         $data = [
-            'COUNTRYCODE' => $exportedShippingAddress['country_id'],
-            'STATE' => $exportedShippingAddress['region']
+            'COUNTRYCODE' => $quote->getShippingAddress()->getCountryId(),
+            'STATE' => 'unknown'
         ];
         $api->method('call')
             ->willReturn($data);
@@ -677,7 +677,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     {
         $addressDataKeys = [
             'country',
-            'country_id',
             'firstname',
             'lastname',
             'street',
