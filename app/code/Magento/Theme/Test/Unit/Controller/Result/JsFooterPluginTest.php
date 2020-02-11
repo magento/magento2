@@ -59,7 +59,7 @@ class JsFooterPluginTest extends TestCase
     }
 
     /**
-     * Data Provider for beforeSendResponse()
+     * Data Provider for testBeforeSendResponse()
      *
      * @return array
      */
@@ -68,14 +68,14 @@ class JsFooterPluginTest extends TestCase
         return [
             [
                 "content" => "<body><h1>Test Title</h1>" .
-                    "<script text=\"text/javascript\">test</script>" .
-                    "<script text=\"text/x-magento-template\">test</script>" .
+                    "<script type=\"text/x-magento-init\">test</script>" .
+                    "<script type=\"text/x-magento-template\">test</script>" .
                     "<p>Test Content</p></body>",
                 "flag" => true,
                 "result" => "<body><h1>Test Title</h1>" .
-                    "<script text=\"text/x-magento-template\">test</script>" .
+                    "<script type=\"text/x-magento-template\">test</script>" .
                     "<p>Test Content</p>" .
-                    "<script text=\"text/javascript\">test</script>" .
+                    "<script type=\"text/x-magento-init\">test</script>" .
                     "\n</body>"
             ],
             [
@@ -122,15 +122,34 @@ class JsFooterPluginTest extends TestCase
     }
 
     /**
+     * Data Provider for testBeforeSendResponseIfGetContentIsNotAString()
+     *
+     * @return array
+     */
+    public function ifGetContentIsNotAStringDataProvider(): array
+    {
+        return [
+            [
+                'content' => []
+            ],
+            [
+                'content' => NULL
+            ]
+        ];
+    }
+
+    /**
      * Test BeforeSendResponse if content is not a string
      *
+     * @param string $content
      * @return void
+     * @dataProvider ifGetContentIsNotAStringDataProvider
      */
-    public function testBeforeSendResponseIfGetContentIsNotAString(): void
+    public function testBeforeSendResponseIfGetContentIsNotAString($content): void
     {
         $this->httpMock->expects($this->once())
             ->method('getContent')
-            ->willReturn([]);
+            ->willReturn($content);
 
         $this->scopeConfigMock->expects($this->never())
             ->method('isSetFlag')
