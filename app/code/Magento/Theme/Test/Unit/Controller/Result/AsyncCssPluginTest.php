@@ -20,6 +20,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class AsyncCssPluginTest extends TestCase
 {
+    const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
+
     /**
      * @var AsyncCssPlugin
      */
@@ -107,7 +109,7 @@ class AsyncCssPluginTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                AsyncCssPlugin::XML_PATH_USE_CSS_CRITICAL_PATH,
+                self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH,
                 ScopeInterface::SCOPE_STORE
             )
             ->willReturn($isSetFlag);
@@ -133,7 +135,7 @@ class AsyncCssPluginTest extends TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(
-                AsyncCssPlugin::XML_PATH_USE_CSS_CRITICAL_PATH,
+                self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH,
                 ScopeInterface::SCOPE_STORE
             )
             ->willReturn(false);

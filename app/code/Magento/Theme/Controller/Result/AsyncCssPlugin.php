@@ -16,7 +16,7 @@ use Magento\Framework\App\Response\Http;
  */
 class AsyncCssPlugin
 {
-    const XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
+    private const XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
 
     /**
      * @var ScopeConfigInterface
