@@ -76,7 +76,7 @@ class Storage
     }
 
     /**
-     * Load customers' data that can be found by given identifiers.
+     * Load customer's data that can be found by given identifiers.
      *
      * @param array $customerIdentifiers With keys "email" and "website_id".
      * @return void
