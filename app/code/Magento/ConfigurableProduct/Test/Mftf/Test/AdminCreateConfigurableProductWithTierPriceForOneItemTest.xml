@@ -54,7 +54,7 @@
         </before>
         <after>
             <!-- Delete configurable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="ApiConfigurableProduct"/>
             </actionGroup>
 
@@ -70,33 +70,33 @@
         <!--Create configurable product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad stepKey="waitProductGridPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!--Fill configurable product values -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!-- Create product configurations and add attribute and select all options -->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
 
          <!-- Add associated products to configurations grid -->
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addFirstSimpleProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addFirstSimpleProduct">
             <argument name="sku" value="$$createFirstSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
         </actionGroup>
 
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addSecondSimpleProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addSecondSimpleProduct">
             <argument name="sku" value="$$createSecondSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
         </actionGroup>
 
         <!-- Save configurable product -->
-        <actionGroup ref="saveProductForm" stepKey="saveConfigurableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProduct"/>
 
         <!-- Assert product tier price on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>

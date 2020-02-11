@@ -13,7 +13,6 @@ use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\DataObject;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -270,11 +269,6 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
@@ -292,11 +286,8 @@ QUERY;
             'Filter category',
             $responseObject->getData('products/items/0/categories/1/name')
         );
-        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
-            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
-            $responseObject->getData('products/items/0/canonical_url')
-        );
+        //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
+        self::assertNull($responseObject->getData('products/items/0/canonical_url'));
     }
 
     /**
@@ -659,15 +650,7 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $firstProduct->setId(
-            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
-        $secondProduct->setId(
-            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
         $this->assertBaseFields($firstProduct, $response['products']['items'][0]);

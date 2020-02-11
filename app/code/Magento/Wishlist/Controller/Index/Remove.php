@@ -14,9 +14,11 @@ use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Product\AttributeValueProvider;
 
 /**
+ * Wishlist Remove Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Remove extends \Magento\Wishlist\Controller\AbstractIndex
+class Remove extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var WishlistProviderInterface
@@ -88,11 +90,11 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('We can\'t delete the item from Wish List right now because of an error: %1.', $e->getMessage())
             );
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t delete the item from the Wish List right now.'));
+            $this->messageManager->addErrorMessage(__('We can\'t delete the item from the Wish List right now.'));
         }
 
         $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();

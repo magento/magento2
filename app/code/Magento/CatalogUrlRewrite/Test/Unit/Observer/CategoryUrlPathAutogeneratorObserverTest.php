@@ -159,6 +159,9 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit\Framework\TestCa
         $this->expectExceptionMessage('Invalid URL key');
         $categoryData = ['use_default' => ['url_key' => $useDefaultUrlKey], 'url_key' => '', 'url_path' => ''];
         $this->category->setData($categoryData);
+        $this->category
+            ->method('getStoreId')
+            ->willReturn(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         $this->category->isObjectNew($isObjectNew);
         $this->assertEquals($isObjectNew, $this->category->isObjectNew());
         $this->assertEquals($categoryData['url_key'], $this->category->getUrlKey());

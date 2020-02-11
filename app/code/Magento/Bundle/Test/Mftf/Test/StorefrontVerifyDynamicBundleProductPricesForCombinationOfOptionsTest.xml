@@ -42,7 +42,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct5.id$$)}}" stepKey="openAdminEditPage"/>
             <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
             <!--Create Bundle product-->
             <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">

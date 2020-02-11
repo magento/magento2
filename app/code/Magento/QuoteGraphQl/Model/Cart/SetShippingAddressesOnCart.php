@@ -10,6 +10,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -52,6 +53,15 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 
         $shippingAddress = $this->getShippingAddress->execute($context, $shippingAddressInput);
 
+        $errors = $shippingAddress->validate();
+
+        if (true !== $errors) {
+            $e = new GraphQlInputException(__('Shipping address errors'));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException($error));
+            }
+            throw $e;
+        }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 }
