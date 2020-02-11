@@ -116,7 +116,7 @@ class Type implements OptionSourceInterface
     /**
      * Factory to product singleton product type instances
      *
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param   \Magento\Catalog\Api\Data\ProductInterface $product
      * @return  \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function factory($product)
