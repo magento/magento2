@@ -44,7 +44,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     private $hashGenerator;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -52,10 +52,10 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
-     * @param \Magento\Framework\Session\Generic $session
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param Generic $session
+     * @param SidResolverInterface $sidResolver
      * @param HashGenerator $hashGenerator
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -96,6 +96,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             $fromStore = $this->storeRepository->get($fromStoreCode);
             /** @var Store $targetStore */
             $targetStore = $this->storeRepository->get($targetStoreCode);
+            $this->storeManager->setCurrentStore($targetStore);
         } catch (NoSuchEntityException $e) {
             $error = __("Requested store is not found ({$fromStoreCode})");
         }
@@ -118,7 +119,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                 '_nosid' => true,
                 '_query' => $query
             ];
-            $this->storeManager->setCurrentStore($targetStore);
+
             $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
         }
 
