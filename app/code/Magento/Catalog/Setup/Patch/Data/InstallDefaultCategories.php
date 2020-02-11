@@ -78,6 +78,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             ->setPosition(0)
             ->setChildrenCount(0)
             ->setName('Root Catalog')
+            ->setIsActive(1)
             ->setInitialSetupFlag(true)
             ->save();
 
