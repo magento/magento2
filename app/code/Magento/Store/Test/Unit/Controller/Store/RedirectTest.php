@@ -11,6 +11,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Controller\Store\Redirect;
+use Magento\Store\Controller\Store\SwitchAction;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreResolver;
@@ -28,7 +29,7 @@ class RedirectTest extends TestCase
     const STUB_DEFAULT_STORE_VIEW = 'default';
 
     /**
-     * @var \Magento\Store\Controller\Store\SwitchAction
+     * @var Redirect
      */
     private $model;
 
@@ -43,17 +44,17 @@ class RedirectTest extends TestCase
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $redirectMock;
 
