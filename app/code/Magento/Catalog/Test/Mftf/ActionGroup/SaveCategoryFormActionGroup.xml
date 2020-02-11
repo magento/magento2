@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SaveCategoryFormActionGroup">
         <annotations>
-            <description>Requires navigation to the Category creation/edit page. Checks that the url contains the AdminCategoryPage url. Saves the Category.</description>
+            <description>DEPRECATED. Use AdminSaveCategoryFormActionGroup instead. Requires navigation to the Category creation/edit page. Checks that the url contains the AdminCategoryPage url. Saves the Category.</description>
         </annotations>
 
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccess"/>
     </actionGroup>
 </actionGroups>
