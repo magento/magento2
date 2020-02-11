@@ -34,32 +34,32 @@ class RedirectTest extends TestCase
     private $model;
 
     /**
-     * @var StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeRepositoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $redirectMock;
 
     /**
-     * @var StoreResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeResolverMock;
 
