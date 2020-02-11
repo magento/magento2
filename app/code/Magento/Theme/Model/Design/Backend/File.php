@@ -118,7 +118,10 @@ class File extends BackendFile
             );
         }
 
-        if (!in_array($this->ioFileSystem->getPathInfo(($file))['extension'], $this->getAllowedExtensions())) {
+        if (
+            !isset($this->ioFileSystem->getPathInfo(($file))['extension']) ||
+            !in_array($this->ioFileSystem->getPathInfo(($file))['extension'], $this->getAllowedExtensions())
+        ) {
             throw new LocalizedException(
                 __('Something is wrong with the file upload settings.')
             );

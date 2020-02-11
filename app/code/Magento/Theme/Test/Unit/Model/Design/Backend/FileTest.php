@@ -8,6 +8,7 @@ namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Model\Design\Backend\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,6 +23,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     /** @var File */
     protected $fileBackend;
+
+    /** @var IoFileSystem|\PHPUnit_Framework_MockObject_MockObject */
+    protected $ioFileSystem;
 
     /**
      * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
@@ -56,6 +60,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
 
+        $this->ioFileSystem = $this->getMockBuilder(\Magento\Framework\Filesystem\Io\File::class)
+            ->getMockForAbstractClass();
+
         $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,6 +87,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $requestData,
             $filesystem,
             $this->urlBuilder,
+            $this->ioFileSystem,
             $abstractResource,
             $abstractDb,
             [],
@@ -240,6 +248,52 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Normal file name' => ['filename.jpg'],
+        ];
+    }
+
+    /**
+     * @dataProvider beforeSaveInvalidDataProvider
+     * @param string $fileName
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Something is wrong with the file upload settings.
+     */
+    public function testBeforeSaveInvalidFile($fileName)
+    {
+        {
+            $expectedFileName = basename($fileName);
+            $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
+            $this->fileBackend->setScope('store');
+            $this->fileBackend->setScopeId(1);
+            $this->fileBackend->setValue(
+                [
+                    [
+                        'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
+                        'file' => $fileName,
+                        'size' => 234234,
+                    ]
+                ]
+            );
+            $this->fileBackend->setFieldConfig(
+                [
+                    'upload_dir' => [
+                        'value' => 'value',
+                        'config' => 'system/filesystem/media',
+                    ],
+                ]
+            );
+
+            $this->fileBackend->beforeSave();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSaveInvalidDataProvider()
+    {
+        return [
+            'Invalid Extension' => ['file.invalid'],
             'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
         ];
     }
