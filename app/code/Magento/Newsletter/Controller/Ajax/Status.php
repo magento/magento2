@@ -10,6 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 use Magento\Newsletter\Model\GuestSubscriptionChecker;
 use Psr\Log\LoggerInterface;
@@ -67,7 +68,7 @@ class Status extends Action implements HttpGetActionInterface
             if (!empty($email) && $this->emailAddressValidator->isValid($email)) {
                 $response['subscribed'] = $this->guestSubscriptionChecker->isSubscribed($email);
             }
-        } catch (\Throwable $exception) {
+        } catch (LocalizedException | \DomainException $exception) {
             $this->logger->error($exception->getMessage());
             $response['errors'] = true;
         }

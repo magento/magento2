@@ -124,7 +124,7 @@ class CustomerPluginTest extends TestCase
             ->method('loadByCustomer')
             ->with($customerId, $websiteId)
             ->willReturnSelf();
-        if ($originalStatus == Subscriber::STATUS_UNCONFIRMED) {
+        if ($originalStatus !== null && $originalStatus === Subscriber::STATUS_UNCONFIRMED) {
             $subscriber->method('getId')->willReturn(1);
         } else {
             $subscriber->expects($this->once())
