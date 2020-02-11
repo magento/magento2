@@ -14,17 +14,17 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 class CommentParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ConfigFilePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFilePool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configFilePoolMock;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirectoryMock;
 
@@ -73,14 +73,14 @@ class CommentParserTest extends \PHPUnit\Framework\TestCase
         $content = <<<TEXT
 <?php
 return array (
-  'ns1' => 
+  'ns1' =>
   array (
-    's1' => 
+    's1' =>
     array (
       0 => 's11',
       1 => 's12',
     ),
-    's2' => 
+    's2' =>
     array (
       0 => 's21',
       1 => 's22',
@@ -90,9 +90,9 @@ return array (
    * comment for namespace 2.
    * Next comment for' namespace 2
    */
-  'ns2' => 
+  'ns2' =>
   array (
-    's1' => 
+    's1' =>
     array (
       0 => 's11',
     ),

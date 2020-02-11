@@ -13,7 +13,7 @@ use Magento\Framework\View\Design\Fallback\RulePool;
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resolver;
 

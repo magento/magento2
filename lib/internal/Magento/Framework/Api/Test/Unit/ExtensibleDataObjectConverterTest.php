@@ -18,10 +18,10 @@ class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\ExtensibleDataObjectConverter */
     protected $converter;
 
-    /** @var  \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $processor;
 
-    /** @var  \Magento\Framework\Api\ExtensibleDataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Api\ExtensibleDataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataObject;
 
     protected function setUp()

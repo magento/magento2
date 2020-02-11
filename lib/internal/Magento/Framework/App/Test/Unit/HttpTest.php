@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Http as AppHttp;

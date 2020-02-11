@@ -33,7 +33,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Code\Generator\Io */
     protected $_object;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $_filesystemDriverMock;
 
     /** @var string */

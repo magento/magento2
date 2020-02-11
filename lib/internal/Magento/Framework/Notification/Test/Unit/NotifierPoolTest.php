@@ -16,11 +16,11 @@ class NotifierPoolTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Notification\NotifierList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Notification\NotifierList|\PHPUnit\Framework\MockObject\MockObject */
     protected $notifierList;
 
     /**
-     * @var \Magento\Framework\Notification\NotifierPool[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @var \Magento\Framework\Notification\NotifierPool[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $notifiers;
 

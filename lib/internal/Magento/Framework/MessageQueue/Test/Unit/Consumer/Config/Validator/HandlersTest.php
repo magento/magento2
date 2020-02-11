@@ -11,7 +11,7 @@ use Magento\Framework\Reflection\MethodsMap;
 class HandlersTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $methodsMap;
 

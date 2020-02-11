@@ -15,17 +15,17 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
     private $dbVersionInfo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleList;
 
     /**
-     * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleResource;
 
     /**
-     * @var \Magento\Framework\Module\Output\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Output\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_outputConfig;
 

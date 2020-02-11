@@ -23,12 +23,12 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
     private $patchRegistry;
 
     /**
-     * @var PatchFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchFactoryMock;
 
     /**
-     * @var PatchHistory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchHistory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchHistoryMock;
 
@@ -38,7 +38,7 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
         $this->patchFactoryMock = $this->getMockBuilder(PatchFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->patchHistoryMock = $this->getMockBuilder(PatchHistory::class)
             ->disableOriginalConstructor()
             ->getMock();

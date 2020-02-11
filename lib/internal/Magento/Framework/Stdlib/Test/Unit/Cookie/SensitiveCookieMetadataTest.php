@@ -21,7 +21,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit\Framework\TestCase
     /** @var SensitiveCookieMetadata */
     private $sensitiveCookieMetadata;
 
-    /** @var  \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
     protected function setUp()

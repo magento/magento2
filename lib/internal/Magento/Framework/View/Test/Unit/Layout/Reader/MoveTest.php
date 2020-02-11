@@ -22,12 +22,12 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     protected $move;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduledStructureMock;
 

@@ -18,12 +18,12 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     private $abstractResource;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
@@ -167,12 +167,12 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
-    
+
     public function testCommitZeroLevel()
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $this->createMock(AdapterInterface::class);
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -206,7 +206,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
     public function testCommitZeroLevelCallbackException()
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $this->createMock(AdapterInterface::class);
 
         $this->abstractResource->setConnection($connection);
@@ -229,9 +229,9 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
     public function testCommitNotCompletedTransaction()
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $this->createMock(AdapterInterface::class);
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();

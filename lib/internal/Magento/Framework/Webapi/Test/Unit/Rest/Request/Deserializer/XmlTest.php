@@ -7,13 +7,13 @@ namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
 class XmlTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_xmlParserMock;
 
     /** @var \Magento\Framework\Webapi\Rest\Request\Deserializer\Xml */
     protected $_xmlDeserializer;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
     protected function setUp()

@@ -35,7 +35,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'w';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 

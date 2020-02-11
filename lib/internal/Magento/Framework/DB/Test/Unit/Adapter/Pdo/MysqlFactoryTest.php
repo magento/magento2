@@ -15,17 +15,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class MysqlFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectFactoryMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 

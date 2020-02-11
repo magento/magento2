@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 abstract class EntityChildTestAbstract extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Io | \PHPUnit_Framework_MockObject_MockObject
+     * @var Io|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 
@@ -24,11 +24,11 @@ abstract class EntityChildTestAbstract extends \PHPUnit\Framework\TestCase
     protected $generator;
 
     /**
-     * @var \Magento\Framework\Code\Generator\ClassGenerator | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\ClassGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $classGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Code\Generator\DefinedClasses */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Code\Generator\DefinedClasses */
     protected $definedClassesMock;
 
     /**

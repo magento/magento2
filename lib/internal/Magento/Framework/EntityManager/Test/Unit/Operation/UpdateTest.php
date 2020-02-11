@@ -18,17 +18,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var UpdateMain|\PHPUnit_Framework_MockObject_MockObject
+     * @var UpdateMain|\PHPUnit\Framework\MockObject\MockObject
      */
     private $updateMain;
 

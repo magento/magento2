@@ -20,7 +20,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     protected $_typeList;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cache;
 
@@ -30,7 +30,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     protected $_typesArray;
 
     /**
-     * @var \Magento\Framework\Cache\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Cache\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_config;
 
@@ -50,7 +50,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     const CACHE_TYPE = \Magento\Framework\Cache\FrontendInterface::class;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 

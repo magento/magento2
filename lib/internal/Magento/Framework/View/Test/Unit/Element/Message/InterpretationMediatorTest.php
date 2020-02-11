@@ -12,12 +12,12 @@ use Magento\Framework\View\Element\Message\InterpretationStrategy;
 class InterpretationMediatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InterpretationStrategy | \PHPUnit_Framework_MockObject_MockObject
+     * @var InterpretationStrategy|\PHPUnit\Framework\MockObject\MockObject
      */
     private $interpretationStrategy;
 
     /**
-     * @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageMock;
 

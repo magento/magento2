@@ -18,52 +18,52 @@ namespace Magento\Framework\TestFramework\Unit\Block;
 class Adminhtml extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_designMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_sidResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_translatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_messagesMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_controllerMock;
 
@@ -73,37 +73,37 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
     protected $_context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManager
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Math\Random
      */
     protected $_mathMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Form\FormKey
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Data\Form\FormKey
      */
     protected $_formKey;
 
@@ -184,7 +184,7 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      * Generates a mocked object
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _makeMock($className)
     {
@@ -194,7 +194,7 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
     /**
      * Sets up a stubbed method with specified behavior and expectations
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject                       $object
+     * @param \PHPUnit\Framework\MockObject\MockObject                       $object
      * @param string                                                        $stubName
      * @param mixed                                                         $return
      * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount|null        $expects
@@ -202,7 +202,7 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      * @return \PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     protected function _setStub(
-        \PHPUnit_Framework_MockObject_MockObject $object,
+        \PHPUnit\Framework\MockObject\MockObject $object,
         $stubName,
         $return = null,
         $expects = null

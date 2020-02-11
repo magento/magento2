@@ -26,7 +26,7 @@ class IdentityTest extends \PHPUnit\Framework\TestCase
     private $identity;
 
     /**
-     * @var \Magento\Framework\Setup\Declaration\Schema\Dto\Column|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\Declaration\Schema\Dto\Column|\PHPUnit\Framework\MockObject\MockObject
      */
     private $columnMock;
 

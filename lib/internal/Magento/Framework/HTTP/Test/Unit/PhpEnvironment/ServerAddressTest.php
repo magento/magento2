@@ -13,7 +13,7 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
     protected $_serverAddress;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     protected $_request;
 

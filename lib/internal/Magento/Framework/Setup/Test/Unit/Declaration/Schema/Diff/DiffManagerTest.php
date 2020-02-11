@@ -29,7 +29,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Setup\Declaration\Schema\Comparator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\Declaration\Schema\Comparator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $comparatorMock;
 
@@ -68,7 +68,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testRegisterModification()
     {
-        /** @var Diff|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var Diff|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,7 +92,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testRegisterIndexModification()
     {
-        /** @var Diff|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var Diff|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -117,7 +117,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testRegisterRemovalReference()
     {
-        /** @var Diff|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var Diff|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -154,7 +154,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testRegisterCreation()
     {
-        /** @var Diff|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var Diff|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,7 +184,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testRegisterTableModificationWhenChangeResource()
     {
-        /** @var Diff|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var Diff|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -216,7 +216,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testRegisterTableModificationWhenChangeEngine()
     {
-        /** @var Diff|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var Diff|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -15,7 +15,7 @@ class FilterFactoryTest extends \PHPUnit\Framework\TestCase
     protected $factory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 

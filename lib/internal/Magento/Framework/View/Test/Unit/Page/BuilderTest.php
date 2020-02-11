@@ -29,7 +29,7 @@ class BuilderTest extends \Magento\Framework\View\Test\Unit\Layout\BuilderTest
 
         $readerContext = $this->createMock(\Magento\Framework\View\Layout\Reader\Context::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $layout */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $layout */
         $layout = & $arguments['layout'];
         $layout->expects($this->once())->method('getReaderContext')->will($this->returnValue($readerContext));
 

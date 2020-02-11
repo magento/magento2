@@ -18,12 +18,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeMock;
 
     /**
-     * @var AreaList|\PHPUnit_Framework_MockObject_MockObject
+     * @var AreaList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $areaListMock;
 

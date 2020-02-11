@@ -23,12 +23,12 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var TopologyConfigCompositeReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var TopologyConfigCompositeReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 

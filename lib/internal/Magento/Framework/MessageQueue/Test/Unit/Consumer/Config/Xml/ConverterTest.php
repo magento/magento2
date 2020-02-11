@@ -16,12 +16,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var ConfigParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configParserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultConfigProviderMock;
 

@@ -10,7 +10,7 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Indexer\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 

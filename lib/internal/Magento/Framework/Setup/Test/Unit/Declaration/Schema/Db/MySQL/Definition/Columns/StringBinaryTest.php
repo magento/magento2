@@ -30,17 +30,17 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
     private $stringBinary;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -71,7 +71,7 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var StringBinaryColumn|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var StringBinaryColumn|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(StringBinaryColumn::class)
             ->disableOriginalConstructor()
             ->getMock();

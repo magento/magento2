@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $source;
 

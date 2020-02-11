@@ -15,17 +15,17 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem\Rollback\Fs|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Fs|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fsMock;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem\Rollback\Ftp|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Ftp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ftpMock;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $snapshotMock;
 

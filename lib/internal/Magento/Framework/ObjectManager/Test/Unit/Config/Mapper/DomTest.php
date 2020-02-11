@@ -15,7 +15,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
     protected $_mapper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $argumentInterpreter;
 

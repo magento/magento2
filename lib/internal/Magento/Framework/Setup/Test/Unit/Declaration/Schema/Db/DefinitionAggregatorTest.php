@@ -28,7 +28,7 @@ class DefinitionAggregatorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var DbDefinitionProcessorInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @var DbDefinitionProcessorInterface[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     private $definitonProcessors;
 
@@ -62,15 +62,15 @@ class DefinitionAggregatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var ElementInterface|\PHPUnit_Framework_MockObject_MockObject $columnInt */
+        /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $columnInt */
         $columnInt = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var ElementInterface|\PHPUnit_Framework_MockObject_MockObject $columnVarchar */
+        /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $columnVarchar */
         $columnVarchar = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var ElementInterface|\PHPUnit_Framework_MockObject_MockObject $columnText */
+        /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $columnText */
         $columnText = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

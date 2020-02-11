@@ -22,12 +22,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface\Proxy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Route\ConfigInterface\Proxy|\PHPUnit\Framework\MockObject\MockObject
      */
     private $routerListMock;
 
     /**
-     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $infoProcessorMock;
 
@@ -37,12 +37,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     private $pathInfo;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 
@@ -453,7 +453,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
         ];
     }
-    
+
     /**
      * @dataProvider setPathInfoDataProvider
      * @param string $requestUri

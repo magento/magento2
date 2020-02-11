@@ -8,7 +8,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_translator;
 
@@ -18,7 +18,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     protected $_renderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 

@@ -20,22 +20,22 @@ use Magento\Framework\Lock\Backend\FileLock;
 class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryList;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeInterface;
 
     /**
-     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeFactory;
 
     /**
-     * @var FileLock|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileLock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockManager;
 

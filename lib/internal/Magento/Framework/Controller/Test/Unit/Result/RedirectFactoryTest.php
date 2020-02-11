@@ -15,7 +15,7 @@ class RedirectFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;
 
-    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
     protected function setUp()

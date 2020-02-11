@@ -16,7 +16,7 @@ class PreProcessorCompositeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PreProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $preProcessorMock;
 

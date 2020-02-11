@@ -88,7 +88,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManagerMock = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
-        /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')

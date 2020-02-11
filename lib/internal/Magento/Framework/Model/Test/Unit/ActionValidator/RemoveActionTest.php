@@ -8,7 +8,7 @@ namespace Magento\Framework\Model\Test\Unit\ActionValidator;
 class RemoveActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $modelToCheck
+     * @param \PHPUnit\Framework\MockObject\MockObject $modelToCheck
      * @param string $protectedModel
      * @param bool $secureArea
      * @param bool $expectedResult

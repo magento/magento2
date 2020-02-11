@@ -52,7 +52,7 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnValuesMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createFieldConverterFactory(array $returnValuesMap)
     {
@@ -69,14 +69,14 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
      * Assert that correct methods with correct arguments are called during delegation of the action
      *
      * @param $connection
-     * @param \PHPUnit_Framework_MockObject_MockObject $fieldConverterOne
-     * @param \PHPUnit_Framework_MockObject_MockObject $fieldConverterTwo
+     * @param \PHPUnit\Framework\MockObject\MockObject $fieldConverterOne
+     * @param \PHPUnit\Framework\MockObject\MockObject $fieldConverterTwo
      * @param $queryModifier
      */
     private function assertCallsDelegation(
         $connection,
-        \PHPUnit_Framework_MockObject_MockObject $fieldConverterOne,
-        \PHPUnit_Framework_MockObject_MockObject $fieldConverterTwo,
+        \PHPUnit\Framework\MockObject\MockObject $fieldConverterOne,
+        \PHPUnit\Framework\MockObject\MockObject $fieldConverterTwo,
         $queryModifier
     ) {
         $fieldConverterOne->expects($this->once())

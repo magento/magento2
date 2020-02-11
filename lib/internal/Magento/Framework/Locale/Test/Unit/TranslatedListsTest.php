@@ -21,12 +21,12 @@ class TranslatedListsTest extends TestCase
     private $listsModel;
 
     /**
-     * @var MockObject | ConfigInterface
+     * @var MockObject|ConfigInterface
      */
     private $mockConfig;
 
     /**
-     * @var MockObject | ResolverInterface
+     * @var MockObject|ResolverInterface
      */
     private $mockLocaleResolver;
 

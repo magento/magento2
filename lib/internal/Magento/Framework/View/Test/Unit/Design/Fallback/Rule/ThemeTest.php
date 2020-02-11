@@ -15,17 +15,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ruleMock;
 
     /**
-     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryListMock;
 

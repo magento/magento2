@@ -14,7 +14,7 @@ class RawTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Controller\Result\Raw */
     protected $raw;
 
-    /** @var HttpResponseInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var HttpResponseInterface|\PHPUnit\Framework\MockObject\MockObject*/
     protected $response;
 
     /** @var ObjectManagerHelper */

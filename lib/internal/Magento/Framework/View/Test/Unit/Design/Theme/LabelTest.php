@@ -16,7 +16,7 @@ class LabelTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $labelList;
 

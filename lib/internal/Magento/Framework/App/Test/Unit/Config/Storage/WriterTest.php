@@ -21,7 +21,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 

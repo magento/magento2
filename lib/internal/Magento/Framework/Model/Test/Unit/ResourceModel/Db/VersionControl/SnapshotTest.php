@@ -18,12 +18,12 @@ class SnapshotTest extends \PHPUnit\Framework\TestCase
     protected $entitySnapshot;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
      */
     protected $entityMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\AbstractModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Model\AbstractModel
      */
     protected $model;
 

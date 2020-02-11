@@ -18,7 +18,7 @@ use Magento\Framework\Event\Config\Data;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataContainerMock;
 

@@ -23,12 +23,12 @@ class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
     private $queryModifierFactory;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var InQueryModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var InQueryModifier|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inQueryModifierMock;
 

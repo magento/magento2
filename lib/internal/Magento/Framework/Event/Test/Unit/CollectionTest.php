@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $events;
 
     /**
-     * @var \Magento\Framework\Event\Observer\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observers;
 

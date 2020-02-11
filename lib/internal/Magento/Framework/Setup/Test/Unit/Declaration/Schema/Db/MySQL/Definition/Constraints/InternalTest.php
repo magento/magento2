@@ -30,7 +30,7 @@ class InternalTest extends \PHPUnit\Framework\TestCase
     private $internal;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -55,7 +55,7 @@ class InternalTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
-        /** @var InternalConstraintDto|\PHPUnit_Framework_MockObject_MockObject $constraint */
+        /** @var InternalConstraintDto|\PHPUnit\Framework\MockObject\MockObject $constraint */
         $constraint = $this->getMockBuilder(InternalConstraintDto::class)
             ->disableOriginalConstructor()
             ->getMock();

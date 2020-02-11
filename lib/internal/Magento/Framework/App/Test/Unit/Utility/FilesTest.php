@@ -16,7 +16,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dirSearchMock;
 

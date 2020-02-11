@@ -18,7 +18,7 @@ class PhpTest extends \PHPUnit\Framework\TestCase
     protected $_phpEngine;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperFactoryMock;
 

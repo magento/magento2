@@ -17,17 +17,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResourceConnection
      */
     private $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend_Db_Statement_Interface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Zend_Db_Statement_Interface
      */
     private $statement;
 
@@ -42,7 +42,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     private $database;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 

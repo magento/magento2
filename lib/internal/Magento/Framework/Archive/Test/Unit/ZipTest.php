@@ -13,7 +13,7 @@ class ZipTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \Magento\Framework\Archive\Zip|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Archive\Zip|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zip;
 

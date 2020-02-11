@@ -10,7 +10,7 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 class OutputAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_output;
 

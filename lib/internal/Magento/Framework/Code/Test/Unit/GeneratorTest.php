@@ -16,7 +16,6 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
@@ -54,17 +53,17 @@ class GeneratorTest extends TestCase
     private $model;
 
     /**
-     * @var Io|Mock
+     * @var Io|MockObject
      */
     private $ioObjectMock;
 
     /**
-     * @var DefinedClasses|Mock
+     * @var DefinedClasses|MockObject
      */
     private $definedClassesMock;
 
     /**
-     * @var LoggerInterface|Mock
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -233,7 +232,7 @@ class GeneratorTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($FinalErrorMessage);
 
-        /** @var EntityAbstract|Mock $entityGeneratorMock */
+        /** @var EntityAbstract|MockObject $entityGeneratorMock */
         $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
             ->disableOriginalConstructor()
             ->getMock();

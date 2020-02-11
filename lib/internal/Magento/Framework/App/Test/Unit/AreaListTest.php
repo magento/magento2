@@ -21,7 +21,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
     protected $_resolverFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -145,7 +145,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObjectManagerMockGetArea()
     {

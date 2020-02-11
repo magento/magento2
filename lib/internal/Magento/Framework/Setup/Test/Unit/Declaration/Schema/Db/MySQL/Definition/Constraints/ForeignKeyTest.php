@@ -31,7 +31,7 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
     private $foreignKey;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -54,7 +54,7 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var Reference|\PHPUnit_Framework_MockObject_MockObject $constraint */
+        /** @var Reference|\PHPUnit\Framework\MockObject\MockObject $constraint */
         $constraint = $this->getMockBuilder(Reference::class)
             ->disableOriginalConstructor()
             ->getMock();

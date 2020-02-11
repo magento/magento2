@@ -20,22 +20,22 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var DefaultValueProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DefaultValueProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultValueProvider;
 
     /**
-     * @var ObjectManagerConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerConfig;
 
     /**
-     * @var ReflectionGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReflectionGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reflectionGenerator;
 
     /**
-     * @var ServiceMethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceMethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serviceMethodsMap;
 

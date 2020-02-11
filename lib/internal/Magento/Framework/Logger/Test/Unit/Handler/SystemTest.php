@@ -9,7 +9,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Logger\Handler\Exception;
 use Magento\Framework\Logger\Handler\System;
 use Monolog\Logger;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SystemTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,12 +19,12 @@ class SystemTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DriverInterface|Mock
+     * @var DriverInterface|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Exception|Mock
+     * @var Exception|MockObject
      */
     private $exceptionHandlerMock;
 

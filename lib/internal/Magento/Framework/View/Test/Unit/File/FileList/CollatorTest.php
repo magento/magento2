@@ -47,7 +47,7 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\File
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\File
      */
     protected function _createViewFile($filename, $module, $themeFullPath = null)
     {

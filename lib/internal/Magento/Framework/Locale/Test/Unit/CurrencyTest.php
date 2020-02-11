@@ -11,17 +11,17 @@ use Magento\Framework\Locale\Currency;
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockEventManager;
 
     /**
-     * @var \Magento\Framework\Locale\Resolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\Resolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockLocaleResolver;
 
     /**
-     * @var \Magento\Framework\CurrencyFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\CurrencyFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockCurrencyFactory;
 

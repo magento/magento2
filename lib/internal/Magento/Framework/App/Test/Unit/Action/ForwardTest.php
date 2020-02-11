@@ -20,7 +20,7 @@ class ForwardTest extends \PHPUnit\Framework\TestCase
     protected $actionAbstract;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 

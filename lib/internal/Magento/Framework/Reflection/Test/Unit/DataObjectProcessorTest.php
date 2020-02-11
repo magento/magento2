@@ -17,7 +17,7 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
     private $dataObjectProcessor;
 
     /**
-     * @var ExtensionAttributesProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExtensionAttributesProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesProcessorMock;
 

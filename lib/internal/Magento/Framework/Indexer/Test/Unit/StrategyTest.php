@@ -21,7 +21,7 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     /**
      * Resource mock
      *
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 

@@ -16,7 +16,7 @@ class ReaderPoolTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\View\Layout\ReaderPool */
     protected $pool;
 
-    /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $readerFactoryMock;
 
     protected function setUp()
@@ -45,7 +45,7 @@ class ReaderPoolTest extends \PHPUnit\Framework\TestCase
         );
 
         /**
-         * @var \Magento\Framework\View\Layout\Reader\Move|\PHPUnit_Framework_MockObject_MockObject $moveReaderMock
+         * @var \Magento\Framework\View\Layout\Reader\Move|\PHPUnit\Framework\MockObject\MockObject $moveReaderMock
          */
         $moveReaderMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Move::class)
             ->disableOriginalConstructor()->getMock();

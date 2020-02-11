@@ -14,12 +14,12 @@ use Magento\Framework\DB\DataConverter\DataConverterInterface;
 class FieldDataConverterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var DataConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConverterMock;
 

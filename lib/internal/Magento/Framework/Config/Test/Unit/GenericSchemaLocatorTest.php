@@ -26,7 +26,7 @@ class GenericSchemaLocatorTest extends \PHPUnit\Framework\TestCase
     private $schemaLocator;
 
     /**
-     * @var ModuleDirReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleDirReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleReaderMock;
 

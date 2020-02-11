@@ -34,7 +34,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->getMock();

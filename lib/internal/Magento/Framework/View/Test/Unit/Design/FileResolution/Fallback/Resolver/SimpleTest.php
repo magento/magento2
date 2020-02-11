@@ -17,12 +17,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class SimpleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleMock;
 
@@ -32,17 +32,17 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactoryMock;
 
     /**
-     * @var RulePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RulePool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rulePoolMock;
 
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryListMock;
 
@@ -292,7 +292,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $themePath
-     * @return \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockForTheme($themePath)
     {

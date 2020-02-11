@@ -13,7 +13,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Config\MetadataProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\MetadataProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_metaDataProcessor;
 

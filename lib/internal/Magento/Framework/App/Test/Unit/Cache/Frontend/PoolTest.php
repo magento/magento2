@@ -21,7 +21,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Array of frontend cache instances stubs, used to verify, what is stored inside the pool
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $_frontendInstances = [];
 

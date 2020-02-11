@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 class ExceptionMessageFactoryPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ExceptionMessageFactoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionMessageFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $defaultExceptionMessageFactoryMock;
 
@@ -22,7 +22,7 @@ class ExceptionMessageFactoryPoolTest extends \PHPUnit\Framework\TestCase
     private $specificExceptionMessageFactoryMock;
 
     /**
-     * @var ExceptionMessageFactoryInterface[] | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionMessageFactoryInterface[]|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exceptionMessageFactoryMapMock;
 

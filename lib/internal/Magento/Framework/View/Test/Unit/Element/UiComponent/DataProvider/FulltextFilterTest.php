@@ -34,37 +34,37 @@ class FulltextFilterTest extends \PHPUnit\Framework\TestCase
     protected $fulltextFilter;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var CollectionAbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionAbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionAbstractDbMock;
 
     /**
-     * @var ResourceModelAbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceModelAbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceModelAbstractDb;
 

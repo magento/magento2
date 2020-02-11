@@ -16,12 +16,12 @@ class BatchSizeManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rowSizeEstimatorMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 

@@ -8,7 +8,7 @@ namespace Magento\Framework\Logger\Test\Unit\Handler;
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Logger\Handler\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Logger\Handler\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
