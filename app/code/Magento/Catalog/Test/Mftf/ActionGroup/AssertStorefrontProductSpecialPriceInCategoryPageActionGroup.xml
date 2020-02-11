@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontProductSpecialPriceInCategoryPageActionGroup" extends="AssertStorefrontProductPriceInCategoryPageActionGroup">
         <annotations>
-            <description>Goes to Storefront Category page for the provided Category. Validates that the Product price and special price is correct.</description>
+            <description>Goes to Storefront Category page for the provided Category. Validates that the Product price and special price are correct.</description>
         </annotations>
         <arguments>
             <argument name="productSpecialPrice" type="string" defaultValue="{{updateVirtualProductSpecialPrice.special_price}}"/>
