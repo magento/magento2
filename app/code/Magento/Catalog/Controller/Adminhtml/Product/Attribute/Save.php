@@ -221,7 +221,7 @@ class Save extends Attribute implements HttpPostActionInterface
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
-                if ($model->getEntityTypeId() != $this->_entityTypeId) {
+                if ($model->getEntityTypeId() != $this->_entityTypeId || isset($data['backend_model'])) {
                     $this->messageManager->addErrorMessage(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
