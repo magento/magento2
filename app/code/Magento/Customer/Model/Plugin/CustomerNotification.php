@@ -69,14 +69,14 @@ class CustomerNotification
         State $state,
         CustomerRepositoryInterface $customerRepository,
         LoggerInterface $logger,
-        RequestInterface $request = null
+        RequestInterface $request
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;
         $this->state = $state;
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
-        $this->request = $request ?? ObjectManager::getInstance()->get(RequestInterface::class);
+        $this->request = $request;
     }
 
     /**

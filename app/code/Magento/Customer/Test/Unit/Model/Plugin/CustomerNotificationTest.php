@@ -112,6 +112,10 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('remove')
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, self::STUB_CUSTOMER_ID);
 
+        $this->sessionMock->expects($this->once())->method('setCustomerData')->with($customerMock);
+        $this->sessionMock->expects($this->once())->method('setCustomerGroupId')->with($customerGroupId);
+        $this->sessionMock->expects($this->once())->method('regenerateId');
+
         $this->plugin->beforeExecute($this->actionMock);
     }
 

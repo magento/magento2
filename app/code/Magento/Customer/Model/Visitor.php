@@ -38,7 +38,7 @@ class Visitor extends AbstractModel
     const VISITOR_TYPE_VISITOR = 'v';
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
     const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
-    const SECONDS_24_HOURS = 86400;
+    private const SECONDS_24_HOURS = 86400;
 
     /**
      * @var string[]
@@ -129,7 +129,7 @@ class Visitor extends AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
-        $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->create(RequestSafetyInterface::class);
+        $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
     /**
