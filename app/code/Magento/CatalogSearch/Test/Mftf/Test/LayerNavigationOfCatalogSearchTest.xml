@@ -42,7 +42,7 @@
         </after>
         <!--Update value for price attribute of Product 1-->
         <comment userInput="Update value for price attribute of Product 1" stepKey="comment1"/>
-        <actionGroup ref="navigateToCreatedProductEditPage" stepKey="navigateToCreatedProductEditPage1">
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="navigateToCreatedProductEditPage1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminProductFormSection.attributeLabelByText($$createPriceAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="grabAttributeLabel"/>
@@ -51,12 +51,16 @@
         <waitForPageLoad stepKey="waitForSimpleProductSaved1"/>
         <!--Update value for price attribute of Product 2-->
         <comment userInput="Update value for price attribute of Product 1" stepKey="comment2"/>
-        <actionGroup ref="navigateToCreatedProductEditPage" stepKey="navigateToCreatedProductEditPage2">
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="navigateToCreatedProductEditPage2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <fillField selector="{{AdminProductAttributeSection.customAttribute($$createPriceAttribute.attribute_code$$)}}" userInput="70" stepKey="fillCustomPrice2"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton2"/>
         <waitForPageLoad stepKey="waitForSimpleProductSaved2"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Navigate to category on Storefront-->
         <comment userInput="Navigate to category on Storefront" stepKey="comment3"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$subCategory.name$$)}}" stepKey="goToCategoryStorefront"/>

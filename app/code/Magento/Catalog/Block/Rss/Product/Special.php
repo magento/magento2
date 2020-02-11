@@ -9,8 +9,7 @@ use Magento\Customer\Model\Context;
 use Magento\Framework\App\Rss\DataProviderInterface;
 
 /**
- * Class Special
- * @package Magento\Catalog\Block\Rss\Product
+ * Special products feed block
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Special extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
@@ -98,6 +97,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
+     * Init
+     *
      * @return void
      */
     protected function _construct()
@@ -107,6 +108,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
+     * Get RSS data
+     *
      * @return array
      */
     public function getRssData()
@@ -156,6 +159,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
+     * Get entry data
+     *
      * @param \Magento\Catalog\Model\Product $item
      * @return array
      */
@@ -245,7 +250,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -253,6 +258,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
+     * Get feeds
+     *
      * @return array
      */
     public function getFeeds()
@@ -266,7 +273,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

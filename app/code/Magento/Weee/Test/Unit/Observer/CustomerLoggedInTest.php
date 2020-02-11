@@ -21,7 +21,7 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     private $moduleManagerMock;
 
@@ -59,7 +59,7 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 

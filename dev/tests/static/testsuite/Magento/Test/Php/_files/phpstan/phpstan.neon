@@ -1,0 +1,38 @@
+parameters:
+	checkExplicitMixedMissingReturn: true
+	checkPhpDocMissingReturn: true
+	reportUnmatchedIgnoredErrors: false
+	excludes_analyse:
+		- %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
+		- %rootDir%/../../../*/_files/*
+		- %rootDir%/../../../dev/tests/functional/*
+		- %rootDir%/../../../dev/tests/*/Fixtures/*
+		- %rootDir%/../../../dev/tests/*/tmp/*
+		- %rootDir%/../../../dev/tests/*/_generated/*
+		- %rootDir%/../../../pub/*
+	autoload_directories:
+		- %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
+		- %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
+		- %rootDir%/../../../dev/tests/api-functional/_files/Magento
+	autoload_files:
+			- %rootDir%/../../../dev/tests/static/framework/autoload.php
+			- %rootDir%/../../../dev/tests/integration/framework/autoload.php
+			- %rootDir%/../../../dev/tests/api-functional/framework/autoload.php
+			- %rootDir%/../../../dev/tests/setup-integration/framework/autoload.php
+			- %rootDir%/../../../dev/tests/static/framework/Magento/PhpStan/autoload.php
+	ignoreErrors:
+	    # Ignore PHPStan\Rules\Classes\UnusedConstructorParametersRule
+		- '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
+		# Ignore setCustomErrorHandler function not found in bootstrap files
+		- '#Function setCustomErrorHandler not found#'
+		# Ignore 'return statement is missing' error when 'void' is present in return type list
+		- '#Method (?:.*?) should return (?:.*?)void(?:.*?) but return statement is missing.#'
+
+services:
+	errorFormatter.filtered:
+		class: Magento\PhpStan\Formatters\FilteredErrorFormatter
+		arguments:
+			showTipsOfTheDay: false
+			checkThisOnly: false
+			inferPrivatePropertyTypeFromConstructor: true
+			checkMissingTypehints: %checkMissingTypehints%

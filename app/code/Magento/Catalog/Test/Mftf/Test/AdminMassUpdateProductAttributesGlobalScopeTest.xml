@@ -16,14 +16,12 @@
             <description value="Admin should be able to mass update product attributes in global scope"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-56"/>
-            <group value="Catalog"/>
-            <group value="Product Attributes"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
+            <group value="catalog"/>
+            <group value="product_attributes"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
@@ -38,16 +36,18 @@
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
         <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
         <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
         <!-- Mass update attributes -->
@@ -58,36 +58,38 @@
         <!-- Switch store view -->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
         <!-- Update attribute -->
-        <click selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
+        <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" time="60" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron2"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Assert on storefront default view -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameDefault">
-            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
             <argument name="priceFrom" value="$$createProductOne.price$$0"/>
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInDefaultView"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Assert on storefront custom view -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameCustom">
-            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
             <argument name="priceFrom" value="$$createProductOne.price$$0"/>
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
+        <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInCustomView"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
     </test>
 </tests>

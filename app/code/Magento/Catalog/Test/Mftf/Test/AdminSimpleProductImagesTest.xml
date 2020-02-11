@@ -40,11 +40,11 @@
         <!-- Go to the first product edit page -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$firstProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
 
         <!-- Set url key -->
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
@@ -126,11 +126,11 @@
         <!-- Go to the second product edit page -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex2"/>
         <waitForPageLoad stepKey="wait2"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
 
         <!-- Upload an image -->
         <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages2"/>
@@ -144,12 +144,14 @@
 
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to the admin grid and see the uploaded image -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
         <waitForPageLoad stepKey="wait3"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid3"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku3">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
         <seeElement selector="img.admin__control-thumbnail[src*='/large']" stepKey="seeImgInGrid"/>
@@ -192,11 +194,11 @@
         <!-- Go to the product edit page -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$product$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProduct"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
 
         <!-- Set url key -->
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
@@ -257,8 +259,8 @@
         <!-- Go to the admin grid and see the Thumbnail image -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex2"/>
         <waitForPageLoad stepKey="wait2"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
             <argument name="product" value="$$product$$"/>
         </actionGroup>
         <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeBaseInGrid"/>
@@ -266,11 +268,11 @@
         <!-- Go to the product edit page again -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
         <waitForPageLoad stepKey="wait5"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid3"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku3">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
             <argument name="product" value="$$product$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProduct3"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct3"/>
         <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages2"/>
 
         <!-- Remove all images -->
@@ -282,8 +284,8 @@
         <!-- Check admin grid for placeholder -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex4"/>
         <waitForPageLoad stepKey="wait6"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid4"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku4">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid4"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku4">
             <argument name="product" value="$$product$$"/>
         </actionGroup>
         <dontSeeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="dontSeeBaseInGrid"/>

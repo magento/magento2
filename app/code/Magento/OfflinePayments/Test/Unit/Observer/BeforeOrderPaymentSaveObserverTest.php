@@ -11,7 +11,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\OfflinePayments\Model\Checkmo;
@@ -77,12 +76,19 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         $this->payment->expects(self::once())
             ->method('getMethod')
             ->willReturn($methodCode);
-        $this->payment->method('getAdditionalInformation')
-            ->with('instructions')
-            ->willReturn('payment configuration');
         $this->payment->expects(self::once())
             ->method('setAdditionalInformation')
             ->with('instructions', 'payment configuration');
+        $method = $this->getMockBuilder(Banktransfer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $method->expects(self::once())
+            ->method('getInstructions')
+            ->willReturn('payment configuration');
+        $this->payment->expects(self::once())
+            ->method('getMethodInstance')
+            ->willReturn($method);
 
         $this->_model->execute($this->observer);
     }
@@ -161,6 +167,26 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         $this->payment->expects(self::exactly(2))
             ->method('getMethod')
             ->willReturn('somepaymentmethod');
+        $this->payment->expects(self::never())
+            ->method('setAdditionalInformation');
+
+        $this->_model->execute($this->observer);
+    }
+
+    /**
+     * @param string $methodCode
+     * @dataProvider dataProviderBeforeOrderPaymentSaveWithInstructions
+     */
+    public function testBeforeOrderPaymentSaveWithInstructionsAlreadySet($methodCode)
+    {
+        $this->payment
+            ->method('getMethod')
+            ->willReturn($methodCode);
+
+        $this->payment->expects(self::once())
+            ->method('getAdditionalInformation')
+            ->willReturn('Test');
+
         $this->payment->expects(self::never())
             ->method('setAdditionalInformation');
 

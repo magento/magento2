@@ -16,7 +16,6 @@ use Magento\Framework\Phrase;
 /**
  * Deployment configuration reader.
  * Loads the merged configuration from config files.
- *
  * @see FileReader The reader for specific configuration file
  */
 class Reader
@@ -107,11 +106,9 @@ class Reader
                 }
             }
         } else {
-            $configFiles = $this->configFilePool->getPaths();
-            $allFilesData = [];
-            $result = [];
-            foreach (array_keys($configFiles) as $fileKey) {
-                $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
+            $configFiles = $this->getFiles();
+            foreach ($configFiles as $file) {
+                $configFile = $path . '/' . $file;
                 if ($fileDriver->isExists($configFile)) {
                     $fileData = include $configFile;
                     if (!is_array($fileData)) {
@@ -120,27 +117,11 @@ class Reader
                 } else {
                     continue;
                 }
-                $allFilesData[$configFile] = $fileData;
                 if ($fileData) {
                     $result = array_replace_recursive($result, $fileData);
                 }
             }
         }
         return $result ?: [];
-    }
-
-    /**
-     * Loads the configuration file.
-     *
-     * @param string $fileKey The file key
-     * @param string $pathConfig The path config
-     * @param bool $ignoreInitialConfigFiles Whether ignore custom pools
-     * @return array
-     * @deprecated 100.2.0 Magento does not support custom config file pools since 2.2.0 version
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
-    {
-        return $this->load($fileKey);
     }
 }
