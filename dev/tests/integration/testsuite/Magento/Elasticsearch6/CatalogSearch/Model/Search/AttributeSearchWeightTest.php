@@ -24,7 +24,7 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
      *
      * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @dataProvider attributeSearchWeightDataProvider
      * @magentoDbIsolation enabled
      *

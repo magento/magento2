@@ -13,6 +13,8 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 
 /**
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
@@ -25,6 +27,11 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  */
 class ReindexAllTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
+    private $searchEngine;
+
     /**
      * @var ConnectionManager
      */
@@ -66,9 +73,17 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Make sure that correct engine is set
+     */
+    protected function assertPreConditions()
+    {
+        $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
+    }
+
+    /**
      * Test search of all products after full reindex
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
@@ -83,7 +98,6 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      * Test sorting of all products after full reindex
      *
      * @magentoDbIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
@@ -118,7 +132,6 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     /**
      * Test search of specific product after full reindex
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
@@ -205,5 +218,19 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         $indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $indexer->load('catalogsearch_fulltext');
         $indexer->reindexAll();
+    }
+
+    /**
+     * Returns installed on server search service
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine()
+    {
+        if (!$this->searchEngine) {
+            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->execute();
+            $this->searchEngine = 'elasticsearch' . $version;
+        }
+        return $this->searchEngine;
     }
 }

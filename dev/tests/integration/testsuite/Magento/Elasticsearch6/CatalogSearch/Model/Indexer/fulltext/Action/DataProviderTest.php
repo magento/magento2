@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch6\CatalogSearch\Model\Indexer\fulltext\Action;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProviderTest as CatalogSearchDataProviderTest;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * Search products by attribute value using mysql search engine.
@@ -19,9 +20,8 @@ class DataProviderTest extends CatalogSearchDataProviderTest
     /**
      * Search product by custom attribute value.
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoDbIsolation disabled
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
@@ -29,11 +29,10 @@ class DataProviderTest extends CatalogSearchDataProviderTest
      */
     public function testSearchProductByAttribute(): void
     {
-        $checker = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class);
-
-        if ($checker->execute() !== 6) {
-            $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
-        }
+        $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->execute();
+        $searchEngine = 'elasticsearch' . $version;
+        $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($searchEngine, $currentEngine);
         parent::testSearchProductByAttribute();
     }
 }

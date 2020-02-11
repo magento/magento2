@@ -9,9 +9,10 @@ namespace Magento\Elasticsearch6\CatalogSearch\Controller\Advanced;
 
 use Magento\CatalogSearch\Controller\Advanced\ResultTest as CatalogSearchResultTest;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
- * Test cases for catalog advanced search using Elasticsearch 6.0+ search engine.
+ * Test cases for catalog advanced search using Elasticsearch 6.0+ or Elasticsearch 7.0+ search engine.
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
@@ -22,9 +23,8 @@ class ResultTest extends CatalogSearchResultTest
      * Advanced search test by difference product attributes.
      *
      * @magentoAppArea frontend
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @dataProvider searchStringDataProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
@@ -33,11 +33,10 @@ class ResultTest extends CatalogSearchResultTest
      */
     public function testExecute(array $searchParams): void
     {
-        $checker = $this->_objectManager->get(ElasticsearchVersionChecker::class);
-
-        if ($checker->execute() !== 6) {
-            $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
-        }
+        $version = $this->_objectManager->get(ElasticsearchVersionChecker::class)->execute();
+        $searchEngine = 'elasticsearch' . $version;
+        $currentEngine = $this->_objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($searchEngine, $currentEngine);
         parent::testExecute($searchParams);
     }
 }
