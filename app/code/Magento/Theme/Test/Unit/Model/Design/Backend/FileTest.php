@@ -261,7 +261,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     public function testBeforeSaveInvalidFile($fileName)
     {
         {
-            $expectedFileName = basename($fileName);
             $this->fileBackend->setScope('store');
             $this->fileBackend->setScopeId(1);
             $this->fileBackend->setValue(
