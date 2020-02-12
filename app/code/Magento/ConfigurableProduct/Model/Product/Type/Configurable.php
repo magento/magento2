@@ -1241,11 +1241,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function isPossibleBuyFromList($product)
     {
         $isAllCustomOptionsDisplayed = true;
+        /*
         foreach ($this->getConfigurableAttributes($product) as $attribute) {
             $eavAttribute = $attribute->getProductAttribute();
 
             $isAllCustomOptionsDisplayed = ($isAllCustomOptionsDisplayed && $eavAttribute->getUsedInProductListing());
         }
+        */
 
         return $isAllCustomOptionsDisplayed;
     }
