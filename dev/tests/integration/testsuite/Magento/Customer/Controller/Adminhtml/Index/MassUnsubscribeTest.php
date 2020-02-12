@@ -65,7 +65,7 @@ class MassUnsubscribeTest extends AbstractBackendController
         $this->dispatch('backend/customer/index/massUnsubscribe');
         $this->assertRedirect($this->stringContains('backend/customer/index/index'));
         $this->assertSessionMessages(
-            self::equalTo(['A total of 2 record(s) were updated.']),
+            $this->equalTo([(string)__('A total of 2 record(s) were updated.')]),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertEquals(
@@ -86,13 +86,13 @@ class MassUnsubscribeTest extends AbstractBackendController
     public function testMassSubscriberActionNoSelection(): void
     {
         $params = [
-            'namespace' => 'customer_listing'
+            'namespace' => 'customer_listing',
         ];
         $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massUnsubscribe');
         $this->assertRedirect($this->stringContains('backend/customer/index/index'));
         $this->assertSessionMessages(
-            self::equalTo(['An item needs to be selected. Select and try again.']),
+            $this->equalTo([(string)__('An item needs to be selected. Select and try again.')]),
             MessageInterface::TYPE_ERROR
         );
     }

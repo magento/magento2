@@ -6,12 +6,9 @@
 declare(strict_types=1);
 
 use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../../Magento/Customer/_files/two_customers.php';
 
-$objectManager = Bootstrap::getObjectManager();
-/** @var SubscriberFactory $subscriberFactory */
 $subscriberFactory = $objectManager->get(SubscriberFactory::class);
 
 $subscriberFactory->create()->subscribe('customer@example.com');

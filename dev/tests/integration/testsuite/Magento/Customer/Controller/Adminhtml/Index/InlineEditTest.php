@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -69,44 +70,69 @@ class InlineEditTest extends AbstractBackendController
         $params = [
             'items' => [
                 $firstCustomer->getId() => [
-                    'email' => 'updated_customer@example.com',
-                    'group_id' => 2,
-                    'website_id' => $defaultWebsiteId,
-                    'taxvat' => 123123,
-                    'gender' => $genderId,
+                    CustomerInterface::EMAIL => 'updated_customer@example.com',
+                    CustomerInterface::GROUP_ID => 2,
+                    CustomerInterface::WEBSITE_ID => $defaultWebsiteId,
+                    CustomerInterface::TAXVAT => 123123,
+                    CustomerInterface::GENDER => $genderId,
                 ],
                 $secondCustomer->getId() => [
-                    'email' => 'updated_customer_two@example.com',
-                    'group_id' => 3,
-                    'website_id' => $defaultWebsiteId,
-                    'taxvat' => 456456,
-                    'gender' => $genderId,
+                    CustomerInterface::EMAIL => 'updated_customer_two@example.com',
+                    CustomerInterface::GROUP_ID => 3,
+                    CustomerInterface::WEBSITE_ID => $defaultWebsiteId,
+                    CustomerInterface::TAXVAT => 456456,
+                    CustomerInterface::GENDER => $genderId,
                 ],
             ],
             'isAjax' => true,
         ];
-        $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
-        $this->dispatch('backend/customer/index/inlineEdit');
-        $actual = $this->json->unserialize($this->getResponse()->getBody());
-        $this->assertEquals([], $actual['messages']);
-        $this->assertEquals(false, $actual['error']);
+        $actual = $this->performInlineEditRequest($params);
+        $this->assertEmpty($actual['messages']);
+        $this->assertFalse($actual['error']);
         $this->assertCustomersData($params);
     }
 
     /**
+     * @dataProvider inlineEditParametersDataProvider
+     *
+     * @param array $params
      * @return void
      */
-    public function testInlineEditActionNoSelection(): void
+    public function testInlineEditWithWrongParams(array $params): void
     {
-        $params = [
-            'items' => [],
-            'isAjax' => true,
+        $actual = $this->performInlineEditRequest($params);
+        $this->assertEquals([(string)__('Please correct the data sent.')], $actual['messages']);
+        $this->assertTrue($actual['error']);
+    }
+
+    /**
+     * @return array
+     */
+    public function inlineEditParametersDataProvider(): array
+    {
+        return [
+            [
+                'items' => [],
+                'isAjax' => true,
+            ],
+            [
+                'items' => [],
+            ],
         ];
+    }
+
+    /**
+     * Perform inline edit request.
+     *
+     * @param array $params
+     * @return array
+     */
+    private function performInlineEditRequest(array $params): array
+    {
         $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/inlineEdit');
-        $actual = $this->json->unserialize($this->getResponse()->getBody());
-        $this->assertEquals(['Please correct the data sent.'], $actual['messages']);
-        $this->assertEquals(true, $actual['error']);
+
+        return $this->json->unserialize($this->getResponse()->getBody());
     }
 
     /**
