@@ -242,11 +242,11 @@ $_item = null;
                                                 <?php
                                                 /** @var $viewModel PreparePostData */
                                                 $viewModel = $block->getViewModel();
-                                                    $postArray = $viewModel->getPostData(
+                                                $postArray = $viewModel->getPostData(
                                                     $block->escapeUrl($block->getAddToCartUrl($_item)),
                                                     ['product' => $_item->getEntityId()]
                                                 );
-                                                //$postArray = json_decode($postData, true);
+                                                $value = $postArray['data'][ActionInterface::PARAM_NAME_URL_ENCODED];
                                                 ?>
                                                 <div class="actions-primary"><form data-role="tocart-form"
                                                     data-product-sku="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
@@ -256,7 +256,7 @@ $_item = null;
                                                     value="<?= /* @noEscape */ (int)$_item->getEntityId() ?>">
                                                 <input type="hidden"
                                                     name="<?= /* @noEscape */ ActionInterface::PARAM_NAME_URL_ENCODED?>"
-                                                    value="<?= /* @noEscape */ $postArray['data'][ActionInterface::PARAM_NAME_URL_ENCODED] ?>">
+                                                    value="<?= /* @noEscape */ $value ?>">
                                                 <?= $block->getBlockHtml('formkey') ?>
                                                 <button type="submit"
                                                     title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
