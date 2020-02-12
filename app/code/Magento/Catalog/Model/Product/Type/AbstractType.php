@@ -1110,9 +1110,11 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      * @since 101.0.11
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isPossibleBuyFromList($product)
     {
-        return !$this->hasRequiredOptions($product);
+        //such cases already handled by add to cart action
+        return true;
     }
 }
