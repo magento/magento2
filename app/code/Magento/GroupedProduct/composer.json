@@ -18,7 +18,8 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-wishlist": "*"
     },
     "suggest": {
         "magento/module-grouped-product-sample-data": "*"
