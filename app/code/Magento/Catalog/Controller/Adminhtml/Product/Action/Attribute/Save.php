@@ -202,10 +202,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private function validateProductAttributes(array $attributesData): void
     {
         $product = $this->productFactory->create();
+        $product->setData($attributesData);
 
         foreach ($attributesData as $attributeCode => $value) {
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
-            $product->setData($attributeCode, $value);
             $attribute->getBackend()->validate($product);
         }
     }
