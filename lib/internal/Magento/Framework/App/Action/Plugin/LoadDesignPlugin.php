@@ -16,7 +16,7 @@ use Magento\Framework\View\DesignLoader;
 /**
  * Handling Exceptions on Design Loading
  */
-class Design
+class LoadDesignPlugin
 {
     /**
      * @var DesignLoader

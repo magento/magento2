@@ -1774,6 +1774,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\LoadDesignPlugin"/>
+        <plugin name="eventDispatch"  type="Magento\Framework\App\Action\Plugin\EventDispatchPlugin"/>
+        <plugin name="actionFlagNoDispatch"  type="Magento\Framework\App\Action\Plugin\ActionFlagNoDispatchPlugin"/>
+    </type>
     <type name="Magento\Framework\App\ScopeResolverPool">
         <arguments>
             <argument name="scopeResolvers" xsi:type="array">
