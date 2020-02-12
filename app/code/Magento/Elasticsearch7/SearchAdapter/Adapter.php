@@ -15,7 +15,6 @@ use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper;
 
 /**
  * Elasticsearch Search Adapter
@@ -25,7 +24,7 @@ class Adapter implements AdapterInterface
     /**
      * Mapper instance
      *
-     * @var \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper
+     * @var Mapper
      */
     private $mapper;
 
@@ -127,7 +126,6 @@ class Adapter implements AdapterInterface
             [
                 'documents' => $rawDocuments,
                 'aggregations' => $aggregationBuilder->build($request, $rawResponse),
-                //total object was changed for Elasticsearch7
                 'total' => isset($rawResponse['hits']['total']['value']) ? $rawResponse['hits']['total']['value'] : 0
             ]
         );
