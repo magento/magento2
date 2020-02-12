@@ -13,7 +13,7 @@ use Magento\Framework\View\DesignLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class DesignTest extends TestCase
+class LoadDesignPluginTest extends TestCase
 {
     public function testBeforeExecute()
     {
