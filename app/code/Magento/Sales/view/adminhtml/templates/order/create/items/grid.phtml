@@ -151,7 +151,7 @@
                                         <?php if (count($wishlists) <= 1) : ?>
                                             <option value="wishlist"><?= $block->escapeHtml(__('Move to Wish List')) ?></option>
                                         <?php else : ?>
-                                            <optgroup label="<?= $block->escapeHtml(__('Move to Wish List')) ?>">
+                                            <optgroup label="<?= $block->escapeHtmlAttr(__('Move to Wish List')) ?>">
                                                 <?php foreach ($wishlists as $wishlist) :?>
                                                     <option value="wishlist_<?= (int) $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
                                                 <?php endforeach;?>

@@ -428,7 +428,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param Item $item
      * @return string
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function getCustomOptions(Item $item)
     {
@@ -540,12 +540,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $product = $item->getProduct();
 
-        $options = ['label' => __('Configure')];
+        $options = ['label' => $this->escapeHtml(__('Configure'))];
         if ($product->canConfigure()) {
             $options['onclick'] = sprintf('order.showQuoteItemConfiguration(%s)', $item->getId());
         } else {
             $options['class'] = ' disabled';
-            $options['title'] = __('This product does not have any configurable options');
+            $options['title'] = $this->escapeHtml(__('This product does not have any configurable options'));
         }
 
         return $this->getLayout()->createBlock(

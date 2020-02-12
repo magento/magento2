@@ -6,6 +6,8 @@
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
+use Magento\Catalog\Block\Product\Context;
+use \Magento\Framework\Escaper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,10 +44,18 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     private $bundleBlock;
 
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaper;
+
+    /** @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
+
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
+        $this->context = $this->createPartialMock(Context::class, ['getEscaper', 'getRegistry', 'getEventManager']);
         $this->bundleProductPriceFactory = $this->getMockBuilder(\Magento\Bundle\Model\Product\PriceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -79,15 +89,23 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->catalogProduct = $this->getMockBuilder(\Magento\Catalog\Helper\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->escaper = $objectHelper->getObject(Escaper::class);
+
+        $this->context->expects($this->once())->method('getRegistry')->willReturn($registry);
+        $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
+        $this->context->expects($this->once())->method('getEventManager')->willReturn($this->eventManager);
+
         /** @var $bundleBlock BundleBlock */
         $this->bundleBlock = $objectHelper->getObject(
             \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle::class,
             [
+                'context'=> $this->context,
                 'registry' => $registry,
                 'eventManager' => $this->eventManager,
                 'jsonEncoder' => $this->jsonEncoder,
                 'productPrice' => $this->bundleProductPriceFactory,
-                'catalogProduct' => $this->catalogProduct
+                'catalogProduct' => $this->catalogProduct,
             ]
         );
 
@@ -108,6 +126,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->any())->method('getType')->willReturn('checkbox');
+        $expected='There is no defined renderer for &quot;checkbox&quot; option type.';
 
         $layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->setMethods(['getChildName', 'getBlock'])
@@ -115,9 +134,8 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $layout->expects($this->any())->method('getChildName')->willReturn(false);
         $this->bundleBlock->setLayout($layout);
-
         $this->assertEquals(
-            'There is no defined renderer for "checkbox" option type.',
+            $expected,
             $this->bundleBlock->getOptionHtml($option)
         );
     }

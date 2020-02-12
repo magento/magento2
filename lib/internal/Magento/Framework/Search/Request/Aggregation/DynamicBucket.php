@@ -10,6 +10,7 @@ use Magento\Framework\Search\Request\BucketInterface;
 /**
  * Dynamic Buckets
  * @api
+ * @since 100.0.2
  */
 class DynamicBucket implements BucketInterface
 {

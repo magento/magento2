@@ -49,9 +49,9 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Sets schedule status only if no existing schedules with the same job code
-     * have that status.  This is used to implement locking for cron jobs.
+     * Sets schedule status only if no existing schedules with the same job code have that status.
      *
+     * This is used to implement locking for cron jobs.
      * If the schedule is currently in $currentStatus and there are no existing
      * schedules with the same job code and $newStatus, set the schedule to
      * $newStatus and return true. Otherwise, return false.

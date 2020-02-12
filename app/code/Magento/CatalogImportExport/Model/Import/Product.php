@@ -13,6 +13,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -548,7 +550,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
-     * @deprecated this variable isn't used anymore.
+     * @deprecated 101.0.0 this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 
@@ -612,7 +614,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var array
-     * @deprecated 100.1.5
+     * @deprecated 100.0.3
      * @since 100.0.3
      */
     protected $productUrlKeys = [];
@@ -747,6 +749,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productRepository;
 
     /**
+     * @var StatusProcessor
+     */
+    private $statusProcessor;
+    /**
+     * @var StockProcessor
+     */
+    private $stockProcessor;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -791,6 +802,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param StockItemImporterInterface|null $stockItemImporter
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
+     * @param StatusProcessor|null $statusProcessor
+     * @param StockProcessor|null $stockProcessor
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -840,7 +853,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         MediaGalleryProcessor $mediaProcessor = null,
         StockItemImporterInterface $stockItemImporter = null,
         DateTimeFactory $dateTimeFactory = null,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        StatusProcessor $statusProcessor = null,
+        StockProcessor $stockProcessor = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -876,6 +891,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
         $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()
             ->get(StockItemImporterInterface::class);
+        $this->statusProcessor = $statusProcessor ?: ObjectManager::getInstance()
+            ->get(StatusProcessor::class);
+        $this->stockProcessor = $stockProcessor ?: ObjectManager::getInstance()
+            ->get(StockProcessor::class);
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -935,6 +954,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return empty attribute value constant
      *
      * @return string
+     * @since 101.0.0
      */
     public function getEmptyAttributeValueConstant()
     {
@@ -1290,12 +1310,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _saveProductAttributes(array $attributesData)
     {
         $linkField = $this->getProductEntityLinkField();
+        $statusAttributeId = (int) $this->retrieveAttributeByCode('status')->getId();
         foreach ($attributesData as $tableName => $skuData) {
+            $linkIdBySkuForStatusChanged = [];
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
                 $linkId = $this->_oldSku[strtolower($sku)][$linkField];
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
+                        if ($attributeId === $statusAttributeId) {
+                            $this->statusProcessor->setStatus($sku, $storeId, $storeValue);
+                            $linkIdBySkuForStatusChanged[strtolower($sku)] = $linkId;
+                        }
                         $tableData[] = [
                             $linkField => $linkId,
                             'attribute_id' => $attributeId,
@@ -1304,6 +1330,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         ];
                     }
                 }
+            }
+            if ($linkIdBySkuForStatusChanged) {
+                $this->statusProcessor->loadOldStatus($linkIdBySkuForStatusChanged);
             }
             $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
         }
@@ -1446,7 +1475,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return void
      * @since 100.0.4
-     * @deprecated
+     * @deprecated 100.2.3
      */
     protected function initMediaGalleryResources()
     {
@@ -2188,6 +2217,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $stockData = [];
             $productIdsToReindex = [];
+            $stockChangedProductIds = [];
             // Format bunch to stock data rows
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
@@ -2197,8 +2227,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $row = [];
                 $sku = $rowData[self::COL_SKU];
                 if ($this->skuProcessor->getNewSku($sku) !== null) {
+                    $stockItem = $this->getRowExistingStockItem($rowData);
+                    $existingStockItemData = $stockItem->getData();
                     $row = $this->formatStockDataForRow($rowData);
                     $productIdsToReindex[] = $row['product_id'];
+                    $storeId = $this->getRowStoreId($rowData);
+                    if (!empty(array_diff_assoc($row, $existingStockItemData))
+                        || $this->statusProcessor->isStatusChanged($sku, $storeId)
+                    ) {
+                        $stockChangedProductIds[] = $row['product_id'];
+                    }
                 }
 
                 if (!isset($stockData[$sku])) {
@@ -2211,9 +2249,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->stockItemImporter->import($stockData);
             }
 
+            $this->reindexStockStatus($stockChangedProductIds);
             $this->reindexProducts($productIdsToReindex);
         }
         return $this;
+    }
+
+    /**
+     * Reindex stock status for provided product IDs
+     *
+     * @param array $productIds
+     */
+    private function reindexStockStatus(array $productIds): void
+    {
+        if ($productIds) {
+            $this->stockProcessor->reindexList($productIds);
+        }
     }
 
     /**
@@ -2471,7 +2522,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->addRowError(
                         ValidatorInterface::ERROR_DUPLICATE_URL_KEY,
                         $rowNum,
-                        $rowData[self::COL_NAME],
+                        $urlKey,
                         $message,
                         $errorLevel
                     )
@@ -3258,5 +3309,31 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function composeLinkKey(int $productId, int $linkedId, int $linkTypeId) : string
     {
         return "{$productId}-{$linkedId}-{$linkTypeId}";
+    }
+
+    /**
+     * Get row store ID
+     *
+     * @param array $rowData
+     * @return int
+     */
+    private function getRowStoreId(array $rowData): int
+    {
+        return !empty($rowData[self::COL_STORE])
+            ? (int) $this->getStoreIdByCode($rowData[self::COL_STORE])
+            : Store::DEFAULT_STORE_ID;
+    }
+
+    /**
+     * Get row stock item model
+     *
+     * @param array $rowData
+     * @return StockItemInterface
+     */
+    private function getRowExistingStockItem(array $rowData): StockItemInterface
+    {
+        $productId = $this->skuProcessor->getNewSku($rowData[self::COL_SKU])['entity_id'];
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
+        return $this->stockRegistry->getStockItem($productId, $websiteId);
     }
 }

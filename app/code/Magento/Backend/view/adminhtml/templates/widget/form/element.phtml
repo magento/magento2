@@ -27,7 +27,7 @@ $type = $element->getType();
 <?php elseif ($type === 'text' || $type === 'button' || $type === 'password') : ?>
     <span class="form_row">
         <?php if ($element->getLabel()) : ?><label for="<?= $element->getHtmlId() ?>" <?= /* @noEscape */ $block->getUiId('label') ?>><?= $block->escapeHtml($element->getLabel()) ?>:</label><?php endif; ?>
-        <input type="<?= $block->escapeHtmlAttr($element->getType()) ?>" name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= /* @noEscape */ $element->getHtmlId() ?>" value="<?= $block->escapeHtmlAttr($element->getValue()) ?>" class="input-text <?= $block->escapeHtmlAttr($element->getClass()) ?>" title="<?= $block->escapeHtmlAttr($element->getTitle()) ?>" <?= /* @noEscape */ ($element->getOnClick() ? 'onClick="' . $element->getOnClick() . '"' : '') ?>/>
+        <input type="<?= $block->escapeHtmlAttr($element->getType()) ?>" name="<?= $block->escapeHtmlAttr($element->getName()) ?>" id="<?= /* @noEscape */ $element->getHtmlId() ?>" value="<?= $block->escapeHtmlAttr($element->getValue()) ?>" class="input-text <?= $block->escapeHtmlAttr($element->getClass()) ?>" title="<?= $block->escapeHtmlAttr($element->getTitle()) ?>" <?= /* @noEscape */ ($element->getOnClick() ? 'onClick="' . $block->escapeHtmlAttr($element->getOnClick()) . '"' : '') ?>/>
     </span>
 <?php elseif ($type === 'radio') : ?>
     <span class="form_row">

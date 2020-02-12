@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogImportExport\Model\Export\RowCustomizerInterface" type="Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite" />
     <preference for="Magento\CatalogImportExport\Model\StockItemImporterInterface" type="Magento\CatalogImportExport\Model\StockItemImporter" />
+    <preference for="Magento\CatalogImportExport\Model\Export\ProductFilterInterface" type="Magento\CatalogImportExport\Model\Export\ProductFilters" />
     <type name="Magento\ImportExport\Model\Import">
         <plugin name="catalogProductFlatIndexerImport" type="Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import" />
         <plugin name="invalidatePriceIndexerOnImport" type="Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import" />
@@ -15,6 +16,13 @@
         <plugin name="invalidateEavIndexerOnImport" type="Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import" />
         <plugin name="invalidateProductCategoryIndexerOnImport" type="Magento\CatalogImportExport\Model\Indexer\Product\Category\Plugin\Import" />
         <plugin name="invalidateCategoryProductIndexerOnImport" type="Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin\Import" />
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\StockProcessor">
+        <arguments>
+            <argument name="indexers" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\CatalogImportExport\Model\Import\Product\Validator">
         <arguments>
@@ -33,6 +41,14 @@
     <type name="Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate">
         <arguments>
             <argument name="validationState" xsi:type="object">Magento\Framework\Config\ValidationState\Required</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Export\ProductFilters">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="category_ids" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\CategoryFilter</item>
+                <item name="quantity_and_stock_status" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\StockStatusFilter</item>
+            </argument>
         </arguments>
     </type>
 </config>

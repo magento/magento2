@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShouldSeeOnlyConfigurableProductChildAssignedToSeparateCategoryTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View products"/>
+            <title value="It should be possible to only view the child product of a configurable product"/>
+            <description value="Create configurable product, add to category such that only child variation is visible in category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5832"/>
+            <group value="configurable_product"/>
+        </annotations>
+        <before>
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultCategory" stepKey="secondCategory"/>
+
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the first option of the attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the second option of the attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the configurable product and add it to the category -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+            <deleteData createDataKey="secondCategory" stepKey="deleteSecondCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Go to the product page for the first product -->
+        <actionGroup ref="goToProductPageViaID" stepKey="openConfigChildProduct1Page">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
+
+        <!-- Edit the visibility the first simple product -->
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="Catalog, Search" stepKey="selectVisibilityCatalogSearch"/>
+        <!--Add to category-->
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="addProductToCategoryAndSaveProduct">
+            <argument name="categoryName" value="$$secondCategory.name$$"/>
+        </actionGroup>
+
+        <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexSearchIndex"/>
+
+        <!-- Go to storefront to view child product -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToSecondCategoryStorefront">
+            <argument name="category" value="$$secondCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCategorySimpleProductShownActionGroup" stepKey="seeChildProductInCategory">
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
+            <argument name="productPrice" value="$$createConfigChildProduct1.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="dontSeeOtherChildProduct">
+            <argument name="productName" value="$$createConfigChildProduct2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="dontSeeParentProduct">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCategoryPageOpenProductActionGroup" stepKey="openConfigChildProductFromCategoryPage">
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageNameAndUrlActionGroup" stepKey="checkStorefrontConfigChildProductPage">
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
+            <argument name="productUrl" value="$$createConfigChildProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+    </test>
+</tests>

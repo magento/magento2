@@ -122,6 +122,7 @@ class Fulltext implements
      * @inheritdoc
      *
      * @throws \InvalidArgumentException
+     * @since 101.0.0
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
     {

@@ -10,6 +10,7 @@ namespace Magento\Framework\Api;
  * Search criteria interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface SearchCriteriaInterface
 {

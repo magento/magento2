@@ -293,6 +293,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Is backup functionality enabled.
      *
      * @return bool
+     * @since 100.2.6
      */
     public function isEnabled(): bool
     {

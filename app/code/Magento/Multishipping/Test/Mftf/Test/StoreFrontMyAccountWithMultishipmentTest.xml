@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19303"/>
             <group value="multishipping"/>
-            <skip>
-                <issueId value="MC-22683"/>
-            </skip>
         </annotations>
 
         <before>
@@ -42,7 +39,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <magentoCLI command="config:set {{DisableMultiShippingCheckoutMultiple.path}} {{DisableMultiShippingCheckoutMultiple.value}}" stepKey="withdrawShippingToMultipleAddresses"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
@@ -89,11 +86,11 @@
             <argument name="dataHref" value="$dataHrefForSecondOrderPlaceOrder"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForAdminPageToLoad"/>
-        <!-- Go to Stores > Configuration > Sales > Orders -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad3"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+
+        <comment userInput="Deprecated step" stepKey="onAdminOrdersPage"/>
+        <comment userInput="Deprecated step" stepKey="waitForOrderPageLoad3"/>
+        <comment userInput="Deprecated step" stepKey="clearFilters"/>
+        <comment userInput="Deprecated step" stepKey="waitForLoading"/>
         <!--Assert order in orders grid -->
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderById" stepKey="openFirstOrderPage">
@@ -102,9 +99,9 @@
         <!-- Check status -->
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeFirstOrderPendingStatus"/>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="validateOrderTotalsForFirstOrder"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage2"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad4"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters2"/>
+        <comment userInput="Deprecated step" stepKey="onAdminOrdersPage2"/>
+        <comment userInput="Deprecated step" stepKey="waitForOrderPageLoad4"/>
+        <comment userInput="Deprecated step" stepKey="clearFilters2"/>
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderById" stepKey="openSecondOrderPage">
             <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
@@ -112,6 +109,6 @@
         <!-- Check status -->
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeSecondOrderPendingStatus"/>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="validateOrderTotalsForSecondOrder"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="gotToHomePage"/>
+        <comment userInput="Deprecated step" stepKey="gotToHomePage"/>
     </test>
 </tests>

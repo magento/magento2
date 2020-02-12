@@ -6,7 +6,6 @@
 namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Downloadable\Api\Data\SampleInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\Sample;
 use Magento\Downloadable\Model\SampleFactory;
@@ -24,7 +23,7 @@ class Builder
      * @var Sample
      */
     private $component;
-    
+
     /**
      * @var File
      */
@@ -51,8 +50,6 @@ class Builder
     private $data = [];
 
     /**
-     * Mapper constructor.
-     *
      * @param File $downloadableFile
      * @param Copy $objectCopyService
      * @param DataObjectHelper $dataObjectHelper
@@ -71,8 +68,10 @@ class Builder
     }
 
     /**
+     * Set data.
+     *
      * @param array $data
-     * @return $this;
+     * @return $this
      * @since 100.1.0
      */
     public function setData(array $data)
@@ -82,6 +81,8 @@ class Builder
     }
 
     /**
+     * Build sample object.
+     *
      * @param SampleInterface $sample
      * @return SampleInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -122,6 +123,8 @@ class Builder
     }
 
     /**
+     * Reset data.
+     *
      * @return void
      */
     private function resetData()
@@ -130,6 +133,8 @@ class Builder
     }
 
     /**
+     * Return component.
+     *
      * @return Sample
      */
     private function getComponent()

@@ -152,7 +152,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * Get logger instance
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 100.1.8
      */
     private function getLogger()
     {

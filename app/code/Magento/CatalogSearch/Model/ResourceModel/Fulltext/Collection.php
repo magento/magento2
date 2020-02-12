@@ -85,7 +85,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @deprecated There must be no dependencies on specific adapter in generic search implementation
+     * @deprecated 101.0.0 There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -381,24 +381,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 101.0.4
      */
     public function clear()
     {
         $this->searchResult = null;
+        $this->setFlag('has_category_filter', false);
+
         return parent::clear();
     }
 
     /**
      * @inheritDoc
+     * @since 101.0.4
      */
     protected function _reset()
     {
         $this->searchResult = null;
+        $this->setFlag('has_category_filter', false);
+
         return parent::_reset();
     }
 
     /**
      * @inheritdoc
+     * @since 101.0.4
      */
     public function _loadEntities($printQuery = false, $logQuery = false)
     {
@@ -423,7 +430,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             throw $e;
         }
 
+        $position = 0;
         foreach ($rows as $value) {
+            if ($this->getFlag('has_category_filter')) {
+                $value['cat_index_position'] = $position++;
+            }
             $object = $this->getNewEmptyItem()->setData($value);
             $this->addItem($object);
             if (isset($this->_itemsById[$object->getId()])) {
@@ -431,6 +442,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             } else {
                 $this->_itemsById[$object->getId()] = [$object];
             }
+        }
+        if ($this->getFlag('has_category_filter')) {
+            $this->setFlag('has_category_filter', false);
         }
 
         return $this;
@@ -467,6 +481,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 101.0.2
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -593,6 +608,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 100.2.3
      */
     protected function _beforeLoad()
     {
@@ -669,6 +685,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::addCategoryFilter($category);
         } else {
+            $this->setFlag('has_category_filter', true);
             $this->_productLimitationPrice();
         }
 

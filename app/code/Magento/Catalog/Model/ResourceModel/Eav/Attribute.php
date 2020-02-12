@@ -246,6 +246,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Is attribute enabled for flat indexing
      *
      * @return bool
+     * @since 103.0.0
      */
     public function isEnabledInFlat()
     {
@@ -873,7 +874,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setIsUsedInGrid($isUsedInGrid)
     {
@@ -883,7 +884,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid)
     {
@@ -893,7 +894,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid)
     {

@@ -18,31 +18,31 @@ use Magento\Framework\App\ScopeResolverInterface;
  * Query builder for search adapter.
  *
  * @api
- * @since 100.1.0
+ * @since 100.2.2
  */
 class Builder
 {
     /**
      * @var Config
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $clientConfig;
 
     /**
      * @var SearchIndexNameResolver
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $searchIndexNameResolver;
 
     /**
      * @var AggregationBuilder
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $aggregationBuilder;
 
     /**
      * @var ScopeResolverInterface
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $scopeResolver;
 
@@ -74,7 +74,7 @@ class Builder
      *
      * @param RequestInterface $request
      * @return array
-     * @since 100.1.0
+     * @since 100.2.2
      */
     public function initQuery(RequestInterface $request)
     {
@@ -101,7 +101,7 @@ class Builder
      * @param RequestInterface $request
      * @param array $searchQuery
      * @return array
-     * @since 100.1.0
+     * @since 100.2.2
      */
     public function initAggregations(
         RequestInterface $request,

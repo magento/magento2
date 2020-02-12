@@ -62,7 +62,7 @@ $fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) .
                             class="use-default-control"
                             id="<?= $element->getHtmlId() ?>_default"
                             <?php if ($block->usedDefault()) :?> checked="checked"<?php endif; ?>
-                            onclick="<?= $block->escapeHtmlAttr($elementToggleCode) ?>"
+                            onclick="<?= $block->escapeHtmlAttr($block->escapeJs($elementToggleCode)) ?>"
                             value="<?= $block->escapeHtmlAttr($block->getAttributeCode()) ?>"/>
                     <span class="use-default-label"><?= $block->escapeHtml(__('Use Default Value')) ?></span>
                 </label>

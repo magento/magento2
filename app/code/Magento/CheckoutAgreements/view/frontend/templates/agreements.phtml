@@ -32,7 +32,7 @@
                        id="agreement-<?= (int) $agreement->getAgreementId() ?>"
                        name="agreement[<?= (int) $agreement->getAgreementId() ?>]"
                        value="1"
-                       title="<?= $block->escapeHtml($agreement->getCheckboxText()) ?>"
+                       title="<?= $block->escapeHtmlAttr($agreement->getCheckboxText()) ?>"
                        class="checkbox"
                        data-validate="{required:true}"/>
                 <label class="label" for="agreement-<?= (int) $agreement->getAgreementId() ?>">

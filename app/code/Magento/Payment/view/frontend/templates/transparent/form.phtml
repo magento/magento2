@@ -46,7 +46,7 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                         }'>
                     <option value=""><?= $block->escapeHtml(__('--Please Select--')) ?></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
-                    <option value="<?= $block->escapeHtml($typeCode) ?>"
+                    <option value="<?= $block->escapeHtmlAttr($typeCode) ?>"
                         <?php if ($typeCode == $ccType) : ?> selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($typeName) ?></option>
                 <?php endforeach ?>
@@ -60,7 +60,7 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
             <div class="control">
                 <input type="number" id="<?= /* @noEscape */ $code ?>_cc_number"
                        data-container="<?= /* @noEscape */ $code ?>-cc-number" name="payment[cc_number]"
-                       title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="input-text" value=""
+                       title="<?= $block->escapeHtmlAttr(__('Credit Card Number')) ?>" class="input-text" value=""
                        data-validate='{
                            "required-number":true,
                            "validate-cc-number":"#<?= /* @noEscape */ $code ?>_cc_type",
@@ -115,7 +115,7 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                 <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
             </label>
             <div class="control">
-                <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+                <input type="number" title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
                        data-container="<?= /* @noEscape */ $code ?>-cc-cvv" class="input-text cvv"
                        id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
                        data-validate='{
@@ -124,7 +124,7 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                        }' autocomplete="off"/>
                 <div class="note">
                     <a href="#" id="<?= /* @noEscape */ $code ?>-cvv-what-is-this" class="action cvv"
-                       title="<?= $block->escapeHtml(__('What is this?')) ?>" data-mage-init='{
+                       title="<?= $block->escapeHtmlAttr(__('What is this?')) ?>" data-mage-init='{
                            "tooltip": {"content": "<?= /* @noEscape */ $content ?>"}
                        }'>
                         <span><?= $block->escapeHtml(__('What is this?')) ?></span>

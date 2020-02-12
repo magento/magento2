@@ -10,7 +10,7 @@ use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 /**
  * MySQL search aggregation metrics builder.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class Metrics

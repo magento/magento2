@@ -32,15 +32,15 @@ $customerAddressView = $block->getData('customer_address');
                     <tbody>
                     <?php foreach ($_pAddsses as $address) : ?>
                         <tr>
-                            <td data-th="<?= $block->escapeHtml(__('First Name')) ?>" class="col firstname"><?= $block->escapeHtml($address->getFirstname()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Last Name')) ?>" class="col lastname"><?= $block->escapeHtml($address->getLastname()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->escapeHtml($block->getStreetAddress($address)) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('City')) ?>" class="col city"><?= $block->escapeHtml($address->getCity()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= $block->escapeHtml($block->getCountryByCode($address->getCountryId())) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= $block->escapeHtml($address->getRegion()->getRegion()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip"><?= $block->escapeHtml($address->getPostcode()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Phone')) ?>" class="col phone"><?= $block->escapeHtml($address->getTelephone()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('First Name')) ?>" class="col firstname"><?= $block->escapeHtml($address->getFirstname()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Last Name')) ?>" class="col lastname"><?= $block->escapeHtml($address->getLastname()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Street Address')) ?>" class="col streetaddress"><?= $block->escapeHtml($block->getStreetAddress($address)) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('City')) ?>" class="col city"><?= $block->escapeHtml($address->getCity()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Country')) ?>" class="col country"><?= $block->escapeHtml($block->getCountryByCode($address->getCountryId())) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('State')) ?>" class="col state"><?= $block->escapeHtml($address->getRegion()->getRegion()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Zip/Postal Code')) ?>" class="col zip"><?= $block->escapeHtml($address->getPostcode()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Phone')) ?>" class="col phone"><?= $block->escapeHtml($address->getTelephone()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
                                 <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $address->getId()])) ?>"><span><?= $block->escapeHtml(__('Edit')) ?></span></a>
                                 <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($address->getId()) ?>"><span><?= $block->escapeHtml(__('Delete')) ?></span></a>
                             </td>

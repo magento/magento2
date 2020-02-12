@@ -23,31 +23,31 @@ use \Magento\Customer\Model\Session as CustomerSession;
 class ProductFieldMapper implements FieldMapperInterface
 {
     /**
-     * @deprecated
+     * @deprecated 100.3.0
      * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @deprecated
+     * @deprecated 100.3.0
      * @var FieldType
      */
     protected $fieldType;
 
     /**
-     * @deprecated
+     * @deprecated 100.3.0
      * @var CustomerSession
      */
     protected $customerSession;
 
     /**
-     * @deprecated
+     * @deprecated 100.3.0
      * @var StoreManager
      */
     protected $storeManager;
 
     /**
-     * @deprecated
+     * @deprecated 100.3.0
      * @var Registry
      */
     protected $coreRegistry;

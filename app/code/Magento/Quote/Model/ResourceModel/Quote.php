@@ -102,6 +102,7 @@ class Quote extends AbstractDb
 
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -124,6 +125,7 @@ class Quote extends AbstractDb
         $data = $connection->fetchRow($select);
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -148,6 +150,7 @@ class Quote extends AbstractDb
 
             if ($data) {
                 $quote->setData($data);
+                $quote->setOrigData();
             }
         }
 
@@ -254,7 +257,7 @@ class Quote extends AbstractDb
      *
      * @param \Magento\Catalog\Model\Product $product
      *
-     * @deprecated 101.0.1
+     * @deprecated 101.0.3
      * @see \Magento\Quote\Model\ResourceModel\Quote::subtractProductFromQuotes
      *
      * @return $this
@@ -303,5 +306,7 @@ class Quote extends AbstractDb
         if (!$object->isPreventSaving()) {
             return parent::save($object);
         }
+
+        return $this;
     }
 }

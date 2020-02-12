@@ -19,7 +19,7 @@ use Magento\Sales\Controller\Adminhtml\Order\Create;
 /**
  * Class Redirect
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Redirect extends Create implements HttpGetActionInterface, HttpPostActionInterface
 {
