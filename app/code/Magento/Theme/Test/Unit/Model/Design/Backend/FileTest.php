@@ -262,7 +262,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         {
             $expectedFileName = basename($fileName);
-            $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
             $this->fileBackend->setScope('store');
             $this->fileBackend->setScopeId(1);
             $this->fileBackend->setValue(

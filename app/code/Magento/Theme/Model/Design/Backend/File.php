@@ -118,8 +118,7 @@ class File extends BackendFile
             );
         }
 
-        if (
-            !isset($this->ioFileSystem->getPathInfo(($file))['extension']) ||
+        if (!isset($this->ioFileSystem->getPathInfo(($file))['extension']) ||
             !in_array($this->ioFileSystem->getPathInfo(($file))['extension'], $this->getAllowedExtensions())
         ) {
             throw new LocalizedException(

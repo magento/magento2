@@ -60,8 +60,7 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images impl
     {
         try {
             $path = $this->getStorage()->getCmsWysiwygImages()->getCurrentPath();
-            if (
-                !$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)
+            if (!$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)
                 || $this->directoryResolver->validateSamePath($path, DirectoryList::MEDIA)
             ) {
                 throw new \Magento\Framework\Exception\LocalizedException(
