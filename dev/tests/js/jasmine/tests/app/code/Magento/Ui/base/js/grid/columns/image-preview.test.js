@@ -13,10 +13,26 @@ define([
 
     describe('Ui/js/grid/columns/image-preview', function () {
         var record = {
-            _rowIndex: 1,
-            rowNumber: 1
-        },
-           imagePreview;
+                _rowIndex: 1,
+                rowNumber: 1
+            },
+            imagePreview,
+            recordMock = {
+                _rowIndex: 2
+            },
+            secondRecordMock = {
+                _rowIndex: 1,
+                rowNumber: 1
+            },
+            elementMock = {
+                keyCode: 37
+            },
+            masonryMock = {
+                shows: jasmine.createSpy().and.returnValue([]),
+                rows: jasmine.createSpy().and.returnValue({
+                    1: secondRecordMock
+                })
+            };
 
         beforeEach(function () {
             imagePreview = new Preview();
@@ -48,25 +64,9 @@ define([
         });
 
         describe('handleKeyDown method', function () {
-            it('veify record changed on key down', function () {
-                var recordMock = {
-                    _rowIndex: 2
-                },
-                    secondRecordMock = {
-                        _rowIndex: 1,
-                        rowNumber: 1
-                    },
-                    elementMock = {
-                        keyCode: 37
-                    },
-                    masonryMock = {
-                        shows: jasmine.createSpy().and.returnValue([]),
-                        rows: jasmine.createSpy().and.returnValue({
-                            1: secondRecordMock
-                        })
 
-                    },
-                    imageMock = document.createElement('img'),
+            it('veify record changed on key down', function () {
+                var imageMock = document.createElement('img'),
                     originMock = $.fn.get;
 
                 spyOn($.fn, 'get').and.returnValue(imageMock);
@@ -76,9 +76,22 @@ define([
                 imagePreview.masonry = jasmine.createSpy().and.returnValue(masonryMock);
                 imagePreview.handleKeyDown(elementMock);
                 expect(imagePreview.displayedRecord()._rowIndex).toBe(secondRecordMock._rowIndex);
+
                 $.fn.get = originMock;
             });
 
+            it('veify record not changed on key down when active element input', function () {
+                var input = $('<input id=\'input-fixture\'/>');
+
+                $(document.body).append(input);
+                input.focus();
+                imagePreview.visibleRecord = jasmine.createSpy().and.returnValue(1);
+                imagePreview.displayedRecord = ko.observable(1);
+                imagePreview.handleKeyDown(elementMock);
+                expect(imagePreview.displayedRecord()).toBe(1);
+
+                $('#input-fixture').remove();
+            });
         });
     });
 });
