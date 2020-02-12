@@ -11,6 +11,7 @@
     <test name="StorefrontNoJavascriptErrorOnAddYourReviewClickTest">
         <annotations>
             <features value="Review"/>
+            <stories value="Storefront Add Review"/>
             <title value="Storefront no javascript error on 'Add Your Review' click test"/>
             <description value="Verify no javascript error occurs when customer clicks 'Add Your Review' link"/>
             <severity value="MAJOR"/>
