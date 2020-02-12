@@ -388,7 +388,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getTable(self::GALLERY_VALUE_TABLE)
         );
 
-        if ($data['image_metadata']) {
+        if (!empty($data['image_metadata'])) {
             $data['image_metadata'] = $this->getSerializer()->serialize($data['image_metadata']);
         }
         $this->getConnection()->insert(
