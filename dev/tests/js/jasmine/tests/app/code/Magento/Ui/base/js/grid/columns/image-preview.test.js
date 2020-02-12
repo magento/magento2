@@ -65,7 +65,7 @@ define([
 
         describe('handleKeyDown method', function () {
 
-            it('veify record changed on key down', function () {
+            it('verify record changed on key down', function () {
                 var imageMock = document.createElement('img'),
                     originMock = $.fn.get;
 
@@ -80,7 +80,7 @@ define([
                 $.fn.get = originMock;
             });
 
-            it('veify record not changed on key down when active element input', function () {
+            it('verify record not changed on key down when active element input', function () {
                 var input = $('<input id=\'input-fixture\'/>');
 
                 $(document.body).append(input);
