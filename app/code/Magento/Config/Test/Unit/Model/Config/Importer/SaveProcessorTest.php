@@ -136,4 +136,37 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(null, $this->model->process($data));
     }
+
+    public function testProcessWithNullValues()
+    {
+        $data = [
+            'default' => [
+                'advanced' => ['modules_disable_output' => ['Test_Module' => '1']]
+            ],
+            'websites' => ['test_website' => ['general' => ['locale' => ['timezone' => 'America/Rio_Branco']]]],
+        ];
+        $this->arrayUtilsMock->expects($this->exactly(2))
+            ->method('flatten')
+            ->willReturnMap([
+                [
+                    [
+                        'advanced' => ['modules_disable_output' => ['Test_Module' => '1']]
+                    ],
+                    '',
+                    '/',
+                    ['advanced/modules_disable_output/Test_Module' => '1']
+                ],
+                [
+                    ['general' => ['locale' => ['timezone' => 'America/Rio_Branco']]],
+                    '',
+                    '/',
+                    ['general/locale/timezone' => 'America/Rio_Branco']
+                ]
+            ]);
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturn(null);
+
+        $this->assertSame(null, $this->model->process($data));
+    }
 }
