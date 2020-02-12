@@ -187,7 +187,7 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->load(1);
         $parents = $this->_model->getParentCategories();
-        $this->assertEquals(0, count($parents));
+        $this->assertEquals(1, count($parents));
     }
 
     public function testGetChildrenCategories()
