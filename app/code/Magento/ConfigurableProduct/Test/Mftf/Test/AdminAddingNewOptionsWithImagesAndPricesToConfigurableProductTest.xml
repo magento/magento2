@@ -32,7 +32,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
-                <argument name="productName" value="$$createConfigProductAttributeCreateConfigurableProduct.name$$"/>
+                <argument name="productName" value="$$createConfigProductCreateConfigurableProduct.name$$"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
