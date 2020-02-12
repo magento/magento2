@@ -11,7 +11,7 @@ namespace Magento\Framework\Filesystem\Driver;
 use Magento\Framework\Exception\FileSystemException;
 
 /**
- * Class Http
+ * Http driver file class.
  */
 class Http extends File
 {
@@ -196,8 +196,13 @@ class Http extends File
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
-        $result = @stream_get_line($resource, $length, $ending);
-
+        try {
+            $result = @stream_get_line($resource, $length, $ending);
+        } catch (\Exception $e) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('Stream get line failed %1', [$e->getMessage()])
+            );
+        }
         return $result;
     }
 
