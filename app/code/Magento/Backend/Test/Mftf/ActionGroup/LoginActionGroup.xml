@@ -10,7 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginActionGroup">
         <annotations>
-            <description>Login to Backend Admin using ENV Admin credentials. PLEASE NOTE: This Action Group does NOT validate that you are Logged In.</description>
+            <description>DEPRECATED. Please use LoginAsAdmin instead.
+                Login to Backend Admin using ENV Admin credentials. PLEASE NOTE: This Action Group does NOT validate that you are Logged In.</description>
         </annotations>
 
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}" stepKey="navigateToAdmin"/>
