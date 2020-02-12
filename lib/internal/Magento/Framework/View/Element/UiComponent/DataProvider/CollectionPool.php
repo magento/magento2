@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class CollectionPool
  */
-class CollectionFactory
+class CollectionPool
 {
     /**
      * @var Collection[]

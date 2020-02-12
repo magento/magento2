@@ -30,14 +30,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
+     * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool
      */
-    protected $collectionFactory;
+    protected $collectionPool;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool $collectionPool
      * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -45,14 +45,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory,
+        \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool $collectionPool,
         \Magento\Sales\Helper\Reorder $salesReorder,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_salesReorder = $salesReorder;
-        $this->_collectionFactory = $collectionFactory;
+        $this->_collectionPool = $collectionPool;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -72,10 +72,11 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      * Apply various selection filters to prepare the sales order grid collection.
      *
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->getReport('sales_order_grid_data_source')->addFieldToSelect(
+        $collection = $this->_collectionPool->getReport('sales_order_grid_data_source')->addFieldToSelect(
             'entity_id'
         )->addFieldToSelect(
             'increment_id'

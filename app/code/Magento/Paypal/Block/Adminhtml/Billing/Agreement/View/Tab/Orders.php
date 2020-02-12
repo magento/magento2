@@ -7,7 +7,7 @@
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
 use Magento\Paypal\Model\ResourceModel\Billing\Agreement as BillingAgreementResource;
-use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
+use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool;
 use Magento\Backend\Block\Widget\Grid\Extended as ExtendedGrid;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Block\Template\Context as TemplateContext;
@@ -22,9 +22,9 @@ use Magento\Framework\Registry;
 class Orders extends ExtendedGrid implements TabInterface
 {
     /**
-     * @var  CollectionFactory
+     * @var  CollectionPool
      */
-    protected $collectionFactory;
+    protected $collectionPool;
 
     /**
      * @var Registry
@@ -39,7 +39,7 @@ class Orders extends ExtendedGrid implements TabInterface
     /**
      * @param TemplateContext $context
      * @param BackendHelper $backendHelper
-     * @param CollectionFactory $collectionFactory
+     * @param CollectionPool $collectionPool
      * @param Registry $coreRegistry
      * @param BillingAgreementResource $billingAgreementResource
      * @param array $data
@@ -47,13 +47,13 @@ class Orders extends ExtendedGrid implements TabInterface
     public function __construct(
         TemplateContext $context,
         BackendHelper $backendHelper,
-        CollectionFactory $collectionFactory,
+        CollectionPool $collectionPool,
         Registry $coreRegistry,
         BillingAgreementResource $billingAgreementResource,
         array $data = []
     ) {
         $this->coreRegistry = $coreRegistry;
-        $this->collectionFactory = $collectionFactory;
+        $this->collectionPool = $collectionPool;
         $this->billingAgreementResource = $billingAgreementResource;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -120,7 +120,7 @@ class Orders extends ExtendedGrid implements TabInterface
     {
         $billingAgreement = $this->coreRegistry->registry('current_billing_agreement');
         if ($billingAgreement) {
-            $collection = $this->collectionFactory->getReport('sales_order_grid_data_source')->addFieldToSelect(
+            $collection = $this->collectionPool->getReport('sales_order_grid_data_source')->addFieldToSelect(
                 'entity_id'
             )->addFieldToSelect(
                 'increment_id'

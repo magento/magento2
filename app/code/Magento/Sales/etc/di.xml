@@ -819,7 +819,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="sales_order_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Grid\Collection</item>

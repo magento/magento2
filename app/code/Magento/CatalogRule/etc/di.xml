@@ -68,7 +68,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="catalog_rule_data_source" xsi:type="string">catalogRuleSearchResult</item>

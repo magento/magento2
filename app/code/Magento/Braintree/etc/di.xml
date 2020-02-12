@@ -581,7 +581,7 @@
     </virtualType>
 
     <!-- Settlement Report Section -->
-    <virtualType name="BraintreeTransactionsCollectionFactoryForReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <virtualType name="BraintreeTransactionsCollectionFactoryForReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="braintree_report_data_source" xsi:type="string">Magento\Braintree\Model\Report\TransactionsCollection</item>

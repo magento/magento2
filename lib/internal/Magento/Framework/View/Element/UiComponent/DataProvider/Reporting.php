@@ -15,9 +15,9 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 class Reporting implements ReportingInterface
 {
     /**
-     * @var CollectionFactory
+     * @var CollectionPool
      */
-    protected $collectionFactory;
+    protected $collectionPool;
 
     /**
      * @var array
@@ -25,14 +25,14 @@ class Reporting implements ReportingInterface
     protected $filterPool;
 
     /**
-     * @param CollectionFactory $collectionFactory
+     * @param CollectionPool $collectionPool
      * @param FilterPool $filterPool
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
+        CollectionPool $collectionPool,
         FilterPool $filterPool
     ) {
-        $this->collectionFactory = $collectionFactory;
+        $this->collectionPool = $collectionPool;
         $this->filterPool = $filterPool;
     }
 
@@ -42,7 +42,7 @@ class Reporting implements ReportingInterface
      */
     public function search(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->collectionFactory->getReport($searchCriteria->getRequestName());
+        $collection = $this->collectionPool->getReport($searchCriteria->getRequestName());
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $this->filterPool->applyFilters($collection, $searchCriteria);

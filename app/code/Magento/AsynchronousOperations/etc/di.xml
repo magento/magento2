@@ -59,7 +59,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="bulk_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\SearchResult</item>

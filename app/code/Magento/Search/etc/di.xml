@@ -55,7 +55,7 @@
             <argument name="resourceModel" xsi:type="string">Magento\Search\Model\ResourceModel\SynonymGroup</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionPool">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="search_synonyms_grid_data_source" xsi:type="string">Magento\Search\Model\ResourceModel\Synonyms\Grid\Collection</item>
