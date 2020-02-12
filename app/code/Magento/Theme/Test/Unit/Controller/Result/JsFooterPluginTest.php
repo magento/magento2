@@ -133,7 +133,7 @@ class JsFooterPluginTest extends TestCase
                 'content' => []
             ],
             'null' => [
-                'content' => NULL
+                'content' => null
             ]
         ];
     }
