@@ -23,6 +23,7 @@ class TierPriceBox extends FinalPriceBox
         if (!$this->isMsrpPriceApplicable() && $this->isTierPriceApplicable()) {
             return parent::toHtml();
         }
+        return '';
     }
 
     /**
