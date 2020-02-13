@@ -509,11 +509,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
-        $this->assertContains(
-            '<input type="checkbox" name="change_password" id="change-password" '
-            . 'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />',
-            $body
-        );
+        $expectedString = <<<EXPECTED_HTML
+<input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
+                   title="Change&#x20;Password"
+                 class="checkbox" />
+EXPECTED_HTML;
+        $this->assertContains($expectedString, $body);
     }
 
     /**
@@ -529,12 +530,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
-        $this->assertContains(
-            '<input type="checkbox" name="change_password" id="change-password" '
-            . 'data-role="change-password" value="1" title="Change&#x20;Password" checked="checked" '
-            . 'class="checkbox" />',
-            $body
-        );
+        $expectedString = <<<EXPECTED_HTML
+<input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
+                   title="Change&#x20;Password"
+                 checked="checked" class="checkbox" />
+EXPECTED_HTML;
+        $this->assertContains($expectedString, $body);
     }
 
     /**
