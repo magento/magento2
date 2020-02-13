@@ -3049,5 +3049,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $simpleProduct = $this->productRepository->get('simple', false, null, true);
         $this->assertEquals('Varchar default value', $simpleProduct->getData('varchar_attribute'));
+        $this->assertEquals('Short description', $simpleProduct->getData('short_description'));
     }
 }
