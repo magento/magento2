@@ -412,13 +412,11 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             if ($this->getView()->isEnabled()) {
                 $this->getView()->suspend();
             }
-            $stateUpdated = $state->loadByIndexer($this->getId())->getUpdated();
+
             try {
                 $this->getActionInstance()->executeFull();
-                if ($state->loadByIndexer($this->getId())->getUpdated() === $stateUpdated) {
-                    $state->setStatus(StateInterface::STATUS_VALID);
-                    $state->save();
-                }
+                $state->setStatus(StateInterface::STATUS_VALID);
+                $state->save();
                 $this->getView()->resume();
             } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
