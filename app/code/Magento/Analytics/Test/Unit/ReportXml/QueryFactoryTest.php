@@ -143,58 +143,20 @@ class QueryFactoryTest extends TestCase
     }
 
     /**
-     * Get Query Data Mock
-     *
-     * @return array
-     */
-    private function getQueryDataMock(): array
-    {
-        return [
-            'connectionName' => self::STUB_CONNECTION,
-            'config' => [
-                'name' => self::STUB_QUERY_NAME,
-                'connection' => self::STUB_CONNECTION
-            ],
-            'select_parts' => []
-        ];
-    }
-
-    /**
-     * ObjectManager Mock with Query class
-     *
-     * @param  array $queryDataMock
-     * @return void
-     */
-    private function createQueryObjectMock($queryDataMock): void
-    {
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(
-                Query::class,
-                [
-                    'select' => $this->selectMock,
-                    'selectHydrator' => $this->selectHydratorMock,
-                    'connectionName' => $queryDataMock['connectionName'],
-                    'config' => $queryDataMock['config']
-                ]
-            )
-            ->willReturn($this->queryMock);
-    }
-
-    /**
      * Test create() if query cached
      *
      * @return void
+     * @dataProvider queryDataProvider
      */
-    public function testCreateIfQueryCached(): void
+    public function testCreateIfQueryCached(array $queryDataMock, string $jsonEncodeData): void
     {
-        $queryName = self::STUB_QUERY_NAME;
-        $queryDataMock = $this->getQueryDataMock();
+        $queryConfigMock = $queryDataMock['config'];
+        $queryName = $queryConfigMock['name'];
 
         $this->queryCacheMock->expects($this->any())
             ->method('load')
             ->with($queryName)
-            ->willReturn(json_encode($queryDataMock));
+            ->willReturn($jsonEncodeData);
 
         $this->jsonSerializerMock->expects($this->once())
             ->method('unserialize')
@@ -220,12 +182,12 @@ class QueryFactoryTest extends TestCase
      * Test create() if query not cached
      *
      * @return void
+     * @dataProvider queryDataProvider
      */
-    public function testCreateIfQueryNotCached(): void
+    public function testCreateIfQueryNotCached(array $queryDataMock, string $jsonEncodeData): void
     {
-        $queryName = self::STUB_QUERY_NAME;
-        $queryDataMock = $this->getQueryDataMock();
         $queryConfigMock = $queryDataMock['config'];
+        $queryName = $queryConfigMock['name'];
 
         $selectBuilderMock = $this->getMockBuilder(SelectBuilder::class)
             ->disableOriginalConstructor()
@@ -263,15 +225,61 @@ class QueryFactoryTest extends TestCase
 
         $this->jsonSerializerMock->expects($this->once())
             ->method('serialize')
-            ->willReturn($this->queryMock);
+            ->willReturn($jsonEncodeData);
 
         $this->queryCacheMock->expects($this->once())
             ->method('save')
-            ->with($this->queryMock, $queryName);
+            ->with($jsonEncodeData, $queryName);
 
         $this->assertEquals(
             $this->queryMock,
             $this->subject->create($queryName)
         );
+    }
+
+    /**
+     * Get Query Data Provider
+     *
+     * @return array
+     */
+    public function queryDataProvider(): array
+    {
+        return [
+            [
+                'getQueryDataMock' => [
+                    'connectionName' => self::STUB_CONNECTION,
+                    'config' => [
+                        'name' => self::STUB_QUERY_NAME,
+                        'connection' => self::STUB_CONNECTION
+                    ],
+                    'select_parts' => []
+                ],
+                'getQueryDataJsonEncodeMock' => '{"connectionName":"default",'.
+                    '"config":{"name":"test_query",'.
+                    '"connection":"default"},"select_parts":[]}'
+            ]
+        ];
+    }
+
+    /**
+     * ObjectManager Mock with Query class
+     *
+     * @param array $queryDataMock
+     * @return void
+     */
+    private function createQueryObjectMock($queryDataMock): void
+    {
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with(
+                Query::class,
+                [
+                    'select' => $this->selectMock,
+                    'selectHydrator' => $this->selectHydratorMock,
+                    'connectionName' => $queryDataMock['connectionName'],
+                    'config' => $queryDataMock['config']
+                ]
+            )
+            ->willReturn($this->queryMock);
     }
 }

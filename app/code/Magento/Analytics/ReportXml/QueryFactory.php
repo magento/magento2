@@ -1,14 +1,15 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\DB\Select;
 
@@ -50,20 +51,20 @@ class QueryFactory
     private $selectHydrator;
 
     /**
-     * @var Json|null
+     * @var Json
      */
     private $jsonSerializer;
 
     /**
      * QueryFactory constructor.
      *
-     * @param CacheInterface         $queryCache
-     * @param SelectHydrator         $selectHydrator
+     * @param CacheInterface $queryCache
+     * @param SelectHydrator $selectHydrator
      * @param ObjectManagerInterface $objectManager
-     * @param SelectBuilderFactory   $selectBuilderFactory
-     * @param Config                 $config
-     * @param array                  $assemblers
-     * @param Json|null              $jsonSerializer
+     * @param SelectBuilderFactory $selectBuilderFactory
+     * @param Config $config
+     * @param array $assemblers
+     * @param Json $jsonSerializer
      */
     public function __construct(
         CacheInterface $queryCache,
@@ -72,7 +73,7 @@ class QueryFactory
         SelectBuilderFactory $selectBuilderFactory,
         Config $config,
         array $assemblers,
-        Json $jsonSerializer = null
+        Json $jsonSerializer
     ) {
         $this->config = $config;
         $this->selectBuilderFactory = $selectBuilderFactory;
@@ -80,7 +81,7 @@ class QueryFactory
         $this->queryCache = $queryCache;
         $this->objectManager = $objectManager;
         $this->selectHydrator = $selectHydrator;
-        $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**
@@ -121,30 +122,9 @@ class QueryFactory
     }
 
     /**
-     * Create query class using objectmanger
-     *
-     * @param  Select $select
-     * @param  string $connection
-     * @param  array  $queryConfig
-     * @return Query
-     */
-    private function createQueryObject($select, $connection, $queryConfig)
-    {
-        return $this->objectManager->create(
-            Query::class,
-            [
-                'select' => $select,
-                'selectHydrator' => $this->selectHydrator,
-                'connectionName' => $connection,
-                'config' => $queryConfig
-            ]
-        );
-    }
-
-    /**
      * Creates query by name
      *
-     * @param  string $queryName
+     * @param string $queryName
      * @return Query
      */
     public function create($queryName)
@@ -164,5 +144,30 @@ class QueryFactory
             $queryName
         );
         return $query;
+    }
+
+    /**
+     * Create query class using objectmanger
+     *
+     * @param Select $select
+     * @param string $connection
+     * @param array $queryConfig
+     * @return Query
+     */
+    private function createQueryObject(
+        Select $select,
+        string $connection,
+        array $queryConfig
+    ): Query
+    {
+        return $this->objectManager->create(
+            Query::class,
+            [
+                'select' => $select,
+                'selectHydrator' => $this->selectHydrator,
+                'connectionName' => $connection,
+                'config' => $queryConfig
+            ]
+        );
     }
 }
