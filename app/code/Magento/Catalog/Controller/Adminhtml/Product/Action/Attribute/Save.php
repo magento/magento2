@@ -204,7 +204,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $product = $this->productFactory->create();
         $product->setData($attributesData);
 
-        foreach ($attributesData as $attributeCode => $value) {
+        foreach (array_keys($attributesData) as $attributeCode) {
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
             $attribute->getBackend()->validate($product);
         }
