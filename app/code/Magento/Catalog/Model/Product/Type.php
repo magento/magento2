@@ -20,34 +20,22 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 /**
  * Product type model
  *
+ *
  * @api
  * @since 100.0.2
  */
 class Type implements OptionSourceInterface
 {
-    /**#@+
-     * Available product types
-     */
     const TYPE_SIMPLE = 'simple';
 
     const TYPE_BUNDLE = 'bundle';
 
     const TYPE_VIRTUAL = 'virtual';
-    /**#@-*/
 
-    /**
-     * Default product type
-     */
     const DEFAULT_TYPE = 'simple';
 
-    /**
-     * Default product type model
-     */
     const DEFAULT_TYPE_MODEL = Simple::class;
 
-    /**
-     * Default price model
-     */
     const DEFAULT_PRICE_MODEL = Price::class;
 
     /**
