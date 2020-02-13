@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\ResourceModel\Eav;
+declare(strict_types=1);
+
+namespace Magento\Customer\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Model\Config;
@@ -11,7 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test for \Magento\Catalog\Model\ResourceModel\Eav\Attribute.
+ * Test for \Magento\Customer\Model\Attribute.
  */
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +35,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @var int|string
      */
-    private $catalogProductEntityType;
+    private $customerEntityType;
 
     /**
      * @inheritDoc
@@ -43,8 +45,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(Attribute::class);
         $this->attributeRepository = $this->objectManager->get(AttributeRepositoryInterface::class);
-        $this->catalogProductEntityType = $this->objectManager->get(Config::class)
-            ->getEntityType('catalog_product')
+        $this->customerEntityType = $this->objectManager->get(Config::class)
+            ->getEntityType('customer')
             ->getId();
     }
 
@@ -53,10 +55,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testCRUD()
+    public function testCRUD(): void
     {
         $this->model->setAttributeCode('test')
-            ->setEntityTypeId($this->catalogProductEntityType)
+            ->setEntityTypeId($this->customerEntityType)
             ->setFrontendLabel('test')
             ->setIsUserDefined(1);
         $crud = new \Magento\TestFramework\Entity($this->model, ['frontend_label' => uniqid()]);
@@ -64,7 +66,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_attribute.php
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_customer.php
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Do not change entity type.
@@ -73,8 +75,20 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testAttributeSaveWithChangedEntityType(): void
     {
-        $attribute = $this->attributeRepository->get($this->catalogProductEntityType, 'test_attribute_code_333');
-        $attribute->setEntityTypeId(1);
+        $attribute = $this->attributeRepository->get($this->customerEntityType, 'user_attribute');
+        $attribute->setEntityTypeId(5);
+        $attribute->save();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_customer.php
+     *
+     * @return void
+     */
+    public function testAttributeSaveWithoutChangedEntityType(): void
+    {
+        $attribute = $this->attributeRepository->get($this->customerEntityType, 'user_attribute');
+        $attribute->setSortOrder(1250);
         $attribute->save();
     }
 }

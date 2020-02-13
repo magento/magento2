@@ -181,7 +181,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Processing object before save data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
@@ -194,15 +194,13 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             if ($this->_data[self::KEY_IS_GLOBAL] != $this->_origData[self::KEY_IS_GLOBAL]) {
                 try {
                     $this->attrLockValidator->validate($this);
-                } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                } catch (LocalizedException $exception) {
+                    throw new LocalizedException(
                         __('Do not change the scope. %1', $exception->getMessage())
                     );
                 }
             }
         }
-
-        $this->validateEntityType();
 
         if ($this->getFrontendInput() == 'price') {
             if (!$this->getBackendModel()) {
@@ -289,7 +287,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Register indexing event before delete catalog eav attribute
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {
@@ -904,24 +902,5 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     {
         $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
         return $this;
-    }
-
-    /**
-     * Entity type for existing attribute shouldn't be changed.
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    private function validateEntityType(): void
-    {
-        $attributeId = $this->getId();
-
-        if ($attributeId !== null) {
-            $origEntityTypeId = $this->getOrigData('entity_type_id');
-
-            if (($origEntityTypeId !== null) && ((int)$this->getEntityTypeId() !== (int)$origEntityTypeId)) {
-                throw new LocalizedException(__('Do not change entity type.'));
-            }
-        }
     }
 }
