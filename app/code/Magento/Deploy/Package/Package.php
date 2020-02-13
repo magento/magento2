@@ -443,12 +443,11 @@ class Package
      */
     public function getParentMap()
     {
-        $map = [];
+        $map = [[]];
         foreach ($this->getParentPackages() as $parentPackage) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $map = array_merge($map, $parentPackage->getMap());
+            $map[] = $parentPackage->getMap();
         }
-        return $map;
+        return array_merge(...$map);
     }
 
     /**
@@ -462,10 +461,8 @@ class Package
         $files = [[]];
         foreach ($this->getParentPackages() as $parentPackage) {
             if ($type === null) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $files[] = $parentPackage->getFiles();
             } else {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $files[] = $parentPackage->getFilesByType($type);
             }
         }
