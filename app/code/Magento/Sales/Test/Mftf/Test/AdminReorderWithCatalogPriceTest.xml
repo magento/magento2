@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminReorderWithCatalogPriceTest">
+    <test name="AdminReorderWithCatalogPriceTest" deprecated="This test is unstable. Please use AdminReorderWithCatalogPriceRuleDiscountTest instead.">
         <annotations>
             <features value="Sales"/>
             <stories value="Admin create order"/>
