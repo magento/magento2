@@ -17,6 +17,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @method setFormName()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -385,12 +386,12 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     public function getValueParsed()
     {
         if (!$this->hasValueParsed()) {
-            $value = $this->getData('value');
+            $value = $this->getValue();
             if (is_array($value) && count($value) === 1) {
                 $value = reset($value);
             }
             if (!is_array($value) && $this->isArrayOperatorType() && $value) {
-                $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+                $value = preg_split('#\s*[,;]\s*#', (string) $value, -1, PREG_SPLIT_NO_EMPTY);
             }
             $this->setValueParsed($value);
         }
@@ -419,8 +420,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     {
         if ($this->getInputType() == 'date' && !$this->getIsValueParsed()) {
             // date format intentionally hard-coded
+            $date = $this->getData('value');
+            $date = (\is_numeric($date) ? '@' : '') . $date;
             $this->setValue(
-                (new \DateTime($this->getData('value')))->format('Y-m-d H:i:s')
+                (new \DateTime($date, new \DateTimeZone((string) $this->_localeDate->getConfigTimezone())))
+                    ->format('Y-m-d H:i:s')
             );
             $this->setIsValueParsed(true);
         }
@@ -432,6 +436,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
      *
      * @return array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getValueName()
     {
@@ -469,6 +474,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
         return $value;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Get inherited conditions selectors
@@ -674,6 +680,9 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             $elementParams['placeholder'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
             $elementParams['autocomplete'] = 'off';
             $elementParams['readonly'] = 'true';
+            $elementParams['value_name'] =
+                (new \DateTime($elementParams['value'], new \DateTimeZone($this->_localeDate->getConfigTimezone())))
+                    ->format('Y-m-d');
         }
         return $this->getForm()->addField(
             $this->getPrefix() . '__' . $this->getId() . '__value',
@@ -756,7 +765,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     /**
      * Validate product attribute value for condition
      *
-     * @param   object|array|int|string|float|bool $validatedValue product attribute value
+     * @param   object|array|int|string|float|bool|null $validatedValue product attribute value
      * @return  bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -821,6 +830,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             case '{}':
             case '!{}':
                 if (is_scalar($validatedValue) && is_array($value)) {
+                    $validatedValue = (string)$validatedValue;
                     foreach ($value as $item) {
                         if (stripos($validatedValue, (string)$item) !== false) {
                             $result = true;
@@ -868,18 +878,19 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     /**
      * Case and type insensitive comparison of values
      *
-     * @param string|int|float $validatedValue
-     * @param string|int|float $value
+     * @param string|int|float|null $validatedValue
+     * @param string|int|float|null $value
      * @param bool $strict
      * @return bool
      */
     protected function _compareValues($validatedValue, $value, $strict = true)
     {
-        if ($strict && is_numeric($validatedValue) && is_numeric($value)) {
+        if (null === $value || null === $validatedValue ||
+            $strict && is_numeric($validatedValue) && is_numeric($value)) {
             return $validatedValue == $value;
         }
 
-        $validatePattern = preg_quote($validatedValue, '~');
+        $validatePattern = preg_quote((string) $validatedValue, '~');
         if ($strict) {
             $validatePattern = '^' . $validatePattern . '$';
         }

@@ -57,4 +57,10 @@
     <entity name="EmptyField" type="taxPostCodeEmpty">
         <data key="value"/>
     </entity>
+    <entity name="DefaultProductTaxClass">
+        <!-- Default value -->
+        <data key="path">tax/classes/default_product_tax_class</data>
+        <data key="label">Yes</data>
+        <data key="value">2</data>
+    </entity>
 </entities>

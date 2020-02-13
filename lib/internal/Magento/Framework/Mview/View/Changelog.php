@@ -178,13 +178,18 @@ class Changelog implements ChangelogInterface
         if (!$this->connection->isTableExists($changelogTableName)) {
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
-        $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
-        if (isset($row['Auto_increment'])) {
-            return (int)$row['Auto_increment'] - 1;
+        $select = $this->connection->select()->from($changelogTableName)->order('version_id DESC')->limit(1);
+        $row = $this->connection->fetchRow($select);
+        if ($row === false) {
+            return 0;
         } else {
-            throw new RuntimeException(
-                new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
-            );
+            if (is_array($row) && array_key_exists('version_id', $row)) {
+                return (int)$row['version_id'];
+            } else {
+                throw new RuntimeException(
+                    new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
+                );
+            }
         }
     }
 

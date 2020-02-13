@@ -34,7 +34,7 @@
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton"/>
         <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
 
-        <!--Add the Address -->
+        <!-- Add the Address -->
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="selectAddress"/>
         <waitForPageLoad stepKey="waitForAddressPageToLoad"/>
         <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="ClickOnAddNewAddressButton"/>
@@ -44,6 +44,7 @@
         <fillField selector="{{AdminEditCustomerAddressesSection.city}}" userInput="{{PolandAddress.city}}" stepKey="fillCity"/>
         <scrollTo selector="{{AdminEditCustomerAddressesSection.phone}}" x="0" y="-80" stepKey="scrollToPhone"/>
         <selectOption selector="{{AdminEditCustomerAddressesSection.country}}" userInput="{{PolandAddress.country}}" stepKey="fillCountry"/>
+        <selectOption selector="{{AdminEditCustomerAddressesSection.state}}" userInput="{{PolandAddress.state}}" stepKey="fillState"/>
         <fillField selector="{{AdminEditCustomerAddressesSection.zipCode}}" userInput="{{PolandAddress.postcode}}" stepKey="fillPostCode"/>
         <fillField selector="{{AdminEditCustomerAddressesSection.phone}}" userInput="{{PolandAddress.telephone}}" stepKey="fillPhoneNumber"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
@@ -60,6 +61,7 @@
         <see userInput="$$createCustomer.firstname$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertFirstName"/>
         <see userInput="$$createCustomer.lastname$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertLastName"/>
         <see userInput="$$createCustomer.email$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
+        <see userInput="{{PolandAddress.state}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertState"/>
         <see userInput="{{PolandAddress.country}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertCountry"/>
         <see userInput="{{PolandAddress.postcode}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertPostCode"/>
         <see userInput="{{PolandAddress.telephone}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertPhoneNumber"/>
@@ -86,6 +88,7 @@
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.street}}" stepKey="seeStreetAddress"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.city}}" stepKey="seeCity"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.country}}" stepKey="seeCountry"/>
+        <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.state}}" stepKey="seeState"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.postcode}}" stepKey="seePostCode"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.telephone}}" stepKey="seePhoneNumber"/>
     </test>
