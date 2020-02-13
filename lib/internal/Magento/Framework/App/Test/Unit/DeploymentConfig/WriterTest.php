@@ -18,7 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
-use \PHPUnit\Framework\MockObject\MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,27 +31,27 @@ class WriterTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var DeploymentConfig\Reader|Mock
+     * @var DeploymentConfig\Reader|MockObject
      */
     private $reader;
 
     /**
-     * @var WriteInterface|Mock
+     * @var WriteInterface|MockObject
      */
     private $dirWrite;
 
     /**
-     * @var ReadInterface|Mock
+     * @var ReadInterface|MockObject
      */
     private $dirRead;
 
     /**
-     * @var FormatterInterface|Mock
+     * @var FormatterInterface|MockObject
      */
     protected $formatter;
 
     /**
-     * @var ConfigFilePool|Mock
+     * @var ConfigFilePool|MockObject
      */
     private $configFilePool;
 
@@ -61,12 +61,12 @@ class WriterTest extends \PHPUnit\Framework\TestCase
     private $deploymentConfig;
 
     /**
-     * @var Filesystem|Mock
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var CommentParser|Mock
+     * @var CommentParser|MockObject
      */
     private $commentParserMock;
 

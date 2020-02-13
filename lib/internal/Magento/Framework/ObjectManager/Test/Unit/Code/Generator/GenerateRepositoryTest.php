@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class RepositoryTest

@@ -9,7 +9,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Sample;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {

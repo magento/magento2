@@ -15,7 +15,7 @@ use Magento\Framework\Locale\Deployed\Options;
 use Magento\Framework\Locale\ListsInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Options class.

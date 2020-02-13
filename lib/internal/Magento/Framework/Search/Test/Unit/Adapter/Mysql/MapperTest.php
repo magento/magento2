@@ -9,7 +9,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Mapper;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
@@ -25,7 +25,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     const METADATA_ENTITY_ID = 'some_entity_id';
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
     private $connectionAdapter;
 

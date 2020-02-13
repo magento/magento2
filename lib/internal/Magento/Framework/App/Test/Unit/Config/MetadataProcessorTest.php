@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\Initial;
 use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Data\ProcessorInterface;
-use \PHPUnit\Framework\MockObject\MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * {@inheritdoc}
@@ -22,17 +22,17 @@ class MetadataProcessorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var Initial|Mock
+     * @var Initial|MockObject
      */
     protected $_initialConfigMock;
 
     /**
-     * @var ProcessorFactory|Mock
+     * @var ProcessorFactory|MockObject
      */
     protected $_modelPoolMock;
 
     /**
-     * @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProcessorInterface|MockObject
      */
     protected $_backendModelMock;
 
@@ -56,7 +56,7 @@ class MetadataProcessorTest extends \PHPUnit\Framework\TestCase
                 ['some/config/path' => ['backendModel' => 'Custom_Backend_Model']]
             );
 
-        $this->_model = new \Magento\Framework\App\Config\MetadataProcessor(
+        $this->_model = new MetadataProcessor(
             $this->_modelPoolMock,
             $this->_initialConfigMock
         );

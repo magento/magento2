@@ -12,7 +12,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Scope\Validator;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @deprecated As tested model class was moved to another directory,
