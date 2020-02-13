@@ -5,13 +5,15 @@
  */
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+$objectManager->removeSharedInstance(CustomerRegistry::class);
 /** @var CustomerRepositoryInterface $customerRepository */
-$customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+$customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
 /** @var \Magento\Framework\Registry $registry */
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
 
