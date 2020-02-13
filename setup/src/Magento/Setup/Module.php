@@ -14,6 +14,9 @@ use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
 
+/**
+ * Setup module bootstrap class
+ */
 class Module implements
     BootstrapListenerInterface,
     ConfigProviderInterface
@@ -63,10 +66,11 @@ class Module implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getConfig()
     {
+        // phpcs:disable
         $result = array_merge_recursive(
             include __DIR__ . '/../../../config/module.config.php',
             include __DIR__ . '/../../../config/router.config.php',
@@ -82,6 +86,7 @@ class Module implements
             include __DIR__ . '/../../../config/languages.config.php',
             include __DIR__ . '/../../../config/marketplace.config.php'
         );
+        // phpcs:enable
         return $result;
     }
 }
