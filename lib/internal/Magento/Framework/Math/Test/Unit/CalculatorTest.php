@@ -13,7 +13,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 

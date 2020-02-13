@@ -14,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class AbstractFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit\Framework_MockObject_MockBuilder
+     * @var \PHPUnit\Framework\MockObject\MockBuilder
      */
     protected $_modelBuilder;
 

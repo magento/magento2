@@ -17,7 +17,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\Framework\ShellInterface;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests crontab manager functionality.
