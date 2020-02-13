@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontSimpleProductWithSpecialAndTierDiscountPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Apply discount tier price and custom price values for simple product"/>
+            <description value="Apply discount tier price and custom price values for simple product"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100.00</field>
+            </createData>
+
+            <!-- Add tier price to product -->
+            <createData entity="tierProductPriceDiscount" stepKey="addTierPrice">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+
+            <!-- Add special price to product -->
+            <createData entity="specialProductPrice2" stepKey="addSpecialToSimpleProduct">
+                <requiredEntity createDataKey="createProduct"/>
+                <field key="price">65.00</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+        <!-- Open product page -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.sku$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Assert product name on product page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="productNameText"/>
+        <assertEquals stepKey="assertProductNameOnProductPage">
+            <expectedResult type="string">$createProduct.name$</expectedResult>
+            <actualResult type="variable">productNameText</actualResult>
+        </assertEquals>
+
+        <!-- Assert product tier price on product page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage">
+            <expectedResult type="string">Buy {{tierProductPriceDiscount.quantity}} for $64.00 each and save 2%</expectedResult>
+            <actualResult type="variable">tierPriceText</actualResult>
+        </assertEquals>
+
+        <!-- Assert final product price on product page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.price}}" stepKey="productPriceText"/>
+        <assertEquals stepKey="assertProductPriceOnProductPage">
+            <expectedResult type="string">$65.00</expectedResult>
+            <actualResult type="variable">productPriceText</actualResult>
+        </assertEquals>
+    </test>
+</tests>
