@@ -8,6 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontOrderIsNotPlacedActionGroup" extends="AssertStorefrontOrderCannotBePlacedActionGroup">
+        <annotations>
+            <description>Validates order cannot be placed and checks error message.</description>
+        </annotations>
         <remove keyForRemoval="assertErrorMessage"/>
         <seeElementInDOM selector="{{CheckoutHeaderSection.errorMessageContainsText(error)}}" stepKey="assertErrorMessageInDOM"/>
     </actionGroup>

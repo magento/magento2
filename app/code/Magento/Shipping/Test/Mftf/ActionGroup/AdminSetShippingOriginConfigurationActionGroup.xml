@@ -13,7 +13,7 @@
             <description>Set Shipping Origin configurations</description>
         </annotations>
         <arguments>
-            <argument name="address"/>
+            <argument name="address" defaultValue="US_Address_California"/>
         </arguments>
         <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} {{address.country_id}}" stepKey="setOriginCountry"/>
         <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} {{address.city}}" stepKey="setOriginCity"/>
