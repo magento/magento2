@@ -74,7 +74,6 @@ class CreatePasswordTest extends AbstractController
         parent::tearDown();
     }
 
-
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_with_website.php
      *
