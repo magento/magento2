@@ -87,7 +87,7 @@ class QueryFactory
     /**
      * Returns query connection name according to configuration
      *
-     * @param  string $queryConfig
+     * @param string $queryConfig
      * @return string
      */
     private function getQueryConnectionName($queryConfig)
@@ -102,7 +102,7 @@ class QueryFactory
     /**
      * Create query according to configuration settings
      *
-     * @param  string $queryName
+     * @param string $queryName
      * @return Query
      */
     private function constructQuery($queryName)
@@ -158,8 +158,7 @@ class QueryFactory
         Select $select,
         string $connection,
         array $queryConfig
-    ): Query
-    {
+    ) {
         return $this->objectManager->create(
             Query::class,
             [
