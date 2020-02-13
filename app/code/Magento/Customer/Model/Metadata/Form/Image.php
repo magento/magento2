@@ -12,8 +12,10 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 
 /**
  * Metadata for form image field
@@ -26,6 +28,11 @@ class Image extends File
      * @var ImageContentInterfaceFactory
      */
     private $imageContentFactory;
+
+    /**
+     * @var IoFileSystem
+     */
+    private $ioFileSystem;
 
     /**
      * Constructor
@@ -43,6 +50,7 @@ class Image extends File
      * @param UploaderFactory $uploaderFactory
      * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
+     * @param IoFileSystem|null $ioFileSystem
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -58,7 +66,8 @@ class Image extends File
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
         \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
-        \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null
+        \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
+        IoFileSystem $ioFileSystem = null
     ) {
         parent::__construct(
             $localeDate,
@@ -76,6 +85,8 @@ class Image extends File
         );
         $this->imageContentFactory = $imageContentInterfaceFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
+        $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
+            ->get(IoFileSystem::class);
     }
 
     /**
@@ -186,26 +197,46 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
+     * @throws LocalizedException
      */
     protected function processCustomerValue(array $value)
     {
-        $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim($value['file'], '/');
+        $file = ltrim($value['file'], '/');
 
-        if ($this->getFileProcessor()->isExist($temporaryFile)) {
-            $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
+        if ($this->ioFileSystem->getPathInfo($file)['dirname'] === '.' &&
+            isset($this->ioFileSystem->getPathInfo($file)['extension']) &&
+            in_array($this->ioFileSystem->getPathInfo($file)['extension'], $this->getAllowedExtensions()) &&
+            isset($this->ioFileSystem->getPathInfo($value['name'])['extension']) &&
+            in_array($this->ioFileSystem->getPathInfo($value['name'])['extension'], $this->getAllowedExtensions())
+        ) {
+            $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
 
-            /** @var ImageContentInterface $imageContentDataObject */
-            $imageContentDataObject = $this->imageContentFactory->create()
-                ->setName($value['name'])
-                ->setBase64EncodedData($base64EncodedData)
-                ->setType($value['type']);
+            if ($this->getFileProcessor()->isExist($temporaryFile)) {
+                $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
 
-            // Remove temporary file
-            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
+                /** @var ImageContentInterface $imageContentDataObject */
+                $imageContentDataObject = $this->imageContentFactory->create()
+                    ->setName($value['name'])
+                    ->setBase64EncodedData($base64EncodedData)
+                    ->setType($value['type']);
 
-            return $imageContentDataObject;
+                // Remove temporary file
+                $this->getFileProcessor()->removeUploadedFile($temporaryFile);
+
+                return $imageContentDataObject;
+            }
         }
-
         return $this->_value;
     }
+
+    /**
+     * Getter for allowed extensions of image files
+     *
+     * @return array
+     */
+    public function getAllowedExtensions()
+    {
+        return ['jpg', 'jpeg', 'gif', 'png'];
+    }
+
 }
