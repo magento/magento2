@@ -10,8 +10,8 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\Newsletter\Model\Subscriber;
-use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -27,11 +27,11 @@ class MassUnsubscribeTest extends AbstractBackendController
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var SubscriberFactory */
-    private $subscriberFactory;
-
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
+
+    /** @var CollectionFactory */
+    private $subscriberCollectionFactory;
 
     /**
      * @inheritdoc
@@ -41,43 +41,35 @@ class MassUnsubscribeTest extends AbstractBackendController
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->subscriberFactory = $this->objectManager->get(SubscriberFactory::class);
+        $this->subscriberCollectionFactory = $this->objectManager->get(CollectionFactory::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
-     * @magentoDataFixture Magento/Newsletter/_files/two_subscribers.php
+     * @magentoDataFixture Magento/Newsletter/_files/three_subscribers.php
      *
      * @return void
      */
     public function testMassUnsubscribeAction(): void
     {
-        $firstCustomer = $this->customerRepository->get('customer@example.com');
-        $secondCustomer = $this->customerRepository->get('customer_two@example.com');
         $params = [
-            'selected' => [
-                $firstCustomer->getId(),
-                $secondCustomer->getId(),
-            ],
+            'selected' => [1, 2, 3],
             'namespace' => 'customer_listing',
         ];
         $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massUnsubscribe');
         $this->assertRedirect($this->stringContains('backend/customer/index/index'));
         $this->assertSessionMessages(
-            $this->equalTo([(string)__('A total of 2 record(s) were updated.')]),
+            $this->equalTo([(string)__('A total of 3 record(s) were updated.')]),
             MessageInterface::TYPE_SUCCESS
         );
-        $this->assertEquals(
-            Subscriber::STATUS_UNSUBSCRIBED,
-            $this->subscriberFactory->create()
-                ->loadByEmail('customer@example.com')->getSubscriberStatus()
-        );
-        $this->assertEquals(
-            Subscriber::STATUS_UNSUBSCRIBED,
-            $this->subscriberFactory->create()
-                ->loadByEmail('customer_two@example.com')->getSubscriberStatus()
-        );
+        $emails = ['customer@search.example.com', 'customer2@search.example.com', 'customer3@search.example.com'];
+        $collection = $this->subscriberCollectionFactory->create()->addFieldToFilter('subscriber_email', $emails)
+            ->addFieldToSelect('subscriber_status');
+        $this->assertCount(3, $collection);
+        foreach ($collection as $subscriber) {
+            $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $subscriber->getData('subscriber_status'));
+        }
     }
 
     /**

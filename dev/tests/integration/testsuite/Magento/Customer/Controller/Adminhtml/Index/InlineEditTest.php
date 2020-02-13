@@ -144,12 +144,10 @@ class InlineEditTest extends AbstractBackendController
     private function assertCustomersData(array $data): void
     {
         foreach ($data['items'] as $customerId => $expectedData) {
-            $customer = $this->customerRepository->getById($customerId);
-            $this->assertEquals($expectedData['email'], $customer->getEmail());
-            $this->assertEquals($expectedData['group_id'], $customer->getGroupId());
-            $this->assertEquals($expectedData['website_id'], $customer->getWebsiteId());
-            $this->assertEquals($expectedData['taxvat'], $customer->getTaxvat());
-            $this->assertEquals($expectedData['gender'], $customer->getGender());
+            $customerData = $this->customerRepository->getById($customerId)->__toArray();
+            foreach ($expectedData as $key => $value) {
+                $this->assertEquals($value, $customerData[$key]);
+            }
         }
     }
 }

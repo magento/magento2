@@ -5,4 +5,4 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../../Magento/Customer/_files/two_customers_rollback.php';
+require __DIR__ . '/../../../Magento/Customer/_files/three_customers_rollback.php';

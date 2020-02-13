@@ -4,27 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\CustomerRegistry;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
-use Magento\TestFramework\Helper\Bootstrap;
 
-$objectManager = Bootstrap::getObjectManager();
-$objectManager->removeSharedInstance(CustomerRegistry::class);
-/** @var CustomerRepositoryInterface $customerRepository */
-$customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
 /** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get(\Magento\Framework\Registry::class);
-
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-try {
-    $customer = $customerRepository->get('customer@example.com');
-    $customerRepository->delete($customer);
-} catch (NoSuchEntityException $e) {
-    // Customer with the specified email does not exist
+/** @var $customer \Magento\Customer\Model\Customer*/
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Customer\Model\Customer::class
+);
+$customer->load(1);
+if ($customer->getId()) {
+    $customer->delete();
 }
 
 $registry->unregister('isSecureArea');
@@ -32,5 +25,5 @@ $registry->register('isSecureArea', false);
 
 /* Unlock account if it was locked for tokens retrieval */
 /** @var RequestThrottler $throttler */
-$throttler = $objectManager->create(RequestThrottler::class);
+$throttler = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(RequestThrottler::class);
 $throttler->resetAuthenticationFailuresCount('customer@example.com', RequestThrottler::USER_TYPE_CUSTOMER);
