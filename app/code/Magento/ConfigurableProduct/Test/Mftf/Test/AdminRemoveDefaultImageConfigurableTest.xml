@@ -89,6 +89,8 @@
             <deleteData createDataKey="baseConfigProductHandle" stepKey="deleteConfig"/>
             <deleteData createDataKey="categoryHandle" stepKey="deleteCategory"/>
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
