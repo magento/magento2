@@ -68,6 +68,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         )->setOrder(
             'qty',
             \Magento\Framework\Data\Collection::SORT_ORDER_ASC
+        )->addAttributeToFilter(
+            'status',
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
 
         if ($storeId) {
