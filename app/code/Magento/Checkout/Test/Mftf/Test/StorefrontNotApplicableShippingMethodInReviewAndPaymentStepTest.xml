@@ -9,7 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontNotApplicableShippingMethodInReviewAndPaymentStepTest">
         <annotations>
-            <title value="Not applicable Shipping Method In Review and Payment Step"/>
+            <title value="DEPRECATED. Not applicable Shipping Method In Review and Payment Step"/>
             <stories value="Checkout Shipping Method Recalculation after Coupon Code Added"/>
             <description value="User should not be able to place order when free shipping declined after applying coupon code"/>
             <features value="Checkout"/>
@@ -18,7 +18,7 @@
             <useCaseId value="MC-21926"/>
             <group value="Checkout"/>
             <skip>
-                <issueId value="MC-29764"/>
+                <issueId value="DEPRECATED">Use StorefrontShippingMethodIsNotApplicableInReviewAndPaymentStepTest instead</issueId>
             </skip>
         </annotations>
 
