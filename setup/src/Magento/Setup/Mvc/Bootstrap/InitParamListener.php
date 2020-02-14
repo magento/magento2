@@ -12,16 +12,16 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
-use Zend\Console\Request;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\Application;
-use Zend\Mvc\MvcEvent;
-use Zend\Router\Http\RouteMatch;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\RequestInterface;
-use Zend\Uri\UriInterface;
+use Laminas\Console\Request;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\Application;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Router\Http\RouteMatch;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Uri\UriInterface;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
@@ -37,7 +37,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
-     * @var \Zend\Stdlib\CallbackHandler[]
+     * @var \Laminas\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
 
@@ -114,8 +114,8 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * Check if user logged-in and has permissions
      *
-     * @param \Zend\Mvc\MvcEvent $event
-     * @return false|\Zend\Http\Response
+     * @param \Laminas\Mvc\MvcEvent $event
+     * @return false|\Laminas\Http\Response
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Setup\Exception
@@ -162,7 +162,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                     !$adminSession->isAllowed('Magento_Backend::setup_wizard')
                 ) {
                     $adminSession->destroy();
-                    /** @var \Zend\Http\Response $response */
+                    /** @var \Laminas\Http\Response $response */
                     $response = $event->getResponse();
                     $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
                     $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');

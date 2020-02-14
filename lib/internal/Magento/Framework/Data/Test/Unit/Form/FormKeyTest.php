@@ -26,7 +26,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     protected $sessionMock;
 
     /**
-     * @var \Zend\Escaper\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Escaper\Escaper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $escaperMock;
 

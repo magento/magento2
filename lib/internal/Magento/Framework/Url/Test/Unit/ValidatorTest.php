@@ -12,7 +12,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Url\Validator */
     protected $object;
 
-    /** @var \Zend\Validator\Uri */
+    /** @var \Laminas\Validator\Uri */
     protected $zendValidator;
 
     /** @var string[] */
@@ -22,7 +22,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->zendValidator = $this->createMock(\Zend\Validator\Uri::class);
+        $this->zendValidator = $this->createMock(\Laminas\Validator\Uri::class);
         $this->object = $objectManager->getObject(
             \Magento\Framework\Url\Validator::class,
             ['validator' => $this->zendValidator]

@@ -8,12 +8,12 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\DocBlock\Tag\ParamTag;
-use Zend\Code\Reflection\DocBlock\Tag\ReturnTag;
-use Zend\Code\Reflection\DocBlockReflection;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\DocBlock\Tag\ParamTag;
+use Laminas\Code\Reflection\DocBlock\Tag\ReturnTag;
+use Laminas\Code\Reflection\DocBlockReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * Type processor of config reader properties
@@ -310,7 +310,7 @@ class TypeProcessor
         if ($methodDocBlock->hasTag('throws')) {
             $throwsTypes = $methodDocBlock->getTags('throws');
             if (is_array($throwsTypes)) {
-                /** @var $throwsType \Zend\Code\Reflection\DocBlock\Tag\ThrowsTag */
+                /** @var $throwsType \Laminas\Code\Reflection\DocBlock\Tag\ThrowsTag */
                 foreach ($throwsTypes as $throwsType) {
                     $exceptions = array_merge($exceptions, $throwsType->getTypes());
                 }

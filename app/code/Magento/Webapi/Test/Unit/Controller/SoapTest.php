@@ -60,7 +60,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_soapServerMock = $this->getMockBuilder(\Magento\Webapi\Model\Soap\Server::class)
@@ -100,7 +100,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         $this->_responseMock
             ->expects($this->any())
             ->method('getHeaders')
-            ->will($this->returnValue(new \Zend\Http\Headers()));
+            ->will($this->returnValue(new \Laminas\Http\Headers()));
 
         $appconfig = $this->createMock(\Magento\Framework\App\Config::class);
         $objectManagerHelper->setBackwardCompatibleProperty(

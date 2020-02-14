@@ -9,7 +9,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Vault\Model\CustomerTokenManagement;
-use Zend\Http\Request;
+use Laminas\Http\Request;
 
 /**
  * Class DeleteActionTest
@@ -26,7 +26,7 @@ class DeleteActionTest extends AbstractController
         /** @var Session $session */
         $session = $this->_objectManager->get(Session::class);
         $session->setCustomerId($customerId);
-        
+
         /** @var CustomerTokenManagement $tokenManagement */
         $tokenManagement = $this->_objectManager->get(CustomerTokenManagement::class);
         $tokens = $tokenManagement->getCustomerSessionTokens();
@@ -44,7 +44,7 @@ class DeleteActionTest extends AbstractController
             ])
             ->setMethod(Request::METHOD_POST);
         $this->dispatch('vault/cards/deleteaction');
-        
+
         static::assertTrue($this->getResponse()->isRedirect());
         static::assertRedirect(static::stringContains('vault/cards/listaction'));
         static::assertSessionMessages(static::equalTo(['Stored Payment Method was successfully removed']));

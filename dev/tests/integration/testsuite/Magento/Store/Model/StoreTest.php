@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**

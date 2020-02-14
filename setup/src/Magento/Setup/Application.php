@@ -5,19 +5,19 @@
  */
 namespace Magento\Setup;
 
-use Zend\Mvc\Application as ZendApplication;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Application as ZendApplication;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
- * This class is wrapper on \Zend\Mvc\Application and allows to do more customization like services loading, which
+ * This class is wrapper on \Laminas\Mvc\Application and allows to do more customization like services loading, which
  * cannot be loaded via configuration.
  */
 class Application
 {
     /**
-     * Creates \Zend\Mvc\Application and bootstrap it.
-     * This method is similar to \Zend\Mvc\Application::init but allows to load
+     * Creates \Laminas\Mvc\Application and bootstrap it.
+     * This method is similar to \Laminas\Mvc\Application::init but allows to load
      * Magento specific services.
      *
      * @param array $configuration
@@ -52,8 +52,8 @@ class Application
     }
 
     /**
-     * Uses \Zend\ServiceManager\ServiceManager::get method to load different kind of services.
-     * Some services cannot be loaded via configuration like \Zend\ServiceManager\Di\DiAbstractServiceFactory and
+     * Uses \Laminas\ServiceManager\ServiceManager::get method to load different kind of services.
+     * Some services cannot be loaded via configuration like \Laminas\ServiceManager\Di\DiAbstractServiceFactory and
      * should be initialized via corresponding factory.
      *
      * @param ServiceManager $serviceManager

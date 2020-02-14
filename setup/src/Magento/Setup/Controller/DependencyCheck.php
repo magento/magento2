@@ -10,9 +10,9 @@ use Magento\Framework\Module\Status;
 use Magento\Setup\Model\DependencyReadinessCheck;
 use Magento\Setup\Model\ModuleStatusFactory;
 use Magento\Setup\Model\UninstallDependencyCheck;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Class DependencyCheck

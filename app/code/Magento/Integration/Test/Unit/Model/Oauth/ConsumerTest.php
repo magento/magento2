@@ -6,7 +6,7 @@
 namespace Magento\Integration\Test\Unit\Model\Oauth;
 
 use Magento\Framework\Url\Validator as UrlValidator;
-use Zend\Validator\Uri as ZendUriValidator;
+use Laminas\Validator\Uri as ZendUriValidator;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
 
 /**

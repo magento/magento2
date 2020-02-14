@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
-use Zend\Mime\Message as ZendMimeMessage;
+use Laminas\Mime\Message as ZendMimeMessage;
 
 /**
  * Class MimeMessage

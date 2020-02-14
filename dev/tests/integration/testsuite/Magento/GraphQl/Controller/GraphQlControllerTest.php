@@ -98,7 +98,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
         $response = $this->graphql->dispatch($this->request);
@@ -175,7 +175,7 @@ query GetProducts(\$filterInput:ProductAttributeFilterInput){
             id
             name
             sku
-        }  
+        }
     }
 }
 QUERY;
@@ -223,12 +223,12 @@ QUERY;
     }
   ])
     {
-      items{        
+      items{
       attribute_code
       attribute_type
       entity_type
-    }      
-    }  
+    }
+    }
   }
 QUERY;
 
@@ -241,7 +241,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
         $response = $this->graphql->dispatch($this->request);

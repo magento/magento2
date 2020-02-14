@@ -170,7 +170,7 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
                 if (preg_match('/' . $extensibleClassPattern . '/', $fileContent) &&
                     !preg_match('/' . $abstractExtensibleClassPattern . '/', $fileContent)
                 ) {
-                    $fileReflection = new \Zend\Code\Reflection\FileReflection($filename, true);
+                    $fileReflection = new \Laminas\Code\Reflection\FileReflection($filename, true);
                     foreach ($fileReflection->getClasses() as $classReflection) {
                         if ($classReflection->isSubclassOf(self::EXTENSIBLE_DATA_INTERFACE)) {
                             $methodsToCheck = ['setExtensionAttributes', 'getExtensionAttributes'];

@@ -21,17 +21,17 @@ class StartUpdaterTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Zend\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
      */
     private $request;
 
     /**
-     * @var \Zend\Http\PhpEnvironment\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Http\PhpEnvironment\Response|\PHPUnit_Framework_MockObject_MockObject
      */
     private $response;
 
     /**
-     * @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mvcEvent;
 
@@ -54,10 +54,10 @@ class StartUpdaterTest extends \PHPUnit\Framework\TestCase
             $this->updaterTaskCreator,
             $this->payloadValidator
         );
-        $this->request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $this->response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
-        $this->mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
+        $this->request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $this->response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $this->mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -77,7 +77,7 @@ class StartUpdaterTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 

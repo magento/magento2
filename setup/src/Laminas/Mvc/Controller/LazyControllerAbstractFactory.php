@@ -1,32 +1,32 @@
 <?php
 /**
- * @link      http://github.com/zendframework/zend-mvc for the canonical source repository
+ * @link      http://github.com/laminas/laminas-mvc for the canonical source repository
  * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-mvc/blob/master/LICENSE.md New BSD License
+ * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
  * @SuppressWarnings(PHPMD)
  */
 
 declare(strict_types=1);
 
-namespace Zend\Mvc\Controller;
+namespace Laminas\Mvc\Controller;
 
 use Interop\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionParameter;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
-use Zend\Filter\FilterPluginManager;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\InputFilter\InputFilterPluginManager;
-use Zend\Log\FilterPluginManager as LogFilterManager;
-use Zend\Log\FormatterPluginManager as LogFormatterManager;
-use Zend\Log\ProcessorPluginManager as LogProcessorManager;
-use Zend\Log\WriterPluginManager as LogWriterManager;
-use Zend\Serializer\AdapterPluginManager as SerializerAdapterManager;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\DispatchableInterface;
-use Zend\Validator\ValidatorPluginManager;
+use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Laminas\Filter\FilterPluginManager;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\InputFilter\InputFilterPluginManager;
+use Laminas\Log\FilterPluginManager as LogFilterManager;
+use Laminas\Log\FormatterPluginManager as LogFormatterManager;
+use Laminas\Log\ProcessorPluginManager as LogProcessorManager;
+use Laminas\Log\WriterPluginManager as LogWriterManager;
+use Laminas\Serializer\AdapterPluginManager as SerializerAdapterManager;
+use Laminas\ServiceManager\AbstractFactoryInterface;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Stdlib\DispatchableInterface;
+use Laminas\Validator\ValidatorPluginManager;
 
 /**
  * Reflection-based factory for controllers.
@@ -87,16 +87,16 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * @var string[]
      */
     protected $aliases = [
-        ConsoleAdapterInterface::class  => 'ConsoleAdapter',
-        FilterPluginManager::class      => 'FilterManager',
-        HydratorPluginManager::class    => 'HydratorManager',
+        ConsoleAdapterInterface::class => 'ConsoleAdapter',
+        FilterPluginManager::class => 'FilterManager',
+        HydratorPluginManager::class => 'HydratorManager',
         InputFilterPluginManager::class => 'InputFilterManager',
-        LogFilterManager::class         => 'LogFilterManager',
-        LogFormatterManager::class      => 'LogFormatterManager',
-        LogProcessorManager::class      => 'LogProcessorManager',
-        LogWriterManager::class         => 'LogWriterManager',
+        LogFilterManager::class => 'LogFilterManager',
+        LogFormatterManager::class => 'LogFormatterManager',
+        LogProcessorManager::class => 'LogProcessorManager',
+        LogWriterManager::class => 'LogWriterManager',
         SerializerAdapterManager::class => 'SerializerAdapterManager',
-        ValidatorPluginManager::class   => 'ValidatorManager',
+        ValidatorPluginManager::class => 'ValidatorManager',
     ];
 
     /**
@@ -131,7 +131,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreate(ContainerInterface $container, $requestedName)
     {
-        if (! class_exists($requestedName)) {
+        if (!class_exists($requestedName)) {
             return false;
         }
 
@@ -167,14 +167,14 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
                 return [];
             }
 
-            if (! $parameter->getClass()) {
+            if (!$parameter->getClass()) {
                 return;
             }
 
             $type = $parameter->getClass()->getName();
             $type = isset($this->aliases[$type]) ? $this->aliases[$type] : $type;
 
-            if (! $container->has($type)) {
+            if (!$container->has($type)) {
                 throw new ServiceNotFoundException(sprintf(
                     'Unable to create controller "%s"; unable to resolve parameter "%s" using type hint "%s"',
                     $requestedName,

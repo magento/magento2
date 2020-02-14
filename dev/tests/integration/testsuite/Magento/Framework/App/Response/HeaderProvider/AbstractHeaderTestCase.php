@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Response\HeaderProvider;
 
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Zend\Http\Header\HeaderInterface;
+use Laminas\Http\Header\HeaderInterface;
 
 /**
  * Class AbstractHeaderTestCase

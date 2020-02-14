@@ -15,7 +15,7 @@ use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo\SampleFour;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
 use Magento\Framework\Reflection\TypeProcessor;
-use Zend\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\ClassReflection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

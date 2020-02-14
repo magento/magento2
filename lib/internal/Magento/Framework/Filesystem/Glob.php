@@ -5,13 +5,13 @@
  */
 namespace Magento\Framework\Filesystem;
 
-use Zend\Stdlib\Glob as ZendGlob;
-use Zend\Stdlib\Exception\RuntimeException as ZendRuntimeException;
+use Laminas\Stdlib\Glob as LaminasGlob;
+use Laminas\Stdlib\Exception\RuntimeException as ZendRuntimeException;
 
 /**
- * Wrapper for Zend\Stdlib\Glob
+ * Wrapper for Laminas\Stdlib\Glob
  */
-class Glob extends ZendGlob
+class Glob extends LaminasGlob
 {
     /**
      * Find pathnames matching a pattern.
@@ -24,7 +24,7 @@ class Glob extends ZendGlob
     public static function glob($pattern, $flags = 0, $forceFallback = false)
     {
         try {
-            $result = ZendGlob::glob($pattern, $flags, $forceFallback);
+            $result = LaminasGlob::glob($pattern, $flags, $forceFallback);
         } catch (ZendRuntimeException $e) {
             $result = [];
         }

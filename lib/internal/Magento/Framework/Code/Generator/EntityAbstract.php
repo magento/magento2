@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Zend\Code\Generator\ValueGenerator;
+use Laminas\Code\Generator\ValueGenerator;
 
 abstract class EntityAbstract
 {

@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\PropertyGenerator;
 
-class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
+class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
     \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
     /**
@@ -86,7 +86,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      */
     public function setClassDocBlock(array $docBlock)
     {
-        $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+        $docBlockObject = new \Laminas\Code\Generator\DocBlockGenerator();
         $docBlockObject->setWordWrap(false);
         $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
 
@@ -115,7 +115,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
             ) {
                 $parametersArray = [];
                 foreach ($methodOptions['parameters'] as $parameterOptions) {
-                    $parameterObject = new \Zend\Code\Generator\ParameterGenerator();
+                    $parameterObject = new \Laminas\Code\Generator\ParameterGenerator();
                     $this->_setDataToObject($parameterObject, $parameterOptions, $this->_parameterOptions);
                     $parametersArray[] = $parameterObject;
                 }
@@ -124,7 +124,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
             }
 
             if (isset($methodOptions['docblock']) && is_array($methodOptions['docblock'])) {
-                $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+                $docBlockObject = new \Laminas\Code\Generator\DocBlockGenerator();
                 $docBlockObject->setWordWrap(false);
                 $this->_setDataToObject($docBlockObject, $methodOptions['docblock'], $this->_docBlockOptions);
 
@@ -172,7 +172,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
             if (isset($propertyOptions['docblock'])) {
                 $docBlock = $propertyOptions['docblock'];
                 if (is_array($docBlock)) {
-                    $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+                    $docBlockObject = new \Laminas\Code\Generator\DocBlockGenerator();
                     $docBlockObject->setWordWrap(false);
                     $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
                     $propertyObject->setDocBlock($docBlockObject);

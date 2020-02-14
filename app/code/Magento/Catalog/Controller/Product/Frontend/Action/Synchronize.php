@@ -71,8 +71,8 @@ class Synchronize extends \Magento\Framework\App\Action\Action
             $this->synchronizer->syncActions($productsData, $typeId);
         } catch (\Exception $e) {
             $resultJson->setStatusHeader(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
         }

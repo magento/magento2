@@ -11,17 +11,17 @@ $_scriptName = basename(__FILE__);
 define(
     'SYNOPSIS',
 <<<SYNOPSIS
-Updates Magento with 2.3 requirements that can't be done by `composer update` or `bin/magento setup:upgrade`. 
+Updates Magento with 2.3 requirements that can't be done by `composer update` or `bin/magento setup:upgrade`.
 Run this script after upgrading to PHP 7.1/7.2 and before running `composer update` or `bin/magento setup:upgrade`.
 
 Steps included:
  - Require new version of the metapackage
  - Update "require-dev" section
- - Add "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/" to composer.json "autoload":"psr-4" section
+ - Add "Laminas\\Mvc\\Controller\\": "setup/src/Laminas/Mvc/Controller/" to composer.json "autoload":"psr-4" section
  - Update Magento/Updater if it's installed
- - Update name, version, and description fields in the root composer.json 
+ - Update name, version, and description fields in the root composer.json
 
-Usage: php -f $_scriptName -- --root='</path/to/magento/root/>' [--composer='</path/to/composer/executable>'] 
+Usage: php -f $_scriptName -- --root='</path/to/magento/root/>' [--composer='</path/to/composer/executable>']
            [--edition='<community|enterprise>'] [--repo='<composer_repo_url>'] [--version='<version_constraint>']
            [--help]
 
@@ -33,15 +33,15 @@ Optional:
  --composer='</path/to/composer/executable>'
     Path to the composer executable
     - Default: The composer found in the system PATH
-    
+
  --edition='<community|enterprise>'
     Target Magento edition for the update.  Open Source = 'community', Commerce = 'enterprise'
     - Default: The edition currently required in composer.json
-    
+
  --repo='<composer_repo_url>'
     The Magento repository url to use to pull the new packages
     - Default: The Magento repository configured in composer.json
-    
+
  --version='<version_constraint>'
     A composer version constraint for allowable 2.3 packages. Versions other than 2.3 are not handled by this script
     See https://getcomposer.org/doc/articles/versions.md#writing-version-constraints for more information.
@@ -247,8 +247,8 @@ try {
     output('');
     runComposer('remove --dev sjparkinson/static-review fabpot/php-cs-fixer --no-update');
 
-    output('\nAdding "Zend\\\\Mvc\\\\Controller\\\\": "setup/src/Zend/Mvc/Controller/" to "autoload": "psr-4"');
-    $composerData['autoload']['psr-4']['Zend\\Mvc\\Controller\\'] = 'setup/src/Zend/Mvc/Controller/';
+    output('\nAdding "Laminas\\\\Mvc\\\\Controller\\\\": "setup/src/Laminas/Mvc/Controller/" to "autoload": "psr-4"');
+    $composerData['autoload']['psr-4']['Laminas\\Mvc\\Controller\\'] = 'setup/src/Laminas/Mvc/Controller/';
 
     if (preg_match('/^magento\/project\-(community|enterprise)\-edition$/', $composerData['name'])) {
         output('\nUpdating project name, version, and description');
