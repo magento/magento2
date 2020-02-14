@@ -17,9 +17,6 @@
             <severity value="AVERAGE"/>
             <group value="wishlist"/>
             <testCaseId value="MC-13976"/>
-            <skip>
-                <issueId value="MC-30519"/>
-            </skip>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
         </annotations>
