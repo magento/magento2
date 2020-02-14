@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Model\ProductLink\Converter;
 
+/**
+ * Return converter by link type
+ */
 class ConverterPool
 {
     /**

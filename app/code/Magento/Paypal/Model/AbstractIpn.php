@@ -8,6 +8,9 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
+/**
+ * Abstract Ipn class
+ */
 class AbstractIpn
 {
     /**
@@ -113,6 +116,7 @@ class AbstractIpn
         if ($response != 'VERIFIED') {
             $this->_addDebugData('postback', $postbackQuery);
             $this->_addDebugData('postback_result', $postbackResult);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('PayPal IPN postback failure. See system.log for details.');
         }
     }
@@ -171,6 +175,8 @@ class AbstractIpn
     }
 
     /**
+     * Adding debug data
+     *
      * @param string $key
      * @param array|string $value
      * @return $this

@@ -28,9 +28,10 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
     private $serviceTypeList;
 
     /**
-     * Initialize dependencies.
+     * Constructor
      *
      * @param AttributeRepositoryInterface $attributeRepository
+     * @param ServiceTypeListInterface $serviceTypeList
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
@@ -41,7 +42,7 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType($attributeCode, $entityType)
     {
@@ -63,7 +64,7 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getAllServiceDataInterfaces()
     {

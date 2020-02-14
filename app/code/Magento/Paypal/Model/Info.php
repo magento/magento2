@@ -334,6 +334,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isPaymentReviewRequired(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -350,6 +351,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isFraudReviewAllowed(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -365,6 +367,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isPaymentCompleted(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -377,6 +380,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isPaymentSuccessful(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -407,6 +411,7 @@ class Info
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isPaymentFailed(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -431,6 +436,7 @@ class Info
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_IPNandPDTVariables
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function explainPendingReason($code)
     {
@@ -480,6 +486,7 @@ class Info
      * @return string
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_IPNandPDTVariables
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function explainReasonCode($code)
     {
@@ -526,6 +533,7 @@ class Info
      *
      * @param string $code
      * @return bool;
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isReversalDisputable($code)
     {
@@ -617,6 +625,7 @@ class Info
      *
      * @param string $key
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getCaseTypeLabel($key)
     {
@@ -660,6 +669,7 @@ class Info
             case self::BUYER_TAX_ID_TYPE:
                 $outputValue = $this->_getBuyerIdTypeValue($outputValue);
                 // fall-through intentional
+                // no break
             default:
                 return $outputValue;
         }

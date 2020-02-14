@@ -6,7 +6,7 @@
 namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
- * Section
+ * Element section
  *
  * @api
  * @since 100.0.2

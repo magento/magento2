@@ -11,6 +11,9 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ *  SearchCriteria FilterProcessor
+ */
 class FilterProcessor implements CollectionProcessorInterface
 {
     /**

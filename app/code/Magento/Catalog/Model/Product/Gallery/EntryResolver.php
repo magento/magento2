@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Manage entryes
+ */
 class EntryResolver
 {
     /**

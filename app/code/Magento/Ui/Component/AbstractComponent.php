@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 use Magento\Framework\Data\ValueSourceInterface;
 
+//phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Abstract class AbstractComponent
  *
@@ -173,6 +174,8 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     }
 
     /**
+     * Return component
+     *
      * @param string $name
      * @return UiComponentInterface
      */
@@ -242,6 +245,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         return $jsConfig;
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Component data setter
      *
@@ -254,6 +258,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         parent::setData($key, $value);
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Component data getter
      *
@@ -278,7 +283,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData()
     {

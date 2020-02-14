@@ -60,6 +60,8 @@ class PackagePool
     }
 
     /**
+     * Return package
+     *
      * @param string $path
      * @return Package|null
      */
@@ -70,6 +72,8 @@ class PackagePool
     }
 
     /**
+     * Return packages
+     *
      * @return Package[]
      */
     public function getPackages()
@@ -79,6 +83,8 @@ class PackagePool
     }
 
     /**
+     * Return theme model
+     *
      * @param string $areaCode
      * @param string $themePath
      * @return ThemeInterface|null
@@ -93,6 +99,8 @@ class PackagePool
     }
 
     /**
+     * Return packages from deployment
+     *
      * @param array $options
      * @return Package[]
      */
@@ -140,6 +148,8 @@ class PackagePool
     }
 
     /**
+     * Return theme by full path
+     *
      * @param string $fullPath
      * @return ThemeInterface|null
      */
@@ -154,6 +164,8 @@ class PackagePool
     }
 
     /**
+     * Collect packages
+     *
      * @param bool $recollect
      * @return void
      */
@@ -244,6 +256,8 @@ class PackagePool
     }
 
     /**
+     * Check if can deploy area
+     *
      * @param Package $package
      * @param array $options
      * @return bool
@@ -264,6 +278,8 @@ class PackagePool
     }
 
     /**
+     * Verify can deploy theme
+     *
      * @param Package $package
      * @param array $options
      * @return bool
@@ -281,6 +297,8 @@ class PackagePool
     }
 
     /**
+     * Verify can deploy locale
+     *
      * @param Package $package
      * @param array $options
      * @return bool
@@ -297,6 +315,8 @@ class PackagePool
     }
 
     /**
+     * Check if included entity
+     *
      * @param string $entity
      * @param array $includedEntities
      * @param array $excludedEntities
@@ -316,6 +336,8 @@ class PackagePool
     }
 
     /**
+     * Return option by name
+     *
      * @param string $name
      * @param array $options
      * @return mixed|null
@@ -326,6 +348,8 @@ class PackagePool
     }
 
     /**
+     * Ensure package exist
+     *
      * @param array $params
      * @return void
      */

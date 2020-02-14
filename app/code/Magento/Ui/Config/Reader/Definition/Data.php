@@ -17,14 +17,8 @@ use Magento\Ui\Config\Reader\DefinitionFactory;
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {
-    /**
-     * ID in the storage cache
-     */
     const CACHE_ID = 'ui_component_configuration_definition_data';
 
-    /**
-     * Search pattern
-     */
     const SEARCH_PATTERN = '%s.xml';
 
     /**

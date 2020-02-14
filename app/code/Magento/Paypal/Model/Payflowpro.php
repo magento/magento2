@@ -556,6 +556,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param string $status
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     protected static function _isTransactionUnderReview($status)
     {

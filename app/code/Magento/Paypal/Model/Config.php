@@ -1330,6 +1330,7 @@ class Config extends AbstractConfig
      * @param string $code
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getIsCreditCardMethod($code)
     {

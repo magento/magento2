@@ -289,6 +289,7 @@ class AttributeMerger
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
                 'validation' => $isFirstLine
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     ? array_merge(
                         ['required-entry' => (bool)$attributeConfig['required']],
                         $attributeConfig['validation']
@@ -381,6 +382,7 @@ class AttributeMerger
     /**
      * Retrieve field options from attribute configuration
      *
+     * @param mixed $attributeCode
      * @param array $attributeConfig
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

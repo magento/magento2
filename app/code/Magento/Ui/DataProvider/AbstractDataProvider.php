@@ -8,7 +8,10 @@ namespace Magento\Ui\DataProvider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
+ // phpcs:disable Magento2.Classes.AbstractApi
 /**
+ * @inheritdoc
+ *
  * @api
  * @since 100.0.2
  */
@@ -74,6 +77,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Return collection
+     *
      * @return AbstractCollection
      */
     public function getCollection()
@@ -112,6 +117,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Return Meta
+     *
      * @return array
      */
     public function getMeta()
@@ -131,6 +138,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Return fields meta info
+     *
      * @param string $fieldSetName
      * @return array
      */
@@ -140,6 +149,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Return field meta info
+     *
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
@@ -195,7 +206,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * self::setOrder() alias
+     * Alias for self::setOrder()
      *
      * @param string $field
      * @param string $direction
