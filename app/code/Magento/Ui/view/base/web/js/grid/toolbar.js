@@ -271,12 +271,19 @@ define([
          */
         show: function () {
             this.visible = true;
-            //Check admin grid button has addedr not
-            if ($('.page-main-actions').length === 0) {
+            // Check admin grid button has added or not
+            if ($('.page-main-actions').length === 0 &&
+                typeof this.$sticky !== 'undefined') {
                 this.$sticky.style.top = 0;
             }
-            this.$sticky.style.display = '';
-            this.$toolbar.style.visibility = 'hidden';
+
+            if (typeof this.$sticky !== 'undefined') {
+                this.$sticky.style.display = '';
+            }
+
+            if (typeof this.$toolbar !== 'undefined') {
+                this.$toolbar.style.visibility = 'hidden';
+            }
 
             return this;
         },
@@ -289,8 +296,13 @@ define([
         hide: function () {
             this.visible = false;
 
-            this.$sticky.style.display = 'none';
-            this.$toolbar.style.visibility = '';
+            if (typeof this.$sticky !== 'undefined') {
+                this.$sticky.style.display = 'none';
+            }
+
+            if (typeof this.$toolbar !== 'undefined') {
+                this.$toolbar.style.visibility = '';
+            }
 
             return this;
         },
