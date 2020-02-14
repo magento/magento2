@@ -9,7 +9,7 @@ namespace Magento\Paypal\Model;
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
 /**
- * Abstract Ipn class
+ * Abstract Ipn class for paypal
  */
 class AbstractIpn
 {
@@ -41,6 +41,11 @@ class AbstractIpn
      * @var \Magento\Framework\HTTP\Adapter\CurlFactory
      */
     protected $_curlFactory;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory

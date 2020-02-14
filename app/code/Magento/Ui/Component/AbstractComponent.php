@@ -142,8 +142,6 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
 
     /**
      * Produce and return block's html output
-     *
-     * @return string
      */
     public function toHtml()
     {

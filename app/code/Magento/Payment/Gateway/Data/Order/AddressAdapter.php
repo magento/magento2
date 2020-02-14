@@ -9,7 +9,7 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
- * Class AddressAdapter
+ * @inheritdoc
  */
 class AddressAdapter implements AddressAdapterInterface
 {

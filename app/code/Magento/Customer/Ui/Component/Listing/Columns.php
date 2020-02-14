@@ -33,6 +33,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     protected $inlineEditUpdater;
 
     /**
+     * @var ColumnFactory
+     */
+    private $columnFactory;
+
+    /**
      * @var array
      */
     protected $filterMap = [

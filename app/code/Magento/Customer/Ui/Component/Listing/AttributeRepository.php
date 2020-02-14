@@ -14,7 +14,7 @@ use Magento\Customer\Api\MetadataManagementInterface;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 
 /**
- * Class AttributeRepository
+ * Attribute Repository Managment
  */
 class AttributeRepository
 {

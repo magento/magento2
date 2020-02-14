@@ -40,9 +40,11 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
+     * phpcs:disable
      */
     public function __toArray()
     {
+     //phpcs:enable
         $data = $this->_data;
         $hasToArray = function ($model) {
             return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);
