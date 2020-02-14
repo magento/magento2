@@ -11,8 +11,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
-Bootstrap::getInstance()
-    ->loadArea(FrontNameResolver::AREA_CODE);
+Bootstrap::getInstance()->loadArea(FrontNameResolver::AREA_CODE);
 
 /**
  * After installation system has categories:

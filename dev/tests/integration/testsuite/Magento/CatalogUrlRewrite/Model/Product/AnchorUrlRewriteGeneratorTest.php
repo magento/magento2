@@ -15,7 +15,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**3
+/**
  * Verify generate url rewrites for anchor categories.
  */
 class AnchorUrlRewriteGeneratorTest extends TestCase
