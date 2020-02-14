@@ -26,6 +26,8 @@
                 <field key="price">100.00</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -47,7 +49,8 @@
         <see selector="{{StoreFrontRemoveItemModalSection.message}}" userInput="Are you sure you would like to remove this item from the shopping cart?" stepKey="seeDeleteConfirmationMessage"/>
         <click selector="{{StoreFrontRemoveItemModalSection.ok}}" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="waitForDeleteToFinish"/>
-        <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteProductFromCheckoutCart"/>
+        <dontSeeElement selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="dontSeeDeleteProductFromCheckoutCart"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <waitForPageLoad stepKey="WaitForPageLoad3"/>
         <see userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
     </test>

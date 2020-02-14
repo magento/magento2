@@ -11,7 +11,7 @@ type DeletePaymentTokenOutput {
 }
 
 type Query {
-    customerPaymentTokens: CustomerPaymentTokens @doc(description: "Return a list of customer payment tokens") @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens")
+    customerPaymentTokens: CustomerPaymentTokens @doc(description: "Return a list of customer payment tokens") @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @cache(cacheable: false)
 }
 
 type CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") {

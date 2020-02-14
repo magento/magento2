@@ -15,7 +15,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Framework\Phrase\Renderer\Translate;
 
 /**
- * Class DataProviderTest
+ * Verify data provider translation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -90,7 +90,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $themePath = 'blank';
         $areaCode = 'adminhtml';
 
-        $filePaths = [['path1'], ['path2'], ['path3'], ['path4']];
+        $filePaths = [['path1'], ['path2'], ['path4'], ['path3']];
 
         $jsFilesMap = [
             ['base', $themePath, '*', '*', [$filePaths[0]]],
@@ -105,24 +105,31 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             'hello1' => 'hello1translated',
             'hello2' => 'hello2translated',
             'hello3' => 'hello3translated',
-            'hello4' => 'hello4translated'
+            'hello4' => 'hello4translated',
+            'ko i18' => 'ko i18 translated',
+            'underscore i18' => 'underscore i18 translated',
         ];
 
         $contentsMap = [
             'content1$.mage.__("hello1")content1',
             'content2$.mage.__("hello2")content2',
-            'content2$.mage.__("hello3")content3',
-            'content2$.mage.__("hello4")content4'
+            'content2$.mage.__("hello4")content4 <!-- ko i18n: "ko i18" --><!-- /ko -->',
+            'content2$.mage.__("hello3")content3 <% _.i18n("underscore i18") %>',
         ];
 
         $translateMap = [
             [['hello1'], [], 'hello1translated'],
             [['hello2'], [], 'hello2translated'],
             [['hello3'], [], 'hello3translated'],
-            [['hello4'], [], 'hello4translated']
+            [['hello4'], [], 'hello4translated'],
+            [['ko i18'], [], 'ko i18 translated'],
+            [['underscore i18'], [], 'underscore i18 translated'],
         ];
 
-        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+        $patterns = [
+            '~\$\.mage\.__\(([\'"])(.+?)\1\)~',
+            '~(?:i18n\:|_\.i18n\()\s*(["\'])(.*?)(?<!\\\\)\1~',
+        ];
 
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
@@ -147,7 +154,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->willReturnMap($translateMap);
 
-        $this->assertEquals($expectedResult, $this->model->getData($themePath));
+        $actualResult = $this->model->getData($themePath);
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(
+            json_encode($expectedResult),
+            json_encode($actualResult),
+            "Translations should be sorted by key"
+        );
     }
 
     /**

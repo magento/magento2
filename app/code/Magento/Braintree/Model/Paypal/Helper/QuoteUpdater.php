@@ -123,8 +123,8 @@ class QuoteUpdater extends AbstractHelper
     {
         $shippingAddress = $quote->getShippingAddress();
 
-        $shippingAddress->setLastname($details['lastName']);
-        $shippingAddress->setFirstname($details['firstName']);
+        $shippingAddress->setLastname($this->getShippingRecipientLastName($details));
+        $shippingAddress->setFirstname($this->getShippingRecipientFirstName($details));
         $shippingAddress->setEmail($details['email']);
 
         $shippingAddress->setCollectShippingRates(true);
@@ -173,19 +173,45 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateAddressData(Address $address, array $addressData)
     {
-        $extendedAddress = isset($addressData['extendedAddress'])
-            ? $addressData['extendedAddress']
+        $extendedAddress = isset($addressData['line2'])
+            ? $addressData['line2']
             : null;
 
-        $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
-        $address->setCity($addressData['locality']);
-        $address->setRegionCode($addressData['region']);
-        $address->setCountryId($addressData['countryCodeAlpha2']);
+        $address->setStreet([$addressData['line1'], $extendedAddress]);
+        $address->setCity($addressData['city']);
+        $address->setRegionCode($addressData['state']);
+        $address->setCountryId($addressData['countryCode']);
         $address->setPostcode($addressData['postalCode']);
 
         // PayPal's address supposes not saving against customer account
         $address->setSaveInAddressBook(false);
         $address->setSameAsBilling(false);
         $address->setCustomerAddressId(null);
+    }
+
+    /**
+     * Returns shipping recipient first name.
+     *
+     * @param array $details
+     * @return string
+     */
+    private function getShippingRecipientFirstName(array $details)
+    {
+        return isset($details['shippingAddress']['recipientName'])
+            ? explode(' ', $details['shippingAddress']['recipientName'], 2)[0]
+            : $details['firstName'];
+    }
+
+    /**
+     * Returns shipping recipient last name.
+     *
+     * @param array $details
+     * @return string
+     */
+    private function getShippingRecipientLastName(array $details)
+    {
+        return isset($details['shippingAddress']['recipientName'])
+            ? explode(' ', $details['shippingAddress']['recipientName'], 2)[1]
+            : $details['lastName'];
     }
 }

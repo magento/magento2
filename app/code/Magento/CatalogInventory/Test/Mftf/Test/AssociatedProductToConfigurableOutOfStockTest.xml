@@ -80,13 +80,16 @@
         </before>
 
         <after>
-              <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-              <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
-              <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
-              <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
-              <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
-              <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
-          </after>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        </after>
 
         <!-- Login as a customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
@@ -122,8 +125,11 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForPageLoad stepKey="waitForNewInvoiceToBeCreated"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
         <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>

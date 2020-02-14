@@ -50,7 +50,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const VALIDATOR_WEBSITE = 'validator_website';
 
-    const VALIDATOR_TEAR_PRICE = 'validator_tear_price';
+    /**
+     * @deprecated
+     * @see VALIDATOR_TIER_PRICE
+     */
+    private const VALIDATOR_TEAR_PRICE = 'validator_tier_price';
+
+    private const VALIDATOR_TIER_PRICE = 'validator_tier_price';
 
     /**
      * Validation failure message template definitions.
@@ -221,7 +227,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
-        $this->_validators[self::VALIDATOR_TEAR_PRICE] = $tierPriceValidator;
+        $this->_validators[self::VALIDATOR_TIER_PRICE] = $tierPriceValidator;
         $this->errorAggregator = $errorAggregator;
 
         foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
@@ -536,7 +542,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getCustomerGroupId($customerGroup)
     {
-        $customerGroups = $this->_getValidator(self::VALIDATOR_TEAR_PRICE)->getCustomerGroups();
+        $customerGroups = $this->_getValidator(self::VALIDATOR_TIER_PRICE)->getCustomerGroups();
         return $customerGroup == self::VALUE_ALL_GROUPS ? 0 : $customerGroups[$customerGroup];
     }
 

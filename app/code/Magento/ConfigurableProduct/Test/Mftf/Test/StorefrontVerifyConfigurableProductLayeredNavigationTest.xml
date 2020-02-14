@@ -117,12 +117,15 @@
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open Product Index Page and Filter First Child product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="ApiSimpleOne"/>
         </actionGroup>
 
@@ -134,6 +137,9 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!--Open Category in Store Front and select product attribute option from sidebar -->
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">

@@ -23,7 +23,7 @@ class MsrpPriceCalculator implements MsrpPriceCalculatorInterface
     /**
      * @param array $msrpPriceCalculators
      */
-    public function __construct(array $msrpPriceCalculators)
+    public function __construct(array $msrpPriceCalculators = [])
     {
         $this->msrpPriceCalculators = $this->getMsrpPriceCalculators($msrpPriceCalculators);
     }

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontClearAllCompareProductsTest">
+        <annotations>
+            <stories value="Compare Products"/>
+            <title value="Clear all products from the 'Compare Products' list"/>
+            <description value="You should be able to remove all Products in the 'Compare Products' list."/>
+            <testCaseId value="MC-14208"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <!-- Create Simple Customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createSimpleCustomer1"/>
+
+            <!-- Create Simple Category -->
+            <createData entity="SimpleSubCategory" stepKey="createSimpleCategory1"/>
+
+            <!-- Create Simple Products -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct1">
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+
+            <!-- Create Virtual Product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct1">
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+
+            <!-- Create Bundled Product -->
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct1">
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1">
+                <requiredEntity createDataKey="createBundleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="createBundleProduct1"/>
+                <requiredEntity createDataKey="createBundleOption1"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+                <field key="qty">10</field>
+            </createData>
+
+            <!-- Create Grouped Product -->
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct1">
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addFirstProduct1">
+                <requiredEntity createDataKey="createGroupedProduct1"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProduct1" stepKey="addSecondProduct1">
+                <requiredEntity createDataKey="createGroupedProduct1"/>
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+            </updateData>
+
+            <!-- Create Downloadable Product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct1"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="createDownloadableProduct1"/>
+            </createData>
+
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+            <!-- Login -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <!-- Delete Created Entities -->
+            <deleteData createDataKey="createSimpleCustomer1" stepKey="deleteSimpleCustomer1"/>
+            <deleteData createDataKey="createSimpleCategory1" stepKey="deleteSimpleCategory1"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
+            <deleteData createDataKey="createVirtualProduct1" stepKey="deleteVirtualProduct1"/>
+            <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>
+            <deleteData createDataKey="createGroupedProduct1" stepKey="deleteGroupedProduct1"/>
+            <deleteData createDataKey="createDownloadableProduct1" stepKey="deleteDownloadableProduct1"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer1">
+            <argument name="Customer" value="$$createSimpleCustomer1$$" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage1">
+            <argument name="productUrl" value="$$createSimpleProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton1"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare1">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage2">
+            <argument name="productUrl" value="$$createConfigProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton2"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare2">
+            <argument name="productVar" value="$$createConfigProduct1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage3">
+            <argument name="productUrl" value="$$createVirtualProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton3"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare3">
+            <argument name="productVar" value="$$createVirtualProduct1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage4">
+            <argument name="productUrl" value="$$createBundleProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton4"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare4">
+            <argument name="productVar" value="$$createBundleProduct1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage5">
+            <argument name="productUrl" value="$$createGroupedProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton5"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare5">
+            <argument name="productVar" value="$$createGroupedProduct1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage6">
+            <argument name="productUrl" value="$$createDownloadableProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton6"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare6">
+            <argument name="productVar" value="$$createDownloadableProduct1$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnMyAccountDashboard1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+
+        <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearComparedProducts1"/>
+    </test>
+</tests>

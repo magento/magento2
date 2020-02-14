@@ -6,6 +6,8 @@
 
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
+use Magento\Catalog\Model\Product;
+
 /**
  * Bundle option renderer
  * @api
@@ -169,7 +171,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     {
         if (is_array($selectionId)) {
             $this->_selectedOptions = $selectionId;
-        } else if ($selectionId && $option->getSelectionById($selectionId)) {
+        } elseif ($selectionId && $option->getSelectionById($selectionId)) {
             $this->_selectedOptions = $selectionId;
         } elseif (!$option->getRequired()) {
             $this->_selectedOptions = 'None';
@@ -179,7 +181,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Define if selection is selected
      *
-     * @param  \Magento\Catalog\Model\Product $selection
+     * @param  Product $selection
      * @return bool
      */
     public function isSelected($selection)
@@ -219,7 +221,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get product model
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {
@@ -232,7 +234,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get bundle option price title.
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @param bool $includeContainer
      * @return string
      */
@@ -254,7 +256,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get price for selection product
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @return int|float
      */
     public function getSelectionPrice($selection)
@@ -277,7 +279,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Get title price for selection product
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @param bool $includeContainer
      * @return string
      */
@@ -299,7 +301,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return;
+        return '';
     }
 
     /**
@@ -318,7 +320,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Format price string
      *
-     * @param \Magento\Catalog\Model\Product $selection
+     * @param Product $selection
      * @param bool $includeContainer
      * @return string
      */

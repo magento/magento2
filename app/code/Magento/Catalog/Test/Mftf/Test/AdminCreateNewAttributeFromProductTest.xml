@@ -11,6 +11,7 @@
     <test name="AdminCreateNewAttributeFromProductTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Product attributes"/>
             <title value="Check that New Attribute from Product is create"/>
             <description value="Check that New Attribute from Product is create"/>
             <severity value="MAJOR"/>
@@ -37,7 +38,7 @@
             </actionGroup>
 
             <!--Delete Attribute-->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
 
@@ -54,7 +55,7 @@
 
         <!--Go to created product page and create new attribute-->
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
-        <actionGroup ref="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPage" stepKey="createAttribute">
+        <actionGroup ref="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPageActionGroup" stepKey="createAttribute">
             <argument name="attributeName" value="{{productDropDownAttribute.attribute_code}}"/>
             <argument name="attributeType" value="Dropdown"/>
             <argument name="firstStoreViewName" value="{{customStoreEN.name}}"/>

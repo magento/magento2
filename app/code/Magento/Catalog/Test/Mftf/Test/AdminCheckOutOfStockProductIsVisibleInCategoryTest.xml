@@ -39,7 +39,7 @@
         <!--Open Product Index Page and filter the product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <!-- Update product Advanced Inventory Setting -->
@@ -63,6 +63,10 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Run re-index task -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Verify product is visible in category front page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>

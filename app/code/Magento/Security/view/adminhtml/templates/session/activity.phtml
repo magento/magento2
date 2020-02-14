@@ -7,7 +7,6 @@
 /**
  * Account activity template
  *
- * @codingStandardsIgnoreFile
  * @var $block \Magento\Security\Block\Adminhtml\Session\Activity
  */
 
@@ -39,21 +38,18 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
             </thead>
             <tbody>
             <?php
-            foreach ($sessionInfoCollection as $item): ?>
+            foreach ($sessionInfoCollection as $item) : ?>
                 <tr>
                     <td><?= $block->escapeHtml($item->getFormattedIp()) ?></td>
                     <td><?= $block->escapeHtml($block->formatDateTime($item->getCreatedAt())) ?></td>
                 </tr>
-            <?php
-            endforeach;
-            ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
 
         <div class="button-container">
             <button type="button"
-                <?php
-                if ($block->areMultipleSessionsActive()): ?>
+                <?php if ($block->areMultipleSessionsActive()) : ?>
                     data-mage-init='{"confirmRedirect":{
                         "message": "<?=
                             $block->escapeJs(__('Are you sure that you want to log out all other sessions?'))
@@ -62,8 +58,7 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
                             $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll')))
                         ?>"
                     }}'
-                <?php
-                else: ?>disabled<?php
+                <?php else : ?>disabled<?php
                 endif ?>
                 title="<?= $block->escapeHtmlAttr(__('Log out all other sessions')) ?>">
                 <?= $block->escapeHtml(__('Log out all other sessions')) ?>

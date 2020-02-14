@@ -10,5 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminNewWidgetPage" url="admin/widget_instance/new/" area="admin" module="Magento_Widget">
         <section name="AdminNewWidgetSelectProductPopupSection"/>
+        <section name="AdminCatalogProductWidgetSection"/>
     </page>
 </pages>

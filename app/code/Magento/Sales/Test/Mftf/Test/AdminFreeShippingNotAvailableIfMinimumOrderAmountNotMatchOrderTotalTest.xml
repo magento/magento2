@@ -41,11 +41,11 @@
             <magentoCLI command="cache:flush" stepKey="flushCache2"/>
         </after>
         <!--Create new order with existing customer-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--Add product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -57,7 +57,7 @@
         <!--Submit Order and verify that Order isn't placed-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
 
-        <dontSeeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
-        <seeElement selector="{{AdminMessagesSection.errorMessage}}" stepKey="seeErrorMessage"/>
+        <dontSeeElement selector="{{AdminOrderFormMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+        <seeElement selector="{{AdminOrderFormMessagesSection.error}}" stepKey="seeErrorMessage"/>
     </test>
 </tests>

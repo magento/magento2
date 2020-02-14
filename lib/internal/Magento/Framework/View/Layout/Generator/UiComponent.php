@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Element\BlockFactory;
@@ -65,7 +66,7 @@ class UiComponent implements GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType()
     {
@@ -90,8 +91,6 @@ class UiComponent implements GeneratorInterface
         $layout = $generatorContext->getLayout();
 
         // Instantiate blocks and collect all actions data
-        /** @var $blocks \Magento\Framework\View\Element\AbstractBlock[] */
-        $blocks = [];
         foreach ($scheduledElements as $elementName => $element) {
             list($elementType, $data) = $element;
 
@@ -99,9 +98,10 @@ class UiComponent implements GeneratorInterface
                 continue;
             }
 
-            $block = $this->generateComponent($structure, $elementName, $data, $layout);
-            $blocks[$elementName] = $block;
-            $layout->setBlock($elementName, $block);
+            $layout->setBlock(
+                $elementName,
+                $this->generateComponent($structure, $elementName, $data, $layout)
+            );
             $scheduledStructure->unsetElement($elementName);
         }
 

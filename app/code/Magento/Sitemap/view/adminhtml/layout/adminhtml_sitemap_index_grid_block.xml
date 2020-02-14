@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.sitemap.container.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">sitemapGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Sitemap\Model\ResourceModel\Sitemap\Collection</argument>
                     <argument name="default_sort" xsi:type="string">sitemap_id</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.sitemap.container.grid.columnSet" as="grid.columnSet">

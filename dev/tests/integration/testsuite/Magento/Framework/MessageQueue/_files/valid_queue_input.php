@@ -23,11 +23,11 @@ return [
                 "name" => "publisher5.topic",
                 "schema" => [
                     "schema_type" => "object",
-                    "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
+                    "schema_value" => \Magento\TestModuleMysqlMq\Model\DataObject::class
                 ],
                 "response_schema" => [
                     "schema_type" => "object",
-                    "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                    "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
                 ],
                 "publisher" => "test-publisher-5"
             ]

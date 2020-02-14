@@ -7,10 +7,11 @@
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+// phpcs:ignore Magento2.Security.IncludeFile
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
@@ -62,6 +63,8 @@ $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType($product->getTypeId());
 $orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
 $orderItemSimple->setProductId($simpleProduct->getId());
+$orderItem->setName($product->getName());
+$orderItem->setSku($simpleProduct->getSku());
 $orderItemSimple->setParentItem($orderItem);
 $orderItemSimple->setStoreId(0);
 $orderItemSimple->setProductType($simpleProduct->getTypeId());

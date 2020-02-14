@@ -16,11 +16,11 @@
             <title value="Admin should able to switch between versions of TinyMCE"/>
             <description value="Admin should able to switch between versions of TinyMCE"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-82936"/>
+            <testCaseId value="MC-6114"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
         <waitForPageLoad stepKey="wait1"/>
@@ -80,7 +80,7 @@
         <see userInput="Hello TinyMCE3!" stepKey="seeContent2"/>
         <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

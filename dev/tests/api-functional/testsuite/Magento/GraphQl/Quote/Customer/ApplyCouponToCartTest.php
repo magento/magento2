@@ -163,26 +163,6 @@ class ApplyCouponToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_coupon_expired.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
-     */
-    public function testApplyExpiredCoupon()
-    {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/574');
-        $couponCode = '2?ds5!2d';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId, $couponCode);
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
      * Products in cart don't fit to the coupon
      *
      * @magentoApiDataFixture Magento/Checkout/_files/discount_10percent_generalusers.php
@@ -201,49 +181,6 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @param string $input
-     * @param string $message
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @expectedException \Exception
-     */
-    public function testApplyCouponWithMissedRequiredParameters(string $input, string $message)
-    {
-        $query = <<<QUERY
-mutation {
-  applyCouponToCart(input: {{$input}}) {
-    cart {
-      applied_coupon {
-        code
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
-    {
-        return [
-            'missed_cart_id' => [
-                'coupon_code: "test"',
-                'Required parameter "cart_id" is missing'
-            ],
-            'missed_coupon_code' => [
-                'cart_id: "test"',
-                'Required parameter "coupon_code" is missing'
-            ],
-        ];
     }
 
     /**

@@ -4,11 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
-$mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+/** @var \Magento\Framework\Filesystem $fileSystem */
+$fileSystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     \Magento\Framework\Filesystem::class
-)->getDirectoryWrite(
+);
+/** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
+$mediaDirectory = $fileSystem->getDirectoryWrite(
     \Magento\Framework\App\Filesystem\DirectoryList::MEDIA
 );
-$mediaDirectory->delete('import');
+/** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
+$varDirectory = $fileSystem->getDirectoryWrite(
+    \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR
+);
+$varDirectory->delete('import');
 $mediaDirectory->delete('catalog');

@@ -8,14 +8,17 @@ namespace Magento\Store\Model;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Security.Superglobal
  */
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,6 +32,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
+    /**
+     * @var HttpRequest
+     */
+    private $request;
+
     protected function setUp()
     {
         $this->model = $this->_getStoreModel();
@@ -40,6 +48,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected function _getStoreModel()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->request = $objectManager->get(RequestInterface::class);
         $this->modelParams = [
             'context' => $objectManager->get(\Magento\Framework\Model\Context::class),
             'registry' => $objectManager->get(\Magento\Framework\Registry::class),
@@ -49,7 +58,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'coreFileStorageDatabase' => $objectManager->get(\Magento\MediaStorage\Helper\File\Storage\Database::class),
             'configCacheType' => $objectManager->get(\Magento\Framework\App\Cache\Type\Config::class),
             'url' => $objectManager->get(\Magento\Framework\Url::class),
-            'request' => $objectManager->get(\Magento\Framework\App\RequestInterface::class),
+            'request' => $this->request,
             'configDataResource' => $objectManager->get(\Magento\Config\Model\ResourceModel\Config\Data::class),
             'filesystem' => $objectManager->get(\Magento\Framework\Filesystem::class),
             'config' => $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class),
@@ -201,7 +210,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBaseUrlForCustomEntryPoint($type, $useCustomEntryPoint, $useStoreCode, $expected)
     {
-         /* config operations require store to be loaded */
+        /* config operations require store to be loaded */
         $this->model->load('default');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
@@ -213,6 +222,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         // emulate custom entry point
         $_SERVER['SCRIPT_FILENAME'] = 'custom_entry.php';
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\RequestInterface::class);
+        $request->setServer(new Parameters($_SERVER));
+
         if ($useCustomEntryPoint) {
             $property = new \ReflectionProperty($this->model, '_isCustomEntryPoint');
             $property->setAccessible(true);
@@ -288,6 +301,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
         $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
 
+        $this->model
+            ->expects($this->any())->method('getUrl')
+            ->willReturn('http://localhost/index.php?' .SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345');
+        $this->request->setParams([SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345']);
+        $this->request->setQueryValue(SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345');
+        $this->assertContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345', $this->model->getCurrentUrl());
+
         /** @var \Magento\Store\Model\Store $secondStore */
         $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');
 
@@ -298,15 +318,15 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $url = $product->getUrlInStore();
 
         $this->assertEquals(
-            $secondStore->getBaseUrl().'catalog/product/view/id/1/s/simple-product/',
+            $secondStore->getBaseUrl() . 'catalog/product/view/id/1/s/simple-product/',
             $url
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().'?___from_store=default',
+            $secondStore->getBaseUrl() . '?SID=12345&___from_store=default',
             $secondStore->getCurrentUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl(),
+            $secondStore->getBaseUrl() . '?SID=12345',
             $secondStore->getCurrentUrl(false)
         );
     }
@@ -332,25 +352,25 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $product->setStoreId($secondStore->getId());
         $url = $product->getUrlInStore();
 
-         /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
+        /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
         $categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
         $category = $categoryRepository->get(333, $secondStore->getStoreId());
 
         $this->assertEquals(
-            $secondStore->getBaseUrl().'catalog/category/view/s/category-1/id/333/',
+            $secondStore->getBaseUrl() . 'catalog/category/view/s/category-1/id/333/',
             $category->getUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().
+            $secondStore->getBaseUrl() .
             'catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store',
             $url
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().'?___store=fixture_second_store&___from_store=default',
+            $secondStore->getBaseUrl() . '?___store=fixture_second_store&___from_store=default',
             $secondStore->getCurrentUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl().'?___store=fixture_second_store',
+            $secondStore->getBaseUrl() . '?___store=fixture_second_store',
             $secondStore->getCurrentUrl(false)
         );
     }
@@ -405,7 +425,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function saveValidationDataProvider()
+    public function saveValidationDataProvider()
     {
         return [
             'empty store name' => [['name' => '']],
