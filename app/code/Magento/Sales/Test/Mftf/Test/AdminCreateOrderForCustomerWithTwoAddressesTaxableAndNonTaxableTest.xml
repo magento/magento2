@@ -36,23 +36,27 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <!--Step 1: Create new order for customer-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <!--Step 2: Add product1 to the order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$product1$$"/>
         </actionGroup>
         <!--Step 2: Select taxable address as billing address-->
         <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_CA.state}}" stepKey="selectTaxableAddress" />
+        <waitForPageLoad stepKey="waitForChangeBillingAddress"/>
+        <!--Step 3: Set shipping address same as billing -->
+        <checkOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="checkSameAsBillingAddressCheckbox"/>
+        <waitForPageLoad stepKey="waitForChangeShippingAddress"/>
         <!--Step 3: Select FlatRate shipping method-->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <!--Step 4: Verify that tax is applied to the order-->
         <seeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="seeTax" />
         <!--Step 5: Select non taxable address as billing address-->
         <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_TX.state}}" stepKey="selectNonTaxableAddress" />
         <!--Step 6: Change shipping method to Free-->
-        <actionGroup ref="changeShippingMethod" stepKey="changeShippingMethod">
+        <actionGroup ref="ChangeShippingMethodActionGroup" stepKey="changeShippingMethod">
             <argument name="shippingMethod" value="freeshipping_freeshipping"/>
         </actionGroup>
         <!--Step 7: Verify that tax is not applied to the order-->

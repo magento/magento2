@@ -44,8 +44,7 @@ class UrlRewriteTest extends AbstractController
             $location = $response->getHeader('Location')->getFieldValue();
             $this->assertStringEndsWith(
                 $redirect,
-                $location,
-                'Invalid location header'
+                $location
             );
         }
     }
@@ -80,38 +79,59 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
             ],
-        ];
-    }
-
-    /**
-     * @magentoDbIsolation enabled
-     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
-     * @dataProvider categoryRewriteProvider
-     * @param string $request
-     * @return void
-     */
-    public function testCategoryUrlRewrite(string $request): void
-    {
-        $this->dispatch($request);
-        $response = $this->getResponse();
-        $this->assertEquals(
-            HttpResponse::STATUS_CODE_200,
-            $response->getHttpResponseCode(),
-            'Response code does not match expected value'
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function categoryRewriteProvider(): array
-    {
-        return [
-            [
-                'category-1.html',
-                'category-1/category-1-1.html',
-                'category-1/category-1-1/category-1-1-1.html',
+            'Use Case #7: Rewrite: page-similar --(301)--> page-a; '
+            . 'Request: page-similar?param=1 --(301)--> page-a?param=1' => [
+                'request' => '/page-similar?param=1',
+                'redirect' => '/page-a?param=1',
+            ],
+            'Use Case #8: Rewrite: page-similar/ --(301)--> page-b; '
+            . 'Request: page-similar/?param=1 --(301)--> page-b?param=1' => [
+                'request' => '/page-similar/?param=1',
+                'redirect' => '/page-b?param=1',
+            ],
+            'Use Case #9: Rewrite: page-similar-query-param --(301)--> page-d?param1=1;'
+            . 'Request: page-similar-query-param --(301)--> page-d?param1=1' => [
+                'request' => '/page-similar-query-param',
+                'redirect' => '/page-d?param1=1',
+            ],
+            'Use Case #10: Rewrite: page-similar-query-param --(301)--> page-d?param1=1; '
+            . 'Request: page-similar-query-param?param2=1 --(301)--> page-d?param1=1&param2=1' => [
+                'request' => '/page-similar-query-param?param2=1',
+                'redirect' => '/page-d?param1=1&param2=1',
+            ],
+            'Use Case #11: Rewrite: page-similar-query-param/ --(301)--> page-e?param1=1; '
+            . 'Request: page-similar-query-param/ --(301)--> page-e?param1=1' => [
+                'request' => '/page-similar-query-param/',
+                'redirect' => '/page-e?param1=1',
+            ],
+            'Use Case #12: Rewrite: page-similar-query-param/ --(301)--> page-e?param1=1;'
+            . 'Request: page-similar-query-param/?param2=1 --(301)--> page-e?param1=1&param2=1' => [
+                'request' => '/page-similar-query-param/?param2=1',
+                'redirect' => '/page-e?param1=1&param2=1',
+            ],
+            'Use Case #13: Rewrite: page-external1 --(301)--> http://example.com/external;'
+            . 'Request: page-external1?param1=1 --(301)--> http://example.com/external (not fills get params)' => [
+                'request' => '/page-external1?param1=1',
+                'redirect' => 'http://example.com/external',
+            ],
+            'Use Case #14: Rewrite: page-external2/ --(301)--> https://example.com/external2/;'
+            . 'Request: page-external2?param2=1 --(301)--> https://example.com/external2/ (not fills get params)' => [
+                'request' => '/page-external2?param2=1',
+                'redirect' => 'https://example.com/external2/',
+            ],
+            'Use Case #15: Rewrite: page-external3 --(301)--> http://example.com/external?param1=value1;'
+            . 'Request: page-external3?param1=custom1&param2=custom2 --(301)--> '
+            . 'http://example.com/external?param1=value1'
+            . ' (fills get param from target path)' => [
+                'request' => '/page-external3?param1=custom1&param2=custom2',
+                'redirect' => 'http://example.com/external?param1=value1',
+            ],
+            'Use Case #16: Rewrite: page-external4/ --(301)--> https://example.com/external2/?param2=value2;'
+            . 'Request: page-external4?param1=custom1&param2=custom2 --(301)--> '
+            . 'https://example.com/external2/?param2=value2 '
+            . ' (fills get param from target path)' => [
+                'request' => '/page-external4?param1=custom1&param2=custom2',
+                'redirect' => 'https://example.com/external2/?param2=value2',
             ],
         ];
     }

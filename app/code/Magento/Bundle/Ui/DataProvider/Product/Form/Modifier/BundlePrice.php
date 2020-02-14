@@ -5,6 +5,7 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -39,7 +40,7 @@ class BundlePrice extends AbstractModifier
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -89,7 +90,22 @@ class BundlePrice extends AbstractModifier
                 ]
             ]
         );
-
+        if ($this->locator->getProduct()->getPriceType() == Price::PRICE_TYPE_DYNAMIC) {
+            $meta = $this->arrayManager->merge(
+                $this->arrayManager->findPath(
+                    static::CODE_TAX_CLASS_ID,
+                    $meta,
+                    null,
+                    'children'
+                ) . static::META_CONFIG_PATH,
+                $meta,
+                [
+                    'service' => [
+                        'template' => ''
+                    ]
+                ]
+            );
+        }
         return $meta;
     }
 

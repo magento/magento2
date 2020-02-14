@@ -61,7 +61,7 @@ input CustomerInput {
     middlename: String @doc(description: "The customer's middle name")
     lastname: String @doc(description: "The customer's family name")
     suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    email: String! @doc(description: "The customer's email address. Required")
+    email: String @doc(description: "The customer's email address. Required for customer creation")
     dob: String @doc(description: "Deprecated: Use `date_of_birth` instead")
     date_of_birth: String @doc(description: "The customer's date of birth")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")

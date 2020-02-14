@@ -15,6 +15,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
 
 /**
  * Category rows indexer.
@@ -41,6 +44,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $eventManager;
 
     /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Config $config
@@ -48,6 +56,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param MetadataPool|null $metadataPool
      * @param CacheContext|null $cacheContext
      * @param EventManagerInterface|null $eventManager
+     * @param IndexerRegistry|null $indexerRegistry
      */
     public function __construct(
         ResourceConnection $resource,
@@ -56,11 +65,13 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         QueryGenerator $queryGenerator = null,
         MetadataPool $metadataPool = null,
         CacheContext $cacheContext = null,
-        EventManagerInterface $eventManager = null
+        EventManagerInterface $eventManager = null,
+        IndexerRegistry $indexerRegistry = null
     ) {
         parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
+        $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
     }
 
     /**
@@ -78,12 +89,37 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
         $this->limitationByProducts = $idsToBeReIndexed;
         $this->useTempTable = $useTempTable;
+        $indexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
+        $workingState = $indexer->isWorking();
 
         $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
 
-        $this->removeEntries();
-
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+            foreach ($this->storeManager->getStores() as $store) {
+                $this->connection->truncateTable($this->getIndexTable($store->getId()));
+            }
+        } else {
+            $this->removeEntries();
+        }
         $this->reindex();
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+            foreach ($this->storeManager->getStores() as $store) {
+                $this->connection->delete(
+                    $this->tableMaintainer->getMainTable($store->getId()),
+                    ['product_id IN (?)' => $this->limitationByProducts]
+                );
+                $select = $this->connection->select()
+                    ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
+                $this->connection->query(
+                    $this->connection->insertFromSelect(
+                        $select,
+                        $this->tableMaintainer->getMainTable($store->getId()),
+                        [],
+                        AdapterInterface::INSERT_ON_DUPLICATE
+                    )
+                );
+            }
+        }
 
         $affectedCategories = array_merge($affectedCategories, $this->getCategoryIdsFromIndex($idsToBeReIndexed));
 

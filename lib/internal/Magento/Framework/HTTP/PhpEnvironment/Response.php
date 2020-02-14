@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 /**
@@ -180,5 +182,28 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     public function __sleep()
     {
         return ['content', 'isRedirect', 'statusCode'];
+    }
+
+    /**
+     * Sending provided headers.
+     *
+     * Had to be overridden because the original did not work correctly with multi-headers.
+     */
+    public function sendHeaders()
+    {
+        if ($this->headersSent()) {
+            return $this;
+        }
+
+        $status  = $this->renderStatusLine();
+        header($status);
+
+        /** @var \Zend\Http\Header\HeaderInterface $header */
+        foreach ($this->getHeaders() as $header) {
+            header($header->toString(), false);
+        }
+
+        $this->headersSent = true;
+        return $this;
     }
 }

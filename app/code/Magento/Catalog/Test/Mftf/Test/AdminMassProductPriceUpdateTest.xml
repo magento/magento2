@@ -34,12 +34,12 @@
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
 
         <!--Search products using keyword -->
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="Testp"/>
         </actionGroup>
 
         <!--Sort Products by ID in descending order-->
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
 
         <!--Select products-->
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct1.sku$$)}}" stepKey="selectFirstProduct"/>

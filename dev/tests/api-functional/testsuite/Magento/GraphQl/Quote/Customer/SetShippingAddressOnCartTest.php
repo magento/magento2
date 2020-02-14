@@ -464,21 +464,16 @@ QUERY;
     /**
      * Covers case with empty street
      *
-     * @todo Unskip case with missing "street" parameter https://github.com/magento/graphql-ce/issues/1033
-     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Magento\Framework\GraphQl\Exception\GraphQlInputException
-     * @expectedExceptionMessage Required parameter "street" is missing
+     * @expectedException \Exception
+     * @expectedExceptionMessage Field CartAddressInput.street of required type [String]! was not provided.
      */
     public function testSetNewShippingAddressWithMissedRequiredStreetParameters()
     {
-        $this->markTestSkipped(
-            'Notice: Undefined index: street https://github.com/magento/graphql-ce/issues/1033'
-        );
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = <<<QUERY
 mutation {
@@ -516,19 +511,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_shipping_addresses' => [
-                'cart_id: "cart_id_value"',
-                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
-                'was not provided.',
-            ],
-            'missed_city' => [
-                'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
-                'Field CartAddressInput.city of required type String! was not provided'
-            ],
-            'missed_cart_id' => [
-                'shipping_addresses: {}',
-                'Required parameter "cart_id" is missing'
-            ],
             'missed_region' => [
                 'cart_id: "cart_id_value"
                  shipping_addresses: [{

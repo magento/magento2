@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCreatedAttributeActionGroup">
+        <annotations>
+            <description>Deletes the Configurable Product Attribute.</description>
+        </annotations>
+
+        <!--Click on Stores item-->
+        <click stepKey="clickOnStoresItem" selector="{{CatalogProductsSection.storesItem}}"/>
+        <waitForPageLoad stepKey="waitForNavigationPanel"/>
+
+        <!--Click on Products item-->
+        <waitForElementVisible selector="{{CatalogProductsSection.storesProductItem}}" stepKey="waitForCatalogLoad"/>
+        <click stepKey="clickOnStoresProductItem" selector="{{CatalogProductsSection.storesProductItem}}"/>
+        <waitForPageLoad stepKey="waitForStoresProductPageLoad"/>
+
+        <!--Click on created Attribute -->
+        <fillField stepKey="searchProductDefaultLabel" selector="{{CatalogProductsSection.searchDefaultLabelField}}" userInput="{{NewProductsData.defaultLabel}}"/>
+        <click stepKey="clickSearchButton" selector="{{CatalogProductsSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForCreatedAttributeLoad"/>
+        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdAttributeItem}}"/>
+        <waitForPageLoad stepKey="waitForAttributePropertiesPageLoad"/>
+
+        <!--Click on Delete Attribute item-->
+        <click stepKey="clickOnDeleteAttributeItem" selector="{{CatalogProductsSection.deleteAttributeItem}}"/>
+        <waitForPageLoad stepKey="waitForDeletedDialogOpened"/>
+
+        <!--Click on OK button-->
+        <click stepKey="clickOnOKButton" selector="{{CatalogProductsSection.okButton}}"/>
+        <waitForPageLoad stepKey="waitFordAttributeDeleted"/>
+        <see userInput="You deleted the product attribute." stepKey="seeDeletedTheProductAttributeMessage"/>
+
+        <!-- Click Reset Filter button-->
+        <click stepKey="clickResetFilterButton" selector="{{CatalogProductsSection.resetFilter}}"/>
+        <waitForPageLoad stepKey="waitForAllFilterReset"/>
+    </actionGroup>
+</actionGroups>

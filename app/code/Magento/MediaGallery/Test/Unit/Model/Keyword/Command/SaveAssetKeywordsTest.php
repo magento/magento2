@@ -7,15 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
 
-use Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords;
-use Magento\MediaGallery\Model\Keyword\Command\SaveAssetLinks;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords;
+use Magento\MediaGallery\Model\Keyword\Command\SaveAssetLinks;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * SaveAssetKeywordsTest.
@@ -48,6 +49,11 @@ class SaveAssetKeywordsTest extends TestCase
     private $selectMock;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
      * SetUp
      */
     public function setUp(): void
@@ -58,10 +64,12 @@ class SaveAssetKeywordsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->createMock(Select::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->sut = new SaveAssetKeywords(
             $this->resourceConnectionMock,
-            $this->saveAssetLinksMock
+            $this->saveAssetLinksMock,
+            $this->loggerMock
         );
     }
 
@@ -106,6 +114,9 @@ class SaveAssetKeywordsTest extends TestCase
             ->method('getConnection')
             ->willThrowException((new \Exception()));
         $this->expectException(CouldNotSaveException::class);
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->willReturnSelf();
 
         $this->sut->execute([$keyword], 1);
     }

@@ -8,6 +8,10 @@ define([
     'use strict';
 
     return Column.extend({
+        defaults: {
+            bodyTmpl: 'ui/grid/columns/overlay'
+        },
+
         /**
          * If overlay should be visible
          *

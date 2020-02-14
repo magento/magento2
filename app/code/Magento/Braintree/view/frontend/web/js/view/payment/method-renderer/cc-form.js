@@ -18,7 +18,6 @@ define(
         'Magento_Vault/js/view/payment/vault-enabler',
         'Magento_Braintree/js/view/payment/kount',
         'mage/translate',
-        'prototype',
         'domReady!'
     ],
     function (
@@ -92,7 +91,7 @@ define(
                     })
                     .then(function (hostedFieldsInstance) {
                         self.hostedFieldsInstance = hostedFieldsInstance;
-                        self.isPlaceOrderActionAllowed(true);
+                        self.isPlaceOrderActionAllowed(false);
                         self.initFormValidationEvents(hostedFieldsInstance);
 
                         return self.hostedFieldsInstance;
