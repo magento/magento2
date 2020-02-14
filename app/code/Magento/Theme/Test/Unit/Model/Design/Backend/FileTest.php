@@ -87,11 +87,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $requestData,
             $filesystem,
             $this->urlBuilder,
-            $this->ioFileSystem,
             $abstractResource,
             $abstractDb,
             [],
-            $this->databaseHelper
+            $this->databaseHelper,
+            $this->ioFileSystem
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -248,50 +248,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Normal file name' => ['filename.jpg'],
-        ];
-    }
-
-    /**
-     * @dataProvider beforeSaveInvalidDataProvider
-     * @param string $fileName
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something is wrong with the file upload settings.
-     */
-    public function testBeforeSaveInvalidFile($fileName)
-    {
-        {
-            $this->fileBackend->setScope('store');
-            $this->fileBackend->setScopeId(1);
-            $this->fileBackend->setValue(
-                [
-                    [
-                        'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
-                        'file' => $fileName,
-                        'size' => 234234,
-                    ]
-                ]
-            );
-            $this->fileBackend->setFieldConfig(
-                [
-                    'upload_dir' => [
-                        'value' => 'value',
-                        'config' => 'system/filesystem/media',
-                    ],
-                ]
-            );
-
-            $this->fileBackend->beforeSave();
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function beforeSaveInvalidDataProvider()
-    {
-        return [
-            'Invalid Extension' => ['file.invalid'],
             'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
         ];
     }

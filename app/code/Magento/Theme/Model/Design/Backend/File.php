@@ -39,17 +39,17 @@ class File extends BackendFile
     /**
      * @var Mime
      */
-    private $mime;
+    protected $mime;
+
+    /**
+     * @var IoFileSystem
+     */
+    protected $ioFileSystem;
 
     /**
      * @var Database
      */
     private $databaseHelper;
-
-    /**
-     * @var IoFileSystem
-     */
-    private $ioFileSystem;
 
     /**
      * @param Context $context
@@ -60,11 +60,11 @@ class File extends BackendFile
      * @param RequestDataInterface $requestData
      * @param Filesystem $filesystem
      * @param UrlInterface $urlBuilder
-     * @param IoFileSystem $ioFileSystem
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @param Database $databaseHelper
+     * @param IoFileSystem $ioFileSystem
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -76,11 +76,11 @@ class File extends BackendFile
         RequestDataInterface $requestData,
         Filesystem $filesystem,
         UrlInterface $urlBuilder,
-        IoFileSystem $ioFileSystem,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = [],
-        Database $databaseHelper = null
+        Database $databaseHelper = null,
+        IoFileSystem $ioFileSystem = null
     ) {
         parent::__construct(
             $context,
@@ -94,9 +94,9 @@ class File extends BackendFile
             $resourceCollection,
             $data
         );
-        $this->ioFileSystem = $ioFileSystem;
         $this->urlBuilder = $urlBuilder;
         $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
+        $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()->get(IoFileSystem::class);
     }
 
     /**
@@ -118,8 +118,9 @@ class File extends BackendFile
             );
         }
 
-        if (!isset($this->ioFileSystem->getPathInfo(($file))['extension']) ||
-            !in_array($this->ioFileSystem->getPathInfo(($file))['extension'], $this->getAllowedExtensions())
+        if (!empty($this->getAllowedExtensions()) &&
+            (!isset($this->ioFileSystem->getPathInfo($file)['extension']) ||
+            !in_array($this->ioFileSystem->getPathInfo($file)['extension'], $this->getAllowedExtensions()))
         ) {
             throw new LocalizedException(
                 __('Something is wrong with the file upload settings.')
@@ -174,7 +175,7 @@ class File extends BackendFile
      */
     public function getAllowedExtensions()
     {
-        return ['jpg', 'jpeg', 'gif', 'png'];
+        return [];
     }
 
     /**
