@@ -274,6 +274,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     private function getInstalledSearchEngine()
     {
         if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
             $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->execute();
             $this->searchEngine = 'elasticsearch' . $version;
         }

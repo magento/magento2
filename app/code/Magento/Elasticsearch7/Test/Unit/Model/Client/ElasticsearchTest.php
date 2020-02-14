@@ -133,7 +133,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testBuildConfig(array $options, $expectedResult): void
     {
         $buildConfig = new Elasticsearch($options);
-        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildConfig');
+        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildESConfig');
         $result = $config->invoke($buildConfig, $options);
         $this->assertEquals($expectedResult, $result['hosts'][0]);
     }

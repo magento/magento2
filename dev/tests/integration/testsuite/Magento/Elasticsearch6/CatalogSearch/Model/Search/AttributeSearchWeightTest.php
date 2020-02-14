@@ -40,7 +40,7 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
         array $expectedProductNames
     ): void {
         $this->markTestSkipped('This test need stabilization. MC-29260');
-
+        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
         $checker = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class);
         if ($checker->execute() !== 6) {
             $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
