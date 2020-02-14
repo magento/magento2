@@ -258,11 +258,12 @@ class Save extends Attribute implements HttpPostActionInterface
                 unset($data['apply_to']);
             }
 
-            $data['entity_type_id'] = $this->_entityTypeId;
+            unset($data['entity_type_id']);
 
             $model->addData($data);
 
             if (!$attributeId) {
+                $model->setEntityTypeId($this->_entityTypeId);
                 $model->setIsUserDefined(1);
             }
 
