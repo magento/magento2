@@ -236,11 +236,11 @@ $_item = null;
                                     <?php endif; ?>
 
                                     <?php if ($showAddTo || $showCart):?>
+                                        <?php // phpcs:disable ?>
                                         <div class="product actions product-item-actions">
                                             <?php if ($showCart):?>
                                                 <?php if ($_item->isSaleable()):?>
                                                     <div class="actions-primary">
-                                                    <?php // phpcs:disable ?>
                                                     <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)):?>
                                                         <button
                                                             class="action tocart primary"
@@ -248,7 +248,6 @@ $_item = null;
                                                         <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                         </button>
                                                     <?php else :?>
-                                                    <?php // phpcs:enable ?>
                                                 <?php
                                                 /** @var $viewModel PreparePostData */
                                                 $viewModel = $block->getViewModel();
@@ -298,6 +297,7 @@ $_item = null;
                                                 </div>
                                             <?php endif; ?>
                                         </div>
+                                        <?php // phpcs:enable ?>
                                     <?php endif; ?>
                                 </div>
                             </div>
