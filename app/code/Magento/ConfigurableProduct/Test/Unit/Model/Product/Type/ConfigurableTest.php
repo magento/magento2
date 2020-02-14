@@ -229,21 +229,25 @@ class ConfigurableTest extends TestCase
 
     /**
      * Verify load user product if stock filter is true.
-     *
+     * @param int $storeId
+     * @param int $customerGroupId
+     * @param int $productId
+     * @param string $linkField
      * @return void
+     * @dataProvider getLoadUserProductsSkipStockFilterIsTrueDataProvider
      */
-    public function testLoadUserProductsSkipStockFilterIsTrue(): void
-    {
-        $storeId = 1;
-        $customerGroupId = 1;
-        $productId = 1;
-        $linkField = 'id';
+    public function testLoadUserProductsSkipStockFilterIsTrue(
+        int $storeId,
+        int $customerGroupId,
+        int $productId,
+        string $linkField
+    ): void {
         $product = $this->createMock(Product::class);
         $productCollectionItem = $this->createMock(Product::class);
         $productCollection = $this->createMock(ProductCollection::class);
         $this->entityMetadata->expects($this->atLeastOnce())
-        ->method('getLinkField')
-        ->willReturn($linkField);
+            ->method('getLinkField')
+            ->willReturn($linkField);
         $product->expects($this->exactly(5))
             ->method('getData')
             ->withConsecutive(
@@ -302,6 +306,23 @@ class ConfigurableTest extends TestCase
             ->willReturnSelf();
 
         $this->assertEquals($product, $this->model->getSalableUsedProducts($product));
+    }
+
+    /**
+     * Data provider for testLoadUserProductsSkipStockFilterIsTrue.
+     *
+     * @return array
+     */
+    public function getLoadUserProductsSkipStockFilterIsTrueDataProvider(): array
+    {
+        return [
+            [
+                'storeId' => 1,
+                'customerGroupId' => 1,
+                'productId' => 1,
+                'linkField' => 'id'
+            ]
+        ];
     }
 
     /**
