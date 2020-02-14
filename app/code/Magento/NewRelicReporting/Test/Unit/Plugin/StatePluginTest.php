@@ -71,7 +71,6 @@ class StatePluginTest extends TestCase
                 'logger' => $this->loggerMock,
             ]
         );
-
     }
 
     /**
