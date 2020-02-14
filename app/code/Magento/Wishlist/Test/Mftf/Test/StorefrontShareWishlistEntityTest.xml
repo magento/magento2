@@ -15,7 +15,7 @@
             <title value="Customer should be able to share a persistent wishlist"/>
             <description value="Customer should be able to share a persistent wishlist"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-13976"/>
+            <testCaseId value="MC-27621"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
         </annotations>
