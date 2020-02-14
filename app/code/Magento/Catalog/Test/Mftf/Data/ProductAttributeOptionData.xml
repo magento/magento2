@@ -101,4 +101,19 @@
     <entity name="ProductAttributeOptionTwoForExportImport" extends="productAttributeOption2" type="ProductAttributeOption">
         <data key="label">option2</data>
     </entity>
+    <entity name="ProductAttributeOption10" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">3.5</data>
+        <data key="value" unique="suffix">3.5</data>
+    </entity>
+    <entity name="ProductAttributeOption11" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">10.12</data>
+        <data key="value" unique="suffix">10.12</data>
+    </entity>
+    <entity name="ProductAttributeOption12" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">36</data>
+        <data key="value" unique="suffix">36</data>
+    </entity>
 </entities>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductQuickSearchWithDecimalAttributeUsingElasticSearchTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Elasticsearch 7.x.x Upgrade"/>
+            <title value="Search decimal attribute with ElasticSearch"/>
+            <description value="User should be able to search decimal attribute using ElasticSearch"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-31239"/>
+            <group value="elasticSearch"/>
+        </annotations>
+        <before>
+            <!-- Create product attribute with 3 options -->
+            <createData entity="multipleSelectProductAttribute" stepKey="customAttribute"/>
+            <createData entity="productAttributeOption10" stepKey="option1">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption11" stepKey="option2">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption12" stepKey="option3">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+
+            <!-- Add custom attribute to Default Set -->
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <!-- Create subcategory -->
+            <createData entity="SimpleSubCategory" stepKey="newCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleA">
+                <requiredEntity createDataKey="newCategory"/>
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleB">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+
+            <!-- Run full reindex and clear caches -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleA" stepKey="deleteSimpleA"/>
+            <deleteData createDataKey="simpleB" stepKey="deleteSimpleB"/>
+            <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete custom attribute-->
+
+            <actionGroup ref="updateIndexerOnSave" stepKey="resetIndexerBackToOriginalState">
+                <argument name="indexerName" value="catalogsearch_fulltext"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Navigate to storefront and do a quick search for the product -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <waitForPageLoad stepKey="waitForHomePageToLoad"/>
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult1">
+            <argument name="keyword" value="10.12"/>
+            <argument name="product" value="simpleA.name"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult2">
+            <argument name="keyword" value="simpleB.name"/>
+            <argument name="product" value="simpleB.name"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult3">
+            <argument name="keyword" value="36"/>
+            <argument name="product" value="simpleA.name"/>
+        </actionGroup>
+
+        </test>
+</tests>
