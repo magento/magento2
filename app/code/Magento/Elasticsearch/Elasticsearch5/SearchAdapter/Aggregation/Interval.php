@@ -141,6 +141,10 @@ class Interval implements IntervalInterface
             return false;
         }
 
+        if (is_array($offset)) {
+            $offset = $offset['value'];
+        }
+
         return $this->load($index - $offset + 1, $offset - 1, $lower);
     }
 
@@ -164,6 +168,10 @@ class Interval implements IntervalInterface
         $offset = $queryCountResult['hits']['total'];
         if (!$offset) {
             return false;
+        }
+
+        if (is_array($offset)) {
+            $offset = $offset['value'];
         }
 
         $from = ['gte' => $data - self::DELTA];
