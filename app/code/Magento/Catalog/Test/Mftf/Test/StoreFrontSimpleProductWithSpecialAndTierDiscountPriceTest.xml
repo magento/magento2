@@ -16,21 +16,17 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
-            <!-- Create product -->
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">100.00</field>
             </createData>
 
-            <!-- Add tier price to product -->
             <createData entity="tierProductPriceDiscount" stepKey="addTierPrice">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
 
-            <!-- Add special price to product -->
             <createData entity="specialProductPrice2" stepKey="addSpecialToSimpleProduct">
                 <requiredEntity createDataKey="createProduct"/>
                 <field key="price">65.00</field>
@@ -40,29 +36,24 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
-        <!-- Open product page -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.sku$)}}" stepKey="openProductPage"/>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
-        <!-- Assert product name on product page -->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="productNameText"/>
-        <assertEquals stepKey="assertProductNameOnProductPage">
-            <expectedResult type="string">$createProduct.name$</expectedResult>
-            <actualResult type="variable">productNameText</actualResult>
-        </assertEquals>
+        <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
 
-        <!-- Assert product tier price on product page -->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
-        <assertEquals stepKey="assertTierPriceTextOnProductPage">
-            <expectedResult type="string">Buy {{tierProductPriceDiscount.quantity}} for $64.00 each and save 2%</expectedResult>
-            <actualResult type="variable">tierPriceText</actualResult>
-        </assertEquals>
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceActionGroup" stepKey="assertProductTierPriceText">
+            <argument name="tierProductPriceDiscountQuantity" value="{{tierProductPriceDiscount.quantity}}"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="64.00"/>
+            <argument name="productSavedPricePercent" value="2"/>
+        </actionGroup>
 
-        <!-- Assert final product price on product page -->
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.price}}" stepKey="productPriceText"/>
-        <assertEquals stepKey="assertProductPriceOnProductPage">
-            <expectedResult type="string">$65.00</expectedResult>
-            <actualResult type="variable">productPriceText</actualResult>
-        </assertEquals>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceText">
+            <argument name="finalProductPrice" value="65.00"/>
+        </actionGroup>
     </test>
 </tests>
