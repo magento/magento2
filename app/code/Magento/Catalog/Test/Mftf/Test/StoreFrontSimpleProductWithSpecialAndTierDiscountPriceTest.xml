@@ -31,6 +31,7 @@
                 <requiredEntity createDataKey="createProduct"/>
                 <field key="price">65.00</field>
             </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndex"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
