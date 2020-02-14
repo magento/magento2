@@ -12,16 +12,16 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
-use Zend\Console\Request;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\Application;
-use Zend\Mvc\MvcEvent;
-use Zend\Router\Http\RouteMatch;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\RequestInterface;
-use Zend\Uri\UriInterface;
+use Laminas\Console\Request;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\Application;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Router\Http\RouteMatch;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Uri\UriInterface;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem

@@ -7,6 +7,8 @@
 namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\Framework\App\Cache\Type\Block as BlockCache;
+use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -35,6 +37,7 @@ use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
@@ -336,7 +339,7 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
-        $script[] = ['Enabling caches:', 'enableCaches', []];
+        $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
@@ -866,6 +869,12 @@ class Installer
      */
     public function installDataFixtures(array $request = [])
     {
+        $frontendCaches = [
+            PageCache::TYPE_IDENTIFIER,
+            BlockCache::TYPE_IDENTIFIER,
+            LayoutCache::TYPE_IDENTIFIER,
+        ];
+
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
@@ -876,7 +885,11 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
+        $this->log->log('Disabling caches:');
+        $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
+        $this->log->log('Enabling caches:');
+        $this->updateCaches(true, $frontendCaches);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -1248,23 +1261,39 @@ class Installer
     }
 
     /**
-     * Enables caches after installing application
+     * Enable or disable caches for specific types that are available
      *
+     * If no types are specified then it will enable or disable all available types
+     * Note this is called by install() via callback.
+     *
+     * @param bool $isEnabled
+     * @param array $types
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
-    private function enableCaches()
+    private function updateCaches($isEnabled, $types = [])
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
-        $types = $cacheManager->getAvailableTypes();
-        $enabledTypes = $cacheManager->setEnabled($types, true);
-        $cacheManager->clean($enabledTypes);
+
+        $availableTypes = $cacheManager->getAvailableTypes();
+        $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
+        $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
+        if ($isEnabled) {
+            $cacheManager->clean($enabledTypes);
+        }
+
+        // Only get statuses of specific cache types
+        $cacheStatus = array_filter(
+            $cacheManager->getStatus(),
+            function (string $key) use ($types) {
+                return in_array($key, $types);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
 
         $this->log->log('Current status:');
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $this->log->log(print_r($cacheManager->getStatus(), true));
+        $this->log->log(print_r($cacheStatus, true));
     }
 
     /**
