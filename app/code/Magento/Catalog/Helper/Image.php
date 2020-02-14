@@ -514,7 +514,7 @@ class Image extends AbstractHelper implements ArgumentInterface
             if ($this->getImageFile()) {
                 $model->setBaseFile($this->getImageFile());
             } else {
-                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+                $model->setBaseFile($this->getProduct() ? $this->getProduct()->getData($model->getDestinationSubdir()) : '');
             }
         }
         return $this;
