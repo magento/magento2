@@ -104,7 +104,11 @@ class Image extends File
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
 
-        $imageProp = @getimagesize($value['tmp_name']);
+        try {
+            $imageProp = getimagesize($value['tmp_name']);
+        } catch (\Exception $e) {
+            $imageProp = false;
+        }
 
         if (!$this->_isUploadedFile($value['tmp_name']) || !$imageProp) {
             return [__('"%1" is not a valid file.', $label)];
@@ -117,9 +121,9 @@ class Image extends File
         }
 
         // modify image name
-        $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
+        $extension = $this->ioFileSystem->getPathInfo($value['name'])['extension'];
         if ($extension != $allowImageTypes[$imageProp[2]]) {
-            $value['name'] = pathinfo($value['name'], PATHINFO_FILENAME) . '.' . $allowImageTypes[$imageProp[2]];
+            $value['name'] = $this->ioFileSystem->getPathInfo($value['name'])['filename'] . '.' . $allowImageTypes[$imageProp[2]];
         }
 
         $maxFileSize = ArrayObjectSearch::getArrayElementByName(
@@ -238,5 +242,4 @@ class Image extends File
     {
         return ['jpg', 'jpeg', 'gif', 'png'];
     }
-
 }

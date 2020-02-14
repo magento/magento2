@@ -329,8 +329,8 @@ class ImageTest extends AbstractFormTestCase
         $originValue = 'filename.jpg';
 
         $value = [
-            'file' => 'filename.jpg',
-            'name' => 'filename.jpg',
+            'file' => 'filename.png',
+            'name' => 'filename.png',
             'type' => 'image',
         ];
 
@@ -380,7 +380,7 @@ class ImageTest extends AbstractFormTestCase
 
     public function testCompactValueUiComponentCustomerNotExists()
     {
-        $originValue = 'filename.png';
+        $originValue = 'filename.jpg';
 
         $value = [
             'file' => 'filename.png',
