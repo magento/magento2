@@ -1,6 +1,4 @@
-### Component: [CMS](https://devdocs.magento.com/)
-
-### Experiense: [Merchant](https://devdocs.magento.com)
+#### Component: [CMS](https://devdocs.magento.com/) | Experiense: [Merchant](https://devdocs.magento.com)
 
 # CMS Module
 
