@@ -25,7 +25,12 @@ define([
             toolbarType;
 
         beforeEach(function () {
-
+            spyOn($, '_data').and.callFake(function () {
+                return {
+                    click: [{}, {}],
+                    mousedown: [{}, {}]
+                };
+            });
         });
 
         describe('Test initialize method for toolbar', function () {
