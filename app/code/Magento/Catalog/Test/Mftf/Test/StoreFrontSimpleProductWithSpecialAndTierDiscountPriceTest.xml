@@ -26,22 +26,27 @@
             <createData entity="tierProductPriceDiscount" stepKey="addTierPrice">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
-
-            <createData entity="specialProductPrice2" stepKey="addSpecialToSimpleProduct">
-                <requiredEntity createDataKey="createProduct"/>
-                <field key="price">65.00</field>
-            </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndex"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
+        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceToProduct">
+            <argument name="price" value="65.00"/>
+        </actionGroup>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
             <argument name="productName" value="$createProduct.name$"/>
