@@ -24,7 +24,7 @@
 
         <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
         <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="You are signed out" stepKey="signOut"/>
+        <waitForText selector="{{StorefrontCMSPageSection.mainTitle}}" userInput="You are signed out" stepKey="signOut"/>
+        <waitForText selector="{{StorefrontCMSPageSection.mainTitle}}" userInput="Home Page" stepKey="waitForHomePageLoad"/>
     </actionGroup>
 </actionGroups>
