@@ -269,7 +269,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->managementMock = $this->getMockBuilder(AccountManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAccount'])
+            ->setMethods(['createAccount', 'validateCustomerStoreIdByWebsiteId'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -520,6 +520,9 @@ class SaveTest extends TestCase
         $redirectMock->expects($this->once())
             ->method('setPath')
             ->with('customer/*/edit', ['id' => $customerId, '_current' => true])
+            ->willReturn(true);
+
+        $this->managementMock->method('validateCustomerStoreIdByWebsiteId')
             ->willReturn(true);
 
         $this->assertEquals($redirectMock, $this->model->execute());
