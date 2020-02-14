@@ -1,3 +1,7 @@
+### Component: [CMS](https://devdocs.magento.com/)
+
+### Experiense: [Merchant](https://devdocs.magento.com)
+
 # CMS Module
 
 The CMS module provides the create, edit, and manage functionality on pages for different content types.
