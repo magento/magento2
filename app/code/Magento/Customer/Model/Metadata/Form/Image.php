@@ -123,7 +123,9 @@ class Image extends File
         // modify image name
         $extension = $this->ioFileSystem->getPathInfo($value['name'])['extension'];
         if ($extension != $allowImageTypes[$imageProp[2]]) {
-            $value['name'] = $this->ioFileSystem->getPathInfo($value['name'])['filename'] . '.' . $allowImageTypes[$imageProp[2]];
+            $value['name'] = $this->ioFileSystem->getPathInfo($value['name'])['filename']
+                . '.'
+                . $allowImageTypes[$imageProp[2]];
         }
 
         $maxFileSize = ArrayObjectSearch::getArrayElementByName(
