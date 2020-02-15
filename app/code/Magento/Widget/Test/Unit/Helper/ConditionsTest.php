@@ -11,6 +11,8 @@ use Magento\Framework\Data\Wysiwyg\Normalizer;
 
 /**
  * Class ConditionsTest
+ *
+ * PHPUnit test case for \Magento\Widget\Helper\Conditions
  */
 class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
