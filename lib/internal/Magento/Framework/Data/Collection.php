@@ -913,4 +913,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }
+
+    /**
+     * Export only scalar and arrays properties for var_dump
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return array_filter(get_object_vars($this), function($v) { return is_scalar($v) || is_array($v); });
+    }
 }
