@@ -7,9 +7,6 @@ namespace Magento\Framework\Data\Test\Unit;
 
 use \Magento\Framework\Data\AbstractSearchResult;
 
-/**
- * Class AbstractSearchResultTest
- */
 class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
 {
     /**

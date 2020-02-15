@@ -12,9 +12,6 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 
-/**
- * Class FormKeyTest
- */
 class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**

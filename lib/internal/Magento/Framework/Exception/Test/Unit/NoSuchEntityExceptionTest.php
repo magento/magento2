@@ -8,9 +8,6 @@ namespace Magento\Framework\Exception\Test\Unit;
 use \Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
-/**
- * Class NoSuchEntityExceptionTest
- */
 class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Phrase\RendererInterface */

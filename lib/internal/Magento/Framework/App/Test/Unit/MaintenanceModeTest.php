@@ -13,9 +13,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Filesystem;
 use PHPUnit\Framework\TestCase;
 
-/**
- * MaintenanceMode Test
- */
 class MaintenanceModeTest extends TestCase
 {
     /**

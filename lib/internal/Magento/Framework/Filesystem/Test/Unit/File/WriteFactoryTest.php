@@ -7,9 +7,6 @@ namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use \Magento\Framework\Filesystem\File\WriteFactory;
 
-/**
- * Class WriteFactoryTest
- */
 class WriteFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()

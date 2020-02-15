@@ -8,9 +8,6 @@ namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 
-/**
- * Class ExcludeFilterTest
- */
 class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**

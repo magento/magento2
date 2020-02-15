@@ -10,9 +10,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\AttributeValue;
 
-/**
- * Class ExtensibleDataObjectConverterTest
- */
 class ExtensibleDataObjectConverterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\Api\ExtensibleDataObjectConverter */

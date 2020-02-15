@@ -10,11 +10,6 @@ namespace Magento\Framework\Event\Test\Unit;
 
 use \Magento\Framework\Event\WrapperFactory;
 
-/**
- * Class WrapperFactoryTest
- *
- * @package Magento\Framework\Event
- */
 class WrapperFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()

@@ -9,9 +9,6 @@ namespace Magento\Framework\Exception\Test\Unit;
 use \Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Phrase;
 
-/**
- * Class AuthenticationExceptionTest
- */
 class AuthenticationExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**

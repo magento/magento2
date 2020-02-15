@@ -22,6 +22,5 @@ class ActionFake extends Action
             ActionTest::$actionParams
         );
         $this->_redirect(ActionTest::FULL_ACTION_NAME, ActionTest::$actionParams);
-        return;
     }
 }

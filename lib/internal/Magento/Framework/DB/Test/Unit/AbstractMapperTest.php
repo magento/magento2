@@ -8,9 +8,6 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use Magento\Framework\DB\Select;
 
-/**
- * Class AbstractMapperTest
- */
 class AbstractMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -8,7 +8,6 @@ namespace Magento\Framework\DB\Test\Unit;
 use \Magento\Framework\DB\Select;
 
 /**
- * Class SelectTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SelectTest extends \PHPUnit\Framework\TestCase

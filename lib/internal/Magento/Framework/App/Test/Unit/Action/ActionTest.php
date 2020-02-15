@@ -53,29 +53,14 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     protected $pageConfigMock;
 
-    /**
-     * Full action name
-     */
     const FULL_ACTION_NAME = 'module/controller/someaction';
 
-    /**
-     * Route name
-     */
     const ROUTE_NAME = 'module/controller/actionroute';
 
-    /**
-     * Action name
-     */
     const ACTION_NAME = 'someaction';
 
-    /**
-     * Controller name
-     */
     const CONTROLLER_NAME = 'controller';
 
-    /**
-     * Module name
-     */
     const MODULE_NAME = 'module';
 
     public static $actionParams = ['param' => 'value'];

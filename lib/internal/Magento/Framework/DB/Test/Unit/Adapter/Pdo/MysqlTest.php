@@ -20,9 +20,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class MysqlTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Custom error handler message
-     */
     const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
@@ -260,34 +257,24 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test Asymmetric transaction rollback failure
+     *
+     * @expectedExceptionMessage Asymmetric transaction rollback.
+     * @throws \Exception
      */
     public function testAsymmetricRollBackFailure()
     {
-        try {
-            $this->_adapter->rollBack();
-            throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
-            $this->assertEquals(
-                AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
-                $e->getMessage()
-            );
-        }
+        $this->_adapter->rollBack();
     }
 
     /**
      * Test Asymmetric transaction commit failure
+     *
+     * @expectedExceptionMessage Asymmetric transaction commit.
+     * @throws \Exception
      */
     public function testAsymmetricCommitFailure()
     {
-        try {
-            $this->_adapter->commit();
-            throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
-            $this->assertEquals(
-                AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
-                $e->getMessage()
-            );
-        }
+        $this->_adapter->commit();
     }
 
     /**
@@ -382,6 +369,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test incomplete Roll Back in a nested transaction
+     *
+     * @expectedExceptionMessage Rolled back transaction has not been completed correctly.
+     * @throws \Exception
      */
     public function testIncompleteRollBackFailureOnCommit()
     {
@@ -393,18 +383,17 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->beginTransaction();
             $this->_adapter->rollBack();
             $this->_adapter->commit();
-            throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
-            $this->assertEquals(
-                AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
-                $e->getMessage()
-            );
             $this->_adapter->rollBack();
+            throw $e;
         }
     }
 
     /**
      * Test incomplete Roll Back in a nested transaction
+     *
+     * @expectedExceptionMessage Rolled back transaction has not been completed correctly.
+     * @throws \Exception
      */
     public function testIncompleteRollBackFailureOnBeginTransaction()
     {
@@ -416,13 +405,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->beginTransaction();
             $this->_adapter->rollBack();
             $this->_adapter->beginTransaction();
-            throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
-            $this->assertEquals(
-                AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
-                $e->getMessage()
-            );
             $this->_adapter->rollBack();
+            throw $e;
         }
     }
 

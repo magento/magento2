@@ -7,9 +7,6 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\VersionControl;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-/**
- * Class SnapshotTest
- */
 class SnapshotTest extends \PHPUnit\Framework\TestCase
 {
     /**

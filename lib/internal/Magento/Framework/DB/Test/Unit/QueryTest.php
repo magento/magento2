@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-/**
- * Class QueryTest
- */
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
     /**

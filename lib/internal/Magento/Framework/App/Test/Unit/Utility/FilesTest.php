@@ -10,8 +10,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test for Utility/Files class.
- *
- * @package Magento\Framework\App\Test\Unit\Utility
  */
 class FilesTest extends \PHPUnit\Framework\TestCase
 {

@@ -9,9 +9,6 @@ namespace Magento\Framework\Exception\Test\Unit;
 use \Magento\Framework\Exception\StateException;
 use Magento\Framework\Phrase;
 
-/**
- * Class StateExceptionTest
- */
 class StateExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**

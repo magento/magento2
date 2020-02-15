@@ -7,9 +7,6 @@ namespace Magento\Framework\Event\Test\Unit\Observer;
 
 use \Magento\Framework\Event\Observer\Collection;
 
-/**
- * Class CollectionTest
- */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -9,9 +9,6 @@ namespace Magento\Framework\Css\Test\Unit\PreProcessor\Instruction;
 use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
 
-/**
- * Class ImportTest
- */
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**

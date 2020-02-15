@@ -9,9 +9,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Phrase;
 
-/**
- * Class WriteTest
- */
 class WriteTest extends \PHPUnit\Framework\TestCase
 {
     /**

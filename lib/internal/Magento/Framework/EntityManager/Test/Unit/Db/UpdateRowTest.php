@@ -12,9 +12,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 
-/**
- * Class UpdateRowTest
- */
 class UpdateRowTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -16,13 +16,4 @@ class DataObject extends AbstractDataObject
     {
         $this->data = $data;
     }
-
-    /**
-     * @param string $key
-     * @return mixed|null
-     */
-    public function get($key)
-    {
-        return parent::get($key);
-    }
 }

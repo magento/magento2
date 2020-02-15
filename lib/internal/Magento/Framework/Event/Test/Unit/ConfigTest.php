@@ -10,11 +10,6 @@ use \Magento\Framework\Event\Config;
 
 use Magento\Framework\Event\Config\Data;
 
-/**
- * Class ConfigTest
- *
- * @package Magento\Framework\Event
- */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**

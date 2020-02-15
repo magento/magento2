@@ -342,7 +342,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $statementMock->expects($this->exactly(2))
             ->method('fetch')
             ->will($this->returnCallback(function () use (&$counter, $data) {
-                return ++$counter % 2 ? [] : $data;
+                ++$counter;
+                return $counter % 2 ? [] : $data;
             }));
 
         $adapterMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select', 'query']);

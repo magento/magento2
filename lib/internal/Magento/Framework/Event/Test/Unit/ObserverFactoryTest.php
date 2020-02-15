@@ -8,11 +8,6 @@ namespace Magento\Framework\Event\Test\Unit;
 
 use \Magento\Framework\Event\ObserverFactory;
 
-/**
- * Class ConfigTest
- *
- * @package Magento\Framework\Event
- */
 class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**

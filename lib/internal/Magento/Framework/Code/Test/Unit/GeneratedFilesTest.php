@@ -14,9 +14,6 @@ use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Lock\Backend\FileLock;
 
-/**
- * Class GeneratedFilesTest
- */
 class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**

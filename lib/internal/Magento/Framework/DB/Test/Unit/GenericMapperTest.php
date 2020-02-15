@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-/**
- * Class GenericMapperTest
- */
 class GenericMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**

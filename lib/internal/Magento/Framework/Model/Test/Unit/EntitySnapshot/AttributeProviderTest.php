@@ -13,9 +13,6 @@ use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
-/**
- * Class AttributeProviderTest
- */
 class AttributeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**

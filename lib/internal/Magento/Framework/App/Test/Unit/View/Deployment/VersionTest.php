@@ -13,9 +13,6 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class VersionTest
- */
 class VersionTest extends \PHPUnit\Framework\TestCase
 {
     /**

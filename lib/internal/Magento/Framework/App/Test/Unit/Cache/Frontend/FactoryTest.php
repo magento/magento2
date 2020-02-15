@@ -135,7 +135,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     return new $class($frontend, $params);
                 default:
                     throw new \Exception("Test is not designed to create {$class} objects");
-                    break;
             }
         };
         /** @var $objectManager \PHPUnit\Framework\MockObject\MockObject */

@@ -7,9 +7,6 @@ namespace Magento\Framework\Data\Test\Unit;
 
 use Magento\Framework\Api\CriteriaInterface;
 
-/**
- * Class AbstractCriteriaTest
- */
 class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
 {
     /**

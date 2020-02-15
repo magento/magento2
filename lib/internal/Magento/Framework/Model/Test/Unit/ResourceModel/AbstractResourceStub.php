@@ -45,26 +45,4 @@ class AbstractResourceStub extends AbstractResource
     {
         $this->connectionAdapter = $adapter;
     }
-
-    /**
-     * @param DataObject $object
-     * @param string $field
-     * @param null $defaultValue
-     * @param bool $unsetEmpty
-     * @return $this
-     */
-    public function _serializeField(DataObject $object, $field, $defaultValue = null, $unsetEmpty = false)
-    {
-        return parent::_serializeField($object, $field, $defaultValue, $unsetEmpty);
-    }
-
-    /**
-     * @param DataObject $object
-     * @param string $field
-     * @param null $defaultValue
-     */
-    public function _unserializeField(DataObject $object, $field, $defaultValue = null)
-    {
-        parent::_unserializeField($object, $field, $defaultValue);
-    }
 }

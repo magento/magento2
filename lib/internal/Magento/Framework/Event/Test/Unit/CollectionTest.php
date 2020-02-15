@@ -12,11 +12,6 @@ use \Magento\Framework\Event\Collection;
 
 use Magento\Framework\Event;
 
-/**
- * Class CollectionTest
- *
- * @package Magento\Framework\Event
- */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**

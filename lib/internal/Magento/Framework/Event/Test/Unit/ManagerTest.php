@@ -10,11 +10,6 @@ use Magento\Framework\Event\InvokerInterface;
 use Magento\Framework\Event\ConfigInterface;
 use Magento\Framework\Event\Manager as EventManager;
 
-/**
- * Class ManagerTest
- *
- * @package Magento\Framework\Event
- */
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**

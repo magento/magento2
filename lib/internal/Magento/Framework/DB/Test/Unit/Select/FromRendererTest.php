@@ -8,9 +8,6 @@ namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
 
-/**
- * Class FromRendererTest
- */
 class FromRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**

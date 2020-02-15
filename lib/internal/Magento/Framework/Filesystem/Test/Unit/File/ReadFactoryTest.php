@@ -7,9 +7,6 @@ namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use \Magento\Framework\Filesystem\File\ReadFactory;
 
-/**
- * Class ReadFactoryTest
- */
 class ReadFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()

@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-/**
- * Class StrategyTest
- * @package Magento\Indexer\Test\Unit\Model\Indexer\Table
- */
 class StrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**

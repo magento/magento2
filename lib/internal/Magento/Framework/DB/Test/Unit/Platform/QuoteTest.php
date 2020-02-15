@@ -8,9 +8,6 @@ namespace Magento\Framework\DB\Test\Unit\Platform;
 
 use Magento\Framework\DB\Select;
 
-/**
- * Class QuoteTest
- */
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
