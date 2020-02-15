@@ -46,7 +46,7 @@ class ProductAttributeFormBuildFrontTabObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optionListLock = $this->createMock(Yesno::class);
         $this->moduleManagerMock = $this->createMock(Manager::class);
@@ -68,7 +68,7 @@ class ProductAttributeFormBuildFrontTabObserverTest extends TestCase
     /**
      * Test case when module output is disabled
      */
-    public function testExecuteWhenOutputDisabled()
+    public function testExecuteWhenOutputDisabled(): void
     {
         $this->moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
@@ -83,7 +83,7 @@ class ProductAttributeFormBuildFrontTabObserverTest extends TestCase
     /**
      * Test case when module output is enabled
      */
-    public function testExecuteWhenOutputEnabled()
+    public function testExecuteWhenOutputEnabled(): void
     {
         $this->moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
@@ -91,7 +91,7 @@ class ProductAttributeFormBuildFrontTabObserverTest extends TestCase
             ->willReturn(true);
 
         $fieldsetMock = $this->createMock(Fieldset::class);
-        $fieldsetMock->expects(self::exactly(3))->method('addField');
+        $fieldsetMock->expects($this->exactly(3))->method('addField');
         $formMock = $this->createMock(Form::class);
         $formMock->expects($this->once())
             ->method('getElement')
