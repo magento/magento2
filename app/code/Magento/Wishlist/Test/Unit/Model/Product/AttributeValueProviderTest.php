@@ -16,7 +16,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * AttributeValueProviderTest
+ * Class AttributeValueProviderTest
+ *
+ * PHPUnit test case for \Magento\Wishlist\Model\Product\AttributeValueProvider
  */
 class AttributeValueProviderTest extends TestCase
 {
