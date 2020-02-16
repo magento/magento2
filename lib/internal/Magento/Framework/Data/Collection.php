@@ -921,6 +921,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function __debugInfo()
     {
-        return array_filter(get_object_vars($this), function($v) { return is_scalar($v) || is_array($v); });
+        return array_filter(get_object_vars($this), function ($v) {
+            return is_scalar($v) || is_array($v);
+        });
     }
 }
