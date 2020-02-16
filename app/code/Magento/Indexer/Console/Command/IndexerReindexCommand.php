@@ -22,6 +22,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
+    public const COMMAND_NAME = 'indexer:reindex';
+
     /**
      * @var array
      */
@@ -62,7 +64,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function configure()
     {
-        $this->setName('indexer:reindex')
+        $this->setName(self::COMMAND_NAME)
             ->setDescription('Reindexes Data')
             ->setDefinition($this->getInputList());
 

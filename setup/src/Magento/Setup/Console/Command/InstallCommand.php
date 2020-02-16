@@ -11,6 +11,7 @@ use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Magento\Framework\Setup\Declaration\Schema\Request;
+use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
@@ -213,6 +214,7 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -221,9 +223,11 @@ class InstallCommand extends AbstractSetupCommand
         $installer->install($input->getOptions());
 
         $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
+        $reindexCommand = $this->getApplication()->find(IndexerReindexCommand::COMMAND_NAME);
         $arrayInput = new ArrayInput([]);
         $arrayInput->setInteractive($input->isInteractive());
         $importConfigCommand->run($arrayInput, $output);
+        $reindexCommand->run($arrayInput, $output);
     }
 
     /**
