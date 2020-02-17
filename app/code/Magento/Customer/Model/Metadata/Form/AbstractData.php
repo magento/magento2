@@ -95,6 +95,7 @@ abstract class AbstractData
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Filesystem\Driver\Http $http
      * @param string|int|bool $value
      * @param string $entityTypeCode
      * @param bool $isAjax
