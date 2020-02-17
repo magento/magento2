@@ -11,7 +11,8 @@
         "magento/module-customer": "*",
         "magento/module-store": "*",
         "magento/module-captcha": "*",
-        "magento/module-authorization": "*"
+        "magento/module-authorization": "*",
+        "magento/module-theme": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -6,87 +6,153 @@
 
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\Plugin\EavAttribute;
+use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
+use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\SwatchAttributeType;
+use Magento\Swatches\Model\SwatchFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class EavAttributeTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test plugin model for Catalog Resource Attribute
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ */
+class EavAttributeTest extends TestCase
 {
-    const ATTRIBUTE_ID = 123;
-    const OPTION_ID = 'option 12';
-    const STORE_ID = 'option 89';
-    const ATTRIBUTE_DEFAULT_VALUE = 1;
-    const ATTRIBUTE_OPTION_VALUE = 2;
-    const ATTRIBUTE_SWATCH_VALUE = 3;
+    private const ATTRIBUTE_ID = 123;
+    private const OPTION_1_ID = 1;
+    private const OPTION_2_ID = 2;
+    private const ADMIN_STORE_ID = 0;
+    private const DEFAULT_STORE_ID = 1;
+    private const NEW_OPTION_KEY = 'option_2';
+    private const ATTRIBUTE_DEFAULT_VALUE = [
+        0 => self::NEW_OPTION_KEY
+    ];
+    private const VISUAL_ATTRIBUTE_OPTIONS = [
+        'value' => [
+            self::OPTION_1_ID => [
+                self::ADMIN_STORE_ID => 'Black',
+                self::DEFAULT_STORE_ID => 'Black',
+            ],
+            self::NEW_OPTION_KEY => [
+                self::ADMIN_STORE_ID => 'White',
+                self::DEFAULT_STORE_ID => 'White',
+            ],
+        ]
+    ];
+    private const VISUAL_SWATCH_OPTIONS = [
+        'value' => [
+            self::OPTION_1_ID => '#000000',
+            self::NEW_OPTION_KEY => '#ffffff',
+        ]
+    ];
+    private const VISUAL_SAVED_OPTIONS = [
+        [
+            'value' => self::OPTION_1_ID,
+            'label' => 'Black',
+        ],
+        [
+            'value' => self::OPTION_2_ID,
+            'label' => 'White',
+        ]
+    ];
+    private const TEXT_ATTRIBUTE_OPTIONS = [
+        'value' => [
+            self::OPTION_1_ID => [
+                self::ADMIN_STORE_ID => 'Small',
+                self::DEFAULT_STORE_ID => 'Small',
+            ],
+            self::NEW_OPTION_KEY => [
+                self::ADMIN_STORE_ID => 'Medium',
+                self::DEFAULT_STORE_ID => 'Medium',
+            ],
+        ]
+    ];
+    private const TEXT_SWATCH_OPTIONS = [
+        'value' => [
+            self::OPTION_1_ID => [
+                self::ADMIN_STORE_ID => 'S',
+                self::DEFAULT_STORE_ID => 'S',
+            ],
+            self::NEW_OPTION_KEY => [
+                self::ADMIN_STORE_ID => 'M',
+                self::DEFAULT_STORE_ID => 'M',
+            ],
+        ]
+    ];
+    private const TEXT_SAVED_OPTIONS = [
+        [
+            'value' => self::OPTION_1_ID,
+            'label' => 'Small',
+        ],
+        [
+            'value' => self::OPTION_2_ID,
+            'label' => 'Medium',
+        ]
+    ];
 
     /** @var EavAttribute */
     private $eavAttribute;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Attribute|MockObject */
     private $attribute;
 
-    /** @var \Magento\Swatches\Model\SwatchFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SwatchFactory|MockObject */
     private $swatchFactory;
 
-    /** @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionFactory|MockObject */
     private $collectionFactory;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     private $swatchHelper;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractSource|MockObject */
     private $abstractSource;
 
-    /** @var \Magento\Swatches\Model\Swatch|\PHPUnit_Framework_MockObject_MockObject */
-    private $swatch;
-
-    /** @var \Magento\Swatches\Model\ResourceModel\Swatch|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Model\ResourceModel\Swatch|MockObject */
     private $resource;
 
-    /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Collection|MockObject */
     private $collection;
 
-    /** @var array */
-    private $optionIds = [];
-
-    /** @var array */
-    private $allOptions = [];
-
-    /** @var array */
-    private $dependencyArray = [];
-
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
-        $this->attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
-        $this->swatchFactory = $this->createPartialMock(\Magento\Swatches\Model\SwatchFactory::class, ['create']);
-        $this->swatchHelper = $this->createMock(\Magento\Swatches\Helper\Data::class);
-        $this->swatch = $this->createMock(\Magento\Swatches\Model\Swatch::class);
-        $this->resource = $this->createMock(\Magento\Swatches\Model\ResourceModel\Swatch::class);
-        $this->collection =
-            $this->createMock(\Magento\Swatches\Model\ResourceModel\Swatch\Collection::class);
-        $this->collectionFactory = $this->createPartialMock(
-            \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory::class,
+        $objectManager = new ObjectManager($this);
+        $this->abstractSource = $this->createMock(AbstractSource::class);
+        $this->attribute = $this->createPartialMock(
+            Attribute::class,
+            ['getSource']
+        );
+        $this->attribute->setId(self::ATTRIBUTE_ID);
+        $this->swatchFactory = $this->createPartialMock(
+            SwatchFactory::class,
             ['create']
         );
-        $this->abstractSource = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
-
-        $serializer = $this->createPartialMock(
-            \Magento\Framework\Serialize\Serializer\Json::class,
-            ['serialize', 'unserialize']
+        $this->swatchHelper = $objectManager->getObject(
+            Data::class,
+            [
+                'swatchTypeChecker' => $objectManager->getObject(SwatchAttributeType::class)
+            ]
         );
-
-        $serializer->expects($this->any())
-            ->method('serialize')->willReturnCallback(function ($parameter) {
-                return json_encode($parameter);
-            });
-
-        $serializer->expects($this->any())
-            ->method('unserialize')->willReturnCallback(function ($parameter) {
-                return json_decode($parameter, true);
-            });
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->resource = $this->createMock(\Magento\Swatches\Model\ResourceModel\Swatch::class);
+        $this->collection = $this->createMock(Collection::class);
+        $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $serializer = $objectManager->getObject(Json::class);
         $this->eavAttribute = $objectManager->getObject(
-            \Magento\Swatches\Model\Plugin\EavAttribute::class,
+            EavAttribute::class,
             [
                 'collectionFactory' => $this->collectionFactory,
                 'swatchFactory' => $this->swatchFactory,
@@ -94,220 +160,128 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $serializer,
             ]
         );
-
-        $this->optionIds = [
-            'value' => ['option 89' => 'test 1', 'option 114' => 'test 2', 'option 170' => 'test 3'],
-            'delete' => ['option 89' => 0, 'option 114' => 1, 'option 170' => 0],
-        ];
-        $this->allOptions = [null, ['value' => 'option 12'], ['value' => 'option 154']];
-        $this->dependencyArray = ['option 89', 'option 170'];
-    }
-
-    public function testBeforeSaveVisualSwatch()
-    {
-        $option = [
-            'value' => [
-                0 => 'option value',
-            ]
-        ];
-        $this->attribute->expects($this->exactly(6))->method('getData')->withConsecutive(
-            ['defaultvisual'],
-            ['optionvisual'],
-            ['swatchvisual'],
-            ['optionvisual'],
-            ['option/delete/0']
-        )->will($this->onConsecutiveCalls(
-            self::ATTRIBUTE_DEFAULT_VALUE,
-            self::ATTRIBUTE_OPTION_VALUE,
-            self::ATTRIBUTE_SWATCH_VALUE,
-            $option,
-            false
-        ));
-
-        $this->attribute->expects($this->exactly(3))->method('setData')
-            ->withConsecutive(
-                ['option', self::ATTRIBUTE_OPTION_VALUE],
-                ['default', self::ATTRIBUTE_DEFAULT_VALUE],
-                ['swatch', self::ATTRIBUTE_SWATCH_VALUE]
-            );
-
-        $this->swatchHelper->expects($this->once())->method('assembleAdditionalDataEavAttribute')
-            ->with($this->attribute);
-        $this->swatchHelper->expects($this->atLeastOnce())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->never())->method('isTextSwatch');
-
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
-    }
-
-    public function testBeforeSaveTextSwatch()
-    {
-        $option = [
-            'value' => [
-                0 => 'option value',
-            ]
-        ];
-        $this->attribute->expects($this->exactly(6))->method('getData')->withConsecutive(
-            ['defaulttext'],
-            ['optiontext'],
-            ['swatchtext'],
-            ['optiontext'],
-            ['option/delete/0']
-        )->will(
-            $this->onConsecutiveCalls(
-                self::ATTRIBUTE_DEFAULT_VALUE,
-                self::ATTRIBUTE_OPTION_VALUE,
-                self::ATTRIBUTE_SWATCH_VALUE,
-                $option,
-                false
-            )
-        );
-
-        $this->attribute->expects($this->exactly(3))->method('setData')
-            ->withConsecutive(
-                ['option', self::ATTRIBUTE_OPTION_VALUE],
-                ['default', self::ATTRIBUTE_DEFAULT_VALUE],
-                ['swatch', self::ATTRIBUTE_SWATCH_VALUE]
-            );
-
-        $this->swatchHelper->expects($this->once())->method('assembleAdditionalDataEavAttribute')
-            ->with($this->attribute);
-        $this->swatchHelper->expects($this->atLeastOnce())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(false);
-        $this->swatchHelper->expects($this->atLeastOnce())->method('isTextSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->attribute->expects($this->any())
+            ->method('getSource')
+            ->willReturn($this->abstractSource);
+        $swatch = $this->createMock(Swatch::class);
+        $swatch->expects($this->any())
+            ->method('getResource')
+            ->willReturn($this->resource);
+        $this->swatchFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($swatch);
     }
 
     /**
+     * Test beforeSave plugin for visual swatch
+     */
+    public function testBeforeSaveVisualSwatch()
+    {
+        $this->attribute->setData(
+            [
+                'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optionvisual' => self::VISUAL_ATTRIBUTE_OPTIONS,
+                'swatchvisual' => self::VISUAL_SWATCH_OPTIONS,
+            ]
+        );
+
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attribute->getData('default'));
+        $this->assertEquals(self::VISUAL_ATTRIBUTE_OPTIONS, $this->attribute->getData('option'));
+        $this->assertEquals(self::VISUAL_SWATCH_OPTIONS, $this->attribute->getData('swatch'));
+    }
+
+    /**
+     * Test beforeSave plugin for text swatch
+     */
+    public function testBeforeSaveTextSwatch()
+    {
+        $this->attribute->setData(
+            [
+                'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optiontext' => self::TEXT_ATTRIBUTE_OPTIONS,
+                'swatchtext' => self::TEXT_SWATCH_OPTIONS,
+            ]
+        );
+
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attribute->getData('default'));
+        $this->assertEquals(self::TEXT_ATTRIBUTE_OPTIONS, $this->attribute->getData('option'));
+        $this->assertEquals(self::TEXT_SWATCH_OPTIONS, $this->attribute->getData('swatch'));
+    }
+
+    /**
+     * Test beforeSave plugin on empty label
+     *
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Admin is a required field in each row
      */
     public function testBeforeSaveWithFailedValidation()
     {
-        $optionText = [
-            'value' => [
-                0 => '',
+        $options = self::VISUAL_ATTRIBUTE_OPTIONS;
+        $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = '';
+        $this->attribute->setData(
+            [
+                'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optionvisual' => $options,
+                'swatchvisual' => self::VISUAL_SWATCH_OPTIONS,
             ]
-        ];
-        $this->swatchHelper->expects($this->once())
-            ->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
+        );
 
-        $this->swatchHelper->expects($this->atLeastOnce())
-            ->method('isVisualSwatch')
-            ->willReturn(true);
-        $this->attribute->expects($this->exactly(5))
-            ->method('getData')
-            ->withConsecutive(
-                ['defaultvisual'],
-                ['optionvisual'],
-                ['swatchvisual'],
-                ['optionvisual'],
-                ['option/delete/0']
-            )
-            ->will(
-                $this->onConsecutiveCalls(
-                    self::ATTRIBUTE_DEFAULT_VALUE,
-                    self::ATTRIBUTE_OPTION_VALUE,
-                    self::ATTRIBUTE_SWATCH_VALUE,
-                    $optionText,
-                    false
-                )
-            );
-
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
         $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     /**
-     * @covers \Magento\Swatches\Model\Plugin\EavAttribute::beforeBeforeSave()
+     * Test beforeSave plugin on empty label of option being deleted
      */
-    public function testBeforeSaveWithDeletedOption()
+    public function testValidationIsSkippedForDeletedOption()
     {
-        $optionText = [
-            'value' => [
-                0 => '',
+        $options = self::VISUAL_ATTRIBUTE_OPTIONS;
+        $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = '';
+        $options['delete'][self::NEW_OPTION_KEY] = '1';
+        $this->attribute->setData(
+            [
+                'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optionvisual' => $options,
+                'swatchvisual' => self::VISUAL_SWATCH_OPTIONS,
             ]
-        ];
+        );
 
-        $this->swatchHelper->expects($this->once())
-            ->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-
-        $this->swatchHelper->expects($this->atLeastOnce())
-            ->method('isVisualSwatch')
-            ->willReturn(true);
-        $this->attribute->expects($this->exactly(6))
-            ->method('getData')
-            ->withConsecutive(
-                ['defaultvisual'],
-                ['optionvisual'],
-                ['swatchvisual'],
-                ['optionvisual'],
-                ['option/delete/0'],
-                ['swatch_input_type']
-            )
-            ->will(
-                $this->onConsecutiveCalls(
-                    self::ATTRIBUTE_DEFAULT_VALUE,
-                    self::ATTRIBUTE_OPTION_VALUE,
-                    self::ATTRIBUTE_SWATCH_VALUE,
-                    $optionText,
-                    true,
-                    false
-                )
-            );
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
         $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attribute->getData('default'));
+        $this->assertEquals($options, $this->attribute->getData('option'));
+        $this->assertEquals(self::VISUAL_SWATCH_OPTIONS, $this->attribute->getData('swatch'));
     }
 
+    /**
+     * Test beforeSave plugin for non a swatch attribute
+     */
     public function testBeforeSaveNotSwatch()
     {
         $additionalData = [
-            'swatch_input_type' => 'visual',
+            Swatch::SWATCH_INPUT_TYPE_KEY => Swatch::SWATCH_INPUT_TYPE_VISUAL,
             'update_product_preview_image' => 1,
             'use_product_image_for_swatch' => 0
         ];
 
-        $shortAdditionalData = [
-            'update_product_preview_image' => 1,
-            'use_product_image_for_swatch' => 0
-        ];
-
-        $this->attribute->expects($this->exactly(2))->method('getData')->withConsecutive(
-            [Swatch::SWATCH_INPUT_TYPE_KEY],
-            ['additional_data']
-        )->willReturnOnConsecutiveCalls(
-            Swatch::SWATCH_INPUT_TYPE_DROPDOWN,
-            json_encode($additionalData)
+        $this->attribute->setData(
+            [
+                Swatch::SWATCH_INPUT_TYPE_KEY => Swatch::SWATCH_INPUT_TYPE_DROPDOWN,
+                'additional_data' => json_encode($additionalData),
+            ]
         );
 
-        $this->attribute
-            ->expects($this->once())
-            ->method('setData')
-            ->with('additional_data', json_encode($shortAdditionalData))
-            ->will($this->returnSelf());
-
-        $this->swatchHelper->expects($this->never())->method('assembleAdditionalDataEavAttribute');
-        $this->swatchHelper->expects($this->never())->method('isVisualSwatch');
-        $this->swatchHelper->expects($this->never())->method('isTextSwatch');
-
-        $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(false);
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_DROPDOWN);
 
         $this->eavAttribute->beforeBeforeSave($this->attribute);
+
+        unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
+
+        $this->assertEquals(json_encode($additionalData), $this->attribute->getData('additional_data'));
     }
 
     /**
@@ -316,390 +290,383 @@ class EavAttributeTest extends \PHPUnit\Framework\TestCase
     public function visualSwatchProvider()
     {
         return [
-            [Swatch::SWATCH_TYPE_EMPTY, null],
-            [Swatch::SWATCH_TYPE_VISUAL_COLOR, '#hex'],
-            [Swatch::SWATCH_TYPE_VISUAL_IMAGE, '/path'],
+            [Swatch::SWATCH_TYPE_EMPTY, 'black', 'white'],
+            [Swatch::SWATCH_TYPE_VISUAL_COLOR, '#000000', '#ffffff'],
+            [Swatch::SWATCH_TYPE_VISUAL_IMAGE, '/path/black.png', '/path/white.png'],
         ];
     }
 
     /**
-     * @dataProvider visualSwatchProvider
+     * Test afterSave plugin for visual swatch
      *
-     * @param $swatchType
-     * @param $swatchValue
+     * @param string $swatchType
+     * @param string $swatch1
+     * @param string $swatch2
+     *
+     * @dataProvider visualSwatchProvider
      */
-    public function testAfterAfterSaveVisualSwatch($swatchType, $swatchValue)
+    public function testAfterAfterSaveVisualSwatch(string $swatchType, string $swatch1, string $swatch2)
     {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
-        $this->resource->expects($this->once())->method('saveDefaultSwatchOption')
-            ->with(self::ATTRIBUTE_ID, self::OPTION_ID);
+        $options = self::VISUAL_SWATCH_OPTIONS;
+        $options['value'][self::OPTION_1_ID] = $swatch1;
+        $options['value'][self::NEW_OPTION_KEY] = $swatch2;
+        $this->attribute->addData(
+            [
+                'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optionvisual' => self::VISUAL_ATTRIBUTE_OPTIONS,
+                'swatchvisual' => $options,
+            ]
+        );
 
-        $this->swatch->expects($this->once())->method('getResource')
-            ->willReturn($this->resource);
-        $this->swatch->expects($this->once())->method('getId')
-            ->willReturn(EavAttribute::DEFAULT_STORE_ID);
-        $this->swatch->expects($this->once())->method('save');
-        $this->swatch->expects($this->exactly(4))->method('setData')
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->abstractSource->expects($this->once())
+            ->method('getAllOptions')
+            ->willReturn(self::VISUAL_SAVED_OPTIONS);
+
+        $this->resource->expects($this->once())
+            ->method('saveDefaultSwatchOption')
+            ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
+
+        $this->collection->expects($this->exactly(4))
+            ->method('addFieldToFilter')
             ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', EavAttribute::DEFAULT_STORE_ID],
-                ['type', $swatchType],
-                ['value', $swatchValue]
-            );
-
-        $this->collection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', EavAttribute::DEFAULT_STORE_ID]
-            )->willReturnSelf();
-
-        $this->collection->expects($this->once())->method('getFirstItem')
-            ->willReturn($this->swatch);
-        $this->collectionFactory->expects($this->once())->method('create')
-            ->willReturn($this->collection);
-
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('default/0')
-            ->willReturn($this->dependencyArray[0]);
-        $this->attribute->expects($this->at(3))->method('getId')
-            ->willReturn(self::ATTRIBUTE_ID);
-        $this->attribute->expects($this->at(4))->method('getData')
-            ->with('swatch/value')
-            ->willReturn([self::STORE_ID => $swatchValue]);
-        $this->attribute->expects($this->at(5))->method('getData')
-            ->with('option/delete/' . self::OPTION_ID)
-            ->willReturn(false);
-
-        $this->swatchFactory->expects($this->exactly(1))->method('create')
-            ->willReturn($this->swatch);
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->never())->method('isTextSwatch');
-
-        $this->eavAttribute->afterAfterSave($this->attribute);
-    }
-
-    public function testDefaultTextualSwatchAfterSave()
-    {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
-
-        $this->swatch->expects($this->any())->method('getId')
-            ->willReturn(EavAttribute::DEFAULT_STORE_ID);
-        $this->swatch->expects($this->any())->method('save');
-        $this->swatch->expects($this->any())->method('isDeleted')
-            ->with(false);
-
-        $this->collection->expects($this->any())->method('addFieldToFilter')
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::ADMIN_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::ADMIN_STORE_ID]
+            )
             ->willReturnSelf();
-        $this->collection->expects($this->any())->method('getFirstItem')
-            ->willReturn($this->swatch);
-        $this->collectionFactory->expects($this->any())->method('create')
+
+        $this->collection->expects($this->exactly(2))
+            ->method('getFirstItem')
+            ->willReturnOnConsecutiveCalls(
+                $this->createSwatchMock(
+                    $swatchType,
+                    $swatch1,
+                    1
+                ),
+                $this->createSwatchMock(
+                    $swatchType,
+                    $swatch2,
+                    null,
+                    self::OPTION_2_ID,
+                    self::ADMIN_STORE_ID
+                )
+            );
+        $this->collectionFactory->expects($this->exactly(2))
+            ->method('create')
             ->willReturn($this->collection);
-
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('default/0')
-            ->willReturn(null);
-
-        $this->attribute->expects($this->at(3))->method('getData')
-            ->with('swatch/value')
-            ->willReturn(
-                [
-                    self::STORE_ID => [
-                        1 => "test",
-                        2 => false,
-                        3 => null,
-                        4 => "",
-                    ]
-                ]
-            );
-
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(false);
-        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-
-        $this->swatch->expects($this->any())->method('setData')
-            ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', 1],
-                ['type', Swatch::SWATCH_TYPE_TEXTUAL],
-                ['value', "test"]
-            );
 
         $this->eavAttribute->afterAfterSave($this->attribute);
     }
 
+    /**
+     * Test afterSave plugin for text swatch
+     */
     public function testAfterAfterSaveTextualSwatch()
     {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
-        $this->resource->expects($this->once())->method('saveDefaultSwatchOption')
-            ->with(self::ATTRIBUTE_ID, self::OPTION_ID);
+        $this->attribute->addData(
+            [
+                'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optiontext' => self::TEXT_ATTRIBUTE_OPTIONS,
+                'swatchtext' => self::TEXT_SWATCH_OPTIONS,
+            ]
+        );
 
-        $this->swatch->expects($this->once())->method('getResource')
-            ->willReturn($this->resource);
-        $this->swatch->expects($this->once())->method('getId')
-            ->willReturn(EavAttribute::DEFAULT_STORE_ID);
-        $this->swatch->expects($this->once())->method('save');
-        $this->swatch->expects($this->once())->method('isDeleted')
-            ->with(false);
-        $this->swatch->expects($this->exactly(4))->method('setData')
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
+
+        $this->abstractSource->expects($this->once())
+            ->method('getAllOptions')
+            ->willReturn(self::TEXT_SAVED_OPTIONS);
+
+        $this->resource->expects($this->once())
+            ->method('saveDefaultSwatchOption')
+            ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
+
+        $this->collection->expects($this->exactly(8))
+            ->method('addFieldToFilter')
             ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', self::OPTION_ID],
-                ['type', Swatch::SWATCH_TYPE_TEXTUAL],
-                ['value', null]
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::ADMIN_STORE_ID],
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::ADMIN_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::DEFAULT_STORE_ID]
+            )
+            ->willReturnSelf();
+
+        $this->collection->expects($this->exactly(4))
+            ->method('getFirstItem')
+            ->willReturnOnConsecutiveCalls(
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID],
+                    1
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID],
+                    1
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
+                    null,
+                    self::OPTION_2_ID,
+                    self::ADMIN_STORE_ID
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
+                    null,
+                    self::OPTION_2_ID,
+                    self::DEFAULT_STORE_ID
+                )
             );
-
-        $this->collection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', self::OPTION_ID]
-            )->willReturnSelf();
-        $this->collection->expects($this->once())->method('getFirstItem')
-            ->willReturn($this->swatch);
-        $this->collectionFactory->expects($this->once())->method('create')
+        $this->collectionFactory->expects($this->exactly(4))
+            ->method('create')
             ->willReturn($this->collection);
-
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('default/0')
-            ->willReturn($this->dependencyArray[0]);
-        $this->attribute->expects($this->at(3))->method('getId')
-            ->willReturn(self::ATTRIBUTE_ID);
-        $this->attribute->expects($this->at(4))->method('getData')
-            ->with('swatch/value')
-            ->willReturn([self::STORE_ID => [self::OPTION_ID => null]]);
-        $this->attribute->expects($this->at(5))->method('getData')
-            ->with('option/delete/' . self::OPTION_ID)
-            ->willReturn(false);
-
-        $this->swatchFactory->expects($this->exactly(1))->method('create')
-            ->willReturn($this->swatch);
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(false);
-        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
 
         $this->eavAttribute->afterAfterSave($this->attribute);
     }
 
+    /**
+     * Test afterSave plugin for deleted visual swatch option
+     */
     public function testAfterAfterSaveVisualSwatchIsDelete()
     {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
-        $this->resource->expects($this->once())->method('saveDefaultSwatchOption')
-            ->with(self::ATTRIBUTE_ID, self::OPTION_ID);
+        $options = self::VISUAL_ATTRIBUTE_OPTIONS;
+        $options['delete'][self::OPTION_1_ID] = '1';
+        $this->attribute->addData(
+            [
+                'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optionvisual' => $options,
+                'swatchvisual' => self::VISUAL_SWATCH_OPTIONS,
+            ]
+        );
 
-        $this->swatch->expects($this->once())->method('getResource')
-            ->willReturn($this->resource);
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->abstractSource->expects($this->once())
+            ->method('getAllOptions')
+            ->willReturn(self::VISUAL_SAVED_OPTIONS);
 
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('default/0')
-            ->willReturn($this->dependencyArray[0]);
-        $this->attribute->expects($this->at(3))->method('getId')
-            ->willReturn(self::ATTRIBUTE_ID);
-        $this->attribute->expects($this->at(4))->method('getData')
-            ->with('swatch/value')
-            ->willReturn([self::STORE_ID => null]);
-        $this->attribute->expects($this->at(5))->method('getData')
-            ->with('option/delete/' . self::OPTION_ID)
-            ->willReturn(true);
+        $this->resource->expects($this->once())
+            ->method('saveDefaultSwatchOption')
+            ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->swatchFactory->expects($this->once())->method('create')
-            ->willReturn($this->swatch);
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->never())->method('isTextSwatch');
+        $this->collection->expects($this->exactly(2))
+            ->method('addFieldToFilter')
+            ->withConsecutive(
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::ADMIN_STORE_ID]
+            )
+            ->willReturnSelf();
+
+        $this->collection->expects($this->exactly(1))
+            ->method('getFirstItem')
+            ->willReturnOnConsecutiveCalls(
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_VISUAL_COLOR,
+                    self::VISUAL_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY],
+                    null,
+                    self::OPTION_2_ID,
+                    self::ADMIN_STORE_ID
+                )
+            );
+        $this->collectionFactory->expects($this->exactly(1))
+            ->method('create')
+            ->willReturn($this->collection);
 
         $this->eavAttribute->afterAfterSave($this->attribute);
     }
 
+    /**
+     * Test afterSave plugin for deleted text swatch option
+     */
     public function testAfterAfterSaveTextualSwatchIsDelete()
     {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
-        $this->resource->expects($this->once())->method('saveDefaultSwatchOption')
-            ->with(self::ATTRIBUTE_ID, self::OPTION_ID);
+        $options = self::TEXT_ATTRIBUTE_OPTIONS;
+        $options['delete'][self::OPTION_1_ID] = '1';
+        $this->attribute->addData(
+            [
+                'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optiontext' => $options,
+                'swatchtext' => self::TEXT_SWATCH_OPTIONS,
+            ]
+        );
 
-        $this->swatch->expects($this->once())->method('getResource')
-            ->willReturn($this->resource);
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
 
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('default/0')
-            ->willReturn($this->dependencyArray[0]);
-        $this->attribute->expects($this->at(3))->method('getId')
-            ->willReturn(self::ATTRIBUTE_ID);
-        $this->attribute->expects($this->at(4))->method('getData')
-            ->with('swatch/value')
-            ->willReturn([self::STORE_ID => [self::OPTION_ID => null]]);
-        $this->attribute->expects($this->at(5))->method('getData')
-            ->with('option/delete/' . self::OPTION_ID)
-            ->willReturn(true);
+        $this->abstractSource->expects($this->once())
+            ->method('getAllOptions')
+            ->willReturn(self::TEXT_SAVED_OPTIONS);
 
-        $this->swatchFactory->expects($this->once())->method('create')
-            ->willReturn($this->swatch);
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(false);
-        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
+        $this->resource->expects($this->once())
+            ->method('saveDefaultSwatchOption')
+            ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->eavAttribute->afterAfterSave($this->attribute);
-    }
-
-    public function testAfterAfterSaveIsSwatchExists()
-    {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
-        $this->resource->expects($this->once())->method('saveDefaultSwatchOption')
-            ->with(self::ATTRIBUTE_ID, self::OPTION_ID);
-
-        $this->swatch->expects($this->once())->method('getResource')
-            ->willReturn($this->resource);
-        $this->swatch->expects($this->once())->method('getId')
-            ->willReturn(1);
-        $this->swatch->expects($this->once())->method('save');
-        $this->swatch->expects($this->once())->method('isDeleted')
-            ->with(false);
-        $this->swatch->expects($this->exactly(2))->method('setData')
+        $this->collection->expects($this->exactly(4))
+            ->method('addFieldToFilter')
             ->withConsecutive(
-                ['type', Swatch::SWATCH_TYPE_TEXTUAL],
-                ['value', null]
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::ADMIN_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::DEFAULT_STORE_ID]
+            )
+            ->willReturnSelf();
+
+        $this->collection->expects($this->exactly(2))
+            ->method('getFirstItem')
+            ->willReturnOnConsecutiveCalls(
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
+                    null,
+                    self::OPTION_2_ID,
+                    self::ADMIN_STORE_ID
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
+                    null,
+                    self::OPTION_2_ID,
+                    self::DEFAULT_STORE_ID
+                )
             );
-
-        $this->collection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', self::OPTION_ID]
-            )->willReturnSelf();
-        $this->collection->expects($this->once())->method('getFirstItem')
-            ->willReturn($this->swatch);
-        $this->collectionFactory->expects($this->once())->method('create')
+        $this->collectionFactory->expects($this->exactly(2))
+            ->method('create')
             ->willReturn($this->collection);
 
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('default/0')
-            ->willReturn($this->dependencyArray[0]);
-        $this->attribute->expects($this->at(3))->method('getId')
-            ->willReturn(self::ATTRIBUTE_ID);
-        $this->attribute->expects($this->at(4))->method('getData')
-            ->with('swatch/value')
-            ->willReturn([self::STORE_ID => [self::OPTION_ID => null]]);
-        $this->attribute->expects($this->at(5))->method('getData')
-            ->with('option/delete/' . self::OPTION_ID)
-            ->willReturn(false);
-
-        $this->swatchFactory->expects($this->exactly(1))->method('create')
-            ->willReturn($this->swatch);
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->willReturn(true);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(false);
-        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-
         $this->eavAttribute->afterAfterSave($this->attribute);
     }
 
+    /**
+     * Test afterSave plugin on empty swatch value
+     */
     public function testAfterAfterSaveNotSwatchAttribute()
     {
-        $this->abstractSource->expects($this->once())->method('getAllOptions')
-            ->willReturn($this->allOptions);
+        $options = self::TEXT_SWATCH_OPTIONS;
+        $options['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID] = null;
+        $options['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID] = null;
+        $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = null;
+        $options['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID] = null;
+        $this->attribute->addData(
+            [
+                'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
+                'optiontext' => self::TEXT_ATTRIBUTE_OPTIONS,
+                'swatchtext' => $options,
+            ]
+        );
 
-        $this->swatch->expects($this->once())->method('getId')
-            ->willReturn(1);
-        $this->swatch->expects($this->once())->method('save');
-        $this->swatch->expects($this->once())->method('isDeleted')
-            ->with(false);
-        $this->swatch->expects($this->exactly(2))->method('setData')
+        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
+
+        $this->abstractSource->expects($this->once())
+            ->method('getAllOptions')
+            ->willReturn(self::TEXT_SAVED_OPTIONS);
+
+        $this->resource->expects($this->once())
+            ->method('saveDefaultSwatchOption')
+            ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
+
+        $this->collection->expects($this->exactly(8))
+            ->method('addFieldToFilter')
             ->withConsecutive(
-                ['type', Swatch::SWATCH_TYPE_TEXTUAL],
-                ['value', null]
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::ADMIN_STORE_ID],
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::ADMIN_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::DEFAULT_STORE_ID]
+            )
+            ->willReturnSelf();
+
+        $this->collection->expects($this->exactly(4))
+            ->method('getFirstItem')
+            ->willReturnOnConsecutiveCalls(
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    null,
+                    1
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    null,
+                    1
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    null,
+                    null,
+                    self::OPTION_2_ID,
+                    self::ADMIN_STORE_ID
+                ),
+                $this->createSwatchMock(
+                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    null,
+                    null,
+                    self::OPTION_2_ID,
+                    self::DEFAULT_STORE_ID
+                )
             );
-
-        $this->collection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_ID],
-                ['store_id', self::OPTION_ID]
-            )->willReturnSelf();
-        $this->collection->expects($this->once())->method('getFirstItem')
-            ->willReturn($this->swatch);
-        $this->collectionFactory->expects($this->once())->method('create')
+        $this->collectionFactory->expects($this->exactly(4))
+            ->method('create')
             ->willReturn($this->collection);
 
-        $this->attribute->expects($this->at(0))->method('getData')
-            ->with('option')
-            ->willReturn($this->optionIds);
-        $this->attribute->expects($this->at(1))->method('getSource')
-            ->willReturn($this->abstractSource);
-        $this->attribute->expects($this->at(2))->method('getData')
-            ->with('swatch/value')
-            ->willReturn([self::STORE_ID => [self::OPTION_ID => null]]);
-        $this->attribute->expects($this->at(3))->method('getData')
-            ->with('option/delete/' . self::OPTION_ID)
-            ->willReturn(false);
-
-        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
-            ->with($this->attribute)
-            ->will($this->onConsecutiveCalls(true, false));
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
-            ->with($this->attribute)
-            ->willReturn(false);
-        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
-            ->with($this->attribute)
-            ->willReturn(true);
-
         $this->eavAttribute->afterAfterSave($this->attribute);
+    }
+
+    /**
+     * Create configured mock for swatch model
+     *
+     * @param string $type
+     * @param string|null $value
+     * @param int|null $id
+     * @param int|null $optionId
+     * @param int|null $storeId
+     * @return MockObject
+     */
+    private function createSwatchMock(
+        string $type,
+        ?string $value,
+        ?int $id = null,
+        ?int $optionId = null,
+        ?int $storeId = null
+    ) {
+        $swatch = $this->createMock(Swatch::class);
+        $swatch->expects($this->any())
+            ->method('getId')
+            ->willReturn($id);
+        $swatch->expects($this->any())
+            ->method('getResource')
+            ->willReturn($this->resource);
+        $swatch->expects($this->once())
+            ->method('save');
+        if ($id) {
+            $swatch->expects($this->exactly(2))
+                ->method('setData')
+                ->withConsecutive(
+                    ['type', $type],
+                    ['value', $value]
+                );
+        } else {
+            $swatch->expects($this->exactly(4))
+                ->method('setData')
+                ->withConsecutive(
+                    ['option_id', $optionId],
+                    ['store_id', $storeId],
+                    ['type', $type],
+                    ['value', $value]
+                );
+        }
+        return $swatch;
     }
 }

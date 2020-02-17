@@ -24,10 +24,10 @@
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteVirtualProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="sku" value="{{virtualProductOutOfStock.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

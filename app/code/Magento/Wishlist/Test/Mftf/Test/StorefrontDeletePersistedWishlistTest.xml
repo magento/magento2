@@ -32,7 +32,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="category"/>
             <deleteData stepKey="deleteProduct" createDataKey="product"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>

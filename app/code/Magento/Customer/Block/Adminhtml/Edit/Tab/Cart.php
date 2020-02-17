@@ -75,7 +75,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -105,13 +105,12 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $quote = $this->getQuote();
 
-        if ($quote) {
+        if ($quote && $quote->getId()) {
             $collection = $quote->getItemsCollection(false);
+            $collection->addFieldToFilter('parent_item_id', ['null' => true]);
         } else {
             $collection = $this->_dataCollectionFactory->create();
         }
-
-        $collection->addFieldToFilter('parent_item_id', ['null' => true]);
 
         $this->setCollection($collection);
 
@@ -119,7 +118,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -201,7 +200,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {
@@ -224,7 +223,13 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product/edit', ['id' => $row->getProductId()]);
+        return $this->getUrl(
+            'catalog/product/edit',
+            [
+                'id' => $row->getProductId(),
+                'customerId' => $this->getCustomerId()
+            ]
+        );
     }
 
     /**

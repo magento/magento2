@@ -121,7 +121,6 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->willReturn(false);
 
         $expectedRedirectUrl = 'https://test.com/index';
-
         $this->configMock->expects($this->once())
             ->method('getValue')
             ->with('web/default/no_route', ScopeInterface::SCOPE_STORE)

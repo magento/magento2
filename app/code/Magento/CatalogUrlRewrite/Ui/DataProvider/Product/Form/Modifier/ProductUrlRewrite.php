@@ -53,7 +53,7 @@ class ProductUrlRewrite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -65,7 +65,7 @@ class ProductUrlRewrite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -95,16 +95,21 @@ class ProductUrlRewrite extends AbstractModifier
                 ScopeInterface::SCOPE_STORE,
                 $this->locator->getProduct()->getStoreId()
             );
-
-            $meta = $this->arrayManager->merge($containerPath, $meta, [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'component' => 'Magento_Ui/js/form/components/group',
+            $meta = $this->arrayManager->merge(
+                $containerPath,
+                $meta,
+                [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'component' => 'Magento_Ui/js/form/components/group',
+                                'label' => false,
+                                'required' => false,
+                            ],
                         ],
                     ],
-                ],
-            ]);
+                ]
+            );
 
             $checkbox['arguments']['data']['config'] = [
                 'componentType' => Field::NAME,

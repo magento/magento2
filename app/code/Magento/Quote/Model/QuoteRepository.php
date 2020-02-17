@@ -224,7 +224,7 @@ class QuoteRepository implements CartRepositoryInterface
     {
         /** @var CartInterface $quote */
         $quote = $this->cartFactory->create();
-        if ($sharedStoreIds && method_exists($quote, 'setSharedStoreIds')) {
+        if ($sharedStoreIds && is_callable([$quote, 'setSharedStoreIds'])) {
             $quote->setSharedStoreIds($sharedStoreIds);
         }
         $quote->setStoreId($this->storeManager->getStore()->getId())->$loadMethod($identifier);

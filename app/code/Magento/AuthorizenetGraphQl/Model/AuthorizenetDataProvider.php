@@ -9,9 +9,13 @@ namespace Magento\AuthorizenetGraphQl\Model;
 
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * SetPaymentMethod additional data provider model for Authorizenet payment method
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class AuthorizenetDataProvider implements AdditionalDataProviderInterface
 {
@@ -36,10 +40,17 @@ class AuthorizenetDataProvider implements AdditionalDataProviderInterface
      *
      * @param array $data
      * @return array
+     * @throws GraphQlInputException
      */
     public function getData(array $data): array
     {
-        $additionalData = $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $data) ?? [];
+        if (!isset($data[self::PATH_ADDITIONAL_DATA])) {
+            throw new GraphQlInputException(
+                __('Required parameter "authorizenet_acceptjs" for "payment_method" is missing.')
+            );
+        }
+
+        $additionalData = $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $data);
         foreach ($additionalData as $key => $value) {
             $additionalData[$this->convertSnakeCaseToCamelCase($key)] = $value;
             unset($additionalData[$key]);

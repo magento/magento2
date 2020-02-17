@@ -21,10 +21,10 @@
         <li>
             <span><?= $block->escapeHtml(__('Return to ')) ?>
                 <?php if (isset($_SERVER['HTTP_REFERER'])) : ?>
-                    <a href="<?= $block->escapeUrl(__($_SERVER['HTTP_REFERER'])) ?>">
+                    <a href="<?= $block->escapeUrl($_SERVER['HTTP_REFERER']) ?>">
                         <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
                 <?php else : ?>
-                    <a href="<?= $block->escapeHtmlAttr(__('javascript:history.back()')) ?>">
+                    <a href="<?= $block->escapeHtmlAttr('javascript:history.back()') ?>">
                         <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
                 <?php endif ?>
             </span>

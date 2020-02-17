@@ -6,6 +6,8 @@
 
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
+use Magento\Catalog\Model\Category;
+
 class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -98,7 +100,62 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
             ->will($this->returnValue($enabled));
+
+        $category = $this->createMock(Category::class);
+        $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
+        $category->expects($this->once())->method('getDisplayMode')->willReturn(Category::DM_PRODUCT);
+
         $this->assertEquals($enabled, $this->model->canShowBlock());
+    }
+
+    /**
+     * Test canShowBlock() with different category display types.
+     *
+     * @param string $mode
+     * @param bool $result
+     *
+     * @dataProvider canShowBlockDataProvider
+     */
+    public function testCanShowBlockWithDifferentDisplayModes(string $mode, bool $result)
+    {
+        $filters = ['To' => 'be', 'or' => 'not', 'to' => 'be'];
+
+        $this->filterListMock->expects($this->atLeastOnce())->method('getFilters')
+            ->with($this->catalogLayerMock)
+            ->will($this->returnValue($filters));
+        $this->assertEquals($filters, $this->model->getFilters());
+
+        $this->visibilityFlagMock
+            ->expects($this->any())
+            ->method('isEnabled')
+            ->with($this->catalogLayerMock, $filters)
+            ->will($this->returnValue(true));
+
+        $category = $this->createMock(Category::class);
+        $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
+        $category->expects($this->once())->method('getDisplayMode')->willReturn($mode);
+        $this->assertEquals($result, $this->model->canShowBlock());
+    }
+
+    /**
+     * @return array
+     */
+    public function canShowBlockDataProvider()
+    {
+        return [
+            [
+                Category::DM_PRODUCT,
+                true,
+            ],
+            [
+                Category::DM_PAGE,
+                false,
+            ],
+            [
+                Category::DM_MIXED,
+                true,
+            ],
+        ];
     }
 
     public function testGetClearUrl()

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Helper\File\Storage;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -50,7 +52,10 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * test for \Magento\MediaStorage\Model\File\Storage\Database::deleteFolder()
      *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
+     * @magentoConfigFixture current_store system/media_storage_configuration/media_storage 1
+     * @magentoConfigFixture current_store system/media_storage_configuration/media_database default_setup
      */
     public function testDeleteFolder()
     {

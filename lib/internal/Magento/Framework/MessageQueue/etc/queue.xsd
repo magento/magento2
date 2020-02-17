@@ -11,6 +11,7 @@
         <xs:annotation>
             <xs:documentation>
                 @deprecated
+                Deprecated for RabbitMQ connection.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

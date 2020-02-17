@@ -34,15 +34,18 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array|null $orders
-     * @param array|null $expected
+     * @param array $params
+     * @param array $expected
      * @dataProvider resolveSortOrderDataProvider
      */
-    public function testResolve($orders, $expected)
+    public function testResolve($params, $expected)
     {
         $searchRequestName = 'test';
         $currentPage = 1;
-        $size = 10;
+        $size = $params['size'];
+        $expectedSize = $expected['size'];
+        $orders = $params['orders'];
+        $expectedOrders = $expected['orders'];
 
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
@@ -54,7 +57,7 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($searchCriteria);
         $searchCriteria->expects($this->once())
             ->method('setSortOrders')
-            ->with($expected)
+            ->with($expectedOrders)
             ->willReturn($searchCriteria);
         $searchCriteria->expects($this->once())
             ->method('setCurrentPage')
@@ -64,10 +67,16 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
-        $this->searchCriteriaBuilder->expects($this->once())
-            ->method('setPageSize')
-            ->with($size)
-            ->willReturn($this->searchCriteriaBuilder);
+
+        if ($expectedSize === null) {
+            $this->searchCriteriaBuilder->expects($this->never())
+                ->method('setPageSize');
+        } else {
+            $this->searchCriteriaBuilder->expects($this->once())
+                ->method('setPageSize')
+                ->with($expectedSize)
+                ->willReturn($this->searchCriteriaBuilder);
+        }
 
         $objectManager = new ObjectManagerHelper($this);
         /** @var SearchCriteriaResolver $model */
@@ -92,12 +101,12 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                null,
-                null,
+                ['size' => 0, 'orders' => null],
+                ['size' => null, 'orders' => null],
             ],
             [
-                ['test' => 'ASC'],
-                ['test' => 'ASC'],
+                ['size' => 10, 'orders' => ['test' => 'ASC']],
+                ['size' => null, 'orders' => ['test' => 'ASC']],
             ],
         ];
     }
