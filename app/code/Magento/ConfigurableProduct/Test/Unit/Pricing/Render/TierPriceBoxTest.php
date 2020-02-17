@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
@@ -61,7 +65,7 @@ class TierPriceBoxTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createPartialMock(Context::class, []);
         $this->saleableItem = $this->createPartialMock(Product::class, ['getPriceInfo']);
@@ -85,7 +89,7 @@ class TierPriceBoxTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testToHtmlEmptyWhenMsrpPriceIsApplicable()
+    public function testToHtmlEmptyWhenMsrpPriceIsApplicable(): void
     {
         $msrpPriceMock = $this->createPartialMock(
             MsrpPrice::class,
