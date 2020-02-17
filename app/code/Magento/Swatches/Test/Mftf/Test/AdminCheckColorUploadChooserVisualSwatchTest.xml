@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckColorUploadChooserVisualSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Check correct view of visual swatches"/>
+            <title value="Correct view of Swatches while choosing color or upload image"/>
+            <description value="Correct view of Swatches while choosing color or upload image"/>
+            <severity value="AVERAGE"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="addNewProductAttribute"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}"
+                      userInput="{{visualSwatchAttribute.input_type}}" stepKey="fillInputType"/>
+
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatch('3')}}" stepKey="clickSwatch3"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatch('2')}}" stepKey="clickSwatch2"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatch('1')}}" stepKey="clickSwatch1"/>
+    </test>
+</tests>
