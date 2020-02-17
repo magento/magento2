@@ -31,7 +31,7 @@
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
         </after>
         <!-- 1. Add simple product to cart and go to checkout-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- 2. Go to Shopping Cart -->

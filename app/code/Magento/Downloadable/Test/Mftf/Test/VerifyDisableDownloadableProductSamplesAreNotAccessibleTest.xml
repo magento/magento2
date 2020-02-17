@@ -87,13 +87,13 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
         <!-- Open Downloadable product from precondition -->
-        <actionGroup ref="goToProductPageViaID" stepKey="openProductEditPage">
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
 
         <!-- Change status of product to "Disable" and save it -->
-        <actionGroup ref="AdminSetProductDisabled" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Assert product is disable on Storefront -->
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">

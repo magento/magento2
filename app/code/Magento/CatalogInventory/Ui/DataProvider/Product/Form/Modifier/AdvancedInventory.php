@@ -242,6 +242,7 @@ class AdvancedInventory extends AbstractModifier
                     'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
                 ],
                 'sortOrder' => 10,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
             ];
             $advancedInventoryButton['arguments']['data']['config'] = [
                 'displayAsLink' => true,
@@ -254,6 +255,9 @@ class AdvancedInventory extends AbstractModifier
                         'targetName' => 'product_form.product_form.advanced_inventory_modal',
                         'actionName' => 'toggleModal',
                     ],
+                ],
+                'imports' => [
+                    'childError' => 'product_form.product_form.advanced_inventory_modal.stock_data:error',
                 ],
                 'title' => __('Advanced Inventory'),
                 'provider' => false,

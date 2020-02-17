@@ -15,6 +15,9 @@ use Zend\Mime\Part as ZendMimePart;
  */
 class MimePart implements MimePartInterface
 {
+    /**
+     * UTF-8 charset
+     */
     public const CHARSET_UTF8 = 'utf-8';
 
     /**
@@ -47,7 +50,7 @@ class MimePart implements MimePartInterface
         $content,
         ?string $type = MimeInterface::TYPE_HTML,
         ?string $fileName = null,
-        ?string $disposition = MimeInterface::DISPOSITION_INLINE,
+        ?string $disposition = null,
         ?string $encoding = MimeInterface::ENCODING_QUOTED_PRINTABLE,
         ?string $description = null,
         ?array $filters = [],

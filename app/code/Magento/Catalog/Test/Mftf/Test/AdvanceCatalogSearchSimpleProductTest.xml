@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
         </before>
         <after>
@@ -91,7 +91,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
 
             <createData entity="ApiProductWithDescription" stepKey="product"/>
             <getData entity="GetProduct" stepKey="arg1">

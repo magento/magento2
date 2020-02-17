@@ -44,4 +44,38 @@ class LogoTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
     }
+
+    /**
+     * cover \Magento\Theme\Block\Html\Header\Logo::getLogoHeight
+     */
+    public function testGetLogoHeight()
+    {
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $arguments = [
+            'scopeConfig' => $scopeConfig,
+        ];
+        $block = $objectManager->getObject(\Magento\Theme\Block\Html\Header\Logo::class, $arguments);
+
+        $this->assertEquals(null, $block->getLogoHeight());
+    }
+
+    /**
+     * @covers \Magento\Theme\Block\Html\Header\Logo::getLogoWidth
+     */
+    public function testGetLogoWidth()
+    {
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig->expects($this->once())->method('getValue')->willReturn('170');
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $arguments = [
+            'scopeConfig' => $scopeConfig,
+        ];
+        $block = $objectManager->getObject(\Magento\Theme\Block\Html\Header\Logo::class, $arguments);
+
+        $this->assertEquals('170', $block->getLogoHeight());
+    }
 }

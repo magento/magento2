@@ -39,12 +39,12 @@
         </after>
         <!-- Create new order and choose an existing customer -->
         <comment userInput="Create new order and choose an existing customer" stepKey="createOrderAndAddCustomer"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!-- Add simple product to order -->
         <comment userInput="Add simple product to order" stepKey="addSimpleProdToOrder"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!-- Just in case uncheck and check 'Same as Billing Address checkbox' -->
