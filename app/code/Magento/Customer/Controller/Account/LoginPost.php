@@ -43,6 +43,11 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
     protected $formKeyValidator;
 
     /**
+     * @var CustomerUrl
+     */
+    protected $customerUrl;
+
+    /**
      * @var AccountRedirect
      */
     protected $accountRedirect;

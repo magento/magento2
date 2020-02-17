@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Filesystem\Driver\Http;
 
 /**
  * Form Element Abstract Data Model
@@ -65,6 +66,11 @@ abstract class AbstractData
     protected $_localeResolver;
 
     /**
+     * @var \Magento\Framework\Filesystem\Driver\Http
+     */
+    protected $_http;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
@@ -98,6 +104,7 @@ abstract class AbstractData
         \Psr\Log\LoggerInterface $logger,
         \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Filesystem\Driver\Http $http,
         $value,
         $entityTypeCode,
         $isAjax = false
@@ -109,6 +116,7 @@ abstract class AbstractData
         $this->_value = $value;
         $this->_entityTypeCode = $entityTypeCode;
         $this->_isAjax = $isAjax;
+        $this->_http = $http;
     }
 
     /**
@@ -419,7 +427,7 @@ abstract class AbstractData
                     }
                     break;
                 case 'url':
-                    $parsedUrl = parse_url($value);
+                    $parsedUrl = $this->_http->parseUrl($value);
                     if ($parsedUrl === false || empty($parsedUrl['scheme']) || empty($parsedUrl['host'])) {
                         return [__('"%1" is not a valid URL.', $label)];
                     }

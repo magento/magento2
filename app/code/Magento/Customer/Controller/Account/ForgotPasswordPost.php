@@ -14,6 +14,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
+use Psr\Log\LoggerInterface;
 
 /**
  * ForgotPasswordPost controller
@@ -25,6 +26,11 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
      * @var \Magento\Customer\Api\AccountManagementInterface
      */
     protected $customerAccountManagement;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @var \Magento\Framework\Escaper
@@ -40,16 +46,19 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
+     * @param LoggerInterface $logger
      * @param Escaper $escaper
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         AccountManagementInterface $customerAccountManagement,
+        LoggerInterface $logger,
         Escaper $escaper
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->logger = $logger;
         $this->escaper = $escaper;
         parent::__construct($context);
     }
