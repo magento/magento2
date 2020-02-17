@@ -26,8 +26,8 @@
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
-        <click selector="{{AdminManageSwatchSection.nthSwatch('3')}}" stepKey="clickSwatch3"/>
-        <click selector="{{AdminManageSwatchSection.nthSwatch('2')}}" stepKey="clickSwatch2"/>
-        <click selector="{{AdminManageSwatchSection.nthSwatch('1')}}" stepKey="clickSwatch1"/>
+        <click selector="{{AdminManageSwatchSection.nthVisualSwatch('3')}}" stepKey="clickSwatch3"/>
+        <click selector="{{AdminManageSwatchSection.nthVisualSwatch('2')}}" stepKey="clickSwatch2"/>
+        <click selector="{{AdminManageSwatchSection.nthVisualSwatch('1')}}" stepKey="clickSwatch1"/>
     </test>
 </tests>
