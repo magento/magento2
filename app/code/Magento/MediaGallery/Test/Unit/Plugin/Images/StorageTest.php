@@ -105,18 +105,6 @@ class StorageTest extends TestCase
                 $result = $this->storagePlugin->afterDeleteDirectory($storageSubject, null, (int)$path);
                 self::assertNull($result);
                 break;
-            case self::NON_EXISTENT_PATH:
-                $directoryRead->expects($this->once())
-                    ->method('getRelativePath')
-                    ->with($path)
-                    ->willReturn($path);
-                $directoryRead->expects($this->once())
-                    ->method('isExist')
-                    ->with($path)
-                    ->willReturn(false);
-                self::expectException('Magento\Framework\Exception\CouldNotDeleteException');
-                $this->storagePlugin->afterDeleteDirectory($storageSubject, null, $path);
-                break;
             case self::INVALID_PATH:
                 $exception = new ValidatorException(__('Path cannot be used with directory'));
                 $directoryRead->expects($this->once())
@@ -133,10 +121,6 @@ class StorageTest extends TestCase
                     ->method('getRelativePath')
                     ->with($path)
                     ->willReturn($path);
-                $directoryRead->expects($this->once())
-                    ->method('isExist')
-                    ->with($path)
-                    ->willReturn(true);
                 $this->deleteMediaAssetByDirectoryPath->expects($this->once())
                     ->method('execute')
                     ->with($path);
@@ -154,7 +138,6 @@ class StorageTest extends TestCase
     {
         return [
             'Non string path' => [2020],
-            'Non-existent path' => [self::NON_EXISTENT_PATH],
             'Invalid path' => [self::INVALID_PATH],
             'Existent path' => [self::VALID_PATH]
         ];

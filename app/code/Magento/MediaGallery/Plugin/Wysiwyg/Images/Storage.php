@@ -111,7 +111,6 @@ class Storage
      *
      * @return null
      *
-     * @throws CouldNotDeleteException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDeleteDirectory(StorageSubject $subject, $result, $path)
@@ -123,9 +122,6 @@ class Storage
         try {
             $mediaDirectoryRead = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $relativePath = $mediaDirectoryRead->getRelativePath($path);
-            if ($mediaDirectoryRead->isExist($relativePath) === false) {
-                throw new CouldNotDeleteException(__('Cannot remove assets, the provided path does not exist'));
-            }
             $this->deleteMediaAssetByDirectoryPath->execute($relativePath);
         } catch (ValidatorException $exception) {
             $this->logger->critical($exception);
