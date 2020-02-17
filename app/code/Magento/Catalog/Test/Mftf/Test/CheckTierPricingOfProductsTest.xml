@@ -36,20 +36,21 @@
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <!--Login as admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
         </before>
 
         <!--Create website, Sore adn Store View-->
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
-            <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
-            <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            <argument name="newWebsiteName" value="secondWebsite"/>
+            <argument name="websiteCode" value="second_website"/>
         </actionGroup>
         <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateStore">
-            <argument name="website" value="{{customWebsite.name}}"/>
-            <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
-            <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            <argument name="website" value="secondWebsite"/>
+            <argument name="storeGroupName" value="secondStore"/>
+            <argument name="storeGroupCode" value="second_store"/>
         </actionGroup>
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateStoreView">
-            <argument name="StoreGroup" value="customStoreGroup"/>
+            <argument name="StoreGroup" value="customStoreTierPrice"/>
             <argument name="customStore" value="customStoreView"/>
         </actionGroup>
         <!--Set Configuration-->
@@ -62,10 +63,10 @@
             <argument name="product" value="$$product1$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing1">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct2">
@@ -75,10 +76,10 @@
             <argument name="product" value="$$product2$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite2">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing2">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct3">
@@ -88,10 +89,10 @@
             <argument name="product" value="$$product3$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite3">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing3">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct4">
@@ -101,10 +102,10 @@
             <argument name="product" value="$$product4$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite4">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="ProductSetAdvancedPricing4">
-            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="website" value="secondWebsite"/>
         </actionGroup>
         <actionGroup ref="ClearProductsFilterActionGroup" stepKey="ClearProductsFilterActionGroup"/>
 
@@ -135,7 +136,7 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <waitForPageLoad stepKey="waitForPageDiscountPageIsLoaded"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="ship" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{customWebsite.name}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="secondWebsite" stepKey="selectWebsites"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="ship" stepKey="setCode"/>
@@ -326,8 +327,9 @@
                 <argument name="ruleName" value="ship"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
-                <argument name="websiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
+            <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
             <actionGroup ref="logout" stepKey="logout"/>
 
             <!--Do reindex and flush cache-->
