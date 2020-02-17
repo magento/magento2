@@ -9,8 +9,6 @@ use Magento\Catalog\Pricing\Price\TierPrice;
 
 /**
  * Responsible for displaying tier price box on configurable product page.
- *
- * @package Magento\ConfigurableProduct\Pricing\Render
  */
 class TierPriceBox extends FinalPriceBox
 {
