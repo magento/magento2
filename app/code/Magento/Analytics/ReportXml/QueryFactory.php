@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,9 +8,9 @@ namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\DB\Select;
 
 /**
  * Creates Query object according to configuration
