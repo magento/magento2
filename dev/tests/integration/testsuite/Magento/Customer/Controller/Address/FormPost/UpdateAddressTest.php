@@ -205,11 +205,10 @@ class UpdateAddressTest extends AbstractController
         $createdAddressData = $address->__toArray();
         foreach ($expectedData as $fieldCode => $expectedValue) {
             if (null === $expectedValue) {
-                $this->assertFalse(isset($createdAddressData[$fieldCode]));
+                $this->assertArrayNotHasKey($fieldCode, $createdAddressData);
                 continue;
             }
-
-            $this->assertTrue(isset($createdAddressData[$fieldCode]), "Field $fieldCode wasn't found.");
+            $this->assertArrayHasKey($fieldCode, $createdAddressData, "Field $fieldCode wasn't found.");
             $this->assertEquals($expectedValue, $createdAddressData[$fieldCode]);
         }
     }

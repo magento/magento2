@@ -198,7 +198,7 @@ class CreateAddressTest extends AbstractController
         $address = reset($customerAddresses);
         $createdAddressData = $address->__toArray();
         foreach ($expectedData as $fieldCode => $expectedValue) {
-            $this->assertTrue(isset($createdAddressData[$fieldCode]), "Field $fieldCode wasn't found.");
+            $this->assertArrayHasKey($fieldCode, $createdAddressData, "Field $fieldCode wasn't found.");
             $this->assertEquals($expectedValue, $createdAddressData[$fieldCode]);
         }
     }
