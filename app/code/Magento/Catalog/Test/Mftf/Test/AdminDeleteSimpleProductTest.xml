@@ -29,7 +29,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProductFilteredBySkuAndName">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProductFilteredBySkuAndName">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>

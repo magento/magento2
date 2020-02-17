@@ -35,12 +35,12 @@
         </actionGroup>
 
         <!--Search created website in grid and verify AssertWebsiteInGrid-->
-        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeWebsiteInGrid">
+        <actionGroup ref="AssertWebsiteInGridActionGroup" stepKey="seeWebsiteInGrid">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
         </actionGroup>
 
         <!--Verify website name and websitecode on website form (AssertWebsiteForm and AssertWebsiteOnStoreForm)-->
-        <actionGroup ref="AssertWebsiteForm" stepKey="seeWebsiteForm">
+        <actionGroup ref="AssertWebsiteFormActionGroup" stepKey="seeWebsiteForm">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
             <argument name="websiteCode" value="{{customWebsite.code}}"/>
         </actionGroup>
