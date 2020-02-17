@@ -31,9 +31,8 @@
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
             <actionGroup ref="logout" stepKey="logout"/>
-            <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>
-
             <magentoCLI command="config:set {{DisableCategoriesPathProductUrls.path}} {{DisableCategoriesPathProductUrls.value}}" stepKey="disableUseCategoriesPath"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
@@ -70,9 +69,17 @@
             <argument name="value" value="{{SimpleSubCategoryDifferentUrlStore.url_key_custom_store}}"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAssertProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrl">
-            <argument name="category" value="_defaultCategoryDifferentUrlStore"/>
-            <argument name="subCategory" value="SimpleSubCategoryDifferentUrlStore" />
+        <actionGroup ref="StorefrontAssertProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlDefaultStore">
+            <argument name="category" value="{{_defaultCategoryDifferentUrlStore.url_key_default_store}}"/>
+            <argument name="product" value="SimpleProduct" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
+            <argument name="storeView" value="customStore" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlCustomStore">
+            <argument name="category" value="{{_defaultCategoryDifferentUrlStore.url_key_custom_store}}"/>
             <argument name="product" value="SimpleProduct" />
         </actionGroup>
 
