@@ -35,7 +35,7 @@ class Data
     const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
-     * Default store ID
+     * The int value of the Default store ID
      */
     const DEFAULT_STORE_ID = 0;
 
