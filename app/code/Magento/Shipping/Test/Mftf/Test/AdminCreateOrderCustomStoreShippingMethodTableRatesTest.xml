@@ -78,22 +78,22 @@
         <!--Assign product to custom website-->
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="unassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+        <actionGroup ref="UnassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
         <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
             <argument name="website" value="{{customWebsite.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--Create order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="storeView" value="customStore"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>

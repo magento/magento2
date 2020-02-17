@@ -25,7 +25,7 @@
         <after>
             <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>

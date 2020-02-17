@@ -9,10 +9,12 @@ namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Block\Product\View\Description;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -43,17 +45,35 @@ class ViewTest extends TestCase
     /** @var Json */
     private $json;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
+    /** @var Description */
+    private $descriptionBlock;
+
+    /** @var array */
+    private const SHORT_DESCRIPTION_BLOCK_DATA = [
+        'at_call' => 'getShortDescription',
+        'at_code' => 'short_description',
+        'overview' => 'overview',
+        'at_label' => 'none',
+        'title' => 'Overview',
+        'add_attribute' => 'description',
+    ];
+
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->create(View::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->block = $this->layout->createBlock(View::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->json = $this->objectManager->get(Json::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->descriptionBlock = $this->layout->createBlock(Description::class);
     }
 
     /**
@@ -177,6 +197,68 @@ class ViewTest extends TestCase
         $output = $this->block->toHtml();
 
         $this->assertContains((string)__('Add to Cart'), $output);
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Catalog/_files/product_multistore_different_short_description.php
+     * @return void
+     */
+    public function testProductShortDescription(): void
+    {
+        $product = $this->productRepository->get('simple-different-short-description');
+        $currentStoreId = $this->storeManager->getStore()->getId();
+        $output = $this->renderDescriptionBlock($product);
+
+        $this->assertContains('First store view short description', $output);
+
+        $secondStore = $this->storeManager->getStore('fixturestore');
+        $this->storeManager->setCurrentStore($secondStore->getId());
+
+        try {
+            $product = $this->productRepository->get(
+                'simple-different-short-description',
+                false,
+                $secondStore->getId(),
+                true
+            );
+            $newBlockOutput = $this->renderDescriptionBlock($product, true);
+
+            $this->assertContains('Second store view short description', $newBlockOutput);
+        } finally {
+            $this->storeManager->setCurrentStore($currentStoreId);
+        }
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param bool $refreshBlock
+     * @return string
+     */
+    private function renderDescriptionBlock(ProductInterface $product, bool $refreshBlock = false): string
+    {
+        $this->registerProduct($product);
+        $descriptionBlock = $this->getDescriptionBlock($refreshBlock);
+        $descriptionBlock->addData(self::SHORT_DESCRIPTION_BLOCK_DATA);
+        $descriptionBlock->setTemplate('Magento_Catalog::product/view/attribute.phtml');
+
+        return $this->descriptionBlock->toHtml();
+    }
+
+    /**
+     * Get description block
+     *
+     * @param bool $refreshBlock
+     * @return Description
+     */
+    private function getDescriptionBlock(bool $refreshBlock): Description
+    {
+        if ($refreshBlock) {
+            $this->descriptionBlock = $this->layout->createBlock(Description::class);
+        }
+
+        return $this->descriptionBlock;
     }
 
     /**

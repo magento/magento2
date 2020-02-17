@@ -30,7 +30,7 @@
         <!--Add product to cart and checkout-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>

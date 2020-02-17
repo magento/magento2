@@ -43,7 +43,7 @@ class CmsBlockTest extends GraphQlAbstract
     {
         $cmsBlock = $this->blockRepository->getById('enabled_block');
         $cmsBlockData = $cmsBlock->getData();
-        $renderedContent = $this->filterEmulate->setUseSessionInUrl(false)->filter($cmsBlock->getContent());
+        $renderedContent = $this->filterEmulate->filter($cmsBlock->getContent());
 
         $query =
             <<<QUERY
@@ -77,7 +77,7 @@ QUERY;
         $cmsBlock = $this->blockRepository->getById('enabled_block');
         $cmsBlockData = $cmsBlock->getData();
         $blockId = $cmsBlockData['block_id'];
-        $renderedContent = $this->filterEmulate->setUseSessionInUrl(false)->filter($cmsBlock->getContent());
+        $renderedContent = $this->filterEmulate->filter($cmsBlock->getContent());
 
         $query =
             <<<QUERY

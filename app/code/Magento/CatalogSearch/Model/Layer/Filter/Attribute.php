@@ -58,15 +58,18 @@ class Attribute extends AbstractFilter
         if (empty($attributeValue) && !is_numeric($attributeValue)) {
             return $this;
         }
+
         $attribute = $this->getAttributeModel();
         /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
-        $label = $this->getOptionText($attributeValue);
-        if (is_array($label)) {
-            $label = implode(',', $label);
+
+        $labels = [];
+        foreach ((array) $attributeValue as $value) {
+            $labels[] = (array) $this->getOptionText($value);
         }
+        $label = implode(',', array_unique(array_merge(...$labels)));
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));

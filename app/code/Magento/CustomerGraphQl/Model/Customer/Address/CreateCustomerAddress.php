@@ -10,9 +10,10 @@ namespace Magento\CustomerGraphQl\Model\Customer\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Directory\Helper\Data as DirectoryData;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Create customer address
@@ -38,23 +39,30 @@ class CreateCustomerAddress
      * @var DataObjectHelper
      */
     private $dataObjectHelper;
+    /**
+     * @var DirectoryData
+     */
+    private $directoryData;
 
     /**
      * @param GetAllowedAddressAttributes $getAllowedAddressAttributes
      * @param AddressInterfaceFactory $addressFactory
      * @param AddressRepositoryInterface $addressRepository
      * @param DataObjectHelper $dataObjectHelper
+     * @param DirectoryData $directoryData
      */
     public function __construct(
         GetAllowedAddressAttributes $getAllowedAddressAttributes,
         AddressInterfaceFactory $addressFactory,
         AddressRepositoryInterface $addressRepository,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        DirectoryData $directoryData
     ) {
         $this->getAllowedAddressAttributes = $getAllowedAddressAttributes;
         $this->addressFactory = $addressFactory;
         $this->addressRepository = $addressRepository;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->directoryData = $directoryData;
     }
 
     /**
@@ -101,6 +109,13 @@ class CreateCustomerAddress
     {
         $attributes = $this->getAllowedAddressAttributes->execute();
         $errorInput = [];
+
+        //Add error for empty postcode with country with no optional ZIP
+        if (!$this->directoryData->isZipCodeOptional($addressData['country_id'])
+            && (!isset($addressData['postcode']) || empty($addressData['postcode']))
+        ) {
+            $errorInput[] = 'postcode';
+        }
 
         foreach ($attributes as $attributeName => $attributeInfo) {
             if ($attributeInfo->getIsRequired()

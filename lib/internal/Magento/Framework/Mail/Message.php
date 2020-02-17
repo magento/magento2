@@ -171,7 +171,6 @@ class Message implements MailMessageInterface
         $part = new Part($body);
         $part->setCharset($this->zendMessage->getEncoding());
         $part->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
-        $part->setDisposition(Mime::DISPOSITION_INLINE);
         $part->setType($messageType);
         $mimeMessage = new \Zend\Mime\Message();
         $mimeMessage->addPart($part);

@@ -50,7 +50,7 @@
             <createData entity="SimpleProduct2" stepKey="productC"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="AdminAssignProductToCategory" stepKey="assignCategoryNAndMToProductC">
+            <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryNAndMToProductC">
                 <argument name="productId" value="$$productC.id$$"/>
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
@@ -97,7 +97,7 @@
 
         <!-- Open Products A, B, C to edit. Assign/unassign categories to/from them. Save changes -->
         <!--  Assign category K to Product A -->
-        <actionGroup ref="AdminAssignProductToCategory" stepKey="assignCategoryK">
+        <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryK">
             <argument name="productId" value="$$productA.id$$"/>
             <argument name="categoryName" value="$$categoryK.name$$"/>
         </actionGroup>
@@ -109,7 +109,7 @@
         </actionGroup>
 
         <!--  Assign category L to Product C -->
-        <actionGroup ref="AdminAssignProductToCategory" stepKey="assignCategoryNAndM">
+        <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryNAndM">
             <argument name="productId" value="$$productC.id$$"/>
             <argument name="categoryName" value="$$categoryL.name$$"/>
         </actionGroup>
@@ -176,7 +176,7 @@
         </actionGroup>
 
         <!-- Add Product B assignment for category N -->
-        <actionGroup ref="AdminAssignProductToCategory" stepKey="assignCategoryN">
+        <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryN">
             <argument name="productId" value="$$productB.id$$"/>
             <argument name="categoryName" value="$$categoryN.name$$"/>
         </actionGroup>
