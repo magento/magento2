@@ -35,16 +35,16 @@
         <!--Open simple product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openFirstProductForEdit"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openFirstProductForEdit"/>
 
         <!-- Add product video -->
-        <actionGroup ref="addProductVideo" stepKey="addProductVideo" after="openFirstProductForEdit"/>
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo" after="openFirstProductForEdit"/>
         <!-- Assert product video in admin product form -->
-        <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
 
         <!-- Save the product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveFirstProduct"/>
@@ -53,7 +53,7 @@
         <!-- Assert product video in storefront product page -->
         <amOnPage url="$$createProduct.name$$.html" stepKey="goToStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded"/>
-        <actionGroup ref="assertProductVideoStorefrontProductPage" stepKey="assertProductVideoStorefrontProductPage" after="waitForStorefrontPageLoaded"/>
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="waitForStorefrontPageLoaded"/>
 
         <!--Click Play video button-->
         <click stepKey="clickToPlayVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>

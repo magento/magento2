@@ -44,17 +44,17 @@
         </after>
 
         <!--Create new customer order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!--Add Simple product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
         <!--Add second product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProductToTheOrder">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
 
@@ -65,7 +65,7 @@
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
 
         <!-- Verify order information -->
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Hold the Order -->
