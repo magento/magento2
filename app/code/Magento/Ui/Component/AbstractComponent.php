@@ -5,14 +5,12 @@
  */
 namespace Magento\Ui\Component;
 
+use Magento\Framework\Data\ValueSourceInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
-use Magento\Framework\Data\ValueSourceInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 //phpcs:disable Magento2.Classes.AbstractApi
 /**
@@ -142,10 +140,12 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
 
     /**
      * Produce and return block's html output
+     *
+     * @return string
      */
     public function toHtml()
     {
-        $this->render();
+        return $this->render();
     }
 
     /**
