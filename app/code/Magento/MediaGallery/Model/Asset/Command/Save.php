@@ -71,8 +71,8 @@ class Save implements SaveInterface
             $connection->insertOnDuplicate($tableName, $this->extractor->extract($mediaAsset, AssetInterface::class));
             return (int) $connection->lastInsertId($tableName);
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during media asset save: %1', $exception->getMessage());
-            $this->logger->critical($message);
             throw new CouldNotSaveException($message, $exception);
         }
     }

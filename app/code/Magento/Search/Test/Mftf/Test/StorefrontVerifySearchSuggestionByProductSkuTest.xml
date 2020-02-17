@@ -39,12 +39,12 @@
             <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
 
             <!--Filter the search term -->
-            <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
                 <argument name="searchQuery" value="$$simpleProduct.sku$$"/>
             </actionGroup>
 
             <!-- Delete created below search terms -->
-            <actionGroup ref="deleteSearchTerm" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

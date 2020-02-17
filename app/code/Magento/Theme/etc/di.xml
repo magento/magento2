@@ -206,6 +206,10 @@
                     <item name="path" xsi:type="string">design/header/welcome</item>
                     <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
+                <item name="header_translate_title" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/translate_title</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
+                </item>
                 <item name="footer_copyright" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/copyright</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>

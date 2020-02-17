@@ -55,13 +55,13 @@
             <see userInput="You saved the store view." stepKey="seeSavedMessage" />
 
             <!--Create a Simple Product 1 -->
-            <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct1">
+            <actionGroup ref="CreateSimpleProductAndAddToWebsiteActionGroup" stepKey="createSimpleProduct1">
                 <argument name="product" value="simpleProductForMassUpdate"/>
                 <argument name="website" value="Second Website"/>
             </actionGroup>
 
             <!--Create a Simple Product 2 -->
-            <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct2">
+            <actionGroup ref="CreateSimpleProductAndAddToWebsiteActionGroup" stepKey="createSimpleProduct2">
                 <argument name="product" value="simpleProductForMassUpdate2"/>
                 <argument name="website" value="Second Website"/>
             </actionGroup>
@@ -86,10 +86,10 @@
         <!-- Search and select products -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="{{simpleProductForMassUpdate.keyword}}"/>
         </actionGroup>
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
 
         <!-- Filter to Second Store View -->
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >
@@ -205,13 +205,13 @@
             <see userInput="You saved the store view." stepKey="seeSavedMessage" />
 
             <!--Create a Simple Product 1 -->
-            <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct1">
+            <actionGroup ref="CreateSimpleProductAndAddToWebsiteActionGroup" stepKey="createSimpleProduct1">
                 <argument name="product" value="simpleProductForMassUpdate"/>
                 <argument name="website" value="Second Website"/>
             </actionGroup>
 
             <!--Create a Simple Product 2 -->
-            <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct2">
+            <actionGroup ref="CreateSimpleProductAndAddToWebsiteActionGroup" stepKey="createSimpleProduct2">
                 <argument name="product" value="simpleProductForMassUpdate2"/>
                 <argument name="website" value="Second Website"/>
             </actionGroup>
@@ -236,10 +236,10 @@
         <!-- Search and select products -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="{{simpleProductForMassUpdate.keyword}}"/>
         </actionGroup>
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
 
         <!-- Filter to Second Store View -->
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >

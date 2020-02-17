@@ -18,7 +18,7 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create Simple Customer -->
@@ -124,6 +124,10 @@
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>
             <deleteData createDataKey="createGroupedProduct1" stepKey="deleteGroupedProduct1"/>
             <deleteData createDataKey="createDownloadableProduct1" stepKey="deleteDownloadableProduct1"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer1">
