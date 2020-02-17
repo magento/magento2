@@ -47,22 +47,18 @@ class Navigation extends AbstractActionController
     /**
      * @param NavModel $navigation
      * @param Status $status
-     * @param ViewModel $viewModel
-     * @param JsonModel $jsonModel
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         NavModel $navigation,
         Status $status,
-        ViewModel $viewModel,
-        JsonModel $jsonModel,
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->navigation = $navigation;
         $this->status = $status;
         $this->objectManagerProvider = $objectManagerProvider->get();
-        $this->view = $viewModel;
-        $this->json = $jsonModel;
+        $this->json = new JsonModel();
+        $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
