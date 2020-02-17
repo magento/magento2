@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductRewriteUrlSubCategoryActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Title is present on the Rewrite URL with a subcategory page.</description>
+        </annotations>
+        <arguments>
+            <argument name="category" defaultValue="_defaultCategory"/>
+            <argument name="subCategory" defaultValue="SimpleSubCategory"/>
+            <argument name="product" defaultValue="SimpleProduct" />
+        </arguments>
+
+        <amOnPage url="{{category.url_key_default_store}}/{{subCategory.url_key_default_store}}/{{product.urlKey}}2.html" stepKey="goToProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{product.name}}" stepKey="seeProductNameInStoreFront"/>
+    </actionGroup>
+</actionGroups>
