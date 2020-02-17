@@ -288,7 +288,7 @@ class TypeProcessor
         $types = $returnAnnotation->getTypes();
         $returnType = null;
         foreach ($types as $type) {
-            if ($type != 'null') {
+            if ($type !== 'null') {
                 $returnType = $type;
                 break;
             }
