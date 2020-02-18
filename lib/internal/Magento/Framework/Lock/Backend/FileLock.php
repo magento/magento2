@@ -91,6 +91,7 @@ class FileLock implements LockManagerInterface
 
             while (!$this->tryToLock($fileResource)) {
                 if (!$skipDeadline && $deadline <= microtime(true)) {
+                    $this->tryToUnlock($fileResource);
                     $this->fileDriver->fileClose($fileResource);
                     return false;
                 }
