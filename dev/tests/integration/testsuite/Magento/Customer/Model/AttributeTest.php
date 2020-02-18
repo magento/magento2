@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -61,7 +62,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->setEntityTypeId($this->customerEntityType)
             ->setFrontendLabel('test')
             ->setIsUserDefined(1);
-        $crud = new \Magento\TestFramework\Entity($this->model, ['frontend_label' => uniqid()]);
+        $crud = new \Magento\TestFramework\Entity($this->model, [AttributeInterface::FRONTEND_LABEL => uniqid()]);
         $crud->testCrud();
     }
 
