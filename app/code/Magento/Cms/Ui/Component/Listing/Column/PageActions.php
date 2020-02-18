@@ -111,6 +111,7 @@ class PageActions extends Column
                         ),
                         'label' => __('View'),
                         '__disableTmpl' => true,
+                        'target' => '_blank'
                     ];
                 }
             }
