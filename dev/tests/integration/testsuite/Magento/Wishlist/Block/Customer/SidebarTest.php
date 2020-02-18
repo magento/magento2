@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SidebarTest extends TestCase
 {
-    CONST BLOCK_NAME = 'wishlist_sidebar';
+    private const BLOCK_NAME = 'wishlist_sidebar';
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -73,7 +73,7 @@ class SidebarTest extends TestCase
     {
         $this->preparePageLayout();
         $this->assertFalse(
-            $this->page->getLayout()->getBlock('wishlist_sidebar'),
+            $this->page->getLayout()->getBlock(self::BLOCK_NAME),
             'Sidebar wish list should not be visible.'
         );
     }
