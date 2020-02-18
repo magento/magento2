@@ -735,16 +735,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'id' => 488,
             ]
         ];
-
-        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn(0);
-        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn(1);
-        $swatchMock->expects($this->at(2))->method('offsetGet')->with('value')->willReturn('test');
-        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn(35);
-        $swatchMock->expects($this->at(4))->method('offsetGet')->with('type')->willReturn(0);
-        $swatchMock->expects($this->at(5))->method('offsetGet')->with('store_id')->willReturn(1);
-        $swatchMock->expects($this->at(6))->method('offsetGet')->with('value')->willReturn('test2');
-        $swatchMock->expects($this->at(7))->method('offsetGet')->with('option_id')->willReturn(36);
-
+        // @codingStandardsIgnoreStart
+        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn($optionsData[0]['type']);
+        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn($optionsData[0]['store_id']);
+        $swatchMock->expects($this->at(2))->method('offsetGet')->with('value')->willReturn($optionsData[0]['value']);
+        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn($optionsData[0]['option_id']);
+        $swatchMock->expects($this->at(4))->method('offsetGet')->with('type')->willReturn($optionsData[1]['type']);
+        $swatchMock->expects($this->at(5))->method('offsetGet')->with('store_id')->willReturn($optionsData[1]['store_id']);
+        $swatchMock->expects($this->at(6))->method('offsetGet')->with('value')->willReturn($optionsData[1]['value']);
+        $swatchMock->expects($this->at(7))->method('offsetGet')->with('option_id')->willReturn($optionsData[1]['option_id']);
+        // @codingStandardsIgnoreEnd
         $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
@@ -770,12 +770,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'option_id' => 35,
             'id' => 423,
         ];
-
-        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn(0);
-        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn(0);
-        $swatchMock->expects($this->at(2))->method('offsetGet')->with('store_id')->willReturn(0);
-        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn(35);
-
+        // @codingStandardsIgnoreStart
+        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn($optionsData['type']);
+        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn($optionsData['store_id']);
+        $swatchMock->expects($this->at(2))->method('offsetGet')->with('store_id')->willReturn($optionsData['store_id']);
+        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn($optionsData['option_id']);
+        // @codingStandardsIgnoreEnd
         $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
