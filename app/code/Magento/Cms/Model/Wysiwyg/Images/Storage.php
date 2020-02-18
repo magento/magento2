@@ -765,12 +765,13 @@ class Storage extends \Magento\Framework\DataObject
     protected function _validatePath($path)
     {
         $root = $this->_sanitizePath($this->_cmsWysiwygImages->getStorageRoot());
-        if ($root == $path) {
+        $realPath = realpath($path);
+        if ($root == $realPath) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t delete root directory %1 right now.', $path)
             );
         }
-        if (strpos($path, (string) $root) !== 0) {
+        if (strpos($realPath, (string) $root) !== 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Directory %1 is not under storage root path.', $path)
             );

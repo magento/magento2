@@ -55,25 +55,4 @@ class DirectoryResolver
 
         return strpos($realPath, $root) === 0;
     }
-
-    /**
-     * Validate same path.
-     *
-     * Gets real path for directory provided in parameters and compares it with specified root directory.
-     * Will return TRUE if real path of provided value is root directory path and FALSE if not.
-     * Throws the \Magento\Framework\Exception\FileSystemException in case when directory path is absent
-     * in Directories configuration.
-     *
-     * @param string $path
-     * @param string $directoryConfig
-     * @return bool
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    public function validateSamePath($path, $directoryConfig = DirectoryList::MEDIA)
-    {
-        $root = $this->directoryList->getPath($directoryConfig);
-        $traverseRealPath = realpath($path);
-
-        return $root === $traverseRealPath;
-    }
 }
