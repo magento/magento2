@@ -132,20 +132,15 @@ class ProductList
             return $this->_defaultAvailableLimit;
         }
         $perPageConfigKey = 'catalog/frontend/' . $mode . '_per_page_values';
-        $scopeType = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $isSingleStoreModeEnabled = $this->scopeConfig->getValue('general/single_store_mode/enabled');
-        if($isSingleStoreModeEnabled) {
-            $scopeType = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-        }
         $perPageValues = (string)$this->scopeConfig->getValue(
             $perPageConfigKey,
-            $scopeType
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $perPageValues = explode(',', $perPageValues);
         $perPageValues = array_combine($perPageValues, $perPageValues);
         if ($this->scopeConfig->isSetFlag(
             'catalog/frontend/list_allow_all',
-            $scopeType
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )) {
             return ($perPageValues + ['all' => __('All')]);
         } else {

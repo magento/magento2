@@ -22,6 +22,11 @@ class Config implements ScopeConfigInterface
     const CACHE_TAG = 'CONFIG';
 
     /**
+     * Config single store mode tag
+     */
+    const SINGLE_STORE_MODE_TAG = 'default/general/single_store_mode/enabled';
+
+    /**
      * @var ScopeCodeResolver
      */
     private $scopeCodeResolver;
@@ -30,6 +35,8 @@ class Config implements ScopeConfigInterface
      * @var ConfigTypeInterface[]
      */
     private $types;
+
+    public $isSingleStoreModeEnabled;
 
     /**
      * Config constructor.
@@ -63,6 +70,15 @@ class Config implements ScopeConfigInterface
         } elseif ($scope === 'website') {
             $scope = 'websites';
         }
+
+        if (!isset($this->isSingleStoreModeEnabled)) {
+            $this->isSingleStoreModeEnabled = (bool)$this->get('system', self::SINGLE_STORE_MODE_TAG);
+        }
+
+        if (!empty($this->isSingleStoreModeEnabled)) {
+            $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+        }
+
         $configPath = $scope;
         if ($scope !== 'default') {
             if (is_numeric($scopeCode) || $scopeCode === null) {
