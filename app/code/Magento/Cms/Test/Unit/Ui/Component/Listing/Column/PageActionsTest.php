@@ -22,6 +22,9 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
         $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $scopeUrlBuilderMock = $this->getMockBuilder(\Magento\Cms\ViewModel\Page\Grid\UrlBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
@@ -35,6 +38,7 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
             [
                 'urlBuilder' => $urlBuilderMock,
                 'context' => $contextMock,
+                'scopeUrlBuilder' => $scopeUrlBuilderMock
             ]
         );
 
@@ -46,12 +50,15 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
 
         // Define test input and expectations
         $title = 'page title';
+        $identifier = 'page_identifier';
+
         $items = [
             'data' => [
                 'items' => [
                     [
                         'page_id' => $pageId,
-                        'title' => $title
+                        'title' => $title,
+                        'identifier' => $identifier
                     ]
                 ]
             ]
@@ -61,6 +68,7 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
             [
                 'page_id' => $pageId,
                 'title' => $title,
+                'identifier' => $identifier,
                 $name => [
                     'edit' => [
                         'href' => 'test/url/edit',
@@ -78,6 +86,12 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
                         'post' => true,
                         '__disableTmpl' => true,
                     ],
+                    'preview' => [
+                        'href' => 'test/url/view',
+                        'label' => __('View'),
+                        '__disableTmpl' => true,
+                        'target' => '_blank'
+                    ]
                 ],
             ],
         ];
@@ -107,6 +121,11 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             );
+
+        $scopeUrlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('test/url/view');
+
         $model->setName($name);
         $items = $model->prepareDataSource($items);
         // Run test
