@@ -16,7 +16,7 @@
             <description value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (virtual quote)"/>
             <severity value="CRITICAL"/>
             <useCaseId value="MC-294"/>
-            <testCaseId value="MC-16525"/>
+            <testCaseId value="MC-28585"/>
             <group value="checkout"/>
             <group value="tax"/>
             <group value="weee"/>
