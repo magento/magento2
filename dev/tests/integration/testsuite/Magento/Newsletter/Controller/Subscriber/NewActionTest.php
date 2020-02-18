@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Newsletter\Controller;
+namespace Magento\Newsletter\Controller\Subscriber;
 
 use Laminas\Stdlib\Parameters;
 use Magento\Customer\Api\CustomerRepositoryInterface;
