@@ -25,7 +25,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $fileBackend;
 
     /** @var IoFileSystem|\PHPUnit_Framework_MockObject_MockObject */
-    protected $ioFileSystem;
+    private $ioFileSystem;
 
     /**
      * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject

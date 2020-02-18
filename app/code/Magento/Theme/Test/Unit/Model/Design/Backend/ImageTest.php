@@ -25,7 +25,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $imageBackend;
 
     /** @var IoFileSystem|\PHPUnit_Framework_MockObject_MockObject */
-    protected $ioFileSystem;
+    private $ioFileSystem;
 
     /**
      * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
@@ -92,13 +92,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             [],
             $this->databaseHelper,
             $this->ioFileSystem
-        );
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->imageBackend,
-            'mime',
-            $this->mime
         );
     }
 

@@ -39,12 +39,12 @@ class File extends BackendFile
     /**
      * @var Mime
      */
-    protected $mime;
+    private $mime;
 
     /**
      * @var IoFileSystem
      */
-    protected $ioFileSystem;
+    private $ioFileSystem;
 
     /**
      * @var Database
