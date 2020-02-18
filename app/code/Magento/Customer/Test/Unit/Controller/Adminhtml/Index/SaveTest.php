@@ -231,7 +231,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->managementMock = $this->getMockBuilder(\Magento\Customer\Model\AccountManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAccount'])
+            ->setMethods(['createAccount', 'validateCustomerStoreIdByWebsiteId'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -499,6 +499,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $redirectMock->expects($this->once())
             ->method('setPath')
             ->with('customer/*/edit', ['id' => $customerId, '_current' => true])
+            ->willReturn(true);
+
+        $this->managementMock->method('validateCustomerStoreIdByWebsiteId')
             ->willReturn(true);
 
         $this->assertEquals($redirectMock, $this->model->execute());
