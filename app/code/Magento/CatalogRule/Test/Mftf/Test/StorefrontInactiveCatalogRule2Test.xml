@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontInactiveCatalogRule2Test">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Customer view catalog price rule"/>
+            <title value="Customer should not see the catalog price rule promotion if status is inactive"/>
+            <description value="Customer should not see the catalog price rule promotion if status is inactive"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-79"/>
+            <group value="catalogRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+                <argument name="active" value="0"/>
+                <argument name="groups" value="'NOT LOGGED IN'"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstPriceRule"/>
+            <!-- Perform reindex -->
+            <magentoCLI command="indexer:reindex" arguments="catalogrule_rule" stepKey="reindex"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Verify price is not discounted on category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPageOnFrontend"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoaded"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="seeProductPriceOnCategoryPage"/>
+
+        <!-- Verify price is not discounted on the product page -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="openProductPageOnFrontend"/>
+        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$createProduct.price$" stepKey="seePriceOnProductPage"/>
+
+        <!-- Verify price is not discounted in the cart -->
+        <actionGroup ref="StorefrontAddProductToCartFromProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openCartPage" />
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="waitForSubtotalAppears"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$createProduct.price$" stepKey="seeProductPriceOnCartPage"/>
+    </test>
+</tests>

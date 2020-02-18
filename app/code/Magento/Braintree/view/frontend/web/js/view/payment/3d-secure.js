@@ -117,7 +117,7 @@ define([
                 options.bin = context.paymentPayload.details.bin;
             }
 
-            if (shippingAddress) {
+            if (shippingAddress && this.isValidShippingAddress(shippingAddress)) {
                 options.additionalInformation = {
                     shippingGivenName: shippingAddress.firstname,
                     shippingSurname: shippingAddress.lastname,
@@ -206,6 +206,25 @@ define([
             }
 
             return false;
+        },
+
+        /**
+         * Validate shipping address
+         *
+         * @param {Object} shippingAddress
+         * @return {Boolean}
+         */
+        isValidShippingAddress: function (shippingAddress) {
+            var isValid = false;
+
+            // check that required fields are not empty
+            if (shippingAddress.firstname && shippingAddress.lastname && shippingAddress.telephone &&
+                shippingAddress.street && shippingAddress.city && shippingAddress.regionCode &&
+                shippingAddress.postcode && shippingAddress.countryId) {
+                isValid = true;
+            }
+
+            return isValid;
         }
     };
 });
