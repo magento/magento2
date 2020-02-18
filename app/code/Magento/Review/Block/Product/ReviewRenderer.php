@@ -1,23 +1,26 @@
 <?php
 /**
- * Review renderer
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\ObjectManager;
-use Magento\Review\Model\ReviewSummaryFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Review\Model\Review\SummaryData as ReviewSummaryData;
 use Magento\Review\Observer\PredispatchReviewObserver;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class ReviewRenderer
+ * Product Review Renderer
  */
-class ReviewRenderer extends \Magento\Framework\View\Element\Template implements ReviewRendererInterface
+class ReviewRenderer extends Template implements ReviewRendererInterface
 {
     /**
      * Array of available template name
@@ -30,32 +33,21 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     ];
 
     /**
-     * Review model factory
-     *
-     * @var \Magento\Review\Model\ReviewFactory
+     * @var ReviewSummaryData
      */
-    protected $_reviewFactory;
+    private $reviewSummaryData;
 
     /**
-     * @var ReviewSummaryFactory
-     */
-    private $reviewSummaryFactory;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+     * @param Context $context
+     * @param ReviewSummaryData $reviewSummaryData
      * @param array $data
-     * @param ReviewSummaryFactory $reviewSummaryFactory
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Review\Model\ReviewFactory $reviewFactory,
-        array $data = [],
-        ReviewSummaryFactory $reviewSummaryFactory = null
+        Context $context,
+        ReviewSummaryData $reviewSummaryData,
+        array $data = []
     ) {
-        $this->_reviewFactory = $reviewFactory;
-        $this->reviewSummaryFactory = $reviewSummaryFactory ??
-            ObjectManager::getInstance()->get(ReviewSummaryFactory::class);
+        $this->reviewSummaryData = $reviewSummaryData;
         parent::__construct($context, $data);
     }
 
@@ -68,7 +60,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     {
         return $this->_scopeConfig->getValue(
             PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -80,18 +72,18 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @param bool $displayIfNoReviews
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     ) {
         if ($product->getRatingSummary() === null) {
-            $this->reviewSummaryFactory->create()->appendSummaryDataToObject(
+            $this->reviewSummaryData->appendSummaryDataToObject(
                 $product,
-                $this->_storeManager->getStore()->getId()
+                (int)$this->_storeManager->getStore()->getId()
             );
         }
 
@@ -135,6 +127,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * Get review product list url
      *
      * @param bool $useDirectLink allows to use direct link for product reviews page
+     *
      * @return string
      */
     public function getReviewsUrl($useDirectLink = false)
