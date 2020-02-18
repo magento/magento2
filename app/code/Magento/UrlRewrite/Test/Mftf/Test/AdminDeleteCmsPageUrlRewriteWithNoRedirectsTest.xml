@@ -15,7 +15,6 @@
             <description value="Log in to admin and delete CMS Page URL rewrite with No Redirects"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14648"/>
-            <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
