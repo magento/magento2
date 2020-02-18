@@ -52,6 +52,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * @param array $options
+     * @throws \Zend_Cache_Exception
      */
     public function __construct(array $options = [])
     {
@@ -97,17 +98,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Update remote cache status info
-     *
-     * @return void
-     */
-    private function updateRemoteCacheStatusInfo()
-    {
-        $this->remote->save(time(), $this->_options['remote_backend_invalidation_time_id'], [], null);
-        $this->cacheInvalidationTime = null;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setDirectives($directives)
@@ -120,15 +110,32 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        $dataModificationTime = $this->local->test($id);
-        if ($this->cacheInvalidationTime === null) {
-            $this->cacheInvalidationTime = $this->remote->load($this->_options['remote_backend_invalidation_time_id']);
-        }
-        if ($dataModificationTime >= $this->cacheInvalidationTime) {
-            return $this->local->load($id, $doNotTestCacheValidity);
+        $localData = $this->local->load($id.':data');
+        $remoteData = false;
+
+        if (false === $localData) {
+            $remoteData = $this->remote->load($id.':data');
+
+            if (false === $remoteData) {
+                return false;
+            }
         } else {
-            return false;
+            $remoteDataHash = $this->remote->load(
+                $id . ':hash'
+            );
+
+            if (md5($localData) !== $remoteDataHash) {
+                $localData = false;
+                $remoteData = $this->remote->load($id.':data');
+            }
         }
+
+        if ($remoteData !== false) {
+            $this->local->save($remoteData, $id.':data');
+            $localData = $remoteData;
+        }
+
+        return $localData;
     }
 
     /**
@@ -136,7 +143,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function test($id)
     {
-        return $this->local->test($id);
+        return $this->local->test($id.":data");
     }
 
     /**
@@ -144,7 +151,19 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
-        return $this->local->save($data, $id, $tags, $specificLifetime);
+        $remHash = $this->remote->load($id. ":hash");
+
+        if ($remHash !== false) {
+            $remData = $this->remote->load($id.":data");
+
+            return $this->local->save($remData, $id .':data', [], $specificLifetime);
+        } else {
+
+            $this->remote->save($data, $id.':data', $tags, $specificLifetime);
+            $this->remote->save(md5($data), $id .':hash', $tags, $specificLifetime);
+
+            return $this->local->save($data, $id .':data', [], $specificLifetime);
+        }
     }
 
     /**
@@ -152,8 +171,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-        $this->updateRemoteCacheStatusInfo();
-        return $this->local->remove($id);
+        return $this->remote->remove($id.':hash')
+            && $this->remote->remove($id.':data')
+            && $this->local->remove($id.':data');
     }
 
     /**
@@ -161,8 +181,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
-        $this->updateRemoteCacheStatusInfo();
-        return $this->local->clean($mode, $tags);
+        return $this->remote->clean($mode, $tags);
     }
 
     /**
