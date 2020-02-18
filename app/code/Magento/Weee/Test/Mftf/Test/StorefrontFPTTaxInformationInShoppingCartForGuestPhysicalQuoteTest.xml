@@ -36,10 +36,8 @@
             <!--  Store>Configuration; Sales>Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
             <!--  Simple product is created  Price = 10;  FPT United States/California/10,United States/New York/20 -->
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">10.00</field>
-                <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
@@ -66,7 +64,6 @@
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
