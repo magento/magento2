@@ -48,13 +48,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $scope
      * @param string|null $scopeCode
+     * @param bool $singleStore
      *
      * @dataProvider getValueDataProvider
      * @return void
      */
-    public function testGetValue($scope, $scopeCode = null)
+    public function testGetValue($scope, $scopeCode = null, $singleStore = false)
     {
         $path = 'path';
+
+        $this->appConfig->isSingleStoreModeEnabled = $singleStore;
+
         if (!is_string($scope)) {
             $this->scopeCodeResolver->expects($this->once())
                 ->method('resolve')
@@ -65,9 +69,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ->method('getCode')
                 ->willReturn('myWebsite');
         }
+
+        $scopeValue = ($scope == 'store') ? 'stores/path' : 'websites/myWebsite/path';
+
+        if($singleStore) {
+            $scopeValue = 'default/path';
+        }
+
         $this->configType->expects($this->once())
             ->method('get')
-            ->with($scope =='store' ? 'stores/path' : 'websites/myWebsite/path')
+            ->with($scopeValue)
             ->willReturn(true);
 
         $this->assertTrue($this->appConfig->getValue($path, $scope, $scopeCode ?: $this->scope));
@@ -81,6 +92,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         return [
             ['store', 1],
             ['website'],
+            ['store', 1, true],
+            ['website', 1, true],
         ];
     }
 }
