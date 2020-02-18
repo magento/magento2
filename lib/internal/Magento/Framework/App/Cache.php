@@ -30,12 +30,13 @@ class Cache implements CacheInterface
     protected $_frontend;
 
     /**
-     * @param \Magento\Framework\App\Cache\Frontend\Pool $frontendPool
+     * @param Cache\Frontend\Pool $frontendPool
+     * @param string|null $cacheIdentifier
      */
-    public function __construct(\Magento\Framework\App\Cache\Frontend\Pool $frontendPool)
+    public function __construct(\Magento\Framework\App\Cache\Frontend\Pool $frontendPool, $cacheIdentifier = null)
     {
         $this->_frontendPool = $frontendPool;
-        $this->_frontend = $frontendPool->get($this->_frontendIdentifier);
+        $this->_frontend = $frontendPool->get($cacheIdentifier ?? $this->_frontendIdentifier);
     }
 
     /**
