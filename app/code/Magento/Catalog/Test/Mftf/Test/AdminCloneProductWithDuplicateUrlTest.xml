@@ -38,7 +38,7 @@
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <!--Save and duplicated the product once-->
         <comment userInput="Save and duplicated the product once" stepKey="commentSaveAndDuplicateProduct"/>
-        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductFormFirstTime"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductFormFirstTime"/>
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openSEOSection"/>
         <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabDuplicatedProductUrlKey"/>
         <assertContains expected="$$createSimpleProduct.custom_attributes[url_key]$$" actual="$grabDuplicatedProductUrlKey" stepKey="assertDuplicatedProductUrlKey"/>
@@ -65,7 +65,7 @@
         <comment userInput="Save and duplicated the product second time" stepKey="commentSaveAndDuplicateProduct1"/>
         <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage1"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad2"/>
-        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductFormSecondTime"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductFormSecondTime"/>
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openProductSEOSection"/>
         <waitForElementVisible selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="waitForUrlKeyField"/>
         <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabSecondDuplicatedProductUrlKey"/>
