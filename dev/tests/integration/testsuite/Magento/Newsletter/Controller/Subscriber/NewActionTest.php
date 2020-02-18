@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller;
 
+use Laminas\Stdlib\Parameters;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResource;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -207,7 +208,10 @@ class NewActionTest extends AbstractController
      */
     private function prepareRequest(string $email): void
     {
-        $this->getRequest()->setMethod(Request::HTTP_METHOD_POST);
+        $parameters = $this->_objectManager->create(Parameters::class);
+        $parameters->set('HTTP_REFERER', 'http://localhost/testRedirect');
+        $this->getRequest()->setServer($parameters);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(['email' => $email]);
     }
 
@@ -222,7 +226,7 @@ class NewActionTest extends AbstractController
         if ($message) {
             $this->assertSessionMessages($this->equalTo([(string)__($message)]));
         }
-        $this->assertRedirect($this->stringContains('/index.php'));
+        $this->assertRedirect($this->equalTo('http://localhost/testRedirect'));
     }
 
     /**

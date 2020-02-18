@@ -62,17 +62,15 @@ class SaveTest extends AbstractController
      *
      * @dataProvider subscriptionDataProvider
      *
-     * @param string $isSubscribed
+     * @param bool $isSubscribed
      * @param string $expectedMessage
      * @return void
      */
-    public function testSaveAction(string $isSubscribed, string $expectedMessage): void
+    public function testSaveAction(bool $isSubscribed, string $expectedMessage): void
     {
         $this->loginCustomer('new_customer@example.com');
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())
-            ->setParam('is_subscribed', $isSubscribed);
         $this->_objectManager->removeSharedInstance(CustomerPlugin::class);
-        $this->dispatch('newsletter/manage/save');
+        $this->dispatchSaveAction($isSubscribed);
         $this->assertSuccessSubscription($expectedMessage);
     }
 
@@ -83,11 +81,11 @@ class SaveTest extends AbstractController
     {
         return [
             'subscribe_customer' => [
-                'is_subscribed' => 1,
+                'is_subscribed' => true,
                 'expected_message' => 'We have saved your subscription.',
             ],
             'unsubscribe_customer' => [
-                'is_subscribed' => 0,
+                'is_subscribed' => false,
                 'expected_message' => 'We have updated your subscription.',
             ],
         ];
@@ -102,8 +100,7 @@ class SaveTest extends AbstractController
     public function testSubscribeWithEnabledConfirmation(): void
     {
         $this->loginCustomer('new_customer@example.com');
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())->setParam('is_subscribed', '1');
-        $this->dispatch('newsletter/manage/save');
+        $this->dispatchSaveAction(true);
         $this->assertSuccessSubscription('A confirmation request has been sent.');
     }
 
@@ -115,10 +112,23 @@ class SaveTest extends AbstractController
     public function testUnsubscribeSubscribedCustomer(): void
     {
         $this->loginCustomer('new_customer@example.com');
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())->setParam('is_subscribed', '0');
         $this->_objectManager->removeSharedInstance(CustomerPlugin::class);
-        $this->dispatch('newsletter/manage/save');
+        $this->dispatchSaveAction(false);
         $this->assertSuccessSubscription('We have removed your newsletter subscription.');
+    }
+
+    /**
+     * Dispatch save action with parameters
+     *
+     * @param string $isSubscribed
+     * @return void
+     */
+    private function dispatchSaveAction(bool $isSubscribed): void
+    {
+        $this->_objectManager->removeSharedInstance(CustomerPlugin::class);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())
+            ->setParam('is_subscribed', $isSubscribed);
+        $this->dispatch('newsletter/manage/save');
     }
 
     /**
