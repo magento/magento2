@@ -9,6 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCategoryAccessibleWhenSuffixIsNullTest">
         <annotations>
+            <stories value="Url rewrites"/>
             <title value="Storefront category is accessible when url suffix is set to null test"/>
             <description value="Check no crash occurs on Category page when catalog/seo/category_url_suffix is set to null"/>
             <features value="CatalogUrlRewrite"/>
