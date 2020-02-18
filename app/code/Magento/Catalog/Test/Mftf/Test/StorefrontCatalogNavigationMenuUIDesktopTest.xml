@@ -21,10 +21,8 @@
         <before>
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="DeleteDefaultCategoryChildrenActionGroup" stepKey="deleteRootCategoryChildren"/>
         </before>
         <after>
-            <actionGroup ref="DeleteDefaultCategoryChildrenActionGroup" stepKey="deleteRootCategoryChildren"/>
             <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToDefault">
                 <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
             </actionGroup>
@@ -159,7 +157,7 @@
         </actionGroup>
 
         <!-- Submenu appears rightward -->
-        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level0')}}" stepKey="assertTopLevelMenuLeftDirection"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuLeftDirection('level0')}}" stepKey="assertTopLevelMenuLeftDirection"/>
 
         <!-- Nested level 1 & 5 -->
         <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryLevelTwoBlank.name$$)}}" stepKey="hoverCategoryLevelTwo"/>
