@@ -120,9 +120,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        $dataModificationTime = $this->local->test($id);
+        $dataModificationTime = (int) $this->local->test($id);
         if ($this->cacheInvalidationTime === null) {
-            $this->cacheInvalidationTime = $this->remote->load($this->_options['remote_backend_invalidation_time_id']);
+            $this->cacheInvalidationTime = (int) $this->remote->load(
+                $this->_options['remote_backend_invalidation_time_id']
+            );
         }
         if ($dataModificationTime >= $this->cacheInvalidationTime) {
             return $this->local->load($id, $doNotTestCacheValidity);
