@@ -154,6 +154,7 @@ define([
          */
         closeModal: function (event, result) {
             var value;
+
             result = result || false;
 
             if (result) {
