@@ -80,6 +80,11 @@
                 <thumbnail_position>stretch</thumbnail_position>
             </watermark>
         </design>
+        <web>
+            <url>
+                <catalog_media_url_format>hash</catalog_media_url_format>
+            </url>
+        </web>
         <general>
             <validator_data>
                 <input_types>

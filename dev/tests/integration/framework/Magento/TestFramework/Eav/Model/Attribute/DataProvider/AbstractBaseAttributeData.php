@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Eav\Model\Attribute\DataProvider;
 
 use Magento\Store\Model\Store;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
 /**
  * Base POST data for create attribute.
@@ -28,7 +29,7 @@ abstract class AbstractBaseAttributeData
         'dropdown_attribute_validation' => '',
         'dropdown_attribute_validation_unique' => '',
         'attribute_code' => '',
-        'is_global' => '0',
+        'is_global' => ScopedAttributeInterface::SCOPE_STORE,
         'default_value_text' => '',
         'default_value_yesno' => '0',
         'default_value_date' => '',
@@ -68,10 +69,10 @@ abstract class AbstractBaseAttributeData
                 $this->defaultAttributePostData,
             ],
             "{$this->getFrontendInput()}_with_global_scope" => [
-                array_merge($this->defaultAttributePostData, ['is_global' => '1']),
+                array_merge($this->defaultAttributePostData, ['is_global' => ScopedAttributeInterface::SCOPE_GLOBAL]),
             ],
             "{$this->getFrontendInput()}_with_website_scope" => [
-                array_merge($this->defaultAttributePostData, ['is_global' => '2']),
+                array_merge($this->defaultAttributePostData, ['is_global' => ScopedAttributeInterface::SCOPE_WEBSITE]),
             ],
             "{$this->getFrontendInput()}_with_attribute_code" => [
                 array_merge($this->defaultAttributePostData, ['attribute_code' => 'test_custom_attribute_code']),
@@ -143,19 +144,19 @@ abstract class AbstractBaseAttributeData
                 "{$this->getFrontendInput()}_with_store_view_scope" => [
                     [
                         'attribute_code' => 'test_attribute_name',
-                        'is_global' => '0',
+                        'is_global' => ScopedAttributeInterface::SCOPE_STORE,
                     ],
                 ],
                 "{$this->getFrontendInput()}_with_global_scope" => [
                     [
                         'attribute_code' => 'test_attribute_name',
-                        'is_global' => '1',
+                        'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
                     ],
                 ],
                 "{$this->getFrontendInput()}_with_website_scope" => [
                     [
                         'attribute_code' => 'test_attribute_name',
-                        'is_global' => '2',
+                        'is_global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                     ],
                 ],
                 "{$this->getFrontendInput()}_with_attribute_code" => [
@@ -216,9 +217,172 @@ abstract class AbstractBaseAttributeData
     }
 
     /**
+     * Return product attribute data set for update attribute.
+     *
+     * @return array
+     */
+    public function getUpdateProvider(): array
+    {
+        $frontendInput = $this->getFrontendInput();
+        return [
+            "{$frontendInput}_update_all_fields" => [
+                'post_data' => $this->getUpdatePostData(),
+                'expected_data' => $this->getUpdateExpectedData(),
+            ],
+            "{$frontendInput}_other_is_user_defined" => [
+                'post_data' => [
+                    'is_user_defined' => '2',
+                ],
+                'expected_data' => [
+                    'is_user_defined' => '1',
+                ],
+            ],
+            "{$frontendInput}_with_is_global_null" => [
+                'post_data' => [
+                    'is_global' => null,
+                ],
+                'expected_data' => [
+                    'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+                ],
+            ],
+            "{$frontendInput}_is_visible_in_advanced_search" => [
+                'post_data' => [
+                    'is_searchable' => '0',
+                    'is_visible_in_advanced_search' => '1',
+                ],
+                'expected_data' => [
+                    'is_searchable' => '0',
+                    'is_visible_in_advanced_search' => '0',
+                ],
+            ],
+            "{$frontendInput}_update_with_attribute_set" => [
+                'post_data' => [
+                    'set' => '4',
+                    'new_attribute_set_name' => 'Text Attribute Set',
+                    'group' => 'text_attribute_group',
+                    'groupName' => 'Text Attribute Group',
+                    'groupSortOrder' => '1',
+                ],
+                'expected_data' => [],
+            ],
+        ];
+    }
+
+    /**
+     * Return product attribute data set with error message for update attribute.
+     *
+     * @return array
+     */
+    public function getUpdateProviderWithErrorMessage(): array
+    {
+        $frontendInput = $this->getFrontendInput();
+        return [
+            "{$frontendInput}_same_attribute_set_name" => [
+                'post_data' => [
+                    'set' => '4',
+                    'new_attribute_set_name' => 'Default',
+                ],
+                'error_message' => (string)__('An attribute set named \'Default\' already exists.'),
+            ],
+            "{$frontendInput}_empty_set_id" => [
+                'post_data' => [
+                    'set' => '',
+                    'new_attribute_set_name' => 'Text Attribute Set',
+                ],
+                'error_message' => (string)__('Something went wrong while saving the attribute.'),
+            ],
+            "{$frontendInput}_nonexistent_attribute_id" => [
+                'post_data' => [
+                    'attribute_id' => 9999,
+                ],
+                'error_message' => (string)__('This attribute no longer exists.'),
+            ],
+            "{$frontendInput}_attribute_other_entity_type" => [
+                'post_data' => [
+                    'attribute_id' => 45,
+                ],
+                'error_message' => (string)__('We can\'t update the attribute.'),
+            ],
+        ];
+    }
+
+    /**
+     * Return product attribute data set for update attribute frontend labels.
+     *
+     * @return array
+     */
+    public function getUpdateFrontendLabelsProvider(): array
+    {
+        $frontendInput = $this->getFrontendInput();
+        return [
+            "{$frontendInput}_update_frontend_label" => [
+                'post_data' => [
+                    'frontend_label' => [
+                        Store::DEFAULT_STORE_ID => 'Test Attribute Update',
+                        'default' => 'Default Store Update',
+                        'fixture_second_store' => 'Second Store Update',
+                        'fixture_third_store' => 'Third Store Update',
+                    ]
+                ],
+                'expected_data' => [
+                    'frontend_label' => 'Test Attribute Update',
+                    'store_labels' => [
+                        'default' => 'Default Store Update',
+                        'fixture_second_store' => 'Second Store Update',
+                        'fixture_third_store' => 'Third Store Update',
+                    ],
+                ],
+            ],
+            "{$frontendInput}_remove_frontend_label" => [
+                'post_data' => [
+                    'frontend_label' => [
+                        Store::DEFAULT_STORE_ID => 'Test Attribute Update',
+                        'default' => 'Default Store Update',
+                        'fixture_second_store' => '',
+                        'fixture_third_store' => '',
+                    ]
+                ],
+                'expected_data' => [
+                    'frontend_label' => 'Test Attribute Update',
+                    'store_labels' => [
+                        'default' => 'Default Store Update',
+                    ],
+                ],
+            ],
+            "{$frontendInput}_with_frontend_label_string" => [
+                'post_data' => [
+                    'frontend_label' => 'Test Attribute Update',
+                ],
+                'expected_data' => [
+                    'frontend_label' => 'Test Attribute Update',
+                    'store_labels' => [
+                        'default' => 'Default Store View',
+                        'fixture_second_store' => 'Fixture Second Store',
+                        'fixture_third_store' => 'Fixture Third Store',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Return attribute frontend input.
      *
      * @return string
      */
     abstract protected function getFrontendInput(): string;
+
+    /**
+     * Return post data for attribute update.
+     *
+     * @return array
+     */
+    abstract protected function getUpdatePostData(): array;
+
+    /**
+     * Return expected data for attribute update.
+     *
+     * @return array
+     */
+    abstract protected function getUpdateExpectedData(): array;
 }

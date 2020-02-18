@@ -117,6 +117,9 @@
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open Product Index Page and Filter First Child product -->
