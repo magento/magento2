@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test button add to wish list link on category page.
+ * Checks add to wishlist button on category page.
  *
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
@@ -40,7 +40,7 @@ class WishlistTest extends TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->block = $this->objectManager->get(LayoutInterface::class)
-            ->addBlock(Wishlist::class)->setTemplate('Magento_Wishlist::catalog/product/list/addto/wishlist.phtml');
+            ->createBlock(Wishlist::class)->setTemplate('Magento_Wishlist::catalog/product/list/addto/wishlist.phtml');
     }
 
     /**
@@ -51,7 +51,8 @@ class WishlistTest extends TestCase
     public function testAddToWishListVisible(): void
     {
         $product = $this->productRepository->get('simple2');
-        $this->assertContains('Add to Wish List', strip_tags($this->block->setProduct($product)->toHtml()));
+        $html = $this->block->setProduct($product)->toHtml();
+        $this->assertEquals('Add to Wish List', trim(strip_tags($html)));
     }
 
     /**

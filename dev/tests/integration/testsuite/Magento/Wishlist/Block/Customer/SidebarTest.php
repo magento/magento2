@@ -40,9 +40,9 @@ class SidebarTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $productMetadataInterface = $this->objectManager->get(ProductMetadataInterface::class);
         if ($productMetadataInterface->getEdition() !== ProductMetadata::EDITION_NAME) {
-            $this->markTestSkipped('Skipped, because this logic is rewritten on Enterprise edition.');
+            $this->markTestSkipped('Skipped, because this logic is rewritten on EE.');
         }
-        $this->page = $this->objectManager->get(Page::class);
+        $this->page = $this->objectManager->create(Page::class);
     }
 
     /**

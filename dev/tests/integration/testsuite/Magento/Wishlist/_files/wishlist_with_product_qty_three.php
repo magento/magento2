@@ -6,12 +6,12 @@
 declare(strict_types=1);
 
 use Magento\Wishlist\Model\WishlistFactory;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
-$json = $objectManager->get(Json::class);
+$json = $objectManager->get(SerializerInterface::class);
 $wishlistFactory = $objectManager->get(WishlistFactory::class);
 $wishlist = $wishlistFactory->create();
 $wishlist->loadByCustomerId($customer->getId(), true);

@@ -33,7 +33,7 @@ class LinkTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->get(LayoutInterface::class)->addBlock(Link::class);
+        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Link::class);
     }
 
     /**

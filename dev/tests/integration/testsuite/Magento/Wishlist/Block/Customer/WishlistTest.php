@@ -23,7 +23,6 @@ use PHPUnit\Framework\TestCase;
  */
 class WishlistTest extends TestCase
 {
-
     private const ITEMS_COUNT_XPATH = "//div[contains(@class, 'pager')]//span[contains(@class, 'toolbar-number')"
     . " and contains(text(), '%s Item')]";
 
@@ -44,7 +43,7 @@ class WishlistTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->page = $this->objectManager->get(Page::class);
+        $this->page = $this->objectManager->create(Page::class);
         $this->customerSession = $this->objectManager->get(Session::class);
     }
 

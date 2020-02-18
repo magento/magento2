@@ -13,10 +13,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test button add to wish list link on product page.
+ * Checks add to wishlist button on product page.
  *
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
@@ -24,6 +25,9 @@ use PHPUnit\Framework\TestCase;
  */
 class WishlistTest extends TestCase
 {
+    private const ADD_TO_WISHLIST_XPATH = "//a[@data-action='add-to-wishlist']"
+    . "/span[contains(text(), 'Add to Wish List')]";
+
     /** @var ObjectManagerInterface */
     private $objectManager;
 
@@ -46,7 +50,7 @@ class WishlistTest extends TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->block = $this->objectManager->get(LayoutInterface::class)
-            ->addBlock(Wishlist::class)->setTemplate('Magento_Wishlist::catalog/product/view/addto/wishlist.phtml');
+            ->createBlock(Wishlist::class)->setTemplate('Magento_Wishlist::catalog/product/view/addto/wishlist.phtml');
     }
 
     /**
@@ -68,7 +72,10 @@ class WishlistTest extends TestCase
     {
         $product = $this->productRepository->get('simple2');
         $this->registerProduct($product);
-        $this->assertContains('Add to Wish List', strip_tags($this->block->toHtml()));
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(self::ADD_TO_WISHLIST_XPATH, $this->block->toHtml())
+        );
     }
 
     /**
@@ -81,7 +88,10 @@ class WishlistTest extends TestCase
     {
         $product = $this->productRepository->get('simple2');
         $this->registerProduct($product);
-        $this->assertNotContains('Add to Wish List', strip_tags($this->block->toHtml()));
+        $this->assertEquals(
+            0,
+            Xpath::getElementsCountForXpath(self::ADD_TO_WISHLIST_XPATH, $this->block->toHtml())
+        );
     }
 
     /**

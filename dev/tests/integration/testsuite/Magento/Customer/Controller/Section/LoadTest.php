@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use Magento\Framework\Escaper;
 
 /**
  * Load customer data test class.
@@ -26,6 +27,9 @@ class LoadTest extends AbstractController
     /** @var SerializerInterface */
     private $json;
 
+    /** @var Escaper */
+    private $escaper;
+
     /**
      * @inheritdoc
      */
@@ -35,6 +39,7 @@ class LoadTest extends AbstractController
 
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->json = $this->_objectManager->get(SerializerInterface::class);
+        $this->escaper = $this->_objectManager->get(Escaper::class);
     }
 
     /**
@@ -52,9 +57,8 @@ class LoadTest extends AbstractController
      */
     public function testLoadInvalidSection(): void
     {
-        $expected = [
-            'message' => 'The &quot;section&lt;invalid&quot; section source isn&#039;t supported.',
-        ];
+        $message = $this->escaper->escapeHtml('The "section<invalid" section source isn\'t supported.');
+        $expected = ['message' => $message];
         $this->dispatch(
             '/customer/section/load/?sections=section<invalid&force_new_section_timestamp=false&_=147066166394'
         );
