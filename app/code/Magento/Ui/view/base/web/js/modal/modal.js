@@ -308,7 +308,7 @@ define([
          * Close modal.
          * * @return {Element} - current element.
          */
-        closeModal: function (event, result) {
+        closeModal: function (event, result) {//eslint-disable-line no-unused-vars
             var that = this;
 
             this._removeKeyListener();
