@@ -124,6 +124,7 @@ class FileLock implements LockManagerInterface
                 } else {
                     $result = true;
                 }
+                $this->tryToUnlock($fileResource);
                 $this->fileDriver->fileClose($fileResource);
             }
         } catch (FileSystemException $exception) {
