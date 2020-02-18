@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 
 /**
@@ -35,6 +36,11 @@ class Image extends File
     private $ioFileSystem;
 
     /**
+     * @var FileDriver
+     */
+    private $fileDriver;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -51,6 +57,7 @@ class Image extends File
      * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
      * @param IoFileSystem|null $ioFileSystem
+     * @param FileDriver|null $fileDriver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -67,7 +74,8 @@ class Image extends File
         UploaderFactory $uploaderFactory,
         \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
         \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
-        IoFileSystem $ioFileSystem = null
+        IoFileSystem $ioFileSystem = null,
+        ?FileDriver $fileDriver = null
     ) {
         parent::__construct(
             $localeDate,
@@ -87,6 +95,7 @@ class Image extends File
             ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
+        $this->fileDriver = $fileDriver ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FileDriver::class);
     }
 
     /**
@@ -207,10 +216,8 @@ class Image extends File
      */
     protected function processCustomerValue(array $value)
     {
-        $file = ltrim($value['file'], '/');
-
-        if ($this->ioFileSystem->getPathInfo($file)['dirname'] === '.' &&
-            isset($this->ioFileSystem->getPathInfo($file)['extension']) &&
+        $file = $this->fileDriver->getRealPathSafety(ltrim($value['file'], '/'));
+        if (isset($this->ioFileSystem->getPathInfo($file)['extension']) &&
             in_array($this->ioFileSystem->getPathInfo($file)['extension'], $this->getAllowedExtensions()) &&
             isset($this->ioFileSystem->getPathInfo($value['name'])['extension']) &&
             in_array($this->ioFileSystem->getPathInfo($value['name'])['extension'], $this->getAllowedExtensions())
