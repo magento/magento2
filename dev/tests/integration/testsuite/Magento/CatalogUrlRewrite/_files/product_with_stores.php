@@ -9,6 +9,7 @@ declare(strict_types=1);
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Setup\CategorySetup::class
 );
+
 require __DIR__ . '/categories_with_stores.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -33,8 +34,6 @@ $categoryLinkManagement = $objectManager->create(
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
-    ->setStoreId(1)
-    ->setWebsiteIds([1])
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)

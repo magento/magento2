@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
@@ -32,11 +31,6 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
     private $productRepository;
 
     /**
-     * @var Category
-     */
-    private $collectionCategory;
-
-    /**
      * @var ObjectRegistryFactory
      */
     private $objectRegistryFactory;
@@ -50,32 +44,49 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->collectionCategory = $this->objectManager->create(Category::class);
         $this->objectRegistryFactory = $this->objectManager->create(ObjectRegistryFactory::class);
     }
 
     /**
      * Verify correct generate of the relative "StoreId"
      *
+     * @param string $expect
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_stores.php
      * @magentoDbIsolation disabled
-     *
-     * @return void
+     * @dataProvider getConfigGenerate
      */
-    public function testGenerate(): void
+    public function testGenerate(string $expect): void
     {
         $product = $this->productRepository->get('simple');
         $categories = $product->getCategoryCollection();
         $productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
 
-        /** @var Store $store */
-        $store = Bootstrap::getObjectManager()->get(Store::class);
-        $store->load('fixture_second_store', 'code');
-
         /** @var AnchorUrlRewriteGenerator $generator */
         $generator = $this->objectManager->get(AnchorUrlRewriteGenerator::class);
 
-        $this->assertEquals([], $generator->generate(1, $product, $productCategories));
-        $this->assertNotEquals([], $generator->generate($store->getId(), $product, $productCategories));
+        /** @var $store Store */
+        $store = Bootstrap::getObjectManager()->get(Store::class);
+        $store->load('fixture_second_store', 'code');
+
+        $urls = $generator->generate($store->getId(), $product, $productCategories);
+
+        $this->assertEquals($expect, $urls[0]->getRequestPath());
+    }
+
+    /**
+     * Data provider for testGenerate
+     *
+     * @return array
+     */
+    public function getConfigGenerate(): array
+    {
+        return [
+            [
+                'expect' => 'category-1-custom/simple-product.html'
+            ]
+        ];
     }
 }

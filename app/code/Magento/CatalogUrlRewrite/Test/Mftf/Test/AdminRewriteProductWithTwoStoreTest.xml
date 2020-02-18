@@ -43,13 +43,13 @@
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForDefaultCategory">
             <argument name="storeView" value="_defaultStore.name"/>
         </actionGroup>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForDefaultCategoryDefaultStore">
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForDefaultCategoryDefaultStore">
             <argument name="value" value="{{_defaultCategoryDifferentUrlStore.url_key_default_store}}"/>
         </actionGroup>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchCustomStoreViewForDefaultCategory">
             <argument name="storeView" value="customStore.name"/>
         </actionGroup>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForDefaultCategoryCustomStore">
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForDefaultCategoryCustomStore">
             <argument name="value" value="{{_defaultCategoryDifferentUrlStore.url_key_custom_store}}"/>
         </actionGroup>
 
@@ -59,17 +59,17 @@
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForSubCategory">
             <argument name="storeView" value="_defaultStore.name"/>
         </actionGroup>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForSubCategoryDefaultStore">
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForSubCategoryDefaultStore">
             <argument name="value" value="{{SimpleSubCategoryDifferentUrlStore.url_key_default_store}}"/>
         </actionGroup>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchCustomStoreViewForSubCategory">
             <argument name="storeView" value="customStore.name"/>
         </actionGroup>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForSubCategoryCustomStore">
+
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForSubCategoryCustomStore">
             <argument name="value" value="{{SimpleSubCategoryDifferentUrlStore.url_key_custom_store}}"/>
         </actionGroup>
-
-        <actionGroup ref="StorefrontAssertProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlDefaultStore">
+        <actionGroup ref="AssertStorefrontProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlDefaultStore">
             <argument name="category" value="{{_defaultCategoryDifferentUrlStore.url_key_default_store}}"/>
             <argument name="product" value="SimpleProduct" />
         </actionGroup>
@@ -77,8 +77,7 @@
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
             <argument name="storeView" value="customStore" />
         </actionGroup>
-
-        <actionGroup ref="StorefrontAssertProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlCustomStore">
+        <actionGroup ref="AssertStorefrontProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlCustomStore">
             <argument name="category" value="{{_defaultCategoryDifferentUrlStore.url_key_custom_store}}"/>
             <argument name="product" value="SimpleProduct" />
         </actionGroup>

@@ -13,14 +13,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
 Bootstrap::getInstance()->loadArea(FrontNameResolver::AREA_CODE);
 
-/**
- * After installation system has categories:
- *
- * root one with ID:1 and Default category with ID:3 both with StoreId:1,
- *
- * root one with ID:1 and Default category with ID:2 both with StoreId:2
- */
-
 $store = Bootstrap::getObjectManager()->get(Store::class);
 $store->load('fixture_second_store', 'code');
 
@@ -29,11 +21,13 @@ $category = Bootstrap::getObjectManager()->create(Category::class);
 $category->isObjectNew(true);
 $category->setId(3)
     ->setName('Category 1')
-    ->setParentId(1)
-    ->setPath('1/2')
-    ->setLevel(1)
+    ->setParentId(2)
+    ->setPath('1/2/3')
+    ->setLevel(2)
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
+    ->setUrlPath('category-1-default')
+    ->setUrlKey('category-1-default')
     ->setIsActive(true)
     ->setPosition(1)
     ->save();
@@ -43,10 +37,12 @@ $category->isObjectNew(true);
 $category->setId(4)
     ->setName('Category 1.1')
     ->setParentId(3)
-    ->setPath('1/2/3')
-    ->setLevel(2)
+    ->setPath('1/2/3/4')
+    ->setLevel(3)
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
+    ->setUrlPath('category-1-1-default')
+    ->setUrlKey('category-1-1-default')
     ->setIsActive(true)
     ->setPosition(1)
     ->save();
@@ -61,6 +57,8 @@ $category->setId(3)
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setStoreId($store->getId())
+    ->setUrlPath('category-1-custom')
+    ->setUrlKey('category-1-custom')
     ->setIsActive(true)
     ->setPosition(1)
     ->save();
@@ -75,6 +73,8 @@ $category->setId(4)
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setStoreId($store->getId())
+    ->setUrlPath('category-1-1-custom')
+    ->setUrlKey('category-1-1-custom')
     ->setIsActive(true)
     ->setPosition(1)
     ->save();

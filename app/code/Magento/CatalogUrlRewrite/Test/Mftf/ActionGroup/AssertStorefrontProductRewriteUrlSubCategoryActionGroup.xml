@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertProductRewriteUrlSubCategoryActionGroup">
+    <actionGroup name="AssertStorefrontProductRewriteUrlSubCategoryActionGroup">
         <annotations>
             <description>Validates that the provided Product Title is present on the Rewrite URL with a subcategory page.</description>
         </annotations>
