@@ -99,8 +99,8 @@
                 <argument name="option" value="Yes"/>
             </actionGroup>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
+
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </before>
 
         <after>
@@ -123,8 +123,8 @@
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
 
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Open category with products and Sort by price desc-->
