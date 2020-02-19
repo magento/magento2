@@ -192,7 +192,20 @@ define([
          * @returns {Boolean} - initial visibility state.
          */
         resolveInitialPasswordVisibility: function () {
-            if (checkoutData.getInputFieldEmailValue() !== '' && checkoutData.getCheckedEmailValue() === '') {
+            // If customer already logged in so we will hide password field
+            if (checkoutData.getInputFieldEmailValue() !== '' &&
+                customer.isLoggedIn()) {
+                return false;
+            }
+
+            // In this case user put email but not logged in yet password field should not show
+            if (checkoutData.getInputFieldEmailValue() !== '' &&
+                !customer.isLoggedIn()) {
+                return false;
+            }
+
+            if (checkoutData.getInputFieldEmailValue() !== '' &&
+                checkoutData.getCheckedEmailValue() === '') {
                 return true;
             }
 
