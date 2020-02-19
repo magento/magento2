@@ -17,8 +17,10 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class ShipmentSender
+ * Class for shipment email notification sender
  *
+ * @deprecated since this class works only with the concrete model and no data interface
+ * @see \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender
