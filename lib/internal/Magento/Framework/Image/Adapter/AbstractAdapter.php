@@ -41,9 +41,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     const POSITION_CENTER = 'center';
 
-    /**
-     * Default font size
-     */
     const DEFAULT_FONT_SIZE = 15;
 
     /**
@@ -204,6 +201,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $angle
      * @return void
+     * @deprecated unused
      */
     abstract public function rotate($angle);
 

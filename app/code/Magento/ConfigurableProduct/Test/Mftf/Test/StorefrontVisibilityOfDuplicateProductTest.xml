@@ -114,7 +114,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--Duplicate the product-->
         <comment userInput="Duplicate the product" stepKey="commentDuplicateProduct"/>
-        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductForm"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickEnableProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigProduct.name$$-Updated" stepKey="fillProductName"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="1" stepKey="selectInStock"/>
