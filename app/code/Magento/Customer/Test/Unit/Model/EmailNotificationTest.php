@@ -347,7 +347,7 @@ class EmailNotificationTest extends TestCase
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
-            ->willReturn($self::STUB_CUSTOMER_WEBSITE_ID);
+            ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
         $customer->expects($this->any())
             ->method('getStoreId')
             ->willReturn(self::STUB_CUSTOMER_STORE_ID);
