@@ -24,7 +24,9 @@ class State
     public function check(Order $order)
     {
         $currentState = $order->getState();
-        if ($currentState == Order::STATE_NEW && $order->getIsInProcess()) {
+        if ($currentState == Order::STATE_NEW && $order->getIsInProcess() ||
+            $currentState == Order::STATE_PENDING_PAYMENT && $order->getIsInProcess()
+        ) {
             $order->setState(Order::STATE_PROCESSING)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
