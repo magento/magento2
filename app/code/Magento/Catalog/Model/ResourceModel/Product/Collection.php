@@ -1717,6 +1717,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             // optimize if using cat index
             $filters = $this->_productLimitationFilters;
             if (isset($filters['category_id']) || isset($filters['visibility'])) {
+                $this->getSelect()->order(new \Zend_Db_Expr('cat_index_position = 0'));
                 $this->getSelect()->order('cat_index.position ' . $dir);
             } else {
                 $this->getSelect()->order('e.entity_id ' . $dir);
