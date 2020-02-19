@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
@@ -15,6 +16,7 @@ use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer email notification
@@ -253,14 +255,14 @@ class EmailNotification implements EmailNotificationInterface
         $storeId = null,
         $email = null
     ) {
-        $templateId = $this->scopeConfig->getValue($template, 'store', $storeId);
+        $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
         if ($email === null) {
             $email = $customer->getEmail();
         }
 
         /** @var array $from */
         $from = $this->senderResolver->resolve(
-            $this->scopeConfig->getValue($sender, 'store', $storeId),
+            $this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId),
             $storeId
         );
 
