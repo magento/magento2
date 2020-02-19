@@ -20,6 +20,6 @@
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(product)}}" stepKey="foundProductAOnPge"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(product)}}" stepKey="foundProductAOnPage"/>
     </actionGroup>
 </actionGroups>

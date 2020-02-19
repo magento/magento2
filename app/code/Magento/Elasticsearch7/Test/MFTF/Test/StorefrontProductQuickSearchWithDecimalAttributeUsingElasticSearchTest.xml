@@ -21,66 +21,70 @@
         <before>
             <!-- Create product attribute with 3 options -->
             <createData entity="multipleSelectProductAttribute" stepKey="customAttribute"/>
-            <createData entity="productAttributeOption10" stepKey="option1">
+            <createData entity="ProductAttributeOption10" stepKey="option1">
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
-            <createData entity="productAttributeOption11" stepKey="option2">
+            <createData entity="ProductAttributeOption11" stepKey="option2">
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
-            <createData entity="productAttributeOption12" stepKey="option3">
+            <createData entity="ProductAttributeOption12" stepKey="option3">
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
 
             <!-- Add custom attribute to Default Set -->
             <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
-                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="customAttribute"/>
             </createData>
 
             <!-- Create subcategory -->
             <createData entity="SimpleSubCategory" stepKey="newCategory"/>
-            <createData entity="SimpleProduct" stepKey="simpleA">
+            <createData entity="SimpleProduct" stepKey="product1">
                 <requiredEntity createDataKey="newCategory"/>
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
-            <createData entity="SimpleProduct" stepKey="simpleB">
+            <createData entity="ApiSimpleProduct" stepKey="product2">
                 <requiredEntity createDataKey="newCategory"/>
+                <requiredEntity createDataKey="customAttribute"/>
             </createData>
-
-            <!-- Run full reindex and clear caches -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="simpleA" stepKey="deleteSimpleA"/>
-            <deleteData createDataKey="simpleB" stepKey="deleteSimpleB"/>
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
-
-            <!-- Delete custom attribute-->
-
-            <actionGroup ref="updateIndexerOnSave" stepKey="resetIndexerBackToOriginalState">
-                <argument name="indexerName" value="catalogsearch_fulltext"/>
-            </actionGroup>
+            <!--Delete attribute-->
+            <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to storefront and do a quick search for the product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$product1$$"/>
+        </actionGroup>
+        <actionGroup ref="ModifyCustomAttributeValueActionGroup" stepKey="ModifyCustomAttributeValueProduct1">
+            <argument name="attributeValue" value="3.5"/>
+            <argument name="product" value="$$product1.sku$$"/>
+        </actionGroup>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForApiSimpleProduct">
+            <argument name="product" value="$$product2$$"/>
+        </actionGroup>
+        <actionGroup ref="ModifyCustomAttributeValueActionGroup" stepKey="ModifyCustomAttributeValueProduct2">
+            <argument name="attributeValue" value="10.12"/>
+            <argument name="product" value="$$product2.sku$$"/>
+        </actionGroup>
+
+        <!--Reindex and clear cache-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:clean" stepKey="cleanCache"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad"/>
         <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult1">
-            <argument name="keyword" value="10.12"/>
-            <argument name="product" value="simpleA.name"/>
+            <argument name="keyword" value="3.5"/>
+            <argument name="product" value="$$product1.name$$"/>
         </actionGroup>
-
         <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult2">
-            <argument name="keyword" value="simpleB.name"/>
-            <argument name="product" value="simpleB.name"/>
+            <argument name="keyword" value="10.12"/>
+            <argument name="product" value="$$product2.name$$"/>
         </actionGroup>
-
-        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult3">
-            <argument name="keyword" value="36"/>
-            <argument name="product" value="simpleA.name"/>
-        </actionGroup>
-
         </test>
 </tests>
