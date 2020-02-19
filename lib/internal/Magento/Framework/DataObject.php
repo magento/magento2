@@ -46,7 +46,7 @@ class DataObject implements \ArrayAccess
      *
      * Retains previous data in the object.
      *
-     * @param array $arr
+     * @param  array $arr
      * @return $this
      */
     public function addData(array $arr)
@@ -65,8 +65,8 @@ class DataObject implements \ArrayAccess
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array $key
-     * @param mixed $value
+     * @param  string|array $key
+     * @param  mixed        $value
      * @return $this
      */
     public function setData($key, $value = null)
@@ -82,7 +82,7 @@ class DataObject implements \ArrayAccess
     /**
      * Unset data from the object.
      *
-     * @param null|string|array $key
+     * @param  null|string|array $key
      * @return $this
      */
     public function unsetData($key = null)
@@ -112,8 +112,8 @@ class DataObject implements \ArrayAccess
      * and retrieve corresponding member. If data is the string - it will be explode
      * by new line character and converted to array.
      *
-     * @param string $key
-     * @param string|int $index
+     * @param  string     $key
+     * @param  string|int $index
      * @return mixed
      */
     public function getData($key = '', $index = null)
@@ -149,7 +149,7 @@ class DataObject implements \ArrayAccess
      *
      * Method consider the path as chain of keys: a/b/c => ['a']['b']['c']
      *
-     * @param string $path
+     * @param  string $path
      * @return mixed
      */
     public function getDataByPath($path)
@@ -172,7 +172,7 @@ class DataObject implements \ArrayAccess
     /**
      * Get object data by particular key
      *
-     * @param string $key
+     * @param  string $key
      * @return mixed
      */
     public function getDataByKey($key)
@@ -183,7 +183,7 @@ class DataObject implements \ArrayAccess
     /**
      * Get value from _data array without parse key
      *
-     * @param string $key
+     * @param  string $key
      * @return mixed
      */
     protected function _getData($key)
@@ -197,8 +197,8 @@ class DataObject implements \ArrayAccess
     /**
      * Set object data with calling setter method
      *
-     * @param string $key
-     * @param mixed $args
+     * @param  string $key
+     * @param  mixed  $args
      * @return $this
      */
     public function setDataUsingMethod($key, $args = [])
@@ -211,8 +211,8 @@ class DataObject implements \ArrayAccess
     /**
      * Get object data by key with calling getter method
      *
-     * @param string $key
-     * @param mixed $args
+     * @param  string $key
+     * @param  mixed  $args
      * @return mixed
      */
     public function getDataUsingMethod($key, $args = null)
@@ -226,7 +226,7 @@ class DataObject implements \ArrayAccess
      *
      * Otherwise checks if the specified attribute is set.
      *
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function hasData($key = '')
@@ -240,7 +240,7 @@ class DataObject implements \ArrayAccess
     /**
      * Convert array of object data with to array with keys requested in $keys array
      *
-     * @param array $keys array of required keys
+     * @param  array $keys array of required keys
      * @return array
      */
     public function toArray(array $keys = [])
@@ -263,7 +263,7 @@ class DataObject implements \ArrayAccess
     /**
      * The "__" style wrapper for toArray method
      *
-     * @param array $keys
+     * @param  array $keys
      * @return array
      */
     public function convertToArray(array $keys = [])
@@ -274,10 +274,10 @@ class DataObject implements \ArrayAccess
     /**
      * Convert object data into XML string
      *
-     * @param array $keys array of keys that must be represented
-     * @param string $rootName root node name
-     * @param bool $addOpenTag flag that allow to add initial xml node
-     * @param bool $addCdata flag that require wrap all values in CDATA
+     * @param  array  $keys       array of keys that must be represented
+     * @param  string $rootName   root node name
+     * @param  bool   $addOpenTag flag that allow to add initial xml node
+     * @param  bool   $addCdata   flag that require wrap all values in CDATA
      * @return string
      */
     public function toXml(array $keys = [], $rootName = 'item', $addOpenTag = false, $addCdata = true)
@@ -308,10 +308,10 @@ class DataObject implements \ArrayAccess
     /**
      * The "__" style wrapper for toXml method
      *
-     * @param array $arrAttributes array of keys that must be represented
-     * @param string $rootName root node name
-     * @param bool $addOpenTag flag that allow to add initial xml node
-     * @param bool $addCdata flag that require wrap all values in CDATA
+     * @param  array  $arrAttributes array of keys that must be represented
+     * @param  string $rootName      root node name
+     * @param  bool   $addOpenTag    flag that allow to add initial xml node
+     * @param  bool   $addCdata      flag that require wrap all values in CDATA
      * @return string
      */
     public function convertToXml(
@@ -319,15 +319,14 @@ class DataObject implements \ArrayAccess
         $rootName = 'item',
         $addOpenTag = false,
         $addCdata = true
-    )
-    {
+    ) {
         return $this->toXml($arrAttributes, $rootName, $addOpenTag, $addCdata);
     }
 
     /**
      * Convert object data to JSON
      *
-     * @param array $keys array of required keys
+     * @param  array $keys array of required keys
      * @return bool|string
      * @throws \InvalidArgumentException
      */
@@ -340,7 +339,7 @@ class DataObject implements \ArrayAccess
     /**
      * The "__" style wrapper for toJson
      *
-     * @param array $keys
+     * @param  array $keys
      * @return bool|string
      * @throws \InvalidArgumentException
      */
@@ -354,7 +353,7 @@ class DataObject implements \ArrayAccess
      *
      * Will use $format as an template and substitute {{key}} for attributes
      *
-     * @param string $format
+     * @param  string $format
      * @return string
      */
     public function toString($format = '')
@@ -374,28 +373,28 @@ class DataObject implements \ArrayAccess
     /**
      * Set/Get attribute wrapper
      *
-     * @param string $method
-     * @param array $args
-     * @return  mixed
+     * @param  string $method
+     * @param  array  $args
+     * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-            case 'get':
-                $key = $this->_underscore(substr($method, 3));
-                $index = isset($args[0]) ? $args[0] : null;
-                return $this->getData($key, $index);
-            case 'set':
-                $key = $this->_underscore(substr($method, 3));
-                $value = isset($args[0]) ? $args[0] : null;
-                return $this->setData($key, $value);
-            case 'uns':
-                $key = $this->_underscore(substr($method, 3));
-                return $this->unsetData($key);
-            case 'has':
-                $key = $this->_underscore(substr($method, 3));
-                return isset($this->_data[$key]);
+        case 'get':
+            $key = $this->_underscore(substr($method, 3));
+            $index = isset($args[0]) ? $args[0] : null;
+            return $this->getData($key, $index);
+        case 'set':
+            $key = $this->_underscore(substr($method, 3));
+            $value = isset($args[0]) ? $args[0] : null;
+            return $this->setData($key, $value);
+        case 'uns':
+            $key = $this->_underscore(substr($method, 3));
+            return $this->unsetData($key);
+        case 'has':
+            $key = $this->_underscore(substr($method, 3));
+            return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
             new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
@@ -421,7 +420,7 @@ class DataObject implements \ArrayAccess
      * $this->setMyField($value) === $this->setData('my_field', $value)
      * Uses cache to eliminate unnecessary preg_replace
      *
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     protected function _underscore($name)
@@ -439,11 +438,11 @@ class DataObject implements \ArrayAccess
      *
      * Example: key1="value1" key2="value2" ...
      *
-     * @param array $keys array of accepted keys
-     * @param string $valueSeparator separator between key and value
-     * @param string $fieldSeparator separator between key/value pairs
-     * @param string $quote quoting sign
-     * @return  string
+     * @param  array  $keys           array of accepted keys
+     * @param  string $valueSeparator separator between key and value
+     * @param  string $fieldSeparator separator between key/value pairs
+     * @param  string $quote          quoting sign
+     * @return string
      */
     public function serialize($keys = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')
     {
@@ -464,8 +463,8 @@ class DataObject implements \ArrayAccess
     /**
      * Present object data as string in debug mode
      *
-     * @param mixed $data
-     * @param array &$objects
+     * @param  mixed $data
+     * @param  array &$objects
      * @return array
      */
     public function debug($data = null, &$objects = [])
@@ -494,10 +493,10 @@ class DataObject implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetSet()
      *
-     * @param string $offset
-     * @param mixed $value
+     * @param  string $offset
+     * @param  mixed  $value
      * @return void
-     * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
+     * @link   http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
     public function offsetSet($offset, $value)
     {
@@ -507,9 +506,9 @@ class DataObject implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetExists()
      *
-     * @param string $offset
+     * @param  string $offset
      * @return bool
-     * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
+     * @link   http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
     public function offsetExists($offset)
     {
@@ -519,9 +518,9 @@ class DataObject implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetUnset()
      *
-     * @param string $offset
+     * @param  string $offset
      * @return void
-     * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
+     * @link   http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
     public function offsetUnset($offset)
     {
@@ -531,9 +530,9 @@ class DataObject implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetGet()
      *
-     * @param string $offset
+     * @param  string $offset
      * @return mixed
-     * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
+     * @link   http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
     public function offsetGet($offset)
     {
@@ -550,8 +549,10 @@ class DataObject implements \ArrayAccess
      */
     public function __debugInfo()
     {
-        return array_filter(get_object_vars($this), function ($v) {
-            return is_scalar($v) || is_array($v);
-        });
+        return array_filter(
+            get_object_vars($this), function ($v) {
+                return is_scalar($v) || is_array($v);
+            }
+        );
     }
 }
