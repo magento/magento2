@@ -33,7 +33,7 @@
         "colinmollenhour/cache-backend-redis": "1.10.6",
         "colinmollenhour/credis": "1.10.0",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
-        "composer/composer": "^1.6",
+        "composer/composer": "^1.9",
         "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1",
         "guzzlehttp/guzzle": "^6.3.3",
         "laminas/laminas-captcha": "^2.7.1",
@@ -320,7 +320,7 @@
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
             "Magento\\Setup\\": "setup/src/Magento/Setup/",
             "Magento\\": "app/code/Magento/",
-            "Laminas\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/"
+            "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/"
         },
         "psr-0": {
             "": [
