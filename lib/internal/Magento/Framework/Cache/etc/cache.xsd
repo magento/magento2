@@ -18,12 +18,12 @@
         <xs:annotation>
             <xs:documentation>Cache type declaration</xs:documentation>
         </xs:annotation>
-        <xs:choice maxOccurs="unbounded" minOccurs="0">
-            <xs:element name="label" type="xs:string" />
-            <xs:element name="description" type="xs:string" />
-        </xs:choice>
+        <xs:sequence>
+            <xs:element name="label" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
         <xs:attribute type="xs:string" name="name" use="required"/>
         <xs:attribute type="xs:string" name="translate" use="optional"/>
-        <xs:attribute type="xs:string" name="instance" use="optional"/>
+        <xs:attribute type="xs:string" name="instance" use="required"/>
     </xs:complexType>
 </xs:schema>
