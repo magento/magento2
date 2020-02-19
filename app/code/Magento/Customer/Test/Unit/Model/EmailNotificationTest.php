@@ -37,7 +37,7 @@ class EmailNotificationTest extends TestCase
 
     private const STUB_EMAIL_IDENTIFIER = 'Template Identifier';
 
-    private const STUB_Sender = 'Sender';
+    private const STUB_SENDER = 'Sender';
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry|MockObject
