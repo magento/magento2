@@ -12,6 +12,7 @@ use Magento\Customer\Controller\RegistryConstants;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
@@ -20,7 +21,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Model\System\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
-use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +40,7 @@ class RenderOrdersTabTest extends TestCase
     ];
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -100,7 +100,6 @@ class RenderOrdersTabTest extends TestCase
     protected function tearDown()
     {
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $this->ordersGridBlock = null;
         parent::tearDown();
     }
 
@@ -114,7 +113,7 @@ class RenderOrdersTabTest extends TestCase
      */
     public function testRenderBlockWithoutOrders(): void
     {
-        $this->processCheckOrdersGridByCustomerId(1);
+        $this->processCheckOrdersGridByCustomerId(1, 0);
     }
 
     /**
@@ -127,7 +126,7 @@ class RenderOrdersTabTest extends TestCase
      */
     public function testRenderBlockWithOneOrder(): void
     {
-        $this->processCheckOrdersGridByCustomerId(1);
+        $this->processCheckOrdersGridByCustomerId(1, 1);
     }
 
     /**
@@ -141,23 +140,23 @@ class RenderOrdersTabTest extends TestCase
      */
     public function testRenderBlockWithFewOrders(): void
     {
-        $this->processCheckOrdersGridByCustomerId(1);
+        $this->processCheckOrdersGridByCustomerId(1, 5);
     }
 
     /**
      * Render orders grid and assert that all data rendered as expected.
      *
      * @param int $customerId
+     * @param int $expectedOrderCount
      * @return void
      */
-    private function processCheckOrdersGridByCustomerId(int $customerId): void
+    private function processCheckOrdersGridByCustomerId(int $customerId, int $expectedOrderCount): void
     {
         $this->registerCustomerId($customerId);
         $ordersGridHtml = $this->getOrdersGridHtml();
         $orderItemsData = $this->getOrderGridItemsData();
-        $ordersCount = count($orderItemsData);
-        $this->assertOrdersCount($ordersCount, $ordersGridHtml);
-        $this->assertIsEmptyGridMessageArrears($ordersGridHtml, $ordersCount === 0);
+        $this->assertOrdersCount($expectedOrderCount, $ordersGridHtml);
+        $this->assertIsEmptyGridMessageArrears($ordersGridHtml, $expectedOrderCount === 0);
         $this->checkOrderItemsFields($orderItemsData, $ordersGridHtml);
     }
 
@@ -388,13 +387,7 @@ class RenderOrdersTabTest extends TestCase
     {
         $date = new \DateTime($createdAt);
 
-        return $this->timezone->formatDateTime(
-            $date,
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::MEDIUM,
-            null,
-            null
-        );
+        return $this->timezone->formatDateTime($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM);
     }
 
     /**
