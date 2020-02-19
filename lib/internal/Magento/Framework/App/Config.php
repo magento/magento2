@@ -12,7 +12,7 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class Config
+ * Class Config for get value of fields
  */
 class Config implements ScopeConfigInterface
 {
@@ -71,13 +71,7 @@ class Config implements ScopeConfigInterface
             $scope = 'websites';
         }
 
-        if (!isset($this->isSingleStoreModeEnabled)) {
-            $this->isSingleStoreModeEnabled = (bool)$this->get('system', self::SINGLE_STORE_MODE_TAG);
-        }
-
-        if (!empty($this->isSingleStoreModeEnabled)) {
-            $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-        }
+        $scope = $this->isSingleStoreMode($scope);
 
         $configPath = $scope;
         if ($scope !== 'default') {
@@ -95,6 +89,27 @@ class Config implements ScopeConfigInterface
         }
         return $this->get('system', $configPath);
     }
+
+    /**
+     * check single store mode in the system
+     *
+     * @param $scope
+     * @return mixed
+     */
+    public function isSingleStoreMode($scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
+    {
+        /** caching the single store mode field value in variable for avoid multiple database hit */
+        if (!isset($this->isSingleStoreModeEnabled)) {
+            $this->isSingleStoreModeEnabled = (bool)$this->get('system', self::SINGLE_STORE_MODE_TAG);
+        }
+
+        /** set scope based on single store mode field value */
+        if (!empty($this->isSingleStoreModeEnabled)) {
+            $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+        }
+        return $scope;
+    }
+
 
     /**
      * Retrieve config flag

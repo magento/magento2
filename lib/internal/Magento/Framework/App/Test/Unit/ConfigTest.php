@@ -72,7 +72,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $scopeValue = ($scope == 'store') ? 'stores/path' : 'websites/myWebsite/path';
 
-        if($singleStore) {
+        if ($singleStore) {
             $scopeValue = 'default/path';
         }
 
@@ -82,6 +82,37 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->assertTrue($this->appConfig->getValue($path, $scope, $scopeCode ?: $this->scope));
+    }
+
+    /**
+     * @param $scope
+     * @param $singleStore
+     * @param $expected
+     *
+     * @dataProvider isSingleStoreModeDataProvider
+     */
+    public function testIsSingleStoreMode($scope, $singleStore, $expected)
+    {
+        $this->appConfig->isSingleStoreModeEnabled = $singleStore;
+
+        $actual = $this->appConfig->isSingleStoreMode($scope);
+
+        $this->assertSame($actual, $expected);
+    }
+
+    /**
+     * @return array
+     */
+    public function isSingleStoreModeDataProvider()
+    {
+        return [
+            ['store', true, 'default'],
+            ['store', false, 'store'],
+            ['website', true, 'default'],
+            ['website', false, 'website'],
+            ['default', true, 'default'],
+            ['default', false, 'default'],
+        ];
     }
 
     /**
