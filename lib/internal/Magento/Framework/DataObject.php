@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 /**
@@ -182,8 +183,8 @@ class DataObject implements \ArrayAccess
     /**
      * Get value from _data array without parse key
      *
-     * @param   string $key
-     * @return  mixed
+     * @param string $key
+     * @return mixed
      */
     protected function _getData($key)
     {
@@ -262,7 +263,7 @@ class DataObject implements \ArrayAccess
     /**
      * The "__" style wrapper for toArray method
      *
-     * @param  array $keys
+     * @param array $keys
      * @return array
      */
     public function convertToArray(array $keys = [])
@@ -318,7 +319,8 @@ class DataObject implements \ArrayAccess
         $rootName = 'item',
         $addOpenTag = false,
         $addCdata = true
-    ) {
+    )
+    {
         return $this->toXml($arrAttributes, $rootName, $addOpenTag, $addCdata);
     }
 
@@ -372,8 +374,8 @@ class DataObject implements \ArrayAccess
     /**
      * Set/Get attribute wrapper
      *
-     * @param   string $method
-     * @param   array $args
+     * @param string $method
+     * @param array $args
      * @return  mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -437,10 +439,10 @@ class DataObject implements \ArrayAccess
      *
      * Example: key1="value1" key2="value2" ...
      *
-     * @param   array $keys array of accepted keys
-     * @param   string $valueSeparator separator between key and value
-     * @param   string $fieldSeparator separator between key/value pairs
-     * @param   string $quote quoting sign
+     * @param array $keys array of accepted keys
+     * @param string $valueSeparator separator between key and value
+     * @param string $fieldSeparator separator between key/value pairs
+     * @param string $quote quoting sign
      * @return  string
      */
     public function serialize($keys = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')

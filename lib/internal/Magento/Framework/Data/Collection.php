@@ -163,9 +163,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string|array $field
      * @param string|int|array $condition
-     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -234,7 +234,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Get current collection page
      *
-     * @param  int $displacement
+     * @param int $displacement
      * @return int
      */
     public function getCurPage($displacement = 0)
@@ -336,8 +336,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve field values from all items
      *
-     * @param   string $colName
-     * @return  array
+     * @param string $colName
+     * @return array
      */
     public function getColumnValues($colName)
     {
@@ -353,9 +353,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Search all items by field value
      *
-     * @param   string $column
-     * @param   mixed $value
-     * @return  array
+     * @param string $column
+     * @param mixed $value
+     * @return array
      */
     public function getItemsByColumnValue($column, $value)
     {
@@ -373,9 +373,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Search first item by field value
      *
-     * @param   string $column
-     * @param   mixed $value
-     * @return  \Magento\Framework\DataObject || null
+     * @param string $column
+     * @param mixed $value
+     * @return \Magento\Framework\DataObject || null
      */
     public function getItemByColumnValue($column, $value)
     {
