@@ -91,15 +91,8 @@ class StorageProvider
                     );
                 }
                 $adapter = $this->adapterProvider->create($config['adapter'], $config['options']);
-                $this->storage[$storageName] = $this->storageFactory->create(
-                    [
-                        'factory' => $this->filesystemFactory->create(
-                            [
-                                'adapter' => $adapter
-                            ]
-                        )
-                    ]
-                );
+                $filesystem = $this->filesystemFactory->create(['adapter' => $adapter]);
+                $this->storage[$storageName] = $this->storageFactory->create(['filesystem' => $filesystem]);
             } else {
                 throw new UnsupportedStorageException("No storage with name '$storageName' is declared");
             }
