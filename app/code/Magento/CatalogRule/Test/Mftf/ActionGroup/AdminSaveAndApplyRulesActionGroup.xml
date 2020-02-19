@@ -10,9 +10,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSaveAndApplyRulesActionGroup">
         <annotations>
-            <description>Clicks Save on a Admin Catalog Price Rule creation/edit page. Validates that the Success Message is present. Clicks Apply Rules. Validates that the Success Message is present.</description>
+            <description>DEPRECATED. Please use AdminCatalogPriceRuleSaveAndApplyActionGroup instead. Clicks Save on a Admin Catalog Price Rule creation/edit page. Validates that the Success Message is present. Clicks Apply Rules. Validates that the Success Message is present.</description>
         </annotations>
-        
+
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>

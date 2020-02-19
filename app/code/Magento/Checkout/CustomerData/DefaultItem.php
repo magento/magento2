@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
- * Default item
+ * Default item in checkout customer data
  */
 class DefaultItem extends AbstractItem
 {
@@ -78,7 +78,7 @@ class DefaultItem extends AbstractItem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doGetItemData()
     {
@@ -121,6 +121,8 @@ class DefaultItem extends AbstractItem
     }
 
     /**
+     * Get product for thumbnail
+     *
      * @return \Magento\Catalog\Model\Product
      * @codeCoverageIgnore
      */
@@ -130,6 +132,8 @@ class DefaultItem extends AbstractItem
     }
 
     /**
+     * Get product
+     *
      * @return \Magento\Catalog\Model\Product
      * @codeCoverageIgnore
      */
