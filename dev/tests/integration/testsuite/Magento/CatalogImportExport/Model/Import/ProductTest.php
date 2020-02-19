@@ -5,11 +5,6 @@
  */
 declare(strict_types=1);
 
-/**
- * Test class for \Magento\CatalogImportExport\Model\Import\Product
- *
- * The "CouplingBetweenObjects" warning is caused by tremendous complexity of the original class
- */
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -18,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\StockRegistry;
@@ -30,6 +26,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -38,7 +35,8 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class ProductTest
+ * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
+ *
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
@@ -81,6 +79,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $logger;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -92,6 +98,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ['logger' => $this->logger]
         );
         $this->importedProducts = [];
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         parent::setUp();
     }
@@ -3022,5 +3029,26 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $stockRegistryStorage->clean();
         $status = $stockRegistry->getStockStatusBySku('simple');
         $this->assertEquals(Stock::STOCK_IN_STOCK, $status->getStockStatus());
+    }
+
+    /**
+     * Tests that empty attribute value in the CSV file will be ignored after update a product by the import.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_varchar_attribute.php
+     */
+    public function testEmptyAttributeValueShouldBeIgnoredAfterUpdateProductByImport()
+    {
+        $pathToFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
+            . 'import_product_with_empty_attribute_value.csv';
+        /** @var ImportProduct $importModel */
+        $importModel = $this->createImportModel($pathToFile);
+        /** @var ProcessingErrorAggregatorInterface $errors */
+        $errors = $importModel->validateData();
+        $this->assertTrue($errors->getErrorsCount() === 0, 'Import file validation failed.');
+        $importModel->importData();
+
+        $simpleProduct = $this->productRepository->get('simple', false, null, true);
+        $this->assertEquals('Varchar default value', $simpleProduct->getData('varchar_attribute'));
+        $this->assertEquals('Short description', $simpleProduct->getData('short_description'));
     }
 }
