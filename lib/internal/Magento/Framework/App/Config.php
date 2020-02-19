@@ -91,9 +91,9 @@ class Config implements ScopeConfigInterface
     }
 
     /**
-     * check single store mode in the system
+     * Check single store mode in the system
      *
-     * @param $scope
+     * @param string $scope
      * @return mixed
      */
     public function isSingleStoreMode($scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
@@ -109,7 +109,6 @@ class Config implements ScopeConfigInterface
         }
         return $scope;
     }
-
 
     /**
      * Retrieve config flag
