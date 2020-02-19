@@ -13,7 +13,7 @@
             <features value="CatalogSearch"/>
             <stories value="Storefront Search"/>
             <title value="Using ElasticSearch with weight attribute"/>
-            <description value="Using ElasticSearch with product has weight attribute"/>
+            <description value="Use ElasticSearch for products with weight attributes"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31368"/>
             <group value="elasticsearch"/>
@@ -31,7 +31,7 @@
             <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttributeInAdmin">
                 <argument name="productAttributeCode" value="weight"/>
             </actionGroup>
-            <actionGroup ref="AdminMakeProductAttributeSearchableOrUnsearchableInAQuickSearchActionGroup" stepKey="makeAttributeUnsearchableInAQuickSearch">
+            <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeUnsearchableInAQuickSearch">
                 <argument name="useInSearchValue" value="No"/>
             </actionGroup>
             <actionGroup ref="saveProductAttribute" stepKey="saveAttributeChanges"/>
@@ -44,12 +44,12 @@
             <argument name="productAttributeCode" value="weight"/>
         </actionGroup>
         <!-- Change attribute property: Use in Search >Yes -->
-        <actionGroup ref="AdminMakeProductAttributeSearchableOrUnsearchableInAQuickSearchActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
+        <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
         <actionGroup ref="saveProductAttribute" stepKey="saveAttribute"/>
         <!-- Step 3 -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         <!-- Step 4 -->
-        <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
         <!-- Step 5 -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
         <!-- Step 6 -->
