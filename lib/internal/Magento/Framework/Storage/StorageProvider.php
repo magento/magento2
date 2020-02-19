@@ -8,6 +8,7 @@ namespace Magento\Framework\Storage;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Storage\AdapterFactory\LocalFactory;
 use Magento\Framework\Storage\StorageFactory;
+use League\Flysystem\FilesystemFactory;
 
 /**
  * Main entry point for accessing file storage
@@ -31,18 +32,26 @@ class StorageProvider
     private $adapterProvider;
 
     /**
-     * Constructor
-     *
+     * @var FilesystemFactory
+     */
+    private $filesystemFactory;
+
+    /**
+     * StorageProvider constructor.
      * @param StorageAdapterProvider $adapterProvider
      * @param \Magento\Framework\Storage\StorageFactory $storageFactory
      * @param array $storage
      * @param DeploymentConfig $envConfig
+     * @param FilesystemFactory $filesystemFactory
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(
         StorageAdapterProvider $adapterProvider,
         StorageFactory $storageFactory,
         array $storage,
-        DeploymentConfig $envConfig
+        DeploymentConfig $envConfig,
+        FilesystemFactory $filesystemFactory
     ) {
         foreach ($storage as $storageName => $localPath) {
             $this->storageConfig[$storageName] = [
@@ -81,7 +90,15 @@ class StorageProvider
                     );
                 }
                 $adapter = $this->adapterProvider->create($config['adapter'], $config['options']);
-                $this->storage[$storageName] = $this->storageFactory->create(['adapter' => $adapter]);
+                $this->storage[$storageName] = $this->storageFactory->create(
+                    [
+                        'factory' => $this->filesystemFactory->create(
+                            [
+                                'adapter' => $adapter
+                            ]
+                        )
+                    ]
+                );
             } else {
                 throw new UnsupportedStorageException("No storage with name '$storageName' is declared");
             }
