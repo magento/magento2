@@ -7,27 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Backend\App\Action;
+
 /**
- * Class Manual
- * @package Magento\LoginAsCustomer\Controller\Adminhtml\Login
+ * Form to chose store view before login as customer
  */
-class Manual extends \Magento\Backend\App\Action
+class Manual extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_button';
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * Chose store view for Login as customer
+     *
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute():ResultInterface
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_LoginAsCustomer::login_button');
-        $title = __('Store View To Login In ');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend($title);
-        $this->_addBreadcrumb($title, $title);
-        $this->_view->renderLayout();
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_LoginAsCustomer::login_button')
+            ->addBreadcrumb(__('Customer'), __('Login As Customer Log'), __('Store View To Login In'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Store View To Login In'));
+
+        return $resultPage;
     }
 }

@@ -7,17 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Login;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\Action;
 
 /**
- * LoginAsCustomer login action
+ * Login As Customer storefront login action
  */
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @var \Magento\LoginAsCustomer\Model\Login
      */
     private $loginModel;
+
 
     /**
      * Index constructor.
@@ -32,12 +37,13 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->loginModel = $loginModel;
     }
     /**
-     * Login as customer action
+     * Login As Customer storefront login
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute():ResultInterface
     {
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
             $login = $this->_initLogin();
 
@@ -48,13 +54,16 @@ class Index extends \Magento\Framework\App\Action\Action
             );
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-            $this->_redirect('/');
-            return;
+
+            $resultRedirect->setPath('/');
+            return $resultRedirect;
+
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        $this->_redirect('*/*/proceed');
+        $resultRedirect->setPath('*/*/proceed');
+        return $resultRedirect;
     }
 
     /**

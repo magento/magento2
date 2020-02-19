@@ -7,13 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Backend\App\Action;
+
 /**
- * LoginAsCustomer log action
+ * Login As Customer log grid action
+ * This action can be executed via GET when just visiting Grid page and POST ajax when filtering, sorting grid
  */
-class Index extends \Magento\Backend\App\Action
+class Index extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
 
@@ -34,25 +43,27 @@ class Index extends \Magento\Backend\App\Action
         parent::__construct($context);
         $this->loginModel = $loginModel;
     }
+
     /**
-     * Login as customer log
+     * Login As Customer log grid action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute():ResultInterface
     {
-        if ($this->getRequest()->getParam('ajax')) {
-            $this->_forward('grid');
-            return;
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $resultForward->forward('grid');
+            return $resultForward;
         }
 
         $this->loginModel->deleteNotUsed();
 
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_LoginAsCustomer::login_log');
-        $title = __('Login As Customer Log ');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend($title);
-        $this->_addBreadcrumb($title, $title);
-        $this->_view->renderLayout();
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_LoginAsCustomer::login_log')
+            ->addBreadcrumb(__('Customer'), __('Login As Customer Log'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Login As Customer Log'));
+
+        return $resultPage;
     }
 }
