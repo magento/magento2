@@ -29,6 +29,7 @@ class DataProviderTest extends CatalogSearchDataProviderTest
      */
     public function testSearchProductByAttribute(): void
     {
+        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
         $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->execute();
         $searchEngine = 'elasticsearch' . $version;
         $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();

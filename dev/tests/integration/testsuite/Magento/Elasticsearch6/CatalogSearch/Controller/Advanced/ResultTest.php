@@ -33,6 +33,7 @@ class ResultTest extends CatalogSearchResultTest
      */
     public function testExecute(array $searchParams): void
     {
+        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
         $version = $this->_objectManager->get(ElasticsearchVersionChecker::class)->execute();
         $searchEngine = 'elasticsearch' . $version;
         $currentEngine = $this->_objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();

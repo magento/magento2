@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductFormCloseAdvancedPricingDialogActionGroup">
+        <annotations>
+            <description>Close Advanced Pricing dialog from product form.</description>
+        </annotations>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="clickCloseButton"/>
+    </actionGroup>
+</actionGroups>

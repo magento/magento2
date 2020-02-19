@@ -13,10 +13,11 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5Mapper;
 
 /**
- * Mapper class
+ * Mapper class for Elasticsearch2
  *
  * @api
  * @since 100.1.0
+ * @deprecated because of EOL for Elasticsearch2
  */
 class Mapper extends Elasticsearch5Mapper
 {

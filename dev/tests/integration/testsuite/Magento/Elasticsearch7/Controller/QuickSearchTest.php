@@ -27,6 +27,7 @@ class QuickSearchTest extends AbstractController
     protected function setUp()
     {
         parent::setUp();
+        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
         $checker = $this->_objectManager->get(ElasticsearchVersionChecker::class);
 
         if ($checker->execute() !== 7) {
@@ -43,7 +44,6 @@ class QuickSearchTest extends AbstractController
      * @magentoConfigFixture fixturestore_store catalog/layered_navigation/price_range_calculation improved
      * @magentoConfigFixture fixturestore_store catalog/layered_navigation/one_price_interval 1
      * @magentoConfigFixture fixturestore_store catalog/layered_navigation/interval_division_limit 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoConfigFixture default_store catalog/search/elasticsearch7_index_prefix storefront_quick_search
      * @magentoConfigFixture fixturestore_store catalog/search/elasticsearch7_index_prefix storefront_quick_search
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php

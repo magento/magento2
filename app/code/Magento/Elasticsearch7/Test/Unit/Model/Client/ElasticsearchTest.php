@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 
 /**
- * Class ElasticsearchTest
+ * Class ElasticsearchTest to test Elasticsearch 7
  */
 class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
@@ -133,7 +133,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testBuildConfig(array $options, $expectedResult): void
     {
         $buildConfig = new Elasticsearch($options);
-        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildConfig');
+        $config = $this->getPrivateMethod(Elasticsearch::class, 'buildESConfig');
         $result = $config->invoke($buildConfig, $options);
         $this->assertEquals($expectedResult, $result['hosts'][0]);
     }
@@ -633,7 +633,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    protected function getEmptyIndexOption()
+    private function getEmptyIndexOption()
     {
         return [
             'hostname' => 'localhost',
