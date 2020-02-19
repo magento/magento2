@@ -133,35 +133,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Test that forgot password email message displays special characters correctly.
-     *
-     * @codingStandardsIgnoreStart
-     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
-     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
-     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
-     * @magentoConfigFixture current_store general/store_information/name Test special' characters
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @codingStandardsIgnoreEnd
-     */
-    public function testForgotPasswordEmailMessageWithSpecialCharacters()
-    {
-        $email = 'customer@example.com';
-
-        $this->getRequest()->setPostValue(['email' => $email]);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-
-        $this->dispatch('customer/account/forgotPasswordPost');
-        $this->assertRedirect($this->stringContains('customer/account/'));
-
-        $subject = $this->transportBuilderMock->getSentMessage()->getSubject();
-        $this->assertContains(
-            'Test special\' characters',
-            $subject
-        );
-    }
-
-    /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testCreatepasswordActionWithDirectLink()
@@ -394,56 +365,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 ]
             ),
             MessageInterface::TYPE_SUCCESS
-        );
-    }
-
-    /**
-     * @codingStandardsIgnoreStart
-     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
-     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
-     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @codingStandardsIgnoreEnd
-     */
-    public function testForgotPasswordPostAction()
-    {
-        $email = 'customer@example.com';
-
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue(['email' => $email]);
-
-        $this->dispatch('customer/account/forgotPasswordPost');
-        $this->assertRedirect($this->stringContains('customer/account/'));
-
-        $message = __(
-            'If there is an account associated with %1 you will receive an email with a link to reset your password.',
-            $email
-        );
-        $this->assertSessionMessages(
-            $this->equalTo([$message]),
-            MessageInterface::TYPE_SUCCESS
-        );
-    }
-
-    /**
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     */
-    public function testForgotPasswordPostWithBadEmailAction()
-    {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()
-            ->setPostValue(
-                [
-                    'email' => 'bad@email',
-                ]
-            );
-
-        $this->dispatch('customer/account/forgotPasswordPost');
-        $this->assertRedirect($this->stringContains('customer/account/forgotpassword'));
-        $this->assertSessionMessages(
-            $this->equalTo(['The email address is incorrect. Verify the email address and try again.']),
-            MessageInterface::TYPE_ERROR
         );
     }
 
