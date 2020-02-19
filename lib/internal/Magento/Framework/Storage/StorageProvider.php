@@ -68,6 +68,7 @@ class StorageProvider
                 );
             }
         }
+        $this->filesystemFactory = $filesystemFactory;
         $this->storageFactory = $storageFactory;
         $this->adapterProvider = $adapterProvider;
     }
