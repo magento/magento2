@@ -381,20 +381,20 @@ class DataObject implements \ArrayAccess
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-        case 'get':
-            $key = $this->_underscore(substr($method, 3));
-            $index = isset($args[0]) ? $args[0] : null;
-            return $this->getData($key, $index);
-        case 'set':
-            $key = $this->_underscore(substr($method, 3));
-            $value = isset($args[0]) ? $args[0] : null;
-            return $this->setData($key, $value);
-        case 'uns':
-            $key = $this->_underscore(substr($method, 3));
-            return $this->unsetData($key);
-        case 'has':
-            $key = $this->_underscore(substr($method, 3));
-            return isset($this->_data[$key]);
+            case 'get':
+                $key = $this->_underscore(substr($method, 3));
+                $index = isset($args[0]) ? $args[0] : null;
+                return $this->getData($key, $index);
+            case 'set':
+                $key = $this->_underscore(substr($method, 3));
+                $value = isset($args[0]) ? $args[0] : null;
+                return $this->setData($key, $value);
+            case 'uns':
+                $key = $this->_underscore(substr($method, 3));
+                return $this->unsetData($key);
+            case 'has':
+                $key = $this->_underscore(substr($method, 3));
+                return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
             new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
@@ -550,7 +550,8 @@ class DataObject implements \ArrayAccess
     public function __debugInfo()
     {
         return array_filter(
-            get_object_vars($this), function ($v) {
+            get_object_vars($this),
+            function ($v) {
                 return is_scalar($v) || is_array($v);
             }
         );
