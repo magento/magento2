@@ -26,6 +26,9 @@
         <element name="logoUpload" type ="input" selector="[name='email_logo']" />
         <element name="logoWrapperOpen" type ="text" selector="[data-index='email'] [data-state-collapsible ='closed']"/>
         <element name="logoPreview" type ="text" selector="[alt ='magento-logo.png']"/>
+        <element name="logoImageAlt" type ="text" selector="[name='email_logo_alt']"/>
+        <element name="logoImageWidth" type ="text" selector="[name='email_logo_width']"/>
+        <element name="logoImageHeight" type ="text" selector="[name='email_logo_height']"/>
         <element name="faviconArrow" type="button" selector="#ZmF2aWNvbg-- > .jstree-icon" />
         <element name="checkIfFaviconArrowExpand" type="button" selector="//li[@id='ZmF2aWNvbg--' and contains(@class,'jstree-closed')]" />
         <element name="storesArrow" type="button" selector="#ZmF2aWNvbi9zdG9yZXM- > .jstree-icon" />

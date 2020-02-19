@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUploadTransactionEmailsImageActionGroup">
+        <annotations>
+            <description>Upload logo image for email</description>
+        </annotations>
+        <arguments>
+            <argument name="image" type="string" defaultValue="{{MagentoLogo.file}}"/>
+            <argument name="width" type="string"/>
+            <argument name="height" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminDesignConfigSection.logoSectionHeader}}" dependentSelector="{{AdminDesignConfigSection.logoWrapperOpen}}" visible="true" stepKey="openTab"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.logoImageAlt}}" stepKey="waitVisibleUploadLogo"/>
+        <attachFile selector="{{AdminDesignConfigSection.logoUpload}}" userInput="{{image}}" stepKey="attachLogo"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.logoPreview}}" stepKey="waitingForLogoToUpload"/>
+        <seeElement selector="{{AdminDesignConfigSection.logoPreview}}" stepKey="LogoPreviewIsVisible"/>
+        <fillField selector="{{AdminDesignConfigSection.logoImageAlt}}" userInput="{{image}}" stepKey="fillFieldImageAlt"/>
+        <fillField selector="{{AdminDesignConfigSection.logoImageWidth}}" userInput="{{width}}" stepKey="fillFieldImageWidth"/>
+        <fillField selector="{{AdminDesignConfigSection.logoImageHeight}}" userInput="{{height}}" stepKey="fillFieldImageHeight"/>
+    </actionGroup>
+</actionGroups>
