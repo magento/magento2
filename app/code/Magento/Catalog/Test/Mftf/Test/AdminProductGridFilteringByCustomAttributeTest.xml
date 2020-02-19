@@ -22,6 +22,7 @@
         <before>
             <!--Login as admin and delete all products -->
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!--Create dropdown product attribute-->
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
             <!--Create attribute options-->

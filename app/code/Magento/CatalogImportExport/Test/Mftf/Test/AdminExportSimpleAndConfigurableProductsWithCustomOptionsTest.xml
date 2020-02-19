@@ -92,7 +92,6 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
 
