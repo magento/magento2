@@ -28,7 +28,7 @@
             <!-- Login to Admin page -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createConfigurableProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
@@ -36,19 +36,19 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteConfigurableProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
             <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCatalogRuleGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
             <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createNewPriceRule"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 

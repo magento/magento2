@@ -31,7 +31,7 @@
                     </container>
                     <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="page-columns">
                         <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col">
-                            <container name="admin.scope.col.wrap" as="admin-scope-col-wrap" htmlTag="div" htmlClass="form-inline"> <!-- ToDo UI: remove this wrapper remove with old styles removal -->
+                            <container name="admin.scope.col.wrap" as="admin-scope-col-wrap" htmlTag="div" htmlClass="admin__scope-old"> <!-- ToDo UI: remove this wrapper remove with old styles removal -->
                                 <container name="content" as="content"/>
                             </container>
                         </container>

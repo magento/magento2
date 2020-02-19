@@ -528,6 +528,11 @@
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
+    <entity name="productWithDateTimeOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
+    </entity>
     <entity name="productWithOptionRadiobutton" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
@@ -751,6 +756,7 @@
         <data key="status">In Stock</data>
         <data key="visibility">Catalog, Search</data>
         <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="storefrontStatus">IN STOCK</data>
         <data key="type_id">virtual</data>
     </entity>
     <entity name="virtualProductCustomImportOptions" type="product">

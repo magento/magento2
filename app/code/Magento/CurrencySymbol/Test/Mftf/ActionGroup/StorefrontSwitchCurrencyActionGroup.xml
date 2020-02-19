@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSwitchCurrencyActionGroup">
+        <arguments>
+            <argument name="currency" type="string" defaultValue="EUR"/>
+        </arguments>
+        <click selector="{{StorefrontSwitchCurrencyRatesSection.currencyToggle}}" stepKey="openToggle"/>
+        <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="waitForCurrency"/>
+        <click selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <see selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" userInput="{{currency}}" stepKey="seeSelectedCurrency"/>
+    </actionGroup>
+</actionGroups>

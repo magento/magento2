@@ -46,7 +46,7 @@
         <fillField userInput="This Is A Title" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately"/>
         <fillField userInput="This Is Another Title" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle"/>
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableLinkWithMaxDownloads">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>

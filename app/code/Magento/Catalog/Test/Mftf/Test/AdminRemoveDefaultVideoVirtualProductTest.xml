@@ -21,13 +21,13 @@
 
         <!-- Replacing steps in base AdminRemoveDefaultVideoSimpleProductTest -->
 
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
     </test>

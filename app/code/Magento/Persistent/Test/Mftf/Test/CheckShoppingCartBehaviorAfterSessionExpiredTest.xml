@@ -43,10 +43,10 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart1">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--Reset cookies and refresh the page-->
         <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
         <reloadPage stepKey="reloadPage"/>

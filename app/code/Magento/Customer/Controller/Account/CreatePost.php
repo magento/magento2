@@ -327,7 +327,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     /**
      * Create customer account action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

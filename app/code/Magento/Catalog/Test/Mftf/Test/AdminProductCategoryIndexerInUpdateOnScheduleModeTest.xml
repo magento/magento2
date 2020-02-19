@@ -148,7 +148,7 @@
         <waitForPageLoad stepKey="waitForProductC1PageLoad"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickOffEnableToggleAgain"/>
         <!-- Saved successfully -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductC1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductC1"/>
 
         <!-- 12. Open category B on Storefront -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="toCategoryBStorefront">
@@ -205,7 +205,7 @@
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickOnEnableToggleAgain"/>
 
         <!-- Saved successfully -->
-        <actionGroup ref="saveProductForm" stepKey="saveChangedProductC1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveChangedProductC1"/>
 
         <!-- 17.12. Open category B on Storefront -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryB">
@@ -264,7 +264,7 @@
                       stepKey="changeVisibility"/>
 
         <!-- Saved successfully -->
-        <actionGroup ref="saveProductForm" stepKey="productC1Saved"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="productC1Saved"/>
 
         <!-- 18.12. Open category B on Storefront -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goPageCategoryB">

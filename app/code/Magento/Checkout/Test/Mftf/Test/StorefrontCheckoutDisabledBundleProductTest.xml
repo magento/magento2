@@ -47,7 +47,7 @@
             <deleteData createDataKey="createBundleDynamicProduct" stepKey="deleteBundleProduct"/>
         </after>
         <!-- Add simple product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="cartAddSimpleProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
@@ -56,7 +56,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!-- Add bundle product to the cart -->
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createBundleDynamicProduct.name$$"/>
         </actionGroup>
         <!-- Login to admin panel -->

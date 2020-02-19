@@ -29,10 +29,10 @@
 
         <!-- Create a bundle product -->
         <!-- Replacing steps in base AdminAddDefaultVideoSimpleProductTest -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillMainProductForm">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
@@ -46,11 +46,11 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProducts" after="selectOptionBundleTitle"/>
         <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProducts" after="waitForAddProducts"/>
         <waitForPageLoad stepKey="waitForPageLoad" after="clickAddProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku1" after="waitForPageLoad">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku1" after="waitForPageLoad">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="checkOption1" after="filterProductGridBySku1"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2" after="checkOption1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2" after="checkOption1">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="checkOption2" after="filterProductGridBySku2"/>
@@ -59,7 +59,7 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillQty2" before="saveProductForm"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
     </test>
