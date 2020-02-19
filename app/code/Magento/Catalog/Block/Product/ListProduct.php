@@ -516,7 +516,9 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             $toolbar->setModes($modes);
         }
         // set collection to toolbar and apply sort
-        $toolbar->setCollection($collection);
+        if (!$toolbar->getCollection()) {
+            $toolbar->setCollection($collection);
+        }
         $this->setChild('toolbar', $toolbar);
     }
 }
