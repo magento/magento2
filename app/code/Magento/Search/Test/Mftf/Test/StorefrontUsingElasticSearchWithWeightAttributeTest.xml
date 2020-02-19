@@ -49,7 +49,7 @@
         <!-- Step 3 -->
         <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         <!-- Step 4 -->
-        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+        <magentoCLI command="cache:clean full_page" stepKey="cleanInvalidatedCaches"/>
         <!-- Step 5 -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
         <!-- Step 6 -->
