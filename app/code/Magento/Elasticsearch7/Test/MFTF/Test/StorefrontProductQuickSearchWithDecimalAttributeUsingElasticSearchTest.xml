@@ -46,9 +46,6 @@
                 <requiredEntity createDataKey="newCategory"/>
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
-            <!--Reindex and clear cache-->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -57,6 +54,9 @@
             <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
             <!--Delete attribute-->
             <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
+            <!--Reindex and clear cache-->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to storefront and do a quick search for the product -->
