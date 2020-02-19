@@ -6,18 +6,14 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMarketingPendingReviewsNavigateMenuTest">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingPendingReviewsNavigateMenuActiveTest">
         <annotations>
             <features value="Pending Reviews"/>
             <stories value="Menu Navigation"/>
-            <title value="Admin marketing pending reviews navigate menu test"/>
-            <description value="Admin should be able to navigate to Marketing > Pending Reviews"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MC-14200"/>
+            <title value="Admin marketing pending reviews navigate menu"/>
+            <description value="Admin able see navigate head menu Marketing is active, when open page Marketing > Pending Reviews"/>
             <group value="menu"/>
-            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -31,6 +27,10 @@
         </actionGroup>
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuUserContentPendingReviews.pageTitle}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertClassElementRelativeIdActionGroup" stepKey="assertClass">
+            <argument name="elementId" value="{{AdminMenuSection.marketing}}"/>
+            <argument name="expectClass" value="{{AdminMenuUserContentPendingReviews.dataActiveClass}}"/>
         </actionGroup>
     </test>
 </tests>
