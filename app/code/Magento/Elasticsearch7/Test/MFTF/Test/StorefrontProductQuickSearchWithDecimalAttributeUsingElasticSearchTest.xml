@@ -46,6 +46,9 @@
                 <requiredEntity createDataKey="newCategory"/>
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
+            <!--Reindex and clear cache-->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
