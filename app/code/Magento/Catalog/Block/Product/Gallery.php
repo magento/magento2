@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-use League\Flysystem\FileNotFoundException;
+use Magento\Framework\Storage\FileNotFoundException;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\ObjectManager;

@@ -14,7 +14,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
-use League\Flysystem\FileNotFoundException;
+use Magento\Framework\Storage\FileNotFoundException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\Storage\StorageProvider;
