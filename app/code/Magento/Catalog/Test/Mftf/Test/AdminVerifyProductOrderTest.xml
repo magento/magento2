@@ -25,7 +25,7 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
         <actionGroup ref="VerifyProductTypeOrder" stepKey="verifyProductTypeOrder"/>
     </test>
 </tests>

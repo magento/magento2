@@ -62,7 +62,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <!-- Click 'Check Out with Multiple Addresses' -->
         <waitForPageLoad stepKey="waitForSecondPageLoad"/>
-        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddresses" stepKey="goCheckoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
         <!-- Select different addresses and click 'Go to Shipping Information' -->
         <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddresses">
             <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
@@ -105,11 +105,11 @@
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <!-- Go to Admin > Sales > Orders -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchFirstOrder">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstOrder">
             <argument name="keyword" value="$grabFirstOrderId"/>
         </actionGroup>
         <seeElement selector="{{AdminOrdersGridSection.orderId({$grabFirstOrderId})}}" stepKey="seeAdminFirstOrder"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchSecondOrder">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondOrder">
             <argument name="keyword" value="$grabSecondOrderId"/>
         </actionGroup>
         <seeElement selector="{{AdminOrdersGridSection.orderId({$grabSecondOrderId})}}" stepKey="seeAdminSecondOrder"/>

@@ -136,26 +136,26 @@
         <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" y="-200" stepKey="scroll"/>
 
         <!-- Add product to the cart and Assert add product to cart success message-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert move product to wishlist success message -->
-        <actionGroup ref="AssertMoveProductToWishListSuccessMessage" stepKey="moveToWishlist">
+        <actionGroup ref="AssertMoveProductToWishListSuccessMessageActionGroup" stepKey="moveToWishlist">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!-- Assert product is present in wishlist -->
-        <actionGroup ref="AssertProductIsPresentInWishList" stepKey="assertProductPresent">
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
             <argument name="productPrice" value="$20.00"/>
         </actionGroup>
 
         <!-- Assert product details in Wishlist -->
-        <actionGroup ref="AssertProductDetailsInWishlist" stepKey="assertProductDetails">
+        <actionGroup ref="AssertProductDetailsInWishlistActionGroup" stepKey="assertProductDetails">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
             <argument name="label" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="labelValue" value="$$getConfigAttributeOption2.label$$"/>
