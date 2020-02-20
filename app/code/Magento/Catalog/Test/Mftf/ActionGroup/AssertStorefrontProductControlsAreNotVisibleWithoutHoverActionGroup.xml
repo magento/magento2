@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductControlsAreNotVisibleWithoutHoverActionGroup">
+        <annotations>
+            <description>Validate that the Product Controls Are Not Visible On Category Page Without Hover on Product</description>
+        </annotations>
+
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.addToCartButtonProductInfoHover}}" stepKey="assertAddToCartButtonElementIsNotVisible"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.addToWishListIconProductInfoHover}}" stepKey="assertAddToWishListIconIsNotVisible"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.addToCompareIconProductInfoHover}}" stepKey="assertAddToCompareIconIsNotVisible"/>
+    </actionGroup>
+</actionGroups>
