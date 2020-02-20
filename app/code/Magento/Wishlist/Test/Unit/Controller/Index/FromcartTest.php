@@ -31,57 +31,57 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var WishlistProviderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistProvider;
 
     /**
-     * @var WishlistHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistHelper;
 
     /**
-     * @var CheckoutCart | \PHPUnit_Framework_MockObject_MockObject
+     * @var CheckoutCart|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cart;
 
     /**
-     * @var CartHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var CartHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartHelper;
 
     /**
-     * @var Escaper | \PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
     /**
-     * @var Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var MessageManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var MessageManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var ResultFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactory;
 
     /**
-     * @var ResultRedirect | \PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formKeyValidator;
 
@@ -363,7 +363,7 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
      * @param string $productName
      * @param DataObject $dataObjectMock
      * @param int $itemId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createQuoteMock($productId, $productName, $dataObjectMock, $itemId)
     {
