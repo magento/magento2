@@ -58,7 +58,7 @@ class SubscriberTest extends TestCase
         $this->assertContains(
             '/newsletter/subscriber/confirm/id/' . $subscriber->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
         $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $subscriber->getSubscriberStatus());
     }
