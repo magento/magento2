@@ -15,8 +15,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\Io\File as IoFileSystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 
 /**
  * Metadata for form image field
@@ -25,6 +26,16 @@ use Magento\Framework\Filesystem\Io\File as IoFileSystem;
  */
 class Image extends File
 {
+    /**
+     * @var WriteFactory
+     */
+    protected $writeFactory;
+
+    /**
+     * @var DirectoryList
+     */
+    protected $directoryList;
+
     /**
      * @var ImageContentInterfaceFactory
      */
@@ -36,9 +47,9 @@ class Image extends File
     private $ioFileSystem;
 
     /**
-     * @var FileDriver
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    private $fileDriver;
+    private $mediaCustomerTmpDirectory;
 
     /**
      * Constructor
@@ -57,7 +68,9 @@ class Image extends File
      * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
      * @param IoFileSystem|null $ioFileSystem
-     * @param FileDriver|null $fileDriver
+     * @param DirectoryList|null $directoryList
+     * @param WriteFactory|null $writeFactory
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -75,7 +88,8 @@ class Image extends File
         \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
         \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
         IoFileSystem $ioFileSystem = null,
-        ?FileDriver $fileDriver = null
+        ?DirectoryList $directoryList = null,
+        ?WriteFactory $writeFactory = null
     ) {
         parent::__construct(
             $localeDate,
@@ -95,7 +109,11 @@ class Image extends File
             ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
-        $this->fileDriver = $fileDriver ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FileDriver::class);
+        $this->writeFactory = $writeFactory ?: ObjectManager::getInstance()
+            ->get(Filesystem\Directory\WriteFactory::class);
+        $this->directoryList =  $directoryList ?: ObjectManager::getInstance()
+            ->get(DirectoryList::class);
+        $this->mediaCustomerTmpDirectory = $this->writeFactory->create($this->directoryList->getPath($this->directoryList::MEDIA) . '/' . $this->_entityTypeCode . '/' . FileProcessor::TMP_DIR);
     }
 
     /**
@@ -214,12 +232,13 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
+     * @throws LocalizedException
      */
     protected function processCustomerValue(array $value)
     {
-        $file = $this->fileDriver->getRealPathSafety(ltrim($value['file'], '/'));
-        $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
-        if ($this->getFileProcessor()->isExist($temporaryFile)) {
+        $file = ltrim($value['file'], '/');
+        if ($this->mediaCustomerTmpDirectory->isExist($file)) {
+            $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
             /** @var ImageContentInterface $imageContentDataObject */
             $imageContentDataObject = $this->imageContentFactory->create()
@@ -227,7 +246,7 @@ class Image extends File
                 ->setBase64EncodedData($base64EncodedData)
                 ->setType($value['type']);
             // Remove temporary file
-            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
+            $this->mediaCustomerTmpDirectory->delete($file);
 
             return $imageContentDataObject;
         }
