@@ -161,6 +161,9 @@ class PatchApplier
                     $this->moduleDataSetup->getConnection()->beginTransaction();
                     $dataPatch->apply();
                     $this->patchHistory->fixPatch(get_class($dataPatch));
+                    foreach ($dataPatch->getAliases() as $patchAlias) {
+                        $this->patchHistory->fixPatch($patchAlias);
+                    }
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
@@ -237,6 +240,9 @@ class PatchApplier
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch(get_class($schemaPatch));
+                foreach ($schemaPatch->getAliases() as $patchAlias) {
+                    $this->patchHistory->fixPatch($patchAlias);
+                }
             } catch (\Exception $e) {
                 throw new SetupException(
                     new Phrase(

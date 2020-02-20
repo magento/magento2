@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="LayeredNavigationSection">
+        <element name="filterOptionContent" type="text" selector="//div[contains(text(), '{{attribute}}')]//following-sibling::div//a[contains(text(), '{{option}}')]" parameterized="true"/>
         <element name="layeredNavigation" type="select" selector="#catalog_layered_navigation-head"/>
         <element name="layeredNavigationBlock" type="block" selector="#catalog_layered_navigation"/>
         <element name="CheckIfTabExpand" type="button" selector="#catalog_layered_navigation-head:not(.open)"/>

@@ -272,6 +272,9 @@ $numColumns = count($block->getColumns());
         <?php if ($block->getCheckboxCheckCallback()) : ?>
             <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
         <?php endif; ?>
+        <?php if ($block->getFilterKeyPressCallback()) : ?>
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.filterKeyPressCallback = <?= /* @noEscape */ $block->getFilterKeyPressCallback() ?>;
+        <?php endif; ?>
         <?php if ($block->getRowInitCallback()) : ?>
             <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
             <?= $block->escapeJs($block->getJsObjectName()) ?>.initGridRows();

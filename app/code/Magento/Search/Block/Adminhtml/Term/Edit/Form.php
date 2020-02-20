@@ -8,8 +8,15 @@
  * Adminhtml tag edit form
  *
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Block\Adminhtml\Term\Edit;
 
+/**
+ * Edit Form Block
+ *
+ * Class \Magento\Search\Block\Adminhtml\Term\Edit\Form
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -114,7 +121,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'label' => __('Number of results'),
                     'title' => __('Number of results (For the last time placed)'),
                     'note' => __('For the last time placed.'),
-                    'required' => true
+                    'required' => true,
+                    'class' => 'required-entry validate-digits validate-zero-or-greater'
                 ]
             );
 
@@ -125,7 +133,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'name' => 'popularity',
                     'label' => __('Number of Uses'),
                     'title' => __('Number of Uses'),
-                    'required' => true
+                    'required' => true,
+                    'class' => 'required-entry validate-digits validate-zero-or-greater'
                 ]
             );
         }

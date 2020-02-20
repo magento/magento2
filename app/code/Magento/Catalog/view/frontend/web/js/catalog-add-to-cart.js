@@ -135,7 +135,9 @@ define([
                         // trigger global event, so other modules will be able add parameters to redirect url
                         $('body').trigger('catalogCategoryAddToCartRedirect', eventData);
 
-                        if (eventData.redirectParameters.length > 0) {
+                        if (eventData.redirectParameters.length > 0 &&
+                            window.location.href.split(/[?#]/)[0] === res.backUrl
+                        ) {
                             parameters = res.backUrl.split('#');
                             parameters.push(eventData.redirectParameters.join('&'));
                             res.backUrl = parameters.join('#');

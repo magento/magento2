@@ -24,5 +24,6 @@
         <element name="productTableColumnName" type="input" selector="#catalog_category_products_filter_name"/>
         <element name="productTableRow" type="button" selector="#catalog_category_products_table tbody tr"/>
         <element name="productSearch" type="button" selector="//button[@data-action='grid-filter-apply']" timeout="30"/>
+        <element name="productTableColumnSku" type="input" selector="#catalog_category_products_filter_sku"/>
     </section>
 </sections>

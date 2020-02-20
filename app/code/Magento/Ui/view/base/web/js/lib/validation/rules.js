@@ -651,7 +651,8 @@ define([
         'validate-number': [
             function (value) {
                 return utils.isEmptyNoTrim(value) ||
-                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(,\d*)*(\.\d*)?\s*$/.test(value);
+                    !isNaN(utils.parseNumber(value)) &&
+                    /^\s*-?\d*(?:[.,|'|\s]\d+)*(?:[.,|'|\s]\d{2})?-?\s*$/.test(value);
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
@@ -829,7 +830,7 @@ define([
         ],
         'validate-state': [
             function (value) {
-                return value !== 0 || value === '';
+                return value !== 0;
             },
             $.mage.__('Please select State/Province.')
         ],
@@ -1066,6 +1067,16 @@ define([
                 return new RegExp(param).test(value);
             },
             $.mage.__('This link is not allowed.')
+        ],
+        'validate-dob': [
+            function (value) {
+                if (value === '') {
+                    return true;
+                }
+
+                return moment(value).isBefore(moment());
+            },
+            $.mage.__('The Date of Birth should not be greater than today.')
         ]
     }, function (data) {
         return {

@@ -96,7 +96,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -105,6 +105,9 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createModifiableProductAttribute" stepKey="deleteModifiableProductAttribute"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Get the current option of the attribute before it was changed -->
@@ -117,7 +120,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
@@ -213,7 +216,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -221,13 +224,16 @@
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Find the product that we just created using the product grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
@@ -265,7 +271,7 @@
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
 
         <!-- Find the simple product that we just created using the product grid and delete it -->
-        <actionGroup ref="deleteProductBySku" stepKey="findCreatedProduct2">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}2-simple"/>
         </actionGroup>
     </test>

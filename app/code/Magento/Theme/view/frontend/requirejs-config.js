@@ -30,7 +30,8 @@ var config = {
             'welcome':                'Magento_Theme/js/view/welcome',
             'breadcrumbs':            'Magento_Theme/js/view/breadcrumbs',
             'criticalCssLoader':      'Magento_Theme/js/view/critical-css-loader',
-            'jquery/ui':              'jquery/compat'
+            'jquery/ui':              'jquery/compat',
+            'cookieStatus':           'Magento_Theme/js/cookie-status'
         }
     },
     deps: [
@@ -44,7 +45,7 @@ var config = {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
             },
-            'jquery/jquery-ui': {
+            'jquery/ui-modules/dialog': {
                 'jquery/patches/jquery-ui': true
             }
         }

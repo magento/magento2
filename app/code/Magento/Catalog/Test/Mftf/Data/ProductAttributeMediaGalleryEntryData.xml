@@ -30,4 +30,9 @@
         <data key="disabled">false</data>
         <requiredEntity type="ImageContent">MagentoLogoImageContent</requiredEntity>
     </entity>
+    <!-- From file "export_import_configurable_product.csv" -->
+    <entity name="ApiProductAttributeMediaGalleryForExportImport" extends="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
+        <data key="label">Magento Logo</data>
+        <requiredEntity type="ImageContent">MagentoLogoImageContentExportImport</requiredEntity>
+    </entity>
 </entities>

@@ -362,6 +362,42 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check product parent item id in order item
+     *
+     * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_configurable_product.php
+     */
+    public function testCreateOrdersWithConfigurableProduct()
+    {
+        $quote = $this->getQuote('test_order_with_configurable_product');
+        /** @var CheckoutSession $session */
+        $session = $this->objectManager->get(CheckoutSession::class);
+        $session->replaceQuote($quote);
+
+        $this->model->createOrders();
+
+        $quoteItemParentIds = [];
+        foreach ($quote->getAllItems() as $quoteItem) {
+            $quoteItemParentIds[] = $quoteItem->getParentItemId();
+        }
+
+        $orderList = $this->getOrderList((int)$quote->getId());
+        $firstOrder = array_shift($orderList);
+        $secondOrder = array_shift($orderList);
+
+        $firstOrderItemParentsIds = [];
+        foreach ($firstOrder->getItems() as $orderItem) {
+            $firstOrderItemParentsIds[] = $orderItem->getParentItemId();
+        }
+        $secondOrderItemParentsIds = [];
+        foreach ($secondOrder->getItems() as $orderItem) {
+            $secondOrderItemParentsIds[] = $orderItem->getParentItemId();
+        }
+
+        $this->assertNotNull($firstOrderItemParentsIds[1]);
+        $this->assertNotNull($secondOrderItemParentsIds[1]);
+    }
+
+    /**
      * Returns order service mock with successful place on first call and exceptions on other calls.
      *
      * @return MockObject

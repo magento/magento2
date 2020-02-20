@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\Exception as ValidatorException;
@@ -43,11 +44,18 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     protected $storeManager;
 
     /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
+
+    /**
      * @var NotificationStorage
      */
     private $notificationStorage;
 
     /**
+     * Customer constructor.
+     *
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
@@ -56,6 +64,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
+     * @param AccountConfirmation $accountConfirmation
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -65,15 +74,19 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $data = []
+        $data = [],
+        AccountConfirmation $accountConfirmation = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
+
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
-        $this->storeManager = $storeManager;
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
         $this->setType('customer');
         $this->setConnection('customer_read', 'customer_write');
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -144,7 +157,13 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         }
 
         // set confirmation key logic
-        if (!$customer->getId() && $customer->isConfirmationRequired()) {
+        if (!$customer->getId() &&
+            $this->accountConfirmation->isConfirmationRequired(
+                $customer->getWebsiteId(),
+                $customer->getId(),
+                $customer->getEmail()
+            )
+        ) {
             $customer->setConfirmation($customer->getRandomConfirmationKey());
         }
         // remove customer confirmation key from database, if empty

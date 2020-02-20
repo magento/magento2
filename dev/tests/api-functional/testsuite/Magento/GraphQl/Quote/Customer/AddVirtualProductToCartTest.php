@@ -59,32 +59,6 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
      * @expectedException Exception
      * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
-    public function testAddVirtualProductToCartIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
     public function testAddVirtualProductToCartIfCartIdIsEmpty()
     {
         $query = <<<QUERY
@@ -93,32 +67,6 @@ mutation {
     input: {
       cart_id: "",
       cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
-     */
-    public function testAddVirtualProductToCartIfCartItemsAreMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "cart_id"
     }
   ) {
     cart {

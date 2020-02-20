@@ -18,6 +18,7 @@
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
         <waitForPageLoad stepKey="waitStoreIndexPageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
         <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>
@@ -28,47 +29,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
         <waitForPageLoad stepKey="waitForSuccessMessage"/>
-        <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
-    </actionGroup>
-
-    <actionGroup name="DeleteCustomStoreViewBackupEnabledYesActionGroup">
-        <annotations>
-            <description>Goes to the Admin Stores grid page. Deleted the provided Store while creating a Backup. Validates that the Success Messages (Delete/Backup) are present and correct.</description>
-        </annotations>
-        <arguments>
-            <argument name="storeViewName" type="string"/>
-        </arguments>
-
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickEditExistingStoreViewRow"/>
-        <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnEditStorePage"/>
-        <selectOption userInput="Yes" selector="{{AdminStoreBackupOptionsSection.createBackupSelect}}" stepKey="setCreateDbBackupToYes"/>
-        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnDeleteStorePage"/>
-        <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreViewDelete"/>
-        <waitForPageLoad stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="The database was backed up." stepKey="seeAssertDatabaseBackedUpMessage"/>
-        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store view." stepKey="seeAssertSuccessDeleteStoreViewMessage"/>
-    </actionGroup>
-
-    <actionGroup name="AssertStoreViewNotInGrid">
-        <annotations>
-            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store View name. Validates that it does NOT appear in the grid.</description>
-        </annotations>
-        <arguments>
-            <argument name="storeViewName" type="string"/>
-        </arguments>
-
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <see selector="{{AdminStoresGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertStoreViewNotInGridMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
     </actionGroup>
 </actionGroups>

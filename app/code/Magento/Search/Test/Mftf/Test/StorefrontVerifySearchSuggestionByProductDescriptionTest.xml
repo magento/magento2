@@ -16,64 +16,53 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14765"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17012"/>
-            </skip>
         </annotations>
-
         <before>
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!-- Create product with description -->
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-             <!--Delete create product -->
-            <deleteData createDataKey="simpleProduct"  stepKey="deleteProduct"/>
-
-             <!--Go to the catalog search term page -->
+            <!-- Delete created product -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <!-- Go to the catalog search term page -->
             <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
             <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
-
-            <!--Filter the search term -->
-            <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+            <!-- Filter the search term -->
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
                 <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
             </actionGroup>
-
             <!-- Delete created below search terms -->
-            <actionGroup ref="deleteSearchTerm" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
         <!-- Go to storefront home page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
-
-         <!--Storefront quick search by  product name -->
+        <!-- Storefront quick search by product name -->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
             <argument name="phrase" value="{{ApiProductDescription.value}}"/>
         </actionGroup>
-
-        <!--Verify search suggestions and select the suggestion from dropdown options -->
+        <!-- Verify search suggestions and select the suggestion from dropdown options -->
         <actionGroup ref="StoreFrontSelectDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestion">
             <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
         </actionGroup>
-
         <!-- Assert Product storefront main page -->
         <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductName">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-
-        <!--Go to the catalog search term page -->
+        <!-- Go to the catalog search term page -->
         <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
         <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
-
-        <!--Filter the search term -->
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+        <!-- Filter the search term -->
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
             <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
         </actionGroup>
-
-        <!--Assert Search Term in grid -->
+        <!-- Assert Search Term in grid -->
         <see stepKey="seeSearchTermInGrid" selector="{{AdminCatalogSearchTermIndexSection.gridRow}}" userInput="{{ApiProductDescription.value}}" />
         <see selector="{{AdminCatalogSearchTermIndexSection.numberOfSearchTermResults}}"  userInput="1"  stepKey="seeNumberOfSearchTermResultInGrid"/>
     </test>

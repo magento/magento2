@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalSmartButtonInCheckoutPageTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Generic checkout skeleton flow"/>
+            <title value="Mainflow of Paypal Smart Button"/>
+            <description value="Users are able to place order using Paypal Smart Button"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13690"/>
+            <group value="paypal"/>
+        </annotations>
+        <before>
+
+            <!-- Create Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+            <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Set Paypal express config -->
+            <magentoCLI command="config:set {{StorefrontPaypalEnableConfigData.path}} {{StorefrontPaypalEnableConfigData.value}}" stepKey="enablePaypal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableInContextCheckoutConfigData.path}} {{StorefrontPaypalEnableInContextCheckoutConfigData.value}}" stepKey="enableInContextPayPal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
+            <magentoCLI command="config:set {{StorefrontPaypalMerchantAccountIdConfigData.path}} {{_CREDS.magento/paypal_express_checkout_us_merchant_id}}" stepKey="setMerchantId"/>
+            <createData entity="PaypalConfig" stepKey="createPaypalExpressConfig"/>
+
+            <!-- Login -->
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <!-- Cleanup Paypal configurations -->
+            <magentoCLI command="config:set {{StorefrontPaypalMerchantAccountIdConfigData.path}} {{StorefrontPaypalMerchantAccountIdConfigData.value}}" stepKey="deleteMerchantId"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableInContextCheckoutConfigData.path}} {{StorefrontPaypalDisableInContextCheckoutConfigData.value}}" stepKey="disableInContextPayPal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableConfigData.path}} {{StorefrontPaypalDisableConfigData.value}}" stepKey="disablePaypal"/>
+            <createData entity="SamplePaypalConfig" stepKey="setDefaultPaypalConfig"/>
+
+            <!-- Delete product -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!--Delete customer -->
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Place an order using PayPal payment method -->
+        <actionGroup ref="CreatePayPalOrderWithSelectedPaymentMethodActionGroup" stepKey="createPayPalOrder">
+            <argument name="Category" value="$$createCategory$$"/>
+            <argument name="payerName" value="{{Payer.firstName}}"/>
+        </actionGroup>
+
+        <!-- PayPal checkout -->
+        <actionGroup ref="StorefrontPayOrderOnPayPalCheckoutActionGroup" stepKey="payOrderOnPayPalCheckout">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!-- I see order successful Page instead of Order Review Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
+    </test>
+</tests>

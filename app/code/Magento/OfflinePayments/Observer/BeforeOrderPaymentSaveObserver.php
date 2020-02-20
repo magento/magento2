@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * OfflinePayments Observer
- */
 namespace Magento\OfflinePayments\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -14,6 +11,9 @@ use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\Checkmo;
 
+/**
+ * Sets payment additional information.
+ */
 class BeforeOrderPaymentSaveObserver implements ObserverInterface
 {
     /**
@@ -30,7 +30,8 @@ class BeforeOrderPaymentSaveObserver implements ObserverInterface
             Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE,
             Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE
         ];
-        if (in_array($payment->getMethod(), $instructionMethods)) {
+        if (in_array($payment->getMethod(), $instructionMethods)
+            && empty($payment->getAdditionalInformation('instructions'))) {
             $payment->setAdditionalInformation(
                 'instructions',
                 $payment->getMethodInstance()->getInstructions()

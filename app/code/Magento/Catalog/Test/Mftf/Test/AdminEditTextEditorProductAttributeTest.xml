@@ -19,14 +19,14 @@
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
             <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>
         </before>
-        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
             <argument name="ProductAttribute" value="productAttributeWysiwyg"/>
         </actionGroup>
         <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor" stepKey="seeTextEditorSelected" />
@@ -75,7 +75,7 @@
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="seePoweredBy"/>
         <after>
             <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

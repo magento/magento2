@@ -204,7 +204,7 @@ class Price
     }
 
     /**
-     * Gets the 'tear_price' array from the product
+     * Gets the 'tier_price' array from the product
      *
      * @param Product $product
      * @param string $key
@@ -262,7 +262,7 @@ class Price
 
         $tierPrice = $product->getTierPrice($qty);
         if (is_numeric($tierPrice)) {
-            $finalPrice = min($finalPrice, $tierPrice);
+            $finalPrice = min($finalPrice, (float) $tierPrice);
         }
         return $finalPrice;
     }
@@ -596,7 +596,10 @@ class Price
     ) {
         \Magento\Framework\Profiler::start('__PRODUCT_CALCULATE_PRICE__');
         if ($wId instanceof Store) {
+            $sId = $wId->getId();
             $wId = $wId->getWebsiteId();
+        } else {
+            $sId = $this->_storeManager->getWebsite($wId)->getDefaultGroup()->getDefaultStoreId();
         }
 
         $finalPrice = $basePrice;
@@ -610,7 +613,7 @@ class Price
         );
 
         if ($rulePrice === false) {
-            $date = $this->_localeDate->date(null, null, false);
+            $date = $this->_localeDate->scopeDate($sId);
             $rulePrice = $this->_ruleFactory->create()->getRulePrice($date, $wId, $gId, $productId);
         }
 
@@ -642,7 +645,7 @@ class Price
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $finalPrice = min($finalPrice, $specialPrice);
+                $finalPrice = min($finalPrice, (float) $specialPrice);
             }
         }
         return $finalPrice;
