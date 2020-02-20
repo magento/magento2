@@ -16,6 +16,5 @@
         <click selector="{{CheckoutBillingAddressSection.changeAddressButton}}" stepKey="clickChangeAddresslink"/>
         <waitForElementVisible selector="{{CheckoutShippingAddressSearchSection.popupSelectShippingAddress}}" stepKey="seePopup"/>
         <seeElement selector="{{CheckoutShippingAddressSearchSection.selectShippingAddressGrid}}" stepKey="seeAddressGrid"/>
-        <see selector="{{CheckoutBillingAddressSearchSection.addressesFound}}" userInput="2 addresses" stepKey="see2Address"/>
     </actionGroup>
 </actionGroups>
