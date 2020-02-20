@@ -35,12 +35,13 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadata;
 
     /**
-      * Gallery constructor.
-      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-      * @param string $connectionName
-      * @throws \Exception
-      */
+     * Gallery constructor.
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param null $connectionName
+     * @throws \Exception
+     */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -49,7 +50,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->metadata = $metadataPool->getMetadata(
             \Magento\Catalog\Api\Data\ProductInterface::class
         );
-
         parent::__construct($context, $connectionName);
     }
 
@@ -160,6 +160,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Returns media entries from database
+     *
      * @param int $storeId
      * @param array $entityIds
      * @param bool $preserveSortOrder

@@ -14,13 +14,13 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
-use Magento\Framework\Storage\FileNotFoundException;
-use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Storage\FileNotFoundException;
 use Magento\Framework\Storage\StorageProvider;
 use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
@@ -173,6 +173,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Sync images to database
+     *
      * @param string $fileName
      */
     private function syncImageToDatabase(string $fileName): void
@@ -187,6 +189,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns file metadata as an associative array
+     *
      * @param string $fileName
      * @return array
      * @throws FileNotFoundException
