@@ -12,6 +12,7 @@ use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Helper\Product;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -19,12 +20,11 @@ use Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Controller create order.
  */
-class Reorder extends Create implements HttpPostActionInterface
+class Reorder extends Create implements HttpGetActionInterface
 {
     /**
      * @var UnavailableProductsProvider
