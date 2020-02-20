@@ -20,6 +20,7 @@ class AzureFactory implements AdapterFactoryInterface
      */
     public function create(array $options): AdapterInterface
     {
+        // phpstan:ignore
         if (empty($options['connection_string']) || empty($options['container_name'])) {
             throw new InvalidStorageConfigurationException(
                 "Can't create Azure Blob storage adapter: " .
