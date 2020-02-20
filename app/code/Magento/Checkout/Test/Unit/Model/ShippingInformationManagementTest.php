@@ -43,36 +43,26 @@ class ShippingInformationManagementTest extends TestCase
 {
     /**
      * Stub cart id
-     *
-     * @var int
      */
     private const STUB_CART_ID = 100;
 
     /**
      * Stub items count
-     *
-     * @var int
      */
     private const STUB_ITEMS_COUNT = 99;
 
     /**
      * Stub carrier code
-     *
-     * @var string
      */
     private const STUB_CARRIER_CODE = 'carrier_code';
 
     /**
      * Stub shipping method
-     *
-     * @var string
      */
     private const STUB_SHIPPING_METHOD = 'shipping_method';
 
     /**
      * Stub error message
-     *
-     * @var string
      */
     private const STUB_ERROR_MESSAGE = 'error message';
 

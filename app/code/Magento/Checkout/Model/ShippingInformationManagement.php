@@ -30,7 +30,7 @@ use Magento\Quote\Model\ShippingFactory;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * @inheritdoc
+ * Class checkout shipping information management
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -224,11 +224,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     /**
      * Validate shipping address
      *
-     * @param AddressInterface $address
+     * @param AddressInterface|null $address
      * @return void
      * @throws StateException
      */
-    private function validateAddress(AddressInterface $address): void
+    private function validateAddress(?AddressInterface $address): void
     {
         if (!$address || !$address->getCountryId()) {
             throw new StateException(__('The shipping address is missing. Set the address and try again.'));
@@ -244,7 +244,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      */
     protected function validateQuote(Quote $quote): void
     {
-        if (!$quote->getItemsCount()) {
+        if (0 === $quote->getItemsCount()) {
             throw new InputException(
                 __('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.')
             );
