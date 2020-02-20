@@ -9,9 +9,9 @@ namespace Magento\Framework\Storage;
 
 /**
  * Exception: FileNotFoundException
+ *
  * Exception to be thrown when the a requested file does not exists
  */
 class FileNotFoundException extends \RuntimeException
 {
-
 }

@@ -39,7 +39,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string $connectionName
      * @throws \Exception
      */
     public function __construct(

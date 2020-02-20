@@ -9,9 +9,9 @@ namespace Magento\Framework\Storage;
 
 /**
  * Exception: RootViolationException
+ *
  * Exception to be thrown when the a directory root not specified
  */
 class RootViolationException extends \RuntimeException
 {
-
 }
