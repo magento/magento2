@@ -77,7 +77,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $this->filter->setVariables(['subscriber' => $subscriber]);
 
-        $construction = '{{widget type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
+        $construction = '{{widget type="Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
 
         $store = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class, [], '', false);
         $store->expects($this->once())
@@ -94,7 +94,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         1 => $construction,
-                        2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1" store_id ="1"'
+                        2 => 'type="Magento\Cms\Block\Widget\Page\Link" page_id="1" store_id ="1"'
                     ]
                 ]
             )
@@ -108,20 +108,20 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $this->filter->widgetDirective([
                 1 => $construction,
-                2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
+                2 => 'type="Magento\Cms\Block\Widget\Page\Link" page_id="1"'
             ]);
     }
 
     public function testWidgetDirectiveWithoutRequiredVariable()
     {
-        $construction = '{{widget type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
+        $construction = '{{widget type="Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
 
         $this->storeManager->expects($this->never())
             ->method('getStore');
         $result = $this->filter->widgetDirective(
             [
                 0 => $construction,
-                1 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
+                1 => 'type="Magento\Cms\Block\Widget\Page\Link" page_id="1"'
             ]
         );
 

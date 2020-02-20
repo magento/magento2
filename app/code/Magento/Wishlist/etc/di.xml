@@ -74,7 +74,7 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">
-                <item name="wishlist_url" xsi:type="object">\Magento\Wishlist\Ui\DataProvider\Product\Collector\Button</item>
+                <item name="wishlist_url" xsi:type="object">Magento\Wishlist\Ui\DataProvider\Product\Collector\Button</item>
             </argument>
         </arguments>
     </type>

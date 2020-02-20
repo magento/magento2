@@ -141,7 +141,7 @@
                 <item name="/config/action/section" xsi:type="string">name</item>
             </argument>
             <argument name="fileName" xsi:type="string">sections.xml</argument>
-            <argument name="converter" xsi:type="object">\Magento\Customer\CustomerData\SectionConfigConverter</argument>
+            <argument name="converter" xsi:type="object">Magento\Customer\CustomerData\SectionConfigConverter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Customer\CustomerData\SchemaLocator</argument>
             <argument name="defaultScope" xsi:type="string">frontend</argument>
         </arguments>

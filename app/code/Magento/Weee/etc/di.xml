@@ -56,7 +56,7 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">
-                <item name="weee" xsi:type="object">\Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee</item>
+                <item name="weee" xsi:type="object">Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee</item>
             </argument>
         </arguments>
     </type>

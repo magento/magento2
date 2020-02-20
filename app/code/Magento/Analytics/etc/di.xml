@@ -207,7 +207,7 @@
     <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
         <arguments>
             <argument name="responseHandlers" xsi:type="array">
-                <item name="201" xsi:type="object">\Magento\Analytics\Model\Connector\ResponseHandler\SignUp</item>
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\SignUp</item>
             </argument>
         </arguments>
     </virtualType>

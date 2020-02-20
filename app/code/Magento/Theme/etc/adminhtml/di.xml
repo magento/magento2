@@ -28,7 +28,7 @@
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
                 <item name="default_message_identifier" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
+                    <item name="renderer" xsi:type="const">Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
                 </item>
             </argument>
         </arguments>

@@ -80,7 +80,7 @@
     </type>
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">\Magento\Catalog\Ui\DataProvider\Product\ProductCollection</argument>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\ProductCollection</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
@@ -91,7 +91,7 @@
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
             </argument>
-            <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
             <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
         </arguments>
     </type>

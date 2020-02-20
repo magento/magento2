@@ -39,13 +39,13 @@
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
                 <item name="addProductSuccessMessage" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="renderer" xsi:type="const">Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
                         <item name="template" xsi:type="string">Magento_Wishlist::messages/addProductSuccessMessage.phtml</item>
                     </item>
                 </item>
                 <item name="removeWishlistItemSuccessMessage" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="renderer" xsi:type="const">Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
                         <item name="template" xsi:type="string">Magento_Wishlist::messages/removeWishlistItemSuccessMessage.phtml</item>
                     </item>

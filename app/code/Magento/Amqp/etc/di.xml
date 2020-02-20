@@ -69,7 +69,7 @@
     </type>
     <virtualType name="Magento\Framework\Amqp\Bulk\ExchangeFactory" type="Magento\Framework\Amqp\ExchangeFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">\Magento\Framework\Amqp\Bulk\Exchange</argument>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\Amqp\Bulk\Exchange</argument>
         </arguments>
     </virtualType>
 </config>

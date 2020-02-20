@@ -84,7 +84,7 @@
     <type name="Magento\Catalog\Model\ProductLink\Converter\ConverterPool">
         <arguments>
             <argument name="converters" xsi:type="array">
-                <item name="associated" xsi:type="object">\Magento\GroupedProduct\Model\Product\Link\ProductEntity\Converter</item>
+                <item name="associated" xsi:type="object">Magento\GroupedProduct\Model\Product\Link\ProductEntity\Converter</item>
             </argument>
         </arguments>
     </type>
