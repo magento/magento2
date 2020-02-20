@@ -245,6 +245,7 @@ define([
             if (this.indetermine() && selected === total) {
                 return this.selectPage();
             }
+
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
