@@ -454,7 +454,7 @@ class StatefulFile implements DriverInterface
     public function changePermissions($path, $permissions)
     {
         $result = @chmod($this->getScheme() . $path, $permissions);
-        clearstatcache(true, $this->getScheme() . $path);
+        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
@@ -483,7 +483,7 @@ class StatefulFile implements DriverInterface
         } else {
             $result = @chmod($path, $dirPermissions);
         }
-        clearstatcache(true, $this->getScheme() . $path);
+        clearstatcache(false, $this->getScheme() . $path);
 
         if (!$result) {
             throw new FileSystemException(
@@ -601,12 +601,9 @@ class StatefulFile implements DriverInterface
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
-        try {
+        // phpcs:disable
             $result = @stream_get_line($resource, $length, $ending);
-        } catch (\Exception $e) {
-            $result = false;
-        }
-
+        // phpcs:enable
         if (false === $result) {
             throw new FileSystemException(
                 new Phrase('File cannot be read %1', [$this->getWarningMessage()])

@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Filesystem driver that uses the local filesystem.
+ *
  * Assumed that stat cache is cleanup before test filesystem
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
