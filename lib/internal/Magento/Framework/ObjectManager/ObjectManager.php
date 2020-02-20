@@ -14,6 +14,9 @@ namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Base implementation Object Manager
+ */
 class ObjectManager implements ObjectManagerInterface
 {
     /**
@@ -76,6 +79,7 @@ class ObjectManager implements ObjectManagerInterface
 
     /**
      * Configure di instance
+     *
      * Note: All arguments should be pre-processed (sort order, translations, etc) before passing to method configure.
      *
      * @param  array $configuration
