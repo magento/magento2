@@ -17,6 +17,7 @@
             <argument name="product" type="string" defaultValue="Simple Product A"/>
         </arguments>
         <fillField userInput="{{keyword}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar"/>
+        <waitForPageLoad stepKey="waitForSearchButton"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
