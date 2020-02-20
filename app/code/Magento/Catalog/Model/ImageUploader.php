@@ -92,6 +92,7 @@ class ImageUploader
      * @param string[] $allowedExtensions
      * @param StorageProvider $storageProvider
      * @param string[] $allowedMimeTypes
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,

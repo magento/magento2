@@ -25,6 +25,8 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Block for gallery content.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Content extends \Magento\Backend\Block\Widget
 {
