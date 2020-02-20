@@ -771,8 +771,7 @@ class EmailNotificationTest extends TestCase
         string $customerEmail,
         string $customerName,
         array $templateVars = []
-    ): void
-    {
+    ): void {
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
