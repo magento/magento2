@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -16,6 +17,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class CategoryListTest extends GraphQlAbstract
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @dataProvider filterSingleCategoryDataProvider
@@ -333,7 +344,7 @@ QUERY;
     }
 }
 QUERY;
-        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $storeRootCategoryId = $storeManager->getStore()->getRootCategoryId();
 
         $result = $this->graphQlQuery($query);
@@ -367,6 +378,36 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('categoryList', $result);
         $this->assertEquals([], $result['categoryList']);
+    }
+
+    /**
+     * Test category image full name is returned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testCategoryImageName()
+    {
+        $query = <<<QUERY
+    {
+categoryList(filters: {ids: {in: ["333"]}}) {
+  id
+  name
+  image
+ }
+}
+QUERY;
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeBaseUrl = $storeManager->getStore()->getBaseUrl('media');
+
+        $expected = "catalog/category/magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg";
+        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . $expected;
+
+        $response = $this->graphQlQuery($query);
+        $categoryList = $response['categoryList'];
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['categoryList']);
+        $this->assertEquals('Category 1', $categoryList[0]['name']);
+        $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
     }
 
     /**
