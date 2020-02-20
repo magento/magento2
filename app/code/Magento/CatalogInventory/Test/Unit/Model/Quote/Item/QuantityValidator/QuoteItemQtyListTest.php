@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
 
 /**
  * Class QuoteItemQtyListTest
- * 
+ *
  * Test for QuoteItemQtyList class
  */
 class QuoteItemQtyListTest extends TestCase
