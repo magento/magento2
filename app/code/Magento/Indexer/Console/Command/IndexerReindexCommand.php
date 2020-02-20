@@ -98,7 +98,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln($e->getMessage());
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
-                $output->writeln([$e->getMessage()]);
             }
         }
         return $returnValue;

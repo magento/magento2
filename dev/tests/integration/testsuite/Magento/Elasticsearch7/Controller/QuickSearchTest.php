@@ -30,7 +30,7 @@ class QuickSearchTest extends AbstractController
         // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
         $checker = $this->_objectManager->get(ElasticsearchVersionChecker::class);
 
-        if ($checker->execute() !== 7) {
+        if ($checker->getVersion() !== 7) {
             $this->markTestSkipped('The installed elasticsearch version isn\'t supported by test');
         }
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);

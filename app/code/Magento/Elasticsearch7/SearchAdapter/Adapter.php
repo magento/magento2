@@ -106,7 +106,7 @@ class Adapter implements AdapterInterface
      * @param RequestInterface $request
      * @return QueryResponse
      */
-    public function query(RequestInterface $request)
+    public function query(RequestInterface $request) : QueryResponse
     {
         $client = $this->connectionManager->getConnection();
         $aggregationBuilder = $this->aggregationBuilder;
@@ -121,12 +121,12 @@ class Adapter implements AdapterInterface
             $rawResponse = self::$emptyRawResponse;
         }
 
-        $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];
+        $rawDocuments = isset($rawResponse['hits']['hits']) ?? [];
         $queryResponse = $this->responseFactory->create(
             [
                 'documents' => $rawDocuments,
                 'aggregations' => $aggregationBuilder->build($request, $rawResponse),
-                'total' => isset($rawResponse['hits']['total']['value']) ? $rawResponse['hits']['total']['value'] : 0
+                'total' => isset($rawResponse['hits']['total']['value']) ?? 0
             ]
         );
         return $queryResponse;

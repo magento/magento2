@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\CatalogSearch\Model\Indexer\fulltext\Action;
+namespace Magento\Elasticsearch\CatalogSearch\Model\Indexer\fulltext\Action;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProviderTest as CatalogSearchDataProviderTest;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Search\EngineResolverInterface;
 
 /**
- * Search products by attribute value using mysql search engine.
+ * Search products by attribute value using Elasticsearch search engine.
  */
 class DataProviderTest extends CatalogSearchDataProviderTest
 {
@@ -30,7 +30,7 @@ class DataProviderTest extends CatalogSearchDataProviderTest
     public function testSearchProductByAttribute(): void
     {
         // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
-        $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->execute();
+        $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
         $searchEngine = 'elasticsearch' . $version;
         $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($searchEngine, $currentEngine);

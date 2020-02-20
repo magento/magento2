@@ -127,11 +127,15 @@
         </arguments>
     </type>
 
-
+    <virtualType name="Magento\Elasticsearch7\Model\DataProvider\Suggestions" type="Magento\Elasticsearch\Model\DataProvider\Base\Suggestions">
+        <arguments>
+            <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch6\Model\DataProvider\Suggestions</item>
+                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch7\Model\DataProvider\Suggestions</item>
             </argument>
         </arguments>
     </type>
@@ -144,7 +148,7 @@
                 <item name="price" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
                 <item name="categoryName" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
                 <item name="position" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
-                <item name="default" xsi:type="object">\Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
+                <item name="default" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
             </argument>
         </arguments>
     </virtualType>

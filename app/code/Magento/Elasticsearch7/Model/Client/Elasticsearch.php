@@ -64,7 +64,7 @@ class Elasticsearch implements ClientInterface
      * @param array $query
      * @return array
      */
-    public function suggest($query)
+    public function suggest($query) : array
     {
         return $this->getElasticsearchClient()->suggest($query);
     }
@@ -89,7 +89,7 @@ class Elasticsearch implements ClientInterface
      *
      * @return bool
      */
-    public function ping()
+    public function ping() : bool
     {
         if ($this->pingResult === null) {
             $this->pingResult = $this->getElasticsearchClient()
@@ -104,7 +104,7 @@ class Elasticsearch implements ClientInterface
      *
      * @return bool
      */
-    public function testConnection()
+    public function testConnection() : bool
     {
         return $this->ping();
     }
@@ -115,7 +115,7 @@ class Elasticsearch implements ClientInterface
      * @param array $options
      * @return array
      */
-    private function buildESConfig($options = [])
+    private function buildESConfig($options = []) : array
     {
         $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
         // @codingStandardsIgnoreStart
@@ -187,7 +187,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return bool
      */
-    public function isEmptyIndex($index)
+    public function isEmptyIndex($index) : bool
     {
         $stats = $this->getElasticsearchClient()->indices()->stats(['index' => $index, 'metric' => 'docs']);
         if ($stats['indices'][$index]['primaries']['docs']['count'] == 0) {
@@ -223,7 +223,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return bool
      */
-    public function indexExists($index)
+    public function indexExists($index) : bool
     {
         return $this->getElasticsearchClient()->indices()->exists(['index' => $index]);
     }
@@ -235,7 +235,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return bool
      */
-    public function existsAlias($alias, $index = '')
+    public function existsAlias($alias, $index = '') : bool
     {
         $params = ['name' => $alias];
         if ($index) {
@@ -250,7 +250,7 @@ class Elasticsearch implements ClientInterface
      * @param string $alias
      * @return array
      */
-    public function getAlias($alias)
+    public function getAlias($alias) : array
     {
         return $this->getElasticsearchClient()->indices()->getAlias(['name' => $alias]);
     }
@@ -326,7 +326,7 @@ class Elasticsearch implements ClientInterface
      * @param array $query
      * @return array
      */
-    public function query($query)
+    public function query($query) : array
     {
         return $this->getElasticsearchClient()->search($query);
     }
