@@ -105,6 +105,7 @@ class Image extends File
      *
      * @param array $value
      * @return string[]
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -179,6 +180,7 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
+     * @throws LocalizedException
      */
     protected function processUiComponentValue(array $value)
     {
@@ -200,11 +202,11 @@ class Image extends File
      *
      * @param array $value
      * @return string
+     * @throws LocalizedException
      */
     protected function processCustomerAddressValue(array $value)
     {
-        $result = $this->getFileProcessor()->moveTemporaryFile($value['file']);
-        return $result;
+        return $this->getFileProcessor()->moveTemporaryFile($value['file']);
     }
 
     /**
@@ -212,43 +214,24 @@ class Image extends File
      *
      * @param array $value
      * @return bool|int|ImageContentInterface|string
-     * @throws LocalizedException
      */
     protected function processCustomerValue(array $value)
     {
         $file = $this->fileDriver->getRealPathSafety(ltrim($value['file'], '/'));
-        if (isset($this->ioFileSystem->getPathInfo($file)['extension']) &&
-            in_array($this->ioFileSystem->getPathInfo($file)['extension'], $this->getAllowedExtensions()) &&
-            isset($this->ioFileSystem->getPathInfo($value['name'])['extension']) &&
-            in_array($this->ioFileSystem->getPathInfo($value['name'])['extension'], $this->getAllowedExtensions())
-        ) {
-            $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
+        if ($this->getFileProcessor()->isExist($temporaryFile)) {
+            $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
+            /** @var ImageContentInterface $imageContentDataObject */
+            $imageContentDataObject = $this->imageContentFactory->create()
+                ->setName($value['name'])
+                ->setBase64EncodedData($base64EncodedData)
+                ->setType($value['type']);
+            // Remove temporary file
+            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
 
-            if ($this->getFileProcessor()->isExist($temporaryFile)) {
-                $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
-
-                /** @var ImageContentInterface $imageContentDataObject */
-                $imageContentDataObject = $this->imageContentFactory->create()
-                    ->setName($value['name'])
-                    ->setBase64EncodedData($base64EncodedData)
-                    ->setType($value['type']);
-
-                // Remove temporary file
-                $this->getFileProcessor()->removeUploadedFile($temporaryFile);
-
-                return $imageContentDataObject;
-            }
+            return $imageContentDataObject;
         }
-        return $this->_value;
-    }
 
-    /**
-     * Getter for allowed extensions of image files
-     *
-     * @return array
-     */
-    public function getAllowedExtensions()
-    {
-        return ['jpg', 'jpeg', 'gif', 'png'];
+        return $this->_value;
     }
 }
