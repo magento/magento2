@@ -27,18 +27,39 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class EmailNotificationTest extends TestCase
 {
+    /**
+     * @var int
+     */
     private const STUB_CUSTOMER_ID = 1;
 
+    /**
+     * @var int
+     */
     private const STUB_CUSTOMER_STORE_ID = 2;
 
+    /**
+     * @var int
+     */
     private const STUB_CUSTOMER_WEBSITE_ID = 1;
 
+    /**
+     * @var string
+     */
     private const STUB_CUSTOMER_EMAIL = 'email@email.com';
 
+    /**
+     * @var string
+     */
     private const STUB_CUSTOMER_NAME = 'Customer Name';
 
+    /**
+     * @var string
+     */
     private const STUB_EMAIL_IDENTIFIER = 'Template Identifier';
 
+    /**
+     * @var string
+     */
     private const STUB_SENDER = 'Sender';
 
     /**
@@ -145,10 +166,10 @@ class EmailNotificationTest extends TestCase
     /**
      * Test email notify when credentials changed
      *
-     * @param int $testNumber
+     * @param int    $testNumber
      * @param string $oldEmail
      * @param string $newEmail
-     * @param bool $isPasswordChanged
+     * @param bool   $isPasswordChanged
      *
      * @dataProvider sendNotificationEmailsDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -161,18 +182,18 @@ class EmailNotificationTest extends TestCase
         $expects = $this->once();
         $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
         switch ($testNumber) {
-            case 1:
-                $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
-                $expects = $this->once();
-                break;
-            case 2:
-                $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE;
-                $expects = $this->exactly(2);
-                break;
-            case 3:
-                $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE;
-                $expects = $this->exactly(2);
-                break;
+        case 1:
+            $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
+            $expects = $this->once();
+            break;
+        case 2:
+            $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE;
+            $expects = $this->exactly(2);
+            break;
+        case 3:
+            $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE;
+            $expects = $this->exactly(2);
+            break;
         }
 
         $this->senderResolverMock
@@ -181,7 +202,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /** @var MockObject $origCustomer */
+        /**
+         * @var MockObject $origCustomer
+         */
         $origCustomer = $this->createMock(CustomerInterface::class);
         $origCustomer->expects($this->any())
             ->method('getStoreId')
@@ -237,7 +260,9 @@ class EmailNotificationTest extends TestCase
             ->with('name', self::STUB_CUSTOMER_NAME)
             ->willReturnSelf();
 
-        /** @var CustomerInterface|MockObject $savedCustomer */
+        /**
+         * @var CustomerInterface|MockObject $savedCustomer
+         */
         $savedCustomer = clone $origCustomer;
 
         $origCustomer->expects($this->any())
@@ -315,7 +340,7 @@ class EmailNotificationTest extends TestCase
     /**
      * Provides Emails Data Provider
      *
-     * @param void
+     * @param  void
      * @return array
      */
     public function sendNotificationEmailsDataProvider(): array
@@ -359,7 +384,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /** @var CustomerInterface|MockObject $customer */
+        /**
+         * @var CustomerInterface|MockObject $customer
+         */
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
@@ -460,7 +487,9 @@ class EmailNotificationTest extends TestCase
             ->method('resolve')
             ->with(self::STUB_SENDER, $defaultStoreId)
             ->willReturn($senderValues);
-        /** @var CustomerInterface|MockObject $customer */
+        /**
+         * @var CustomerInterface|MockObject $customer
+         */
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
@@ -554,7 +583,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /** @var CustomerInterface|MockObject $customer */
+        /**
+         * @var CustomerInterface|MockObject $customer
+         */
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->once())
             ->method('getStoreId')
@@ -642,7 +673,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /** @var CustomerInterface|MockObject $customer */
+        /**
+         * @var CustomerInterface|MockObject $customer
+         */
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getStoreId')
@@ -723,11 +756,11 @@ class EmailNotificationTest extends TestCase
      * Create default mock for $this->transportBuilderMock.
      *
      * @param string $templateIdentifier
-     * @param int $customerStoreId
-     * @param array $senderValues
+     * @param int    $customerStoreId
+     * @param array  $senderValues
      * @param string $customerEmail
      * @param string $customerName
-     * @param array $templateVars
+     * @param array  $templateVars
      *
      * @return void
      */
