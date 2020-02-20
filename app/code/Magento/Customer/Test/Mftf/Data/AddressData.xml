@@ -327,6 +327,7 @@
         <data key="postcode">10789</data>
         <data key="telephone">333-33-333-33</data>
         <data key="country">Germany</data>
+        <data key="state">Berlin</data>
     </entity>
     <entity name="US_Address_California">
         <data key="firstname">John</data>
