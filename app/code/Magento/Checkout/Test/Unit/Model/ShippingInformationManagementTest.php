@@ -41,29 +41,14 @@ use PHPUnit\Framework\TestCase;
  */
 class ShippingInformationManagementTest extends TestCase
 {
-    /**
-     * Stub cart id
-     */
     private const STUB_CART_ID = 100;
 
-    /**
-     * Stub items count
-     */
     private const STUB_ITEMS_COUNT = 99;
 
-    /**
-     * Stub carrier code
-     */
     private const STUB_CARRIER_CODE = 'carrier_code';
 
-    /**
-     * Stub shipping method
-     */
     private const STUB_SHIPPING_METHOD = 'shipping_method';
 
-    /**
-     * Stub error message
-     */
     private const STUB_ERROR_MESSAGE = 'error message';
 
     /**
