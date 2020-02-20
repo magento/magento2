@@ -9,12 +9,12 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
-use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ListProductTest extends \PHPUnit\Framework\TestCase
+class ListProductTest extends TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ListProduct
@@ -22,76 +22,79 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layerMock;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Helper\PostHelper|MockObject
      */
     protected $postDataHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Checkout\Helper\Cart|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Helper\Cart|MockObject
      */
     protected $cartHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Type\Simple|MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $urlHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category|MockObject
      */
     protected $catCollectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|MockObject
      */
     protected $prodCollectionMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar|MockObject
      */
     protected $toolbarMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var Render|\PHPUnit_Framework_MockObject_MockObject
+     * @var Render|MockObject
      */
     private $renderer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        /** @var MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
@@ -137,7 +140,12 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
         $this->block = null;
     }
 
-    public function testGetIdentities()
+    /**
+     * Verify identitioes
+     *
+     * @return void
+     */
+    public function testGetIdentities(): void
     {
         $productTag = 'cat_p_1';
         $categoryTag = 'cat_c_p_1';
@@ -201,7 +209,56 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetAddToCartPostParams()
+    /**
+     * Verify addToolbarBlock not ovveride product collection
+     *
+     * @return void
+     */
+    public function testAddToolbarBlockCollection(): void
+    {
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue('1'));
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+        $this->layerMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->will($this->returnValue($currentCategory));
+        $this->layoutMock->expects($this->exactly(2))
+            ->method('getBlock')
+            ->will($this->returnValue($this->toolbarMock));
+        $this->toolbarMock->expects($this->at(3))
+            ->method('getCollection')
+            ->willReturn($this->prodCollectionMock);
+        $this->toolbarMock->expects($this->once())
+            ->method('setCollection')
+            ->with($this->prodCollectionMock);
+
+        $this->block->getLoadedProductCollection();
+        $addToolbarBlock = $this->getMethod('addToolbarBlock');
+        $addToolbarBlock->invokeArgs($this->block, [$this->prodCollectionMock]);
+    }
+
+    /**
+     * Access protected method
+     *
+     * @param string $name
+     */
+    private function getMethod(string $name)
+    {
+        $class = new \ReflectionClass(\Magento\Catalog\Block\Product\ListProduct::class);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
+    }
+    /**
+     * Verify add to cart post params
+     *
+     * @return void
+     */
+    public function testGetAddToCartPostParams(): void
     {
         $url = 'http://localhost.com/dev/';
         $id = 1;
@@ -233,7 +290,12 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedPostData, $result);
     }
 
-    public function testSetIsProductListFlagOnGetProductPrice()
+    /**
+     * Verify ListFlag on get product price
+     *
+     * @return void
+     */
+    public function testSetIsProductListFlagOnGetProductPrice(): void
     {
         $this->renderer->expects($this->once())
             ->method('setData')
