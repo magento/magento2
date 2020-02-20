@@ -182,8 +182,12 @@ abstract class AbstractFiltersTest extends TestCase
         array $data
     ): void {
         $attribute = $this->attributeRepository->get($this->getAttributeCode());
+        $attribute->setDataChanges(false);
         $attribute->addData($data);
-        $this->attributeRepository->save($attribute);
+
+        if ($attribute->hasDataChanges()) {
+            $this->attributeRepository->save($attribute);
+        }
     }
 
     /**

@@ -896,12 +896,16 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
     {
         try {
-            $res = $this->uploaderHelper->getUploader($type, $this->parameters)->move($fileName, $renameFileOff);
-            return $res['file'];
+            $uploader = $this->uploaderHelper->getUploader($type, $this->parameters);
+            if (!$this->uploaderHelper->isFileExist($fileName)) {
+                $uploader->move($fileName, $renameFileOff);
+                $fileName = $uploader['file'];
+            }
         } catch (\Exception $e) {
             $this->_entityModel->addRowError(self::ERROR_MOVE_FILE, $this->rowNum);
-            return '';
+            $fileName = '';
         }
+        return $fileName;
     }
 
     /**
