@@ -34,10 +34,10 @@
             <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeUnsearchableInAQuickSearch">
                 <argument name="useInSearchValue" value="No"/>
             </actionGroup>
-            <actionGroup ref="saveProductAttribute" stepKey="saveAttributeChanges"/>
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!-- Logout from admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Step 2 -->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttribute">
@@ -45,7 +45,7 @@
         </actionGroup>
         <!-- Change attribute property: Use in Search >Yes -->
         <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
-        <actionGroup ref="saveProductAttribute" stepKey="saveAttribute"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
         <!-- Step 3 -->
         <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         <!-- Step 4 -->

@@ -18,6 +18,6 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
         <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" stepKey="waitForUseInSearchElementVisible"/>
-        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="{{useInSearchValue}}" stepKey="selectYesInUseInSearch"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="{{useInSearchValue}}" stepKey="setUseInSearchValue"/>
     </actionGroup>
 </actionGroups>
