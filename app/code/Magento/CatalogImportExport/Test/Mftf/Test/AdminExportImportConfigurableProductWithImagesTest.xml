@@ -130,11 +130,6 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
     </before>
         <after>
-            <!-- Delete exported file -->
-            <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
-
             <!-- Remove downloadable domains -->
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
 
@@ -174,9 +169,11 @@
         <magentoCLI command="cron:run" stepKey="runCronFirstTime"/>
         <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
 
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+
         <!-- Save exported file: file successfully downloaded -->
-        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="rowIndex" value="0"/>
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
 
         <!-- Go to Catalog > Products. Find ConfProd and delete it -->
@@ -224,5 +221,10 @@
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <closeTab stepKey="closeConfigChildProductPage"/>
+
+        <!-- Delete exported file -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$grabNameFile}"/>
+        </actionGroup>
     </test>
 </tests>
