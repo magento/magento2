@@ -8,10 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Check simple product on the category page -->
     <actionGroup name="AssertStorefrontProductIsPresentOnCategoryPageActionGroup">
         <annotations>
-            <description>Validate that the provided Product is present and correct on a Category page.</description>
+            <description>Validate that the provided Product is present and has correct name on a Category page.</description>
         </annotations>
         <arguments>
             <argument name="productName" type="string" defaultValue="{{ApiSimpleOne.name}}"/>

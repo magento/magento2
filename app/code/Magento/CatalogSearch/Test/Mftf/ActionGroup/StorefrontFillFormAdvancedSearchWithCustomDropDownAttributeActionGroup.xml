@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontFillFormAdvancedSearchWithCustomSelectAttributeActionGroup" extends="StorefrontFillFormAdvancedSearchActionGroup">
+    <actionGroup name="StorefrontFillFormAdvancedSearchWithCustomDropDownAttributeActionGroup" extends="StorefrontFillFormAdvancedSearchActionGroup">
         <annotations>
             <description>Fills in the advanced search form and select the attribute.</description>
         </annotations>

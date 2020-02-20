@@ -8,17 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CreateApiConfigurableProductWithProductAttributeAdvanceSearchActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
+    <actionGroup name="CreateApiConfigurableProductWithDescriptionActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
         <annotations>
             <description>Creates a Configurable Product with 2 Product Options and product attributes advance searchable via the API.</description>
         </annotations>
 
-        <!-- Create the configurable product based on the data in the /data folder -->
+        <!-- Replacement action. Create the configurable product via API. -->
         <createData entity="ApiConfigurableProductWithDescription" stepKey="createConfigProduct">
             <field key="name">{{productName}}</field>
         </createData>
-
-        <!--Replacement action-->
-        <createData entity="productDropDownAttribute" stepKey="createConfigProductAttribute"/>
     </actionGroup>
 </actionGroups>
