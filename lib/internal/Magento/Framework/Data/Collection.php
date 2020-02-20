@@ -15,6 +15,7 @@ use Magento\Framework\Option\ArrayInterface;
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
  *
  * @api
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
