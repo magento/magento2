@@ -9,6 +9,9 @@ use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 
 /**
  * Unit tests for Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver class.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class ResolverTest extends \PHPUnit\Framework\TestCase
 {

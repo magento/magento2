@@ -40,7 +40,7 @@ class RuleProductTest extends \PHPUnit\Framework\TestCase
     public function testReindexAfterRuleCreation()
     {
         /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $productRepository->get('simple');

@@ -5,6 +5,9 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Export\Config;
 
+/**
+ * Converter test
+ */
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**

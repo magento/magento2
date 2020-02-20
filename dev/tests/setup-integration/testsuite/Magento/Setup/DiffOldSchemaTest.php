@@ -97,6 +97,58 @@ class DiffOldSchemaTest extends SetupTestCase
     }
 
     /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @param string $dbPrefix
+     * @throws \Exception
+     * @dataProvider oldSchemaUpgradeDataProvider
+     */
+    public function testOldSchemaUpgrade(string $dbPrefix)
+    {
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'old_diff_before',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'base_update',
+            'InstallSchema.php',
+            'Setup'
+        );
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule1'],
+            ['db-prefix' => $dbPrefix]
+        );
+        //Move db_schema.xml
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'base_update',
+            'db_schema.xml',
+            'etc'
+        );
+        $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
+        $generatedSchema = $this->schemaConfig->getDbConfig();
+        $diff = $this->schemaDiff->diff($declarativeSchema, $generatedSchema);
+        self::assertEmpty($diff->getAll());
+    }
+
+    /**
+     * @return array
+     */
+    public function oldSchemaUpgradeDataProvider(): array
+    {
+        return [
+            'Without db prefix' => [
+                'dbPrefix' => '',
+            ],
+            'With db prefix' => [
+                'dbPrefix' => 'spec_',
+            ],
+        ];
+    }
+
+    /**
      * @return array
      */
     private function getBigIntKeyDbSensitiveData()

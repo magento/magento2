@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
 use Magento\Customer\Model\Session;
@@ -83,6 +84,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $variationPricesMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->mockContextObject();
@@ -174,7 +178,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function cacheKeyProvider() : array
+    public function cacheKeyProvider(): array
     {
         return [
             'without_currency_and_customer_group' => [
@@ -229,9 +233,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->setMethods([
-                'getCurrentCurrency',
-            ])
+            ->setMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCode')
@@ -266,9 +268,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $amountMock = $this->getAmountMock($amount);
 
         $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
-            ->setMethods([
-                'getAmount',
-            ])
+            ->setMethods(['getAmount'])
             ->getMockForAbstractClass();
         $priceMock->expects($this->any())->method('getAmount')->willReturn($amountMock);
         $tierPriceMock = $this->getTierPriceMock($amountMock, $priceQty, $percentage);
@@ -283,22 +283,25 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $priceInfoMock->expects($this->any())
             ->method('getPrice')
-            ->willReturnMap([
-                ['regular_price', $priceMock],
-                ['final_price', $priceMock],
-                ['tier_price', $tierPriceMock],
-            ]);
+            ->willReturnMap(
+                [
+                    ['regular_price', $priceMock],
+                    ['final_price', $priceMock],
+                    ['tier_price', $tierPriceMock],
+                ]
+            );
 
         $productMock->expects($this->any())->method('getTypeInstance')->willReturn($productTypeMock);
         $productMock->expects($this->any())->method('getPriceInfo')->willReturn($priceInfoMock);
         $productMock->expects($this->any())->method('isSaleable')->willReturn(true);
         $productMock->expects($this->any())->method('getId')->willReturn($productId);
+        $productMock->expects($this->any())->method('getStatus')
+            ->willReturn(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
 
         $this->helper->expects($this->any())
             ->method('getOptions')
             ->with($productMock, [$productMock])
             ->willReturn([]);
-        $this->product->expects($this->any())->method('getSkipSaleableCheck')->willReturn(true);
 
         $attributesData = [
             'attributes' => [],
@@ -313,11 +316,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->atLeastOnce())->method('getPriceFormat')->willReturn([]);
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
-            ->willReturnMap([
-                [$amount, $amount],
-                [$priceQty, $priceQty],
-                [$percentage, $percentage],
-            ]);
+            ->willReturnArgument(0);
 
         $this->variationPricesMock->expects($this->once())
             ->method('getFormattedPrices')
@@ -349,13 +348,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve array with expected parameters for method getJsonConfig()
      *
-     * @param $productId
-     * @param $amount
-     * @param $priceQty
-     * @param $percentage
+     * @param int $productId
+     * @param double $amount
+     * @param int $priceQty
+     * @param int $percentage
      * @return array
      */
-    private function getExpectedArray($productId, $amount, $priceQty, $percentage)
+    private function getExpectedArray($productId, $amount, $priceQty, $percentage): array
     {
         $expectedArray = [
             'attributes' => [],
@@ -379,6 +378,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                             'percentage' => $percentage,
                         ],
                     ],
+                    'msrpPrice' => [
+                        'amount' => null    ,
+                    ]
                 ],
             ],
             'priceFormat' => [],
@@ -418,9 +420,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->willReturn('%s');
 
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->setMethods([
-                'getCurrentCurrency',
-            ])
+            ->setMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCurrentCurrency')
@@ -472,10 +472,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected function getAmountMock($amount): \PHPUnit_Framework_MockObject_MockObject
     {
         $amountMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountInterface::class)
-            ->setMethods([
-                'getValue',
-                'getBaseAmount',
-            ])
+            ->setMethods(['getValue', 'getBaseAmount'])
             ->getMockForAbstractClass();
         $amountMock->expects($this->any())
             ->method('getValue')
@@ -503,10 +500,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         ];
 
         $tierPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\TierPriceInterface::class)
-            ->setMethods([
-                'getTierPriceList',
-                'getSavePercent',
-            ])
+            ->setMethods(['getTierPriceList', 'getSavePercent'])
             ->getMockForAbstractClass();
         $tierPriceMock->expects($this->any())
             ->method('getTierPriceList')

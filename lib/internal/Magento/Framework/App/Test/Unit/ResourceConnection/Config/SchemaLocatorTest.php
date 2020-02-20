@@ -13,7 +13,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
 
     protected function setUp()

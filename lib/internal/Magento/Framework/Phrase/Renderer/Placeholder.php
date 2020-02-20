@@ -40,6 +40,6 @@ class Placeholder implements RendererInterface
      */
     private function keyToPlaceholder($key)
     {
-        return '%' . (is_int($key) ? strval($key + 1) : $key);
+        return '%' . (is_int($key) ? (string)($key + 1) : $key);
     }
 }

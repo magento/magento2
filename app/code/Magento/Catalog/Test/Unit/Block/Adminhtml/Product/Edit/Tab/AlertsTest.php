@@ -55,6 +55,9 @@ class AlertsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($canShowTab, $this->alerts->canShowTab());
     }
 
+    /**
+     * @return array
+     */
     public function canShowTabDataProvider()
     {
         return [

@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Sales\Model\ConfigInterface;
 
 /**
+ * Totals cart block.
+ *
  * @api
  */
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
@@ -42,7 +46,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param ConfigInterface $salesConfig
      * @param array $layoutProcessors
      * @param array $data
      * @codeCoverageIgnore
@@ -51,7 +55,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\Config $salesConfig,
+        ConfigInterface $salesConfig,
         array $layoutProcessors = [],
         array $data = []
     ) {
@@ -62,6 +66,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Retrieve encoded js layout.
+     *
      * @return string
      */
     public function getJsLayout()
@@ -74,6 +80,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Retrieve totals from cache.
+     *
      * @return array
      */
     public function getTotals()
@@ -85,6 +93,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Set totals to cache.
+     *
      * @param array $value
      * @return $this
      * @codeCoverageIgnore
@@ -96,6 +106,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Create totals block and set totals.
+     *
      * @param string $code
      * @return BlockInterface
      */
@@ -121,6 +133,8 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get totals html.
+     *
      * @param mixed $total
      * @param int|null $area
      * @param int $colspan
@@ -177,7 +191,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * Get formated in base currency base grand total value
+     * Get formatted in base currency base grand total value
      *
      * @return string
      */

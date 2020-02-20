@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\Indexer\ActionFactory;
@@ -14,6 +15,8 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
 
 /**
+ * Indexer model.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
@@ -361,7 +364,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
                 return $this->getView()->getUpdated();
             }
         }
-        return $this->getState()->getUpdated();
+        return $this->getState()->getUpdated() ?: '';
     }
 
     /**
@@ -398,7 +401,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * Regenerate full index
      *
      * @return void
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function reindexAll()
     {
@@ -414,16 +417,11 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;
-            } catch (\Error $error) {
-                $state->setStatus(StateInterface::STATUS_INVALID);
-                $state->save();
-                $this->getView()->resume();
-                throw $error;
             }
         }
     }

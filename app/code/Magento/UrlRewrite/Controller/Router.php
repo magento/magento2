@@ -5,16 +5,16 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
-use Magento\UrlRewrite\Model\OptionProvider;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Action\Redirect;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * UrlRewrite Controller Router
@@ -44,7 +44,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected $response;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @var UrlFinderInterface
      */
     protected $urlFinder;
 
@@ -73,49 +73,11 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Match corresponding URL Rewrite and modify request.
      *
      * @param RequestInterface|HttpRequest $request
-     *
      * @return ActionInterface|null
+     * @throws NoSuchEntityException
      */
     public function match(RequestInterface $request)
     {
-        if ($fromStore = $request->getParam('___from_store')) {
-            //If we're in the process of switching stores then matching rewrite
-            //rule from previous store because the URL was not changed yet from
-            //old store's format.
-            $oldStoreId = $this->storeManager->getStore($fromStore)->getId();
-            $oldRewrite = $this->getRewrite(
-                $request->getPathInfo(),
-                $oldStoreId
-            );
-            if ($oldRewrite && $oldRewrite->getRedirectType() === 0) {
-                //If there is a match and it's a correct URL then just
-                //redirecting to current store's URL equivalent,
-                //otherwise just continuing finding a rule within current store.
-                $currentRewrite = $this->urlFinder->findOneByData(
-                    [
-                        UrlRewrite::ENTITY_TYPE => $oldRewrite->getEntityType(),
-                        UrlRewrite::ENTITY_ID => $oldRewrite->getEntityId(),
-                        UrlRewrite::STORE_ID =>
-                            $this->storeManager->getStore()->getId(),
-                        UrlRewrite::REDIRECT_TYPE => 0,
-                    ]
-                );
-                if ($currentRewrite
-                    && $currentRewrite->getRequestPath()
-                    !== $oldRewrite->getRequestPath()
-                ) {
-                    return $this->redirect(
-                        $request,
-                        $this->url->getUrl(
-                            '',
-                            ['_direct' => $currentRewrite->getRequestPath()]
-                        ),
-                        OptionProvider::TEMPORARY
-                    );
-                }
-            }
-        }
-
         $rewrite = $this->getRewrite(
             $request->getPathInfo(),
             $this->storeManager->getStore()->getId()
@@ -143,6 +105,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Process redirect
+     *
      * @param RequestInterface $request
      * @param UrlRewrite $rewrite
      *
@@ -154,12 +118,14 @@ class Router implements \Magento\Framework\App\RouterInterface
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
             || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
-            $target = $this->url->getUrl('', ['_direct' => $target]);
+            $target = $this->url->getUrl('', ['_direct' => $target, '_query' => $request->getParams()]);
         }
         return $this->redirect($request, $target, $rewrite->getRedirectType());
     }
 
     /**
+     * Redirect to target URL
+     *
      * @param RequestInterface|HttpRequest $request
      * @param string $url
      * @param int $code
@@ -174,15 +140,19 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Find rewrite based on request data
+     *
      * @param string $requestPath
      * @param int $storeId
      * @return UrlRewrite|null
      */
     protected function getRewrite($requestPath, $storeId)
     {
-        return $this->urlFinder->findOneByData([
-            UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
-            UrlRewrite::STORE_ID => $storeId,
-        ]);
+        return $this->urlFinder->findOneByData(
+            [
+                UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
+                UrlRewrite::STORE_ID => $storeId,
+            ]
+        );
     }
 }

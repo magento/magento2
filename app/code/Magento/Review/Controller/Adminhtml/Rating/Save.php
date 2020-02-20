@@ -5,10 +5,14 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Save extends RatingController
+/**
+ * Class Save
+ */
+class Save extends RatingController implements HttpPostActionInterface
 {
     /**
      * Save rating
@@ -57,10 +61,10 @@ class Save extends RatingController
                     }
                 }
 
-                $this->messageManager->addSuccess(__('You saved the rating.'));
+                $this->messageManager->addSuccessMessage(__('You saved the rating.'));
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setRatingData(false);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)
                     ->setRatingData($this->getRequest()->getPostValue());
                 $resultRedirect->setPath('review/rating/edit', ['id' => $this->getRequest()->getParam('id')]);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CatalogWidgetSection">
+        <element name="insertWidgetButton" type="button" selector=".scalable.action-add-widget.plugin"/>
+        <element name="storeViewOption" type="button" selector="//*[@name='store_id']"/>
+    </section>
+
+    <section name="InsertWidgetSection">
+        <element name="widgetTypeDropDown" type="select" selector="#select_widget_type"/>
+        <element name="conditionsAddButton" type="button" selector=".rule-param.rule-param-new-child"/>
+        <element name="conditionsSelectBox" type="button" selector="#conditions__1__new_child"/>
+        <element name="addCondition" type="button" selector="//*[@id='conditions__1--{{arg1}}__value']/../preceding-sibling::a" parameterized="true"/>
+        <element name="conditionField" type="button" selector="#conditions__1--{{arg2}}__value" parameterized="true"/>
+        <element name="save" type="button" selector="#save-button"/>
+        <element name="conditionIs" type="button" selector="//*[@id='conditions__1--1__attribute']/following-sibling::span[1]"/>
+        <element name="conditionOperator" type="button" selector="#conditions__1--{{arg3}}__operator" parameterized="true"/>
+        <element name="checkElementStorefrontByPrice" type="button" selector="//*[@class='product-items widget-product-grid']//*[contains(text(),'${{arg4}}.00')]" parameterized="true"/>
+        <element name="checkElementStorefrontByName" type="button" selector="//*[@class='product-items widget-product-grid']//*[@class='product-item'][{{productPosition}}]//a[contains(text(), '{{productName}}')]" parameterized="true"/>
+        <element name="categoryTreeWrapper" type="text" selector=".rule-chooser .tree.x-tree"/>
+    </section>
+</sections>

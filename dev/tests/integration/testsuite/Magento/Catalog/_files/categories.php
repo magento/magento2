@@ -20,7 +20,7 @@ $categoryLinkRepository = $objectManager->create(
     ]
 );
 
-/** @var Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagement */
+/** @var Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
 $reflectionClass = new \ReflectionClass(get_class($categoryLinkManagement));
 $properties = [
@@ -64,6 +64,7 @@ $category->setId(4)
     ->setIsActive(true)
     ->setIsAnchor(true)
     ->setPosition(1)
+    ->setDescription('Category 1.1 description.')
     ->save();
 
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
@@ -79,6 +80,7 @@ $category->setId(5)
     ->setPosition(1)
     ->setCustomUseParentSettings(0)
     ->setCustomDesign('Magento/blank')
+    ->setDescription('This is the description for Category 1.1.1')
     ->save();
 
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
@@ -113,6 +115,7 @@ $category->setId(8)
     ->setName('Inactive')
     ->setParentId(2)
     ->setPath('1/2/8')
+    ->setLevel(2)
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setIsActive(false)
@@ -178,7 +181,7 @@ $category->setId(13)
     ->setParentId(3)
     ->setPath('1/2/3/13')
     ->setLevel(3)
-    ->setDescription('Ololo')
+    ->setDescription('Its a description of Test Category 1.2')
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setIsActive(true)

@@ -6,7 +6,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
-class Index extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Index extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

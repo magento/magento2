@@ -42,5 +42,5 @@ interface DDLTriggerInterface
      * @param ElementHistory $elementHistory
      * @return callable
      */
-    public function getCallback(ElementHistory $elementHistory) : Callable;
+    public function getCallback(ElementHistory $elementHistory) : callable;
 }

@@ -13,8 +13,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * Class File
- * @package Magento\Framework\Filesystem\Driver
+ * Driver file class
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class File implements DriverInterface
@@ -399,17 +399,36 @@ class File implements DriverInterface
      */
     public function deleteDirectory($path)
     {
+        $exceptionMessages = [];
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
         $iterator = new \FilesystemIterator($path, $flags);
         /** @var \FilesystemIterator $entity */
         foreach ($iterator as $entity) {
-            if ($entity->isDir()) {
-                $this->deleteDirectory($entity->getPathname());
-            } else {
-                $this->deleteFile($entity->getPathname());
+            try {
+                if ($entity->isDir()) {
+                    $this->deleteDirectory($entity->getPathname());
+                } else {
+                    $this->deleteFile($entity->getPathname());
+                }
+            } catch (FileSystemException $exception) {
+                $exceptionMessages[] = $exception->getMessage();
             }
         }
-        $result = @rmdir($this->getScheme() . $path);
+
+        if (!empty($exceptionMessages)) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase(
+                    \implode(' ', $exceptionMessages)
+                )
+            );
+        }
+
+        $fullPath = $this->getScheme() . $path;
+        if (is_link($fullPath)) {
+            $result = @unlink($fullPath);
+        } else {
+            $result = @rmdir($fullPath);
+        }
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -532,7 +551,7 @@ class File implements DriverInterface
     public function filePutContents($path, $content, $mode = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
-        if (!$result) {
+        if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'The specified "%1" file couldn\'t be written. %2',
@@ -573,12 +592,15 @@ class File implements DriverInterface
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
+        // phpcs:disable
         $result = @stream_get_line($resource, $length, $ending);
+        // phpcs:enable
         if (false === $result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
+
         return $result;
     }
 
@@ -843,6 +865,8 @@ class File implements DriverInterface
     }
 
     /**
+     * Returns an absolute path for the given one.
+     *
      * @param string $basePath
      * @param string $path
      * @param string|null $scheme
@@ -879,7 +903,8 @@ class File implements DriverInterface
     }
 
     /**
-     * Fixes path separator
+     * Fixes path separator.
+     *
      * Utility method.
      *
      * @param string $path
@@ -950,6 +975,13 @@ class File implements DriverInterface
         if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) === false) {
             return $path;
         }
+
+        //Removing redundant directory separators.
+        $path = preg_replace(
+            '/\\' . DIRECTORY_SEPARATOR . '\\' . DIRECTORY_SEPARATOR . '+/',
+            DIRECTORY_SEPARATOR,
+            $path
+        );
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
         $realPath = [];
         foreach ($pathParts as $pathPart) {

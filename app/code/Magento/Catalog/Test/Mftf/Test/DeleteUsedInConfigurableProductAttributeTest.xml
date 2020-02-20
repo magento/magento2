@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteUsedInConfigurableProductAttributeTest">
+        <annotations>
+            <stories value="Delete product attribute"/>
+            <title value="Admin should not be able to delete product attribute used in configurable product"/>
+            <description value="Admin should not be able to delete product attribute used in configurable product"/>
+            <testCaseId value="MC-14061"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
+
+            <!-- Create base configurable product-->
+            <createData entity="BaseConfigurableProduct" stepKey="baseConfigProductHandle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- Create Dropdown Product Attribute -->
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <!--Create attribute options -->
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <!--Add to attribute to Default attribute set-->
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <!-- Get handle of the attribute options -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <!--Create configurable product with the options -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <!-- Login As Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete the configurable product created in the before block -->
+            <deleteData createDataKey="baseConfigProductHandle" stepKey="deleteConfig"/>
+
+            <!-- Delete the category created in the before block -->
+            <deleteData createDataKey="categoryHandle" stepKey="deleteCategory"/>
+
+            <!-- Delete configurable product attribute created in the before block -->
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
+
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!-- Go to Stores > Attributes > Products. Search and select the product attribute that was used to create the configurable product-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$productAttributeHandle.attribute_code$$"/>
+        </actionGroup>
+
+        <!-- Click Delete Attribute button -->
+        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+            <argument name="productAttributeCode" value="$$productAttributeHandle.attribute_code$$"/>
+        </actionGroup>
+
+        <!-- Should see error message: This attribute is used in configurable products.  -->
+        <actionGroup ref="AssertAttributeDeletionErrorMessageActionGroup" stepKey="assertAttributeDeletionErrorMessage"/>
+
+        <!-- Go back to the product attribute grid. Should see the product attribute in the grid -->
+        <actionGroup ref="SearchAttributeByCodeOnProductAttributeGridActionGroup" stepKey="searchAttributeByCodeOnProductAttributeGrid">
+            <argument name="productAttributeCode" value="$$productAttributeHandle.attribute_code$$"/>
+        </actionGroup>
+
+        <!-- Go to the Catalog > Products page and search configurable product created in before block.-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProductOnBackend">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+        </actionGroup>
+
+        <!--Should see the product attributes as expected -->
+        <actionGroup ref="AssertProductAttributePresenceInCatalogProductGridActionGroup" stepKey="assertProductAttributePresenceInCatalogProductGrid">
+            <argument name="productAttribute" value="$$productAttributeHandle$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsNewPagePiwSection">
+        <element name="header" type="button" selector="div[data-index=websites]" timeout="30"/>
+        <element name="selectStoreView" type="select" selector="//option[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="storeIdDropdown" type="select" selector="//div[@data-bind=&quot;scope: 'cms_page_form.cms_page_form'&quot;]//select[@name='store_id']"/>
+    </section>
+</sections>

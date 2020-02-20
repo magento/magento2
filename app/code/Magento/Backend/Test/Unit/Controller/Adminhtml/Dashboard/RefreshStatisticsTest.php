@@ -107,7 +107,7 @@ class RefreshStatisticsTest extends \PHPUnit\Framework\TestCase
         $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('We updated lifetime statistic.'));
 
         $this->objectManager->expects($this->any())

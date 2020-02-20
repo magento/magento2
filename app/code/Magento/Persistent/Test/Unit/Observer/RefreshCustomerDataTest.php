@@ -80,6 +80,9 @@ class RefreshCustomerDataTest extends \PHPUnit\Framework\TestCase
         $this->observer->execute($observerMock);
     }
 
+    /**
+     * @return array
+     */
     public function beforeStartDataProvider()
     {
         return [

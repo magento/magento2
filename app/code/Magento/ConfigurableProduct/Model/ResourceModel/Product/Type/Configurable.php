@@ -19,6 +19,9 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Configurable product resource model.
+ */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -173,10 +176,13 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $parentId
         );
 
-        $childrenIds = [0 => []];
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $childrenIds[0][$row['product_id']] = $row['product_id'];
-        }
+        $childrenIds = [
+            0 => array_column(
+                $this->getConnection()->fetchAll($select),
+                'product_id',
+                'product_id'
+            )
+        ];
 
         return $childrenIds;
     }
@@ -189,7 +195,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getParentIdsByChild($childId)
     {
-        $parentIds = [];
         $select = $this->getConnection()
             ->select()
             ->from(['l' => $this->getMainTable()], [])
@@ -198,10 +203,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'e.' . $this->optionProvider->getProductEntityLinkField() . ' = l.parent_id',
                 ['e.entity_id']
             )->where('l.product_id IN(?)', $childId);
-
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $parentIds[] = $row['entity_id'];
-        }
+        $parentIds = $this->getConnection()->fetchCol($select);
 
         return $parentIds;
     }

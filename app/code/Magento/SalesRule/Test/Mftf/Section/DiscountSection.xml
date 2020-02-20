@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="DiscountSection">
+        <element name="DiscountTab" type="button" selector="//*[text()='Apply Discount Code']"/>
+        <element name="CouponInput" type="input" selector="#coupon_code"/>
+        <element name="DiscountInput" type="input" selector="#discount-code"/>
+        <element name="ApplyCodeBtn" type="button" selector="//span[text()='Apply Discount']"/>
+        <element name="CancelCoupon" type="button" selector="//button[@value='Cancel Coupon']"/>
+        <element name="DiscountVerificationMsg" type="text" selector=".message-success div"/>
+        <element name="CancelCouponBtn" type="button" selector="#discount-form .action-cancel"/>
+    </section>
+</sections>

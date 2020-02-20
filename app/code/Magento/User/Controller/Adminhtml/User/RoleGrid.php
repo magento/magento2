@@ -6,7 +6,11 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-class RoleGrid extends \Magento\User\Controller\Adminhtml\User
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\User\Controller\Adminhtml\User as UserAction;
+
+class RoleGrid extends UserAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @return void

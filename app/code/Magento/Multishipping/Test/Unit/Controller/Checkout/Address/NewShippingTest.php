@@ -163,11 +163,14 @@ class NewShippingTest extends \PHPUnit\Framework\TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [
             'shipping_address_exists' => ['*/checkout/addresses', 'shipping_address', 'back/address'],
-            'shipping_address_not_exist' => ['*/cart/', null, 'back/cart']
+            'shipping_address_not_exist' => ['checkout/cart/', null, 'back/cart']
         ];
     }
 

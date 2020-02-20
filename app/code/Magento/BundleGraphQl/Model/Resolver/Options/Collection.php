@@ -61,6 +61,7 @@ class Collection
      * Add parent id/sku pair to use for option filter at fetch time.
      *
      * @param int $parentId
+     * @param int $parentEntityId
      * @param string $sku
      */
     public function addParentFilterData(int $parentId, int $parentEntityId, string $sku) : void
@@ -77,11 +78,7 @@ class Collection
     public function getOptionsByParentId(int $parentId) : array
     {
         $options = $this->fetch();
-        if (!isset($options[$parentId])) {
-            return [];
-        }
-
-        return $options[$parentId];
+        return $options[$parentId] ?? [];
     }
 
     /**
@@ -114,7 +111,7 @@ class Collection
 
         $this->extensionAttributesJoinProcessor->process($optionsCollection);
         if (empty($optionsCollection->getData())) {
-            return null;
+            return [];
         }
 
         /** @var \Magento\Bundle\Model\Option $option */

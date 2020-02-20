@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateCustomerDefaultBillingAddressFromBlockTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="Implement handling of large number of addresses on storefront Address book"/>
+            <title value="Add default customer address via the Storefront6"/>
+            <description value="Storefront user should be able to create a new default address via the storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97501"/>
+            <group value="customer"/>
+            <group value="update"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
+        <click stepKey="ClickEditDefaultBillingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
+        <fillField  stepKey="fillFirstName" userInput="EditedFirstNameBilling" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
+        <fillField  stepKey="fillLastName" userInput="EditedLastNameBilling" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+        <see userInput="EditedFirstNameBilling"
+             selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultBilling"/>
+        <see userInput="EditedLastNameBilling"
+             selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultBilling"/>
+        <see userInput="{{US_Address_NY_Default_Shipping.firstname}}"
+             selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultShipping"/>
+        <see userInput="{{US_Address_NY_Default_Shipping.lastname}}"
+             selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
+    </test>
+    <test name="StorefrontUpdateCustomerDefaultShippingAddressFromBlockTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="Implement handling of large number of addresses on storefront Address book"/>
+            <title value="Add default customer address via the Storefront611"/>
+            <description value="Storefront user should be able to create a new default address via the storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97501"/>
+            <group value="customer"/>
+            <group value="update"/>
+            <skip>
+                <issueId value="MAGETWO-97504"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
+        <click stepKey="ClickEditDefaultShippingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}"/>
+        <fillField  stepKey="fillFirstName" userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
+        <fillField  stepKey="fillLastName" userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+        <see userInput="EditedFirstNameShipping"
+             selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultShipping"/>
+        <see userInput="EditedLastNameShipping"
+             selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
+        <see userInput="{{US_Address_TX_Default_Billing.firstname}}"
+             selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultBilling"/>
+        <see userInput="{{US_Address_TX_Default_Billing.lastname}}"
+             selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultBilling"/>
+    </test>
+    <test name="StorefrontUpdateCustomerAddressFromGridTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="Add default customer address via the Storefront7"/>
+            <title value="Add default customer address via the Storefront7"/>
+            <description value="Storefront user should be able to create a new default address via the storefront2"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-97502"/>
+            <group value="customer"/>
+            <group value="update"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
+        <click selector="{{StorefrontCustomerAddressesSection.editAdditionalAddress('1')}}" stepKey="editAdditionalAddress"/>
+        <fillField  stepKey="fillFirstName" userInput="EditedFirstName" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
+        <fillField  stepKey="fillLastName" userInput="EditedLastName" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+        <see userInput="EditedFirstName"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressFirstNameOnGrid"/>
+        <see userInput="EditedLastName"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressLastNameOnGrid"/>
+    </test>
+</tests>

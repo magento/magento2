@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * A custom adapter that allows generating arbitrary descriptions
- */
 namespace Magento\Setup\Model;
 
+/**
+ * A custom adapter that allows generating arbitrary descriptions.
+ */
 class DataGenerator
 {
     /**

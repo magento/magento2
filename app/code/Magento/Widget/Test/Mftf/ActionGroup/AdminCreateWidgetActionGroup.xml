@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+   <actionGroup name="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>Goes to the Admin Widget creation page. Creates the provided Widget.</description>
+       </annotations>
+       <arguments>
+           <argument name="widget"/>
+       </arguments>
+
+       <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="amOnAdminNewWidgetPage"/>
+       <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+       <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
+       <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+       <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+       <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
+       <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+       <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
+       <waitForAjaxLoad stepKey="waitForLoad"/>
+       <selectOption selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+       <waitForAjaxLoad stepKey="waitForPageLoad"/>
+       <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+       <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
+   </actionGroup>
+</actionGroups>

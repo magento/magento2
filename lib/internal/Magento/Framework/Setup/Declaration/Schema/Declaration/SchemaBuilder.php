@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
 use Magento\Framework\Phrase;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
@@ -17,8 +20,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
 
 /**
- * This type of builder is responsible for converting ENTIRE data, that comes from XML
- * into DTO`s format, with aggregation root: Schema.
+ * This type of builder is responsible for converting ENTIRE data, that comes from XML into DTO`s format.
  *
  * Note: SchemaBuilder can not be used for one structural element, like column or constraint
  * because it should have references to other DTO objects.
@@ -67,6 +69,11 @@ class SchemaBuilder
     private $resourceConnection;
 
     /**
+     * @var ElementNameResolver
+     */
+    private $elementNameResolver;
+
+    /**
      * SchemaBuilder constructor.
      *
      * @param    ElementFactory $elementFactory
@@ -74,24 +81,27 @@ class SchemaBuilder
      * @param    Sharding $sharding
      * @param    ValidationComposite $validationComposite
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @internal param array $tablesData
+     * @param ElementNameResolver $elementNameResolver
      */
     public function __construct(
         ElementFactory $elementFactory,
         BooleanUtils $booleanUtils,
         Sharding $sharding,
         ValidationComposite $validationComposite,
-        \Magento\Framework\App\ResourceConnection $resourceConnection
+        \Magento\Framework\App\ResourceConnection $resourceConnection,
+        ElementNameResolver $elementNameResolver
     ) {
         $this->sharding = $sharding;
         $this->elementFactory = $elementFactory;
         $this->booleanUtils = $booleanUtils;
         $this->validationComposite = $validationComposite;
         $this->resourceConnection = $resourceConnection;
+        $this->elementNameResolver = $elementNameResolver;
     }
 
     /**
      * Add tables data to builder.
+     *
      * Tables data holds tables information: columns, constraints, indexes, attributes.
      *
      * @param  array $tablesData
@@ -130,7 +140,7 @@ class SchemaBuilder
      * @throws Exception
      * @return Schema
      */
-    public function build(Schema $schema)
+    public function build(Schema $schema): Schema
     {
         foreach ($this->tablesData as $tableData) {
             if (!$schema->getTableByName($tableData['name'])) {
@@ -151,7 +161,7 @@ class SchemaBuilder
      * @param array $tableData
      * @return string
      */
-    private function getStructuralElementResource(array $tableData)
+    private function getStructuralElementResource(array $tableData): string
     {
         return isset($tableData['resource']) && $this->sharding->canUseResource($tableData['resource']) ?
             $tableData['resource'] : 'default';
@@ -163,7 +173,7 @@ class SchemaBuilder
      * @param  array $structuralElementData
      * @return bool
      */
-    private function isDisabled($structuralElementData)
+    private function isDisabled(array $structuralElementData): bool
     {
         return isset($structuralElementData['disabled']) &&
             $this->booleanUtils->toBoolean($structuralElementData['disabled']);
@@ -171,14 +181,15 @@ class SchemaBuilder
 
     /**
      * Instantiate column DTO objects from array.
+     *
      * If column was renamed new key will be associated to it.
      *
-     * @param  array  $tableData
-     * @param  string $resource
-     * @param  Table  $table
+     * @param array $tableData
+     * @param string $resource
+     * @param Table $table
      * @return array
      */
-    private function processColumns(array $tableData, $resource, Table $table)
+    private function processColumns(array $tableData, string $resource, Table $table): array
     {
         $columns = [];
 
@@ -198,12 +209,12 @@ class SchemaBuilder
     /**
      * Process generic data that is support by all 3 child types: columns, constraints, indexes.
      *
-     * @param  array    $elementData
-     * @param  Table    $table
-     * @param  $resource
+     * @param array $elementData
+     * @param string $resource
+     * @param Table $table
      * @return array
      */
-    private function processGenericData(array $elementData, $resource, Table $table)
+    private function processGenericData(array $elementData, string $resource, Table $table): array
     {
         $elementData['table'] = $table;
         $elementData['resource'] = $resource;
@@ -213,13 +224,14 @@ class SchemaBuilder
 
     /**
      * Process tables and add them to schema.
+     *
      * If table already exists - then we need to skip it.
      *
      * @param  Schema $schema
-     * @param  array  $tableData
-     * @return \Magento\Framework\Setup\Declaration\Schema\Dto\Table
+     * @param  array $tableData
+     * @return Table
      */
-    private function processTable(Schema $schema, array $tableData)
+    private function processTable(Schema $schema, array $tableData): Table
     {
         if (!$schema->getTableByName($tableData['name'])) {
             $resource = $this->getStructuralElementResource($tableData);
@@ -240,11 +252,13 @@ class SchemaBuilder
     }
 
     /**
+     * Provides column by name.
+     *
      * @param string $columnName
      * @param Table $table
      * @return Column
      */
-    private function getColumnByName(string $columnName, Table $table)
+    private function getColumnByName(string $columnName, Table $table): Column
     {
         $columnCandidate = $table->getColumnByName($columnName);
 
@@ -264,7 +278,7 @@ class SchemaBuilder
      * @param  Table $table
      * @return array
      */
-    private function convertColumnNamesToObjects(array $columnNames, Table $table)
+    private function convertColumnNamesToObjects(array $columnNames, Table $table): array
     {
         $columns = [];
 
@@ -278,12 +292,12 @@ class SchemaBuilder
     /**
      * Convert and instantiate index objects.
      *
-     * @param  array    $tableData
-     * @param  $resource
-     * @param  Table    $table
+     * @param  array $tableData
+     * @param  string $resource
+     * @param  Table $table
      * @return Index[]
      */
-    private function processIndexes(array $tableData, $resource, Table $table)
+    private function processIndexes(array $tableData, string $resource, Table $table): array
     {
         if (!isset($tableData['index'])) {
             return [];
@@ -296,6 +310,11 @@ class SchemaBuilder
                 continue;
             }
 
+            $indexData['name'] = $this->elementNameResolver->getFullIndexName(
+                $table,
+                $indexData['column'],
+                $indexData['indexType'] ?? null
+            );
             $indexData = $this->processGenericData($indexData, $resource, $table);
             $indexData['columns'] = $this->convertColumnNamesToObjects($indexData['column'], $table);
             $index = $this->elementFactory->create('index', $indexData);
@@ -309,12 +328,12 @@ class SchemaBuilder
      * Convert and instantiate constraint objects.
      *
      * @param  array $tableData
-     * @param  $resource
+     * @param  string $resource
      * @param  Schema $schema
      * @param Table $table
      * @return Constraint[]
      */
-    private function processConstraints(array $tableData, $resource, Schema $schema, Table $table)
+    private function processConstraints(array $tableData, string $resource, Schema $schema, Table $table): array
     {
         if (!isset($tableData['constraint'])) {
             return [];
@@ -331,6 +350,13 @@ class SchemaBuilder
             if ($constraintData['type'] === 'foreign') {
                 $constraintData['column'] = $this->getColumnByName($constraintData['column'], $table);
                 $referenceTableData = $this->tablesData[$constraintData['referenceTable']];
+
+                if ($this->isDisabled($referenceTableData)) {
+                    throw new \LogicException(
+                        sprintf('The reference table named "%s" is disabled', $referenceTableData['name'])
+                    );
+                }
+
                 //If we are referenced to the same table we need to specify it
                 //Get table name from resource connection regarding prefix settings
                 $refTableName = $this->resourceConnection->getTableName($referenceTableData['name']);
@@ -354,9 +380,20 @@ class SchemaBuilder
                     $constraintData['referenceColumn'],
                     $constraintData['referenceTable']
                 );
+                $constraintData['name'] = $this->elementNameResolver->getFullFKName(
+                    $table,
+                    $constraintData['column'],
+                    $constraintData['referenceTable'],
+                    $constraintData['referenceColumn']
+                );
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;
             } else {
+                $constraintData['name'] = $this->elementNameResolver->getFullIndexName(
+                    $table,
+                    $constraintData['column'],
+                    $constraintData['type']
+                );
                 $constraintData['columns'] = $this->convertColumnNamesToObjects($constraintData['column'], $table);
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;

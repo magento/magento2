@@ -6,12 +6,7 @@
 
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Phrase;
-use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Determines the name to use for fields in a data output array given method metadata.

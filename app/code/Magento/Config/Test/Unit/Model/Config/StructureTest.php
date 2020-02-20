@@ -50,6 +50,9 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     protected $_structureData;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_flyweightFactory = $this->getMockBuilder(FlyweightFactory::class)
@@ -82,7 +85,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetTabsBuildsSectionTree()
+    /**
+     * Verify tabs build section tree
+     *
+     * @return void
+     */
+    public function testGetTabsBuildsSectionTree(): void
     {
         $expected = ['tab1' => ['children' => ['section1' => ['tab' => 'tab1']]]];
 
@@ -108,7 +116,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_tabIteratorMock, $model->getTabs());
     }
 
-    public function testGetSectionList()
+    /**
+     * Verify get section list method
+     *
+     * @return void
+     */
+    public function testGetSectionList(): void
     {
         $expected = [
             'section1_child_id_1' => true,
@@ -152,6 +165,8 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify Get Element return empty element if element is requested
+     *
      * @param string $path
      * @param string $expectedType
      * @param string $expectedId
@@ -174,6 +189,8 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get Element return empty by path element if not exist
+     *
      * @param string $path
      * @param string $expectedType
      * @param string $expectedId
@@ -196,6 +213,8 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify Element return e,pty element if not exists
+     *
      * @param string $expectedType
      * @param string $expectedId
      * @param string $expectedPath
@@ -221,6 +240,9 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         return $elementMock;
     }
 
+    /**
+     * @return array
+     */
     public function emptyElementDataProvider()
     {
         return [
@@ -231,14 +253,24 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetElementReturnsProperElementByPath()
+    /**
+     * Verify get element returns proper element by path
+     *
+     * @return void
+     */
+    public function testGetElementReturnsProperElementByPath(): void
     {
         $elementMock = $this->getElementPathReturnsProperElementByPath();
 
         $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
     }
 
-    public function testGetElementByConfigPathReturnsProperElementByPath()
+    /**
+     * Verify get element by config path return proper path
+     *
+     * @return void
+     */
+    public function testGetElementByConfigPathReturnsProperElementByPath(): void
     {
         $elementMock = $this->getElementPathReturnsProperElementByPath();
 
@@ -246,6 +278,8 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Build mock element
+     *
      * @return Mock
      */
     private function getElementPathReturnsProperElementByPath()
@@ -268,7 +302,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         return $elementMock;
     }
 
-    public function testGetElementByPathPartsIfSectionDataIsEmpty()
+    /**
+     * Verefy get element by path part
+     *
+     * @return void
+     */
+    public function testGetElementByPathPartsIfSectionDataIsEmpty(): void
     {
         $fieldData = [
             'id' => 'field_3',
@@ -339,7 +378,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('currentSection', $this->_model->getFirstSection()->getData());
     }
 
-    public function testGetElementReturnsProperElementByPathCachesObject()
+    /**
+     * Verify get element return element by path caches object
+     *
+     * @return void
+     */
+    public function testGetElementReturnsProperElementByPathCachesObject(): void
     {
         $elementMock = $this->getElementReturnsProperElementByPathCachesObject();
 
@@ -347,7 +391,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
     }
 
-    public function testGetElementByConfigPathReturnsProperElementByPathCachesObject()
+    /**
+     * Verify Get Element by id returns proper element
+     *
+     * @return void
+     */
+    public function testGetElementByConfigPathReturnsProperElementByPathCachesObject(): void
     {
         $elementMock = $this->getElementReturnsProperElementByPathCachesObject();
 
@@ -389,6 +438,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
     }
 
+    /**
+     * DataProvider
+     *
+     * @return array
+     */
     public function getFieldPathsByAttributeDataProvider()
     {
         return [
@@ -405,32 +459,53 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetFieldPaths()
+    /**
+     * Verify get Fields paths method
+     *
+     * @dataProvider getFieldPaths
+     * @param array $expected
+     * @return void
+     */
+    public function testGetFieldPaths(array $expected): void
     {
-        $expected = [
-            'section/group/field2' => [
-                'field_2'
-            ],
-            'field_3' => [
-                'field_3'
-            ],
-            'field_3_1' => [
-                'field_3_1'
-            ],
-            'field_3_1_1' => [
-                'field_3_1_1'
-            ],
-            'section/group/field4' => [
-                'field_4',
-            ],
-            'field_5' => [
-                'field_5',
-            ],
-        ];
-
         $this->assertSame(
             $expected,
             $this->_model->getFieldPaths()
         );
+    }
+
+    /**
+     * dataprovider for Field Paths
+     *
+     * @return array
+     */
+    public function getFieldPaths(): array
+    {
+        return  [
+            [
+                [
+                    'section/group/field2' => [
+                        'field_2'
+                    ],
+                    'field_3' => [
+                        'field_3',
+                        'field_3'
+                    ],
+                    'field_3_1' => [
+                        'field_3_1'
+                    ],
+                    'field_3_1_1' => [
+                        'field_3_1_1'
+                    ],
+                    'section/group/field4' => [
+                        'field_4',
+                    ],
+                    'field_5' => [
+                        'field_5',
+                        'field_5'
+                    ]
+                ]
+            ]
+        ];
     }
 }

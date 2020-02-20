@@ -3,55 +3,110 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Indexer\Product\Eav\Action\Full;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Decimal;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\BatchProviderInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
-    public function testExecuteWithAdapterErrorThrowsException()
+    /**
+     * @var Full|MockObject
+     */
+    private $model;
+
+    /**
+     * @var DecimalFactory|MockObject
+     */
+    private $eavDecimalFactory;
+
+    /**
+     * @var SourceFactory|MockObject
+     */
+    private $eavSourceFactory;
+
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPool;
+
+    /**
+     * @var BatchProviderInterface|MockObject
+     */
+    private $batchProvider;
+
+    /**
+     * @var BatchSizeCalculator|MockObject
+     */
+    private $batchSizeCalculator;
+
+    /**
+     * @var ActiveTableSwitcher|MockObject
+     */
+    private $activeTableSwitcher;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @var Generator
+     */
+    private $batchQueryGenerator;
+
+    /**
+     * @return void
+     */
+    protected function setUp()
     {
-        $eavDecimalFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
-            ['create']
+        $this->eavDecimalFactory = $this->createPartialMock(DecimalFactory::class, ['create']);
+        $this->eavSourceFactory = $this->createPartialMock(SourceFactory::class, ['create']);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->batchProvider = $this->getMockForAbstractClass(BatchProviderInterface::class);
+        $this->batchQueryGenerator = $this->createMock(Generator::class);
+        $this->batchSizeCalculator = $this->createMock(BatchSizeCalculator::class);
+        $this->activeTableSwitcher = $this->createMock(ActiveTableSwitcher::class);
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Full::class,
+            [
+                'eavDecimalFactory' => $this->eavDecimalFactory,
+                'eavSourceFactory' => $this->eavSourceFactory,
+                'metadataPool' => $this->metadataPool,
+                'batchProvider' => $this->batchProvider,
+                'batchSizeCalculator' => $this->batchSizeCalculator,
+                'activeTableSwitcher' => $this->activeTableSwitcher,
+                'scopeConfig' => $this->scopeConfig,
+                'batchQueryGenerator' => $this->batchQueryGenerator,
+            ]
         );
-        $eavSourceFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
-            ['create']
-        );
-
-        $exceptionMessage = 'exception message';
-        $exception = new \Exception($exceptionMessage);
-
-        $eavDecimalFactory->expects($this->once())
-            ->method('create')
-            ->will($this->throwException($exception));
-
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $batchProviderMock = $this->createMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
-
-        $batchManagementMock = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class
-        );
-
-        $tableSwitcherMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
-        )->disableOriginalConstructor()->getMock();
-
-        $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full(
-            $eavDecimalFactory,
-            $eavSourceFactory,
-            $metadataMock,
-            $batchProviderMock,
-            $batchManagementMock,
-            $tableSwitcherMock
-        );
-
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage($exceptionMessage);
-
-        $model->execute();
     }
 
     /**
@@ -59,25 +114,18 @@ class FullTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $eavDecimalFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
-            ['create']
-        );
-        $eavSourceFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
-            ['create']
-        );
+        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(1);
 
         $ids = [1, 2, 3];
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
 
         $connectionMock->expects($this->atLeastOnce())->method('describeTable')->willReturn(['id' => []]);
-        $eavSource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source::class)
+        $eavSource = $this->getMockBuilder(Source::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavDecimal = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Decimal::class)
+        $eavDecimal = $this->getMockBuilder(Decimal::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -90,43 +138,36 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $eavSource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);
 
-        $eavDecimal->expects($this->once())
-            ->method('reindexEntities')
-            ->with($ids);
+        $eavDecimal->expects($this->once())->method('reindexEntities')->with($ids);
 
-        $eavSource->expects($this->once())
-            ->method('reindexEntities')
-            ->with($ids);
+        $eavSource->expects($this->once())->method('reindexEntities')->with($ids);
 
-        $eavDecimalFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($eavSource));
+        $this->eavDecimalFactory->expects($this->once())->method('create')->will($this->returnValue($eavSource));
 
-        $eavSourceFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($eavDecimal));
+        $this->eavSourceFactory->expects($this->once())->method('create')->will($this->returnValue($eavDecimal));
 
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $entityMetadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+        $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->getMockForAbstractClass();
 
-        $metadataMock->expects($this->atLeastOnce())
+        $this->metadataPool->expects($this->atLeastOnce())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);
 
-        $batchProviderMock = $this->createMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
-        $batchProviderMock->expects($this->atLeastOnce())
-            ->method('getBatches')
-            ->willReturn([['from' => 10, 'to' => 100]]);
-        $batchProviderMock->expects($this->atLeastOnce())
-            ->method('getBatchIds')
+        // Super inefficient algorithm in some cases
+        $this->batchProvider->expects($this->never())
+            ->method('getBatches');
+
+        $batchQuery = $this->createMock(Select::class);
+
+        $connectionMock->method('fetchCol')
+            ->with($batchQuery)
             ->willReturn($ids);
 
-        $batchManagementMock = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class
-        );
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->batchQueryGenerator->method('generate')
+            ->willReturn([$batchQuery]);
+
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -134,19 +175,17 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $selectMock->expects($this->atLeastOnce())->method('distinct')->willReturnSelf();
         $selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 
-        $tableSwitcherMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
-        )->disableOriginalConstructor()->getMock();
+        $this->model->execute();
+    }
 
-        $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full(
-            $eavDecimalFactory,
-            $eavSourceFactory,
-            $metadataMock,
-            $batchProviderMock,
-            $batchManagementMock,
-            $tableSwitcherMock
-        );
-
-        $model->execute();
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testExecuteWithDisabledEavIndexer()
+    {
+        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);
+        $this->metadataPool->expects($this->never())->method('getMetadata');
+        $this->model->execute();
     }
 }

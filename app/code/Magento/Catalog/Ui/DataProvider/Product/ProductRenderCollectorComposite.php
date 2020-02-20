@@ -9,8 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 
 /**
- * Composite, which holds collectors, that collect enought information for
- * product render
+ * Composite, which holds collectors, that collect enough information for product render
  */
 class ProductRenderCollectorComposite implements ProductRenderCollectorInterface
 {

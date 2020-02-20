@@ -40,6 +40,11 @@ class Index extends GenericElement implements
     private $indexType;
 
     /**
+     * @var string
+     */
+    private $nameWithoutPrefix;
+
+    /**
      * Constructor.
      *
      * @param string $name
@@ -47,18 +52,21 @@ class Index extends GenericElement implements
      * @param Table $table
      * @param array $columns
      * @param string $indexType
+     * @param string $nameWithoutPrefix
      */
     public function __construct(
         string $name,
         string $type,
         Table $table,
         array $columns,
-        string $indexType
+        string $indexType,
+        string $nameWithoutPrefix
     ) {
         parent::__construct($name, $type);
         $this->table = $table;
         $this->columns = $columns;
         $this->indexType = $indexType;
+        $this->nameWithoutPrefix = $nameWithoutPrefix;
     }
 
     /**
@@ -122,5 +130,15 @@ class Index extends GenericElement implements
     public function getIndexType()
     {
         return $this->indexType;
+    }
+
+    /**
+     * Retrieve the index name which is calculated without table prefix.
+     *
+     * @return string
+     */
+    public function getNameWithoutPrefix()
+    {
+        return $this->nameWithoutPrefix;
     }
 }

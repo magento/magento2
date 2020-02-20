@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyTinyMCEActionGroup">
+        <annotations>
+            <description>Goes to Admin CMS Page creation page. Validates that all of the Tiny MCE buttons are present.</description>
+        </annotations>
+
+        <seeElement selector="{{TinyMCESection.Style}}" stepKey="assertInfo2"/>
+        <seeElement selector="{{TinyMCESection.Bold}}" stepKey="assertInfo3"/>
+        <seeElement selector="{{TinyMCESection.Italic}}" stepKey="assertInfo4"/>
+        <seeElement selector="{{TinyMCESection.Underline}}" stepKey="assertInfo5"/>
+        <seeElement selector="{{TinyMCESection.AlignLeft}}" stepKey="assertInfo6"/>
+        <seeElement selector="{{TinyMCESection.AlignCenter}}" stepKey="assertInfo7"/>
+        <seeElement selector="{{TinyMCESection.AlignRight}}" stepKey="assertInfo8"/>
+        <seeElement selector="{{TinyMCESection.Numlist}}" stepKey="assertInfo9"/>
+        <seeElement selector="{{TinyMCESection.Bullet}}" stepKey="assertInfo10"/>
+        <seeElement selector="{{TinyMCESection.InsertLink}}" stepKey="assertInfo11"/>
+        <seeElement selector="{{TinyMCESection.InsertImageIcon}}" stepKey="assertInf12"/>
+        <seeElement selector="{{TinyMCESection.InsertTable}}" stepKey="assertInfo13"/>
+        <seeElement selector="{{TinyMCESection.SpecialCharacter}}" stepKey="assertInfo14"/>
+    </actionGroup>
+</actionGroups>

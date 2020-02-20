@@ -37,7 +37,7 @@ class AddDirtyRulesNotice implements ObserverInterface
         $dirtyRules = $observer->getData('dirty_rules');
         if (!empty($dirtyRules)) {
             if ($dirtyRules->getState()) {
-                $this->messageManager->addNotice($observer->getData('message'));
+                $this->messageManager->addNoticeMessage($observer->getData('message'));
             }
         }
     }

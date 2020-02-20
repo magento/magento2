@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -15,7 +12,11 @@
  */
 ?>
 <div class="price-box msrp">
-    <?php if ($this->helper('Magento\Msrp\Helper\Data')->canApplyMsrp($block->getProduct())): ?>
-        <a href="<?= /* @escapeNotVerified */ $block->getProduct()->getProductUrl() ?>"><?= /* @escapeNotVerified */ __('Click for price') ?></a>
+    <?php //phpcs:disable ?>
+    <?php if ($this->helper(\Magento\Msrp\Helper\Data::class)->canApplyMsrp($block->getProduct())) : ?>
+    <?php //phpcs:enable ?>
+        <a href="<?= $block->escapeUrl($block->getProduct()->getProductUrl()) ?>">
+            <?= $block->escapeHtml(__('Click for price')) ?>
+        </a>
     <?php endif; ?>
 </div>

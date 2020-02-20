@@ -6,7 +6,7 @@
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Shell;
+use Magento\Framework\Setup\Declaration\Schema\Sharding;
 
 /**
  * Persist listened schema to db_schema.xml file.
@@ -24,8 +24,6 @@ class SchemaPersistor
     private $xmlPersistor;
 
     /**
-     * Constructor.
-     *
      * @param ComponentRegistrar $componentRegistrar
      * @param XmlPersistor $xmlPersistor
      */
@@ -64,32 +62,88 @@ class SchemaPersistor
                 continue;
             }
             $schemaPatch = sprintf('%s/etc/db_schema.xml', $path);
-            if (file_exists($schemaPatch)) {
-                $dom = new \SimpleXMLElement(file_get_contents($schemaPatch));
-            } else {
-                $dom = $this->initEmptyDom();
-            }
-
-            foreach ($tablesData as $tableName => $tableData) {
-                $tableData = $this->handleDefinition($tableData);
-                $table = $dom->addChild('table');
-                $table->addAttribute('name', $tableName);
-                $table->addAttribute('resource', $tableData['resource']);
-                if (isset($tableData['engine']) && $tableData['engine'] !== null) {
-                    $table->addAttribute('engine', $tableData['engine']);
-                }
-
-                $this->processColumns($tableData, $table);
-                $this->processConstraints($tableData, $table);
-                $this->processIndexes($tableData, $table);
-            }
-
+            $dom = $this->processTables($schemaPatch, $tablesData);
             $this->persistModule($dom, $schemaPatch);
         }
     }
 
     /**
+     * Convert tables data into XML document.
+     *
+     * @param string $schemaPatch
+     * @param array $tablesData
+     * @return \SimpleXMLElement
+     */
+    private function processTables(string $schemaPatch, array $tablesData): \SimpleXMLElement
+    {
+        if (file_exists($schemaPatch)) {
+            $dom = new \SimpleXMLElement(file_get_contents($schemaPatch));
+        } else {
+            $dom = $this->initEmptyDom();
+        }
+        $defaultAttributesValues = [
+            'resource' => Sharding::DEFAULT_CONNECTION,
+        ];
+
+        foreach ($tablesData as $tableName => $tableData) {
+            $tableData = $this->handleDefinition($tableData);
+            $table = $dom->xpath("//table[@name='" . $tableName . "']");
+            if (!$table) {
+                $table = $dom->addChild('table');
+                $table->addAttribute('name', $tableName);
+            } else {
+                $table = reset($table);
+            }
+
+            $attributeNames = ['disabled', 'resource', 'engine', 'comment'];
+            foreach ($attributeNames as $attributeName) {
+                $this->updateElementAttribute(
+                    $table,
+                    $attributeName,
+                    $tableData,
+                    $defaultAttributesValues[$attributeName] ?? null
+                );
+            }
+
+            $this->processColumns($tableData, $table);
+            $this->processConstraints($tableData, $table);
+            $this->processIndexes($tableData, $table);
+        }
+
+        return $dom;
+    }
+
+    /**
+     * Update element attribute value or create new attribute.
+     *
+     * @param \SimpleXMLElement $element
+     * @param string $attributeName
+     * @param array $elementData
+     * @param string|null $defaultValue
+     */
+    private function updateElementAttribute(
+        \SimpleXMLElement $element,
+        string $attributeName,
+        array $elementData,
+        ?string $defaultValue = null
+    ) {
+        $attributeValue = $elementData[$attributeName] ?? $defaultValue;
+        if ($attributeValue !== null) {
+            if (is_bool($attributeValue)) {
+                $attributeValue = $this->castBooleanToString($attributeValue);
+            }
+
+            if ($element->attributes()[$attributeName]) {
+                $element->attributes()->$attributeName = $attributeValue;
+            } else {
+                $element->addAttribute($attributeName, $attributeValue);
+            }
+        }
+    }
+
+    /**
      * If disabled attribute is set to false it remove it at all.
+     *
      * Also handle other generic attributes.
      *
      * @param array $definition
@@ -124,24 +178,30 @@ class SchemaPersistor
      */
     private function processColumns(array $tableData, \SimpleXMLElement $table)
     {
-        if (isset($tableData['columns'])) {
-            foreach ($tableData['columns'] as $columnData) {
-                $columnData = $this->handleDefinition($columnData);
+        if (!isset($tableData['columns'])) {
+            return $table;
+        }
+
+        foreach ($tableData['columns'] as $columnName => $columnData) {
+            $columnData = $this->handleDefinition($columnData);
+            $domColumn = $table->xpath("column[@name='" . $columnName . "']");
+            if (!$domColumn) {
                 $domColumn = $table->addChild('column');
-                $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
-                unset($columnData['xsi:type']);
-
-                foreach ($columnData as $attributeKey => $attributeValue) {
-                    if ($attributeValue === null) {
-                        continue;
-                    }
-
-                    if (is_bool($attributeValue)) {
-                        $attributeValue = $this->castBooleanToString($attributeValue);
-                    }
-
-                    $domColumn->addAttribute($attributeKey, $attributeValue);
+                if (!empty($columnData['xsi:type'])) {
+                    $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
                 }
+                $domColumn->addAttribute('name', $columnName);
+            } else {
+                $domColumn = reset($domColumn);
+            }
+
+            $attributeNames = array_diff(array_keys($columnData), ['name', 'xsi:type']);
+            foreach ($attributeNames as $attributeName) {
+                $this->updateElementAttribute(
+                    $domColumn,
+                    $attributeName,
+                    $columnData
+                );
             }
         }
 
@@ -160,14 +220,29 @@ class SchemaPersistor
         if (isset($tableData['indexes'])) {
             foreach ($tableData['indexes'] as $indexName => $indexData) {
                 $indexData = $this->handleDefinition($indexData);
-                $domIndex = $table->addChild('index');
-                $domIndex->addAttribute('name', $indexName);
 
-                if (isset($indexData['disabled']) && $indexData['disabled']) {
-                    $domIndex->addAttribute('disabled', true);
-                } else {
-                    $domIndex->addAttribute('indexType', $indexData['indexType']);
+                $domIndex = $table->xpath("index[@referenceId='" . $indexName . "']");
+                if (!$domIndex) {
+                    $domIndex = $this->getUniqueIndexByName($table, $indexName);
+                }
 
+                if (!$domIndex) {
+                    $domIndex = $table->addChild('index');
+                    $domIndex->addAttribute('referenceId', $indexName);
+                } elseif (is_array($domIndex)) {
+                    $domIndex = reset($domIndex);
+                }
+
+                $attributeNames = array_diff(array_keys($indexData), ['referenceId', 'columns', 'name']);
+                foreach ($attributeNames as $attributeName) {
+                    $this->updateElementAttribute(
+                        $domIndex,
+                        $attributeName,
+                        $indexData
+                    );
+                }
+                
+                if (!empty($indexData['columns'])) {
                     foreach ($indexData['columns'] as $column) {
                         $columnXml = $domIndex->addChild('column');
                         $columnXml->addAttribute('name', $column);
@@ -188,36 +263,47 @@ class SchemaPersistor
      */
     private function processConstraints(array $tableData, \SimpleXMLElement $table)
     {
-        if (isset($tableData['constraints'])) {
-            foreach ($tableData['constraints'] as $constraintType => $constraints) {
-                if ($constraintType === 'foreign') {
-                    foreach ($constraints as $name => $constraintData) {
-                        $constraintData = $this->handleDefinition($constraintData);
-                        $constraintDom = $table->addChild('constraint');
-                        $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
-                        $constraintDom->addAttribute('name', $name);
+        if (!isset($tableData['constraints'])) {
+            return $table;
+        }
 
-                        foreach ($constraintData as $attributeKey => $attributeValue) {
-                            $constraintDom->addAttribute($attributeKey, $attributeValue);
-                        }
-                    }
+        foreach ($tableData['constraints'] as $constraintType => $constraints) {
+            foreach ($constraints as $constraintName => $constraintData) {
+                $constraintData = $this->handleDefinition($constraintData);
+                $domConstraint = $table->xpath("constraint[@referenceId='" . $constraintName . "']");
+                if (!$domConstraint) {
+                    $domConstraint = $table->addChild('constraint');
+                    $domConstraint->addAttribute('xsi:type', $constraintType, 'xsi');
+                    $domConstraint->addAttribute('referenceId', $constraintName);
                 } else {
-                    foreach ($constraints as $name => $constraintData) {
-                        $constraintData = $this->handleDefinition($constraintData);
-                        $constraintDom = $table->addChild('constraint');
-                        $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
-                        $constraintDom->addAttribute('name', $name);
-                        $constraintData['columns'] = $constraintData['columns'] ?? [];
+                    $domConstraint = reset($domConstraint);
+                }
 
-                        if (isset($constraintData['disabled'])) {
-                            $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
-                        }
+                $attributeNames = array_diff(
+                    array_keys($constraintData),
+                    ['referenceId', 'xsi:type', 'disabled', 'columns', 'name', 'type']
+                );
+                foreach ($attributeNames as $attributeName) {
+                    $this->updateElementAttribute(
+                        $domConstraint,
+                        $attributeName,
+                        $constraintData
+                    );
+                }
 
-                        foreach ($constraintData['columns'] as $column) {
-                            $columnXml = $constraintDom->addChild('column');
-                            $columnXml->addAttribute('name', $column);
-                        }
+                if (!empty($constraintData['columns'])) {
+                    foreach ($constraintData['columns'] as $column) {
+                        $columnXml = $domConstraint->addChild('column');
+                        $columnXml->addAttribute('name', $column);
                     }
+                }
+
+                if (!empty($constraintData['disabled'])) {
+                    $this->updateElementAttribute(
+                        $domConstraint,
+                        'disabled',
+                        $constraintData
+                    );
                 }
             }
         }
@@ -235,5 +321,27 @@ class SchemaPersistor
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
         $this->xmlPersistor->persist($simpleXmlElementDom, $path);
+    }
+
+    /**
+     * Retrieve unique index declaration by name.
+     *
+     * @param \SimpleXMLElement $table
+     * @param string $indexName
+     * @return \SimpleXMLElement|null
+     */
+    private function getUniqueIndexByName(\SimpleXMLElement $table, string $indexName): ?\SimpleXMLElement
+    {
+        $indexElement = null;
+        $constraint = $table->xpath("constraint[@referenceId='" . $indexName . "']");
+        if ($constraint) {
+            $constraint = reset($constraint);
+            $type = $constraint->attributes('xsi', true)->type;
+            if ($type == 'unique') {
+                $indexElement = $constraint;
+            }
+        }
+
+        return $indexElement;
     }
 }

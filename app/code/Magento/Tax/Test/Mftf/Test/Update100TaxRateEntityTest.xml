@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="Update100TaxRateEntityTest">
+        <annotations>
+            <stories value="Update Tax Rate"/>
+            <title value="Update tax rate, 100 rate"/>
+            <description value="Test log in to Tax Rate and Update 100 Rate"/>
+            <testCaseId value="MC-5328"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+        </after>
+
+        <!-- Search the tax rate on tax grid page -->
+        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex1"/>
+        <waitForPageLoad stepKey="waitForTaxRateIndex1"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
+        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="$$initialTaxRate.code$$" stepKey="fillCode"/>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch1"/>
+        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
+
+        <!-- Update values on the tax rate form page -->
+        <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{taxRateCustomRateUS.code}}" stepKey="fillTaxIdentifierField2"/>
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="{{taxRateCustomRateUS.tax_country_id}}" stepKey="selectCountry1"/>
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{taxRateCustomRateUS.tax_region_id}}" stepKey="selectState"/>
+        <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="{{taxRateCustomRateUS.tax_postcode}}" stepKey="fillPostCode"/>
+        <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="{{taxRateCustomRateUS.rate}}" stepKey="fillRate1"/>
+        <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
+
+        <!-- Verify we see updated TaxIdentifier(from the above step) on the tax rate grid page -->
+        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex4"/>
+        <waitForPageLoad stepKey="waitForTaxRateIndex2"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{taxRateCustomRateUS.code}}" stepKey="fillTaxIdentifierField3"/>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
+        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
+        <!-- Verify we see updated values on the tax rate form page -->
+        <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{taxRateCustomRateUS.code}}" stepKey="seeRTaxIdentifier"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="{{taxRateCustomRateUS.tax_country}}" stepKey="seeCountry2"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="{{taxRateCustomRateUS.tax_region}}" stepKey="seeState2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="{{taxRateCustomRateUS.tax_postcode}}" stepKey="seeZipCode"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="{{taxRateCustomRateUS.rate}}" stepKey="seeRate2"/>
+    </test>
+</tests>

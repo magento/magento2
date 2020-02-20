@@ -27,7 +27,16 @@ define([
                 },
                 date: {
                     component: 'Magento_Ui/js/form/element/date',
-                    dateFormat: 'MM/dd/YYYY'
+                    dateFormat: 'MM/dd/YYYY',
+                    shiftedValue: 'filter'
+                },
+                datetime: {
+                    component: 'Magento_Ui/js/form/element/date',
+                    dateFormat: 'MM/dd/YYYY',
+                    shiftedValue: 'filter',
+                    options: {
+                        showsTime: true
+                    }
                 },
                 text: {
                     component: 'Magento_Ui/js/form/element/abstract'

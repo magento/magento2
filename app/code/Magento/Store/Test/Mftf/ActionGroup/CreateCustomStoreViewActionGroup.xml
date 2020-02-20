@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomStoreViewActionGroup">
+        <annotations>
+            <description>Goes to the Admin Store Views creation page. Fills in the provided Store View Name. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeGroupName" defaultValue="customStoreGroup.name"/>
+        </arguments>
+
+        <amOnPage  url="{{AdminSystemStoreViewPage.url}}" stepKey="amOnAdminSystemStoreViewPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
+        <selectOption userInput="{{storeGroupName}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+        <selectOption userInput="{{customStore.is_active}}" selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="selectStoreViewStatus"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreViewButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="clickAcceptNewStoreViewCreationButton"/>
+    </actionGroup>
+</actionGroups>

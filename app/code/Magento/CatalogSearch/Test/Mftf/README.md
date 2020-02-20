@@ -1,0 +1,3 @@
+# Catalog Search Functional Tests
+
+The Functional Test Module for **Magento Catalog Search** module.

@@ -172,7 +172,7 @@ class ImageProcessor implements ImageProcessorInterface
      */
     protected function getMimeTypeExtension($mimeType)
     {
-        return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
+        return $this->mimeTypeExtensionMap[$mimeType] ?? '';
     }
 
     /**

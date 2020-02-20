@@ -7,6 +7,9 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -35,6 +38,21 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
     private $baseSelectProcessorMock;
 
     /**
+     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $indexScopeResolverMock;
+
+    /**
+     * @var \Magento\Framework\Indexer\Dimension|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $dimensionMock;
+
+    /**
+     * @var \Magento\Framework\Indexer\DimensionFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $dimensionFactoryMock;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice
      */
     private $model;
@@ -56,18 +74,33 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
+
+        $this->indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+
         $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice(
             $this->storeManagerMock,
             $this->resourceMock,
             $this->customerSessionMock,
             $this->metadataPoolMock,
-            $this->baseSelectProcessorMock
+            $this->baseSelectProcessorMock,
+            $this->indexScopeResolverMock,
+            $this->dimensionFactoryMock
         );
     }
 
     public function testBuild()
     {
         $productId = 10;
+        $storeId = 1;
         $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -79,7 +112,7 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId');
+        $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->willReturn(1);
         $connection->expects($this->any())->method('select')->willReturn($select);
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinInner')->willReturnSelf();
@@ -91,6 +124,6 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
         $metadata->expects($this->once())->method('getLinkField')->willReturn('row_id');
         $this->resourceMock->expects($this->any())->method('getTableName');
         $this->baseSelectProcessorMock->expects($this->once())->method('process')->willReturnSelf();
-        $this->model->build($productId);
+        $this->model->build($productId, $storeId);
     }
 }

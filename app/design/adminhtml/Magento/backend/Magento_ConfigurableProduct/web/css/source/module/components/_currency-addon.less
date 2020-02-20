@@ -18,29 +18,30 @@
 //  _____________________________________________
 
 .currency-addon {
+    border: 1px solid rgb(173,173,173);
     position: relative;
-    border: 1px solid #adadad;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
+    display: inline-flex;
     -webkit-flex-direction: row;
     -ms-flex-direction: row;
     flex-direction: row;
-    display: inline-flex;
     flex-flow: row nowrap;
     width: 100%;
 
     .admin__control-text {
-        appearence: none;
-        -webkit-flex-grow: 1;
-        flex-grow: 1;
         -ms-flex-order: 1;
-        -webkit-order: 1;
-        order: 1;
+        -webkit-appearance: none;
+        -webkit-flex-grow: 1;
         -webkit-flex-shrink: 1;
-        flex-shrink: 1;
+        -webkit-order: 1;
+        appearance: none;
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
+        flex-grow: 1;
+        flex-shrink: 1;
+        order: 1;
         vertical-align: top;
 
         &:focus {
@@ -51,28 +52,28 @@
     }
 
     label.error {
-        position: absolute;
         left: 0;
+        position: absolute;
         top: 33px;
     }
 
     .currency-symbol {
+        -webkit-flex-basis: auto;
+        -webkit-flex-grow: 0;
+        -webkit-flex-shrink: 0;
         border: solid @currency-addon-symbol__border-color;
         border-width: 0;
         box-sizing: border-box;
         color: @currency-addon-symbol__color;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 0;
         height: @currency-addon-symbol__height;
+        order: 0;
         padding: 7px 0 0 @indent__xs;
         position: static;
         transition: @smooth__border-color;
-        -webkit-flex-basis: auto;
-        flex-basis: auto;
-        -webkit-flex-grow: 0;
-        flex-grow: 0;
-        -webkit-flex-shrink: 0;
-        flex-shrink: 0;
         z-index: 1;
-        order: 0;
     }
 
     ._error & {

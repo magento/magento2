@@ -12,6 +12,8 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * @codeCoverageIgnore
  * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TemporaryStorageFactory
 {

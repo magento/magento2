@@ -92,12 +92,16 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getStoreId', '__wakeup']);
 
-        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $this->orderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            [
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
                 'getCustomerEmail', 'getShippingAddress', 'setSendEmail',
-                'setEmailSent'
-            ]);
+                'setEmailSent', 'getCreatedAtFormatted', 'getIsNotVirtual',
+                'getEmailCustomerNote', 'getFrontendStatusLabel'
+            ]
+        );
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
@@ -120,6 +124,10 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
+    /**
+     * @param $billingAddress
+     * @param bool $isVirtual
+     */
     public function stepAddressFormat($billingAddress, $isVirtual = false)
     {
         $this->orderMock->expects($this->any())
@@ -145,6 +153,9 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         $this->stepSend($this->never(), $this->once());
     }
 
+    /**
+     * @param $identityMockClassName
+     */
     public function stepIdentityContainerInit($identityMockClassName)
     {
         $this->identityContainerMock = $this->createPartialMock(
@@ -156,9 +167,13 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->storeMock));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+     */
     protected function stepSend(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendExpects,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendCopyToExpects
     ) {
         $senderMock = $this->createPartialMock(\Magento\Sales\Model\Order\Email\Sender::class, ['send', 'sendCopyTo']);
         $senderMock->expects($sendExpects)

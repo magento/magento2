@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable
+
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
@@ -13,6 +15,10 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\View\Design\Theme\ThemePackageFactory;
 
 require __DIR__ . '/autoload.php';
+
+if (!defined('TESTS_TEMP_DIR')) {
+    define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
+}
 
 setCustomErrorHandler();
 

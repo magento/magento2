@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Customer\Model\Address;
 
 /**
  * Class AddressTest
@@ -40,7 +41,7 @@ class RelationTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessRelation($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        $addressModel = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, [
+        $addressModel = $this->createPartialMock(Address::class, [
                 '__wakeup',
                 'getId',
                 'getEntityTypeId',
@@ -55,7 +56,17 @@ class RelationTest extends \PHPUnit\Framework\TestCase
             ]);
         $customerModel = $this->createPartialMock(
             \Magento\Customer\Model\Customer::class,
-            ['__wakeup', 'setDefaultBilling', 'setDefaultShipping', 'save', 'load', 'getResource', 'getId']
+            [
+                '__wakeup',
+                'setDefaultBilling',
+                'setDefaultShipping',
+                'save',
+                'load',
+                'getResource',
+                'getId',
+                'getDefaultShippingAddress',
+                'getDefaultBillingAddress'
+            ]
         );
         $customerResource = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
@@ -88,6 +99,7 @@ class RelationTest extends \PHPUnit\Framework\TestCase
         $this->customerFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($customerModel);
+
         if ($addressId && ($isDefaultBilling || $isDefaultShipping)) {
             $customerId = 1;
             $customerResource->expects($this->exactly(2))->method('getConnection')->willReturn($connectionMock);

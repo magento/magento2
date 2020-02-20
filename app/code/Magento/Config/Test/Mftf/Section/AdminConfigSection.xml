@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigSection">
+        <element name="collapsibleTabByTitle" type="button" selector="//div[@id='system_config_tabs']//div[@data-role='title'][contains(.,'{{tabTitle}}')]" parameterized="true" />
+        <element name="expandedTabByTitle" type="button" selector="//div[@id='system_config_tabs']//div[@data-role='title'][@aria-expanded='true'][contains(.,'{{tabTitle}}')]" parameterized="true" />
+        <element name="notExpandedTabByTitle" type="button" selector="//div[@id='system_config_tabs']//div[@data-role='title'][@aria-expanded='false'][contains(.,'{{tabTitle}}')]" parameterized="true" />
+        <element name="navItemByTitle" type="button" selector="//div[@id='system_config_tabs']//div[@role='tablist']//li[contains(@class, 'nav-item')][contains(.,'{{navItem}}')]" parameterized="true" />
+        <element name="activeNavItemByTitle" type="button" selector="//div[@id='system_config_tabs']//div[@role='tablist']//li[contains(@class, 'nav-item')][contains(@class, '_active')][contains(.,'{{navItem}}')]" parameterized="true" />
+        <element name="saveButton" type="button" selector="#save"/>
+        <element name="generalTab" type="text" selector="//div[@class='admin__page-nav-title title _collapsible']//strong[text()='General']"/>
+        <element name="generalTabClosed" type="text" selector="//div[@class='admin__page-nav-title title _collapsible' and @aria-expanded='false' or @aria-expanded='0']//strong[text()='General']"/>
+        <element name="generalTabOpened" type="text" selector="//div[@class='admin__page-nav-title title _collapsible' and @aria-expanded='true' or @aria-expanded='1']//strong[text()='General']"/>
+        <element name="defaultConfigButton" type="button" selector="#store-change-button" timeout="30"/>
+        <element name="defaultConfigDropdown" type="button" selector="//ul[@class='dropdown-menu']" timeout="30"/>
+        <element name="fieldError" type="text" selector="label.mage-error"/>
+        <element name="useSystemValue" type="checkbox" selector="#{{configRowId}} > .use-default > input" parameterized="true"/>
+        <element name="collapsibleSectionByTitle" type="text" selector="//form[@id='config-edit-form']//div[@class='section-config'][contains(.,'{{sectionTitle}}')]" parameterized="true" />
+        <element name="expandedSectionByTitle" type="text" selector="//form[@id='config-edit-form']//div[@class='section-config active'][contains(.,'{{sectionTitle}}')]" parameterized="true" />
+        <element name="errorElement" type="text" selector="#{{inputId}}-error" parameterized="true" />
+    </section>
+</sections>

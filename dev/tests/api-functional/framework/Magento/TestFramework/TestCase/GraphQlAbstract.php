@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -27,13 +28,15 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private $appCache;
 
     /**
-     * Perform GraphQL call to the system under test.
+     * Perform GraphQL query call via GET to the system under test.
      *
      * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
      * @param string $query
      * @param array $variables
      * @param string $operationName
+     * @param array $headers
      * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
      */
     public function graphQlQuery(
         string $query,
@@ -41,7 +44,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
         string $operationName = '',
         array $headers = []
     ) {
-        return $this->getGraphQlClient()->postQuery(
+        return $this->getGraphQlClient()->get(
             $query,
             $variables,
             $operationName,
@@ -50,11 +53,62 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Perform GraphQL mutations call via POST to the system under test.
+     *
+     * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
+     */
+    public function graphQlMutation(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        return $this->getGraphQlClient()->post(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
+     * Perform GraphQL query via GET and returns only the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlQueryWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->getWithResponseHeaders(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
+     * Compose headers
+     *
+     * @param array $headers
      * @return string[]
      */
-    private function composeHeaders($headers)
+    private function composeHeaders(array $headers): array
     {
-        $headersArray =[];
+        $headersArray = [];
         foreach ($headers as $key => $value) {
             $headersArray[] = sprintf('%s: %s', $key, $value);
         }
@@ -92,9 +146,37 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private function getGraphQlClient()
     {
         if ($this->graphQlClient === null) {
-            return Bootstrap::getObjectManager()->get(\Magento\TestFramework\TestCase\GraphQl\Client::class);
-        } else {
-            $this->graphQlClient;
+            $this->graphQlClient = Bootstrap::getObjectManager()->get(
+                \Magento\TestFramework\TestCase\GraphQl\Client::class
+            );
+        }
+        return $this->graphQlClient;
+    }
+
+    /**
+     * Compare actual response fields with expected
+     *
+     * @param array $actualResponse
+     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
+     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
+     */
+    protected function assertResponseFields($actualResponse, $assertionMap)
+    {
+        foreach ($assertionMap as $key => $assertionData) {
+            $expectedValue = isset($assertionData['expected_value'])
+                ? $assertionData['expected_value']
+                : $assertionData;
+            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
+            self::assertNotNull(
+                $expectedValue,
+                "Value of '{$responseField}' field must not be NULL"
+            );
+            self::assertEquals(
+                $expectedValue,
+                $actualResponse[$responseField],
+                "Value of '{$responseField}' field in response does not match expected value: "
+                . var_export($expectedValue, true)
+            );
         }
     }
 }

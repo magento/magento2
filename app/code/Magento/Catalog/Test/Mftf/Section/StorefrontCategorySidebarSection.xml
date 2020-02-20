@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategorySidebarSection">
+        <element name="layeredFilterBlock" type="block" selector="#layered-filter-block"/>
+        <element name="filterOptionsTitle" type="text" selector="//div[@class='filter-options-title' and contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="filterOptions" type="text" selector=".filter-options-content .items"/>
+        <element name="filterOption" type="text" selector=".filter-options-content .item"/>
+        <element name="optionQty" type="text" selector=".filter-options-content .item .count"/>
+        <element name="filterOptionByLabel" type="button" selector=" div.filter-options-item div[option-label='{{optionLabel}}']" parameterized="true"/>
+        <element name="removeFilter" type="button" selector="div.filter-current .remove"/>
+        <element name="activeFilterOptions" type="text" selector=".filter-options-item.active .items"/>
+        <element name="activeFilterOptionItemByPosition" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a" parameterized="true"/>
+    </section>
+    <section name="StorefrontCategorySidebarMobileSection">
+        <element name="shopByButton" type="button" selector="//div[contains(@class, 'filter-title')]/strong[contains(text(), 'Shop By')]"/>
+    </section>
+</sections>

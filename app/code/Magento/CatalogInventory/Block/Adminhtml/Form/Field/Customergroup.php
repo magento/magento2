@@ -84,7 +84,7 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
             $this->_customerGroups[$notLoggedInGroup->getId()] = $notLoggedInGroup->getCode();
         }
         if ($groupId !== null) {
-            return isset($this->_customerGroups[$groupId]) ? $this->_customerGroups[$groupId] : null;
+            return $this->_customerGroups[$groupId] ?? null;
         }
         return $this->_customerGroups;
     }

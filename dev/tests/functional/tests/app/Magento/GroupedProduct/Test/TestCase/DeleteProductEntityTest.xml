@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\DeleteProductEntityTest">
         <variation name="DeleteProductEntityTestVariation8" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" method="test">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products" xsi:type="string">groupedProduct::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />

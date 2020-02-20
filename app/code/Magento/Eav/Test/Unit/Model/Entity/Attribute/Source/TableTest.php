@@ -194,6 +194,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
     }
 
+    /**
+     * @return array
+     */
     public function specificOptionsProvider()
     {
         return [
@@ -249,6 +252,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getOptionText($value));
     }
 
+    /**
+     * @return array
+     */
     public function getOptionTextProvider()
     {
         return [
@@ -308,7 +314,10 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $attrOption->expects($this->once())->method('addOptionValueToCollection')
             ->with($collection, $this->abstractAttributeMock, $expr)
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with("{$attributeCode} {$dir}");
+        $attrOption->expects($this->once())->method('addOptionToCollection')
+            ->with($collection, $this->abstractAttributeMock, $expr)
+            ->willReturnSelf();
+        $select->expects($this->once())->method('order')->with("{$attributeCode}_order {$dir}");
 
         $this->assertEquals($this->model, $this->model->addValueSortToCollection($collection, $dir));
     }

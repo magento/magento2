@@ -36,6 +36,10 @@ define([
          */
         toggleElement: function () {
             this.disabled(this.isUseDefault() || this.isUseConfig());
+
+            if (this.source) {
+                this.source.set('data.use_default.' + this.index, Number(this.isUseDefault()));
+            }
         }
     });
 });

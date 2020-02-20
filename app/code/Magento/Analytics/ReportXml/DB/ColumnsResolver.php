@@ -76,7 +76,7 @@ class ColumnsResolver
             $columnName = $this->nameResolver->getName($attributeData);
             if (isset($attributeData['function'])) {
                 $prefix = '';
-                if (isset($attributeData['distinct']) && $attributeData['distinct'] == true) {
+                if (!empty($attributeData['distinct'])) {
                     $prefix = ' DISTINCT ';
                 }
                 $expression = new ColumnValueExpression(

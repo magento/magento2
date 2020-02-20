@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
@@ -16,7 +17,8 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
@@ -31,7 +33,10 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
-                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                if (!empty($image['value_id'])) {
+                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
+                        continue;
+                    }
                     $recordsToDelete[] = $image['value_id'];
                     $catalogPath = $this->mediaConfig->getBaseMediaPath();
                     $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
@@ -49,7 +54,8 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
@@ -70,12 +76,24 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
                 $image['value_id'],
                 $product->getData($this->metadata->getLinkField())
             );
+        } elseif (!empty($image['recreate'])) {
+            $data['value_id'] = $image['value_id'];
+            $data['value'] = $image['file'];
+            $data['attribute_id'] = $this->getAttribute()->getAttributeId();
+
+            if (!empty($image['media_type'])) {
+                $data['media_type'] = $image['media_type'];
+            }
+
+            $this->resourceModel->saveDataRow(Gallery::GALLERY_TABLE, $data);
         }
 
         return $data;
     }
 
     /**
+     * Retrieve store ids from product.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      * @since 101.0.0
@@ -94,6 +112,8 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     }
 
     /**
+     * Remove deleted images.
+     *
      * @param array $files
      * @return null
      * @since 101.0.0

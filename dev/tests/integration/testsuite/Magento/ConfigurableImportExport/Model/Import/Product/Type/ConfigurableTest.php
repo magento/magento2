@@ -152,18 +152,19 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/enable_reindex_schedule.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
-     * @return void
+     * @magentoDbIsolation disabled
      */
     public function testConfigurableImportWithMultipleStores()
     {
         $productSku = 'Configurable 1';
         $products = [
             'default' => 'Configurable 1',
-            'fixture_second_store' => 'Configurable 1 Second Store',
+            'fixture_second_store' => 'Configurable 1 Second Store'
         ];
         $filesystem = $this->objectManager->create(
             \Magento\Framework\Filesystem::class
@@ -174,24 +175,26 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views.csv',
-                'directory' => $directory,
+                'directory' => $directory
             ]
         );
-        $errors = $this->model->setSource($source)->setParameters(
+        $errors = $this->model->setSource(
+            $source
+        )->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
+                'entity' => 'catalog_product'
             ]
         )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() === 0);
+        $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
 
         foreach ($products as $storeCode => $productName) {
             $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
             $store->load($storeCode, 'code');
-            /** @var ProductRepositoryInterface $productRepository */
-            $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+            /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+            $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
             $product = $productRepository->get($productSku, 0, $store->getId());
             $this->assertFalse($product->isObjectNew());
@@ -201,36 +204,40 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/enable_reindex_schedule.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
-     * @return void
      */
     public function testConfigurableImportWithStoreSpecifiedMainItem()
     {
-        $expectedErrorMessage = 'Product with assigned super attributes should not have specified "store_view_code"'
-            . ' value';
-        $filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class
-        );
+        {
+            $expectedErrorMessage = 'Product with assigned super attributes should not have specified "store_view_code"'
+                . ' value';
+            $filesystem = $this->objectManager->create(
+                \Magento\Framework\Filesystem::class
+            );
 
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views_error.csv',
-                'directory' => $directory,
-            ]
-        );
-        $errors = $this->model->setSource($source)->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-            ]
-        )->validateData();
+            $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+            $source = $this->objectManager->create(
+                \Magento\ImportExport\Model\Import\Source\Csv::class,
+                [
+                    'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views_error.csv',
+                    'directory' => $directory
+                ]
+            );
+            $errors = $this->model->setSource(
+                $source
+            )->setParameters(
+                [
+                    'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                    'entity' => 'catalog_product'
+                ]
+            )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() === 1);
-        $this->assertEquals($expectedErrorMessage, $errors->getAllErrors()[0]->getErrorMessage());
+            $this->assertTrue($errors->getErrorsCount() == 1);
+            $this->assertEquals($expectedErrorMessage, $errors->getAllErrors()[0]->getErrorMessage());
+        }
     }
 }

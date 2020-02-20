@@ -11,12 +11,20 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/file-uploader',
-    'mage/adminhtml/browser',
-    'mage/adminhtml/tools'
+    'mage/adminhtml/browser'
 ], function ($, _, utils, uiAlert, validator, Element, browser) {
     'use strict';
 
     return Element.extend({
+        /**
+         * {@inheritDoc}
+         */
+        initialize: function () {
+            this._super();
+
+            // Listen for file deletions from the media browser
+            $(window).on('fileDeleted.mediabrowser', this.onDeleteFile.bind(this));
+        },
 
         /**
          * Assign uid for media gallery
@@ -74,6 +82,40 @@ define([
             }
 
             browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
+        },
+
+        /**
+         * @param {jQuery.event} e
+         * @param {Object} data
+         * @returns {Object} Chainables
+         */
+        onDeleteFile: function (e, data) {
+            var fileId = this.getFileId(),
+                deletedFileIds = data.ids;
+
+            if (fileId && $.inArray(fileId, deletedFileIds) > -1) {
+                this.clear();
+            }
+
+            return this;
+        },
+
+        /**
+         * {@inheritDoc}
+         */
+        clear: function () {
+            this.value([]);
+
+            return this;
+        },
+
+        /**
+         * Gets the ID of the file used if set
+         *
+         * @return {String|Null} ID
+         */
+        getFileId: function () {
+            return this.hasData() ? this.value()[0].id : null;
         },
 
         /**

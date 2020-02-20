@@ -6,6 +6,8 @@
 -->
 <!--@subject {{trans "Header"}} @-->
 <!--@vars {
+"var logo_url":"Email Logo Image URL",
+"var logo_alt":"Email Logo Alt Text",
 "var logo_height":"Email Logo Image Height",
 "var logo_width":"Email Logo Image Width",
 "var template_styles|raw":"Template CSS"
@@ -43,8 +45,6 @@
 
                                 {{if logo_height}}
                                     height="{{var logo_height}}"
-                                {{else}}
-                                    height="52"
                                 {{/if}}
 
                                 src="{{var logo_url}}"

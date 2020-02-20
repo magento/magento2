@@ -59,7 +59,7 @@ class Save extends \Magento\Backend\App\Action
             $synGroup = $this->synGroupRepository->get($synGroupId);
 
             if (!$synGroup->getGroupId() && $synGroupId) {
-                $this->messageManager->addError(__('This synonym group no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This synonym group no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
 

@@ -61,15 +61,17 @@ class Dob extends AbstractWidget
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/dob.phtml');
+        $this->setTemplate('Magento_Customer::widget/dob.phtml');
     }
 
     /**
+     * Check if dob attribute enabled in system
+     *
      * @return bool
      */
     public function isEnabled()
@@ -79,6 +81,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Check if dob attribute marked as required
+     *
      * @return bool
      */
     public function isRequired()
@@ -88,14 +92,39 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Set date
+     *
      * @param string $date
      * @return $this
      */
     public function setDate($date)
     {
-        $this->setTime($date ? strtotime($date) : false);
+        $this->setTime($this->filterTime($date));
         $this->setValue($this->applyOutputFilter($date));
         return $this;
+    }
+
+    /**
+     * Sanitizes time
+     *
+     * @param mixed $value
+     * @return bool|int
+     */
+    private function filterTime($value)
+    {
+        $time = false;
+        if ($value) {
+            if ($value instanceof \DateTimeInterface) {
+                $time =  $value->getTimestamp();
+            } elseif (is_numeric($value)) {
+                $time = $value;
+            } elseif (is_string($value)) {
+                $time = strtotime($value);
+                $time = $time === false ? $this->_localeDate->date($value, null, false, false)->getTimestamp() : $time;
+            }
+        }
+
+        return $time;
     }
 
     /**
@@ -127,13 +156,16 @@ class Dob extends AbstractWidget
     protected function applyOutputFilter($value)
     {
         $filter = $this->getFormFilter();
-        if ($filter) {
+        if ($filter && $value) {
+            $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
         return $value;
     }
 
     /**
+     * Get day
+     *
      * @return string|bool
      */
     public function getDay()
@@ -142,6 +174,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Get month
+     *
      * @return string|bool
      */
     public function getMonth()
@@ -150,6 +184,8 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Get year
+     *
      * @return string|bool
      */
     public function getYear()
@@ -168,27 +204,42 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Retrieve store attribute label
+     *
+     * @param string $attributeCode
+     *
+     * @return string
+     */
+    public function getStoreLabel($attributeCode)
+    {
+        $attribute = $this->_getAttribute($attributeCode);
+        return $attribute ? __($attribute->getStoreLabel()) : '';
+    }
+
+    /**
      * Create correct date field
      *
      * @return string
      */
     public function getFieldHtml()
     {
-        $this->dateElement->setData([
-            'extra_params' => $this->getHtmlExtraParams(),
-            'name' => $this->getHtmlId(),
-            'id' => $this->getHtmlId(),
-            'class' => $this->getHtmlClass(),
-            'value' => $this->getValue(),
-            'date_format' => $this->getDateFormat(),
-            'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
-            'years_range' => '-120y:c+nn',
-            'max_date' => '-1d',
-            'change_month' => 'true',
-            'change_year' => 'true',
-            'show_on' => 'both',
-            'first_day' => $this->getFirstDay()
-        ]);
+        $this->dateElement->setData(
+            [
+                'extra_params' => $this->getHtmlExtraParams(),
+                'name' => $this->getHtmlId(),
+                'id' => $this->getHtmlId(),
+                'class' => $this->getHtmlClass(),
+                'value' => $this->getValue(),
+                'date_format' => $this->getDateFormat(),
+                'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
+                'years_range' => '-120y:c+nn',
+                'max_date' => '-1d',
+                'change_month' => 'true',
+                'change_year' => 'true',
+                'show_on' => 'both',
+                'first_day' => $this->getFirstDay()
+            ]
+        );
         return $this->dateElement->getHtml();
     }
 
@@ -216,6 +267,8 @@ class Dob extends AbstractWidget
         $validators['validate-date'] = [
             'dateFormat' => $this->getDateFormat()
         ];
+        $validators['validate-dob'] = true;
+
         return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 
@@ -226,7 +279,11 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormatWithLongYear();
+        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        /** Escape RTL characters which are present in some locales and corrupt formatting */
+        $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
+
+        return $escapedDateFormat;
     }
 
     /**

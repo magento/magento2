@@ -10,6 +10,7 @@
         <add
                 id="Magento_Braintree::settlement_report"
                 title="Braintree Settlement"
+                translate="title"
                 module="Magento_Braintree"
                 sortOrder="80"
                 parent="Magento_Reports::report_salesroot"

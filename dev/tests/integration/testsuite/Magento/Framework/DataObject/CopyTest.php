@@ -39,8 +39,6 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
     public function testCopyFieldsetWithExtensionAttributes()
     {
-        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
-        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $fieldsetConfigMock = $this->getMockBuilder(\Magento\Framework\DataObject\Copy\Config::class)
@@ -74,20 +72,22 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = $objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
-        /** @var \Magento\Wonderland\Model\Data\FakeCustomerFactory $customerFactory */
-        $customerFactory = $objectManager->get(\Magento\Wonderland\Model\Data\FakeCustomerFactory::class);
-        /** @var \Magento\Wonderland\Api\Data\CustomerInterface $source */
+        /** @var \Magento\TestModuleExtensionAttributes\Model\Data\FakeCustomerFactory $customerFactory */
+        $customerFactory = $objectManager->get(
+            \Magento\TestModuleExtensionAttributes\Model\Data\FakeCustomerFactory::class
+        );
+        /** @var \Magento\TestModuleExtensionAttributes\Api\Data\CustomerInterface $source */
         $source = $customerFactory->create();
         $dataObjectHelper->populateWithArray(
             $source,
             $dataWithExtraField,
-            \Magento\Wonderland\Api\Data\FakeCustomerInterface::class
+            \Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerInterface::class
         );
-        /** @var \Magento\Wonderland\Api\Data\CustomerInterface $target */
+        /** @var \Magento\TestModuleExtensionAttributes\Api\Data\CustomerInterface $target */
         $target = $customerFactory->create();
         $target = $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target);
 
-        $this->assertInstanceOf(\Magento\Wonderland\Api\Data\FakeCustomerInterface::class, $target);
+        $this->assertInstanceOf(\Magento\TestModuleExtensionAttributes\Api\Data\FakeCustomerInterface::class, $target);
         $this->assertNull(
             $target->getEmail(),
             "Email should not be set because it is not defined in the fieldset."
@@ -106,8 +106,6 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
     public function testCopyFieldsetWithAbstractSimpleObject()
     {
-        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
-        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $fieldset = 'sales_copy_order';
@@ -130,13 +128,13 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             ->method('getFieldSet')
             ->willReturn($data);
 
-        $source = $objectManager->get(\Magento\Wonderland\Model\Data\FakeAttributeMetadata::class);
+        $source = $objectManager->get(\Magento\TestModuleExtensionAttributes\Model\Data\FakeAttributeMetadata::class);
         $source->setStoreLabel('storeLabel');
         $source->setFrontendLabel('frontendLabel');
         $source->setAttributeCode('attributeCode');
         $source->setNote('note');
 
-        $target = $objectManager->get(\Magento\Wonderland\Model\Data\FakeAttributeMetadata::class);
+        $target = $objectManager->get(\Magento\TestModuleExtensionAttributes\Model\Data\FakeAttributeMetadata::class);
         $expectedTarget = $source;
 
         $this->assertEquals(

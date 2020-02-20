@@ -3,47 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Service;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Class InvoiceService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceService implements InvoiceManagementInterface
 {
     /**
-     * Repository
-     *
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
     protected $repository;
 
     /**
-     * Repository
-     *
      * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface
      */
     protected $commentRepository;
 
     /**
-     * Search Criteria Builder
-     *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $criteriaBuilder;
 
     /**
-     * Filter Builder
-     *
      * @var \Magento\Framework\Api\FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * Invoice Notifier
-     *
      * @var \Magento\Sales\Model\Order\InvoiceNotifier
      */
     protected $invoiceNotifier;
@@ -59,8 +59,11 @@ class InvoiceService implements InvoiceManagementInterface
     protected $orderConverter;
 
     /**
-     * Constructor
-     *
+     * @var JsonSerializer
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $repository
      * @param \Magento\Sales\Api\InvoiceCommentRepositoryInterface $commentRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
@@ -68,6 +71,7 @@ class InvoiceService implements InvoiceManagementInterface
      * @param \Magento\Sales\Model\Order\InvoiceNotifier $notifier
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Model\Convert\Order $orderConverter
+     * @param JsonSerializer $serializer
      */
     public function __construct(
         \Magento\Sales\Api\InvoiceRepositoryInterface $repository,
@@ -76,7 +80,8 @@ class InvoiceService implements InvoiceManagementInterface
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Sales\Model\Order\InvoiceNotifier $notifier,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Sales\Model\Convert\Order $orderConverter
+        \Magento\Sales\Model\Convert\Order $orderConverter,
+        JsonSerializer $serializer
     ) {
         $this->repository = $repository;
         $this->commentRepository = $commentRepository;
@@ -85,6 +90,7 @@ class InvoiceService implements InvoiceManagementInterface
         $this->invoiceNotifier = $notifier;
         $this->orderRepository = $orderRepository;
         $this->orderConverter = $orderConverter;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -125,37 +131,53 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
+     * Creates an invoice based on the order and quantities provided.
+     *
+     * Explanation for `if` statements:
+     * - using qty defined in `$preparedItemsQty` is prioritized
+     * - if qty is not defined and item is dummy, get ordered qty
+     * - if qty is not defined, get qty to invoice
+     * - else qty is 0
+     *
      * @param Order $order
-     * @param array $qtys
-     * @return \Magento\Sales\Model\Order\Invoice
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $orderItemsQtyToInvoice
+     * @return Invoice
+     * @throws LocalizedException
+     * @throws \Exception
      */
-    public function prepareInvoice(Order $order, array $qtys = [])
-    {
-        $invoice = $this->orderConverter->toInvoice($order);
+    public function prepareInvoice(
+        Order $order,
+        array $orderItemsQtyToInvoice = []
+    ): InvoiceInterface {
         $totalQty = 0;
-        $qtys = $this->prepareItemsQty($order, $qtys);
+        $invoice = $this->orderConverter->toInvoice($order);
+        $preparedItemsQty = $this->prepareItemsQty($order, $orderItemsQtyToInvoice);
+
         foreach ($order->getAllItems() as $orderItem) {
-            if (!$this->_canInvoiceItem($orderItem)) {
+            if (!$this->canInvoiceItem($orderItem, $preparedItemsQty)) {
                 continue;
             }
-            $item = $this->orderConverter->itemToInvoiceItem($orderItem);
-            if ($orderItem->isDummy()) {
+
+            if (isset($preparedItemsQty[$orderItem->getId()])) {
+                $qty = $preparedItemsQty[$orderItem->getId()];
+            } elseif ($orderItem->isDummy()) {
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (isset($qtys[$orderItem->getId()])) {
-                $qty = (double) $qtys[$orderItem->getId()];
-            } elseif (empty($qtys)) {
+            } elseif (empty($orderItemsQtyToInvoice)) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
                 $qty = 0;
             }
+
+            $invoiceItem = $this->orderConverter->itemToInvoiceItem($orderItem);
+            $this->setInvoiceItemQuantity($invoiceItem, (float) $qty);
+            $invoice->addItem($invoiceItem);
             $totalQty += $qty;
-            $this->setInvoiceItemQuantity($item, $qty);
-            $invoice->addItem($item);
         }
+
         $invoice->setTotalQty($totalQty);
         $invoice->collectTotals();
         $order->getInvoiceCollection()->addItem($invoice);
+
         return $invoice;
     }
 
@@ -163,45 +185,67 @@ class InvoiceService implements InvoiceManagementInterface
      * Prepare qty to invoice for parent and child products if theirs qty is not specified in initial request.
      *
      * @param Order $order
-     * @param array $qtys
+     * @param array $orderItemsQtyToInvoice
      * @return array
      */
-    private function prepareItemsQty(Order $order, array $qtys = [])
-    {
+    private function prepareItemsQty(
+        Order $order,
+        array $orderItemsQtyToInvoice
+    ): array {
         foreach ($order->getAllItems() as $orderItem) {
-            if (empty($qtys[$orderItem->getId()])) {
-                continue;
-            }
-            if ($orderItem->isDummy()) {
-                if ($orderItem->getHasChildren()) {
-                    foreach ($orderItem->getChildrenItems() as $child) {
-                        if (!isset($qtys[$child->getId()])) {
-                            $qtys[$child->getId()] = $child->getQtyToInvoice();
-                        }
-                    }
-                } elseif ($orderItem->getParentItem()) {
-                    $parent = $orderItem->getParentItem();
-                    if (!isset($qtys[$parent->getId()])) {
-                        $qtys[$parent->getId()] = $parent->getQtyToInvoice();
-                    }
+            if (isset($orderItemsQtyToInvoice[$orderItem->getId()])) {
+                if ($orderItem->isDummy() && $orderItem->getHasChildren()) {
+                    $orderItemsQtyToInvoice = $this->setChildItemsQtyToInvoice($orderItem, $orderItemsQtyToInvoice);
+                }
+            } else {
+                if (isset($orderItemsQtyToInvoice[$orderItem->getParentItemId()])) {
+                    $orderItemsQtyToInvoice[$orderItem->getId()] =
+                        $orderItemsQtyToInvoice[$orderItem->getParentItemId()];
                 }
             }
         }
 
-        return $qtys;
+        return $orderItemsQtyToInvoice;
     }
 
     /**
-     * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
-     * with parent item which is included to invoice
+     * Sets qty to invoice for children order items, if not set.
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @param OrderItemInterface $parentOrderItem
+     * @param array $orderItemsQtyToInvoice
+     * @return array
+     */
+    private function setChildItemsQtyToInvoice(
+        OrderItemInterface $parentOrderItem,
+        array $orderItemsQtyToInvoice
+    ): array {
+        /** @var OrderItemInterface $childOrderItem */
+        foreach ($parentOrderItem->getChildrenItems() as $childOrderItem) {
+            if (!isset($orderItemsQtyToInvoice[$childOrderItem->getItemId()])) {
+                $productOptions = $childOrderItem->getProductOptions();
+
+                if (isset($productOptions['bundle_selection_attributes'])) {
+                    $bundleSelectionAttributes = $this->serializer
+                        ->unserialize($productOptions['bundle_selection_attributes']);
+                    $orderItemsQtyToInvoice[$childOrderItem->getItemId()] =
+                        $bundleSelectionAttributes['qty'] * $orderItemsQtyToInvoice[$parentOrderItem->getItemId()];
+                }
+            }
+        }
+
+        return $orderItemsQtyToInvoice;
+    }
+
+    /**
+     * Check if order item can be invoiced.
+     *
+     * @param OrderItemInterface $item
+     * @param array $qtys
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _canInvoiceItem(\Magento\Sales\Api\Data\OrderItemInterface $item)
+    private function canInvoiceItem(OrderItemInterface $item, array $qtys): bool
     {
-        $qtys = [];
         if ($item->getLockedDoInvoice()) {
             return false;
         }
@@ -233,14 +277,14 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
-     * Set quantity to invoice item
+     * Set quantity to invoice item.
      *
-     * @param \Magento\Sales\Api\Data\InvoiceItemInterface $item
+     * @param InvoiceItemInterface $item
      * @param float $qty
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return InvoiceManagementInterface
+     * @throws LocalizedException
      */
-    protected function setInvoiceItemQuantity(\Magento\Sales\Api\Data\InvoiceItemInterface $item, $qty)
+    private function setInvoiceItemQuantity(InvoiceItemInterface $item, float $qty): InvoiceManagementInterface
     {
         $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (double) $qty : (int) $qty;
         $qty = $qty > 0 ? $qty : 0;
@@ -251,7 +295,7 @@ class InvoiceService implements InvoiceManagementInterface
         $qtyToInvoice = sprintf("%F", $item->getOrderItem()->getQtyToInvoice());
         $qty = sprintf("%F", $qty);
         if ($qty > $qtyToInvoice && !$item->getOrderItem()->isDummy()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We found an invalid quantity to invoice item "%1".', $item->getName())
             );
         }

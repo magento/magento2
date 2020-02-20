@@ -190,6 +190,9 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function mockQuery()
     {
         return $this->getMockBuilder(QueryInterface::class)
@@ -197,6 +200,9 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return array
+     */
     private function mockFilters()
     {
         $visibilityFilter = $this->getMockBuilder(Term::class)

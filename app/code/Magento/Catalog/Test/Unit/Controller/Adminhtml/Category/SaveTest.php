@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
-use Magento\Catalog\Controller\Adminhtml\Category\Save as Model;
-
 /**
  * Class SaveTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -104,7 +102,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             true,
-            ['addSuccess', 'getMessages']
+            ['addSuccessMessage', 'getMessages']
         );
 
         $this->save = $this->objectManager->getObject(
@@ -394,7 +392,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('save');
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the category.'));
         $categoryMock->expects($this->at(1))
             ->method('getId')
@@ -463,9 +461,25 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      */
     public function imagePreprocessingDataProvider()
     {
+        $dataWithImage = [
+            'image' => 'path.jpg',
+            'name' => 'category',
+            'description' => '',
+            'parent' => 0
+        ];
+        $expectedSameAsDataWithImage = $dataWithImage;
+
+        $dataWithoutImage = [
+            'name' => 'category',
+            'description' => '',
+            'parent' => 0
+        ];
+        $expectedIfDataWithoutImage = $dataWithoutImage;
+        $expectedIfDataWithoutImage['image'] = '';
+
         return [
-            [['attribute1' => null, 'attribute2' => 123]],
-            [['attribute2' => 123]]
+            'categoryPostData contains image' => [$dataWithImage, $expectedSameAsDataWithImage],
+            'categoryPostData doesn\'t contain image' => [$dataWithoutImage, $expectedIfDataWithoutImage],
         ];
     }
 
@@ -473,8 +487,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      * @dataProvider imagePreprocessingDataProvider
      *
      * @param array $data
+     * @param array $expected
      */
-    public function testImagePreprocessingWithoutValue($data)
+    public function testImagePreprocessing($data, $expected)
     {
         $eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
 
@@ -484,13 +499,17 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
             new \Magento\Framework\DataObject([
-                'attribute_code' => 'attribute1',
+                'attribute_code' => 'image',
                 'backend' => $imageBackendModel
             ]),
             new \Magento\Framework\DataObject([
-                'attribute_code' => 'attribute2',
+                'attribute_code' => 'name',
                 'backend' => new \Magento\Framework\DataObject()
-            ])
+            ]),
+            new \Magento\Framework\DataObject([
+                'attribute_code' => 'level',
+                'backend' => new \Magento\Framework\DataObject()
+            ]),
         ]]);
 
         $eavConfig->expects($this->once())
@@ -504,48 +523,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $result = $model->imagePreprocessing($data);
 
-        $this->assertEquals([
-            'attribute1' => false,
-            'attribute2' => 123
-        ], $result);
-    }
-
-    public function testImagePreprocessingWithValue()
-    {
-        $eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
-
-        $imageBackendModel = $this->objectManager->getObject(
-            \Magento\Catalog\Model\Category\Attribute\Backend\Image::class
-        );
-
-        $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
-            new \Magento\Framework\DataObject([
-                'attribute_code' => 'attribute1',
-                'backend' => $imageBackendModel
-            ]),
-            new \Magento\Framework\DataObject([
-                'attribute_code' => 'attribute2',
-                'backend' => new \Magento\Framework\DataObject()
-            ])
-        ]]);
-
-        $eavConfig->expects($this->once())
-            ->method('getEntityType')
-            ->with(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
-            ->will($this->returnValue($collection));
-
-        $model = $this->objectManager->getObject(Model::class, [
-            'eavConfig' => $eavConfig
-        ]);
-
-        $result = $model->imagePreprocessing([
-            'attribute1' => 'somevalue',
-            'attribute2' => null
-        ]);
-
-        $this->assertEquals([
-            'attribute1' => 'somevalue',
-            'attribute2' => null
-        ], $result);
+        $this->assertEquals($expected, $result);
     }
 }

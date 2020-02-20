@@ -13,8 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that properties are sorted alphabetically
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#sorting
- *
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#sorting
  */
 class PropertiesSortingSniff implements Sniff
 {
@@ -43,7 +42,7 @@ class PropertiesSortingSniff implements Sniff
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -57,7 +56,7 @@ class PropertiesSortingSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -100,6 +99,14 @@ class PropertiesSortingSniff implements Sniff
      */
     private function validatePropertiesSorting(File $phpcsFile, $stackPtr, array $properties)
     {
+        // Fix needed for cases when incorrect properties passed for validation due to bug in PHP tokens.
+        $symbolsForSkip = ['(', 'block', 'field'];
+        $properties = array_filter(
+            $properties,
+            function ($var) use ($symbolsForSkip) {
+                return !in_array($var, $symbolsForSkip);
+            }
+        );
 
         $originalProperties = $properties;
         sort($properties);

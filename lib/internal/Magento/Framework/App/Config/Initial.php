@@ -72,9 +72,9 @@ class Initial
         list($scopeType, $scopeCode) = array_pad(explode('|', $scope), 2, null);
 
         if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT == $scopeType) {
-            return isset($this->_data[$scopeType]) ? $this->_data[$scopeType] : [];
+            return $this->_data[$scopeType] ?? [];
         } elseif ($scopeCode) {
-            return isset($this->_data[$scopeType][$scopeCode]) ? $this->_data[$scopeType][$scopeCode] : [];
+            return $this->_data[$scopeType][$scopeCode] ?? [];
         }
         return [];
     }

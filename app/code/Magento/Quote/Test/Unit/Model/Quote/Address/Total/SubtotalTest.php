@@ -49,6 +49,9 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function collectDataProvider()
     {
         return [

@@ -44,7 +44,7 @@ class TargetPath extends DataSource
             $id = $this->entity->hasData('id') ? $this->entity->getId() : $this->entity->getPageId();
             $this->data = preg_replace('`(%.*?%)`', $id, $data['entity']);
         } else {
-            $this->data = strval($data['entity']);
+            $this->data = (string)$data['entity'];
         }
     }
 

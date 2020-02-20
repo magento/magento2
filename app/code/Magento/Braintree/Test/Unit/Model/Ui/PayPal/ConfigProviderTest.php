@@ -77,6 +77,9 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
             ]);
 
+        $this->config->method('isRequiredBillingAddress')
+            ->willReturn(1);
+
         self::assertEquals($expected, $this->configProvider->getConfig());
     }
 
@@ -101,7 +104,8 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'skipOrderReview' => false,
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
-                            ]
+                            ],
+                            'isRequiredBillingAddress' => true
                         ]
                     ]
                 ]

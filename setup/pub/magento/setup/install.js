@@ -75,13 +75,16 @@ angular.module('install', ['ngStorage'])
             $scope.isStarted = true;
             $scope.isInProgress = true;
             progress.post(data, function (response) {
+                response = response.data;
                 $scope.isInProgress = false;
+
                 if (response.success) {
                     $localStorage.config.encrypt.key = response.key;
                     $localStorage.messages = response.messages;
                     $scope.nextState();
                 } else {
                     $scope.displayFailure();
+
                     if (response.isSampleDataError) {
                         $scope.isSampleDataError = true;
                     }
@@ -105,10 +108,10 @@ angular.module('install', ['ngStorage'])
     .service('progress', ['$http', function ($http) {
         return {
             get: function (callback) {
-                $http.post('index.php/install/progress').then(callback);
+                $http.post('index.php/install/progress').then(callback, function errorCallback() {});
             },
             post: function (data, callback) {
-                $http.post('index.php/install/start', data).success(callback);
+                $http.post('index.php/install/start', data).then(callback, function errorCallback() {});
             }
         };
     }]);

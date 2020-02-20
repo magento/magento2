@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRequiredFieldsHaveRequiredFieldIndicatorTest">
+        <annotations>
+            <stories value="Verify the presence of required field indicators across different pages in Magento Admin"/>
+            <title value="Required fields should have the required asterisk indicator "/>
+            <description value="Verify that Required fields should have the required indicator icon next to the field name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94330"/>
+            <group value="Catalog"/>
+        </annotations>
+        <after>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+        <waitForElementVisible selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="waitForAddSubCategoryVisible"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+
+        <!-- Verify that the Category Name field has the required field name indicator -->
+        <executeJS function="{{AdminCategoryBasicFieldSection.RequiredFieldIndicator}}" stepKey="getRequiredFieldIndicator"/>
+        <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="getRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator1"/>
+
+        <executeJS function="{{AdminCategoryBasicFieldSection.RequiredFieldIndicatorColor}}" stepKey="getRequiredFieldIndicatorColor"/>
+        <assertEquals expected="rgb(226, 38, 38)" expectedType="string" actualType="variable" actual="getRequiredFieldIndicatorColor" message="pass" stepKey="assertRequiredFieldIndicator2"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="addProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="addSimpleProduct"/>
+
+        <!-- Verify that the Product Name and Sku fields have the required field name indicator -->
+        <executeJS function="{{AdminProductFormSection.RequiredNameIndicator}}" stepKey="productNameRequiredFieldIndicator"/>
+        <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="productNameRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator3"/>
+        <executeJS function="{{AdminProductFormSection.RequiredSkuIndicator}}" stepKey="productSkuRequiredFieldIndicator"/>
+        <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="productSkuRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator4"/>
+
+        <!-- Verify that the CMS page have the required field name indicator next to Page Title -->
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <executeJS function="{{CmsNewPagePageBasicFieldsSection.RequiredFieldIndicator}}" stepKey="pageTitleRequiredFieldIndicator"/>
+        <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="pageTitleRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator5"/>
+
+    </test>
+</tests>

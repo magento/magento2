@@ -205,7 +205,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
             ->method('buildOutputDataArray')
             ->with(
                 $this->attributeMetadataMock,
-                AttributeMetadataInterface::class
+                AttributeMetadata::class
             )
             ->willReturn($data);
         $this->assertSame(

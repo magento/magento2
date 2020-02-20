@@ -207,7 +207,7 @@
 					sel.setRng(oldRng);
 					sel.setContent('');
 
-					// For some odd reason we need to detach the the mceInsertContent call from the paste event
+					// For some odd reason we need to detach the mceInsertContent call from the paste event
 					// It's like IE has a reference to the parent element that you paste in and the selection gets messed up
 					// when it tries to restore the selection
 					setTimeout(function() {

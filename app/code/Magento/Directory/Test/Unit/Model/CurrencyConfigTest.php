@@ -68,7 +68,7 @@ class CurrencyConfigTest extends TestCase
     }
 
     /**
-     * Test get currency config for admin and storefront areas.
+     * Test get currency config for admin, crontab and storefront areas.
      *
      * @dataProvider getConfigCurrenciesDataProvider
      * @return void
@@ -91,7 +91,7 @@ class CurrencyConfigTest extends TestCase
             ->method('getCode')
             ->willReturn('testCode');
 
-        if ($areCode === Area::AREA_ADMINHTML) {
+        if (in_array($areCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
             $this->storeManager->expects(self::once())
                 ->method('getStores')
                 ->willReturn([$store]);
@@ -121,6 +121,7 @@ class CurrencyConfigTest extends TestCase
     {
         return [
             ['areaCode' => Area::AREA_ADMINHTML],
+            ['areaCode' => Area::AREA_CRONTAB],
             ['areaCode' => Area::AREA_FRONTEND],
         ];
     }

@@ -32,8 +32,8 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory $dataProviderFactory
      * @param array $data
      */
     public function __construct(

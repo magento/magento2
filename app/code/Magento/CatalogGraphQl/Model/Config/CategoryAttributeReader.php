@@ -30,7 +30,15 @@ class CategoryAttributeReader implements ReaderInterface
         'is_active',
         'children',
         'level',
-        'default_sort_by'
+        'default_sort_by',
+        'all_children',
+        'page_layout',
+        'custom_design',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout_update',
+        'custom_use_parent_settings',
+        'custom_apply_to_products',
     ];
 
     /**
@@ -44,15 +52,23 @@ class CategoryAttributeReader implements ReaderInterface
     private $collectionFactory;
 
     /**
+     * @var array
+     */
+    private $categoryAttributeResolvers;
+
+    /**
      * @param Type $typeLocator
      * @param CollectionFactory $collectionFactory
+     * @param array $categoryAttributeResolvers
      */
     public function __construct(
         Type $typeLocator,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        array $categoryAttributeResolvers = []
     ) {
         $this->typeLocator = $typeLocator;
         $this->collectionFactory = $collectionFactory;
+        $this->categoryAttributeResolvers = $categoryAttributeResolvers;
     }
 
     /**
@@ -85,6 +101,9 @@ class CategoryAttributeReader implements ReaderInterface
             $data['fields'][$attributeCode]['name'] = $attributeCode;
             $data['fields'][$attributeCode]['type'] = $locatedType;
             $data['fields'][$attributeCode]['arguments'] = [];
+            if (isset($this->categoryAttributeResolvers[$attributeCode])) {
+                $data['fields'][$attributeCode]['resolver'] = $this->categoryAttributeResolvers[$attributeCode];
+            }
         }
 
         $config['CategoryInterface'] = $data;

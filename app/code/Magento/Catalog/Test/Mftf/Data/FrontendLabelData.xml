@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductAttributeFrontendLabel" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label" unique="suffix">attribute</data>
+    </entity>
+    <entity name="ProductAttributeFrontendLabelTwo" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label" unique="suffix">attributeTwo</data>
+    </entity>
+    <entity name="ProductAttributeFrontendLabelThree" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label" unique="suffix">attributeThree</data>
+    </entity>
+    <entity name="ProductAttributeFrontendLabelForExportImport" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label">attributeExportImport</data>
+    </entity>
+</entities>

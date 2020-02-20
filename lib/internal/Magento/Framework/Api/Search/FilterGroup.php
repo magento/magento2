@@ -10,6 +10,8 @@ use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Groups two or more filters together using a logical OR
+ *
+ * @api
  */
 class FilterGroup extends AbstractSimpleObject
 {

@@ -27,7 +27,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store crontab/default/jobs/catalog_product_alert/schedule/cron_expr 8 * * * *
+     * @magentoConfigFixture current_store crontab/default/jobs/catalog_product_alert/schedule/cron_expr * * * * *
      */
     public function testDispatchScheduled()
     {
@@ -35,6 +35,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
         );
         $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_PENDING);
+        $collection->addFieldToFilter('job_code', 'catalog_product_alert');
         $this->assertGreaterThan(0, $collection->count(), 'Cron has failed to schedule tasks for itself for future.');
     }
 

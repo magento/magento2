@@ -5,11 +5,15 @@
  */
 namespace Magento\ProductAlert\Test\Unit\Model;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ProductAlert\Model\ProductSalability;
 
 /**
  * Class ObserverTest
+ *
+ * Is used to test Product Alert Observer
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -115,6 +119,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $productSalabilityMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
@@ -164,7 +171,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultStore', 'getId'])
+            ->setMethods(['getDefaultStore', 'getId', 'setWebsiteId'])
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMock();
@@ -281,12 +288,13 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->any())->method('getDefaultStore')->willReturnSelf();
         $this->websiteMock->expects($this->once())->method('getDefaultStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->any())->method('getId')->willReturn(2);
+        $this->storeMock->expects($this->any())->method('setWebsiteId')->willReturnSelf();
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
         $this->priceColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
         $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
-
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $items = [
             new \Magento\Framework\DataObject([
                 'customer_id' => $id
@@ -296,8 +304,8 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $customer = new \Magento\Framework\DataObject(['group_id' => $id]);
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customer);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
 
         $this->productMock->expects($this->once())->method('setCustomerGroupId')->willReturnSelf();
         $this->productMock->expects($this->once())->method('getFinalPrice')->willReturn('655.99');
@@ -368,7 +376,6 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessStockEmailThrowsException()
     {
-        $id = 1;
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -395,8 +402,8 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $customer = new \Magento\Framework\DataObject(['group_id' => $id]);
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customer);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
 
         $this->productMock->expects($this->once())->method('setCustomerGroupId')->willReturnSelf();
         $this->productSalabilityMock->expects($this->once())->method('isSalable')->willReturn(false);

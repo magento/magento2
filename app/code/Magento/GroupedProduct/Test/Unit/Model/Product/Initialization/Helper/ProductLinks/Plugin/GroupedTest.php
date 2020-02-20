@@ -92,6 +92,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->model->beforeInitializeLinks($this->subjectMock, $this->productMock, []);
     }
 
+    /**
+     * @return array
+     */
     public function productTypeDataProvider()
     {
         return [
@@ -141,6 +144,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->model->beforeInitializeLinks($this->subjectMock, $this->productMock, ['associated' => $linksData]);
     }
 
+    /**
+     * @return array
+     */
     public function linksDataProvider()
     {
         return [

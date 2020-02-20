@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutHeaderSection">
+        <element name="shippingMethodStep" type="text" selector=".opc-progress-bar-item:nth-of-type(1)"/>
+        <element name="reviewAndPaymentsStep" type="text" selector=".opc-progress-bar-item:nth-of-type(2)"/>
+        <element name="errorMessageContainsText" type="text" selector="//div[contains(@class, 'message message-error error')]//div[contains(text(), '{{text}}')]" parameterized="true"/>
+    </section>
+</sections>

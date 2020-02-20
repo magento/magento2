@@ -7,14 +7,16 @@
 namespace Magento\Ui\Component\MassAction;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
+ * Filter component.
+ *
  * @api
  * @since 100.0.2
  */
@@ -99,14 +101,16 @@ class Filter
                 throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
         }
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
+
+        $filterIds = $this->getFilterIds();
+        if (\is_array($selected)) {
+            $filterIds = array_unique(array_merge($filterIds, $selected));
         }
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $filterIds]
+        );
+
         return $collection;
     }
 

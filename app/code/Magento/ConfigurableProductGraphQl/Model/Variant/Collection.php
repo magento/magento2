@@ -9,12 +9,12 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as DataProvider;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
 
 /**
  * Collection for fetching configurable child product data.
@@ -27,19 +27,9 @@ class Collection
     private $childCollectionFactory;
 
     /**
-     * @var ProductFactory
-     */
-    private $productFactory;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
-
-    /**
-     * @var DataProvider
-     */
-    private $productDataProvider;
 
     /**
      * @var MetadataPool
@@ -47,9 +37,9 @@ class Collection
     private $metadataPool;
 
     /**
-     * @var int[]
+     * @var Product[]
      */
-    private $parentIds = [];
+    private $parentProducts = [];
 
     /**
      * @var array
@@ -62,40 +52,55 @@ class Collection
     private $attributeCodes = [];
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * @var CollectionPostProcessor
+     */
+    private $collectionPostProcessor;
+
+    /**
      * @param CollectionFactory $childCollectionFactory
-     * @param ProductFactory $productFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DataProvider $productDataProvider
      * @param MetadataPool $metadataPool
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionPostProcessor $collectionPostProcessor
      */
     public function __construct(
         CollectionFactory $childCollectionFactory,
-        ProductFactory $productFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        DataProvider $productDataProvider,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        CollectionProcessorInterface $collectionProcessor,
+        CollectionPostProcessor $collectionPostProcessor
     ) {
         $this->childCollectionFactory = $childCollectionFactory;
-        $this->productFactory = $productFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productDataProvider = $productDataProvider;
         $this->metadataPool = $metadataPool;
+        $this->collectionProcessor = $collectionProcessor;
+        $this->collectionPostProcessor = $collectionPostProcessor;
     }
 
     /**
-     * Add parent Id to collection filter
+     * Add parent to collection filter
      *
-     * @param int $id
+     * @param Product $product
      * @return void
      */
-    public function addParentId(int $id) : void
+    public function addParentProduct(Product $product) : void
     {
-        if (!in_array($id, $this->parentIds) && !empty($this->childrenMap)) {
-            $this->childrenMap = [];
-            $this->parentIds[] = $id;
-        } elseif (!in_array($id, $this->parentIds)) {
-            $this->parentIds[] = $id;
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productId = $product->getData($linkField);
+
+        if (isset($this->parentProducts[$productId])) {
+            return;
         }
+
+        if (!empty($this->childrenMap)) {
+            $this->childrenMap = [];
+        }
+        $this->parentProducts[$productId] = $product;
     }
 
     /**
@@ -133,21 +138,25 @@ class Collection
      */
     private function fetch() : array
     {
-        if (empty($this->parentIds) || !empty($this->childrenMap)) {
+        if (empty($this->parentProducts) || !empty($this->childrenMap)) {
             return $this->childrenMap;
         }
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        foreach ($this->parentIds as $id) {
+        foreach ($this->parentProducts as $product) {
+            $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
-            /** @var Product $product */
-            $product = $this->productFactory->create();
-            $product->setData($linkField, $id);
             $childCollection->setProductFilter($product);
+            $this->collectionProcessor->process(
+                $childCollection,
+                $this->searchCriteriaBuilder->create(),
+                $attributeData
+            );
+            $childCollection->load();
+            $this->collectionPostProcessor->process($childCollection, $attributeData);
 
             /** @var Product $childProduct */
-            foreach ($childCollection->getItems() as $childProduct) {
+            foreach ($childCollection as $childProduct) {
                 $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
                 $parentId = (int)$childProduct->getParentId();
                 if (!isset($this->childrenMap[$parentId])) {
@@ -159,5 +168,25 @@ class Collection
         }
 
         return $this->childrenMap;
+    }
+
+    /**
+     * Get attributes code
+     *
+     * @param \Magento\Catalog\Model\Product $currentProduct
+     * @return array
+     */
+    private function getAttributesCodes(Product $currentProduct): array
+    {
+        $attributeCodes = $this->attributeCodes;
+        $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
+        foreach ($allowAttributes as $attribute) {
+            $productAttribute = $attribute->getProductAttribute();
+            if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
+                $attributeCodes[] = $productAttribute->getAttributeCode();
+            }
+        }
+
+        return $attributeCodes;
     }
 }

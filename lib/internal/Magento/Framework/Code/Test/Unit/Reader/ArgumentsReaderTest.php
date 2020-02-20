@@ -263,6 +263,9 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function testIsCompatibleTypeDataProvider()
     {
         return [

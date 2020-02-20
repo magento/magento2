@@ -155,6 +155,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function isTransactionExistsDataProvider()
     {
         return [
@@ -165,6 +168,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getAuthorizationDataProvider()
     {
         return [

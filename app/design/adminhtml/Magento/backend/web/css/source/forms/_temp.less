@@ -11,7 +11,7 @@
 .admin__fieldset-wrapper-title {
     &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
-    line-height: 1.2;
+    line-height: 1.4;
     margin-bottom: 0;
     padding: 14px 0 16px;
 
@@ -162,7 +162,7 @@
             @_icon-font-line-height: 16px,
             @_icon-font-text-hide: true,
             @_icon-font-position: after,
-            @_icon-font-color: @color-brown-darkie
+            @_icon-font-color: @color-brown-darker
         );
 
         span {
@@ -175,7 +175,7 @@
             z-index: 2;
 
             &:after {
-                color: darken(@color-brown-darkie, 20%);
+                color: darken(@color-brown-darker, 20%);
             }
 
             //  @Todo ui - testing solution to show action hint without title attribute
@@ -253,7 +253,7 @@ label.mage-error {
 
         .captcha-reload {
             float: right;
-            vertical-align: middle;
+            margin-top: 15px;
         }
     }
 }
@@ -408,6 +408,9 @@ label.mage-error {
             width: 16px;
             z-index: 1;
 
+            /**
+             * @codingStandardsIgnoreStart
+             */
             &:before {
                 &:extend(.admin__control-checkbox + label:before);
                 left: 0;
@@ -434,6 +437,7 @@ label.mage-error {
                 &:before {
                     &:extend(.admin__control-checkbox:checked + label:before);
                 }
+                //  @codingStandardsIgnoreEnd
             }
 
             &._indeterminate {
@@ -466,10 +470,9 @@ label.mage-error {
     }
 
     .admin__data-grid-header-row {
-        &:extend(.abs-cleafix);
-
         .action-select-multiselect {
             -webkit-appearance: menulist-button;
+            appearance: menulist-button;
             height: 38px;
             left: -1rem;
             min-width: 0;
@@ -547,7 +550,7 @@ label.mage-error {
         }
 
         .admin__control-select-placeholder {
-            color: @color-darkie-gray;
+            color: @color-darker-gray;
             font-weight: @font-weight__bold;
         }
     }

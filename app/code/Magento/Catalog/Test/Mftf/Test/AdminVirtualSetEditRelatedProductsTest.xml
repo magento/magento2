@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVirtualSetEditRelatedProductsTest" extends="AdminSimpleSetEditRelatedProductsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/edit virtual product"/>
+            <title value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
+            <description value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3415"/>
+            <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-194"/>
+            </skip>
+        </annotations>
+        <before></before>
+        <after>
+            <!-- Delete virtual product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="defaultVirtualProduct"/>
+            </actionGroup>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+
+        <!--See related product in storefront-->
+        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

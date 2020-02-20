@@ -32,6 +32,6 @@ class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
      */
     public function getPart($code)
     {
-        return isset($this->_parts[$code]) ? $this->_parts[$code] : null;
+        return $this->_parts[$code] ?? null;
     }
 }

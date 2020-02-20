@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertBlockContent">
+        <annotations>
+            <description>Validates that the Block details are present and correct. PLEASE NOTE: The Block data is Hardcoded, using '_defaultBlock'.</description>
+        </annotations>
+        
+        <grabValueFrom selector="{{BlockNewPageBasicFieldsSection.blockTitle}}"  stepKey="grabTextFromTitle"/>
+        <assertEquals stepKey="assertTitle" message="pass">
+            <expectedResult type="string">{{_defaultBlock.title}}</expectedResult>
+            <actualResult type="variable">grabTextFromTitle</actualResult>
+        </assertEquals>
+        <executeJS function="(el = document.querySelector('[name=\'identifier\']')) &amp;&amp; el['se' + 'tAt' + 'tribute']('data-value', el.value.split('-')[0]);" stepKey="setAttribute"/>
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.duplicatedIdentifier(_defaultBlock.identifier)}}" stepKey="see"/>
+        <grabValueFrom selector="{{BlockContentSection.TextArea}}"  stepKey="grabTextFromContent"/>
+        <assertEquals stepKey="assertContent" message="pass">
+            <expectedResult type="string">{{_defaultBlock.content}}</expectedResult>
+            <actualResult type="variable">grabTextFromContent</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

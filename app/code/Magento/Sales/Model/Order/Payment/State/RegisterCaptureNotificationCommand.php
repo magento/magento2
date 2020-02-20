@@ -11,6 +11,11 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\StatusResolver;
 
+/**
+ * Class RegisterCaptureNotificationCommand
+ *
+ * Command that Register Capture Notification
+ */
 class RegisterCaptureNotificationCommand implements CommandInterface
 {
     /**
@@ -23,11 +28,12 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      */
     public function __construct(StatusResolver $statusResolver = null)
     {
-        $this->statusResolver = $statusResolver
-            ? : ObjectManager::getInstance()->get(StatusResolver::class);
+        $this->statusResolver = $statusResolver ?: ObjectManager::getInstance()->get(StatusResolver::class);
     }
 
     /**
+     * Registers a capture event for this payment
+     *
      * @param OrderPaymentInterface $payment
      * @param string|float|int $amount
      * @param OrderInterface $order
@@ -35,7 +41,11 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
-        $state = Order::STATE_PROCESSING;
+        $state = $order->getState();
+        if (!$state || $state === Order::STATE_NEW || $state === Order::STATE_PENDING_PAYMENT) {
+            $state = Order::STATE_PROCESSING;
+        }
+
         $status = null;
         $message = 'Registered notification about captured amount of %1.';
 
@@ -61,6 +71,8 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     }
 
     /**
+     * Sets the state and status of the order
+     *
      * @deprecated 100.2.0 Replaced by a StatusResolver class call.
      *
      * @param Order $order

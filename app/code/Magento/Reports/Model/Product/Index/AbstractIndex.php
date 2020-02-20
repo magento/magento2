@@ -7,8 +7,11 @@ namespace Magento\Reports\Model\Product\Index;
 
 /**
  * Reports Product Index Abstract Model
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
 {
@@ -113,7 +116,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve visitor id
      *
-     * if don't exists return current visitor id
+     * If don't exists return current visitor id
      *
      * @return int
      */
@@ -128,7 +131,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve customer id
      *
-     * if customer don't logged in return null
+     * If customer don't logged in return null
      *
      * @return int
      */
@@ -143,7 +146,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve store id
      *
-     * default return current store id
+     * Default return current store id
      *
      * @return int
      */
@@ -156,7 +159,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * On customer loggin merge visitor/customer index
+     * On customer login merge visitor/customer index
      *
      * @return $this
      */
@@ -246,13 +249,14 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Add product ids to current visitor/customer log
+     *
      * @param string[] $productIds
      * @return $this
      */
     public function registerIds($productIds)
     {
         $this->_getResource()->registerIds($this, $productIds);
-        $this->_getSession()->unsData($this->_countCacheKey);
+        $this->_getSession()->unsetData($this->_countCacheKey);
         return $this;
     }
 }

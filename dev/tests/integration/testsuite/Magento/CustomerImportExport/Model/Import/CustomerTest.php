@@ -6,11 +6,17 @@
 
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ImportExport\Model\Import;
 
 /**
  * Test for class \Magento\CustomerImportExport\Model\Import\Customer which covers validation logic
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -78,9 +84,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $expectAddedCustomers = 5;
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
-            __DIR__ . '/_files/customers_to_import.csv',
+            __DIR__ . '/_files/customers_with_gender_to_import.csv',
             $this->directoryWrite
         );
+
+        $existingCustomer = $this->getCustomer('CharlesTAlston@teleworm.us', 1);
 
         /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -107,13 +115,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expectAddedCustomers, $addedCustomers, 'Added unexpected amount of customers');
 
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $existingCustomer = $objectManager->get(
-            \Magento\Framework\Registry::class
-        )->registry('_fixture/Magento_ImportExport_Customer');
-
         $updatedCustomer = $customers[$existingCustomer->getId()];
 
         $this->assertNotEquals(
@@ -132,6 +133,87 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $existingCustomer->getCreatedAt(),
             $updatedCustomer->getCreatedAt(),
             'Creation date must be changed'
+        );
+        $this->assertEquals(
+            $existingCustomer->getGender(),
+            $updatedCustomer->getGender(),
+            'Gender must be changed'
+        );
+    }
+
+    /**
+     * Tests importData() method.
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customer.php
+     *
+     * @return void
+     */
+    public function testImportDataWithOneAdditionalColumn(): void
+    {
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/customer_to_import_with_one_additional_column.csv',
+            $this->directoryWrite
+        );
+
+        $existingCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Customer::class
+        );
+        $existingCustomer->setWebsiteId(1);
+        $existingCustomer = $existingCustomer->loadByEmail('CharlesTAlston@teleworm.us');
+
+        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+        );
+        $customersCollection->resetData();
+        $customersCollection->clear();
+
+        $this->_model
+            ->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->validateData()
+            ->hasToBeTerminated();
+        sleep(1);
+        $this->_model->importData();
+
+        $customers = $customersCollection->getItems();
+
+        $updatedCustomer = $customers[$existingCustomer->getId()];
+
+        $this->assertNotEquals(
+            $existingCustomer->getFirstname(),
+            $updatedCustomer->getFirstname(),
+            'Firstname must be changed'
+        );
+
+        $this->assertNotEquals(
+            $existingCustomer->getUpdatedAt(),
+            $updatedCustomer->getUpdatedAt(),
+            'Updated at date must be changed'
+        );
+
+        $this->assertEquals(
+            $existingCustomer->getLastname(),
+            $updatedCustomer->getLastname(),
+            'Lastname must not be changed'
+        );
+
+        $this->assertEquals(
+            $existingCustomer->getStoreId(),
+            $updatedCustomer->getStoreId(),
+            'Store Id must not be changed'
+        );
+
+        $this->assertEquals(
+            $existingCustomer->getCreatedAt(),
+            $updatedCustomer->getCreatedAt(),
+            'Creation date must not be changed'
+        );
+
+        $this->assertEquals(
+            $existingCustomer->getGroupId(),
+            $updatedCustomer->getGroupId(),
+            'Customer group must not be changed'
         );
     }
 
@@ -270,5 +352,62 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty(
             $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_CUSTOMER_NOT_FOUND])
         );
+    }
+
+    /**
+     * Test import existing customers
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
+     * @return void
+     */
+    public function testUpdateExistingCustomers(): void
+    {
+        $this->doImport(__DIR__ . '/_files/customers_to_update.csv', Import::BEHAVIOR_ADD_UPDATE);
+        $customer = $this->getCustomer('customer@example.com', 1);
+        $this->assertEquals('Firstname-updated', $customer->getFirstname());
+        $this->assertEquals('Lastname-updated', $customer->getLastname());
+        $this->assertEquals(1, $customer->getStoreId());
+        $customer = $this->getCustomer('julie.worrell@example.com', 1);
+        $this->assertEquals('Julie-updated', $customer->getFirstname());
+        $this->assertEquals('Worrell-updated', $customer->getLastname());
+        $this->assertEquals(1, $customer->getStoreId());
+        $customer = $this->getCustomer('david.lamar@example.com', 1);
+        $this->assertEquals('David-updated', $customer->getFirstname());
+        $this->assertEquals('Lamar-updated', $customer->getLastname());
+        $this->assertEquals(1, $customer->getStoreId());
+    }
+
+    /**
+     * Gets customer entity.
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return CustomerInterface
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getCustomer(string $email, int $websiteId): CustomerInterface
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = $objectManager->get(CustomerRepositoryInterface::class);
+        return $repository->get($email, $websiteId);
+    }
+
+    /**
+     * Import using given file and behavior
+     *
+     * @param string $file
+     * @param string $behavior
+     */
+    private function doImport(string $file, string $behavior): void
+    {
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv($file, $this->directoryWrite);
+        $this->_model
+            ->setParameters(['behavior' => $behavior])
+            ->setSource($source)
+            ->validateData()
+            ->hasToBeTerminated();
+        $this->_model->importData();
     }
 }

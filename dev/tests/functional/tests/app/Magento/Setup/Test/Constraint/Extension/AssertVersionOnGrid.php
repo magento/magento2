@@ -23,7 +23,7 @@ class AssertVersionOnGrid extends AbstractConstraint
     /*#@-*/
 
     /**
-     * Assert that that version of extension is correct.
+     * Assert that version of extension is correct.
      *
      * @param Grid $grid
      * @param Extension $extension

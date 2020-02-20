@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateStoreViewActionGroup">
+        <annotations>
+            <description>Goes to the Admin Store View creation page. Fills in the provided Store View and Store details. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
+            <argument name="customStore" defaultValue="customStore"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStoreViewPage.url}}" stepKey="navigateToNewStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <comment userInput="Creating Store View" stepKey="storeViewCreationComment"/>
+
+        <!--Create Store View-->
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{StoreGroup.name}}" stepKey="selectStore"/>
+        <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{customStore.name}}" stepKey="enterStoreViewName"/>
+        <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}" stepKey="enterStoreViewCode"/>
+        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus"/>
+        <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the store view." stepKey="seeSavedMessage"/>
+    </actionGroup>
+</actionGroups>

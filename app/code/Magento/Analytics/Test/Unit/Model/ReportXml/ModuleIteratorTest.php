@@ -10,6 +10,9 @@ use Magento\Analytics\Model\ReportXml\ModuleIterator;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Module iterator test.
+ */
 class ModuleIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**

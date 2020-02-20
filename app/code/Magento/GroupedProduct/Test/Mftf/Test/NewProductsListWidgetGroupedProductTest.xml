@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NewProductsListWidgetGroupedProductTest" extends="NewProductsListWidgetTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="New products list widget"/>
+            <title value="Admin should be able to set Grouped Product as new so that it shows up in the Catalog New Products List Widget"/>
+            <description value="Admin should be able to set Grouped Product as new so that it shows up in the Catalog New Products List Widget"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-121"/>
+            <group value="GroupedProduct"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- A Cms page containing the New Products Widget gets created here via extends -->
+
+        <!-- Create a grouped product to appear in the widget -->
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
+        <waitForPageLoad stepKey="waitForProductList"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductButton"/>
+        <click selector="{{AdminProductGridActionSection.addGroupedProduct}}" stepKey="clickAddGroupedProduct"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
+        <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="scrollToAddProductsToGroup"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
+            <argument name="sku" value="api-simple-product"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult1"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('1')}}" stepKey="checkFilterResult2"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+
+        <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
+
+        <!-- Check for product on the CMS page with the New Products widget -->
+
+        <amOnPage url="{{_newDefaultCmsPage.identifier}}" stepKey="amOnCmsPage"/>
+        <waitForPageLoad stepKey="waitForCmsPage"/>
+        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductName"/>
+    </test>
+</tests>

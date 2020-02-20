@@ -30,7 +30,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
             ->setMethods(['fireEvent'])
-            ->setConstructorArgs([[]])
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->_adapter =
@@ -69,9 +69,9 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup expectations for "transaction start" use case
      *
-     * @param \PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher
+     * @param \PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher
      */
-    protected function _expectTransactionStart(\PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher)
+    protected function _expectTransactionStart(\PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher)
     {
         $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('startTransaction');
         $this->_adapter->expects($this->once())->method('beginTransaction');
@@ -103,9 +103,9 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup expectations for "transaction rollback" use case
      *
-     * @param \PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher
+     * @param \PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher
      */
-    protected function _expectTransactionRollback(\PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher)
+    protected function _expectTransactionRollback(\PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher)
     {
         $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('rollbackTransaction');
         $this->_adapter->expects($this->once())->method('rollback');

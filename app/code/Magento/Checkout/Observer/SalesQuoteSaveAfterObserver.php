@@ -7,6 +7,9 @@ namespace Magento\Checkout\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class SalesQuoteSaveAfterObserver
+ */
 class SalesQuoteSaveAfterObserver implements ObserverInterface
 {
     /**
@@ -24,15 +27,18 @@ class SalesQuoteSaveAfterObserver implements ObserverInterface
     }
 
     /**
+     * Assign quote to session
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        /* @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();
-        /* @var $quote \Magento\Quote\Model\Quote */
+
         if ($quote->getIsCheckoutCart()) {
-            $this->checkoutSession->getQuoteId($quote->getId());
+            $this->checkoutSession->setQuoteId($quote->getId());
         }
     }
 }

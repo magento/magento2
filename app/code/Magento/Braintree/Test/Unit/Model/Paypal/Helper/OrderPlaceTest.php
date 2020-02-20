@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
 use Magento\Braintree\Model\Paypal\Helper\OrderPlace;
+use Magento\Braintree\Model\Paypal\OrderCancellationService;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Model\Type\Onepage;
@@ -14,6 +17,7 @@ use Magento\Customer\Model\Session;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class OrderPlaceTest
@@ -27,62 +31,80 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     const TEST_EMAIL = 'test@test.loc';
 
     /**
-     * @var CartManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartManagementInterface|MockObject
      */
-    private $cartManagementMock;
+    private $cartManagement;
 
     /**
-     * @var AgreementsValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AgreementsValidatorInterface|MockObject
      */
-    private $agreementsValidatorMock;
+    private $agreementsValidator;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
-    private $customerSessionMock;
+    private $customerSession;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    private $checkoutHelperMock;
+    private $checkoutHelper;
 
     /**
-     * @var Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|MockObject
      */
-    private $billingAddressMock;
+    private $billingAddress;
 
     /**
      * @var OrderPlace
      */
     private $orderPlace;
 
+    /**
+     * @var OrderCancellationService|MockObject
+     */
+    private $orderCancellation;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->cartManagementMock = $this->getMockBuilder(CartManagementInterface::class)
+        $this->cartManagement = $this->getMockBuilder(CartManagementInterface::class)
             ->getMockForAbstractClass();
-        $this->agreementsValidatorMock = $this->getMockBuilder(AgreementsValidatorInterface::class)
+        $this->agreementsValidator = $this->getMockBuilder(AgreementsValidatorInterface::class)
             ->getMockForAbstractClass();
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
+        $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->checkoutHelperMock = $this->getMockBuilder(Data::class)
+        $this->checkoutHelper = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->orderCancellation = $this->getMockBuilder(OrderCancellationService::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->orderPlace = new OrderPlace(
-            $this->cartManagementMock,
-            $this->agreementsValidatorMock,
-            $this->customerSessionMock,
-            $this->checkoutHelperMock
+            $this->cartManagement,
+            $this->agreementsValidator,
+            $this->customerSession,
+            $this->checkoutHelper,
+            $this->orderCancellation
         );
     }
 
+    /**
+     * Checks a scenario for a guest customer.
+     *
+     * @throws \Exception
+     */
     public function testExecuteGuest()
     {
         $agreement = ['test', 'test'];
         $quoteMock = $this->getQuoteMock();
 
-        $this->agreementsValidatorMock->expects(self::once())
+        $this->agreementsValidator->expects(self::once())
             ->method('isValid')
             ->willReturn(true);
 
@@ -97,7 +119,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(10);
 
-        $this->cartManagementMock->expects(self::once())
+        $this->cartManagement->expects(self::once())
             ->method('placeOrder')
             ->with(10);
 
@@ -105,9 +127,11 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteMock
+     * Disables address validation.
+     *
+     * @param MockObject $quoteMock
      */
-    private function disabledQuoteAddressValidationStep(\PHPUnit_Framework_MockObject_MockObject $quoteMock)
+    private function disabledQuoteAddressValidationStep(MockObject $quoteMock)
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
         $shippingAddressMock = $this->getMockBuilder(Address::class)
@@ -115,26 +139,21 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quoteMock->expects(self::once())
-            ->method('getShippingAddress')
+        $quoteMock->method('getShippingAddress')
             ->willReturn($shippingAddressMock);
 
-        $billingAddressMock->expects(self::once())
-            ->method('setShouldIgnoreValidation')
+        $billingAddressMock->method('setShouldIgnoreValidation')
             ->with(true)
             ->willReturnSelf();
 
-        $quoteMock->expects(self::once())
-            ->method('getIsVirtual')
+        $quoteMock->method('getIsVirtual')
             ->willReturn(false);
 
-        $shippingAddressMock->expects(self::once())
-            ->method('setShouldIgnoreValidation')
+        $shippingAddressMock->method('setShouldIgnoreValidation')
             ->with(true)
             ->willReturnSelf();
 
-        $billingAddressMock->expects(self::any())
-            ->method('getEmail')
+        $billingAddressMock->method('getEmail')
             ->willReturn(self::TEST_EMAIL);
 
         $billingAddressMock->expects(self::never())
@@ -142,25 +161,24 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteMock
+     * Prepares checkout step.
+     *
+     * @param MockObject $quoteMock
      */
-    private function getCheckoutMethodStep(\PHPUnit_Framework_MockObject_MockObject $quoteMock)
+    private function getCheckoutMethodStep(MockObject $quoteMock)
     {
-        $this->customerSessionMock->expects(self::once())
-            ->method('isLoggedIn')
+        $this->customerSession->method('isLoggedIn')
             ->willReturn(false);
 
         $quoteMock->expects(self::at(1))
             ->method('getCheckoutMethod')
             ->willReturn(null);
 
-        $this->checkoutHelperMock->expects(self::once())
-            ->method('isAllowedGuestCheckout')
+        $this->checkoutHelper->method('isAllowedGuestCheckout')
             ->with($quoteMock)
             ->willReturn(true);
 
-        $quoteMock->expects(self::once())
-            ->method('setCheckoutMethod')
+        $quoteMock->method('setCheckoutMethod')
             ->with(Onepage::METHOD_GUEST);
 
         $quoteMock->expects(self::at(2))
@@ -169,9 +187,11 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteMock
+     * Prepares quote.
+     *
+     * @param MockObject $quoteMock
      */
-    private function prepareGuestQuoteStep(\PHPUnit_Framework_MockObject_MockObject $quoteMock)
+    private function prepareGuestQuoteStep(MockObject $quoteMock)
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
 
@@ -184,44 +204,44 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
             ->method('getEmail')
             ->willReturn(self::TEST_EMAIL);
 
-        $quoteMock->expects(self::once())
-            ->method('setCustomerEmail')
+        $quoteMock->method('setCustomerEmail')
             ->with(self::TEST_EMAIL)
             ->willReturnSelf();
 
-        $quoteMock->expects(self::once())
-            ->method('setCustomerIsGuest')
+        $quoteMock->method('setCustomerIsGuest')
             ->with(true)
             ->willReturnSelf();
 
-        $quoteMock->expects(self::once())
-            ->method('setCustomerGroupId')
+        $quoteMock->method('setCustomerGroupId')
             ->with(Group::NOT_LOGGED_IN_ID)
             ->willReturnSelf();
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteMock
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * Gets a mock object for a billing address entity.
+     *
+     * @param MockObject $quoteMock
+     * @return Address|MockObject
      */
-    private function getBillingAddressMock(\PHPUnit_Framework_MockObject_MockObject $quoteMock)
+    private function getBillingAddressMock(MockObject $quoteMock)
     {
-        if (!isset($this->billingAddressMock)) {
-            $this->billingAddressMock = $this->getMockBuilder(Address::class)
+        if (!isset($this->billingAddress)) {
+            $this->billingAddress = $this->getMockBuilder(Address::class)
                 ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
                 ->disableOriginalConstructor()
                 ->getMock();
         }
 
-        $quoteMock->expects(self::any())
-            ->method('getBillingAddress')
-            ->willReturn($this->billingAddressMock);
+        $quoteMock->method('getBillingAddress')
+            ->willReturn($this->billingAddress);
 
-        return $this->billingAddressMock;
+        return $this->billingAddress;
     }
 
     /**
-     * @return Quote|\PHPUnit_Framework_MockObject_MockObject
+     * Gets a mock object for a quote.
+     *
+     * @return Quote|MockObject
      */
     private function getQuoteMock()
     {

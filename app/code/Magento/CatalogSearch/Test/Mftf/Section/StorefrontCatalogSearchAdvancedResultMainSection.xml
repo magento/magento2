@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCatalogSearchAdvancedResultMainSection">
+        <element name="SearchTitle" type="text" selector=".page-title span"/>
+        <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
+        <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="SuccessMsg" type="button" selector="div.message-success"/>
+        <element name="productCount" type="text" selector="#toolbar-amount"/>
+        <element name="message" type="text" selector="div.message div"/>
+        <element name="itemFound" type="text" selector=".search.found>strong"/>
+        <element name="productName" type="text" selector=".product.name.product-item-name>a"/>
+        <element name="nthProductName" type="text" selector="li.product-item:nth-of-type({{var1}}) .product-item-name>a" parameterized="true"/>
+    </section>
+</sections>

@@ -55,7 +55,7 @@ define([
                 return messageObj.parameters.shift();
             });
             this.clear();
-            this.errorMessages.push(message);
+            type.push(message);
 
             return true;
         },

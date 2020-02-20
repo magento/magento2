@@ -7,6 +7,11 @@ namespace Magento\Customer\Model\Address\Validator;
 
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\ValidatorInterface;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Address country and region validator.
@@ -14,17 +19,35 @@ use Magento\Customer\Model\Address\ValidatorInterface;
 class Country implements ValidatorInterface
 {
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @var Data
      */
     private $directoryData;
 
     /**
-     * @param \Magento\Directory\Helper\Data $directoryData
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
+     * @param Data $directoryData
+     * @param AllowedCountries $allowedCountriesReader
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Directory\Helper\Data $directoryData
+        Data $directoryData,
+        AllowedCountries $allowedCountriesReader,
+        Escaper $escaper = null
     ) {
         $this->directoryData = $directoryData;
+        $this->allowedCountriesReader = $allowedCountriesReader;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
     }
 
     /**
@@ -52,11 +75,11 @@ class Country implements ValidatorInterface
         $errors = [];
         if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'countryId']);
-        } elseif (!in_array($countryId, $this->directoryData->getCountryCollection()->getAllIds(), true)) {
+        } elseif (!in_array($countryId, $this->getWebsiteAllowedCountries($address), true)) {
             //Checking if such country exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                ['fieldName' => 'countryId', 'value' => htmlspecialchars($countryId)]
+                ['fieldName' => 'countryId', 'value' => $this->escaper->escapeHtml($countryId)]
             );
         }
 
@@ -68,6 +91,8 @@ class Country implements ValidatorInterface
      *
      * @param AbstractAddress $address
      * @return array
+     * @throws \Zend_Validate_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateRegion(AbstractAddress $address)
     {
@@ -87,14 +112,26 @@ class Country implements ValidatorInterface
             //If country actually has regions and requires you to
             //select one then it must be selected.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']);
-        } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+        } elseif ($allowedRegions && $regionId && !in_array($regionId, $allowedRegions, true)) {
             //If a region is selected then checking if it exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                ['fieldName' => 'regionId', 'value' => htmlspecialchars($regionId)]
+                ['fieldName' => 'regionId', 'value' => $this->escaper->escapeHtml($regionId)]
             );
         }
 
         return $errors;
+    }
+
+    /**
+     * Return allowed counties per website.
+     *
+     * @param AbstractAddress $address
+     * @return array
+     */
+    private function getWebsiteAllowedCountries(AbstractAddress $address): array
+    {
+        $storeId = $address->getData('store_id');
+        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
     }
 }

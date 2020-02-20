@@ -17,6 +17,9 @@ use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
  */
 class DownloadTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var array Result of get_headers() function */
+    public static $headers;
+
     /** @var DownloadHelper */
     protected $_helper;
 
@@ -89,7 +92,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @exectedExceptionMessage Please set resource file and link type.
+     * @expectedExceptionMessage Please set resource file and link type.
      */
     public function testGetFileSizeNoResource()
     {
@@ -155,6 +158,9 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestGetContentTypeThroughHelper()
     {
         return [[false, ''], [true, false]];
@@ -187,6 +193,11 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($fileName, $this->_helper->getFilename());
     }
 
+    /**
+     * @param bool $doesExist
+     * @param int $size
+     * @param string $path
+     */
     protected function _setupFileMocks($doesExist = true, $size = self::FILE_SIZE, $path = self::FILE_PATH)
     {
         $this->_handleMock->expects($this->any())->method('stat')->will($this->returnValue(['size' => $size]));
@@ -199,6 +210,11 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
         $this->_helper->setResource($path, DownloadHelper::LINK_TYPE_FILE);
     }
 
+    /**
+     * @param int $size
+     * @param string $url
+     * @param array $additionalStatData
+     */
     protected function _setupUrlMocks($size = self::FILE_SIZE, $url = self::URL, $additionalStatData = [])
     {
         $this->_handleMock->expects(
@@ -217,6 +233,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_handleMock)
         );
 
+        self::$headers = ['200 OK'];
         $this->_helper->setResource($url, DownloadHelper::LINK_TYPE_URL);
     }
 

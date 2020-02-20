@@ -157,6 +157,10 @@ class GenerateFixturesCommand extends Command
         }
     }
 
+    /**
+     * @param \Magento\Setup\Fixtures\Fixture $fixture
+     * @param OutputInterface $output
+     */
     private function executeFixture(\Magento\Setup\Fixtures\Fixture $fixture, OutputInterface $output)
     {
         $output->write('<info>' . $fixture->getActionTitle() . '... </info>');

@@ -18,6 +18,8 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
  * Class SelectContainerBuilder
  * Class is responsible for SelectContainer creation and filling it with all required data
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class SelectContainerBuilder
 {

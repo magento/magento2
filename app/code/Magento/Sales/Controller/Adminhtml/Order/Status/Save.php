@@ -6,25 +6,32 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Sales\Model\Order\Status;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Sales\Controller\Adminhtml\Order\Status as StatusAction;
+
+class Save extends StatusAction implements HttpPostActionInterface
 {
     /**
      * Save status form processing
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         $isNew = $this->getRequest()->getParam('is_new');
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $statusCode = $this->getRequest()->getParam('status');
 
             //filter tags in labels/status
-            /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-            $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
+            /** @var $filterManager FilterManager */
+            $filterManager = $this->_objectManager->get(FilterManager::class);
             if ($isNew) {
                 $statusCode = $data['status'] = $filterManager->stripTags($data['status']);
             }
@@ -37,10 +44,11 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
                 $label = $filterManager->stripTags($label);
             }
 
-            $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->load($statusCode);
+            $status = $this->_objectManager->create(Status::class)->load($statusCode);
             // check if status exist
             if ($isNew && $status->getStatus()) {
-                $this->messageManager->addError(__('We found another order status with the same order status code.'));
+                $this->messageManager
+                    ->addErrorMessage(__('We found another order status with the same order status code.'));
                 $this->_getSession()->setFormData($data);
                 return $resultRedirect->setPath('sales/*/new');
             }
@@ -49,23 +57,33 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 
             try {
                 $status->save();
-                $this->messageManager->addSuccess(__('You saved the order status.'));
+                $this->messageManager->addSuccessMessage(__('You saved the order status.'));
                 return $resultRedirect->setPath('sales/*/');
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('We can\'t add the order status right now.')
                 );
             }
             $this->_getSession()->setFormData($data);
-            if ($isNew) {
-                return $resultRedirect->setPath('sales/*/new');
-            } else {
-                return $resultRedirect->setPath('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
-            }
+            return $this->getRedirect($resultRedirect, $isNew);
         }
         return $resultRedirect->setPath('sales/*/');
+    }
+
+    /**
+     * @param Redirect $resultRedirect
+     * @param bool $isNew
+     * @return Redirect
+     */
+    private function getRedirect(Redirect $resultRedirect, $isNew)
+    {
+        if ($isNew) {
+            return $resultRedirect->setPath('sales/*/new');
+        } else {
+            return $resultRedirect->setPath('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
+        }
     }
 }

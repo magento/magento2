@@ -159,16 +159,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($requestPathProduct, $this->model->getUrlInStore($product, $routeParams));
                 break;
             case 'getProductUrl':
-                $this->assertEquals($requestPathProduct, $this->model->getProductUrl($product, true));
+                $this->assertEquals($requestPathProduct, $this->model->getProductUrl($product, null));
                 $this->sidResolver
-                    ->expects($this->once())
+                    ->expects($this->never())
                     ->method('getUseSessionInUrl')
                     ->will($this->returnValue(true));
-                $this->assertEquals($requestPathProduct, $this->model->getProductUrl($product, null));
                 break;
         }
     }
 
+    /**
+     * @return array
+     */
     public function getUrlDataProvider()
     {
         return [
@@ -209,7 +211,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 1,
                 1,
                 [],
-                ['_direct' => '/product/url/path', '_query' => []],
+                ['_direct' => '/product/url/path', '_query' => [], '_nosid' => true],
                 null,
                 null,
             ]

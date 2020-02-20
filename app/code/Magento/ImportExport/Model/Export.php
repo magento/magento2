@@ -13,6 +13,7 @@ namespace Magento\ImportExport\Model;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @deprecated
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {

@@ -15,6 +15,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test products query for configurable products
+ */
 class ConfigurableProductViewTest extends GraphQlAbstract
 {
     /**
@@ -89,7 +92,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
           }
         }
       }
-      category_ids
       ... on ConfigurableProduct {
         configurable_options {
           id
@@ -110,7 +112,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         variants {
           product {
             id
-            category_ids
             name
             sku
             attribute_set_id
@@ -206,7 +207,6 @@ QUERY;
         /**
          * @var ProductRepositoryInterface $productRepository
          */
-
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
@@ -235,7 +235,6 @@ QUERY;
         $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -244,7 +243,7 @@ QUERY;
                 'expected_value' => $product->getData(
                     $metadataPool->getMetadata(
                         ProductInterface::class
-                    )->getLinkField()
+                    )->getIdentifierField()
                 )
             ],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
@@ -303,12 +302,9 @@ QUERY;
                 isset($variantArray['product']['id']),
                 'variant product elements don\'t contain id key'
             );
+            $variantProductId = $variantArray['product']['id'];
             $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
-            $this->assertTrue(
-                isset($variantArray['product']['category_ids']),
-                'variant product doesn\'t contain category_ids key'
-            );
             $this->assertTrue(
                 isset($variantArray['product']['categories']),
                 'variant product doesn\'t contain categories key'
@@ -317,21 +313,21 @@ QUERY;
             /** @var \Magento\Catalog\Model\Product $childProduct */
             $childProduct = $productRepository->get($indexValue);
 
-            /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
-            $links = $childProduct->getExtensionAttributes()->getCategoryLinks();
-            $this->assertCount(1, $links, "Precondition failed, incorrect number of categories.");
-            $id =$links[0]->getCategoryId();
-
-            $actualValue
-                = $actualResponse['variants'][$variantKey]['product']['categories'][0];
-            $this->assertEquals($actualValue, ['id' => $id]);
+            switch ($variantProductId) {
+                case 10:
+                    $this->assertEmpty(
+                        $actualResponse['variants'][$variantKey]['product']['categories'],
+                        'No category is expected for product, that not visible individually'
+                    );
+                    break;
+                case 20:
+                    $this->assertEquals(
+                        $actualResponse['variants'][$variantKey]['product']['categories'][0],
+                        ['id' => 333]
+                    );
+                    break;
+            }
             unset($variantArray['product']['categories']);
-
-            $categoryIdsAttribute = $childProduct->getCustomAttribute('category_ids');
-            $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
-            $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-            $this->assertEquals($categoryIdsAttributeValue, $variantArray['product']['category_ids']);
-            unset($variantArray['product']['category_ids']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
             $this->assertCount(
@@ -419,6 +415,7 @@ QUERY;
                 $variantArray['product']['price']
             );
             $configurableOptions = $this->getConfigurableOptions();
+            $this->assertEquals(1, count($variantArray['attributes']));
             foreach ($variantArray['attributes'] as $attribute) {
                 $hasAssertion = false;
                 foreach ($configurableOptions as $option) {
@@ -495,31 +492,6 @@ QUERY;
             $this->assertEquals(
                 (int)$value['value_index'],
                 (int)$configurableAttributeOption['options'][$key]['value_index']
-            );
-        }
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields(array $actualResponse, array $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
             );
         }
     }

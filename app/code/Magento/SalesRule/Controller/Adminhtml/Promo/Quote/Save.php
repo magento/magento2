@@ -6,8 +6,52 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+
+/**
+ * SalesRule save controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private $timezone;
+    
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param TimezoneInterface $timezone
+     * @param DataPersistorInterface $dataPersistor
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        TimezoneInterface $timezone = null,
+        DataPersistorInterface $dataPersistor = null
+    ) {
+        parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
+        $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            TimezoneInterface::class
+        );
+        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            DataPersistorInterface::class
+        );
+    }
+
     /**
      * Promo quote save action
      *
@@ -17,7 +61,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      */
     public function execute()
     {
-        if ($this->getRequest()->getPostValue()) {
+        $data = $this->getRequest()->getPostValue();
+        if ($data) {
             try {
                 /** @var $model \Magento\SalesRule\Model\Rule */
                 $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
@@ -25,7 +70,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     'adminhtml_controller_salesrule_prepare_save',
                     ['request' => $this->getRequest()]
                 );
-                $data = $this->getRequest()->getPostValue();
+                if (empty($data['from_date'])) {
+                    $data['from_date'] = $this->timezone->formatDate();
+                }
 
                 $filterValues = ['from_date' => $this->_dateFilter];
                 if ($this->getRequest()->getParam('to_date')) {
@@ -37,12 +84,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     $data
                 );
                 $data = $inputFilter->getUnescaped();
-                $id = $this->getRequest()->getParam('rule_id');
-                if ($id) {
-                    $model->load($id);
-                    if ($id != $model->getId()) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
-                    }
+                if (!$this->checkRuleExists($model)) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('The wrong rule is specified.'));
                 }
 
                 $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
@@ -50,9 +93,10 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
-                        $this->messageManager->addError($errorMessage);
+                        $this->messageManager->addErrorMessage($errorMessage);
                     }
                     $session->setPageData($data);
+                    $this->dataPersistor->set('sale_rule', $data);
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
                     return;
                 }
@@ -82,7 +126,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $session->setPageData($model->getData());
 
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the rule.'));
+                $this->messageManager->addSuccessMessage(__('You saved the rule.'));
                 $session->setPageData(false);
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
@@ -91,7 +135,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->_redirect('sales_rule/*/');
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $id = (int)$this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
                     $this->_redirect('sales_rule/*/edit', ['id' => $id]);
@@ -100,7 +144,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 }
                 return;
             } catch (\Exception $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
@@ -110,5 +154,23 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
             }
         }
         $this->_redirect('sales_rule/*/');
+    }
+
+    /**
+     * Check if Cart Price Rule with provided id exists.
+     *
+     * @param \Magento\SalesRule\Model\Rule $model
+     * @return bool
+     */
+    private function checkRuleExists(\Magento\SalesRule\Model\Rule $model): bool
+    {
+        $id = $this->getRequest()->getParam('rule_id');
+        if ($id) {
+            $model->load($id);
+            if ($model->getId() != $id) {
+                return false;
+            }
+        }
+        return true;
     }
 }

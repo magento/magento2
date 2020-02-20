@@ -11,14 +11,14 @@ class MethodInvokedAtIndexTest extends \PHPUnit\Framework\TestCase
 {
     public function testMatches()
     {
-        $invocationObject = new \PHPUnit_Framework_MockObject_Invocation_Object(
+        $invocationObject = new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
             'ClassName',
             'ValidMethodName',
             [],
             'void',
             new \StdClass()
         );
-        $matcher = new \Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex(0);
+        $matcher = new MethodInvokedAtIndex(0);
         $this->assertTrue($matcher->matches($invocationObject));
 
         $matcher = new MethodInvokedAtIndex(1);

@@ -10,6 +10,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option text type
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -68,6 +70,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         // Check maximal length limit
         $maxCharacters = $option->getMaxCharacters();
+        $value = $this->normalizeNewLineSymbols($value);
         if ($maxCharacters > 0 && $this->string->strlen($value) > $maxCharacters) {
             $this->setIsValid(false);
             throw new LocalizedException(__('The text is too long. Shorten the text and try again.'));
@@ -84,7 +87,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function prepareForCart()
     {
-        if ($this->getIsValid() && strlen($this->getUserValue()) > 0) {
+        if ($this->getIsValid() && ($this->getUserValue() !== '')) {
             return $this->getUserValue();
         } else {
             return null;
@@ -100,5 +103,16 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($value)
     {
         return $this->_escaper->escapeHtml($value);
+    }
+
+    /**
+     * Normalize newline symbols
+     *
+     * @param string $value
+     * @return string
+     */
+    private function normalizeNewLineSymbols(string $value)
+    {
+        return str_replace(["\r\n", "\n\r", "\r"], "\n", $value);
     }
 }

@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Format a product's price information to conform to GraphQL schema representation
@@ -26,39 +26,31 @@ use Magento\Store\Model\StoreManagerInterface;
 class Price implements ResolverInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var PriceInfoFactory
      */
     private $priceInfoFactory;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param StoreManagerInterface $storeManager
      * @param PriceInfoFactory $priceInfoFactory
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        PriceInfoFactory $priceInfoFactory,
-        ValueFactory $valueFactory
+        PriceInfoFactory $priceInfoFactory
     ) {
-        $this->storeManager = $storeManager;
         $this->priceInfoFactory = $priceInfoFactory;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
+     * @inheritdoc
+     *
      * Format product's tier price data to conform to GraphQL schema
      *
-     * {@inheritdoc}
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return array
      */
     public function resolve(
         Field $field,
@@ -66,12 +58,9 @@ class Price implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
@@ -83,18 +72,23 @@ class Price implements ResolverInterface
         $minimalPriceAmount =  $finalPrice->getMinimalPrice();
         $maximalPriceAmount =  $finalPrice->getMaximalPrice();
         $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
+        $store = $context->getExtensionAttributes()->getStore();
 
         $prices = [
-            'minimalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $minimalPriceAmount),
-            'regularPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $regularPriceAmount),
-            'maximalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
+            'minimalPrice' => $this->createAdjustmentsArray(
+                $priceInfo->getAdjustments(),
+                $minimalPriceAmount,
+                $store
+            ),
+            'regularPrice' => $this->createAdjustmentsArray(
+                $priceInfo->getAdjustments(),
+                $regularPriceAmount,
+                $store
+            ),
+            'maximalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount, $store)
         ];
 
-        $result = function () use ($prices) {
-            return $prices;
-        };
-
-        return $this->valueFactory->create($result);
+        return $prices;
     }
 
     /**
@@ -102,13 +96,11 @@ class Price implements ResolverInterface
      *
      * @param AdjustmentInterface[] $adjustments
      * @param AmountInterface $amount
+     * @param StoreInterface $store
      * @return array
      */
-    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount) : array
+    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount, StoreInterface $store) : array
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->storeManager->getStore();
-
         $priceArray = [
                 'amount' => [
                     'value' => $amount->getValue(),

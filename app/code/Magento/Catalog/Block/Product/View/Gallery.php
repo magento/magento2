@@ -23,6 +23,8 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
+ * Product gallery block
+ *
  * @api
  * @since 100.0.2
  */
@@ -135,16 +137,18 @@ class Gallery extends AbstractView
         $imagesItems = [];
         /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
-            $imageItem = new DataObject([
-                'thumb' => $image->getData('small_image_url'),
-                'img' => $image->getData('medium_image_url'),
-                'full' => $image->getData('large_image_url'),
-                'caption'  => $image->getData('label'),
-                'position' => $image->getData('position'),
-                'isMain'   => $this->isMainImage($image),
-                'type' => str_replace('external-', '', $image->getMediaType()),
-                'videoUrl' => $image->getVideoUrl(),
-            ]);
+            $imageItem = new DataObject(
+                [
+                    'thumb' => $image->getData('small_image_url'),
+                    'img' => $image->getData('medium_image_url'),
+                    'full' => $image->getData('large_image_url'),
+                    'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
+                    'position' => $image->getData('position'),
+                    'isMain'   => $this->isMainImage($image),
+                    'type' => str_replace('external-', '', $image->getMediaType()),
+                    'videoUrl' => $image->getVideoUrl(),
+                ]
+            );
             foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                 $imageItem->setData(
                     $imageConfig->getData('json_object_key'),
@@ -196,6 +200,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Returns image attribute
+     *
      * @param string $imageId
      * @param string $attributeName
      * @param string $default
@@ -203,9 +209,9 @@ class Gallery extends AbstractView
      */
     public function getImageAttribute($imageId, $attributeName, $default = null)
     {
-        $attributes =
-            $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
-        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+        $attributes = $this->getConfigView()
+                ->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
+        return $attributes[$attributeName] ?? $default;
     }
 
     /**
@@ -222,6 +228,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Returns image gallery config object
+     *
      * @return Collection
      */
     private function getGalleryImagesConfig()

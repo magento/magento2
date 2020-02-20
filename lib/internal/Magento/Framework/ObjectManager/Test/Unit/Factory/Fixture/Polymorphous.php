@@ -26,6 +26,6 @@ class Polymorphous
      */
     public function getArg($key)
     {
-        return isset($this->args[$key]) ? $this->args[$key] : null;
+        return $this->args[$key] ?? null;
     }
 }

@@ -17,7 +17,7 @@ class AssertCustomerRedirectToDashboard extends AbstractConstraint
     /**
      * Dashboard Message on account index page.
      */
-    const DASHBOARD_MESSAGE = 'My Dashboard';
+    const DASHBOARD_MESSAGE = 'My Account';
 
     /**
      * Constraint severeness

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">export_grid.export_grid_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <deps>
+            <dep>export_grid.export_grid_data_source</dep>
+        </deps>
+        <spinner>export_grid_columns</spinner>
+    </settings>
+    <dataSource name="export_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">file_name</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_ImportExport::export</aclResource>
+        <dataProvider class="Magento\ImportExport\Ui\DataProvider\ExportFileDataProvider" name="export_grid_data_source">
+            <settings>
+                <requestFieldName>file_name</requestFieldName>
+                <primaryFieldName>file_name</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="export_grid_columns">
+        <column name="file_name">
+            <settings>
+                <sortable>false</sortable>
+                <label translate="true">File name</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\ImportExport\Ui\Component\Columns\ExportGridActions">
+            <settings>
+                <indexField>file_name</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

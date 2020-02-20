@@ -94,6 +94,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $storeInterface;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $tableResolver;
+
+    /**
      * Setup
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -210,6 +215,44 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->willReturn('entity_id');
 
         $objectManager = new ObjectManagerHelper($this);
+
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->setMethods([
+                'getConnection',
+                'getTableName'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resource->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($connection);
+        $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
+
+        $this->tableResolver = $objectManager->getObject(
+            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class,
+            [
+                'resource' => $resource
+            ]
+        );
+
+        $traversableMock = $this->createMock(\Traversable::class);
+        $dimensionsMock = $this->createMock(\Magento\Framework\Indexer\MultiDimensionProvider::class);
+        $dimensionsMock->method('getIterator')->willReturn($traversableMock);
+
+        $indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+
+        $dimensionFactoryMock = $this->createMock(
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+        );
+        $dimensionFactoryMock->method('create')->willReturn($dimensionsMock);
+        $indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
+
         $this->model = $objectManager->getObject(
             \Magento\Elasticsearch\Model\ResourceModel\Index::class,
             [
@@ -220,6 +263,8 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 'categoryRepository' => $this->categoryRepository,
                 'eavConfig' => $this->eavConfig,
                 'connectionName' => 'default',
+                'tableResolver' => $this->tableResolver,
+                'dimensionCollectionFactory' => $dimensionFactoryMock,
             ]
         );
     }
@@ -318,7 +363,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->any())
             ->method('from')
             ->with(
-                [null],
+                ['catalog_category_product_index_store1'],
                 ['category_id', 'product_id', 'position', 'store_id']
             )->willReturnSelf();
 
@@ -498,7 +543,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInternalType(
             'array',
-            $this->model->getFullCategoryProductIndexData([1, [1, ]])
+            $this->model->getFullCategoryProductIndexData(1, [1, ])
         );
     }
 

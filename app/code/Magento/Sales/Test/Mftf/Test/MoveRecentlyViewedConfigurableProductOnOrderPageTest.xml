@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MoveRecentlyViewedConfigurableProductOnOrderPageTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Add Products to Order from Recently Viewed Products Section"/>
+            <title value="Move recently viewed configurable product on order page test"/>
+            <description value="Move recently viewed configurable product on order page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16163"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create customer -->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
+        </before>
+        <after>
+            <!-- Admin logout -->
+            <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Customer logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete created data -->
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 0" stepKey="disableReportModule"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Go to created product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption.value$$" stepKey="selectOption"/>
+
+        <!-- Search and open customer -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>
+        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+
+        <!-- Click create order -->
+        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+
+        <!-- Add configure to product -->
+        <click selector="{{AdminCustomerActivitiesRecentlyViewedSection.addToOrderConfigure($$createConfigProduct.name$$)}}" stepKey="configureProduct"/>
+        <selectOption selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" userInput="$$getConfigAttributeOption.value$$" stepKey="selectProductOption"/>
+        <click selector="{{AdminCustomerActivitiesConfigureSection.okButton}}" stepKey="clickOkBtn"/>
+        <waitForPageLoad stepKey="waitForProductConfigureLoad"/>
+
+        <!-- Click 'Update Changes' -->
+        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+
+        <!-- Assert products in items ordered grid -->
+        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductName"/>
+        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$123.00" stepKey="seeProductPrice"/>
+    </test>
+</tests>

@@ -23,6 +23,9 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

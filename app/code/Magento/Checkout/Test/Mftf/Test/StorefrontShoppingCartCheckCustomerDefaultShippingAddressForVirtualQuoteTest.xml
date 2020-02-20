@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShoppingCartCheckCustomerDefaultShippingAddressForVirtualQuoteTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Estimator in Shopping cart must be pre-filled by Customer default shipping address for virtual quote"/>
+            <title value="Estimator in Shopping cart must be pre-filled by Customer default shipping address for virtual quote"/>
+            <description value="Estimator in Shopping cart must be pre-filled by Customer default shipping address for virtual quote"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-46795"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <createData entity="Customer_With_Different_Default_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Steps -->
+        <!-- Step 1: Go to Storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!-- Step 2: Add virtual product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$)}}" stepKey="amOnPage"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Step 3: Go to Shopping Cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingcart"/>
+        <!-- Step 4: Open Estimate Tax section -->
+        <click selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" stepKey="openEstimateTaxSection"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCountry"/>
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkState"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.postcode}}" stepKey="scrollToPostCodeField"/>
+        <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
+        <assertEquals message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
+            <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
+            <actualResult type="variable">grabTextPostCode</actualResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -22,6 +22,7 @@ define([
 
                 return false;
             }
+            $(element).attr('disabled', true);
             location.href = config.checkoutUrl;
         });
 

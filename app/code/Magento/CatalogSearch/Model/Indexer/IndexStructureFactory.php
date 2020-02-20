@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 
 /**
+ * Index structure factory
+ *
  * @api
  * @since 100.1.0
  */

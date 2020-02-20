@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSetCustomerDefaultBillingAddressTest">
+        <annotations>
+            <stories value="Set customer default billing address"/>
+            <title value="Admin should be able to set customer default billing address"/>
+            <description value="Admin should be able to set customer default billing address from customer addresses grid row actions"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94952"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- -
+        Step1. Login to admin and go to Customers > All Customers.
+        Step2. On *Customers* page choose customer from preconditions and open it to edit
+        Step3. On edit customer page open *Addresses* tab and find a grid with the additional addresses
+        <!- -->
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
+            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses_No_Default_Address"/>
+        </actionGroup>
+        <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
+        <waitForPageLoad stepKey="waitForAddresses"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <fillField userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="fillCustomerAddressStreetInSearchByKeyword"/>
+        <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="pressEnterKey"/>
+        <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad"/>
+        <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="assertThatThereIsNoDefaultBillingAddress"/>
+        <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeOnlyOneCustomerAddressesInGrid"/>
+        <!--Step4. Click *Select* link in *Actions* column for target additional address-->
+        <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickSelectElementFromRow" />
+        <!--Step4. Click *Set as default billing*-->
+        <click selector="{{AdminCustomerAddressesGridSection.firstRowSetAsDefaultBillingLink}}" stepKey="clickOnSetAddressAsDefaultBilling"/>
+        <!--Step5. Press *Ok* button on the pop-up-->
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmSetAddressAsDefaultBilling"/>
+        <seeElement selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="seeDefaultBillingAddressSection"/>
+        <see userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="assertDefaultBillingAddressIsSet"/>
+        <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
+        <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
+        <assertElementContainsAttribute selector="{{AdminCustomerAddressesSection.defaultBillingAddressCheckBox}}" attribute="value" expectedValue="1" stepKey="assertDefaultBillingCheckboxIsCheckedOnCustomerAddressAddUpdateForm"/>
+    </test>
+</tests>

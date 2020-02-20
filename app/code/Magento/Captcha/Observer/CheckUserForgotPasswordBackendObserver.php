@@ -7,6 +7,11 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class CheckUserForgotPasswordBackendObserver
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CheckUserForgotPasswordBackendObserver implements ObserverInterface
 {
     /**
@@ -69,18 +74,17 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
         $controller = $observer->getControllerAction();
         $email = (string)$observer->getControllerAction()->getRequest()->getParam('email');
         $params = $observer->getControllerAction()->getRequest()->getParams();
-        if (!empty($email) && !empty($params)) {
-            if ($captchaModel->isRequired()) {
-                if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
-                ) {
-                    $this->_session->setEmail((string)$controller->getRequest()->getPost('email'));
-                    $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                    $this->messageManager->addError(__('Incorrect CAPTCHA'));
-                    $controller->getResponse()->setRedirect(
-                        $controller->getUrl('*/*/forgotpassword', ['_nosecret' => true])
-                    );
-                }
-            }
+        if (!empty($email)
+            && !empty($params)
+            && $captchaModel->isRequired()
+            && !$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
+        ) {
+            $this->_session->setEmail((string)$controller->getRequest()->getPost('email'));
+            $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+            $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
+            $controller->getResponse()->setRedirect(
+                $controller->getUrl('*/*/forgotpassword', ['_nosecret' => true])
+            );
         }
 
         return $this;

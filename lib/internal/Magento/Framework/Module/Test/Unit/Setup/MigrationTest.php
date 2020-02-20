@@ -251,7 +251,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Serialize\Serializer\Json
-     * @throws \PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
      */
     private function getSerializerMock()
     {

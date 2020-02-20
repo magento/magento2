@@ -108,7 +108,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     {
         $routeParamsResolverFactoryMock = $this->createMock(\Magento\Framework\Url\RouteParamsResolverFactory::class);
         if ($resolve) {
-            $routeParamsResolverFactoryMock->expects($this->once())->method('create')
+            $routeParamsResolverFactoryMock->expects($this->any())->method('create')
                 ->will($this->returnValue($this->routeParamsResolverMock));
         }
         return $routeParamsResolverFactoryMock;
@@ -149,8 +149,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $httpHost string
-     * @param $url string
+     * @param string $httpHost
+     * @param string $url
      * @dataProvider getCurrentUrlProvider
      */
     public function testGetCurrentUrl($httpHost, $url)
@@ -163,6 +163,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($url, $model->getCurrentUrl());
     }
 
+    /**
+     * @return array
+     */
     public function getCurrentUrlProvider()
     {
         return [
@@ -180,7 +183,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse((bool)$model->getUseSession());
 
         $model->setUseSession(true);
-        $this->assertTrue($model->getUseSession());
+        $this->assertFalse($model->getUseSession());
     }
 
     public function testGetBaseUrlNotLinkType()
@@ -337,6 +340,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/catalog/product/view/', $model->getUrl('catalog', ['_use_rewrite' => 1]));
     }
 
+    /**
+     * @return array
+     */
     public function getUrlDataProvider()
     {
         return [
@@ -429,7 +435,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $url
+     * @param string $inputUrl
      * @dataProvider getRebuiltUrlDataProvider
      */
     public function testGetRebuiltUrl($inputUrl, $outputUrl)
@@ -461,10 +467,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('getSessionIdForHost')->will($this->returnValue(false));
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionVar')->will($this->returnValue(true));
-        $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')
+        $this->sidResolverMock->expects($this->any())->method('getUseSessionInUrl')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->any())->method('getSessionIdForHost')->will($this->returnValue(false));
+        $this->sidResolverMock->expects($this->any())->method('getUseSessionVar')->will($this->returnValue(true));
+        $this->routeParamsResolverMock->expects($this->any())->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(true));
         $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
@@ -485,11 +491,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('getSessionIdForHost')
+        $this->sidResolverMock->expects($this->never())->method('getUseSessionInUrl')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->never())->method('getSessionIdForHost')
             ->will($this->returnValue('session-id'));
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionVar')->will($this->returnValue(false));
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam');
+        $this->sidResolverMock->expects($this->never())->method('getUseSessionVar')->will($this->returnValue(false));
+        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
             ->method('getQuery')
             ->will($this->returnValue('foo=bar'));
@@ -497,6 +503,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('http://example.com/?foo=bar', $model->getRedirectUrl('http://example.com/'));
     }
 
+    /**
+     * @return array
+     */
     public function getRebuiltUrlDataProvider()
     {
         return [
@@ -531,10 +540,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'queryParamsResolver' => $this->queryParamsResolverMock,
         ]);
 
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam')->with($this->sessionMock)
+        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam')->with($this->sessionMock)
             ->will($this->returnValue('sid'));
-        $this->sessionMock->expects($this->once())->method('getSessionId')->will($this->returnValue('session-id'));
-        $this->queryParamsResolverMock->expects($this->once())->method('setQueryParam')->with('sid', 'session-id');
+        $this->sessionMock->expects($this->never())->method('getSessionId')->will($this->returnValue('session-id'));
+        $this->queryParamsResolverMock->expects($this->never())->method('setQueryParam')->with('sid', 'session-id');
 
         $model->addSessionParam();
     }
@@ -558,6 +567,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $model->isOwnOriginUrl());
     }
 
+    /**
+     * @return array
+     */
     public function isOwnOriginUrlDataProvider()
     {
         return [
@@ -607,6 +619,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('http://localhost/', $model->getConfigData($key));
     }
 
+    /**
+     * @return array
+     */
     public function getConfigDataDataProvider()
     {
         return [
@@ -666,10 +681,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $requestMock->expects($this->once())
+        $requestMock->expects($this->any())
             ->method('getHttpHost')
             ->will($this->returnValue('localhost'));
-        $this->scopeMock->expects($this->once())
+        $this->scopeMock->expects($this->any())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://localhost'));
         $this->scopeResolverMock->expects($this->any())
@@ -694,24 +709,27 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('localhost'));
-        $this->scopeMock->expects($this->once())
+        $requestMock->expects($this->never())->method('getHttpHost')->will($this->returnValue('localhost'));
+        $this->scopeMock->expects($this->any())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://example.com'));
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam')
+        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam')
             ->will($this->returnValue('SID'));
-        $this->sessionMock->expects($this->once())->method('getSessionId')
+        $this->sessionMock->expects($this->never())->method('getSessionId')
             ->will($this->returnValue('session-id'));
 
         $this->assertEquals(
-            '<a href="http://example.com/?SID=session-id">www.example.com</a>',
+            '<a href="http://example.com/">www.example.com</a>',
             $model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>')
         );
     }
 
+    /**
+     * @return array
+     */
     public function sessionUrlVarWithMatchedHostsAndBaseUrlDataProvider()
     {
         return [

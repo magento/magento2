@@ -23,8 +23,8 @@ class Quote extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param Snapshot $entitySnapshot,
-     * @param RelationComposite $entityRelationComposite,
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
      */
@@ -102,6 +102,7 @@ class Quote extends AbstractDb
 
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -124,6 +125,7 @@ class Quote extends AbstractDb
         $data = $connection->fetchRow($select);
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -148,6 +150,7 @@ class Quote extends AbstractDb
 
             if ($data) {
                 $quote->setData($data);
+                $quote->setOrigData();
             }
         }
 
@@ -168,29 +171,6 @@ class Quote extends AbstractDb
             $quote->getStoreId()
         )
         ->getNextValue();
-    }
-
-    /**
-     * Check if order increment ID is already used.
-     * Method can be used to avoid collisions of order IDs.
-     *
-     * @param int $orderIncrementId
-     * @return bool
-     */
-    public function isOrderIncrementIdUsed($orderIncrementId)
-    {
-        /** @var  \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->_resources->getConnection('sales');
-        $bind = [':increment_id' => $orderIncrementId];
-        /** @var \Magento\Framework\DB\Select $select */
-        $select = $adapter->select();
-        $select->from($this->getTable('sales_order'), 'entity_id')->where('increment_id = :increment_id');
-        $entity_id = $adapter->fetchOne($select, $bind);
-        if ($entity_id > 0) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -319,12 +299,14 @@ class Quote extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->isPreventSaving()) {
             return parent::save($object);
         }
+
+        return $this;
     }
 }

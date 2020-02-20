@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SortByIdDescendingActionGroup">
+        <annotations>
+            <description>Sorts a Backend Admin Grid by descending order for the ID column.</description>
+        </annotations>
+
+        <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending" visible="true"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish"/>
+
+        <!-- Conditional Click again in case it goes from default state to ascending on first click -->
+        <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="secondClickToAttemptSortByIdDescending" visible="true"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish"/>
+    </actionGroup>
+</actionGroups>

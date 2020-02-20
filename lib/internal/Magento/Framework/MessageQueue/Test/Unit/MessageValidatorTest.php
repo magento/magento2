@@ -150,6 +150,9 @@ class MessageValidatorTest extends \PHPUnit\Framework\TestCase
         $this->model->validate('topic', $message);
     }
 
+    /**
+     * @return array
+     */
     public function getQueueConfigRequestType()
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)

@@ -6,23 +6,22 @@
 namespace Magento\DownloadableImportExport\Model;
 
 use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
+use Magento\Catalog\Model\Product;
 
+/**
+ * Test export and import downloadable products
+ */
 class DownloadableTest extends AbstractProductExportImportTestCase
 {
-    public function exportImportDataProvider()
+    /**
+     * @return array
+     */
+    public function exportImportDataProvider(): array
     {
         return [
             'downloadable-product' => [
                 [
-                    'Magento/Downloadable/_files/product_downloadable.php'
-                ],
-                [
-                    'downloadable-product',
-                ],
-            ],
-            'downloadable-product-with-files' => [
-                [
-                    'Magento/Downloadable/_files/product_downloadable_with_files.php'
+                    'Magento/Downloadable/_files/product_downloadable_with_link_url_and_sample_url.php'
                 ],
                 [
                     'downloadable-product',
@@ -31,102 +30,66 @@ class DownloadableTest extends AbstractProductExportImportTestCase
         ];
     }
 
-    public function importReplaceDataProvider()
-    {
-        return $this->exportImportDataProvider();
-    }
-
     /**
-     * @param array $fixtures
-     * @param string[] $skus
-     * @param string[] $skippedAttributes
-     * @dataProvider exportImportDataProvider
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * Run import/export tests.
      *
-     * @todo remove after MAGETWO-38240 resolved
-     */
-    public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
-    {
-        $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
-    }
-
-    /**
-     * @param array $fixtures
-     * @param string[] $skus
-     * @dataProvider exportImportDataProvider
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @todo remove after MAGETWO-38240 resolved
-     */
-    public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
-    {
-        $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
-    }
-
-    /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
      * @param string[] $skus
      * @param string[] $skippedAttributes
-     * @dataProvider importReplaceDataProvider
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @todo remove after MAGETWO-38240 resolved
+     * @return void
+     * @dataProvider exportImportDataProvider
      */
-    public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
-        $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
+        $skippedAttributes = array_merge(self::$skippedAttributes, ['downloadable_links']);
+        parent::testImportExport($fixtures, $skus, $skippedAttributes);
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     *
-     * @param array $fixtures
-     * @param string[] $skus
-     * @param string[] $skippedAttributes
-     * @dataProvider importReplaceDataProvider
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
-    {
-        $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
-    }
-
-    /**
-     * @param \Magento\Catalog\Model\Product $expectedProduct
-     * @param \Magento\Catalog\Model\Product $actualProduct
-     */
-    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
-    {
-        $expectedProductLinks   = $expectedProduct->getExtensionAttributes()->getDownloadableProductLinks();
+    protected function assertEqualsSpecificAttributes(
+        Product $expectedProduct,
+        Product $actualProduct
+    ): void {
+        $expectedProductLinks = $expectedProduct->getExtensionAttributes()->getDownloadableProductLinks();
         $expectedProductSamples = $expectedProduct->getExtensionAttributes()->getDownloadableProductSamples();
 
-        $actualProductLinks   = $actualProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $actualProductLinks = $actualProduct->getExtensionAttributes()->getDownloadableProductLinks();
         $actualProductSamples = $actualProduct->getExtensionAttributes()->getDownloadableProductSamples();
 
         $this->assertEquals(count($expectedProductLinks), count($actualProductLinks));
         $this->assertEquals(count($expectedProductSamples), count($actualProductSamples));
+        $actualLinks = $this->getDataWithSortingById($actualProductLinks);
+        $expectedLinks = $this->getDataWithSortingById($actualProductLinks);
+        foreach ($actualLinks as $key => $actualLink) {
+            $this->assertEquals($expectedLinks[$key], $actualLink);
+        }
+        $actualSamples = $this->getDataWithSortingById($actualProductSamples);
+        $expectedSamples = $this->getDataWithSortingById($expectedProductSamples);
+        foreach ($actualSamples as $key => $actualSample) {
+            $this->assertEquals($expectedSamples[$key], $actualSample);
+        }
+    }
 
-        $expectedLinksArray = [];
-        foreach ($expectedProductLinks as $link) {
-            $expectedLinksArray[] = $link->getData();
-        }
-        foreach ($actualProductLinks as $actualLink) {
-            $this->assertContains($expectedLinksArray, $actualLink->getData());
+    /**
+     * Get data with sorting by id
+     *
+     * @param array $objects
+     *
+     * @return array
+     */
+    private function getDataWithSortingById(array $objects)
+    {
+        $result = [];
+        foreach ($objects as $object) {
+            $result[$object->getId()] = $object->getData();
         }
 
-        $expectedSamplesArray = [];
-        foreach ($expectedProductSamples as $sample) {
-            $expectedSamplesArray[] = $sample->getData();
-        }
-        foreach ($actualProductSamples as $actualSample) {
-            $this->assertContains($expectedSamplesArray, $actualSample->getData());
-        }
+        return $result;
     }
 }

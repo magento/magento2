@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRuleFormSection">
+        <element name="fieldTaxRate" type="block" selector="div.field-tax_rate"/>
+        <element name="taxIdentifier" type="input" selector="input.admin__control-text admin__action-multiselect-search" timeout="30"/>
+        <element name="code" type="input" selector="#code"/>
+        <element name="taxRateSearch" type="input" selector="input[data-role='advanced-select-text']"/>
+        <element name="taxRateSelected" type="input" selector="//span[contains(., '{{taxRateCode}}') and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true" />
+        <element name="taxRateOption" type="multiselect" selector="//*[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//span[.='{{taxRateCode}}']" parameterized="true" />
+        <element name="save" type="button" selector="#save" timeout="30"/>
+        <element name="deleteRule" type="button" selector="#delete" timeout="30"/>
+        <element name="ok" type="button" selector="button.action-primary.action-accept" timeout="30"/>
+        <element name="additionalSettings" type="button" selector="#details-summarybase_fieldset" timeout="30"/>
+        <element name="customerTaxClassOption" type="checkbox" selector="//*[@id='tax_customer_class']/..//span[.='{{taxCustomerClass}}']" parameterized="true"/>
+        <element name="productTaxClassOption" type="checkbox" selector="//*[@id='tax_product_class']/..//span[.='{{taxProductClass}}']" parameterized="true"/>
+        <element name="customerTaxClassSelected" type="checkbox" selector="//*[@id='tax_customer_class']/..//span[.='{{taxCustomerClass}}' and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true"/>
+        <element name="productTaxClassSelected" type="checkbox" selector="//*[@id='tax_product_class']/..//span[.='{{taxProductClass}}' and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true"/>
+        <element name="priority" type="text" selector="#priority"/>
+        <element name="sortOrder" type="text" selector="#position"/>
+    </section>
+</sections>

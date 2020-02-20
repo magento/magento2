@@ -153,6 +153,9 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $result2['totalRecords']);
     }
 
+    /**
+     * @return array
+     */
     public function afterToDataProvider()
     {
         return [

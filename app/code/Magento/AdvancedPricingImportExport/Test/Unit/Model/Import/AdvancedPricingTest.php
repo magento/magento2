@@ -15,6 +15,9 @@ use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory 
  */
 class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
+    /**
+     * DB Table data
+     */
     const TABLE_NAME = 'tableName';
     const LINK_FIELD = 'linkField';
 
@@ -54,7 +57,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $websiteValidator;
 
     /**
-     * @var AdvancedPricing\Validator\TearPrice |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\TierPrice |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $tierPriceValidator;
 
@@ -209,6 +212,10 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * Test method validateRow against its result.
      *
      * @dataProvider validateRowResultDataProvider
+     * @param array $rowData
+     * @param string|null $behavior
+     * @param bool $expectedResult
+     * @throws \ReflectionException
      */
     public function testValidateRowResult($rowData, $behavior, $expectedResult)
     {
@@ -234,6 +241,10 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * Test method validateRow whether AddRowError is called.
      *
      * @dataProvider validateRowAddRowErrorCallDataProvider
+     * @param array $rowData
+     * @param string|null $behavior
+     * @param string $error
+     * @throws \ReflectionException
      */
     public function testValidateRowAddRowErrorCall($rowData, $behavior, $error)
     {
@@ -324,6 +335,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * Take into consideration different data and check relative internal calls.
      *
      * @dataProvider saveAndReplaceAdvancedPricesAppendBehaviourDataProvider
+     * @param array $data
+     * @param string $tierCustomerGroupId
+     * @param string $groupCustomerGroupId
+     * @param string $tierWebsiteId
+     * @param string $groupWebsiteId
+     * @param array $expectedTierPrices
+     * @throws \ReflectionException
      */
     public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCalls(
         $data,
@@ -768,6 +786,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $this->invokeMethod($this->advancedPricing, 'saveProductPrices', [$priceData, 'table']);
     }
 
+    /**
+     * @return array
+     */
     public function saveProductPricesDataProvider()
     {
         return [
@@ -839,6 +860,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
     }
 
+    /**
+     * @return array
+     */
     public function deleteProductTierPricesDataProvider()
     {
         return [
@@ -900,7 +924,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
         $dbSelectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->connection->expects($this->once())
-            ->method('fetchAssoc')
+            ->method('fetchAll')
             ->willReturn($existingPrices);
         $this->connection->expects($this->once())
             ->method('select')
@@ -909,7 +933,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->method('from')
             ->with(
                 self::TABLE_NAME,
-                ['value_id', self::LINK_FIELD, 'all_groups', 'customer_group_id']
+                [self::LINK_FIELD, 'all_groups', 'customer_group_id', 'qty']
             )->willReturnSelf();
         $this->advancedPricing->expects($this->once())
             ->method('retrieveOldSkus')
@@ -921,6 +945,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
     }
 
+    /**
+     * @return array
+     */
     public function processCountExistingPricesDataProvider()
     {
         return [
@@ -947,6 +974,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param $object
      * @param $property
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function getPropertyValue($object, $property)
     {
@@ -963,6 +991,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param $object
      * @param $property
      * @param $value
+     * @return mixed
+     * @throws \ReflectionException
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
@@ -980,8 +1010,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param object $object
      * @param string $method
      * @param array $args
-     *
-     * @return mixed the method result.
+     * @return mixed
+     * @throws \ReflectionException
      */
     private function invokeMethod($object, $method, $args = [])
     {
@@ -998,6 +1028,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param array $methods
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \ReflectionException
      */
     private function getAdvancedPricingMock($methods = [])
     {

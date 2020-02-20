@@ -211,9 +211,6 @@ class StoresFixture extends Fixture
         $this->generateWebsites();
         $this->generateStoreGroups();
         $this->generateStoreViews();
-
-        //clean cache
-        $this->storeManager->reinitStores();
     }
 
     /**
@@ -305,7 +302,6 @@ class StoresFixture extends Fixture
                     'code' => $storeCode
                 ]
             )->save();
-            $this->eventManager->dispatch('store_add', ['store' => $store]);
 
             $this->saveStoreLocale($store->getId(), $localesList[$existedStoreViewsCount % $localesListCount]);
         }

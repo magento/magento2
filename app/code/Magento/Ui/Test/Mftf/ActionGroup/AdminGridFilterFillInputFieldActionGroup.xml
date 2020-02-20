@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGridFilterFillInputFieldActionGroup">
+        <annotations>
+            <description>Expands the 'Filters' section of an Admin Grid page. Fills in the provided Filter Value for the provided Filter Name.</description>
+        </annotations>
+        <arguments>
+            <argument name="filterInputName" type="string"/>
+            <argument name="filterValue" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminDataGridFilterSection.filterExpand}}" dependentSelector="{{AdminDataGridFilterSection.filterForm}}" visible="false" stepKey="openFiltersFormIfNecessary"/>
+        <waitForElementVisible selector="{{AdminDataGridFilterSection.filterForm}}" stepKey="waitForFormVisible"/>
+        <fillField userInput="{{filterValue}}" selector="{{AdminDataGridFilterSection.inputFieldByNameAttr(filterInputName)}}" stepKey="fillFilterInputField"/>
+    </actionGroup>
+</actionGroups>

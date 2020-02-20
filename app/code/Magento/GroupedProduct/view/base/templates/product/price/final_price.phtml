@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Template for displaying grouped product price
  */
@@ -26,10 +24,10 @@ if ($minProduct) {
         );
 }
 ?>
-<div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-    <?php if ($minProduct && \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW != $block->getZone()): ?>
+<div class="price-box">
+    <?php if ($minProduct && \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW != $block->getZone()) : ?>
     <p class="minimal-price">
-        <span class="price-label"><?= /* @escapeNotVerified */ __('Starting at') ?></span><?= $amountRender->toHtml() ?>
+        <span class="price-label"><?= $block->escapeHtml(__('Starting at')) ?></span><?= $amountRender->toHtml() ?>
     </p>
     <?php endif ?>
 </div>

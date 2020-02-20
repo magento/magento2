@@ -28,6 +28,9 @@ $vendorAutoload = BP . "/{$vendorDir}/autoload.php";
 /* 'composer install' validation */
 if (file_exists($vendorAutoload)) {
     $composerAutoloader = include $vendorAutoload;
+} else if (file_exists("{$vendorDir}/autoload.php")) {
+	$vendorAutoload = "{$vendorDir}/autoload.php";
+	$composerAutoloader = include $vendorAutoload;
 } else {
     throw new \Exception(
         'Vendor autoload is not found. Please run \'composer install\' under application root directory.'

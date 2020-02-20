@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCreateProductConfigurationsPanel">
+        <element name="attributeOption" type="checkbox" selector="li[data-attribute-option-title='{{colorOption}}']" parameterized="true"/>
+        <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
+        <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
+        <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
+        <element name="attributeCode" type="input" selector=".admin__control-text[name='attribute_code']"/>
+        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
+        <element name="id" type="text" selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div"/>
+        <element name="variationsGrid" type="block" selector=".admin__field[data-index='configurable-matrix']"/>
+        <element name="variationQty" type="input" selector=".admin__field[data-index='configurable-matrix'] input[name='configurable-matrix[{{rowIndex}}][qty]']" parameterized="true"/>
+        <element name="attributeCheckbox" type="checkbox" selector="//div[contains(text(), '{{arg}}')]/ancestor::tr//input[@data-action='select-row']" parameterized="true"/>
+        <element name="defaultLabel" type="text" selector="//div[contains(text(), '{{arg}}')]/ancestor::tr//td[3]/div[@class='data-grid-cell-content']" parameterized="true"/>
+
+        <element name="selectAll" type="button" selector=".action-select-all"/>
+        <element name="selectAllByAttribute" type="button" selector="//div[@data-attribute-title='{{attr}}']//button[contains(@class, 'action-select-all')]" parameterized="true"/>
+        <element name="createNewValue" type="input" selector=".action-create-new" timeout="30"/>
+        <element name="attributeNameInTitle" type="input" selector="//div[contains(@class,'attribute-entity-title-block')]/div[contains(@class,'attribute-entity-title')]"/>
+        <element name="attributeName" type="input" selector="li[data-attribute-option-title=''] .admin__field-create-new .admin__control-text"/>
+        <element name="attributeNameWithError" type="text" selector="//li[@data-attribute-option-title='']/div[contains(@class,'admin__field admin__field-create-new _error')]"/>
+        <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
+        <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
+
+        <element name="applySingleSetOfImages" type="radio" selector=".admin__field-label[for='apply-single-set-radio']" timeout="30"/>
+        <element name="imageFileUpload" type="input" selector=".steps-wizard-section input[type='file'][name='image']"/>
+        <element name="imageUploadButton" type="button" selector=".steps-wizard-section div.gallery"/>
+
+        <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
+        <element name="applySinglePriceToAllSkus" type="radio" selector=".admin__field-label[for='apply-single-price-radio']"/>
+        <element name="singlePrice" type="input" selector="#apply-single-price-input"/>
+        <element name="selectAttribute" type="select" selector="#select-each-price" timeout="30"/>
+        <element name="attribute1" type="input" selector="#apply-single-price-input-0"/>
+        <element name="attribute2" type="input" selector="#apply-single-price-input-1"/>
+        <element name="attribute3" type="input" selector="#apply-single-price-input-2"/>
+
+        <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
+        <element name="applyUniqueQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-inventory-radio']" timeout="30"/>
+        <element name="selectQuantity" type="select" selector="#apply-single-price-input-qty" timeout="30"/>
+        <element name="applyUniqueQuantity" type="input" selector="//*[text()='{{option}}']/ancestor::div[contains(@class, 'admin__field _required')]//input[contains(@id, 'apply-qty-input')]" parameterized="true"/>
+        <element name="applyUniqueImagesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-images-radio']" timeout="30"/>
+        <element name="applyUniquePricesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']" timeout="30"/>
+        <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>
+        <element name="uploadImagesButton" type="file" selector="//*[text()='{{option}}']/../../div[@data-role='gallery']//input[@type='file']" timeout="30" parameterized="true"/>
+        <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
+        <element name="imageFile" type="text" selector="//*[@data-role='gallery']//img[contains(@src, '{{url}}')]" parameterized="true"/>
+        <element name="selectPriceButton" type="select" selector="#select-each-price" timeout="30"/>
+        <element name="price" type="input" selector="//*[text()='{{option}}']/../..//input[contains(@id, 'apply-single-price-input')]" parameterized="true"/>
+        <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
+        <element name="gridLoadingMask" type="text" selector="[data-role='spinner'][data-component*='product_attributes_listing']"/>
+        <element name="attributeCheckboxByName" type="input" selector="//*[contains(@data-attribute-option-title,'{{arg}}')]//input[@type='checkbox']" parameterized="true"/>
+        <element name="attributeColorCheckbox" type="select" selector="//div[contains(text(),'color') and @class='data-grid-cell-content']/../preceding-sibling::td/label/input"/>
+        <element name="attributeRowByAttributeCode" type="block" selector="//td[count(../../..//th[./*[.='Attribute Code']]/preceding-sibling::th) + 1][./*[.='{{attribute_code}}']]/../td//input[@data-action='select-row']" parameterized="true"/>
+    </section>
+</sections>

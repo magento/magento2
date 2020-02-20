@@ -6,7 +6,12 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
-class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+/**
+ * Controller endpoint for mass action: set index mode as 'Update by Schedule'
+ */
+class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
 {
     /**
      * Turn mview on for the given indexers

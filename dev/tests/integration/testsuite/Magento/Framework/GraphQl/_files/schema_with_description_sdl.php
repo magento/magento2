@@ -506,20 +506,6 @@ return [
                 'defaultValue' =>  null
             ],
             [
-                'name' =>  'finset',
-                'description' =>  '',
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'String',
-                        'ofType' =>  null
-                    ]
-                ],
-                'defaultValue' =>  null
-            ],
-            [
                 'name' =>  'from',
                 'description' =>  '',
                 'type' =>  [

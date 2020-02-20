@@ -15,6 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Helper\ImageFactory;
 use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Framework\View\DesignLoader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,6 +33,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     /** @var  DesignInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $design;
+
+    /** @var DesignLoader | \PHPUnit_Framework_MockObject_MockObject*/
+    private $designLoader;
 
     /** @var  Image */
     private $model;
@@ -60,13 +64,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->design = $this->createMock(DesignInterface::class);
+        $this->designLoader = $this->createMock(DesignLoader::class);
         $this->model = new Image(
             $this->imageFactory,
             $this->state,
             $this->storeManager,
             $this->design,
             $this->imageInterfaceFactory,
-            $this->imageCodes
+            $this->imageCodes,
+            $this->designLoader
         );
     }
 
@@ -93,9 +99,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($image);
 
-        $imageHelper->expects($this->once())
-            ->method('getResizedImageInfo')
-            ->willReturn([11, 11]);
         $this->state->expects($this->once())
             ->method('emulateAreaCode')
             ->with(
@@ -105,12 +108,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($imageHelper);
 
+        $width = 5;
+        $height = 10;
         $imageHelper->expects($this->once())
             ->method('getHeight')
-            ->willReturn(10);
+            ->willReturn($height);
         $imageHelper->expects($this->once())
             ->method('getWidth')
-            ->willReturn(10);
+            ->willReturn($width);
         $imageHelper->expects($this->once())
             ->method('getLabel')
             ->willReturn('Label');
@@ -126,10 +131,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with();
         $image->expects($this->once())
             ->method('setResizedHeight')
-            ->with(11);
+            ->with($height);
         $image->expects($this->once())
             ->method('setResizedWidth')
-            ->with(11);
+            ->with($width);
 
         $productRenderInfoDto->expects($this->once())
             ->method('setImages')

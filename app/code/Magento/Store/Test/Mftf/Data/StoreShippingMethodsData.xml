@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="FreeShippingMethodsSettingConfig" type="free_shipping_config_state">
+        <requiredEntity type="active">active</requiredEntity>
+    </entity>
+    <entity name="active" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultShippingMethodsConfig" type="free_shipping_config_state">
+        <requiredEntity type="active">DefaultFreeShipping</requiredEntity>
+    </entity>
+    <entity name="DefaultFreeShipping" type="active">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="DisableFreeShippingConfig" type="disable_free_shipping_config_state">
+        <requiredEntity type="disableFreeShipping">disableFreeShipping</requiredEntity>
+    </entity>
+    <entity name="disableFreeShipping" type="disableFreeShipping">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="MinimumOrderAmount90" type="minimum_order_amount">
+        <requiredEntity type="free_shipping_subtotal">Price</requiredEntity>
+    </entity>
+    <entity name="Price" type="free_shipping_subtotal">
+        <data key="value">90</data>
+    </entity>
+
+    <entity name="MinimumOrderAmount100" type="minimum_order_amount">
+        <requiredEntity type="free_shipping_subtotal">FreeShippingSubtotal100</requiredEntity>
+    </entity>
+    <entity name="FreeShippingSubtotal100" type="free_shipping_subtotal">
+        <data key="value">100</data>
+    </entity>
+
+    <entity name="DefaultMinimumOrderAmount" type="minimum_order_amount">
+        <requiredEntity type="free_shipping_subtotal">DefaultPrice</requiredEntity>
+    </entity>
+    <entity name="DefaultPrice" type="free_shipping_subtotal">
+        <data key="value">0</data>
+    </entity>
+</entities>

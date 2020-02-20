@@ -3,14 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\ResourceModel;
 
+use Exception;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\UnionExpression;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
+use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Psr\Log\LoggerInterface;
 
+/**
+ * EAV read handler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReadHandler implements AttributeInterface
 {
     /**
@@ -29,23 +43,21 @@ class ReadHandler implements AttributeInterface
     private $logger;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     private $config;
 
     /**
-     * ReadHandler constructor.
-     *
      * @param MetadataPool $metadataPool
      * @param ScopeResolver $scopeResolver
      * @param LoggerInterface $logger
-     * @param \Magento\Eav\Model\Config $config
+     * @param Config $config
      */
     public function __construct(
         MetadataPool $metadataPool,
         ScopeResolver $scopeResolver,
         LoggerInterface $logger,
-        \Magento\Eav\Model\Config $config
+        Config $config
     ) {
         $this->metadataPool = $metadataPool;
         $this->scopeResolver = $scopeResolver;
@@ -58,17 +70,35 @@ class ReadHandler implements AttributeInterface
      *
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
-     * @throws \Exception if for unknown entity type
+     * @throws Exception if for unknown entity type
+     * @deprecated Not used anymore
+     * @see ReadHandler::getEntityAttributes
      */
     protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
-        $attributes = (null === $eavEntityType) ? [] : $this->config->getAttributes($eavEntityType);
-        return $attributes;
+        return null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType);
     }
 
     /**
+     * Get attribute of given entity type
+     *
+     * @param string $entityType
+     * @param DataObject $entity
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @throws Exception if for unknown entity type
+     */
+    private function getEntityAttributes(string $entityType, DataObject $entity): array
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $eavEntityType = $metadata->getEavEntityType();
+        return null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType, $entity);
+    }
+
+    /**
+     * Get context variables
+     *
      * @param ScopeInterface $scope
      * @return array
      */
@@ -82,13 +112,15 @@ class ReadHandler implements AttributeInterface
     }
 
     /**
+     * Execute read handler
+     *
      * @param string $entityType
      * @param array $entityData
      * @param array $arguments
      * @return array
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\ConfigurationMismatchException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws Exception
+     * @throws ConfigurationMismatchException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
@@ -104,46 +136,85 @@ class ReadHandler implements AttributeInterface
         $attributesMap = [];
         $selects = [];
 
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($this->getAttributes($entityType) as $attribute) {
+        /** @var AbstractAttribute $attribute */
+        foreach ($this->getEntityAttributes($entityType, new DataObject($entityData)) as $attribute) {
             if (!$attribute->isStatic()) {
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
             }
         }
         if (count($attributeTables)) {
-            $attributeTables = array_keys($attributeTables);
-            foreach ($attributeTables as $attributeTable) {
+            $identifiers = null;
+            foreach ($attributeTables as $attributeTable => $attributeIds) {
                 $select = $connection->select()
                     ->from(
                         ['t' => $attributeTable],
                         ['value' => 't.value', 'attribute_id' => 't.attribute_id']
                     )
-                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
+                    ->where('attribute_id IN (?)', $attributeIds);
+                $attributeIdentifiers = [];
                 foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
-                        $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                        $connection->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
-                    )->order('t.' . $scope->getIdentifier() . ' DESC');
+                    );
+                    $attributeIdentifiers[] = $scope->getIdentifier();
                 }
+                $attributeIdentifiers = array_unique($attributeIdentifiers);
+                $identifiers = array_intersect($identifiers ?? $attributeIdentifiers, $attributeIdentifiers);
                 $selects[] = $select;
             }
-            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
-                $selects,
-                \Magento\Framework\DB\Select::SQL_UNION_ALL
-            );
-            foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
+            $this->applyIdentifierForSelects($selects, $identifiers);
+            $unionSelect = new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )');
+            $orderedUnionSelect = $connection->select();
+            $orderedUnionSelect->from(['u' => $unionSelect]);
+            $this->applyIdentifierForUnion($orderedUnionSelect, $identifiers);
+            $attributes = $connection->fetchAll($orderedUnionSelect);
+            foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {
                     $this->logger->warning(
-                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
-                        for entity type '$entityType'."
+                        "Attempt to load value of nonexistent EAV attribute",
+                        [
+                            'attribute_id' => $attributeValue['attribute_id'],
+                            'entity_type' => $entityType
+                        ]
                     );
                 }
             }
         }
         return $entityData;
+    }
+
+    /**
+     * Apply identifiers column on select array
+     *
+     * @param Select[] $selects
+     * @param array $identifiers
+     * @return void
+     */
+    private function applyIdentifierForSelects(array $selects, array $identifiers): void
+    {
+        foreach ($selects as $select) {
+            foreach ($identifiers as $identifier) {
+                $select->columns($identifier, 't');
+            }
+        }
+    }
+
+    /**
+     * Apply identifiers order on union select
+     *
+     * @param Select $unionSelect
+     * @param array $identifiers
+     */
+    private function applyIdentifierForUnion(Select $unionSelect, array $identifiers)
+    {
+        foreach ($identifiers as $identifier) {
+            $unionSelect->order($identifier);
+        }
     }
 }

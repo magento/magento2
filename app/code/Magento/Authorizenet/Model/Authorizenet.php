@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Model;
 
 use Magento\Authorizenet\Model\TransactionService;
 use Magento\Framework\HTTP\ZendClientFactory;
 
 /**
+ * Model for Authorize.net payment method
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 {

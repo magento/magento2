@@ -86,6 +86,9 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedOutputDataArray, $outputData);
     }
 
+    /**
+     * @return array
+     */
     public function buildOutputDataArrayDataProvider()
     {
         $expectedOutputDataArray = [

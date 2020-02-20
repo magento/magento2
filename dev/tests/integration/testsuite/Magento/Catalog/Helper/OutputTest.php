@@ -65,6 +65,24 @@ class OutputTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider isDirectiveDataProvider
+     */
+    public function testIsDirective($html, $expectedResult)
+    {
+        $this->assertEquals($expectedResult, $this->_helper->isDirectivesExists($html));
+    }
+
+    public function isDirectiveDataProvider()
+    {
+        return [
+            ['{{', false],
+            ['Test string', false],
+            ['{store url="customer/account/login"}', false],
+            ['{{store url="customer/account/login"}}', true],
+        ];
+    }
+
+    /**
      * Helper method for testProcess()
      *
      * @param \Magento\Catalog\Helper\Output $helper

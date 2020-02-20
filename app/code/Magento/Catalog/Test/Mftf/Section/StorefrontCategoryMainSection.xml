@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryMainSection">
+        <element name="perPage" type="select" selector="//*[@id='authenticationPopup']/following-sibling::div[3]//*[@id='limiter']"/>
+        <element name="sortedBy" type="select" selector="//*[@id='authenticationPopup']/following-sibling::div[1]//*[@id='sorter']"/>
+        <element name="modeGridIsActive" type="text" selector="//*[@id='authenticationPopup']/following-sibling::div[1]//*[@class='modes']/strong[@class='modes-mode active mode-grid']/span"/>
+        <element name="modeListButton" type="button" selector="#mode-list"/>
+        <element name="CategoryTitle" type="text" selector="#page-title-heading span"/>
+        <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
+        <element name="specifiedProductItemInfo" type="button" selector="//a[@class='product-item-link'][contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="addToCartButtonProductInfoHover" type="button" selector=".product-item-info:hover button.action.tocart.primary" timeout="30"/>
+        <element name="addToWishListIconProductInfoHover" type="button" selector=".product-item-info:hover a.action.towishlist" timeout="30"/>
+        <element name="addToCompareIconProductInfoHover" type="button" selector=".product-item-info:hover a.action.tocompare" timeout="30"/>
+        <element name="addToCartProductBySku" type="button" selector="//form[@data-product-sku='{{productSku}}']//button[contains(@class, 'tocart')]" parameterized="true" />
+        <element name="SuccessMsg" type="button" selector="div.message-success"/>
+        <element name="productCount" type="text" selector="#toolbar-amount"/>
+        <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
+        <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
+        <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
+        <element name="productImage" type="text" selector="img.product-image-photo"/>
+        <element name="productLink" type="text" selector="a.product-item-link" timeout="30"/>
+        <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
+        <element name="productPrice" type="text" selector=".price-final_price"/>
+        <element name="productPriceByName" type="text" selector="//a[contains(text(), '{{productName}}')]//ancestor::div[contains(@class, 'product-item-info')]//span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="categoryImage" type="text" selector=".category-image"/>
+        <element name="emptyProductMessage" type="block" selector=".message.info.empty>div"/>
+        <element name="lineProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
+        <element name="asLowAs" type="input" selector="//*[@class='price-box price-final_price']/a/span[@class='price-container price-final_price tax weee']"/>
+        <element name="productsList" type="block" selector="#maincontent .column.main"/>
+        <element name="productName" type="text" selector=".product-item-name"/>
+        <element name="productOptionList" type="text" selector="#narrow-by-list"/>
+        <element name="productNameByPosition" type="text" selector=".products-grid li:nth-of-type({{position}}) .product-item-name a" parameterized="true"/>
+    </section>
+</sections>

@@ -5,6 +5,7 @@
  */
 namespace Magento\Deploy\Test\Unit\Service;
 
+use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Service\Bundle;
@@ -102,7 +103,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
             $package->expects($this->never())->method('getTheme');
             $package->expects($this->never())->method('getLocale');
         } else {
-            $package->expects($this->exactly(1))->method('isVirtual')->willReturn(false);
+            $package->expects($this->exactly(2))->method('isVirtual')->willReturn(false);
             $package->expects($this->exactly(3))->method('getArea')->willReturn('area');
             $package->expects($this->exactly(3))->method('getTheme')->willReturn('theme');
             $package->expects($this->exactly(3))->method('getLocale')->willReturn('locale');
@@ -187,6 +188,9 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $this->service->deploy($options));
     }
 
+    /**
+     * @return array
+     */
     public function deployDataProvider()
     {
         return [
@@ -194,6 +198,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 [
                     'strategy' =>  'compact',
                     'no-javascript' => false,
+                    'no-js-bundle' => false,
                     'no-html-minify' => false,
                     'refresh-content-version-only' => false,
                 ],
@@ -203,6 +208,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 [
                     'strategy' =>  'compact',
                     'no-javascript' => false,
+                    'no-js-bundle' => false,
                     'no-html-minify' => false,
                     'refresh-content-version-only' => false,
                     'content-version' =>  '123456',
@@ -217,5 +223,39 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 '654321'
             ]
         ];
+    }
+
+    public function testMaxExecutionTimeOptionPassed()
+    {
+        $options = [
+            DeployStaticOptions::MAX_EXECUTION_TIME           => 100,
+            DeployStaticOptions::REFRESH_CONTENT_VERSION_ONLY => false,
+            DeployStaticOptions::JOBS_AMOUNT                  => 3,
+            DeployStaticOptions::STRATEGY                     => 'compact',
+            DeployStaticOptions::NO_JAVASCRIPT                => true,
+            DeployStaticOptions::NO_JS_BUNDLE                 => true,
+            DeployStaticOptions::NO_HTML_MINIFY               => true,
+        ];
+
+        $queueMock = $this->createMock(Queue::class);
+        $strategyMock = $this->createMock(CompactDeploy::class);
+        $this->queueFactory->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'logger'               => $this->logger,
+                    'maxExecTime'          => 100,
+                    'maxProcesses'         => 3,
+                    'options'              => $options,
+                    'deployPackageService' => null
+                ]
+            )
+            ->willReturn($queueMock);
+        $this->deployStrategyFactory->expects($this->once())
+            ->method('create')
+            ->with('compact', ['queue' => $queueMock])
+            ->willReturn($strategyMock);
+
+        $this->service->deploy($options);
     }
 }

@@ -36,7 +36,7 @@ if (!$attribute->getId()) {
             'is_unique' => 0,
             'is_required' => 0,
             'is_searchable' => 1,
-            'is_visible_in_advanced_search' => 0,
+            'is_visible_in_advanced_search' => 1,
             'is_comparable' => 1,
             'is_filterable' => 1,
             'is_filterable_in_search' => 1,
@@ -87,7 +87,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setCateroryIds([])
+    ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setSpecialPrice('5.99')
     ->save();
@@ -112,7 +112,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setCateroryIds([])
+    ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setSpecialPrice('15.99')
     ->save();
@@ -132,7 +132,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)
     ->setWebsiteIds([1])
-    ->setCateroryIds([])
+    ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 140, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setSpecialPrice('25.99')
     ->save();

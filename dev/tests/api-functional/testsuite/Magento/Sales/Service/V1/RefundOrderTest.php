@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Service\V1;
+
+use Magento\Sales\Model\Order;
 
 /**
  * API test for creation of Creditmemo for certain Order.
@@ -86,10 +89,10 @@ class RefundOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'Failed asserting that proper shipping amount of the Order was refunded'
             );
 
-            $this->assertNotEquals(
-                $existingOrder->getStatus(),
+            $this->assertEquals(
+                Order::STATE_COMPLETE,
                 $updatedOrder->getStatus(),
-                'Failed asserting that order status was changed'
+                'Failed asserting that order status has not changed'
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was created');
@@ -197,6 +200,73 @@ class RefundOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was created');
         }
+    }
+
+    /**
+     * Test order will keep same(custom) status after partial refund, if state has not been changed.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_invoice_and_custom_status.php
+     */
+    public function testOrderStatusPartialRefund()
+    {
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $items = $this->getOrderItems($existingOrder);
+        $items[0]['qty'] -= 1;
+        $result = $this->_webApiCall(
+            $this->getServiceData($existingOrder),
+            [
+                'orderId' => $existingOrder->getEntityId(),
+                'items' => $items,
+            ]
+        );
+
+        $this->assertNotEmpty(
+            $result,
+            'Failed asserting that the received response is correct'
+        );
+
+        /** @var \Magento\Sales\Model\Order $updatedOrder */
+        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId($existingOrder->getIncrementId());
+
+        $this->assertSame('custom_processing', $updatedOrder->getStatus());
+        $this->assertSame('processing', $updatedOrder->getState());
+    }
+
+    /**
+     * Test order will change custom status after total refund, when state has been changed.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_invoice_and_custom_status.php
+     */
+    public function testOrderStatusTotalRefund()
+    {
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $items = $this->getOrderItems($existingOrder);
+        $result = $this->_webApiCall(
+            $this->getServiceData($existingOrder),
+            [
+                'orderId' => $existingOrder->getEntityId(),
+                'items' => $items,
+            ]
+        );
+
+        $this->assertNotEmpty(
+            $result,
+            'Failed asserting that the received response is correct'
+        );
+
+        /** @var \Magento\Sales\Model\Order $updatedOrder */
+        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId($existingOrder->getIncrementId());
+
+        $this->assertSame('complete', $updatedOrder->getStatus());
+        $this->assertSame('complete', $updatedOrder->getState());
     }
 
     /**

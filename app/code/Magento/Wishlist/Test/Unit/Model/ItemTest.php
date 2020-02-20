@@ -172,6 +172,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($actualOption->isDeleted());
     }
 
+    /**
+     * @return array
+     */
     public function getOptionsDataProvider()
     {
         $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)

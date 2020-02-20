@@ -160,6 +160,9 @@ class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $values);
     }
 
+    /**
+     * @return array
+     */
     public function dataForGetStoreOptionValues()
     {
         return [

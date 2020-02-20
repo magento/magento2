@@ -1,14 +1,21 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 
-class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
+/**
+ * Class Upload
+ *
+ * @package Magento\Downloadable\Controller\Adminhtml\Downloadable\File
+ */
+class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Downloadable\Model\Link
@@ -71,23 +78,27 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
      */
     public function execute()
     {
-        $type = $this->getRequest()->getParam('type');
-        $tmpPath = '';
-        if ($type == 'samples') {
-            $tmpPath = $this->_sample->getBaseTmpPath();
-        } elseif ($type == 'links') {
-            $tmpPath = $this->_link->getBaseTmpPath();
-        } elseif ($type == 'link_samples') {
-            $tmpPath = $this->_link->getBaseSampleTmpPath();
-        }
-
         try {
+            $type = $this->getRequest()->getParam('type');
+            $tmpPath = '';
+            if ($type === 'samples') {
+                $tmpPath = $this->_sample->getBaseTmpPath();
+            } elseif ($type === 'links') {
+                $tmpPath = $this->_link->getBaseTmpPath();
+            } elseif ($type === 'link_samples') {
+                $tmpPath = $this->_link->getBaseSampleTmpPath();
+            } else {
+                throw new LocalizedException(__('Upload type can not be determined.'));
+            }
+
             $uploader = $this->uploaderFactory->create(['fileId' => $type]);
 
             $result = $this->_fileHelper->uploadFromTmp($tmpPath, $uploader);
 
             if (!$result) {
-                throw new \Exception('File can not be moved from temporary folder to the destination folder.');
+                throw new FileSystemException(
+                    __('File can not be moved from temporary folder to the destination folder.')
+                );
             }
 
             unset($result['tmp_name'], $result['path']);
@@ -96,17 +107,10 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
                 $relativePath = rtrim($tmpPath, '/') . '/' . ltrim($result['file'], '/');
                 $this->storageDatabase->saveFile($relativePath);
             }
-
-            $result['cookie'] = [
-                'name' => $this->_getSession()->getName(),
-                'value' => $this->_getSession()->getSessionId(),
-                'lifetime' => $this->_getSession()->getCookieLifetime(),
-                'path' => $this->_getSession()->getCookiePath(),
-                'domain' => $this->_getSession()->getCookieDomain(),
-            ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
+
         return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
     }
 }

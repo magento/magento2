@@ -8,6 +8,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
+ * Credit memo adjustments block
+ *
  * @api
  * @since 100.0.2
  */
@@ -50,7 +52,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Initialize creditmemo agjustment totals
+     * Initialize creditmemo adjustment totals
      *
      * @return $this
      */
@@ -58,7 +60,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     {
         $parent = $this->getParentBlock();
         $this->_source = $parent->getSource();
-        $total = new \Magento\Framework\DataObject(['code' => 'agjustments', 'block_name' => $this->getNameInLayout()]);
+        $total = new \Magento\Framework\DataObject(['code' => 'adjustments', 'block_name' => $this->getNameInLayout()]);
         $parent->removeTotal('shipping');
         $parent->removeTotal('adjustment_positive');
         $parent->removeTotal('adjustment_negative');

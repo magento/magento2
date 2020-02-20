@@ -22,4 +22,9 @@ return [
             ],
         ],
     ],
+    'routes' => [
+        'asyncProducts' => ['POST' => 'async/bulk/V1/products'],
+        'asyncBulkCmsPages' => ['POST' => 'async/bulk/V1/cmsPage'],
+        'asyncCustomers' => ['POST' => 'async/V1/customers']
+    ]
 ];

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check the product in recently viewed widget -->
+    <actionGroup name="StorefrontAssertProductInRecentlyViewedWidgetActionGroup">
+        <annotations>
+            <description>Validate that the provided Product appears in the Recently Viewed Products widget.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitWidgetRecentlyViewedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyViewedWidget"/>
+    </actionGroup>
+</actionGroups>

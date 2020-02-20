@@ -193,6 +193,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getItemById($testId));
     }
 
+    /**
+     * @return array
+     */
     public function getItemsDataProvider()
     {
         return [
@@ -202,6 +205,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return \Magento\Framework\DataObject
+     */
     public function getMagentoObject()
     {
         return new \Magento\Framework\DataObject();

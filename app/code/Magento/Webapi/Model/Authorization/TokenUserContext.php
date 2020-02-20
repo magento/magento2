@@ -99,7 +99,7 @@ class TokenUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUserId()
     {
@@ -108,7 +108,7 @@ class TokenUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUserType()
     {
@@ -132,6 +132,11 @@ class TokenUserContext implements UserContextInterface
             // other user-type tokens are considered always valid
             return false;
         }
+
+        if (empty($tokenTtl)) {
+            return false;
+        }
+
         if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
             return true;
         }
@@ -182,6 +187,8 @@ class TokenUserContext implements UserContextInterface
     }
 
     /**
+     * Set user data based on user type received from token data.
+     *
      * @param Token $token
      * @return void
      */

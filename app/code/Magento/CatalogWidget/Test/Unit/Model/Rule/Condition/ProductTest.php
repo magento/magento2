@@ -5,47 +5,69 @@
  */
 namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
+use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogWidget\Model\Rule\Condition\Product as ProductWidget;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\Rule;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\Product
+     * @var ProductWidget
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $attributeMock;
 
+    /**
+     * @var Product|MockObject
+     */
+    private $productResource;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+        $eavConfig = $this->createMock(Config::class);
+        $this->attributeMock = $this->createMock(Attribute::class);
         $eavConfig->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
-        $ruleMock = $this->createMock(\Magento\SalesRule\Model\Rule::class);
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $ruleMock = $this->createMock(Rule::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
-        $productResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
-        $productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
-        $productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
+        $this->productResource = $this->createMock(Product::class);
+        $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
+        $this->productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
+        $productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
+            ProductWidget::class,
             [
                 'config' => $eavConfig,
                 'storeManager' => $storeManager,
-                'productResource' => $productResource,
+                'productResource' => $this->productResource,
                 'productCategoryList' => $productCategoryList,
                 'data' => [
                     'rule' => $ruleMock,
@@ -55,10 +77,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test addToCollection method.
+     *
+     * @return void
+     */
     public function testAddToCollection()
     {
-        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $collectionMock = $this->createMock(Collection::class);
+        $selectMock = $this->createMock(Select::class);
         $collectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('join')->willReturnSelf();
         $this->attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
@@ -67,12 +94,27 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('getBackendType')->willReturn('multiselect');
+
+        $entityMock = $this->createMock(AbstractEntity::class);
+        $entityMock->expects($this->once())->method('getLinkField')->willReturn('entitiy_id');
+        $this->attributeMock->expects($this->once())->method('getEntity')->willReturn($entityMock);
+        $connection = $this->createMock(AdapterInterface::class);
+
+        $this->productResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
+
         $this->model->addToCollection($collectionMock);
     }
 
+    /**
+     * Test getMappedSqlField method.
+     *
+     * @return void
+     */
     public function testGetMappedSqlFieldSku()
     {
         $this->model->setAttribute('sku');
         $this->assertEquals('e.sku', $this->model->getMappedSqlField());
+        $this->model->setAttribute('attribute_set_id');
+        $this->assertEquals('e.attribute_set_id', $this->model->getMappedSqlField());
     }
 }

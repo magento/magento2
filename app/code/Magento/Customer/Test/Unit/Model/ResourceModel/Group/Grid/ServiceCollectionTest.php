@@ -227,6 +227,9 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->serviceCollection->addFieldToFilter($fields, $conditions);
     }
 
+    /**
+     * @return array
+     */
     public function addFieldToFilterInconsistentArraysDataProvider()
     {
         return [

@@ -46,8 +46,8 @@ class AllowedCountries
     /**
      * Retrieve all allowed countries for scope or scopes
      *
-     * @param string | null $scopeCode
      * @param string $scope
+     * @param string|null $scopeCode
      * @return array
      * @since 100.1.2
      */
@@ -55,20 +55,18 @@ class AllowedCountries
         $scope = ScopeInterface::SCOPE_WEBSITE,
         $scopeCode = null
     ) {
-        if (empty($scopeCode)) {
+        if ($scopeCode === null) {
             $scopeCode = $this->getDefaultScopeCode($scope);
         }
 
         switch ($scope) {
             case ScopeInterface::SCOPE_WEBSITES:
             case ScopeInterface::SCOPE_STORES:
-                $allowedCountries = [];
+                $allowedCountries = [[]];
                 foreach ($scopeCode as $singleFilter) {
-                    $allowedCountries = array_merge(
-                        $allowedCountries,
-                        $this->getCountriesFromConfig($this->getSingleScope($scope), $singleFilter)
-                    );
+                    $allowedCountries[] = $this->getCountriesFromConfig($this->getSingleScope($scope), $singleFilter);
                 }
+                $allowedCountries = array_merge(...$allowedCountries);
                 break;
             default:
                 $allowedCountries = $this->getCountriesFromConfig($scope, $scopeCode);

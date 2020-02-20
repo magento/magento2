@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
@@ -14,9 +16,14 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Create extends \Magento\Backend\App\Action
 {
+    /**
+     * Indicates how to process post data
+     */
+    private const ACTION_SAVE = 'save';
     /**
      * @var \Magento\Framework\Escaper
      */
@@ -38,6 +45,7 @@ abstract class Create extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Action\Context $context,
@@ -180,7 +188,7 @@ abstract class Create extends \Magento\Backend\App\Action
             && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
                 $this->_getOrderCreateModel()->setShippingAsBilling(1);
-            } else {
+            } elseif ($syncFlag !== null) {
                 $this->_getOrderCreateModel()->setShippingAsBilling((int)$syncFlag);
             }
         }
@@ -206,7 +214,7 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Apply mass changes from sidebar
          */
-        if ($data = $this->getRequest()->getPost('sidebar')) {
+        if (($data = $this->getRequest()->getPost('sidebar')) && $action !== self::ACTION_SAVE) {
             $this->_getOrderCreateModel()->applySidebarData($data);
         }
 
@@ -222,7 +230,8 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Adding products to quote from special grid
          */
-        if ($this->getRequest()->has('item') && !$this->getRequest()->getPost('update_items') && !($action == 'save')
+        if ($this->getRequest()->has('item') && !$this->getRequest()->getPost('update_items')
+            && $action !== self::ACTION_SAVE
         ) {
             $items = $this->getRequest()->getPost('item');
             $items = $this->_processFiles($items);
@@ -317,7 +326,7 @@ abstract class Create extends \Magento\Backend\App\Action
                 }
             }
             if (!$isApplyDiscount) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __(
                         '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
                         $this->escaper->escapeHtml($couponCode)
@@ -325,14 +334,14 @@ abstract class Create extends \Magento\Backend\App\Action
                 );
             } else {
                 if ($this->_getQuote()->getCouponCode() !== $couponCode) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'The "%1" coupon code isn\'t valid. Verify the code and try again.',
                             $this->escaper->escapeHtml($couponCode)
                         )
                     );
                 } else {
-                    $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                    $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
         }
@@ -362,6 +371,8 @@ abstract class Create extends \Magento\Backend\App\Action
     }
 
     /**
+     * Reload quote
+     *
      * @return $this
      */
     protected function _reloadQuote()
