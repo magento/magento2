@@ -740,8 +740,8 @@ class ProductRepository implements ProductRepositoryInterface
      */
     private function getCollectionProcessor()
     {
-        // phpstan-ignore-next-line ProductCollectionProcessor not found.
         if (!$this->collectionProcessor) {
+        // phpstan:ignore ProductCollectionProcessor not found.
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
