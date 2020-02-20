@@ -79,10 +79,15 @@
         <!--Reindex and clear cache-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad"/>
 
         <!-- Navigate to Storefront and search -->
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult0">
+            <argument name="keyword" value="$$product1.name$$"/>
+            <argument name="product" value="$$product1.name$$"/>
+        </actionGroup>
         <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult1">
             <argument name="keyword" value="3.5"/>
             <argument name="product" value="$$product1.name$$"/>
