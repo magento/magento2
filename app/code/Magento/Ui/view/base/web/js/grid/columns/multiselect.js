@@ -237,7 +237,7 @@ define([
         togglePage: function () {
             var total = this.getIds().length,
                 selected = this.getPageSelections().length;
-            
+
             if (this.isPageSelected() && selected !== total) {
                 return this.selectPage();
             }
@@ -245,6 +245,7 @@ define([
             if (this.indetermine() && selected === total) {
                 return this.selectPage();
             }
+
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
@@ -460,7 +461,7 @@ define([
 
             this.allSelected(allSelected);
             this.indetermine(totalSelected && !allSelected);
-            
+
             return this;
         },
 
