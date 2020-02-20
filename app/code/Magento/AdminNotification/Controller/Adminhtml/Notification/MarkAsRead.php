@@ -6,7 +6,11 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\NotificationService;
+use Magento\Backend\App\Action;
+
+class MarkAsRead extends Notification
 {
     /**
      * Authorization level of a basic admin session
@@ -16,6 +20,17 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
     const ADMIN_RESOURCE = 'Magento_AdminNotification::mark_as_read';
 
     /**
+     * @var NotificationService
+     */
+    private $notificationService;
+
+    public function __construct(Action\Context $context, NotificationService $notificationService)
+    {
+        parent::__construct($context);
+        $this->notificationService = $notificationService;
+    }
+
+    /**
      * @return void
      */
     public function execute()
@@ -23,11 +38,7 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
         $notificationId = (int)$this->getRequest()->getParam('id');
         if ($notificationId) {
             try {
-                $this->_objectManager->create(
-                    \Magento\AdminNotification\Model\NotificationService::class
-                )->markAsRead(
-                    $notificationId
-                );
+                $this->notificationService->markAsRead($notificationId);
                 $this->messageManager->addSuccessMessage(__('The message has been marked as Read.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

@@ -6,7 +6,11 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\InboxFactory as InboxModelFactory;
+use Magento\Backend\App\Action;
+
+class MassRemove extends Notification
 {
 
     /**
@@ -15,6 +19,16 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_AdminNotification::adminnotification_remove';
+    /**
+     * @var InboxModelFactory
+     */
+    private $inboxModelFactory;
+
+    public function __construct(Action\Context $context, InboxModelFactory $inboxModelFactory)
+    {
+        parent::__construct($context);
+        $this->inboxModelFactory = $inboxModelFactory;
+    }
 
     /**
      * @return void
@@ -27,7 +41,7 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
         } else {
             try {
                 foreach ($ids as $id) {
-                    $model = $this->_objectManager->create(\Magento\AdminNotification\Model\Inbox::class)->load($id);
+                    $model = $this->inboxModelFactory->create()->load($id);
                     if ($model->getId()) {
                         $model->setIsRemove(1)->save();
                     }

@@ -6,15 +6,29 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
-{
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\InboxFactory as InboxModelFactory;
+use Magento\Backend\App\Action;
 
+class MassMarkAsRead extends Notification
+{
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_AdminNotification::mark_as_read';
+
+    /**
+     * @var InboxModelFactory
+     */
+    private $inboxModelFactory;
+
+    public function __construct(Action\Context $context, InboxModelFactory $inboxModelFactory)
+    {
+        parent::__construct($context);
+        $this->inboxModelFactory = $inboxModelFactory;
+    }
 
     /**
      * @return void
@@ -27,7 +41,7 @@ class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
         } else {
             try {
                 foreach ($ids as $id) {
-                    $model = $this->_objectManager->create(\Magento\AdminNotification\Model\Inbox::class)->load($id);
+                    $model = $this->inboxModelFactory->create()->load($id);
                     if ($model->getId()) {
                         $model->setIsRead(1)->save();
                     }

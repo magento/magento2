@@ -6,9 +6,12 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
-{
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\InboxFactory as InboxModelFactory;
+use Magento\Backend\App\Action;
 
+class Remove extends Notification
+{
     /**
      * Authorization level of a basic admin session
      *
@@ -17,12 +20,23 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
     const ADMIN_RESOURCE = 'Magento_AdminNotification::adminnotification_remove';
 
     /**
+     * @var InboxModelFactory
+     */
+    private $inboxModelFactory;
+
+    public function __construct(Action\Context $context, InboxModelFactory $inboxModelFactory)
+    {
+        parent::__construct($context);
+        $this->inboxModelFactory = $inboxModelFactory;
+    }
+
+    /**
      * @return void
      */
     public function execute()
     {
         if ($id = $this->getRequest()->getParam('id')) {
-            $model = $this->_objectManager->create(\Magento\AdminNotification\Model\Inbox::class)->load($id);
+            $model = $this->inboxModelFactory->create()->load($id);
 
             if (!$model->getId()) {
                 $this->_redirect('adminhtml/*/');
