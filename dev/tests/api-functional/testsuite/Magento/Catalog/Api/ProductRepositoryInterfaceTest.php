@@ -8,19 +8,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
-use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
-use Magento\Integration\Api\AdminTokenServiceInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\WebsiteRepository;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -28,6 +22,12 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteRepository;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Test for \Magento\Catalog\Api\ProductRepositoryInterface
@@ -378,6 +378,21 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $response = $this->saveProduct($product);
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
+        $this->deleteProduct($product[ProductInterface::SKU]);
+    }
+
+    /**
+     * Verify that product creation is success with type_id null
+     *
+     * @dataProvider productCreationProvider
+     */
+    public function testSaveProductWithNonExistType($product): void
+    {
+        $product[ProductInterface::TYPE_ID] = null;
+        $response = $this->saveProduct($product);
+        $this->assertArrayHasKey(ProductInterface::PRICE, $response);
+        $this->assertArrayHasKey(ProductInterface::TYPE_ID, $response);
+        $this->assertArrayHasKey(ProductInterface::VISIBILITY, $response);
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
