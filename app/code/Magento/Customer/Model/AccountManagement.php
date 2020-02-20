@@ -13,6 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
@@ -200,6 +201,7 @@ class AccountManagement implements AccountManagementInterface
      * Minimum password length
      *
      * @deprecated Get rid of Helpers in Password Security Management
+     * @see \Magento\Customer\Model\AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
      */
     const MIN_PASSWORD_LENGTH = 6;
 
@@ -282,21 +284,6 @@ class AccountManagement implements AccountManagementInterface
      * @var TransportBuilder
      */
     private $transportBuilder;
-
-    /**
-     * @var SessionManagerInterface
-     */
-    private $sessionManager;
-
-    /**
-     * @var SaveHandlerInterface
-     */
-    private $saveHandler;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $visitorCollectionFactory;
 
     /**
      * @var DataObjectProcessor
@@ -384,6 +371,11 @@ class AccountManagement implements AccountManagementInterface
     private $getByToken;
 
     /**
+     * @var SessionCleanerInterface
+     */
+    private $sessionCleaner;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -417,10 +409,12 @@ class AccountManagement implements AccountManagementInterface
      * @param AddressRegistry|null $addressRegistry
      * @param GetCustomerByToken|null $getByToken
      * @param AllowedCountries|null $allowedCountriesReader
+     * @param SessionCleanerInterface|null $sessionCleaner
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -455,7 +449,8 @@ class AccountManagement implements AccountManagementInterface
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         AddressRegistry $addressRegistry = null,
         GetCustomerByToken $getByToken = null,
-        AllowedCountries $allowedCountriesReader = null
+        AllowedCountries $allowedCountriesReader = null,
+        SessionCleanerInterface $sessionCleaner = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -486,12 +481,6 @@ class AccountManagement implements AccountManagementInterface
         $this->dateTimeFactory = $dateTimeFactory ?: $objectManager->get(DateTimeFactory::class);
         $this->accountConfirmation = $accountConfirmation ?: $objectManager
             ->get(AccountConfirmation::class);
-        $this->sessionManager = $sessionManager
-            ?: $objectManager->get(SessionManagerInterface::class);
-        $this->saveHandler = $saveHandler
-            ?: $objectManager->get(SaveHandlerInterface::class);
-        $this->visitorCollectionFactory = $visitorCollectionFactory
-            ?: $objectManager->get(CollectionFactory::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder
             ?: $objectManager->get(SearchCriteriaBuilder::class);
         $this->addressRegistry = $addressRegistry
@@ -500,6 +489,7 @@ class AccountManagement implements AccountManagementInterface
             ?: $objectManager->get(GetCustomerByToken::class);
         $this->allowedCountriesReader = $allowedCountriesReader
             ?: $objectManager->get(AllowedCountries::class);
+        $this->sessionCleaner = $sessionCleaner ?? $objectManager->get(SessionCleanerInterface::class);
     }
 
     /**
@@ -538,6 +528,8 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+
+            return false;
         }
         return true;
     }
@@ -725,7 +717,7 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->destroyCustomerSessions($customer->getId());
+        $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->customerRepository->save($customer);
 
         return true;
@@ -1054,7 +1046,7 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->destroyCustomerSessions($customer->getId());
+        $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->disableAddressValidation($customer);
         $this->customerRepository->save($customer);
 
@@ -1604,36 +1596,6 @@ class AccountManagement implements AccountManagementInterface
             );
         } else {
             return $this->emailNotification;
-        }
-    }
-
-    /**
-     * Destroy all active customer sessions by customer id (current session will not be destroyed).
-     *
-     * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
-     * configured session lifetime.
-     *
-     * @param string|int $customerId
-     * @return void
-     */
-    private function destroyCustomerSessions($customerId)
-    {
-        $sessionLifetime = $this->scopeConfig->getValue(
-            \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $dateTime = $this->dateTimeFactory->create();
-        $activeSessionsTime = $dateTime->setTimestamp($dateTime->getTimestamp() - $sessionLifetime)
-            ->format(DateTime::DATETIME_PHP_FORMAT);
-        /** @var \Magento\Customer\Model\ResourceModel\Visitor\Collection $visitorCollection */
-        $visitorCollection = $this->visitorCollectionFactory->create();
-        $visitorCollection->addFieldToFilter('customer_id', $customerId);
-        $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
-        $visitorCollection->addFieldToFilter('session_id', ['neq' => $this->sessionManager->getSessionId()]);
-        /** @var \Magento\Customer\Model\Visitor $visitor */
-        foreach ($visitorCollection->getItems() as $visitor) {
-            $sessionId = $visitor->getSessionId();
-            $this->saveHandler->destroy($sessionId);
         }
     }
 
