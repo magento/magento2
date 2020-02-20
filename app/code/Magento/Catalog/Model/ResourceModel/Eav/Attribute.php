@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -180,7 +181,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Processing object before save data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
@@ -193,13 +194,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             if ($this->_data[self::KEY_IS_GLOBAL] != $this->_origData[self::KEY_IS_GLOBAL]) {
                 try {
                     $this->attrLockValidator->validate($this);
-                } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                } catch (LocalizedException $exception) {
+                    throw new LocalizedException(
                         __('Do not change the scope. %1', $exception->getMessage())
                     );
                 }
             }
         }
+
         if ($this->getFrontendInput() == 'price') {
             if (!$this->getBackendModel()) {
                 $this->setBackendModel(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class);
@@ -285,7 +287,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Register indexing event before delete catalog eav attribute
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {

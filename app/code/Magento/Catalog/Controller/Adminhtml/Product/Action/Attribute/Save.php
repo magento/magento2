@@ -7,14 +7,16 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class Save
+ * Class responsible for saving product attributes.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
@@ -60,6 +62,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $eavConfig;
 
     /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -70,6 +77,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param int $bulkSize
      * @param TimezoneInterface $timezone
      * @param Config $eavConfig
+     * @param ProductFactory $productFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -82,7 +90,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Authorization\Model\UserContextInterface $userContext,
         int $bulkSize = 100,
         TimezoneInterface $timezone = null,
-        Config $eavConfig = null
+        Config $eavConfig = null,
+        ProductFactory $productFactory = null
     ) {
         parent::__construct($context, $attributeHelper);
         $this->bulkManagement = $bulkManagement;
@@ -95,6 +104,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             ->get(TimezoneInterface::class);
         $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
             ->get(Config::class);
+        $this->productFactory = $productFactory ?? ObjectManager::getInstance()->get(ProductFactory::class);
     }
 
     /**
@@ -120,9 +130,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $attributesData = $this->sanitizeProductAttributes($attributesData);
 
         try {
+            $this->validateProductAttributes($attributesData);
             $this->publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
@@ -147,10 +158,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
         foreach ($attributesData as $attributeCode => $value) {
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+
             if (!$attribute->getAttributeId()) {
                 unset($attributesData[$attributeCode]);
                 continue;
             }
+
             if ($attribute->getBackendType() === 'datetime') {
                 if (!empty($value)) {
                     $filterInput = new \Zend_Filter_LocalizedToNormalized(['date_format' => $dateFormat]);
@@ -179,6 +192,25 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     }
 
     /**
+     * Validate product attributes data.
+     *
+     * @param array $attributesData
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateProductAttributes(array $attributesData): void
+    {
+        $product = $this->productFactory->create();
+        $product->setData($attributesData);
+
+        foreach (array_keys($attributesData) as $attributeCode) {
+            $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+            $attribute->getBackend()->validate($product);
+        }
+    }
+
+    /**
      * Schedule new bulk
      *
      * @param array $attributesData
@@ -187,7 +219,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param int $storeId
      * @param int $websiteId
      * @param array $productIds
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      *
      * @return void
      */
@@ -241,7 +273,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $this->userContext->getUserId()
             );
             if (!$result) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Something went wrong while processing the request.')
                 );
             }
