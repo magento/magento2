@@ -166,10 +166,10 @@ class EmailNotificationTest extends TestCase
     /**
      * Test email notify when credentials changed
      *
-     * @param int    $testNumber
+     * @param int $testNumber
      * @param string $oldEmail
      * @param string $newEmail
-     * @param bool   $isPasswordChanged
+     * @param bool $isPasswordChanged
      *
      * @dataProvider sendNotificationEmailsDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -182,18 +182,18 @@ class EmailNotificationTest extends TestCase
         $expects = $this->once();
         $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
         switch ($testNumber) {
-        case 1:
-            $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
-            $expects = $this->once();
-            break;
-        case 2:
-            $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE;
-            $expects = $this->exactly(2);
-            break;
-        case 3:
-            $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE;
-            $expects = $this->exactly(2);
-            break;
+            case 1:
+                $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
+                $expects = $this->once();
+                break;
+            case 2:
+                $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE;
+                $expects = $this->exactly(2);
+                break;
+            case 3:
+                $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE;
+                $expects = $this->exactly(2);
+                break;
         }
 
         $this->senderResolverMock
@@ -340,7 +340,7 @@ class EmailNotificationTest extends TestCase
     /**
      * Provides Emails Data Provider
      *
-     * @param  void
+     * @param void
      * @return array
      */
     public function sendNotificationEmailsDataProvider(): array
@@ -756,11 +756,11 @@ class EmailNotificationTest extends TestCase
      * Create default mock for $this->transportBuilderMock.
      *
      * @param string $templateIdentifier
-     * @param int    $customerStoreId
-     * @param array  $senderValues
+     * @param int $customerStoreId
+     * @param array $senderValues
      * @param string $customerEmail
      * @param string $customerName
-     * @param array  $templateVars
+     * @param array $templateVars
      *
      * @return void
      */
@@ -771,7 +771,8 @@ class EmailNotificationTest extends TestCase
         string $customerEmail,
         string $customerName,
         array $templateVars = []
-    ): void {
+    ): void
+    {
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
