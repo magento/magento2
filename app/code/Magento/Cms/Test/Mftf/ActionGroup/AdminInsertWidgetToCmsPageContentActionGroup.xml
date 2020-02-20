@@ -19,7 +19,7 @@
         <waitForElementVisible selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="waitForInsertWidgetElementVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="clickOnInsertWidgetButton"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClickOnInsertWidgetButton"/>
-        <waitForElementVisible selector="{{WidgetSection.InsertWidgetTitle}}"  stepKey="waitForInsertWidgetTitle"/>
+        <waitForElementVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForInsertWidgetTitle"/>
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="{{widgetType}}" stepKey="selectWidgetType"/>
     </actionGroup>
 </actionGroups>

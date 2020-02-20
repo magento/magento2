@@ -13,10 +13,13 @@
             <description>Assert "Add to Wish List" icon is clickable in category product listing</description>
         </annotations>
 
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(productName)}}" stepKey="hoverProduct"/>
         <click selector="{{StorefrontCategoryMainSection.addToWishListIconProductInfoHover}}" stepKey="clickOnAddToWishListIcon"/>
-        <waitForElementVisible selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" stepKey="waitForErrorMessageIsVisible"/>
-        <see selector="{{StorefrontCustomerLoginMessagesSection.errorMessage}}" userInput="You must login or register to add items to your wishlist." stepKey="assertErrorMessage"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.error}}" stepKey="waitForErrorMessageIsVisible"/>
+        <see selector="{{StorefrontMessagesSection.error}}" userInput="You must login or register to add items to your wishlist." stepKey="assertErrorMessage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertCustomerLoginPageUrl"/>
     </actionGroup>
 </actionGroups>

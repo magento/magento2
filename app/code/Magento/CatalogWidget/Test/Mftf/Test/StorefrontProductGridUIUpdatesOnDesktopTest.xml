@@ -66,7 +66,9 @@
         <seeElement selector="{{StorefrontCategoryMainSection.productPriceByName($createFirstSimpleProduct.name$)}}" stepKey="assertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($createFirstSimpleProduct.name$)}}" stepKey="hoverProduct"/>
         <actionGroup ref="AssertStorefrontProductControlsAreVisibleOnHoverActionGroup" stepKey="assertProductControlsAreVisibleOnHoverOnCmsPage"/>
-        <actionGroup ref="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup" stepKey="assertAddToWishListIconIsClickable"/>
+        <actionGroup ref="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup" stepKey="assertAddToWishListIconIsClickable">
+            <argument name="productName" value="$createFirstSimpleProduct.name$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateAndOpenCreatedCmsPageToVerifyAddToCompareIconIsClickable">
             <argument name="identifier" value="$createCmsPage.identifier$"/>
         </actionGroup>
@@ -81,7 +83,9 @@
         <seeElement selector="{{StorefrontCategoryMainSection.productPriceByName($createFirstSimpleProduct.name$)}}" stepKey="assertProductPriceOnCategoryPage"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($createFirstSimpleProduct.name$)}}" stepKey="hoverProductOnCategoryPage"/>
         <actionGroup ref="AssertStorefrontProductControlsAreVisibleOnHoverActionGroup" stepKey="assertProductControlsAreVisibleOnHoverOnCategoryPage"/>
-        <actionGroup ref="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup" stepKey="assertAddToWishListIconIsClickableOnCategoryPage"/>
+        <actionGroup ref="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup" stepKey="assertAddToWishListIconIsClickableOnCategoryPage">
+            <argument name="productName" value="$createFirstSimpleProduct.name$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateCategoryCreatedInPreconditionsToVerifyAddToCompareIconIsClickable">
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
