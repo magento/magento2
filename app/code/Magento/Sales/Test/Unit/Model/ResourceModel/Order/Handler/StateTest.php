@@ -131,12 +131,16 @@ class StateTest extends \PHPUnit\Framework\TestCase
                 [true, 1, false, 1, Order::STATE_NEW, Order::STATE_COMPLETE, true, 1],
             'new - canCreditmemo, canShip, !IsInProcess -> new' =>
                 [true, 0, true, 0, Order::STATE_NEW, Order::STATE_NEW, false, 1],
+            'pending_payment - canCreditmemo, canShip, IsInProcess -> processing' =>
+                [true, 1, true, 1, Order::STATE_PENDING_PAYMENT, Order::STATE_PROCESSING, true, 1],
+            'pending_payment - canCreditmemo, !canShip, IsInProcess -> processing' =>
+                [true, 1, false, 1, Order::STATE_PENDING_PAYMENT, Order::STATE_COMPLETE, true, 1],
+            'pending_payment - canCreditmemo, canShip, !IsInProcess -> new' =>
+                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, Order::STATE_PENDING_PAYMENT, false, 1],
             'hold - canUnhold -> hold' =>
                 [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, false, true],
             'payment_review - canUnhold -> payment_review' =>
                 [true, 0, true, 0, Order::STATE_PAYMENT_REVIEW, Order::STATE_PAYMENT_REVIEW, false, 0, false, true],
-            'pending_payment - canUnhold -> pending_payment' =>
-                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, Order::STATE_PENDING_PAYMENT, false, 0, false, true],
             'cancelled - isCanceled -> cancelled' =>
                 [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, true],
         ];
