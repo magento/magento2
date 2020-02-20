@@ -10,13 +10,16 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ChangingSingleCustomerGroupViaGrid">
         <annotations>
-            <title value="Change a single customer group via grid"/>
+            <title value="DEPRECATED Change a single customer group via grid"/>
             <description value="From the selection of All Customers select a single customer to change their group"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-10921"/>
             <stories value="Change Customer Group"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminChangeSingleCustomerGroupViaGridTest instead</issueId>
+            </skip>
         </annotations>
 
         <before>
@@ -60,7 +63,7 @@
 
     <test name="ChangingAllCustomerGroupViaGrid" extends="ChangingSingleCustomerGroupViaGrid">
         <annotations>
-            <title value="Change all customers' group via grid"/>
+            <title value="DEPRECATED Change all customers' group via grid"/>
             <description value="Select All customers to change their group"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-10924"/>
@@ -68,7 +71,7 @@
             <group value="customer"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use AdminChangeAllCustomersGroupViaGridTest instead</issueId>
             </skip>
         </annotations>
 
