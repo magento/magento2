@@ -239,8 +239,8 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $_selectAttributesActualValue = $this->readAttribute($this->model, '_selectAttributes');
 
         $this->assertAttributeEquals(
-            [self::ATTRIBUTE_CODE => self::ATTRIBUTE_ID_STRING], 
-            '_selectAttributes', 
+            [self::ATTRIBUTE_CODE => self::ATTRIBUTE_ID_STRING],
+            '_selectAttributes',
             $this->model
         );
         $this->assertSame($_selectAttributesActualValue[self::ATTRIBUTE_CODE], self::ATTRIBUTE_ID_INT);
