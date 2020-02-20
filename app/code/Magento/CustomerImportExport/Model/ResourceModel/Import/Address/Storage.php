@@ -23,7 +23,7 @@ class Storage
     /**
      * IDs of addresses grouped by customer IDs.
      *
-     * @var string[][]
+     * @var int[][]
      */
     private $addresses = [];
 
@@ -62,16 +62,16 @@ class Storage
     /**
      * Record existing address.
      *
-     * @param string $customerId
-     * @param string $addressId
-     *
+     * @param int $customerId
+     * @param int $addressId
      * @return void
      */
-    private function addRecord(string $customerId, string $addressId): void
+    private function addRecord(int $customerId, int $addressId): void
     {
         if (!$customerId || !$addressId) {
             return;
         }
+
         if (!array_key_exists($customerId, $this->addresses)) {
             $this->addresses[$customerId] = [];
         }
@@ -84,7 +84,7 @@ class Storage
     /**
      * Load addresses IDs for given customers.
      *
-     * @param string[] $customerIds
+     * @param int[] $customerIds
      *
      * @return void
      */
@@ -95,27 +95,31 @@ class Storage
         $collection->removeAttributeToSelect();
         $select = $collection->getSelect();
         $tableId = array_keys($select->getPart(Select::FROM))[0];
-        $select->where($tableId .'.parent_id in (?)', $customerIds);
+        $select->reset(Select::COLUMNS)->columns([$tableId . '.entity_id', $tableId . '.parent_id']);
 
-        $this->collectionIterator->iterate(
-            $collection,
-            $this->config->getValue(AbstractEntity::XML_PATH_PAGE_SIZE),
-            [
-                function (DataObject $record) {
-                    $this->addRecord($record->getParentId(), $record->getId());
-                }
-            ]
-        );
+        $pageSize = $this->config->getValue(AbstractEntity::XML_PATH_PAGE_SIZE);
+        $getChuck = function (int $offset) use ($customerIds, $pageSize) {
+            return array_slice($customerIds, $offset, $pageSize);
+        };
+        $offset = 0;
+        for ($idsChunk = $getChuck($offset); !empty($idsChunk); $offset += $pageSize, $idsChunk = $getChuck($offset)) {
+            $chunkSelect = clone $select;
+            $chunkSelect->where($tableId .'.parent_id IN (?)', $idsChunk);
+            $addresses = $collection->getConnection()->fetchAll($chunkSelect);
+            foreach ($addresses as $address) {
+                $this->addRecord((int) $address['parent_id'], (int) $address['entity_id']);
+            }
+        }
     }
 
     /**
      * Check if given address exists for given customer.
      *
-     * @param string $addressId
-     * @param string $forCustomerId
+     * @param int $addressId
+     * @param int $forCustomerId
      * @return bool
      */
-    public function doesExist(string $addressId, string $forCustomerId): bool
+    public function doesExist(int $addressId, int $forCustomerId): bool
     {
         return array_key_exists($forCustomerId, $this->addresses)
             && in_array(
@@ -128,7 +132,7 @@ class Storage
     /**
      * Pre-load addresses for given customers.
      *
-     * @param string[] $forCustomersIds
+     * @param int[] $forCustomersIds
      * @return void
      */
     public function prepareAddresses(array $forCustomersIds): void
@@ -138,13 +142,7 @@ class Storage
         }
 
         $forCustomersIds = array_unique($forCustomersIds);
-        $customerIdsToUse = [];
-        foreach ($forCustomersIds as $customerId) {
-            if (!array_key_exists((string)$customerId, $this->addresses)) {
-                $customerIdsToUse[] = $customerId;
-            }
-        }
-
+        $customerIdsToUse = array_diff($forCustomersIds, array_keys($this->addresses));
         $this->loadAddresses($customerIdsToUse);
     }
 }

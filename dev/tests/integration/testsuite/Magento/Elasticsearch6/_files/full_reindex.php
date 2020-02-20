@@ -7,6 +7,6 @@
 $checker = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     \Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker::class
 );
-if ($checker->execute() === 6) {
+if ($checker->getVersion() === 6) {
     include __DIR__ . '/../../../Magento/CatalogSearch/_files/full_reindex.php';
 }

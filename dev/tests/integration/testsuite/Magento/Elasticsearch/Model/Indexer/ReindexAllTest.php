@@ -230,7 +230,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     {
         if (!$this->searchEngine) {
             // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
-            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->execute();
+            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
             $this->searchEngine = 'elasticsearch' . $version;
         }
         return $this->searchEngine;

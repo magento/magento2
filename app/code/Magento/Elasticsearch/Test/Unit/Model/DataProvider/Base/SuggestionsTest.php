@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch6\Test\Unit\Model\DataProvider;
+namespace Magento\Elasticsearch\Test\Unit\Model\DataProvider\Base;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\DataProvider\Suggestions;
@@ -103,7 +103,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch6\Model\DataProvider\Suggestions::class,
+            \Magento\Elasticsearch\Model\DataProvider\Base\Suggestions::class,
             [
                 'queryResultFactory' => $this->queryResultFactory,
                 'connectionManager' => $this->connectionManager,

@@ -15,7 +15,7 @@ class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Conf
     /**
      * @inheritdoc
      */
-    protected function _getFieldMapping()
+    protected function _getFieldMapping(): array
     {
         $fields = [
             'engine' => 'catalog_search_engine',

@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch6\Model\DataProvider;
+namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -17,7 +17,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
- * Class Suggestions
+ * Default implementation to provide suggestions mechanism for Elasticsearch
  */
 class Suggestions implements SuggestedQueriesInterface
 {

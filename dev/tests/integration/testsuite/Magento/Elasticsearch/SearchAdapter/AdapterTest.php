@@ -400,7 +400,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     {
         if (!$this->searchEngine) {
             // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
-            $version = $this->objectManager->get(ElasticsearchVersionChecker::class)->execute();
+            $version = $this->objectManager->get(ElasticsearchVersionChecker::class)->getVersion();
             $this->searchEngine = 'elasticsearch' . $version;
         }
         return $this->searchEngine;
