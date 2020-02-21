@@ -28,6 +28,9 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
+            if (is_iterable($header)) {
+                $header = $header[0];
+            }
         }
         return $header;
     }
@@ -94,8 +97,13 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     {
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
-            $header = $headers->get($name);
-            $headers->removeHeader($header);
+            $headerValues = $headers->get($name);
+            if (!is_iterable($headerValues)) {
+                $headerValues = [$headerValues];
+            }
+            foreach ($headerValues as $headerValue) {
+                $headers->removeHeader($headerValue);
+            }
         }
 
         return $this;
@@ -203,7 +211,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
             header($header->toString(), false);
         }
 
-        $this->headersSent = true;
         return $this;
     }
 }
