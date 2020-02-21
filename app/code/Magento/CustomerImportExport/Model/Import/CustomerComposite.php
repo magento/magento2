@@ -165,8 +165,8 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
-     * @param array $data
      * @param Processor $indexerProcessor
+     * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -181,8 +181,8 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
-        array $data = [],
-        ?Processor $indexerProcessor = null
+        Processor $indexerProcessor,
+        array $data = []
     ) {
         parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
@@ -239,7 +239,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         } else {
             $this->_nextCustomerId = $resourceHelper->getNextAutoincrement($this->_customerEntity->getEntityTable());
         }
-        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->create(Processor::class);
+        $this->indexerProcessor = $indexerProcessor;
     }
 
     /**
