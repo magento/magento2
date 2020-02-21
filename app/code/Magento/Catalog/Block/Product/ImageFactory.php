@@ -175,6 +175,4 @@ class ImageFactory
 
         return $this->objectManager->create(ImageBlock::class, $data);
     }
-
-
 }
