@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingGuestInfoSection">
         <element name="email" type="input" selector="#customer-email"/>
+        <element name="prefixName" type="select" selector="select[name=prefix]"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
         <element name="lastName" type="input" selector="input[name=lastname]"/>
         <element name="company" type="input" selector="input[name=company]"/>

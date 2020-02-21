@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPrefixCustomerOnCheckoutTest">
+        <annotations>
+            <title value="Verify 'Prefix Name' when using an empty value for it."/>
+            <description value="Empty value for 'Prefix Name' must be shown in the select field."/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{CustomerAccountAddressPrefixRequiredConfigData.path}} {{CustomerAccountAddressPrefixRequiredConfigData.value}}" stepKey="requiredShowPrefix"/>
+            <magentoCLI command="config:set {{CustomerAccountAddressPrefixOptionsConfigData.path}} {{CustomerAccountAddressPrefixOptionsConfigData.value}}" stepKey="setOptionsPrefix"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set {{CustomerAccountAddressPrefixNoConfigData.path}} {{CustomerAccountAddressPrefixNoConfigData.value}}" stepKey="disableShowPrefix"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestGoToCheckout"/>
+
+        <actionGroup ref="StorefrontAssertCheckoutPrefixNameSelectedActionGroup" stepKey="assertFirstPrefix">
+              <argument name="prefix" value="Mr."/>
+          </actionGroup>
+        <actionGroup ref="StorefrontAssertCheckoutPrefixNameSelectedActionGroup" stepKey="assertSecondPrefix">
+              <argument name="prefix" value="Mrs."/>
+          </actionGroup>
+        <actionGroup ref="StorefrontAssertCheckoutPrefixNameSelectedActionGroup" stepKey="assertEmptyPrefix">
+            <argument name="prefix"/>
+        </actionGroup>
+    </test>
+</tests>

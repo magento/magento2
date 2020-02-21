@@ -61,4 +61,16 @@
         <data key="label">Global</data>
         <data key="value">0</data>
     </entity>
+    <entity name="CustomerAccountAddressPrefixRequiredConfigData">
+        <data key="path">customer/address/prefix_show</data>
+        <data key="value">req</data>
+    </entity>
+    <entity name="CustomerAccountAddressPrefixNoConfigData">
+        <data key="path">customer/address/prefix_show</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CustomerAccountAddressPrefixOptionsConfigData">
+        <data key="path">customer/address/prefix_options</data>
+        <data key="value">;Mr.;Mrs.</data>
+    </entity>
 </entities>
