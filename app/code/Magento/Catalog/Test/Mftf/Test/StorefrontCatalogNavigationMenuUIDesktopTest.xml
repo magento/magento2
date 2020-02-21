@@ -159,7 +159,7 @@
         </actionGroup>
 
         <!-- Submenu appears rightward -->
-        <seeElement selector="{{StorefrontNavigationMenuSection.submenuLeftDirection('level0')}}" stepKey="assertTopLevelMenuLeftDirection"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level0')}}" stepKey="assertTopLevelMenuLeftDirection"/>
 
         <!-- Nested level 1 & 5 -->
         <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryLevelTwoBlank.name$$)}}" stepKey="hoverCategoryLevelTwo"/>
