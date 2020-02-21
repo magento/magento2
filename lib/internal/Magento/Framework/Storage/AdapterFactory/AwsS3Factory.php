@@ -20,7 +20,6 @@ class AwsS3Factory implements AdapterFactoryInterface
      */
     public function create(array $options): AdapterInterface
     {
-        // phpstan:ignore
         if (empty($options['client']) || empty($options['bucket'])) {
             throw new InvalidStorageConfigurationException(
                 "Can't create AWS S3 adapter: required 'client' and/or 'bucket' options are absent"
