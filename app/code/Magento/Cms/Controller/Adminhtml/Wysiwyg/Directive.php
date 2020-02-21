@@ -10,6 +10,12 @@ use Magento\Backend\App\Action;
 use Magento\Cms\Model\Template\Filter;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Image\Adapter\AdapterInterface;
+use Magento\Framework\Url\DecoderInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Process template text for wysiwyg editor.
@@ -25,34 +31,42 @@ class Directive extends Action implements HttpGetActionInterface
     const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface
+     * @var DecoderInterface
      */
     protected $urlDecoder;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param DecoderInterface $urlDecoder
+     * @param RawFactory $resultRawFactory
+     * @param File $file
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        DecoderInterface $urlDecoder,
+        RawFactory $resultRawFactory,
+        File $file
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;
         $this->resultRawFactory = $resultRawFactory;
+        $this->file = $file;
     }
 
     /**
      * Template directives callback
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Raw
      */
     public function execute()
     {
@@ -62,13 +76,14 @@ class Directive extends Action implements HttpGetActionInterface
             /** @var Filter $filter */
             $filter = $this->_objectManager->create(Filter::class);
             $imagePath = $filter->filter($directive);
-            /** @var \Magento\Framework\Image\Adapter\AdapterInterface $image */
+            /** @var AdapterInterface $image */
             $image = $this->_objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
-            /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+            /** @var Raw $resultRaw */
             $resultRaw = $this->resultRawFactory->create();
             $image->open($imagePath);
             $resultRaw->setHeader('Content-Type', $image->getMimeType());
-            $resultRaw->setContents($image->getImage());
+            unset($image);
+            $resultRaw->setContents($this->file->fileGetContents($imagePath));
         } catch (\Exception $e) {
             /** @var Config $config */
             $config = $this->_objectManager->get(Config::class);
@@ -76,7 +91,7 @@ class Directive extends Action implements HttpGetActionInterface
             $image->open($imagePath);
             $resultRaw->setHeader('Content-Type', $image->getMimeType());
             $resultRaw->setContents($image->getImage());
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
         }
         return $resultRaw;
     }
