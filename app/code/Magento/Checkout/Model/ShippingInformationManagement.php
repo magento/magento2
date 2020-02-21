@@ -244,7 +244,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      */
     protected function validateQuote(Quote $quote): void
     {
-        if (0 === $quote->getItemsCount()) {
+        if (!$quote->getItemsCount()) {
             throw new InputException(
                 __('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.')
             );
