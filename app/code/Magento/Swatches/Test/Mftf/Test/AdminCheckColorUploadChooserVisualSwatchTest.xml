@@ -28,6 +28,8 @@
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
         <click selector="{{AdminManageSwatchSection.nthVisualSwatch('3')}}" stepKey="clickSwatch3"/>
         <click selector="{{AdminManageSwatchSection.nthVisualSwatch('2')}}" stepKey="clickSwatch2"/>
+        <dontSeeElement selector="{{AdminManageSwatchSection.chooserBlock('3')}}" stepKey="dontSeeSwatch3"/>
         <click selector="{{AdminManageSwatchSection.nthVisualSwatch('1')}}" stepKey="clickSwatch1"/>
+        <dontSeeElement selector="{{AdminManageSwatchSection.chooserBlock('2')}}" stepKey="dontSeeSwatch2"/>
     </test>
 </tests>
