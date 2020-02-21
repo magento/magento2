@@ -9,6 +9,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class StateTest
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
  */
 class StateTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,6 +23,16 @@ class StateTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Address
+     */
+    protected $addressMock;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Address\Collection
+     */
+    protected $addressCollectionMock;
 
     protected function setUp()
     {

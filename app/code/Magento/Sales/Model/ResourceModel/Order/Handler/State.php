@@ -10,6 +10,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class State
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
  */
 class State
 {
