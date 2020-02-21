@@ -79,7 +79,6 @@
         <!--Reindex and clear cache-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:clean" stepKey="cleanCache"/>
-        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad"/>
 
