@@ -81,7 +81,7 @@ class SaveTest extends AbstractBackendController
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
         $this->assertCustomerData(
             $postData['customer'][CustomerData::EMAIL],
-            $postData['customer'][CustomerData::WEBSITE_ID],
+            (int)$postData['customer'][CustomerData::WEBSITE_ID],
             $expectedData
         );
     }
@@ -245,8 +245,8 @@ class SaveTest extends AbstractBackendController
         $this->assertRedirect($this->stringStartsWith(
             $this->_baseControllerUrl . 'edit/id/' . $customerData->getId()
         ));
-        $this->assertCustomerData($customerData->getEmail(), $customerData->getWebsiteId(), $expectedData);
-        $this->assertCustomerSubscription($customerData->getId(), Subscriber::STATUS_SUBSCRIBED);
+        $this->assertCustomerData($customerData->getEmail(), (int)$customerData->getWebsiteId(), $expectedData);
+        $this->assertCustomerSubscription((int)$customerData->getId(), Subscriber::STATUS_SUBSCRIBED);
     }
 
     /**
@@ -428,13 +428,13 @@ class SaveTest extends AbstractBackendController
      * Check that customer parameters match expected values.
      *
      * @param string $customerEmail
-     * @param string $customerWebsiteId
+     * @param int $customerWebsiteId
      * @param array $expectedData
      * @return void
      */
     private function assertCustomerData(
         string $customerEmail,
-        string $customerWebsiteId,
+        int $customerWebsiteId,
         array $expectedData
     ): void {
         /** @var CustomerData $customerData */
