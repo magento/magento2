@@ -90,7 +90,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\Customer\Model\Indexer\Processor
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerProcessor;
 

@@ -7,7 +7,6 @@ namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Customer\Model\Indexer\Processor;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Import entity customer combined model
