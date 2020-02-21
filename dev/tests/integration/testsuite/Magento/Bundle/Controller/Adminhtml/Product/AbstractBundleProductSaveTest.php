@@ -76,7 +76,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      *
      * @param array $post
      * @param int|null $id
-     * @return void
+     * @return array
      */
     protected function prepareRequestData(array $post, ?int $id = null): array
     {
@@ -105,7 +105,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      * Prepare post params before dispatch
      *
      * @param array $post
-     * @return void
+     * @return array
      */
     private function preparePostParams(array $post): array
     {
@@ -128,7 +128,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      *
      * @param string $type
      * @param array $option
-     * @return void
+     * @return array
      */
     private function prepareOptionByType(string $type, array $option): array
     {
@@ -144,7 +144,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      *
      * @param array $productIdsBySkus
      * @param array $selection
-     * @return void
+     * @return array
      */
     private function prepareSelection(array $productIdsBySkus, array $selection): array
     {
