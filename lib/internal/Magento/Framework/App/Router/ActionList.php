@@ -80,8 +80,7 @@ class ActionList
             $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheKey . '.' . 'php';
 
             if (file_exists($file)) {
-                $this->actions = include $file;
-                $this->actions ? : $this->actions = $moduleReader->getActionFiles();
+                $this->actions = (include $file) ?? $moduleReader->getActionFiles();
             } else {
                 $this->actions = $moduleReader->getActionFiles();
             }
