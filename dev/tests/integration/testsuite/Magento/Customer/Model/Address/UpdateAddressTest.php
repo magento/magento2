@@ -33,32 +33,32 @@ class UpdateAddressTest extends TestCase
     /**
      * @var AddressRegistry
      */
-    private $addressRegistry;
+    protected $addressRegistry;
 
     /**
      * @var Address
      */
-    private $addressResource;
+    protected $addressResource;
 
     /**
      * @var CustomerRegistry
      */
-    private $customerRegistry;
+    protected $customerRegistry;
 
     /**
      * @var AddressRepositoryInterface
      */
-    private $addressRepository;
+    protected $addressRepository;
 
     /**
      * @var CustomerRepositoryInterface
      */
-    private $customerRepository;
+    protected $customerRepository;
 
     /**
      * @var int[]
      */
-    private $processedAddressesIds = [];
+    protected $processedAddressesIds = [];
 
     /**
      * @inheritdoc
