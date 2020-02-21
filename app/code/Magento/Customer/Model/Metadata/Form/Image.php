@@ -113,7 +113,11 @@ class Image extends File
             ->get(Filesystem\Directory\WriteFactory::class);
         $this->directoryList =  $directoryList ?: ObjectManager::getInstance()
             ->get(DirectoryList::class);
-        $this->mediaCustomerTmpDirectory = $this->writeFactory->create($this->directoryList->getPath($this->directoryList::MEDIA) . '/' . $this->_entityTypeCode . '/' . FileProcessor::TMP_DIR);
+        $this->mediaCustomerTmpDirectory = $this->writeFactory->create(
+            $this->directoryList->getPath($this->directoryList::MEDIA)
+            . '/' . $this->_entityTypeCode
+            . '/' . FileProcessor::TMP_DIR
+        );
     }
 
     /**
