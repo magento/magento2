@@ -27,7 +27,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
      */
     public function testBundleProductSave(array $post): void
     {
-        $this->prepareRequest($post);
+        $post = $this->prepareRequestData($post);
         $this->dispatch('backend/catalog/product/save');
         $this->assertBundleOptions($post['bundle_options']);
     }
@@ -120,7 +120,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
      */
     public function testBundleProductSaveMultiOptions(array $post): void
     {
-        $this->prepareRequest($post);
+        $post = $this->prepareRequestData($post);
         $this->dispatch('backend/catalog/product/save');
         $this->assertBundleOptions($post['bundle_options']);
     }
@@ -176,7 +176,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     public function testUpdateProduct(array $post): void
     {
         $id = $this->productRepository->get('bundle-product-checkbox-options')->getId();
-        $this->prepareRequest($post, (int)$id);
+        $post = $this->prepareRequestData($post, (int)$id);
         $this->dispatch('backend/catalog/product/save');
         $this->assertBundleOptions($post['bundle_options']);
     }

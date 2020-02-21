@@ -78,10 +78,12 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      * @param int|null $id
      * @return void
      */
-    protected function prepareRequest(array &$post, ?int $id = null): void
+    protected function prepareRequestData(array $post, ?int $id = null): array
     {
-        $this->preparePostParams($post);
+        $post = $this->preparePostParams($post);
         $this->setRequestparams($post, $id);
+
+        return $post;
     }
 
     /**
@@ -105,18 +107,20 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      * @param array $post
      * @return void
      */
-    private function preparePostParams(array &$post): void
+    private function preparePostParams(array $post): array
     {
         $post['product'] = $this->getStaticProductData();
         foreach ($post['bundle_options']['bundle_options'] as &$bundleOption) {
-            $this->prepareOptionByType($bundleOption['type'], $bundleOption);
+            $bundleOption = $this->prepareOptionByType($bundleOption['type'], $bundleOption);
             $productIdsBySkus = $this->productResource->getProductsIdsBySkus(
                 array_column($bundleOption['bundle_selections'], 'sku')
             );
             foreach ($bundleOption['bundle_selections'] as &$bundleSelection) {
-                $this->prepareSelection($productIdsBySkus, $bundleSelection);
+                $bundleSelection = $this->prepareSelection($productIdsBySkus, $bundleSelection);
             }
         }
+
+        return $post;
     }
 
     /**
@@ -126,11 +130,13 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      * @param array $option
      * @return void
      */
-    private function prepareOptionByType(string $type, array &$option)
+    private function prepareOptionByType(string $type, array $option): array
     {
         $option['required'] = '1';
         $option['delete'] = '';
         $option['title'] = $option['title'] ?? $type . ' Option Title';
+
+        return $option;
     }
 
     /**
@@ -140,7 +146,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
      * @param array $selection
      * @return void
      */
-    private function prepareSelection(array $productIdsBySkus, array &$selection): void
+    private function prepareSelection(array $productIdsBySkus, array $selection): array
     {
         $staticData = [
             'price' => '10',
@@ -149,6 +155,8 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
         ];
         $selection['product_id'] = $productIdsBySkus[$selection['sku']];
         $selection = array_merge($selection, $staticData);
+
+        return $selection;
     }
 
     /**
