@@ -1,29 +1,35 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\QueueConfigItem;
 
-use Magento\Framework\MessageQueue\Topology\Config\Data;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
+use Magento\Framework\MessageQueue\Topology\Config\Data;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataMapperTest extends \PHPUnit\Framework\TestCase
+class DataMapperTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $configData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CommunicationConfig|MockObject
      */
     private $communicationConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseQueueNameBuilder|MockObject
      */
     private $queueNameBuilder;
 
@@ -32,7 +38,10 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    /**
+     * @return void
+     */
+    protected function setUp(): void
     {
         $this->configData = $this->createMock(Data::class);
         $this->communicationConfig = $this->createMock(CommunicationConfig::class);
@@ -40,7 +49,12 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
         $this->model = new DataMapper($this->configData, $this->communicationConfig, $this->queueNameBuilder);
     }
 
-    public function testGetMappedData()
+    /**
+     * @return void
+     *
+     * @throws LocalizedException
+     */
+    public function testGetMappedData(): void
     {
         $data = [
             'ex01' => [
@@ -96,7 +110,9 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
             ['topic02', ['name' => 'topic02', 'is_synchronous' => false]],
         ];
 
-        $this->communicationConfig->expects($this->exactly(2))->method('getTopic')->willReturnMap($communicationMap);
+        $this->communicationConfig->expects($this->exactly(2))
+            ->method('getTopic')
+            ->willReturnMap($communicationMap);
         $this->configData->expects($this->once())->method('get')->willReturn($data);
         $this->queueNameBuilder->expects($this->once())
             ->method('getQueueName')
@@ -110,23 +126,27 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'some.queue--amqp' => [
                 'name' => 'some.queue',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
         ];
         $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**
+     * @return void
+     *
+     * @throws LocalizedException
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetMappedDataForWildcard()
+    public function testGetMappedDataForWildcard(): void
     {
         $data = [
             'ex01' => [
@@ -200,7 +220,9 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getTopic')
             ->with('topic01')
             ->willReturn(['name' => 'topic01', 'is_synchronous' => true]);
-        $this->communicationConfig->expects($this->any())->method('getTopics')->willReturn($communicationData);
+        $this->communicationConfig->expects($this->any())
+            ->method('getTopics')
+            ->willReturn($communicationData);
         $this->configData->expects($this->once())->method('get')->willReturn($data);
         $this->queueNameBuilder->expects($this->any())
             ->method('getQueueName')
@@ -215,49 +237,49 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'some.queue--amqp' => [
                 'name' => 'some.queue',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'responseQueue.topic02--amqp' => [
                 'name' => 'responseQueue.topic02',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'responseQueue.topic03--amqp' => [
                 'name' => 'responseQueue.topic03',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'responseQueue.topic04.04.04--amqp' => [
                 'name' => 'responseQueue.topic04.04.04',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'responseQueue.topic05.05--amqp' => [
                 'name' => 'responseQueue.topic05.05',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ],
             'responseQueue.topic08.part2.some.test--amqp' => [
                 'name' => 'responseQueue.topic08.part2.some.test',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
-                'arguments' => [],
+                'arguments' => ['some' => 'arguments'],
             ]
         ];
         $this->assertEquals($expectedResult, $actualResult);
