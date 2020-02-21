@@ -81,11 +81,13 @@ class Image implements ResolverInterface
      */
     private function formatFileNameWithMediaCategoryFolder(string $fileName): string
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $baseFileName = basename($fileName);
         return '/'
             . $this->directoryList->getUrlPath('media')
             . '/'
             . ltrim(FileInfo::ENTITY_MEDIA_PATH, '/')
             . '/'
-            . basename($fileName);
+            . $baseFileName;
     }
 }
