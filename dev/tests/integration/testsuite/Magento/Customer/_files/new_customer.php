@@ -8,31 +8,30 @@ declare(strict_types=1);
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Data\CustomerFactory;
+use Magento\Customer\Model\GroupManagement;
 use Magento\Eav\Model\AttributeRepository;
-use Magento\Framework\Math\Random;
-use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var AccountManagementInterface $accountManagment */
-$accountManagment = $objectManager->get(AccountManagementInterface::class);
-/** @var CustomerFactory $customerFactory */
+/** @var AccountManagementInterface $accountManagement */
+$accountManagement = $objectManager->get(AccountManagementInterface::class);
 $customerFactory = $objectManager->get(CustomerFactory::class);
-/** @var Random $random */
-$random = $objectManager->get(Random::class);
-/** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-$customer = $customerFactory->create();
-$website = $websiteRepository->get('base');
+$customerFactory->create();
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $objectManager->get(StoreManagerInterface::class);
+$website = $storeManager->getWebsite('base');
+/** @var GroupManagement $groupManagement */
+$groupManagement = $objectManager->get(GroupManagement::class);
 $defaultStoreId = $website->getDefaultStore()->getId();
 /** @var AttributeRepository $attributeRepository */
 $attributeRepository = $objectManager->get(AttributeRepository::class);
 $gender = $attributeRepository->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'gender')
     ->getSource()->getOptionId('Male');
-
+$customer = $customerFactory->create();
 $customer->setWebsiteId($website->getId())
-    ->setEmail('unconfirmedcustomer@example.com')
-    ->setGroupId(1)
+    ->setEmail('new_customer@example.com')
+    ->setGroupId($groupManagement->getDefaultGroup($defaultStoreId)->getId())
     ->setStoreId($defaultStoreId)
     ->setPrefix('Mr.')
     ->setFirstname('John')
@@ -41,7 +40,5 @@ $customer->setWebsiteId($website->getId())
     ->setSuffix('Esq.')
     ->setDefaultBilling(1)
     ->setDefaultShipping(1)
-    ->setConfirmation($random->getUniqueHash())
     ->setGender($gender);
-
-$accountManagment->createAccount($customer, 'Qwert12345');
+$accountManagement->createAccount($customer, 'Qwert12345');
