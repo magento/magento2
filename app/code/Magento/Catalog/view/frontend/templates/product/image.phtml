@@ -7,7 +7,7 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <img class="photo image <?= $block->escapeHtmlAttr($block->getClass()) ?>"
-    <?= $block->escapeHtml($block->getCustomAttributes()) ?>
+    <?= /* @noEscape */ $block->getCustomAttributes() ?>
     src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
     width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
     height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
