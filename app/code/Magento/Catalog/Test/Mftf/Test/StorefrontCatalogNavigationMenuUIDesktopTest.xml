@@ -21,8 +21,10 @@
         <before>
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteDefaultCategoryChildrenActionGroup" stepKey="deleteRootCategoryChildren"/>
         </before>
         <after>
+            <actionGroup ref="DeleteDefaultCategoryChildrenActionGroup" stepKey="deleteRootCategoryChildren"/>
             <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToDefault">
                 <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
             </actionGroup>
