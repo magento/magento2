@@ -36,8 +36,8 @@
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="ApiSimpleProductWithSpecCharInName" type="product" extends="ApiSimpleProduct">
-        <data key="name">Pursuit Lumaflex&#38;trade; Tone Band</data>
-        <data key="sku" unique="suffix">x&#38;trade;</data>
+        <data key="name" unique="suffix">Pursuit Lumaflex™ Tone Band</data>
+        <data key="sku" unique="suffix">x™</data>
     </entity>
     <entity name="SimpleProduct_25" type="product" extends="SimpleProduct2">
         <data key="quantity">25</data>

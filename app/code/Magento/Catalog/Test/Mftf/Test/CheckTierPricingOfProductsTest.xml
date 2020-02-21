@@ -36,6 +36,7 @@
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <!--Login as admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
         </before>
 
         <!--Create website, Sore adn Store View-->
@@ -328,6 +329,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
+            <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
             <actionGroup ref="logout" stepKey="logout"/>
 
             <!--Do reindex and flush cache-->
