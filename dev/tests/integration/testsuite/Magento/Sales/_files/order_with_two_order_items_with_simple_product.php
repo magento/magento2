@@ -11,16 +11,14 @@ use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 
-require 'default_rollback.php';
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 $addressData = include __DIR__ . '/address_data.php';
 
-$objectManager = Bootstrap::getObjectManager();
 /** @var OrderAddressInterfaceFactory $addressFactory */
 $addressFactory = $objectManager->get(OrderAddressInterfaceFactory::class);
 /** @var OrderPaymentInterfaceFactory $paymentFactory */
@@ -35,9 +33,9 @@ $storeManager = $objectManager->get(StoreManagerInterface::class);
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 
 $billingAddress = $addressFactory->create(['data' => $addressData]);
-$billingAddress->setAddressType('billing');
+$billingAddress->setAddressType(Address::TYPE_BILLING);
 $shippingAddress = $addressFactory->create(['data' => $addressData]);
-$shippingAddress->setAddressType('shipping');
+$shippingAddress->setAddressType(Address::TYPE_SHIPPING);
 $payment = $paymentFactory->create();
 $payment->setMethod('checkmo')->setAdditionalInformation(
     [
@@ -60,7 +58,7 @@ $order->setIncrementId('100000001')
     ->setBaseGrandTotal(20)
     ->setCustomerIsGuest(false)
     ->setCustomerId($customer->getId())
-    ->setCustomerEmail('customer@null.com')
+    ->setCustomerEmail($customer->getEmail())
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
     ->setStoreId($defaultStoreId)

@@ -75,8 +75,8 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
                 [
                     'order_increment_id' => '100000001',
                     'items_count_to_ship_by_sku' => [
-                        'simple' => 'all',
-                        'custom-design-simple-product' => 'all',
+                        'simple' => 5,
+                        'custom-design-simple-product' => 5,
                     ],
                     'comment_text' => 'Create full shipment',
                 ],
@@ -164,7 +164,7 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
     public function testCreateOrderShipmentWithoutPostData(): void
     {
         $this->performShipmentCreationRequest([]);
-        $this->assertError404();
+        $this->assert404NotFound();
     }
 
     /**
@@ -174,19 +174,19 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
      *
      * @return void
      */
-    public function testNameCreateOrderShipmentWithoutOrderId(): void
+    public function testCreateOrderShipmentWithoutOrderId(): void
     {
         $dataToSend = [
             'order_increment_id' => '100000001',
             'items_count_to_ship_by_sku' => [
-                'simple' => 'all',
+                'simple' => 2,
             ],
             'comment_text' => 'Create full shipment',
         ];
         $postData = $this->createPostData($dataToSend);
         unset($postData['order_id']);
         $this->performShipmentCreationRequest($postData);
-        $this->assertError404();
+        $this->assert404NotFound();
     }
 
     /**
@@ -240,6 +240,16 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
     }
 
     /**
+     * @inheritdoc
+     */
+    public function assert404NotFound()
+    {
+        $this->assertEquals('noroute', $this->getRequest()->getControllerName());
+        $this->assertContains('404 Error', $this->getResponse()->getBody());
+        $this->assertContains('Page not found', $this->getResponse()->getBody());
+    }
+
+    /**
      * Set POST data and type POST to request
      * and perform request by path backend/admin/order_shipment/save.
      *
@@ -267,18 +277,6 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('sales/order/view/order_id/' . $orderId));
-    }
-
-    /**
-     * Assert that body contains 404 error and forwarded to no-route.
-     *
-     * @return void
-     */
-    private function assertError404(): void
-    {
-        $this->assertEquals('noroute', $this->getRequest()->getControllerName());
-        $this->assertContains('404 Error', $this->getResponse()->getBody());
-        $this->assertContains('Page not found', $this->getResponse()->getBody());
     }
 
     /**
@@ -321,9 +319,8 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
             if (!isset($dataForBuildPostData['items_count_to_ship_by_sku'][$orderItem->getSku()])) {
                 continue;
             }
-            $orderCount = $dataForBuildPostData['items_count_to_ship_by_sku'][$orderItem->getSku()];
-            $shipment['items'][$orderItem->getItemId()] = $orderCount === 'all'
-                ? (int)$orderItem->getQtyOrdered() : $orderCount;
+            $shipment['items'][$orderItem->getItemId()]
+                = $dataForBuildPostData['items_count_to_ship_by_sku'][$orderItem->getSku()];
         }
         if (empty($shipment['items'])) {
             unset($shipment['items']);
