@@ -17,6 +17,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ProductUrlPathGenerator
+ *
+ * To generate SEO friendly URL-path for products
  */
 class ProductUrlPathGenerator
 {

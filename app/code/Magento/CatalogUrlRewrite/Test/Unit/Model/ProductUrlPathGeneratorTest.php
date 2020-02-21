@@ -13,6 +13,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ProductUrlPathGeneratorTest
+ *
+ * Unit test for \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
  */
 class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
 {
