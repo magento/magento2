@@ -121,12 +121,12 @@ class Adapter implements AdapterInterface
             $rawResponse = self::$emptyRawResponse;
         }
 
-        $rawDocuments = isset($rawResponse['hits']['hits']) ?? [];
+        $rawDocuments = $rawResponse['hits']['hits'] ?? [];
         $queryResponse = $this->responseFactory->create(
             [
                 'documents' => $rawDocuments,
                 'aggregations' => $aggregationBuilder->build($request, $rawResponse),
-                'total' => isset($rawResponse['hits']['total']['value']) ?? 0
+                'total' => $rawResponse['hits']['total']['value'] ?? 0
             ]
         );
         return $queryResponse;
