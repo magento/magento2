@@ -56,7 +56,7 @@ class Image implements ResolverInterface
         $mediaPath = $this->directoryList->getUrlPath('media');
         $pos = strpos($imagePath, $mediaPath);
         if ($pos !== false) {
-            $imagePath = substr($imagePath, $pos + strlen($mediaPath), strlen($baseUrl));
+            $imagePath = substr($imagePath, $pos + strlen($mediaPath));
         }
         $imageUrl = rtrim($baseUrl, '/') . '/' . ltrim($imagePath, '/');
 
