@@ -160,8 +160,8 @@ class RefundOrder implements RefundOrderInterface
                 : $this->config->getStateDefaultStatus($orderState);
             $order->setStatus($status);
 
-            $order = $this->orderRepository->save($order);
             $creditmemo = $this->creditmemoRepository->save($creditmemo);
+            $order = $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
             $this->logger->critical($e);
