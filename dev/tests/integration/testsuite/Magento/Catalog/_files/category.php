@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-require 'catalog_category_image.php';
-
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(
