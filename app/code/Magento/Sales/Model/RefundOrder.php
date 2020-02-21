@@ -19,7 +19,8 @@ use Magento\Sales\Model\Order\Validation\RefundOrderInterface as RefundOrderVali
 use Psr\Log\LoggerInterface;
 
 /**
- * Class RefundOrder
+ * Class is used for creating a credit memo and refunding it.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundOrder implements RefundOrderInterface
