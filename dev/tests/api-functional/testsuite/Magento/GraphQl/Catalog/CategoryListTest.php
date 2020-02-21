@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -383,13 +384,21 @@ QUERY;
     /**
      * Test category image full name is returned
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_long_image_name.php
      */
     public function testCategoryImageName()
     {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+
         $query = <<<QUERY
     {
-categoryList(filters: {ids: {in: ["333"]}}) {
+categoryList(filters: {ids: {in: ["$categoryId"]}}) {
   id
   name
   image
@@ -406,7 +415,7 @@ QUERY;
         $categoryList = $response['categoryList'];
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertNotEmpty($response['categoryList']);
-        $this->assertEquals('Category 1', $categoryList[0]['name']);
+        $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
         $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
     }
 
