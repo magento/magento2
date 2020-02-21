@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Cart total Repository Test
+ * Test Cart totals object for class \Magento\Quote\Model\Cart\CartTotalRepository
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
