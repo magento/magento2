@@ -68,6 +68,20 @@ class ImageFactory
     }
 
     /**
+     * Remove class from custom attributes
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function filterCustomAttributes(array $attributes): array
+    {
+        if (isset($attributes['class'])) {
+            unset($attributes['class']);
+        }
+        return $attributes;
+    }
+
+    /**
      * Retrieve image class for HTML element
      *
      * @param array $attributes
@@ -153,7 +167,7 @@ class ImageFactory
                 'height' => $imageMiscParams['image_height'],
                 'label' => $this->getLabel($product, $imageMiscParams['image_type']),
                 'ratio' => $this->getRatio($imageMiscParams['image_width'], $imageMiscParams['image_height']),
-                'custom_attributes' => $attributes,
+                'custom_attributes' => $this->filterCustomAttributes($attributes),
                 'class' => $this->getClass($attributes),
                 'product_id' => $product->getId()
             ],
@@ -161,4 +175,6 @@ class ImageFactory
 
         return $this->objectManager->create(ImageBlock::class, $data);
     }
+
+
 }

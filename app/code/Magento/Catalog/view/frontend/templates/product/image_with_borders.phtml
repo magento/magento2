@@ -12,9 +12,7 @@
           style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
         <img class="<?= $block->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
-                <?php if ($name !== 'class'): ?>
-                    <?= $block->escapeHtmlAttr($name) ?>="<?= $block->escapeHtmlAttr($value) ?>"
-                <?php endif; ?>
+                <?= $block->escapeHtmlAttr($name) ?>="<?= $block->escapeHtmlAttr($value) ?>"
             <?php endforeach; ?>
             src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
             max-width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
