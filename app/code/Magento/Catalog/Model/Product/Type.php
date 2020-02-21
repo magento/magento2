@@ -5,9 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Type\Pool;
 use Magento\Catalog\Model\Product\Type\Price;
 use Magento\Catalog\Model\Product\Type\Price\Factory as PriceFactory;
@@ -15,7 +13,6 @@ use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
-use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Product type model
@@ -113,8 +110,8 @@ class Type implements OptionSourceInterface
     /**
      * Factory to product singleton product type instances
      *
-     * @param ProductInterface $product
-     * @return AbstractType
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function factory($product)
     {
@@ -137,7 +134,7 @@ class Type implements OptionSourceInterface
      * Product type price model factory
      *
      * @param string $productType
-     * @return Price
+     * @return \Magento\Catalog\Model\Product\Type\Price
      */
     public function priceFactory($productType)
     {
@@ -161,7 +158,7 @@ class Type implements OptionSourceInterface
      * Get Product Price Info object
      *
      * @param Product $saleableItem
-     * @return PriceInfoInterface
+     * @return \Magento\Framework\Pricing\PriceInfoInterface
      */
     public function getPriceInfo(Product $saleableItem)
     {
