@@ -7,7 +7,11 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <img class="photo image <?= $block->escapeHtmlAttr($block->getClass()) ?>"
-    <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
+    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+        <?php if ($name !== 'class'): ?>
+            <?= $block->escapeHtmlAttr($name) ?>="<?= $block->escapeHtmlAttr($value) ?>"
+        <?php endif; ?>
+    <?php endforeach; ?>
     src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
     width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
     height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"

@@ -68,23 +68,6 @@ class ImageFactory
     }
 
     /**
-     * Retrieve image custom attributes for HTML element
-     *
-     * @param array $attributes
-     * @return string
-     */
-    private function getStringCustomAttributes(array $attributes): string
-    {
-        $result = [];
-        foreach ($attributes as $name => $value) {
-            if ($name != 'class') {
-                $result[] = $name . '="' . $value . '"';
-            }
-        }
-        return !empty($result) ? implode(' ', $result) : '';
-    }
-
-    /**
      * Retrieve image class for HTML element
      *
      * @param array $attributes
@@ -161,7 +144,7 @@ class ImageFactory
         }
 
         $attributes = $attributes === null ? [] : $attributes;
-        
+
         $data = [
             'data' => [
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
@@ -170,7 +153,7 @@ class ImageFactory
                 'height' => $imageMiscParams['image_height'],
                 'label' => $this->getLabel($product, $imageMiscParams['image_type']),
                 'ratio' => $this->getRatio($imageMiscParams['image_width'], $imageMiscParams['image_height']),
-                'custom_attributes' => $this->getStringCustomAttributes($attributes),
+                'custom_attributes' => $attributes,
                 'class' => $this->getClass($attributes),
                 'product_id' => $product->getId()
             ],
