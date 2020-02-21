@@ -20,7 +20,6 @@
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{cmsBlockDataTitle}}" stepKey="fillFieldTitle1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{cmsBlockDataIdentifier}}" stepKey="fillFieldIdentifier"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView"/>
-        <scrollTo selector="{{BlockContentSection.TextArea}}" stepKey="scrollToContentField"/>
         <fillField selector="{{BlockContentSection.TextArea}}" userInput="{{cmsBlockDataContent}}" stepKey="fillContentField"/>
     </actionGroup>
 </actionGroups>
