@@ -166,8 +166,8 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             $this->_dataFactory,
             $this->_customerFactory,
             $this->_addressFactory,
-            $data,
-            $this->indexerProcessor
+            $this->indexerProcessor,
+            $data
         );
     }
 
