@@ -20,8 +20,6 @@ $category->setId(
     '1/2/333'
 )->setLevel(
     2
-)->setImage(
-    $filePathLong
 )->setAvailableSortBy(
     ['position', 'name']
 )->setDefaultSortBy(
