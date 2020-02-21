@@ -11,7 +11,7 @@
     <span class="product-image-wrapper"
           style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
         <img class="<?= $block->escapeHtmlAttr($block->getClass()) ?>"
-            <?= /* @noEscape */ $block->getCustomAttributes() ?>
+            <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
             src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
             max-width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
             max-height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
