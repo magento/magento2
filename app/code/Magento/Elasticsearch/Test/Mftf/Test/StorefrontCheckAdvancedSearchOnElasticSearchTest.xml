@@ -16,7 +16,7 @@
             <description value="Check Advanced Search on ElasticSearch"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31115"/>
-            <group value="elasticsearch"/>
+            <group value="SearchEngineElasticsearch"/>
             <group value="configurableProduct"/>
             <group value="catalog_search"/>
         </annotations>
