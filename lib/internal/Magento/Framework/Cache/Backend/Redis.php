@@ -51,14 +51,14 @@ class Redis extends \Cm_Cache_Backend_Redis
                 $redis->hGet(self::PREFIX_KEY . $key, self::FIELD_DATA);
             }
 
-            $this->preloadedData= array_combine($this->preloadKeys, $redis->exec());
+            $this->preloadedData = array_combine($this->preloadKeys, $redis->exec());
         }
 
         if (isset($this->preloadedData[$id])) {
             return $this->_decodeData($this->preloadedData[$id]);
         }
 
-        return parent::load($id, $doNotTestCacheValidity = false);
+        return parent::load($id, $doNotTestCacheValidity);
     }
 
     /**
