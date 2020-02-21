@@ -63,7 +63,7 @@
         <element name="targetEllipsisSelect" type="select" selector="select#conditions__{{var1}}--{{var2}}__value" parameterized="true" timeout="30"/>
         <element name="targetSelect" type="select" selector="//ul[@id='conditions__{{var}}__children']//select" parameterized="true" timeout="30"/>
         <element name="targetInput" type="input" selector="input#conditions__{{var1}}--{{var2}}__value" parameterized="true"/>
-        <element name="applyButton" type="button" selector="#conditions__{{var1}}__children li:nth-of-type({{var2}}) a.rule-param-apply" parameterized="true"/>
+        <element name="applyButton" type="button" selector="#conditions__{{var1}}__children li:nth-of-type({{var2}}) a.rule-param-apply" parameterized="true" timeout="30"/>
         <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{condition}}']" parameterized="true"/>
         <element name="activeOperatorSelect" type="select" selector=".rule-param-edit select[name*='[operator]']"/>
         <element name="activeValueInput" type="input" selector=".rule-param-edit [name*='[value]']"/>
