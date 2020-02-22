@@ -301,7 +301,7 @@
                 <visible>true</visible>
             </settings>
         </field>
-        <field name="sendemail_store_id" formElement="select">
+        <field name="sendemail_store_id" component="Magento_Ui/js/form/element/select" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -317,7 +317,11 @@
             <formElements>
                 <select>
                     <settings>
-                        <options class="Magento\Store\Model\System\Store"/>
+                        <options class="Magento\Customer\ViewModel\Customer\Store"/>
+                        <filterBy>
+                            <field>website_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.website_id</target>
+                        </filterBy>
                     </settings>
                 </select>
             </formElements>
