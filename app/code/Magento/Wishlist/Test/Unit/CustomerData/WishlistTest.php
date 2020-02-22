@@ -26,19 +26,19 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
     /** @var Wishlist */
     private $model;
 
-    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
     private $wishlistHelperMock;
 
-    /** @var Sidebar|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Sidebar|\PHPUnit\Framework\MockObject\MockObject */
     private $sidebarMock;
 
-    /** @var Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Image|\PHPUnit\Framework\MockObject\MockObject */
     private $catalogImageHelperMock;
 
-    /** @var ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ViewInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $viewMock;
 
-    /** @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $itemResolver;
 
     protected function setUp()
@@ -120,7 +120,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock */
+        /** @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock */
         $itemMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -133,7 +133,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->once())
             ->method('loadLayout');
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -161,7 +161,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($items));
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $productMock */
+        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $productMock */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -229,7 +229,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('isVisibleInSiteVisibility')
             ->willReturn($productIsVisible);
 
-        /** @var AbstractType|\PHPUnit_Framework_MockObject_MockObject $productTypeMock */
+        /** @var AbstractType|\PHPUnit\Framework\MockObject\MockObject $productTypeMock */
         $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasRequiredOptions'])
@@ -276,7 +276,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $itemAddParams = ['add_params'];
         $itemRemoveParams = ['remove_params'];
 
-        /** @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock */
+        /** @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock */
         $itemMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -331,7 +331,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->once())
             ->method('loadLayout');
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -359,7 +359,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($items));
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $productMock */
+        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $productMock */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -428,7 +428,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->never())
             ->method('isVisibleInSiteVisibility');
 
-        /** @var AbstractType|\PHPUnit_Framework_MockObject_MockObject $productTypeMock */
+        /** @var AbstractType|\PHPUnit\Framework\MockObject\MockObject $productTypeMock */
         $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasRequiredOptions'])

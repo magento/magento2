@@ -558,7 +558,7 @@ class Application
             }
         }
     }
-    
+
     /**
      * Copies global configuration file from the tests folder (see TESTS_GLOBAL_CONFIG_FILE)
      *
