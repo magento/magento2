@@ -5,7 +5,7 @@
 
 /* eslint max-nested-callbacks: 0 */
 
-define(['squire', 'ko', 'jquery'], function (Squire, ko, $) {
+define(['squire', 'ko'], function (Squire, ko) {
     'use strict';
 
     var injector = new Squire(),
@@ -38,9 +38,9 @@ define(['squire', 'ko', 'jquery'], function (Squire, ko, $) {
     beforeEach(function (done) {
         window.checkoutConfig = {
             quoteData: {
-                entity_id: 1
+                /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
+                entity_Id: 1
             },
-            /** Stub validated email */
             validatedEmailValue: 'test@gmail.com',
             formKey: 'formKey'
         };
@@ -65,7 +65,7 @@ define(['squire', 'ko', 'jquery'], function (Squire, ko, $) {
 
     describe('Magento_Checkout/js/view/form/element/email', function () {
         describe('"setInputFieldEmailValue" method', function () {
-            it('Check method call setInputFieldEmailValue.', function () {
+            it('Check method setInputFieldEmailValue called by checkoutData.', function () {
                 expect(mocks['Magento_Checkout/js/checkout-data'].setInputFieldEmailValue)
                     .toHaveBeenCalledWith(window.checkoutConfig.validatedEmailValue);
             });
