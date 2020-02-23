@@ -856,7 +856,7 @@ XMLRequest;
             'CNH' => 'CNY'
         ];
 
-        return isset($currencyMapping[$code]) ? $currencyMapping[$code] : $code;
+        return $currencyMapping[$code] ?? $code;
     }
 
     /**
