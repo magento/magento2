@@ -40,7 +40,7 @@
             <deleteData createDataKey="createProduct3" stepKey="deleteThirdProduct"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -48,7 +48,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="wait1"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearAll"/>
-        <actionGroup ref="searchProductGridByKeyword" stepKey="searchForProduct">
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>
         </actionGroup>
 
@@ -145,6 +145,9 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--check storefront for both options-->
@@ -238,6 +241,9 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--check storefront for both options-->
@@ -284,7 +290,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
@@ -333,7 +339,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>

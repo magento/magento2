@@ -94,7 +94,7 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
 
         <!-- Click on <product1>: Product page opens-->
-        <actionGroup ref="filterProductGridByName" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridNameProduct($$simpleProduct.name$$)}}" stepKey="clickProduct1"/>
@@ -159,16 +159,16 @@
         <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategory1Name"/>
         <see userInput="We can't find products matching the selection." stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
-      
+
         <!-- Log in to the backend: Admin user is logged in-->
         <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
-        
+
         <!-- Navigate to the Catalog > Products: Navigate to the Catalog>Products -->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductsPage"/>
 
         <!-- Click on <product1> -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openSimpleProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openSimpleProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
 

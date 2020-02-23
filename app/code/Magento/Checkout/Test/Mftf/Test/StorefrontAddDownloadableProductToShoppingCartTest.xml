@@ -47,7 +47,7 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary-->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="AssertCartSummary" >

@@ -349,7 +349,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             if ($user) {
                 $user->setHasAvailableResources(false);
             }
-            $action = '*/*/denied';
+            $action = '*/denied';
         }
         return $action;
     }

@@ -31,7 +31,7 @@
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
                 <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
             <deleteData createDataKey="createCustomerTaxClass" stepKey="deleteCustomerTaxClass"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
