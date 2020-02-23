@@ -205,7 +205,6 @@ class ManagementTest extends TestCase
         $this->assertTrue($this->model->setProductLinks($productSku, $links));
     }
 
-
     /**
      * Test for SetProductLinks with empty array of items
      *

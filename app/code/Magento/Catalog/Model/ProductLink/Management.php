@@ -13,6 +13,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Api\ProductLinkManagementInterface;
 
+/**
+ * Manage product links from api
+ */
 class Management implements ProductLinkManagementInterface
 {
     /**
@@ -38,7 +41,7 @@ class Management implements ProductLinkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLinkedItemsByType($sku, $type)
     {
@@ -65,7 +68,7 @@ class Management implements ProductLinkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductLinks($sku, array $items)
     {
