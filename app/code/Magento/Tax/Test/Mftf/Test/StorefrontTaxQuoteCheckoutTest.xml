@@ -41,6 +41,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -146,14 +148,7 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
-            <!-- Fill out form for a new user with address -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Simple_US_Customer_NY"/>
-            </actionGroup>
-
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
-                <argument name="Address" value="US_Address_NY"/>
-            </actionGroup>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -185,6 +180,15 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
         </after>
+
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+
+        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
         <amOnPage url="$$simpleProduct1.sku$$.html" stepKey="goToSimpleProductPage"/>
@@ -265,6 +269,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -381,14 +387,7 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
-            <!-- Fill out form for a new user with address -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Simple_US_Customer_NY"/>
-            </actionGroup>
-
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
-                <argument name="Address" value="US_Address_NY"/>
-            </actionGroup>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -420,6 +419,15 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
         </after>
+
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+
+        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
         <amOnPage url="$$virtualProduct1.sku$$.html" stepKey="goToVirtualProductPage"/>
