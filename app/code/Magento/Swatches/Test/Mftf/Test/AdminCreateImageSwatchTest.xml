@@ -24,7 +24,14 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Begin creating a new product attribute of type "Image Swatch" -->
@@ -96,15 +103,11 @@
         </assertContains>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
-            <argument name="product" value="BaseConfigurableProduct"/>
-        </actionGroup>
+        <amOnPage url="{{AdminProductCreatePage.url(BaseConfigurableProduct.attribute_set_id, BaseConfigurableProduct.type_id)}}" stepKey="goToCreateConfigurableProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$createCategory.name$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the Image Swatch we created earlier -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
@@ -144,7 +147,7 @@
         </assertContains>
 
         <!-- Go to the product listing page and see text swatch options -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPageStorefront"/>
+        <amOnPage url="$createCategory.custom_attributes[url_key]$.html" stepKey="goToCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForProductListingPage"/>
 
         <!-- Verify the storefront -->
