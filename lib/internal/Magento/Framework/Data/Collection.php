@@ -338,7 +338,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve field values from all items
      *
      * @param string $colName
-     * @return  array
+     * @return array
      */
     public function getColumnValues($colName)
     {
@@ -356,7 +356,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string $column
      * @param array $value
-     * @return  array
+     * @return array
      */
     public function getItemsByColumnValue($column, $value)
     {
