@@ -41,7 +41,6 @@ define(['squire', 'ko'], function (Squire, ko) {
                 /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
                 entity_Id: 1
             },
-            validatedEmailValue: 'test@gmail.com',
             formKey: 'formKey'
         };
 
@@ -64,17 +63,11 @@ define(['squire', 'ko'], function (Squire, ko) {
     });
 
     describe('Magento_Checkout/js/view/form/element/email', function () {
-        describe('"setInputFieldEmailValue" method', function () {
-            it('Check method setInputFieldEmailValue called by checkoutData.', function () {
-                expect(mocks['Magento_Checkout/js/checkout-data'].setInputFieldEmailValue)
-                    .toHaveBeenCalledWith(window.checkoutConfig.validatedEmailValue);
-            });
-        });
-
         describe('"initObservable" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initObservable')).toBeDefined();
             });
+            
             it('Check method type', function () {
                 var type = typeof obj.initialize;
 
