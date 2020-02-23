@@ -67,7 +67,6 @@ define(['squire', 'ko'], function (Squire, ko) {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initObservable')).toBeDefined();
             });
-            
             it('Check method type', function () {
                 var type = typeof obj.initialize;
 
@@ -79,7 +78,6 @@ define(['squire', 'ko'], function (Squire, ko) {
             it('Check for return type of current method.', function () {
                 expect(obj.initConfig()).toEqual(obj);
             });
-
             it('Check isPasswordVisible variable type', function () {
                 expect(typeof obj.isPasswordVisible()).toEqual('boolean');
             });
