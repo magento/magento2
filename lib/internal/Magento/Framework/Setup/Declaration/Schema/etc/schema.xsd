@@ -20,6 +20,7 @@
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/longtext.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/mediumtext.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/varchar.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/json.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/blob.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/mediumblob.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/longblob.xsd" />

@@ -98,7 +98,7 @@
             <!--<argument name="category" value="$$createCategoryC$$"/>-->
             <!--<argument name="productCount" value="2"/>-->
         <!--</actionGroup>-->
-        <!--<actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">-->
+        <!--<actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct1">-->
             <!--<argument name="product" value="$$createProduct1$$"/>-->
         <!--</actionGroup>-->
 
@@ -109,7 +109,7 @@
             <argument name="category" value="$$createSubCategory$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct2">
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct2">
             <argument name="product" value="$$createProduct2$$"/>
         </actionGroup>
 
@@ -118,17 +118,17 @@
             <!--<argument name="category" value="$$createCategoryB$$"/>-->
             <!--<argument name="productCount" value="1"/>-->
         <!--</actionGroup>-->
-        <!--<actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct3">-->
+        <!--<actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct3">-->
             <!--<argument name="product" value="$$createProduct3$$"/>-->
         <!--</actionGroup>-->
 
         <!-- Delete Categories 1(with subcategory) and 3. -->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPageAfterStoreFrontCategoryAssertions"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadAfterStoreFrontCategoryAssertions"/>
-        <actionGroup ref="DeleteCategory" stepKey="deleteCategoryC">
+        <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategoryC">
             <argument name="categoryEntity" value="$$createCategoryC$$"/>
         </actionGroup>
-        <actionGroup ref="DeleteCategory" stepKey="deleteCategoryB">
+        <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategoryB">
             <argument name="categoryEntity" value="$$createCategoryB$$"/>
         </actionGroup>
         <!-- Verify categories 1 and 3 are absent -->
@@ -139,17 +139,17 @@
         <!-- Verify products 1-3 are available on storefront -->
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct1.custom_attributes[url_key]$$.html" stepKey="amOnProduct1Page"/>
         <waitForPageLoad stepKey="product1WaitForPageLoad"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page">
+        <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="browseAssertProduct1Page">
             <argument name="product" value="$$createProduct1$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct2.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
         <waitForPageLoad stepKey="product2WaitForPageLoad"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page">
+        <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="browseAssertProduct2Page">
             <argument name="product" value="$$createProduct2$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct3.custom_attributes[url_key]$$.html" stepKey="amOnProduct3Page"/>
         <waitForPageLoad stepKey="product3WaitForPageLoad"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct3Page">
+        <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="browseAssertProduct3Page">
             <argument name="product" value="$$createProduct3$$"/>
         </actionGroup>
         <!-- Rename New Root Category to Default category -->

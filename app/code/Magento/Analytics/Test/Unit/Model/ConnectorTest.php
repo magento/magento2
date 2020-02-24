@@ -57,9 +57,13 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Executing non-existing command
+     *
      * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Command "register" was not found.
+     * @return void
      */
-    public function testExecuteCommandNotFound()
+    public function testExecuteCommandNotFound(): void
     {
         $commandName = 'register';
         $this->connector->execute($commandName);

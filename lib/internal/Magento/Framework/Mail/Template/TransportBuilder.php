@@ -87,7 +87,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var EmailMessageInterface
+     * @var MessageInterface
      */
     protected $message;
 

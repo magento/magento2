@@ -70,6 +70,7 @@ class GetCustomer
 
         try {
             $customer = $this->customerRepository->getById($currentUserId);
+            // @codeCoverageIgnoreStart
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(
                 __('Customer with id "%customer_id" does not exist.', ['customer_id' => $currentUserId]),
@@ -77,6 +78,7 @@ class GetCustomer
             );
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
+            // @codeCoverageIgnoreEnd
         }
 
         if (true === $this->authentication->isLocked($currentUserId)) {
@@ -85,8 +87,10 @@ class GetCustomer
 
         try {
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($currentUserId);
+            // @codeCoverageIgnoreStart
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
+            // @codeCoverageIgnoreEnd
         }
 
         if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {

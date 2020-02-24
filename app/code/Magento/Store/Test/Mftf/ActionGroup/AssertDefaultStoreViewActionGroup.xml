@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertDefaultStoreViewActionGroup" extends="EditStoreGroupActionGroup">
+        <annotations>
+            <description>Asserts that the provided store view is default in provided store group.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <seeOptionIsSelected selector="{{AdminEditStoreGroupSection.defaultStoreView}}" userInput="{{storeViewName}}" stepKey="assertDefaultStoreView" after="waitForStorePageToLoad"/>
+    </actionGroup>
+</actionGroups>

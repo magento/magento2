@@ -58,9 +58,9 @@ class AsyncCssPlugin
                     }
                     $media = $media ?? 'all';
                     $loadCssAsync = sprintf(
-                        '<link rel="preload" as="style" media="%s" .
-                         onload="this.onload=null;this.rel=\'stylesheet\'"' .
-                        'href="%s">',
+                        '<link rel="preload" as="style" media="%s"' .
+                         ' onload="this.onload=null;this.rel=\'stylesheet\'"' .
+                        ' href="%s" />',
                         $media,
                         $href
                     );

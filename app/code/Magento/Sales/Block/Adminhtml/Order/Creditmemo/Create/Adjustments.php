@@ -60,7 +60,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     {
         $parent = $this->getParentBlock();
         $this->_source = $parent->getSource();
-        $total = new \Magento\Framework\DataObject(['code' => 'agjustments', 'block_name' => $this->getNameInLayout()]);
+        $total = new \Magento\Framework\DataObject(['code' => 'adjustments', 'block_name' => $this->getNameInLayout()]);
         $parent->removeTotal('shipping');
         $parent->removeTotal('adjustment_positive');
         $parent->removeTotal('adjustment_negative');
@@ -110,21 +110,5 @@ class Adjustments extends \Magento\Backend\Block\Template
             $label = __('Refund Shipping');
         }
         return $label;
-    }
-
-    /**
-     * Get update totals url.
-     *
-     * @return string
-     */
-    public function getUpdateTotalsUrl(): string
-    {
-        return $this->getUrl(
-            'sales/*/updateQty',
-            [
-                'order_id' => $this->getSource()->getOrderId(),
-                'invoice_id' => $this->getRequest()->getParam('invoice_id', null),
-            ]
-        );
     }
 }

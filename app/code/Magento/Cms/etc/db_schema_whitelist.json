@@ -50,7 +50,8 @@
             "custom_layout_update_xml": true,
             "custom_theme_from": true,
             "custom_theme_to": true,
-            "meta_title": true
+            "meta_title": true,
+            "layout_update_selected": true
         },
         "index": {
             "CMS_PAGE_IDENTIFIER": true,
