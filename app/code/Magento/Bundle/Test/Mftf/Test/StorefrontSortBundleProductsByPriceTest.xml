@@ -109,6 +109,9 @@
             <deleteData createDataKey="createFirstProductForBundle" stepKey="deleteFirstProductForBundle"/>
             <deleteData createDataKey="createSecondProductForBundle" stepKey="deleteSecondProductForBundle"/>
             <deleteData createDataKey="createThirdBundleProduct" stepKey="deleteThirdBundleProduct"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open created category on Storefront -->
