@@ -9,18 +9,19 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 use Magento\Framework\Model\Context;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\Method\Adapter;
 use Magento\Sales\Api\CreditmemoManagementInterface;
+use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\Payment\Operations\SaleOperation;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class PaymentTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -49,17 +50,17 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\PriceCurrency|MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \Magento\Directory\Model\Currency | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Currency|MockObject
      */
     protected $currencyMock;
 
@@ -84,50 +85,55 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     private $transactionId;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $transactionCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\CreditmemoFactory|MockObject
      */
     protected $creditmemoFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|MockObject
      */
     protected $creditMemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository|MockObject
      */
     protected $transactionRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface|MockObject
      */
     protected $transactionManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface|MockObject
      */
 
     protected $transactionBuilderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Processor|MockObject
      */
     protected $paymentProcessor;
 
     /**
-     * @var \Magento\Sales\Model\OrderRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\OrderRepository|MockObject
      */
     protected $orderRepository;
 
     /**
-     * @var CreditmemoManagementInterface
+     * @var CreditmemoManagementInterface|MockObject
      */
     private $creditmemoManagerMock;
+
+    /**
+     * @var SaleOperation|MockObject
+     */
+    private $saleOperation;
 
     /**
      * @return void
@@ -137,6 +143,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->saleOperation = $this->getMockBuilder(SaleOperation::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -177,28 +187,8 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->paymentMethod = $this->getMockBuilder(AbstractMethod::class)
+        $this->paymentMethod = $this->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'canVoid',
-                    'authorize',
-                    'getConfigData',
-                    'getConfigPaymentAction',
-                    'validate',
-                    'setStore',
-                    'acceptPayment',
-                    'denyPayment',
-                    'fetchTransactionInfo',
-                    'canCapture',
-                    'canRefund',
-                    'canOrder',
-                    'order',
-                    'isInitializeNeeded',
-                    'initialize',
-                    'refund'
-                ]
-            )
             ->getMock();
 
         $this->invoice = $this->getMockBuilder(Invoice::class)
@@ -377,7 +367,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->mockPlaceEvents();
         $statusHistory = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
+            OrderStatusHistoryInterface::class
         );
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
@@ -437,7 +427,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->mockPlaceEvents();
         $statusHistory = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
+            OrderStatusHistoryInterface::class
         );
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
@@ -473,7 +463,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with('order_status', null)
             ->willReturn($newOrderStatus);
         $statusHistory = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
+            OrderStatusHistoryInterface::class
         );
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
@@ -519,7 +509,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with('order_status', null)
             ->willReturn($newOrderStatus);
         $statusHistory = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
+            OrderStatusHistoryInterface::class
         );
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
@@ -541,6 +531,52 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($this->payment, $this->payment->place());
 
+        $this->assertEquals($sum, $this->payment->getAmountAuthorized());
+        $this->assertEquals($sum, $this->payment->getBaseAmountAuthorized());
+    }
+
+    /**
+     * Tests place order flow with supported 'sale' payment operation.
+     */
+    public function testPlaceWithSaleOperationSupported()
+    {
+        $newOrderStatus = 'new_status';
+        $customerNote = 'blabla';
+        $sum = 10;
+
+        $this->paymentMethod->method('canSale')
+            ->willReturn(true);
+        $this->order->method('getTotalDue')
+            ->willReturn($sum);
+        $this->order->method('getBaseTotalDue')
+            ->willReturn($sum);
+        $this->helper->method('getMethodInstance')
+            ->willReturn($this->paymentMethod);
+        $this->paymentMethod->method('getConfigPaymentAction')
+            ->willReturn(AbstractMethod::ACTION_AUTHORIZE_CAPTURE);
+        $this->paymentMethod->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
+        $statusHistory = $this->getMockForAbstractClass(OrderStatusHistoryInterface::class);
+        $this->order->method('getCustomerNote')
+            ->willReturn($customerNote);
+        $this->order->method('addStatusHistoryComment')
+            ->with($customerNote)
+            ->willReturn($statusHistory);
+        $this->mockGetDefaultStatus(Order::STATE_PROCESSING, $newOrderStatus, ['first', 'second']);
+        $this->order->method('setState')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturnSelf();
+        $this->order->method('setStatus')
+            ->with($newOrderStatus)
+            ->willReturnSelf();
+        $this->paymentMethod->expects($this->once())
+            ->method('getConfigPaymentAction')
+            ->willReturn(null);
+        $this->saleOperation->expects($this->once())
+            ->method('execute');
+
+        $this->assertEquals($this->payment, $this->payment->place());
         $this->assertEquals($sum, $this->payment->getAmountAuthorized());
         $this->assertEquals($sum, $this->payment->getBaseAmountAuthorized());
     }
@@ -1594,7 +1630,8 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
                 'transactionBuilder' => $this->transactionBuilderMock,
                 'paymentProcessor' => $this->paymentProcessor,
                 'orderRepository' => $this->orderRepository,
-                'creditmemoManager' => $this->creditmemoManagerMock
+                'creditmemoManager' => $this->creditmemoManagerMock,
+                'saleOperation' => $this->saleOperation
             ]
         );
     }
@@ -1621,7 +1658,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $statusHistory = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
+            OrderStatusHistoryInterface::class
         );
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
