@@ -1013,9 +1013,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $tableAlias = $attributeCode . '_max_value';
         $fieldAlias = 'max_' . $attributeCode;
         $condition = 'e.entity_id = ' . $tableAlias . '.entity_id AND ' . $this->_getConditionSql(
-            $tableAlias . '.attribute_id',
-            $attribute->getId()
-        );
+                $tableAlias . '.attribute_id',
+                $attribute->getId()
+            );
 
         $select->join(
             [$tableAlias => $attribute->getBackend()->getTable()],
@@ -1048,9 +1048,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $tableAlias = $attributeCode . '_range_count_value';
 
         $condition = 'e.entity_id = ' . $tableAlias . '.entity_id AND ' . $this->_getConditionSql(
-            $tableAlias . '.attribute_id',
-            $attribute->getId()
-        );
+                $tableAlias . '.attribute_id',
+                $attribute->getId()
+            );
 
         $select->reset(\Magento\Framework\DB\Select::GROUP);
         $select->join(
@@ -1088,9 +1088,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $select->reset(\Magento\Framework\DB\Select::GROUP);
         $condition = 'e.entity_id=' . $tableAlias . '.entity_id AND ' . $this->_getConditionSql(
-            $tableAlias . '.attribute_id',
-            $attribute->getId()
-        );
+                $tableAlias . '.attribute_id',
+                $attribute->getId()
+            );
 
         $select->join(
             [$tableAlias => $attribute->getBackend()->getTable()],
@@ -1180,7 +1180,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($resetLeftJoins) {
             $countSelect->resetJoinLeft();
         }
+
+        $this->removeEntityIdentifierFromGroupBy($countSelect);
+
         return $countSelect;
+    }
+
+    /**
+     * Using `entity_id` for `GROUP BY` causes COUNT() return {n} rows of value = 1 instead of 1 row of value {n}
+     *
+     * @param Select $select
+     * @throws \Zend_Db_Select_Exception
+     */
+    private function removeEntityIdentifierFromGroupBy(Select $select): void
+    {
+        $groupBy = array_filter($select->getPart(Select::GROUP), function ($field) {
+            return false === strpos($field, $this->getIdFieldName());
+        });
+
+        $select->setPart(Select::GROUP, $groupBy);
     }
 
     /**
@@ -1766,28 +1784,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _prepareProductLimitationFilters()
     {
         if (isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
-            $this->_productLimitationFilters['store_id']
-        )
+                $this->_productLimitationFilters['visibility']
+            ) && !isset(
+                $this->_productLimitationFilters['store_id']
+            )
         ) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
         if (isset(
-            $this->_productLimitationFilters['category_id']
-        ) && !isset(
-            $this->_productLimitationFilters['store_id']
-        )
+                $this->_productLimitationFilters['category_id']
+            ) && !isset(
+                $this->_productLimitationFilters['store_id']
+            )
         ) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
         if (isset(
-            $this->_productLimitationFilters['store_id']
-        ) && isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
-            $this->_productLimitationFilters['category_id']
-        )
+                $this->_productLimitationFilters['store_id']
+            ) && isset(
+                $this->_productLimitationFilters['visibility']
+            ) && !isset(
+                $this->_productLimitationFilters['category_id']
+            )
         ) {
             $this->_productLimitationFilters['category_id'] = $this->_storeManager->getStore(
                 $this->_productLimitationFilters['store_id']
@@ -1820,12 +1838,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'int'
             );
         } elseif (isset(
-            $filters['store_id']
-        ) && (!isset(
-            $filters['visibility']
-        ) && !isset(
-            $filters['category_id']
-        )) && !$this->isEnabledFlat()
+                $filters['store_id']
+            ) && (!isset(
+                    $filters['visibility']
+                ) && !isset(
+                    $filters['category_id']
+                )) && !$this->isEnabledFlat()
         ) {
             $joinWebsite = true;
             $websiteId = $this->_storeManager->getStore($filters['store_id'])->getWebsiteId();
@@ -1901,9 +1919,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Join Product Price Table with left-join possibility
      *
-     * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @param bool $joinLeft
      * @return $this
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      */
     protected function _productLimitationPrice($joinLeft = false)
     {
@@ -2334,8 +2352,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 101.0.1
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.1
      */
     public function addMediaGalleryData()
     {
@@ -2360,7 +2378,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'entity.' . $linkField . ' IN (?)',
                 array_map(
                     function ($item) use ($linkField) {
-                        return (int) $item->getOrigData($linkField);
+                        return (int)$item->getOrigData($linkField);
                     },
                     $items
                 )
@@ -2411,9 +2429,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Retrieve Media gallery resource.
      *
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
      * @deprecated 101.0.1
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
      */
     private function getMediaGalleryResource()
     {
