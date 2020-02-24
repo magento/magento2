@@ -153,10 +153,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * Remove remote data version.
      *
      * @param $id
+     * @return bool
      */
     private function removeRemoteDataVersion($id)
     {
-        $this->remote->remove($id . self::HASH_SUFFIX);
+        return $this->remote->remove($id . self::HASH_SUFFIX);
     }
 
     /**
