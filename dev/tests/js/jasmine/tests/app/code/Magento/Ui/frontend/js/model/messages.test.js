@@ -42,12 +42,11 @@ define([
         });
 
         it('simple message', function () {
-            var messageObj =
-                {
-                    message: 'Message test'
-                },
-                type = [];
+            var type = [];
 
+            messageObj = {
+                message: 'Message test'
+            };
             expect(obj.add(messageObj, type)).toEqual(true);
             expect(type).toEqual([messageObj.message]);
         });
