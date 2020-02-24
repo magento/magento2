@@ -20,6 +20,7 @@ class CspUtilTest extends AbstractController
      * Test that CSP helper for templates works.
      *
      * @return void
+     * @magentoConfigFixture default_store csp/mode/storefront/report_only 0
      */
     public function testPhtmlHelper(): void
     {
@@ -29,11 +30,9 @@ class CspUtilTest extends AbstractController
 
         $this->assertContains('<script src="http://my.magento.com/static/script.js" />', $content);
         $this->assertContains("<script>\n    let myVar = 1;\n</script>", $content);
-        $headers = '';
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            $headers .= $header->getFieldName() .': ' .$header->getFieldValue() .PHP_EOL;
-        }
-        $this->assertContains('http://my.magento.com', $headers);
-        $this->assertContains('\'sha256-H4RRnauTM2X2Xg/z9zkno1crqhsaY3uKKu97uwmnXXE=\'', $headers);
+        $header = $this->getResponse()->getHeader('Content-Security-Policy');
+        $this->assertNotEmpty($header);
+        $this->assertContains('http://my.magento.com', $header->getFieldValue());
+        $this->assertContains('\'sha256-H4RRnauTM2X2Xg/z9zkno1crqhsaY3uKKu97uwmnXXE=\'', $header->getFieldValue());
     }
 }
