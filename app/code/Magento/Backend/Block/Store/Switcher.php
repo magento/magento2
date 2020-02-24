@@ -473,6 +473,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $website->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -489,6 +491,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $group->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -505,6 +509,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $store->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -590,7 +596,7 @@ class Switcher extends \Magento\Backend\Block\Template
             class="admin__field-tooltip-action action-help"><span>%s</span></a></span></div>';
             $title =  $this->escapeHtmlAttr(__('What is this?'));
             $span= $this->escapeHtml(__('What is this?'));
-            sprintf($html, $this->escapeUrl($url), $title, $span);
+            $html = sprintf($html, $this->escapeUrl($url), $title, $span);
         }
         return $html;
     }
