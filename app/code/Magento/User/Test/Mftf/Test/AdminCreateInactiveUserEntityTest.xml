@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateInactiveUserEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Create Admin User"/>
+            <title value="Admin user should be able to create inactive admin user"/>
+            <description value="Admin user should be able to create inactive admin user"/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="inactiveAdmin"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="genericAdminRole"/>
+            <argument name="user" value="inactiveAdmin"/>
+        </actionGroup>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{inactiveAdmin.username}}" stepKey="fillUsernameSearch"/>
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad time="10" stepKey="wait1"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{inactiveAdmin.username}}" stepKey="seeFoundUsername"/>
+        <actionGroup ref="logout" stepKey="logoutMasterAdmin"/>
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{inactiveAdmin.username}}" stepKey="fillUsername"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{inactiveAdmin.password}}" stepKey="fillPassword"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeUserErrorMessage" />
+    </test>
+</tests>

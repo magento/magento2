@@ -85,7 +85,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->once()

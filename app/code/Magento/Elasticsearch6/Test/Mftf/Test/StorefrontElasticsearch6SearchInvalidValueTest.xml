@@ -34,43 +34,47 @@
             <magentoCLI command="config:set {{SetMinQueryLength3Config.path}} {{SetMinQueryLength3Config.value}}" stepKey="setMinQueryLengthPreviousState"/>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
-                <argument name="ProductAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
             </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
             <waitForPageLoad stepKey="waitForAttributePageLoad"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
-            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteProduct"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProduct"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
             <magentoCLI command="cache:flush config" stepKey="flushCache"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <actionGroup ref="AdminCreateSearchableProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="AdminCreateSearchableProductAttributeActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="textProductAttribute"/>
         </actionGroup>
         <!--Assign attribute to the Default set-->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{textProductAttribute.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
         <!--Create product and fill new attribute field-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
             <argument name="product" value="ProductWithSpecialSymbols"/>
         </actionGroup>
-        <actionGroup ref="SetCategoryByName" stepKey="addCategoryToProduct">
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToProduct">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
@@ -92,7 +96,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForSecondSearchTerm">
             <argument name="phrase" value="?;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForSecondSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
             <argument name="phrase" value="?{{ProductWithSpecialSymbols.name}};"/>
         </actionGroup>
@@ -104,10 +108,10 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
             <argument name="phrase" value="?anythingcangobetween;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForThirdSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForThirdSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForForthSearchTerm">
             <argument name="phrase" value="? anything at all ;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForForthSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForForthSearchTerm"/>
     </test>
 </tests>

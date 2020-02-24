@@ -26,6 +26,7 @@ if (!$attribute->loadByCode($entityType, 'text_swatch_attribute')->getAttributeI
             'is_required' => '0',
             'attribute_code' => 'text_swatch_attribute',
             'is_global' => '1',
+            'is_user_defined' => 1,
             'is_unique' => '0',
             'is_searchable' => '0',
             'is_comparable' => '0',

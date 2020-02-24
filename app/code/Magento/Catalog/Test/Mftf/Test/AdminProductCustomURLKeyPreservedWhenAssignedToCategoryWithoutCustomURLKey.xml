@@ -61,20 +61,20 @@
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openSeoSection"/>
         <uncheckOption selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="uncheckUseDefaultUrlKey"/>
         <fillField userInput="U2" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <actionGroup ref="goToAdminCategoryPageById" stepKey="openCategory">
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="openCategory">
             <argument name="id" value="$createCategory.id$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCategoryAssignProduct" stepKey="assignSimpleProductFirst">
+        <actionGroup ref="AdminCategoryAssignProductActionGroup" stepKey="assignSimpleProductFirst">
             <argument name="productSku" value="$createSimpleProductFirst.sku$"/>
         </actionGroup>
-        <actionGroup ref="AdminCategoryAssignProduct" stepKey="assignSimpleProductSecond">
+        <actionGroup ref="AdminCategoryAssignProductActionGroup" stepKey="assignSimpleProductSecond">
             <argument name="productSku" value="$createSimpleProductSecond.sku$"/>
         </actionGroup>
 
-        <actionGroup ref="saveCategoryForm" stepKey="saveCategory"/>
+        <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
         <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />

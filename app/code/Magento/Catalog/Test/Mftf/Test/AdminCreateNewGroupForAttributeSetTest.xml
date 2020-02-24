@@ -27,15 +27,19 @@
         </before>
         <after>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
-        
+
         <!-- Navigate to Stores > Attributes > Attribute Set -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!-- Search and open Attribute Set from preconditions -->
-        <actionGroup ref="goToAttributeSetByName" stepKey="searchAttribute">
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 
@@ -68,9 +72,9 @@
         <see userInput="$$createConfigProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttribute"/>
 
         <!-- Click 'Save' -->
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttribute"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
 
-        <actionGroup ref="goToAttributeSetByName" stepKey="backTohAttributeSet">
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="backTohAttributeSet">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 
@@ -85,7 +89,7 @@
         <!-- Empty group is created. No attributes are assigned to it. -->
         <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup(emptyGroup.name)}}" stepKey="assertEmptyGroup"/>
         <dontSeeElement selector="{{AdminProductAttributeSetEditSection.attributesInGroup(emptyGroup.name)}}" stepKey="seeNoAttributes"/>
-      
+
         <!-- Navigate to Catalog > Products -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
@@ -93,8 +97,8 @@
         <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
         <waitForPageLoad stepKey="waitForNewProductPage"/>
-        
-        <actionGroup ref="AdminProductPageSelectAttributeSet" stepKey="selectAttribute">
+
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttribute">
             <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 

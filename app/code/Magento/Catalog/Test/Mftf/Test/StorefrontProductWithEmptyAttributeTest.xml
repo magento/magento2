@@ -23,12 +23,15 @@
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>
         </before>
         <after>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
@@ -38,7 +41,7 @@
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <seeElement selector=".message-success" stepKey="assertSuccess"/>
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="SimpleProduct"/>
         </actionGroup>

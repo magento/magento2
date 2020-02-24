@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddUpSellProductBySkuActionGroup" extends="AddRelatedProductBySkuActionGroup">
+        <annotations>
+            <description>EXTENDS: AddRelatedProductBySkuActionGroup. Add the provided Product as an Up Sell Product.</description>
+        </annotations>
+
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddUpSellProductsButton}}" stepKey="clickAddRelatedProductButton"/>
+        <conditionalClick selector="{{AdminAddUpSellProductsModalSection.Modal}} {{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminAddUpSellProductsModalSection.Modal}} {{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminAddUpSellProductsModalSection.Modal}} {{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminAddUpSellProductsModalSection.Modal}} {{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminAddUpSellProductsModalSection.Modal}} {{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminAddUpSellProductsModalSection.Modal}}{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+    </actionGroup>
+</actionGroups>

@@ -132,17 +132,6 @@ QUERY;
     public function dataProviderSetPaymentOnCartWithException(): array
     {
         return [
-            'missed_cart_id' => [
-                'payment_method: {
-                  code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
-                  }',
-                'Field SetPaymentMethodAndPlaceOrderInput.cart_id of required type String! was not provided.',
-            ],
-            'missed_payment_method' => [
-                'cart_id: "cart_id_value"',
-                'Field SetPaymentMethodAndPlaceOrderInput.payment_method of required type PaymentMethodInput!'
-                . ' was not provided.',
-            ],
             'place_order_with_out_of_stock_products' => [
                 'cart_id: "cart_id_value"
                   payment_method: {
