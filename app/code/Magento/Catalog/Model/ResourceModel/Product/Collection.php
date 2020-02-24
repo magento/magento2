@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -23,7 +24,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Category;
 
 /**
  * Product collection
@@ -1013,9 +1013,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $tableAlias = $attributeCode . '_max_value';
         $fieldAlias = 'max_' . $attributeCode;
         $condition = 'e.entity_id = ' . $tableAlias . '.entity_id AND ' . $this->_getConditionSql(
-                $tableAlias . '.attribute_id',
-                $attribute->getId()
-            );
+            $tableAlias . '.attribute_id',
+            $attribute->getId()
+        );
 
         $select->join(
             [$tableAlias => $attribute->getBackend()->getTable()],
@@ -1048,9 +1048,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $tableAlias = $attributeCode . '_range_count_value';
 
         $condition = 'e.entity_id = ' . $tableAlias . '.entity_id AND ' . $this->_getConditionSql(
-                $tableAlias . '.attribute_id',
-                $attribute->getId()
-            );
+            $tableAlias . '.attribute_id',
+            $attribute->getId()
+        );
 
         $select->reset(\Magento\Framework\DB\Select::GROUP);
         $select->join(
@@ -1088,9 +1088,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $select->reset(\Magento\Framework\DB\Select::GROUP);
         $condition = 'e.entity_id=' . $tableAlias . '.entity_id AND ' . $this->_getConditionSql(
-                $tableAlias . '.attribute_id',
-                $attribute->getId()
-            );
+            $tableAlias . '.attribute_id',
+            $attribute->getId()
+        );
 
         $select->join(
             [$tableAlias => $attribute->getBackend()->getTable()],
@@ -1783,30 +1783,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected function _prepareProductLimitationFilters()
     {
-        if (isset(
-                $this->_productLimitationFilters['visibility']
-            ) && !isset(
-                $this->_productLimitationFilters['store_id']
-            )
-        ) {
+        if (isset($this->_productLimitationFilters['visibility'])
+            && !isset($this->_productLimitationFilters['store_id'])) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
-        if (isset(
-                $this->_productLimitationFilters['category_id']
-            ) && !isset(
-                $this->_productLimitationFilters['store_id']
-            )
-        ) {
+
+        if (isset($this->_productLimitationFilters['category_id'])
+            && !isset($this->_productLimitationFilters['store_id'])) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
-        if (isset(
-                $this->_productLimitationFilters['store_id']
-            ) && isset(
-                $this->_productLimitationFilters['visibility']
-            ) && !isset(
-                $this->_productLimitationFilters['category_id']
-            )
-        ) {
+
+        if (isset($this->_productLimitationFilters['store_id'])
+            && isset($this->_productLimitationFilters['visibility'])
+            && !isset($this->_productLimitationFilters['category_id'])) {
             $this->_productLimitationFilters['category_id'] = $this->_storeManager->getStore(
                 $this->_productLimitationFilters['store_id']
             )->getRootCategoryId();
@@ -1837,14 +1826,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $filters['website_ids'],
                 'int'
             );
-        } elseif (isset(
-                $filters['store_id']
-            ) && (!isset(
-                    $filters['visibility']
-                ) && !isset(
-                    $filters['category_id']
-                )) && !$this->isEnabledFlat()
-        ) {
+        } elseif (isset($filters['store_id']) && !$this->isEnabledFlat()
+            && (!isset($filters['visibility']) && !isset($filters['category_id']))) {
             $joinWebsite = true;
             $websiteId = $this->_storeManager->getStore($filters['store_id'])->getWebsiteId();
             $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId, 'int');
@@ -2431,7 +2414,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
      * @deprecated 101.0.1
-     *
      */
     private function getMediaGalleryResource()
     {
