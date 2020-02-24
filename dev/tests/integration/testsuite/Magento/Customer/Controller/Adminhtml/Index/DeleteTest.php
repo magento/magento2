@@ -20,10 +20,10 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class DeleteTest extends AbstractBackendController
 {
     /** @var FormKey */
-    protected $formKey;
+    private $formKey;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -44,12 +44,11 @@ class DeleteTest extends AbstractBackendController
      */
     public function testDeleteCustomer(array $paramsData, array $expected): void
     {
-        $paramsData['form_key'] = $this->formKey->getFormKey();
         $this->dispatchCustomerDelete($paramsData);
 
         $this->assertRedirect($this->stringContains('customer/index'));
         $this->assertSessionMessages(
-            $this->equalTo($expected['message']),
+            $this->equalTo([(string)__(...$expected['message'])]),
             $expected['message_type']
         );
     }
@@ -67,9 +66,7 @@ class DeleteTest extends AbstractBackendController
                     'id' => 1,
                 ],
                 'expected' => [
-                    'message' => [
-                        0 => 'You deleted the customer.',
-                    ],
+                    'message' => ['You deleted the customer.'],
                     'message_type' => MessageInterface::TYPE_SUCCESS,
                 ],
             ],
@@ -79,7 +76,11 @@ class DeleteTest extends AbstractBackendController
                 ],
                 'expected' => [
                     'message' => [
-                        0 => 'No such entity with customerId = 2',
+                        'No such entity with %fieldName = %fieldValue',
+                        [
+                            'fieldName' => 'customerId',
+                            'fieldValue' => '2',
+                        ],
                     ],
                     'message_type' => MessageInterface::TYPE_ERROR,
                 ],
@@ -95,6 +96,7 @@ class DeleteTest extends AbstractBackendController
      */
     private function dispatchCustomerDelete(array $params): void
     {
+        $params['form_key'] = $this->formKey->getFormKey();
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParams($params);
         $this->dispatch('backend/customer/index/delete');

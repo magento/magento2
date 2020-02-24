@@ -42,7 +42,7 @@ class ValidateTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->customerFactory = $this->objectManager->get(CustomerInterfaceFactory::class);
-        $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
+        $this->dataObjectHelper = $this->objectManager->get(DataObjectHelper::class);
         parent::setUp();
     }
 
@@ -80,17 +80,18 @@ class ValidateTest extends TestCase
      */
     public function validateFieldsProvider(): array
     {
+        $attributeEmptyMessage = 'The "%1" attribute value is empty. Set the attribute and try again.';
         return [
             'without_required_fields' => [
                 'customer_data' => [],
                 'expectedResults' => [
                     'valid' => false,
                     'messages' => [
-                        'The "Associate to Website" attribute value is empty. Set the attribute and try again.',
-                        'The "Group" attribute value is empty. Set the attribute and try again.',
-                        'The "First Name" attribute value is empty. Set the attribute and try again.',
-                        'The "Last Name" attribute value is empty. Set the attribute and try again.',
-                        'The "Email" attribute value is empty. Set the attribute and try again.',
+                        (string)__($attributeEmptyMessage, 'Associate to Website'),
+                        (string)__($attributeEmptyMessage, 'Group'),
+                        (string)__($attributeEmptyMessage, 'First Name'),
+                        (string)__($attributeEmptyMessage, 'Last Name'),
+                        (string)__($attributeEmptyMessage, 'Email'),
                     ],
                 ],
             ],

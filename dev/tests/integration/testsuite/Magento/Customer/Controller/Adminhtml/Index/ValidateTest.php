@@ -9,7 +9,7 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -19,17 +19,17 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class ValidateTest extends AbstractBackendController
 {
-    /** @var Json */
-    protected $jsonSerializer;
+    /** @var SerializerInterface */
+    private $jsonSerializer;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->jsonSerializer = $this->_objectManager->get(Json::class);
+        $this->jsonSerializer = $this->_objectManager->get(SerializerInterface::class);
     }
 
     /**
@@ -43,25 +43,27 @@ class ValidateTest extends AbstractBackendController
         $postData = [
             'customer' => [],
         ];
+        $attributeEmptyMessage = 'The "%1" attribute value is empty. Set the attribute and try again.';
         $expectedErrors = [
             'error' => true,
             'messages' => [
-                0 => 'The "First Name" attribute value is empty. Set the attribute and try again.',
-                1 => 'The "Last Name" attribute value is empty. Set the attribute and try again.',
-                2 => 'The "Email" attribute value is empty. Set the attribute and try again.',
+                (string)__($attributeEmptyMessage, 'First Name'),
+                (string)__($attributeEmptyMessage, 'Last Name'),
+                (string)__($attributeEmptyMessage, 'Email'),
             ],
         ];
 
         $this->dispatchCustomerValidate($postData);
         $errors = $this->jsonSerializer->unserialize($this->getResponse()->getBody());
-        $this->assertEquals($errors, $expectedErrors);
+        $this->assertEquals($expectedErrors, $errors);
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
      */
-    public function testValidateCustomerWithAddressSuccess()
+    public function testValidateCustomerWithAddressSuccess(): void
     {
         $customerData = [
             'customer' => [
@@ -99,17 +101,11 @@ class ValidateTest extends AbstractBackendController
                 ],
             ],
         ];
-        /**
-         * set customer data
-         */
         $this->dispatchCustomerValidate($customerData);
-        $body = $this->getResponse()->getBody();
 
-        /**
-         * Check that no errors were generated and set to session
-         */
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
-        $this->assertEquals('{"error":0}', $body);
+        $errors = $this->jsonSerializer->unserialize($this->getResponse()->getBody());
+        $this->assertEquals(['error' => 0], $errors);
     }
 
     /**

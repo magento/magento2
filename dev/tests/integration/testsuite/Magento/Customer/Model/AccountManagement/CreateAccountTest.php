@@ -111,8 +111,8 @@ class CreateAccountTest extends TestCase
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
         $this->transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
-        $this->extensibleDataObjectConverter = $this->objectManager->create(ExtensibleDataObjectConverter::class);
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->extensibleDataObjectConverter = $this->objectManager->get(ExtensibleDataObjectConverter::class);
         $this->customerModelFactory = $this->objectManager->get(CustomerFactory::class);
         $this->random = $this->objectManager->get(Random::class);
         $this->encryptor = $this->objectManager->get(EncryptorInterface::class);
@@ -279,7 +279,7 @@ class CreateAccountTest extends TestCase
         );
         $this->assertNotNull($savedCustomer->getId());
         $this->assertCustomerData($savedCustomer, $expectedCustomerData);
-        $this->assertTrue(!$savedCustomer->getSuffix());
+        $this->assertEmpty($savedCustomer->getSuffix());
         $this->assertEquals(
             $savedCustomer->getId(),
             $this->accountManagement->authenticate($customerData[CustomerInterface::EMAIL], $password)->getId()
@@ -327,7 +327,7 @@ class CreateAccountTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
      */
-    public function testCreateNonexistingCustomer(): void
+    public function testCreateNoExistingCustomer(): void
     {
         $existingCustId = 1;
         $existingCustomer = $this->customerRepository->getById($existingCustId);
@@ -437,10 +437,8 @@ class CreateAccountTest extends TestCase
             if (!in_array($key, $expectedDifferences)) {
                 if ($value === null) {
                     $this->assertArrayNotHasKey($key, $dataInService);
-                } else {
-                    if (isset($dataInService[$key])) {
-                        $this->assertEquals($value, $dataInService[$key], 'Failed asserting value for ' . $key);
-                    }
+                } elseif (isset($dataInService[$key])) {
+                    $this->assertEquals($value, $dataInService[$key], 'Failed asserting value for ' . $key);
                 }
             }
         }
@@ -466,7 +464,7 @@ class CreateAccountTest extends TestCase
         $savedCustomer = $this->accountManagement->createAccount($newCustomerEntity, '_aPassword1');
         $this->assertNotNull($savedCustomer->getId());
         $this->assertCustomerData($savedCustomer, $expectedCustomerData);
-        $this->assertTrue(!$savedCustomer->getSuffix());
+        $this->assertEmpty($savedCustomer->getSuffix());
     }
 
     /**
@@ -549,15 +547,15 @@ class CreateAccountTest extends TestCase
     /**
      * Check that customer parameters match expected values.
      *
-     * @param CustomerInterface $customerData
+     * @param CustomerInterface $customer
      * @param array $expectedData
      * return void
      */
     private function assertCustomerData(
-        CustomerInterface $customerData,
+        CustomerInterface $customer,
         array $expectedData
     ): void {
-        $actualCustomerArray = $customerData->__toArray();
+        $actualCustomerArray = $customer->__toArray();
         foreach ($expectedData as $key => $expectedValue) {
             $this->assertEquals(
                 $expectedValue,

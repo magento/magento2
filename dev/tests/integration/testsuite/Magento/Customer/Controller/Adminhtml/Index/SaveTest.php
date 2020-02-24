@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Backend\Model\Session;
+use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Helper\View;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Customer\Model\EmailNotification;
+use Magento\Backend\Model\Session;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Mail\Template\TransportBuilder;
@@ -34,13 +34,13 @@ class SaveTest extends AbstractBackendController
      *
      * @var string
      */
-    protected $_baseControllerUrl;
+    private $_baseControllerUrl = 'http://localhost/index.php/backend/customer/index/';
 
     /** @var CustomerRepositoryInterface */
-    protected $customerRepository;
+    private $customerRepository;
 
-    /**@var View */
-    protected $customerViewHelper;
+    /**@var CustomerNameGenerationInterface */
+    private $customerViewHelper;
 
     /** @var SubscriberFactory */
     private $subscriberFactory;
@@ -49,14 +49,13 @@ class SaveTest extends AbstractBackendController
     private $session;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
         parent::setUp();
-        $this->_baseControllerUrl = 'http://localhost/index.php/backend/customer/index/';
-        $this->customerRepository = $this->_objectManager->create(CustomerRepositoryInterface::class);
-        $this->customerViewHelper = $this->_objectManager->get(View::class);
+        $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
+        $this->customerViewHelper = $this->_objectManager->get(CustomerNameGenerationInterface::class);
         $this->subscriberFactory = $this->_objectManager->get(SubscriberFactory::class);
         $this->session = $this->_objectManager->get(Session::class);
     }
@@ -67,15 +66,15 @@ class SaveTest extends AbstractBackendController
      * @dataProvider createCustomerProvider
      * @magentoDbIsolation enabled
      *
-     * @param $postData
-     * @param $expectedData
+     * @param array $postData
+     * @param array $expectedData
      * @return void
      */
-    public function testCreateCustomer($postData, $expectedData): void
+    public function testCreateCustomer(array $postData, array $expectedData): void
     {
         $this->dispatchCustomerSave($postData);
         $this->assertSessionMessages(
-            $this->equalTo(['You saved the customer.']),
+            $this->equalTo([(string)__('You saved the customer.')]),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
@@ -142,6 +141,7 @@ class SaveTest extends AbstractBackendController
      * @param array $postData
      * @param array $expectedData
      * @param array $expectedMessage
+     * @return void
      */
     public function testCreateCustomerErrors(array $postData, array $expectedData, array $expectedMessage): void
     {
@@ -185,15 +185,15 @@ class SaveTest extends AbstractBackendController
                     ]
                 ),
                 'expected_message' => [
-                    0 => '"First Name" is a required value.',
-                    1 => '"Last Name" is a required value.',
+                    (string)__('"%1" is a required value.', 'First Name'),
+                    (string)__('"%1" is a required value.', 'Last Name'),
                 ],
             ],
             'with_empty_post_data' => [
                 'post_data' => [],
                 'expected_data' => [],
                 'expected_message' => [
-                    0 => 'The customer email is missing. Enter and try again.',
+                    (string)__('The customer email is missing. Enter and try again.'),
                 ],
             ],
             'with_invalid_form_data' => [
@@ -210,7 +210,7 @@ class SaveTest extends AbstractBackendController
                     ],
                 ],
                 'expected_message' => [
-                    0 => 'The customer email is missing. Enter and try again.',
+                    (string)__('The customer email is missing. Enter and try again.'),
                 ],
             ]
         ];
@@ -239,7 +239,7 @@ class SaveTest extends AbstractBackendController
 
         $this->dispatchCustomerSave($postData, $params);
         $this->assertSessionMessages(
-            $this->equalTo(['You saved the customer.']),
+            $this->equalTo([(string)__('You saved the customer.')]),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith(
@@ -251,6 +251,7 @@ class SaveTest extends AbstractBackendController
 
     /**
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     * @return void
      */
     public function testExistingCustomerUnsubscribeNewsletter(): void
     {
@@ -267,7 +268,7 @@ class SaveTest extends AbstractBackendController
         ];
         $this->dispatchCustomerSave($postData);
         $this->assertSessionMessages(
-            $this->equalTo(['You saved the customer.']),
+            $this->equalTo([(string)__('You saved the customer.')]),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
@@ -280,8 +281,9 @@ class SaveTest extends AbstractBackendController
      * @magentoConfigFixture current_store customer/account_information/change_email_template change_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     * @return void
      */
-    public function testExistingCustomerChangeEmail()
+    public function testExistingCustomerChangeEmail(): void
     {
         $customerId = 1;
         $newEmail = 'newcustomer@example.com';
@@ -324,6 +326,7 @@ class SaveTest extends AbstractBackendController
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     * @return void
      */
     public function testCreateSameEmailFormatDateError(): void
     {
@@ -347,7 +350,9 @@ class SaveTest extends AbstractBackendController
         );
         $this->dispatchCustomerSave($postData);
         $this->assertSessionMessages(
-            $this->equalTo(['A customer with the same email address already exists in an associated website.']),
+            $this->equalTo([
+                (string)__('A customer with the same email address already exists in an associated website.'),
+            ]),
             MessageInterface::TYPE_ERROR
         );
         $this->assertArraySubset(
@@ -467,13 +472,13 @@ class SaveTest extends AbstractBackendController
     /**
      * Prepare email mock to test emails.
      *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @param int $occurrenceNumber
      * @param string $templateId
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
      * @return \PHPUnit_Framework_MockObject_MockObject
-     * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     private function prepareEmailMock(
         int $occurrenceNumber,
@@ -527,13 +532,16 @@ class SaveTest extends AbstractBackendController
     }
 
     /**
+     * Add email mock to class
+     *
      * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
      * @param string $className
+     * @return void
      */
     private function addEmailMockToClass(
         \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
         $className
-    ) {
+    ): void {
         $mocked = $this->_objectManager->create(
             $className,
             ['transportBuilder' => $transportBuilderMock]
