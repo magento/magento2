@@ -15,6 +15,7 @@
                 <active>0</active>
                 <is_gateway>1</is_gateway>
                 <can_use_checkout>1</can_use_checkout>
+                <can_sale>1</can_sale>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
                 <can_capture_partial>1</can_capture_partial>
