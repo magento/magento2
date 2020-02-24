@@ -12,6 +12,10 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 use Magento\CustomerImportExport\Model\Import\Customer;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 
+/**
+ * The test for Customer model
+ *
+ */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -127,6 +131,17 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         );
         $property->setAccessible(true);
         $property->setValue($modelMock, $dataSourceModelMock);
+
+        $indexerProcessorMock = $this->createMock(\Magento\Customer\Model\Indexer\Processor::class);
+        $indexerProcessorMock->expects($this->any())
+            ->method('markIndexerAsInvalid')
+            ->will($this->returnValue(true));
+        $property = new \ReflectionProperty(
+            \Magento\CustomerImportExport\Model\Import\Customer::class,
+            'indexerProcessor'
+        );
+        $property->setAccessible(true);
+        $property->setValue($modelMock, $indexerProcessorMock);
 
         $modelMock->expects($this->any())
             ->method('validateRow')
