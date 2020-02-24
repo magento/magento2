@@ -7,6 +7,8 @@
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
+ * Prepare date for save in DB
+ *
  * @api
  * @since 100.0.2
  */
@@ -61,7 +63,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     /**
      * Prepare date for save in DB
      *
-     * string format is used in input fields (all date input fields need apply locale settings)
+     * String format is used in input fields (all date input fields need apply locale settings)
      * int (Unix) format can be used in other parts of the code
      *
      * @param string|int|\DateTimeInterface $date
