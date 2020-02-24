@@ -127,18 +127,6 @@
     <entity name="SubCategoryNonAnchor" extends="SubCategoryWithParent">
         <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
     </entity>
-    <entity name="SubCategoryWithParent" type="category">
-        <data key="name" unique="suffix">ApiCategory</data>
-        <data key="is_active">true</data>
-    </entity>
-    <entity name="ConfigurableProductWithAttributeSet" type="category">
-        <data key="name" unique="suffix">ApiCategory</data>
-        <data key="is_active">true</data>
-    </entity>
-    <entity name="ApiCategory" type="category">
-        <data key="name" unique="suffix">ApiCategory</data>
-        <data key="is_active">true</data>
-    </entity>
     <entity name="ApiCategoryA" type="category">
         <data key="name" unique="suffix">Category A</data>
         <data key="is_active">true</data>
