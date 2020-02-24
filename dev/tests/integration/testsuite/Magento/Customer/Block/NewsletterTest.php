@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Block;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @see \Magento\Customer\Block\Newsletter
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
+ * @magentoDataFixture Magento/Customer/_files/customer.php
  */
 class NewsletterTest extends TestCase
 {
@@ -40,6 +42,9 @@ class NewsletterTest extends TestCase
     /** @var Newsletter */
     private $block;
 
+    /** @var Session */
+    private $customerSession;
+
     /**
      * @inheritdoc
      */
@@ -50,6 +55,7 @@ class NewsletterTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $this->layout->createBlock(Newsletter::class);
+        $this->customerSession = $this->objectManager->get(Session::class);
     }
 
     /**
@@ -57,6 +63,7 @@ class NewsletterTest extends TestCase
      */
     public function testSubscriptionCheckbox(): void
     {
+        $this->customerSession->loginById(1);
         $html = $this->block->toHtml();
         $this->assertEquals(
             1,
