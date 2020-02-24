@@ -3,31 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Model\Layout;
 
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\View\Layout;
+use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\Config;
 
 /**
- * Class LayoutPlugin
- *
- * Plugin for Magento\Framework\View\Layout
+ * Appends cacheable pages response headers.
  */
 class LayoutPlugin
 {
     /**
      * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @var ResponseInterface
      */
-    protected $response;
+    private $response;
 
     /**
      * @var MaintenanceMode
@@ -35,8 +34,6 @@ class LayoutPlugin
     private $maintenanceMode;
 
     /**
-     * Constructor
-     *
      * @param ResponseInterface $response
      * @param Config $config
      * @param MaintenanceMode $maintenanceMode
@@ -52,30 +49,28 @@ class LayoutPlugin
     }
 
     /**
-     * Set appropriate Cache-Control headers
+     * Sets appropriate Cache-Control headers.
      *
      * We have to set public headers in order to tell Varnish and Builtin app that page should be cached
      *
-     * @param Layout $subject
-     * @param mixed $result
-     * @return mixed
+     * @param LayoutInterface $subject
+     * @return void
      */
-    public function afterGenerateXml(Layout $subject, $result)
+    public function afterGenerateElements(LayoutInterface $subject)
     {
         if ($subject->isCacheable() && !$this->maintenanceMode->isOn() && $this->config->isEnabled()) {
             $this->response->setPublicHeaders($this->config->getTtl());
         }
-        return $result;
     }
 
     /**
-     * Retrieve all identities from blocks for further cache invalidation
+     * Retrieves all identities from blocks for further cache invalidation.
      *
-     * @param Layout $subject
+     * @param LayoutInterface $subject
      * @param mixed $result
      * @return mixed
      */
-    public function afterGetOutput(Layout $subject, $result)
+    public function afterGetOutput(LayoutInterface $subject, $result)
     {
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [[]];
@@ -92,6 +87,7 @@ class LayoutPlugin
             $tags = array_unique(array_merge(...$tags));
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
         }
+
         return $result;
     }
 }
