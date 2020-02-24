@@ -37,7 +37,7 @@ return [
     ],
     'controllers' => [
         'abstract_factories' => [
-            \Laminas\Mvc\Controller\LazyControllerAbstractFactory::class,
+            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
 ];
