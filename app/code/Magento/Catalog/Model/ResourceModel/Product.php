@@ -12,8 +12,10 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\Store;
 
 /**
  * Product entity resource model
@@ -458,7 +460,7 @@ class Product extends AbstractResource
             }
             $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
                 $unionTables,
-                \Magento\Framework\DB\Select::SQL_UNION_ALL
+                Select::SQL_UNION_ALL
             );
             $this->availableCategoryIdsCache[$entityId] = array_unique($this->getConnection()->fetchCol($unionSelect));
         }
@@ -470,7 +472,7 @@ class Product extends AbstractResource
      *
      * @param int $entityId
      * @param string $tableName
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     private function getAvailableInCategoriesSelect($entityId, $tableName)
     {
@@ -708,13 +710,43 @@ class Product extends AbstractResource
 
         if (is_array($row)) {
             $object->addData($row);
+            $this->getEntityManager()->load($object, $entityId);
         } else {
             $object->isObjectNew(true);
         }
 
         $this->loadAttributesForObject($attributes, $object);
-        $this->getEntityManager()->load($object, $entityId);
+
         return $this;
+    }
+
+    /**
+     * Retrieve data storage select for loading product for store set in model object (default if not set)
+     *
+     * @param DataObject $object
+     * @param int|string $rowId
+     *
+     * @return Select
+     */
+    //phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore -- due to overriding parent method
+    protected function _getLoadRowSelect($object, $rowId)
+    {
+        $select = parent::_getLoadRowSelect($object, $rowId);
+        $storeId = $object->getStoreId();
+        $catalogProductWebsiteTable = $this->getTable('catalog_product_website');
+        $storeTable = $this->getTable('store');
+
+        if ($storeId !== null && $storeId !== Store::DEFAULT_STORE_ID) {
+            $select->join(
+                ['cpw' => $catalogProductWebsiteTable],
+                "{$this->getEntityTable()}.{$this->getIdFieldName()} = cpw.product_id"
+            )->join(
+                ['s' => $storeTable],
+                "cpw.website_id = s.website_id"
+            )->where("store_id = ?", $storeId);
+        }
+
+        return $select;
     }
 
     /**
