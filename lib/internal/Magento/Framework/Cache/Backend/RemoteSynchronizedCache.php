@@ -38,11 +38,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     protected $cacheInvalidationTime;
 
     /**
-     * Suffix for data to be retrieved from cache storage.
-     */
-    private const DATA_SUFFIX = ':data';
-
-    /**
      * Suffix for hash to compare data version in cache storage.
      */
     private const HASH_SUFFIX = ':hash';
@@ -117,32 +112,76 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
+     * Return hash sign of the data.
+     *
+     * @param $data
+     * @return string
+     */
+    private function getDataVersion($data)
+    {
+        return \md5($data);
+    }
+
+    /**
+     * Load data version by id from remote.
+     *
+     * @param $id
+     * @return false|string
+     */
+    private function loadRemoteDataVersion($id)
+    {
+        return $this->remote->load(
+            $id . self::HASH_SUFFIX
+        );
+    }
+
+    /**
+     * Save new data version to remote.
+     *
+     * @param $data
+     * @param $id
+     * @param $tags
+     * @param $specificLifetime
+     * @return bool
+     */
+    private function saveRemoteDataVersion($data, $id, $tags, $specificLifetime)
+    {
+        return $this->remote->save($this->getDataVersion($data), $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+    }
+
+    /**
+     * Remove remote data version.
+     *
+     * @param $id
+     */
+    private function removeRemoteDataVersion($id)
+    {
+        $this->remote->remove($id . self::HASH_SUFFIX);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        $localData = $this->local->load($id . self::DATA_SUFFIX);
+        $localData = $this->local->load($id);
         $remoteData = false;
 
         if (false === $localData) {
-            $remoteData = $this->remote->load($id . self::DATA_SUFFIX);
+            $remoteData = $this->remote->load($id);
 
             if (false === $remoteData) {
                 return false;
             }
         } else {
-            $remoteDataHash = $this->remote->load(
-                $id . self::HASH_SUFFIX
-            );
-
-            if (md5($localData) !== $remoteDataHash) {
+            if ($this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id)) {
                 $localData = false;
-                $remoteData = $this->remote->load($id . self::DATA_SUFFIX);
+                $remoteData = $this->remote->load($id);
             }
         }
 
         if ($remoteData !== false) {
-            $this->local->save($remoteData, $id . self::DATA_SUFFIX);
+            $this->local->save($remoteData, $id);
             $localData = $remoteData;
         }
 
@@ -154,7 +193,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function test($id)
     {
-        return $this->local->test($id . self::DATA_SUFFIX);
+        return $this->local->test($id) ?? $this->remote->test($id);
     }
 
     /**
@@ -163,16 +202,16 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         $dataToSave = $data;
-        $remHash = $this->remote->load($id . self::HASH_SUFFIX);
+        $remHash = $this->loadRemoteDataVersion($id);
 
         if ($remHash !== false) {
-            $dataToSave = $this->remote->load($id . self::DATA_SUFFIX);
+            $dataToSave = $this->remote->load($id);
         } else {
-            $this->remote->save($data, $id . self::DATA_SUFFIX, $tags, $specificLifetime);
-            $this->remote->save(md5($data), $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+            $this->remote->save($data, $id, $tags, $specificLifetime);
+            $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
         }
 
-        return $this->local->save($dataToSave, $id . self::DATA_SUFFIX, [], $specificLifetime);
+        return $this->local->save($dataToSave, $id, [], $specificLifetime);
     }
 
     /**
@@ -180,9 +219,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-         return $this->remote->remove($id . self::HASH_SUFFIX) &&
-            $this->remote->remove($id . self::DATA_SUFFIX) &&
-            $this->local->remove($id . self::DATA_SUFFIX);
+         return $this->removeRemoteDataVersion($id) &&
+            $this->remote->remove($id) &&
+            $this->local->remove($id);
     }
 
     /**
