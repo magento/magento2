@@ -78,7 +78,12 @@ class ImageTest extends AbstractFormTestCase
     /**
      * @var Write|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mediaCustomerTmpDirectoryMock;
+    private $mediaEntityTmpDirectoryMock;
+
+    /**
+     * @var Write|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mediaEntityDirectoryMock;
 
     protected function setUp()
     {
@@ -123,12 +128,12 @@ class ImageTest extends AbstractFormTestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mediaCustomerTmpDirectoryMock = $this->getMockBuilder(Write::class)
+        $this->mediaEntityTmpDirectoryMock = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->mediaCustomerTmpDirectoryMock);
+        $this->mediaEntityDirectoryMock = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -350,21 +355,29 @@ class ImageTest extends AbstractFormTestCase
         $originValue = 'filename.ext1';
 
         $value = [
+            'dispersePath' => '/f/i',
             'file' => 'filename.ext2',
         ];
+        $expectedResult = $value['dispersePath'] . '/' . $value['file'];
 
-        $this->fileProcessorMock->expects($this->once())
-            ->method('moveTemporaryFile')
-            ->with($value['file'])
+        $this->writeFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->mediaEntityDirectoryMock);
+        $this->mediaEntityDirectoryMock->expects($this->once())
+            ->method('create')
+            ->with($value['dispersePath'])
             ->willReturn(true);
-
+        $this->mediaEntityDirectoryMock->expects($this->once())
+            ->method('isWritable')
+            ->with($value['dispersePath'])
+            ->willReturn(true);
         $model = $this->initialize([
             'value' => $originValue,
             'isAjax' => false,
             'entityTypeCode' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
         ]);
 
-        $this->assertTrue($model->compactValue($value));
+        $this->assertEquals($expectedResult, $model->compactValue($value));
     }
 
     public function testCompactValueUiComponentCustomer()
@@ -379,7 +392,10 @@ class ImageTest extends AbstractFormTestCase
 
         $base64EncodedData = 'encoded_data';
 
-        $this->mediaCustomerTmpDirectoryMock->expects($this->once())
+        $this->writeFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->mediaEntityTmpDirectoryMock);
+        $this->mediaEntityTmpDirectoryMock->expects($this->once())
             ->method('isExist')
             ->with($value['file'])
             ->willReturn(true);
@@ -387,9 +403,9 @@ class ImageTest extends AbstractFormTestCase
             ->method('getBase64EncodedData')
             ->with(FileProcessor::TMP_DIR . '/' . $value['file'])
             ->willReturn($base64EncodedData);
-        $this->mediaCustomerTmpDirectoryMock->expects($this->once())
-            ->method('delete')
-            ->with($value['file'])
+        $this->fileProcessorMock->expects($this->once())
+            ->method('removeUploadedFile')
+            ->with(FileProcessor::TMP_DIR . '/' . $value['file'])
             ->willReturnSelf();
 
         $imageContentMock = $this->getMockBuilder(
@@ -431,7 +447,10 @@ class ImageTest extends AbstractFormTestCase
             'type' => 'image',
         ];
 
-        $this->mediaCustomerTmpDirectoryMock->expects($this->once())
+        $this->writeFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->mediaEntityTmpDirectoryMock);
+        $this->mediaEntityTmpDirectoryMock->expects($this->once())
             ->method('isExist')
             ->with($value['file'])
             ->willReturn(false);

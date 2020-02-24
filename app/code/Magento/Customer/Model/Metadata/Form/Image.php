@@ -49,7 +49,12 @@ class Image extends File
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    private $mediaCustomerTmpDirectory;
+    private $mediaEntityTmpDirectory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $mediaEntityDirectory;
 
     /**
      * Constructor
@@ -113,10 +118,15 @@ class Image extends File
             ->get(Filesystem\Directory\WriteFactory::class);
         $this->directoryList =  $directoryList ?: ObjectManager::getInstance()
             ->get(DirectoryList::class);
-        $this->mediaCustomerTmpDirectory = $this->writeFactory->create(
+        $this->mediaEntityTmpDirectory = $this->writeFactory->create(
             $this->directoryList->getPath($this->directoryList::MEDIA)
             . '/' . $this->_entityTypeCode
             . '/' . FileProcessor::TMP_DIR
+        );
+
+        $this->mediaEntityDirectory = $this->writeFactory->create(
+            $this->directoryList->getPath($this->directoryList::MEDIA)
+            . '/' . $this->_entityTypeCode
         );
     }
 
@@ -228,7 +238,39 @@ class Image extends File
      */
     protected function processCustomerAddressValue(array $value)
     {
-        return $this->getFileProcessor()->moveTemporaryFile($value['file']);
+        $fileName = ltrim($value['file'], '/');
+
+        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
+
+        if (!$this->mediaEntityDirectory->create($dispersionPath)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to create directory %1.', $dispersionPath)
+            );
+        }
+
+        if (!$this->mediaEntityDirectory->isWritable($dispersionPath)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Destination folder is not writable or does not exists.')
+            );
+        }
+
+        $destinationFileName = \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+            $this->mediaEntityDirectory->getAbsolutePath($dispersionPath) . '/' . $fileName
+        );
+
+        try {
+            $this->mediaEntityDirectory->renameFile(
+                FileProcessor::TMP_DIR . '/' . $fileName,
+                $dispersionPath . '/' . $destinationFileName
+            );
+        } catch (\Exception $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Something went wrong while saving the file.')
+            );
+        }
+
+        $fileName = $dispersionPath . '/' . $destinationFileName;
+        return $fileName;
     }
 
     /**
@@ -241,7 +283,7 @@ class Image extends File
     protected function processCustomerValue(array $value)
     {
         $file = ltrim($value['file'], '/');
-        if ($this->mediaCustomerTmpDirectory->isExist($file)) {
+        if ($this->mediaEntityTmpDirectory->isExist($file)) {
             $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
             /** @var ImageContentInterface $imageContentDataObject */
@@ -250,7 +292,7 @@ class Image extends File
                 ->setBase64EncodedData($base64EncodedData)
                 ->setType($value['type']);
             // Remove temporary file
-            $this->mediaCustomerTmpDirectory->delete($file);
+            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
 
             return $imageContentDataObject;
         }
