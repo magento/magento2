@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed3e922ed361c51cbda3e8783dac7282",
+    "content-hash": "1f8ec87b0e5a5f467b3a072f4776014b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3863,16 +3863,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.23",
+            "version": "2.0.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "c78eb5058d5bb1a183133c36d4ba5b6675dfa099"
+                "reference": "40998159a0907cc523e1f2d1904d45765613a617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c78eb5058d5bb1a183133c36d4ba5b6675dfa099",
-                "reference": "c78eb5058d5bb1a183133c36d4ba5b6675dfa099",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/40998159a0907cc523e1f2d1904d45765613a617",
+                "reference": "40998159a0907cc523e1f2d1904d45765613a617",
                 "shasum": ""
             },
             "require": {
@@ -3951,7 +3951,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2019-09-17T03:41:22+00:00"
+            "time": "2020-02-04T12:15:04+00:00"
         },
         {
             "name": "psr/container",
@@ -5414,16 +5414,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.133.17",
+            "version": "3.133.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "6d0036fe1be474d2849dc990daaaa76215846966"
+                "reference": "c5f84f9edafb6372dafdbc87cb588772761179ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6d0036fe1be474d2849dc990daaaa76215846966",
-                "reference": "6d0036fe1be474d2849dc990daaaa76215846966",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c5f84f9edafb6372dafdbc87cb588772761179ca",
+                "reference": "c5f84f9edafb6372dafdbc87cb588772761179ca",
                 "shasum": ""
             },
             "require": {
@@ -5494,7 +5494,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-02-18T19:11:24+00:00"
+            "time": "2020-02-21T19:09:49+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -7135,16 +7135,16 @@
         },
         {
             "name": "jms/serializer",
-            "version": "1.14.0",
+            "version": "1.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/serializer.git",
-                "reference": "ee96d57024af9a7716d56fcbe3aa94b3d030f3ca"
+                "reference": "ba908d278fff27ec01fb4349f372634ffcd697c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/ee96d57024af9a7716d56fcbe3aa94b3d030f3ca",
-                "reference": "ee96d57024af9a7716d56fcbe3aa94b3d030f3ca",
+                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/ba908d278fff27ec01fb4349f372634ffcd697c0",
+                "reference": "ba908d278fff27ec01fb4349f372634ffcd697c0",
                 "shasum": ""
             },
             "require": {
@@ -7198,12 +7198,12 @@
             ],
             "authors": [
                 {
-                    "name": "Asmir Mustafic",
-                    "email": "goetas@gmail.com"
-                },
-                {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com"
+                },
+                {
+                    "name": "Asmir Mustafic",
+                    "email": "goetas@gmail.com"
                 }
             ],
             "description": "Library for (de-)serializing data of any complexity; supports XML, JSON, and YAML.",
@@ -7215,7 +7215,7 @@
                 "serialization",
                 "xml"
             ],
-            "time": "2019-04-17T08:12:16+00:00"
+            "time": "2020-02-22T20:59:37+00:00"
         },
         {
             "name": "league/container",

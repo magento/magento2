@@ -10,7 +10,7 @@ namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class AdapterTest to test Elasticsearch5 search adapter
+ * Class AdapterTest to test Elasticsearch search adapter
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {

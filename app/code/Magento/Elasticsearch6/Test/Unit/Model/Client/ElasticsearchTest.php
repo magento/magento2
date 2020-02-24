@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 
 /**
- * Class ElasticsearchTest to test ElasticsearchClient
+ * Class ElasticsearchTest to test Elasticsearch 6
  */
 class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {

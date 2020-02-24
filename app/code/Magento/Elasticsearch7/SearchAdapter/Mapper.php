@@ -13,7 +13,7 @@ use Magento\Framework\Search\RequestInterface;
 /**
  * Elasticsearch7 mapper class
  */
-class Mapper extends \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper
+class Mapper
 {
     /**
      * @var \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper

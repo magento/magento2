@@ -45,10 +45,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     protected function createAdapter()
     {
-        if ($this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine() == 'elasticsearch7') {
-            return $this->objectManager->create(\Magento\Elasticsearch7\SearchAdapter\Adapter::class);
-        }
-        return $this->objectManager->create(\Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter::class);
+        return $this->objectManager->create(\Magento\Search\Model\AdapterFactory::class)->create();
     }
 
     /**

@@ -50,10 +50,6 @@ class Elasticsearch implements ClientInterface
             );
         }
 
-        if (!($elasticsearchClient instanceof \Elasticsearch\Client)) {
-            $config = $this->buildESConfig($options);
-            $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config, true);
-        }
         $this->client[getmypid()] = $elasticsearchClient;
         $this->clientOptions = $options;
     }
@@ -64,7 +60,7 @@ class Elasticsearch implements ClientInterface
      * @param array $query
      * @return array
      */
-    public function suggest($query) : array
+    public function suggest(array $query) : array
     {
         return $this->getElasticsearchClient()->suggest($query);
     }
@@ -74,10 +70,10 @@ class Elasticsearch implements ClientInterface
      *
      * @return \Elasticsearch\Client
      */
-    private function getElasticsearchClient()
+    private function getElasticsearchClient(): \Elasticsearch\Client
     {
         $pid = getmypid();
-        if (!isset($this->client[$pid])) {
+        if (!isset($this->client[$pid]) || !($this->client[$pid] instanceof \Elasticsearch\Client)) {
             $config = $this->buildESConfig($this->clientOptions);
             $this->client[$pid] = \Elasticsearch\ClientBuilder::fromConfig($config, true);
         }
@@ -115,7 +111,7 @@ class Elasticsearch implements ClientInterface
      * @param array $options
      * @return array
      */
-    private function buildESConfig($options = []) : array
+    private function buildESConfig(array $options = []) : array
     {
         $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
         // @codingStandardsIgnoreStart
@@ -148,7 +144,7 @@ class Elasticsearch implements ClientInterface
      * @param array $query
      * @return void
      */
-    public function bulkQuery($query)
+    public function bulkQuery(array $query)
     {
         $this->getElasticsearchClient()->bulk($query);
     }
@@ -160,7 +156,7 @@ class Elasticsearch implements ClientInterface
      * @param array $settings
      * @return void
      */
-    public function createIndex($index, $settings)
+    public function createIndex(string $index, array $settings)
     {
         $this->getElasticsearchClient()->indices()->create(
             [
@@ -176,7 +172,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return void
      */
-    public function deleteIndex($index)
+    public function deleteIndex(string $index)
     {
         $this->getElasticsearchClient()->indices()->delete(['index' => $index]);
     }
@@ -187,10 +183,10 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return bool
      */
-    public function isEmptyIndex($index) : bool
+    public function isEmptyIndex(string $index) : bool
     {
         $stats = $this->getElasticsearchClient()->indices()->stats(['index' => $index, 'metric' => 'docs']);
-        if ($stats['indices'][$index]['primaries']['docs']['count'] == 0) {
+        if ($stats['indices'][$index]['primaries']['docs']['count'] ===  0) {
             return true;
         }
         return false;
@@ -204,9 +200,13 @@ class Elasticsearch implements ClientInterface
      * @param string $oldIndex
      * @return void
      */
-    public function updateAlias($alias, $newIndex, $oldIndex = '')
+    public function updateAlias(string $alias, string $newIndex, string $oldIndex = '')
     {
-        $params['body'] = ['actions' => []];
+        $params = [
+            'body' => [
+                'actions' => []
+            ]
+        ];
         if ($oldIndex) {
             $params['body']['actions'][] = ['remove' => ['alias' => $alias, 'index' => $oldIndex]];
         }
@@ -223,7 +223,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return bool
      */
-    public function indexExists($index) : bool
+    public function indexExists(string $index) : bool
     {
         return $this->getElasticsearchClient()->indices()->exists(['index' => $index]);
     }
@@ -235,7 +235,7 @@ class Elasticsearch implements ClientInterface
      * @param string $index
      * @return bool
      */
-    public function existsAlias($alias, $index = '') : bool
+    public function existsAlias(string $alias, string $index = '') : bool
     {
         $params = ['name' => $alias];
         if ($index) {
@@ -250,7 +250,7 @@ class Elasticsearch implements ClientInterface
      * @param string $alias
      * @return array
      */
-    public function getAlias($alias) : array
+    public function getAlias(string $alias) : array
     {
         return $this->getElasticsearchClient()->indices()->getAlias(['name' => $alias]);
     }
@@ -263,7 +263,7 @@ class Elasticsearch implements ClientInterface
      * @param string $entityType
      * @return void
      */
-    public function addFieldsMapping(array $fields, $index, $entityType)
+    public function addFieldsMapping(array $fields, string $index, string $entityType)
     {
         $params = [
             'index' => $index,
@@ -326,7 +326,7 @@ class Elasticsearch implements ClientInterface
      * @param array $query
      * @return array
      */
-    public function query($query) : array
+    public function query(array $query) : array
     {
         return $this->getElasticsearchClient()->search($query);
     }
@@ -338,7 +338,7 @@ class Elasticsearch implements ClientInterface
      * @param string $entityType
      * @return void
      */
-    public function deleteMapping($index, $entityType)
+    public function deleteMapping(string $index, string $entityType)
     {
         $this->getElasticsearchClient()->indices()->deleteMapping(
             [
