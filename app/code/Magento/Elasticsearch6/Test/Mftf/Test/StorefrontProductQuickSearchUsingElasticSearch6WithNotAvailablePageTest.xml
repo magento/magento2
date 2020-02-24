@@ -30,17 +30,6 @@
             <argument name="phrase" value="AAA"/>
             <argument name="pageNumber" value="999"/>
         </actionGroup>
-        <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="scrollToBottomToolbarPager"/>
-        <grabTextFrom selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="grabNumberOfCurrentPage"/>
-        <assertEquals stepKey="assertCurrentPageIsLastPageOfCatalogSearchResult">
-            <expectedResult type="variable">grabNumberOfLastPage</expectedResult>
-            <actualResult type="variable">grabNumberOfCurrentPage</actualResult>
-        </assertEquals>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertProductOnLastCatalogSearchPage">
-            <argument name="product" value="$createSecondProduct$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertFirstProductIsMissingOnLastCatalogSearchPage">
-            <argument name="productName" value="$createFirstProduct.name$"/>
-        </actionGroup>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="assertEmptyResultsPage"/>
     </test>
 </tests>
