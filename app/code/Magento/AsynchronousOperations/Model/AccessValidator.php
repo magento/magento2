@@ -45,6 +45,8 @@ class AccessValidator
     /**
      * Check if content allowed for current user
      *
+     * @deprecated sine 100.3.0
+     *
      * @param int $bulkUuid
      * @return bool
      */

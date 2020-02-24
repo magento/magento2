@@ -6,11 +6,21 @@
 
 namespace Magento\AsynchronousOperations\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Class Bulk
  */
-class Bulk extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Bulk extends AbstractDb
 {
+    public const TABLE_NAME = "magento_bulk";
+    public const TABLE_PRIMARY_KEY = "uuid";
+
+    /**
+     * @var bool
+     */
+    protected $_isPkAutoIncrement = false;
+
     /**
      * Initialize banner sales rule resource model
      *
@@ -18,6 +28,6 @@ class Bulk extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('magento_bulk', 'uuid');
+        $this->_init(self::TABLE_NAME, self::TABLE_PRIMARY_KEY);
     }
 }

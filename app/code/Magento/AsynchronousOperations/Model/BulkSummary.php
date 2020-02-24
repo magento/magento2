@@ -7,13 +7,19 @@
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Class BulkSummary
  */
-class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\Framework\Api\ExtensibleDataInterface
+class BulkSummary extends AbstractModel implements BulkSummaryInterface, ExtensibleDataInterface
 {
+    public function _construct()
+    {
+        $this->_init(ResourceModel\Bulk::class);
+    }
+
     /**
      * @inheritDoc
      */

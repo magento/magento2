@@ -3,31 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ResourceConnection;
+use Magento\AsynchronousOperations\Api\BulkSummaryRepositoryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\Framework\MessageQueue\BulkPublisherInterface;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\AsynchronousOperations\Model\Repository\Registry as BulkRepositoryRegistry;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Bulk\BulkManagementInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\MessageQueue\BulkPublisherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class BulkManagement
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
+class BulkManagement implements BulkManagementInterface
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
     /**
      * @var BulkSummaryInterfaceFactory
      */
@@ -64,34 +66,54 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     private $logger;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var BulkSummaryRepositoryInterface
+     */
+    private $bulkSummaryRepository;
+
+    /**
+     * @var BulkRepositoryRegistry
+     */
+    private $bulkRepositoryRegistry;
+
+    /**
      * BulkManagement constructor.
-     * @param EntityManager $entityManager
      * @param BulkSummaryInterfaceFactory $bulkSummaryFactory
      * @param CollectionFactory $operationCollectionFactory
      * @param BulkPublisherInterface $publisher
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      * @param \Psr\Log\LoggerInterface $logger
-     * @param UserContextInterface $userContext
+     * @param BulkRepositoryRegistry $bulkRepositoryRegistry
+     * @param UserContextInterface|null $userContext
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @throws \Exception
      */
     public function __construct(
-        EntityManager $entityManager,
         BulkSummaryInterfaceFactory $bulkSummaryFactory,
         CollectionFactory $operationCollectionFactory,
         BulkPublisherInterface $publisher,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        \Psr\Log\LoggerInterface $logger,
-        UserContextInterface $userContext = null
+        LoggerInterface $logger,
+        BulkRepositoryRegistry $bulkRepositoryRegistry,
+        UserContextInterface $userContext = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->entityManager = $entityManager;
-        $this->bulkSummaryFactory= $bulkSummaryFactory;
+        $this->bulkSummaryFactory = $bulkSummaryFactory;
         $this->operationCollectionFactory = $operationCollectionFactory;
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;
         $this->publisher = $publisher;
         $this->logger = $logger;
+        $this->bulkRepositoryRegistry = $bulkRepositoryRegistry;
         $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->bulkSummaryRepository = $this->bulkRepositoryRegistry->getRepository();
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -99,34 +121,24 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      */
     public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null)
     {
-        $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
-        $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-        // save bulk summary and related operations
-        $connection->beginTransaction();
         $userType = $this->userContext->getUserType();
         if ($userType === null) {
             $userType = UserContextInterface::USER_TYPE_ADMIN;
         }
         try {
-            /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface $bulkSummary */
             $bulkSummary = $this->bulkSummaryFactory->create();
-            $this->entityManager->load($bulkSummary, $bulkUuid);
             $bulkSummary->setBulkId($bulkUuid);
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
             $bulkSummary->setUserType($userType);
             $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
-
-            $this->entityManager->save($bulkSummary);
-
-            $connection->commit();
+            $this->bulkSummaryRepository->saveBulk($bulkSummary);
         } catch (\Exception $exception) {
-            $connection->rollBack();
             $this->logger->critical($exception->getMessage());
             return false;
         }
-        $this->publishOperations($operations);
 
+        $this->publishOperations($operations);
         return true;
     }
 
@@ -142,10 +154,13 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
 
-        /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation[] $retriablyFailedOperations */
-        $retriablyFailedOperations = $this->operationCollectionFactory->create()
-            ->addFieldToFilter('error_code', ['in' => $errorCodes])
-            ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter("error_code", $errorCodes, "in")
+            ->addFilter("bulk_uuid", $bulkUuid, "eq")
+            ->create();
+
+        $retriablyFailedOperations = $this->bulkSummaryRepository
+            ->getOperationsList($searchCriteria)
             ->getItems();
 
         // remove corresponding operations from database (i.e. move them to 'open' status)
@@ -157,10 +172,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             /** @var OperationInterface $operation */
             foreach ($retriablyFailedOperations as $operation) {
                 if ($currentBatchSize === $maxBatchSize) {
-                    $connection->delete(
-                        $this->resourceConnection->getTableName('magento_operation'),
-                        $connection->quoteInto('id IN (?)', $operationIds)
-                    );
+                    $this->bulkSummaryRepository->deleteOperationsById($operationIds);
                     $operationIds = [];
                     $currentBatchSize = 0;
                 }
@@ -171,10 +183,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             }
             // remove operations from the last batch
             if (!empty($operationIds)) {
-                $connection->delete(
-                    $this->resourceConnection->getTableName('magento_operation'),
-                    $connection->quoteInto('id IN (?)', $operationIds)
-                );
+                $this->bulkSummaryRepository->deleteOperationsById($operationIds);
             }
 
             $connection->commit();
@@ -205,16 +214,4 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function deleteBulk($bulkId)
-    {
-        return $this->entityManager->delete(
-            $this->entityManager->load(
-                $this->bulkSummaryFactory->create(),
-                $bulkId
-            )
-        );
-    }
 }

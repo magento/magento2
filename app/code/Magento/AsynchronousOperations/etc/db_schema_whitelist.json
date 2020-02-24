@@ -28,7 +28,8 @@
             "result_serialized_data": true,
             "status": true,
             "error_code": true,
-            "result_message": true
+            "result_message": true,
+            "request_id": true
         },
         "index": {
             "MAGENTO_OPERATION_BULK_UUID_ERROR_CODE": true

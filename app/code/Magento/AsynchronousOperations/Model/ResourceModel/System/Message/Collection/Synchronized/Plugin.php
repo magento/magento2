@@ -91,6 +91,8 @@ class Plugin
         }
         $userId = $this->userContext->getUserId();
         $userBulks = $this->bulkStatus->getBulksByUser($userId);
+        var_dump($userBulks);
+        exit;
         $acknowledgedBulks = $this->getAcknowledgedBulksUuid(
             $this->bulkNotificationManagement->getAcknowledgedBulksByUser($userId)
         );

@@ -47,6 +47,8 @@
                 comment="Code of the error that appeared during operation execution (used to aggregate related failed operations)"/>
         <column xsi:type="varchar" name="result_message" nullable="true" length="255"
                 comment="Operation result message"/>
+        <column xsi:type="int" name="request_id" padding="6" unsigned="false" nullable="true" identity="false"
+                comment="Operation ID within given batch"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>

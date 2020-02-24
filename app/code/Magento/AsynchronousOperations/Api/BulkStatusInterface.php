@@ -8,6 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Api;
 
+use Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface;
+use Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface;
+use Magento\Framework\Bulk\BulkStatusInterface as AsynchronousBulkStatusInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Interface BulkStatusInterface.
  *
@@ -15,23 +20,23 @@ namespace Magento\AsynchronousOperations\Api;
  *
  * @api
  */
-interface BulkStatusInterface extends \Magento\Framework\Bulk\BulkStatusInterface
+interface BulkStatusInterface extends AsynchronousBulkStatusInterface
 {
     /**
      * Get Bulk summary data with list of operations items full data.
      *
      * @param string $bulkUuid
-     * @return \Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return DetailedBulkOperationsStatusInterface
+     * @throws NoSuchEntityException
      */
-    public function getBulkDetailedStatus($bulkUuid);
+    public function getBulkDetailedStatus(string $bulkUuid): DetailedBulkOperationsStatusInterface;
 
     /**
      * Get Bulk summary data with list of operations items short data.
      *
      * @param string $bulkUuid
-     * @return \Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return BulkOperationsStatusInterface
+     * @throws NoSuchEntityException
      */
-    public function getBulkShortStatus($bulkUuid);
+    public function getBulkShortStatus(string $bulkUuid): BulkOperationsStatusInterface;
 }
