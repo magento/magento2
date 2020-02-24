@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDesignConfigMediaGalleryFaviconICOUploadTest">
+
+        <annotations>
+            <features value="Theme"/>
+            <stories value="Themes"/>
+            <title value="Check that Admin is able to upload an ICO file to the Storage Root using the Media Gallery for the favicon design config element."/>
+            <description value="Use Media Gallery launched from favicon file uploader to upload .ico image file. Verify that warning message about unsupported image type is not displayed."/>
+            <severity value="MAJOR"/>
+            <group value="Theme"/>
+            <testCaseId value="magento/magento2#23881"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Go to design config section for favicon-->
+        <comment userInput="Edit Store View" stepKey="editStoreViewComment"/>
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <waitForPageLoad stepKey="waitForPageload1"/>
+        <click selector="{{AdminDesignConfigSection.scopeRow('1')}}" stepKey="editStoreView"/>
+        <waitForPageLoad stepKey="waitForPageload2"/>
+        <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection"/>
+        <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection"/>
+
+        <!--Open Media Gallery-->
+        <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtn"/>
+        <!--Upload Image-->
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage">
+            <argument name="Image" value="ImageIcon1"/>
+        </actionGroup>
+        <!--We shouldn't see a warning about unsupported image format-->
+        <dontSee selector="{{MediaGallerySection.messages}}" userInput="Unsupported image format." stepKey="dontSeeIcoWarning"/>
+        <!--Unselect Image-->
+        <click selector="{{MediaGallerySection.lastImageOrImageCopy(ImageIcon1.fileName, ImageIcon1.extension)}}" stepKey="unselectImage"/>
+        <!--Delete it-->
+        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
+            <argument name="Image" value="ImageIcon1"/>
+        </actionGroup>
+        <!--Close Media Gallery-->
+        <click selector="{{MediaGallerySection.CancelBtn}}" stepKey="closeModalIco"/>
+
+    </test>
+</tests>

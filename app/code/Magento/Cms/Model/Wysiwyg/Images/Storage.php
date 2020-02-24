@@ -552,9 +552,12 @@ class Storage extends \Magento\Framework\DataObject
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
         }
 
-        // create thumbnail
-        $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
-
+        // Skip resize if we are in GD2 Image Adapter mode and the file extension is ico as they
+        // are not supported in GD2.
+        if ($uploader->getFileExtension() !== "ico" ||
+            !($this->_imageFactory->create() instanceof \Magento\Framework\Image\Adapter\Gd2)) {
+            $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
+        }
         return $result;
     }
 

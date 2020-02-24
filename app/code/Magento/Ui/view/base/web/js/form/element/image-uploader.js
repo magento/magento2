@@ -81,6 +81,9 @@ define([
                 openDialogUrl += '&current_tree_path=' + Base64.mageEncode(this.mediaGallery.initialOpenSubpath);
             }
 
+            if (this.allowedExtensions) {
+                openDialogUrl += '&allowed_extensions=' + Base64.mageEncode(this.allowedExtensions);
+            }
             browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
         },
 

@@ -43,7 +43,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     {
         parent::_construct();
         $type = $this->_getMediaType();
-        $allowed = $this->_imagesStorage->getAllowedExtensions($type);
+        $allowed = $this->_getAllowedFileExtensions();
         $labels = [];
         $files = [];
         foreach ($allowed as $ext) {
@@ -70,5 +70,19 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
             return $this->_getData('media_type');
         }
         return $this->getRequest()->getParam('type');
+    }
+
+    /**
+     * Return allowed file extensions based on request or config
+     *
+     * @return array
+     */
+    protected function _getAllowedFileExtensions()
+    {
+        if ($encodedExtensions = $this->getRequest()->getParam('allowed_extensions')) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            return(explode(" ", base64_decode($encodedExtensions)));
+        }
+        return $this->_imagesStorage->getAllowedExtensions($this->_getMediaType());
     }
 }

@@ -17,4 +17,9 @@
     <entity name="MagentoLumaTheme" type="theme">
         <data key="name">Magento Luma</data>
     </entity>
+    <entity name="ImageIcon1" type="uploadImage">
+        <data key="value">ico.ico</data>
+        <data key="fileName">ico</data>
+        <data key="extension">ico</data>
+    </entity>
 </entities>
