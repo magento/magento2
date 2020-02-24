@@ -49,8 +49,10 @@ class Elasticsearch implements ClientInterface
                 __('The search failed because of a search engine misconfiguration.')
             );
         }
-
-        $this->client[getmypid()] = $elasticsearchClient;
+        // phpstan:ignore
+        if ($elasticsearchClient instanceof \Elasticsearch\Client) {
+            $this->client[getmypid()] = $elasticsearchClient;
+        }
         $this->clientOptions = $options;
     }
 
@@ -73,7 +75,7 @@ class Elasticsearch implements ClientInterface
     private function getElasticsearchClient(): \Elasticsearch\Client
     {
         $pid = getmypid();
-        if (!isset($this->client[$pid]) || !($this->client[$pid] instanceof \Elasticsearch\Client)) {
+        if (!isset($this->client[$pid])) {
             $config = $this->buildESConfig($this->clientOptions);
             $this->client[$pid] = \Elasticsearch\ClientBuilder::fromConfig($config, true);
         }
