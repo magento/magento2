@@ -44,6 +44,9 @@
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Open product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.name$$)}}" stepKey="goToProductDefaultPage"/>
