@@ -307,7 +307,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // Can't add new translated strings in patch release
         'invalidLayoutUpdate' => 'Invalid format.',
         'insufficientPermissions' => 'Invalid format.',
-        ValidatorInterface::ERROR_SKU_MARGINAL_WHITESPACES => 'SKU contains marginal whitespaces'
     ];
     //@codingStandardsIgnoreEnd
 
