@@ -9,7 +9,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class Thumbnail
+ * Column with thumbnail images
  *
  * @api
  * @since 100.0.2
@@ -19,6 +19,16 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     const NAME = 'thumbnail';
 
     const ALT_FIELD = 'name';
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    private $imageHelper;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $urlBuilder;
 
     /**
      * @param ContextInterface $context
