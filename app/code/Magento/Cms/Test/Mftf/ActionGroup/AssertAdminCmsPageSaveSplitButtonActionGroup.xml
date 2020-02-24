@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="VerifyCmsPageSaveSplitButtonActionGroup">
+    <actionGroup name="AssertAdminCmsPageSaveSplitButtonActionGroup">
         <annotations>
             <description>Verify Save and Duplicate and Save and Close button.</description>
         </annotations>

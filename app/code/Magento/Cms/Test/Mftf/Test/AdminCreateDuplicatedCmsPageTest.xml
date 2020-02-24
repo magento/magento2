@@ -26,11 +26,11 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Navigate to create a CMS page and Verify Save&Duplicate - Save&Close button -->
-        <actionGroup ref="VerifyCmsPageSaveSplitButtonActionGroup" stepKey="verifyCmsPageSaveButton" />
+        <actionGroup ref="AssertAdminCmsPageSaveSplitButtonActionGroup" stepKey="verifyCmsPageSaveButton" />
         <!-- Filled out Content -->
         <actionGroup ref="FillOutCMSPageContent" stepKey="FillOutPageContent"/>
         <!-- Click save and duplicate action -->
-        <actionGroup ref="SaveAndDuplicateCMSPageWithSplitButtonActionGroup" stepKey="clickSaveAndDuplicateButton"/>
+        <actionGroup ref="AdminSaveAndDuplicateCMSPageWithSplitButtonActionGroup" stepKey="clickSaveAndDuplicateButton"/>
         <!--Verify duplicated CMS Page-->
         <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
         <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="assertContent"/>
