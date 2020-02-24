@@ -4,6 +4,8 @@
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
+TEST PR
+
 ## Magento System Requirements
 [Magento System Requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements.html).
 
