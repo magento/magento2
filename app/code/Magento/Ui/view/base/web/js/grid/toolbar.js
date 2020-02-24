@@ -273,15 +273,15 @@ define([
             this.visible = true;
             // Check admin grid button has added or not
             if ($('.page-main-actions').length === 0 &&
-                typeof this.$sticky !== 'undefined') {
+                !_.isUndefined(this.$sticky)) {
                 this.$sticky.style.top = 0;
             }
 
-            if (typeof this.$sticky !== 'undefined') {
+            if (!_.isUndefined(this.$sticky)) {
                 this.$sticky.style.display = '';
             }
 
-            if (typeof this.$toolbar !== 'undefined') {
+            if (!_.isUndefined(this.$toolbar)) {
                 this.$toolbar.style.visibility = 'hidden';
             }
 
@@ -296,11 +296,11 @@ define([
         hide: function () {
             this.visible = false;
 
-            if (typeof this.$sticky !== 'undefined') {
+            if (!_.isUndefined(this.$sticky)) {
                 this.$sticky.style.display = 'none';
             }
 
-            if (typeof this.$toolbar !== 'undefined') {
+            if (!_.isUndefined(this.$toolbar)) {
                 this.$toolbar.style.visibility = '';
             }
 

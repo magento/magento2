@@ -5,13 +5,9 @@
 
 /*eslint max-nested-callbacks: 0*/
 define([
-    'underscore',
-    'uiRegistry',
-    'ko',
     'Magento_Ui/js/grid/toolbar',
-    'Magento_Ui/js/lib/view/utils/dom-observer',
-    'Magento_Ui/js/lib/view/utils/async'
-], function (_, registry, ko, Toolbar, observer, $) {
+    'jquery'
+], function (Toolbar, $) {
     'use strict';
 
     describe('Magento_Ui/js/grid/toolbar', function () {
@@ -22,9 +18,11 @@ define([
                 provider: 'provider',
                 name: 'magento'
             }),
-            toolbarType;
+            toolbarType,
+            originToolbar;
 
         beforeEach(function () {
+            originToolbar = toolbarObj;
             spyOn($, '_data').and.callFake(function () {
                 return {
                     click: [{}, {}],
@@ -33,11 +31,14 @@ define([
             });
         });
 
-        describe('Test initialize method for toolbar', function () {
+        afterEach(function () {
+            toolbarObj = originToolbar;
+        });
+
+        describe('initialize toolbar', function () {
             it('Check for defined ', function () {
                 expect(toolbarObj.hasOwnProperty('initialize')).toBeDefined();
             });
-
             it('Check method type', function () {
                 toolbarType = typeof toolbarObj.initialize;
                 expect(toolbarType).toEqual('function');
@@ -48,14 +49,6 @@ define([
             it('Check toolbar show method return same instance', function () {
                 expect(toolbarObj.show()).toEqual(toolbarObj);
             });
-
-        });
-
-        describe('Test hide toolbar method', function () {
-            it('Check toolbar hide method return same instance', function () {
-                expect(toolbarObj.hide()).toEqual(toolbarObj);
-            });
-
         });
     });
 });
