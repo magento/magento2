@@ -16,8 +16,9 @@
             <description value="Transactional Emails Logo should be able to be uploaded in the admin and previewed"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27620"/>
-            <useCaseId value="MC-24241"/>
-            <group value="logoUpload"/>
+            <useCaseId value="MC-10932"/>
+            <group value="theme"/>
+            <group value="email"/>
         </annotations>
         <before>
             <!--Login to Admin Area-->
@@ -35,8 +36,8 @@
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
         <waitForPageLoad stepKey="waitForPageLoadToViewDesignConfigPage"/>
         <actionGroup ref="AdminGridFilterSearchResultsBySelectActionGroup" stepKey="filterThemeDesignConfiguration">
-            <argument name="selectorAttr" value="store_id"/>
-            <argument name="store" value="{{_defaultStore.name}}"/>
+            <argument name="attributeSelector" value="store_id"/>
+            <argument name="attributeValue" value="{{_defaultStore.name}}"/>
         </actionGroup>
         <click selector="{{AdminDesignConfigSection.scopeRow('1')}}" stepKey="editStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoadToOpenStoreViewEditPage"/>

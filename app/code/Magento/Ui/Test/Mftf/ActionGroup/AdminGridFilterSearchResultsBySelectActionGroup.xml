@@ -13,14 +13,14 @@
             <description>Filters an Admin Grid page using the provided Filter Selector and Search Value.</description>
         </annotations>
         <arguments>
-            <argument name="selectorAttr" type="string"/>
-            <argument name="store" type="string"/>
+            <argument name="attributeSelector" type="string"/>
+            <argument name="attributeValue" type="string"/>
         </arguments>
 
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminGridFilterControls.clearAll}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForFilterApplied"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
-        <selectOption selector="{{AdminDataGridFilterSection.selectFieldByNameAttrInGrid(selectorAttr)}}" userInput="{{store}}" stepKey="selectStoreView"/>
+        <selectOption selector="{{AdminDataGridFilterSection.filterSelectFieldByName(attributeSelector)}}" userInput="{{attributeValue}}" stepKey="selectFieldByName"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>
