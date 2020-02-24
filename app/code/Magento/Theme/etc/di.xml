@@ -289,4 +289,9 @@
             <argument name="identifierName" xsi:type="string">theme_id</argument>
         </arguments>
     </type>
+    <type name="Magento\Theme\Helper\Storage">
+        <arguments>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
 </config>

@@ -563,6 +563,30 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testDeleteRootDirectoryRelative()
+    {
+        $directoryPath = $this->_storageRoot;
+        $fakePath = 'fake/relative/path';
+
+        $this->directoryWrite->method('getAbsolutePath')
+            ->with($fakePath)
+            ->willReturn($directoryPath);
+
+        $this->_helperStorage->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getStorageRoot'
+        )->will(
+            $this->returnValue($directoryPath)
+        );
+
+        $this->_storageModel->deleteDirectory($fakePath);
+    }
+
+    /**
      * @return array
      */
     public function booleanCasesDataProvider()

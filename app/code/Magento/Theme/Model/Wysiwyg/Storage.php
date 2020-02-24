@@ -18,11 +18,15 @@ class Storage
 {
     /**
      * Type font
+     *
+     * Represents the font type
      */
     const TYPE_FONT = 'font';
 
     /**
      * Type image
+     *
+     * Represents the image type
      */
     const TYPE_IMAGE = 'image';
 
@@ -328,7 +332,7 @@ class Storage
         $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
         $pathCmp = rtrim($path, '/');
 
-        if ($rootCmp == $pathCmp) {
+        if ($rootCmp == $pathCmp || $rootCmp === $this->mediaWriteDirectory->getAbsolutePath($path)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t delete root directory %1 right now.', $path)
             );
