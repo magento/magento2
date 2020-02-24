@@ -1194,7 +1194,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function removeEntityIdentifierFromGroupBy(Select $select): void
     {
-        $groupBy = array_filter($select->getPart(Select::GROUP), function ($field) {
+        $originalGroupBy = $select->getPart(Select::GROUP);
+
+        if (!is_array($originalGroupBy)) {
+            return;
+        }
+
+        $groupBy = array_filter($originalGroupBy, function ($field) {
             return false === strpos($field, $this->getIdFieldName());
         });
 
