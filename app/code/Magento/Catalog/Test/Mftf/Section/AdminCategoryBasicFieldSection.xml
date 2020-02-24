@@ -41,6 +41,7 @@
         <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index={{arg1}}]&gt;.admin__field-label span'), ':after').getPropertyValue('content');" parameterized="true"/>
         <element name="displayMode" type="button" selector="select[name='display_mode']"/>
         <element name="anchor" type="checkbox" selector="input[name='is_anchor']"/>
+        <element name="anchorLabel" type="text" selector="input[name='is_anchor']+label"/>
         <element name="productListCheckBox" type="checkbox" selector="input[name='use_config[available_sort_by]']" />
         <element name="productList" type="text" selector="select[name='available_sort_by']"/>
         <element name="defaultProductLisCheckBox" type="checkbox" selector="input[name='use_config[default_sort_by]']"/>
