@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Mview\View;
+use Magento\Framework\Mview\ViewInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -16,23 +21,23 @@ use Magento\Framework\Phrase;
 class ScheduleStatus extends AbstractRenderer
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
 
     /**
-     * @var \Magento\Framework\Mview\ViewInterface
+     * @var ViewInterface
      */
-    protected $viewModel;
+    private $viewModel;
 
-     /**
-      * @param \Magento\Backend\Block\Context $context
-      * @param \Magento\Framework\Escaper $escaper
-      * @param \Magento\Framework\Mview\ViewInterface $viewModel
-      * @param array $data
-      */
+    /**
+     * @param Context $context
+     * @param Escaper $escaper
+     * @param ViewInterface $viewModel
+     * @param array $data
+     */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
+        Context $context,
         Escaper $escaper,
         View $viewModel,
         array $data = []
@@ -45,10 +50,10 @@ class ScheduleStatus extends AbstractRenderer
     /**
      * Render indexer status
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         try {
             if (!$row->getIsScheduled()) {
