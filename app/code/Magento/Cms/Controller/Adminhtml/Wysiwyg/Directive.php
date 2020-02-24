@@ -13,7 +13,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Image\Adapter\AdapterInterface;
+use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\Url\DecoderInterface;
 use Psr\Log\LoggerInterface;
 
@@ -46,21 +46,29 @@ class Directive extends Action implements HttpGetActionInterface
     private $file;
 
     /**
+     * @var AdapterFactory
+     */
+    private $imageAdapterFactory;
+
+    /**
      * @param Action\Context $context
      * @param DecoderInterface $urlDecoder
      * @param RawFactory $resultRawFactory
      * @param File $file
+     * @param AdapterFactory $imageAdapterFactory
      */
     public function __construct(
         Action\Context $context,
         DecoderInterface $urlDecoder,
         RawFactory $resultRawFactory,
-        File $file
+        File $file,
+        AdapterFactory $imageAdapterFactory
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;
         $this->resultRawFactory = $resultRawFactory;
         $this->file = $file;
+        $this->imageAdapterFactory = $imageAdapterFactory;
     }
 
     /**
@@ -76,23 +84,25 @@ class Directive extends Action implements HttpGetActionInterface
             /** @var Filter $filter */
             $filter = $this->_objectManager->create(Filter::class);
             $imagePath = $filter->filter($directive);
-            /** @var AdapterInterface $image */
-            $image = $this->_objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
-            /** @var Raw $resultRaw */
-            $resultRaw = $this->resultRawFactory->create();
+            $image = $this->imageAdapterFactory->create();
             $image->open($imagePath);
-            $resultRaw->setHeader('Content-Type', $image->getMimeType());
-            unset($image);
-            $resultRaw->setContents($this->file->fileGetContents($imagePath));
         } catch (\Exception $e) {
             /** @var Config $config */
             $config = $this->_objectManager->get(Config::class);
+            $image = $this->imageAdapterFactory->create();
             $imagePath = $config->getSkinImagePlaceholderPath();
             $image->open($imagePath);
-            $resultRaw->setHeader('Content-Type', $image->getMimeType());
-            $resultRaw->setContents($image->getImage());
             $this->_objectManager->get(LoggerInterface::class)->critical($e);
         }
+        $mimeType = $image->getMimeType();
+        unset($image);
+        // To avoid issues with PNG images with alpha blending we return raw file
+        // after validation as an image source instead of generating the new PNG image
+        // with image adapter
+        $content = $this->file->fileGetContents($imagePath);
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setHeader('Content-Type', $mimeType);
+        $resultRaw->setContents($content);
         return $resultRaw;
     }
 }
