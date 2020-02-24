@@ -391,6 +391,17 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
         $dataSourceModel->setAccessible(true);
         $dataSourceModel->setValue($modelMock, $dataSourceMock);
+        // mock to imitate indexer processor model
+        $indexerProcessorMock = $this->createMock(\Magento\Customer\Model\Indexer\Processor::class);
+        $indexerProcessorMock->expects($this->any())
+            ->method('markIndexerAsInvalid')
+            ->will($this->returnValue(true));
+        $property = new \ReflectionProperty(
+            \Magento\CustomerImportExport\Model\Import\Address::class,
+            'indexerProcessor'
+        );
+        $property->setAccessible(true);
+        $property->setValue($modelMock, $indexerProcessorMock);
         // mock expects for entity adapter
         $modelMock->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $modelMock->expects($this->any())
@@ -449,7 +460,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             new \Magento\Framework\Stdlib\DateTime(),
             $this->createMock(\Magento\Customer\Model\Address\Validator\Postcode::class),
             $this->_getModelDependencies(),
-            $this->countryWithWebsites
+            $this->countryWithWebsites,
+            $this->createMock(\Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage::class),
+            $this->createMock(\Magento\Customer\Model\Indexer\Processor::class)
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
