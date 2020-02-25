@@ -3,41 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Mime;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Theme\Model\Design\Backend\File;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FileTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $mediaDirectory;
+    /** @var WriteInterface|PHPUnit_Framework_MockObject_MockObject */
+    private $mediaDirectory;
 
-    /** @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $urlBuilder;
+    /** @var UrlInterface|PHPUnit_Framework_MockObject_MockObject */
+    private $urlBuilder;
 
     /** @var File */
-    protected $fileBackend;
+    private $fileBackend;
 
-    /** @var IoFileSystem */
+    /** @var IoFileSystem|PHPUnit_Framework_MockObject_MockObject */
     private $ioFileSystem;
 
     /**
-     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mime|PHPUnit_Framework_MockObject_MockObject
      */
     private $mime;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|PHPUnit_Framework_MockObject_MockObject
      */
     private $databaseHelper;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
@@ -59,7 +69,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mediaDirectory = $this->getMockBuilder(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class
+            WriteInterface::class
         )
             ->getMockForAbstractClass();
         $filesystem->expects($this->once())
@@ -68,11 +78,13 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->mediaDirectory);
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
+        $this->ioFileSystem = $this->getMockBuilder(\Magento\Framework\Filesystem\Io\File::class)
+            ->getMockForAbstractClass();
+        $this->mime = $this->getMockBuilder(Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->databaseHelper = $this->getMockBuilder(
-            \Magento\MediaStorage\Helper\File\Storage\Database::class
+            Database::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -83,7 +95,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $abstractDb = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->ioFileSystem = new IoFileSystem();
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -107,17 +118,22 @@ class FileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
         unset($this->fileBackend);
     }
 
     /**
+     * Gets the mock object.
+     *
      * @param string $class
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockObject($class, $methods = [])
+    private function getMockObject(string $class, array $methods = []): PHPUnit_Framework_MockObject_MockObject
     {
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
@@ -128,15 +144,20 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Gets mock objects for abstract class.
+     *
      * @param string $class
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockObjectForAbstractClass($class)
+    private function getMockObjectForAbstractClass(string $class): PHPUnit_Framework_MockObject_MockObject
     {
         return  $this->getMockBuilder($class)
             ->getMockForAbstractClass();
     }
 
+    /**
+     * Test for afterLoad method.
+     */
     public function testAfterLoad()
     {
         $value = 'filename.jpg';
@@ -201,11 +222,13 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for beforeSave method.
+     *
      * @dataProvider beforeSaveDataProvider
      * @param string $fileName
      * @throws LocalizedException
      */
-    public function testBeforeSave($fileName)
+    public function testBeforeSave(string $fileName)
     {
         $expectedFileName = basename($fileName);
         $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
@@ -247,17 +270,21 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider for testBeforeSave.
+     *
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public function beforeSaveDataProvider(): array
     {
         return [
             'Normal file name' => ['filename.jpg'],
-            'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
+            'Vulnerable file name' => ['../../../../../../../../etc/pass'],
         ];
     }
 
     /**
+     * Test for beforeSave method without file.
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage header_logo_src does not contain field 'file'
      */
@@ -276,6 +303,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->fileBackend->beforeSave();
     }
 
+    /**
+     * Test for beforeSave method with existing file.
+     *
+     * @throws LocalizedException
+     */
     public function testBeforeSaveWithExistingFile()
     {
         $value = 'filename.jpg';
@@ -327,7 +359,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Normal path' => ['pub/media/', 'filename.jpg'],
-            'Complex path' => ['somepath/pub/media/', 'filename.jpg'],
+            'Complex path' => ['some_path/pub/media/', 'filename.jpg'],
         ];
     }
 }

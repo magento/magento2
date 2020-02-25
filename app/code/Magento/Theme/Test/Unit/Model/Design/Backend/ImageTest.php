@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
-use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 use Magento\Theme\Model\Design\Backend\Image;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -14,8 +17,11 @@ use Magento\Theme\Model\Design\Backend\Image;
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Image */
-    protected $imageBackend;
+    private $imageBackend;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
@@ -31,7 +37,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $databaseHelper = $this->getMockObject(\Magento\MediaStorage\Helper\File\Storage\Database::class);
         $abstractResource = $this->getMockObject(\Magento\Framework\Model\ResourceModel\AbstractResource::class);
         $abstractDb = $this->getMockObject(\Magento\Framework\Data\Collection\AbstractDb::class);
-        $ioFileSystem = new IoFileSystem();
+        $ioFileSystem = $this->getMockObject(\Magento\Framework\Filesystem\Io\File::class);
         $this->imageBackend = new Image(
             $context,
             $registry,
@@ -49,6 +55,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
         unset($this->imageBackend);
@@ -57,9 +66,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $class
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockObject($class, $methods = [])
+    private function getMockObject(string $class, array $methods = []): PHPUnit_Framework_MockObject_MockObject
     {
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
@@ -70,6 +79,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for beforeSave method with invalid file extension.
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Something is wrong with the file upload settings.
      */

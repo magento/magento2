@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use Magento\Framework\Filesystem\Driver\File;
@@ -16,6 +18,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /** @var bool Result of file_put_contents() function */
     public static $filePutContents;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         self::$fileGetContents = '';
@@ -23,21 +28,25 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for getAbsolutePath method.
+     *
      * @dataProvider dataProviderForTestGetAbsolutePath
-     * @param $basePath
-     * @param $path
-     * @param $expected
+     * @param string $basePath
+     * @param string $path
+     * @param string $expected
      */
-    public function testGetAbsolutePath($basePath, $path, $expected)
+    public function testGetAbsolutePath(string $basePath, string $path, string $expected)
     {
         $file = new File();
         $this->assertEquals($expected, $file->getAbsolutePath($basePath, $path));
     }
 
     /**
+     * Data provider for testGetAbsolutePath.
+     *
      * @return array
      */
-    public function dataProviderForTestGetAbsolutePath()
+    public function dataProviderForTestGetAbsolutePath(): array
     {
         return [
             ['/root/path/', 'sub', '/root/path/sub'],
@@ -48,21 +57,25 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for getRelativePath method.
+     *
      * @dataProvider dataProviderForTestGetRelativePath
-     * @param $basePath
-     * @param $path
-     * @param $expected
+     * @param string $basePath
+     * @param string $path
+     * @param string $expected
      */
-    public function testGetRelativePath($basePath, $path, $expected)
+    public function testGetRelativePath(string $basePath, string $path, string $expected)
     {
         $file = new File();
         $this->assertEquals($expected, $file->getRelativePath($basePath, $path));
     }
 
     /**
+     * Data provider for testGetRelativePath.
+     *
      * @return array
      */
-    public function dataProviderForTestGetRelativePath()
+    public function dataProviderForTestGetRelativePath(): array
     {
         return [
             ['/root/path/', 'sub', 'sub'],
@@ -73,20 +86,24 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider dataProviderForTestRealPathSafety
-     * @param $path
-     * @param $expected
+     * Test for getRealPathSafety method.
+     *
+     * @dataProvider dataProviderForTestGetRealPathSafety
+     * @param string $path
+     * @param string $expected
      */
-    public function testGetRealPathSafety($path, $expected)
+    public function testGetRealPathSafety(string $path, string $expected)
     {
         $file = new File();
         $this->assertEquals($expected, $file->getRealPathSafety($path));
     }
 
     /**
+     * Data provider for testGetRealPathSafety;
+     *
      * @return array
      */
-    public function dataProviderForTestRealPathSafety()
+    public function dataProviderForTestGetRealPathSafety(): array
     {
         return [
             ['/1/2/3', '/1/2/3'],
