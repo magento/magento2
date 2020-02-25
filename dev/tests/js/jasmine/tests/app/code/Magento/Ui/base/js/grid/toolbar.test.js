@@ -24,11 +24,8 @@ define([
                 name: 'magento'
             });
             originToolbar = toolbarObj;
-            spyOn($, '_data').and.callFake(function () {
-                return {
-                    click: [{}, {}],
-                    mousedown: [{}, {}]
-                };
+            spyOn(toolbarObj, 'waitDOMElements').and.callFake(function () {
+                return $.Deferred().promise();
             });
         });
 
