@@ -1755,12 +1755,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
+                        $hash = '';
                         if (filter_var($columnImage, FILTER_VALIDATE_URL) === false) {
                             $filename = $importDir . DIRECTORY_SEPARATOR . $columnImage;
                             if (file_exists($filename)) {
                                 $hash = hash_file('sha256', $importDir . DIRECTORY_SEPARATOR . $columnImage);
-                            } else {
-                                $hash = hash_file('sha256', $filename);
                             }
                         } else {
                             $hash = hash_file('sha256', $columnImage);
@@ -1824,22 +1823,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                         if (isset($rowExistingImages[$uploadedFile])) {
                             $currentFileData = $rowExistingImages[$uploadedFile];
+                            $currentFileData['store_id'] = $storeId;
+                            $storeMediaGalleryValueExists = isset($rowStoreMediaGalleryValues[$uploadedFile]);
+                            if (array_key_exists($uploadedFile, $imageHiddenStates)
+                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
+                            ) {
+                                $imagesForChangeVisibility[] = [
+                                    'disabled' => $imageHiddenStates[$uploadedFile],
+                                    'imageData' => $currentFileData,
+                                    'exists' => $storeMediaGalleryValueExists
+                                ];
+                                $storeMediaGalleryValueExists = true;
+                            }
+
                             if (isset($rowLabels[$column][$columnImageKey])
                                 && $rowLabels[$column][$columnImageKey] !=
                                 $currentFileData['label']
                             ) {
                                 $labelsForUpdate[] = [
                                     'label' => $rowLabels[$column][$columnImageKey],
-                                    'imageData' => $currentFileData
-                                ];
-                            }
-
-                            if (array_key_exists($uploadedFile, $imageHiddenStates)
-                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
-                            ) {
-                                $imagesForChangeVisibility[] = [
-                                    'disabled' => $imageHiddenStates[$uploadedFile],
-                                    'imageData' => $currentFileData
+                                    'imageData' => $currentFileData,
+                                    'exists' => $storeMediaGalleryValueExists
                                 ];
                             }
                         } else {
