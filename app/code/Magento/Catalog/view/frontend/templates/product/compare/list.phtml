@@ -109,7 +109,7 @@
                                 <?php if ($index++ == 0) :?>
                                     <th scope="row" class="cell label">
                                         <span class="attribute label">
-                                            <?= $block->escapeHtml($attribute->getStoreLabel() ? $attribute->getStoreLabel() : __($attribute->getFrontendLabel())) ?>
+                                            <?= $block->escapeHtml($attribute->getStoreLabel() ? __($attribute->getStoreLabel()) : __($attribute->getFrontendLabel())) ?>
                                         </span>
                                     </th>
                                 <?php endif; ?>
