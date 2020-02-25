@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Widget Block Converter
@@ -127,15 +128,17 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         if (!isset($widgetArray['supported_containers'])) {
             $widgetArray['supported_containers'] = [];
         }
+        $supportedContainers = [[]];
         foreach ($widgetSubNode->childNodes as $container) {
             if ($container->nodeName === '#text' || $container->nodeName === '#comment') {
                 continue;
             }
-            $widgetArray['supported_containers'] = array_merge(
-                $widgetArray['supported_containers'],
-                $this->_convertContainer($container)
-            );
+            $supportedContainers[] = $this->_convertContainer($container);
         }
+        $widgetArray['supported_containers'] = array_merge(
+            $widgetArray['supported_containers'],
+            ...$supportedContainers
+        );
 
         return $widgetArray;
     }
@@ -269,7 +272,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         if ($additional_classes) {
             $parameter['additional_classes'] = $additional_classes->nodeValue;
         }
-        
+
         return $parameter;
     }
 
