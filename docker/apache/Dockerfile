@@ -1,4 +1,4 @@
-ARG APACHE_VERSION=""
+ARG APACHE_VERSION="2.4.32"
 FROM httpd:${APACHE_VERSION:+${APACHE_VERSION}-}alpine
 LABEL maintainer="Cristian Pini"
 ENV TZ=Europe/London
