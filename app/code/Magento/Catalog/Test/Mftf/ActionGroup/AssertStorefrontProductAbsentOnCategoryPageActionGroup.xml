@@ -13,8 +13,8 @@
             <description>Navigate to category page and verify product is absent.</description>
         </annotations>
         <arguments>
-            <argument name="categoryUrlKey" defaultValue="_defaultCategory.url_key"/>
-            <argument name="productName" defaultValue="SimpleProduct.name"/>
+            <argument name="categoryUrlKey" defaultValue="{{_defaultCategory.url_key}}"/>
+            <argument name="productName" defaultValue="{{SimpleProduct.name}}"/>
         </arguments>
 
         <amOnPage url="{{StorefrontCategoryPage.url(categoryUrlKey)}}" stepKey="navigateToCategoryPage"/>
