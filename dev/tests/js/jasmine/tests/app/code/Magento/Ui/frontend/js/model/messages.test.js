@@ -41,7 +41,7 @@ define([
             });
         });
 
-        it('simple message', function () {
+        it('adds massage without parameters', function () {
             var type = [];
 
             messageObj = {
@@ -51,7 +51,7 @@ define([
             expect(type).toEqual([messageObj.message]);
         });
 
-        it('message with parameters', function () {
+        it('add message with parameters', function () {
             var returnedObj,
                 type = [];
 
@@ -70,7 +70,7 @@ define([
             expect(type).toEqual(returnedObj);
         });
 
-        it('check addErrorMessage && getErrorMessage && hasMessages', function () {
+        it('add error message, get error message, verify has error message', function () {
             messageObj = {
                 message: errorMessageText
             };
@@ -81,7 +81,7 @@ define([
             expect(obj.hasMessages()).toEqual(true);
         });
 
-        it('check addSuccessMessage && getSuccessMessage && hasMessages', function () {
+        it('add success message, get success message, verify has success message', function () {
             messageObj = {
                 message: successMessageText
             };
@@ -91,7 +91,7 @@ define([
             expect(obj.hasMessages()).toEqual(true);
         });
 
-        it('check for cleaning messages', function () {
+        it('cleaning messages', function () {
             messageObj = {
                 message: 'Message test case %1, case %2 and case %3',
                 parameters: [
