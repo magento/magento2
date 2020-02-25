@@ -23,13 +23,13 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Wishlist\Ui\DataProvider\Product\Collector\Button */
     private $button;
 
-    /** @var ProductRenderExtensionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductRenderExtensionFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $productRenderExtensionFactoryMock;
 
-    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
     private $wishlistHelperMock;
 
-    /** @var ButtonInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ButtonInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $buttonInterfaceFactoryMock;
 
     protected function setUp()

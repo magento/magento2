@@ -365,6 +365,25 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Checks a case when method return annotation has a null-type at first position,
+     * and a valid type at second.
+     */
+    public function testGetReturnTypeNullAtFirstPos()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => false,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getWithNull');
+
+        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    /**
      * Simple and complex data provider
      *
      * @return array
