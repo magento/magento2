@@ -30,7 +30,7 @@
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
             <!--Admin Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create product -->

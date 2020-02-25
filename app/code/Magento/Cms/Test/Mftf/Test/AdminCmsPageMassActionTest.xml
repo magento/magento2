@@ -27,7 +27,7 @@
         <after>
             <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage" />
             <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Go to Grid page-->

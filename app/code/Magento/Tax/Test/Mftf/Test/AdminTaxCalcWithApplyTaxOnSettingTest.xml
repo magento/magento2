@@ -27,7 +27,7 @@
             <createData entity="ApiSimpleProductWithCustomPrice" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
             <actionGroup ref="SetTaxApplyOnSettingActionGroup" stepKey="setApplyTaxOnSetting">
                 <argument name="userInput" value="Original price only"/>
@@ -49,7 +49,7 @@
                 <argument name="userInput" value="Custom price if available"/>
             </actionGroup>
             <actionGroup ref="ResetTaxClassForShippingActionGroup" stepKey="resetTaxClassForShipping"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="NavigateToNewOrderPageNewCustomerSingleStoreActionGroup" stepKey="gotoNewOrderCreationPage"/>

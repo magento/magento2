@@ -23,7 +23,7 @@
         </before>
         <after>
             <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyWebsites_EUR_USD"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToCurrencySymbolsPageActionGroup" stepKey="navigateToCurrencySymbolsPage"/>
         <actionGroup ref="AssertAdminCurrencySymbolIsDisabledActionGroup" stepKey="assertEURDisabledInput">
