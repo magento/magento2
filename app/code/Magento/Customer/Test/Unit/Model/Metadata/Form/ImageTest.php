@@ -12,6 +12,7 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Driver\File as Driver;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 
@@ -81,9 +82,9 @@ class ImageTest extends AbstractFormTestCase
     private $mediaEntityTmpDirectoryMock;
 
     /**
-     * @var Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var Driver|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mediaEntityDirectoryMock;
+    private $driverMock;
 
     protected function setUp()
     {
@@ -131,14 +132,21 @@ class ImageTest extends AbstractFormTestCase
         $this->mediaEntityTmpDirectoryMock = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mediaEntityDirectoryMock = $this->getMockBuilder(Write::class)
+        $this->driverMock = $this->getMockBuilder(Driver::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->writeFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->mediaEntityTmpDirectoryMock);
+        $this->mediaEntityTmpDirectoryMock->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($this->driverMock);
     }
 
     /**
      * @param array $data
      * @return \Magento\Customer\Model\Metadata\Form\File
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function initialize(array $data)
     {
@@ -355,29 +363,30 @@ class ImageTest extends AbstractFormTestCase
         $originValue = 'filename.ext1';
 
         $value = [
-            'dispersePath' => '/f/i',
             'file' => 'filename.ext2',
         ];
-        $expectedResult = $value['dispersePath'] . '/' . $value['file'];
 
-        $this->writeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->mediaEntityDirectoryMock);
-        $this->mediaEntityDirectoryMock->expects($this->once())
-            ->method('create')
-            ->with($value['dispersePath'])
-            ->willReturn(true);
-        $this->mediaEntityDirectoryMock->expects($this->once())
-            ->method('isWritable')
-            ->with($value['dispersePath'])
-            ->willReturn(true);
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with($value['file'])
+            ->willReturn($value['file']);
+        $this->mediaEntityTmpDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->willReturn($value['file']);
+        $this->mediaEntityTmpDirectoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->willReturn($value['file']);
+        $this->fileProcessorMock->expects($this->once())
+            ->method('moveTemporaryFile')
+            ->with($value['file'])
+            ->willReturn($value['file']);
         $model = $this->initialize([
             'value' => $originValue,
             'isAjax' => false,
             'entityTypeCode' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
         ]);
 
-        $this->assertEquals($expectedResult, $model->compactValue($value));
+        $this->assertEquals($value['file'], $model->compactValue($value));
     }
 
     public function testCompactValueUiComponentCustomer()
@@ -392,9 +401,6 @@ class ImageTest extends AbstractFormTestCase
 
         $base64EncodedData = 'encoded_data';
 
-        $this->writeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->mediaEntityTmpDirectoryMock);
         $this->mediaEntityTmpDirectoryMock->expects($this->once())
             ->method('isExist')
             ->with($value['file'])
@@ -447,9 +453,6 @@ class ImageTest extends AbstractFormTestCase
             'type' => 'image',
         ];
 
-        $this->writeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->mediaEntityTmpDirectoryMock);
         $this->mediaEntityTmpDirectoryMock->expects($this->once())
             ->method('isExist')
             ->with($value['file'])

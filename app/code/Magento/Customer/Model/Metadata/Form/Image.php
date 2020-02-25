@@ -52,11 +52,6 @@ class Image extends File
     private $mediaEntityTmpDirectory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    private $mediaEntityDirectory;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -122,11 +117,6 @@ class Image extends File
             $this->directoryList->getPath($this->directoryList::MEDIA)
             . '/' . $this->_entityTypeCode
             . '/' . FileProcessor::TMP_DIR
-        );
-
-        $this->mediaEntityDirectory = $this->writeFactory->create(
-            $this->directoryList->getPath($this->directoryList::MEDIA)
-            . '/' . $this->_entityTypeCode
         );
     }
 
@@ -238,39 +228,19 @@ class Image extends File
      */
     protected function processCustomerAddressValue(array $value)
     {
-        $fileName = ltrim($value['file'], '/');
-
-        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
-
-        if (!$this->mediaEntityDirectory->create($dispersionPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Unable to create directory %1.', $dispersionPath)
+        $fileName = $this->mediaEntityTmpDirectory
+            ->getDriver()
+            ->getRealPathSafety(
+                $this->mediaEntityTmpDirectory->getAbsolutePath(
+                    ltrim(
+                        $value['file'],
+                        '/'
+                    )
+                )
             );
-        }
-
-        if (!$this->mediaEntityDirectory->isWritable($dispersionPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Destination folder is not writable or does not exists.')
-            );
-        }
-
-        $destinationFileName = \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->mediaEntityDirectory->getAbsolutePath($dispersionPath) . '/' . $fileName
+        return $this->getFileProcessor()->moveTemporaryFile(
+            $this->mediaEntityTmpDirectory->getRelativePath($fileName)
         );
-
-        try {
-            $this->mediaEntityDirectory->renameFile(
-                FileProcessor::TMP_DIR . '/' . $fileName,
-                $dispersionPath . '/' . $destinationFileName
-            );
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Something went wrong while saving the file.')
-            );
-        }
-
-        $fileName = $dispersionPath . '/' . $destinationFileName;
-        return $fileName;
     }
 
     /**
