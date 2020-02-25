@@ -972,7 +972,7 @@ class File implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) === false) {
+        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
             return $path;
         }
 

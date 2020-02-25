@@ -24,6 +24,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider dataProviderForTestGetAbsolutePath
+     * @param $basePath
+     * @param $path
+     * @param $expected
      */
     public function testGetAbsolutePath($basePath, $path, $expected)
     {
@@ -46,6 +49,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider dataProviderForTestGetRelativePath
+     * @param $basePath
+     * @param $path
+     * @param $expected
      */
     public function testGetRelativePath($basePath, $path, $expected)
     {
@@ -63,6 +69,31 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ['/root/path/', '/sub', '/sub'],
             ['/root/path/', '/root/path/sub', 'sub'],
             ['/root/path/sub', '/root/path/other', '/root/path/other'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForTestRealPathSafety
+     * @param $path
+     * @param $expected
+     */
+    public function testGetRealPathSafety($path, $expected)
+    {
+        $file = new File();
+        $this->assertEquals($expected, $file->getRealPathSafety($path));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestRealPathSafety()
+    {
+        return [
+            ['/1/2/3', '/1/2/3'],
+            ['/1/2/3/../..', '/1'],
+            ['/1/2/3/.', '/1/2/3'],
+            ['/1/2/3/./4/5', '/1/2/3/4/5'],
+            ['/1/2/3/../4/5', '/1/2/4/5'],
         ];
     }
 }
