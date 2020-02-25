@@ -169,7 +169,7 @@
 
             <!-- Delete created price rules -->
             <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
-                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="ruleName" value="{{CatalogRuleToFixed.name}}"/>
             </actionGroup>
             <!-- Admin log out -->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
