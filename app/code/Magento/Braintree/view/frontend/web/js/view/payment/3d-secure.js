@@ -145,7 +145,6 @@ define([
                 .then(function () {
                     self.threeDSecureInstance.verifyCard(options, function (err, payload) {
                         if (err) {
-                            fullScreenLoader.stopLoader();
                             self.state.reject(err.message);
 
                             return;
@@ -159,12 +158,13 @@ define([
                         } else {
                             self.state.reject($t('Please try again with another form of payment.'));
                         }
-                        fullScreenLoader.stopLoader();
                     });
                 })
                 .fail(function () {
-                    fullScreenLoader.stopLoader();
                     self.state.reject($t('Please try again with another form of payment.'));
+                })
+                .always(function () {
+                    fullScreenLoader.stopLoader();
                 });
 
             return self.state.promise();
