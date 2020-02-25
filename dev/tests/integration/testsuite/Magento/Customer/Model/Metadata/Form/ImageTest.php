@@ -3,60 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
 
     /**
-     * @var String
+     * @var string
      */
-    protected $fileName = 'magento.jpg';
+    private $fileName = 'magento.jpg';
 
     /**
-     * @var String
+     * @var string
      */
-    protected $invalidFileName = '../../invalidFile.xyz';
+    private $invalidFileName = '../../invalidFile.xyz';
 
     /**
-     * @var String
+     * @var string
      */
-    protected $imageFixtureDir;
+    private $imageFixtureDir;
 
     /**
-     * @var String
+     * @var string
      */
-    protected $expectedFileName;
+    private $expectedFileName;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     private $mediaDirectory;
 
+    /**
+     * @inheritDoc
+     */
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Filesystem::class);
+            ->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->imageFixtureDir = realpath(__DIR__ . '/../../../_files/image');
         $this->expectedFileName = '/m/a/' . $this->fileName;
     }
 
     /**
+     * Test for processCustomerAddressValue method
+     *
      * @magentoAppIsolation enabled
+     * @throws FileSystemException
+     * @throws \ReflectionException
      */
     public function testProcessCustomerAddressValue()
     {
@@ -98,7 +112,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for processCustomerValue method
+     *
      * @magentoAppIsolation enabled
+     * @throws FileSystemException
+     * @throws \ReflectionException
      */
     public function testProcessCustomerValue()
     {
@@ -137,8 +155,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for processCustomerValue method with invalid value
+     *
      * @magentoAppIsolation enabled
      * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @throws FileSystemException
+     * @throws \ReflectionException
      */
     public function testProcessCustomerInvalidValue()
     {
@@ -171,21 +193,20 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'processCustomerValue'
         );
         $processCustomerAddressValueMethod->setAccessible(true);
-        $result = $processCustomerAddressValueMethod->invoke($image, $imageFile);
-        $this->assertInstanceOf('array', $result);
-        $this->assertFileExists($tmpFilePath);
+        $processCustomerAddressValueMethod->invoke($image, $imageFile);
     }
 
     /**
      * @inheritdoc
+     * @throws FileSystemException
      */
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Filesystem::class
+            Filesystem::class
         );
-        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var WriteInterface $mediaDirectory */
         $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete('customer');
         $mediaDirectory->delete('customer_address');

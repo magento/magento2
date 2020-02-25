@@ -3,21 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use Psr\Log\LoggerInterface;
 
 /**
  * Metadata for form image field
@@ -26,16 +38,6 @@ use Magento\Framework\Filesystem\Directory\WriteFactory;
  */
 class Image extends File
 {
-    /**
-     * @var WriteFactory
-     */
-    protected $writeFactory;
-
-    /**
-     * @var DirectoryList
-     */
-    protected $directoryList;
-
     /**
      * @var ImageContentInterfaceFactory
      */
@@ -47,46 +49,46 @@ class Image extends File
     private $ioFileSystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     private $mediaEntityTmpDirectory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param TimezoneInterface $localeDate
+     * @param LoggerInterface $logger
+     * @param AttributeMetadataInterface $attribute
+     * @param ResolverInterface $localeResolver
      * @param null|string $value
      * @param string $entityTypeCode
      * @param bool $isAjax
-     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
+     * @param EncoderInterface $urlEncoder
+     * @param NotProtectedExtension $fileValidator
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
-     * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
-     * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
+     * @param FileProcessorFactory|null $fileProcessorFactory
+     * @param ImageContentInterfaceFactory|null $imageContentInterfaceFactory
      * @param IoFileSystem|null $ioFileSystem
      * @param DirectoryList|null $directoryList
      * @param WriteFactory|null $writeFactory
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws FileSystemException
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        TimezoneInterface $localeDate,
+        LoggerInterface $logger,
+        AttributeMetadataInterface $attribute,
+        ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,
         $isAjax,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
+        EncoderInterface $urlEncoder,
+        NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
-        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
-        \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
+        FileProcessorFactory $fileProcessorFactory = null,
+        ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
         IoFileSystem $ioFileSystem = null,
         ?DirectoryList $directoryList = null,
         ?WriteFactory $writeFactory = null
@@ -106,15 +108,13 @@ class Image extends File
             $fileProcessorFactory
         );
         $this->imageContentFactory = $imageContentInterfaceFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
+            ->get(ImageContentInterfaceFactory::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
-        $this->writeFactory = $writeFactory ?: ObjectManager::getInstance()
-            ->get(Filesystem\Directory\WriteFactory::class);
-        $this->directoryList =  $directoryList ?: ObjectManager::getInstance()
-            ->get(DirectoryList::class);
-        $this->mediaEntityTmpDirectory = $this->writeFactory->create(
-            $this->directoryList->getPath($this->directoryList::MEDIA)
+        $writeFactory = $writeFactory ?? ObjectManager::getInstance()->get(WriteFactory::class);
+        $directoryList = $directoryList ?? ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->mediaEntityTmpDirectory = $writeFactory->create(
+            $directoryList->getPath($directoryList::MEDIA)
             . '/' . $this->_entityTypeCode
             . '/' . FileProcessor::TMP_DIR
         );
@@ -138,7 +138,7 @@ class Image extends File
 
         try {
             $imageProp = getimagesize($value['tmp_name']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $imageProp = false;
         }
 
