@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  * Layer price filter based on Search API
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Price extends AbstractFilter
 {
@@ -141,7 +140,7 @@ class Price extends AbstractFilter
         list($from, $to) = $filter;
 
         $this->getLayer()->getProductCollection()->addFieldToFilter(
-            $this->getAttributeModel()->getAttributeCode(),
+            'price',
             ['from' => $from, 'to' =>  empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA]
         );
 
