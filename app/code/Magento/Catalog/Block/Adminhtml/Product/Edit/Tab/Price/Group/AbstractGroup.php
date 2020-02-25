@@ -212,7 +212,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
         }
 
         if ($groupId !== null) {
-            return isset($this->_customerGroups[$groupId]) ? $this->_customerGroups[$groupId] : [];
+            return $this->_customerGroups[$groupId] ?? [];
         }
 
         return $this->_customerGroups;
