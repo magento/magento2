@@ -8,6 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
+use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Backend\Image;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -19,25 +31,26 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /** @var Image */
     private $imageBackend;
 
+    /** @var File */
+    private $ioFileSystem;
+
     /**
      * @inheritdoc
      */
     public function setUp()
     {
-        $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
-        $registry = $this->getMockObject(\Magento\Framework\Registry::class);
-        $config = $this->getMockObject(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $cacheTypeList = $this->getMockObject(\Magento\Framework\App\Cache\TypeListInterface::class);
-        $uploaderFactory = $this->getMockObject(\Magento\MediaStorage\Model\File\UploaderFactory::class);
-        $requestData = $this->getMockObject(
-            \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface::class
-        );
-        $filesystem = $this->getMockObject(\Magento\Framework\Filesystem::class);
-        $urlBuilder = $this->getMockObject(\Magento\Framework\UrlInterface::class);
-        $databaseHelper = $this->getMockObject(\Magento\MediaStorage\Helper\File\Storage\Database::class);
-        $abstractResource = $this->getMockObject(\Magento\Framework\Model\ResourceModel\AbstractResource::class);
-        $abstractDb = $this->getMockObject(\Magento\Framework\Data\Collection\AbstractDb::class);
-        $ioFileSystem = $this->getMockObject(\Magento\Framework\Filesystem\Io\File::class);
+        $context = $this->getMockObject(Context::class);
+        $registry = $this->getMockObject(Registry::class);
+        $config = $this->getMockObject(ScopeConfigInterface::class);
+        $cacheTypeList = $this->getMockObject(TypeListInterface::class);
+        $uploaderFactory = $this->getMockObject(UploaderFactory::class);
+        $requestData = $this->getMockObject(RequestDataInterface::class);
+        $filesystem = $this->getMockObject(Filesystem::class);
+        $urlBuilder = $this->getMockObject(UrlInterface::class);
+        $databaseHelper = $this->getMockObject(Database::class);
+        $abstractResource = $this->getMockObject(AbstractResource::class);
+        $abstractDb = $this->getMockObject(AbstractDb::class);
+        $this->ioFileSystem = $this->getMockObject(File::class);
         $this->imageBackend = new Image(
             $context,
             $registry,
@@ -51,7 +64,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             $abstractDb,
             [],
             $databaseHelper,
-            $ioFileSystem
+            $this->ioFileSystem
         );
     }
 
@@ -86,15 +99,24 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveWithInvalidExtensionFile()
     {
+        $invalidFileName = 'fileName.invalidExtension';
         $this->imageBackend->setData(
             [
                 'value' => [
                     [
-                        'file' => 'fileName.invalidExtension',
+                        'file' => $invalidFileName,
                     ]
                 ],
             ]
         );
+        $expectedPathInfo = [
+            'extension' => 'invalidExtension'
+        ];
+        $this->ioFileSystem
+            ->expects($this->any())
+            ->method('getPathInfo')
+            ->with($invalidFileName)
+            ->willReturn($expectedPathInfo);
         $this->imageBackend->beforeSave();
     }
 }
