@@ -306,6 +306,4 @@ class CustomerTest extends TestCase
         $this->model->setDisableAutoGroupChange($isAutoGroupChangeAllowed);
         $this->assertEquals($isAutoGroupChangeAllowed, $this->model->getDisableAutoGroupChange());
     }
-
-
 }
