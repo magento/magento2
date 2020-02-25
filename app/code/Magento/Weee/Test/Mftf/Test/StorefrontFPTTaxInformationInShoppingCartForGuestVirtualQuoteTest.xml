@@ -39,8 +39,6 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <!-- Delete all catalog price rules that can (and actually do) affect this test-->
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
         </before>
 

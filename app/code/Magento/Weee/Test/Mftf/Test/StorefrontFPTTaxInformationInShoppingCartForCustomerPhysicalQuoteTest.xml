@@ -56,8 +56,6 @@
                 <argument name="valueForFPT" value="20"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <!-- Delete all catalog price rules that can (and actually do) affect this test-->
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
         </before>
 
