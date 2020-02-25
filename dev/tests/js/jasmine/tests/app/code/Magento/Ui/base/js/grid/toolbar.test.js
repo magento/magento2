@@ -11,17 +11,18 @@ define([
     'use strict';
 
     describe('Magento_Ui/js/grid/toolbar', function () {
-        var toolbarObj = new Toolbar({
+        var toolbarObj,
+            toolbarType,
+            originToolbar;
+
+        beforeEach(function () {
+            toolbarObj = new Toolbar({
                 index: 'listing_top',
                 dataScope: '',
                 columnsProvider: 'magento',
                 provider: 'provider',
                 name: 'magento'
-            }),
-            toolbarType,
-            originToolbar;
-
-        beforeEach(function () {
+            });
             originToolbar = toolbarObj;
             spyOn($, '_data').and.callFake(function () {
                 return {
