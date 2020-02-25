@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Error;
 
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\Escaper;
+use Magento\Framework\Filesystem\Driver\File as DriverInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Error processor
@@ -150,6 +151,11 @@ class Processor
     private $escaper;
 
     /**
+     * @var DriverInterface
+     */
+    private $driver;
+
+    /**
      * @param Http $response
      * @param Json $serializer
      * @param Escaper $escaper
@@ -157,13 +163,15 @@ class Processor
     public function __construct(
         Http $response,
         Json $serializer = null,
-        Escaper $escaper = null
+        Escaper $escaper = null,
+        DriverInterface $driver = null
     ) {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->driver = $driver ?: ObjectManager::getInstance()->get(DriverInterface::class);
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
@@ -257,9 +265,9 @@ class Processor
         //The url needs to be updated base on Document root path.
         return $this->getBaseUrl() .
         str_replace(
-            str_replace('\\', '/', realpath($this->_indexDir)),
+            str_replace('\\', '/', $this->driver->getRealPath($this->_indexDir)),
             '',
-            str_replace('\\', '/', realpath($this->_errorDir))
+            str_replace('\\', '/', $this->driver->getRealPath($this->_errorDir))
         ) . '/' . $this->_config->skin . '/';
     }
 
@@ -507,7 +515,7 @@ class Processor
         }
         $this->_setReportData($reportData);
 
-        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData). PHP_EOL);
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData) . PHP_EOL);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -614,7 +622,7 @@ class Processor
     {
         $envName = 'MAGE_ERROR_REPORT_DIR_NESTING_LEVEL';
         $value = $_ENV[$envName] ?? getenv($envName);
-        if(false === $value && property_exists($this->_config, 'dir_nesting_level')) {
+        if (false === $value && property_exists($this->_config, 'dir_nesting_level')) {
             $value = $this->_config->dir_nesting_level;
         }
         $value = (int)$value;
