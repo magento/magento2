@@ -12,7 +12,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateCustomerWithWebSiteAndGroup">
+    <actionGroup name="AdminCreateCustomerWithWebSiteAndGroup" deprecated="Use `AdminCreateCustomerWithWebSiteAndGroupActionGroup` instead">
         <annotations>
             <description>Goes to the Customer grid page. Click on 'Add New Customer'. Fills provided Customer Data. Fill provided Customer Address data. Assigns Product to Website and Store View. Clicks on Save.</description>
         </annotations>
@@ -22,7 +22,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
             <argument name="storeView" type="string" defaultValue="{{_defaultStore.name}}"/>
         </arguments>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminCreateCustomerWithWebSiteAndGroupActionGroup` instead -->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersPage"/>
         <click stepKey="addNewCustomer" selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
@@ -37,29 +36,27 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see stepKey="seeSuccessMessage" userInput="You saved the customer."/>
     </actionGroup>
 
-    <actionGroup name="AdminEditCustomerAddressNoZipNoState" extends="AdminEditCustomerAddressesFrom">
+    <actionGroup name="AdminEditCustomerAddressNoZipNoState" extends="AdminEditCustomerAddressesFrom" deprecated="Use `AdminEditCustomerAddressNoZipNoStateActionGroup` instead">
         <annotations>
             <description>EXTENDS: AdminEditCustomerAddressesFrom. Removes 'selectState' and 'fillZipCode'. Clicks on 'Set Default' for Billing/Shipping.</description>
         </annotations>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminEditCustomerAddressNoZipNoStateActionGroup` instead -->
         <remove keyForRemoval="selectState"/>
         <remove keyForRemoval="fillZipCode"/>
         <click selector="{{AdminEditCustomerAddressesSection.defaultBillingAddressButton}}" stepKey="setDefaultBilling" before="setDefaultShipping"/>
         <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
     </actionGroup>
 
-    <actionGroup name="AdminEditCustomerAddressSetDefaultShippingAndBilling" extends="AdminEditCustomerAddressesFrom">
+    <actionGroup name="AdminEditCustomerAddressSetDefaultShippingAndBilling" extends="AdminEditCustomerAddressesFrom" deprecated="Use `AdminEditCustomerAddressSetDefaultShippingAndBillingActionGroup` instead">
         <annotations>
             <description>EXTENDS: AdminEditCustomerAddressesFrom. Removes 'selectState' and 'fillZipCode'.</description>
         </annotations>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminEditCustomerAddressSetDefaultShippingAndBillingActionGroup` instead -->
         <click selector="{{AdminEditCustomerAddressesSection.defaultBillingAddressButton}}" stepKey="setDefaultBilling" before="setDefaultShipping"/>
         <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
     </actionGroup>
 
-    <actionGroup name="EnterCustomerAddressInfo">
+    <actionGroup name="EnterCustomerAddressInfo" deprecated="Use `EnterCustomerAddressInfoActionGroup` instead">
         <annotations>
             <description>Fills in the provided Customer details (First/Last Name, Company, Phone # and Address) on the Admin Customer creation/edit page. Clicks on the Save button.</description>
         </annotations>
@@ -67,7 +64,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
             <argument name="Address"/>
         </arguments>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `EnterCustomerAddressInfoActionGroup` instead -->
         <amOnPage url="customer/address/new/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPage"/>
         <fillField stepKey="fillFirstName" selector="{{StorefrontCustomerAddressSection.firstName}}" userInput="{{Address.firstname}}"/>
@@ -84,16 +80,15 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
     </actionGroup>
 
     <!-- Fills State Field instead of selecting it-->
-    <actionGroup name="EnterCustomerAddressInfoFillState" extends="EnterCustomerAddressInfo">
+    <actionGroup name="EnterCustomerAddressInfoFillState" extends="EnterCustomerAddressInfo" deprecated="Use `CreateSystemBackupActionGroup` instead">
         <annotations>
             <description>EXTENDS: EnterCustomerAddressInfo. Fills the State field.</description>
         </annotations>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateSystemBackupActionGroup` instead -->
         <fillField stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvinceFill}}" userInput="{{Address.state}}"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerBillingAddress">
+    <actionGroup name="VerifyCustomerBillingAddress" deprecated="Use `VerifyCustomerBillingAddressActionGroup` instead">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Billing Address is present and correct on the Storefront Customer Dashboard Address section.</description>
         </annotations>
@@ -104,7 +99,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `VerifyCustomerBillingAddressActionGroup` instead -->
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultBillingAddressFirstnameAndLastname"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.company}}" stepKey="seeAssertCustomerDefaultBillingAddressCompany"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.street[0]}}" stepKey="seeAssertCustomerDefaultBillingAddressStreet"/>
@@ -114,7 +108,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultBillingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerShippingAddress">
+    <actionGroup name="VerifyCustomerShippingAddress" deprecated="Use `VerifyCustomerShippingAddressActionGroup` instead">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Shipping Address is present and correct.</description>
         </annotations>
@@ -122,7 +116,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
             <argument name="address"/>
         </arguments>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `VerifyCustomerShippingAddressActionGroup` instead -->
         <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultShippingAddressFirstnameAndLastname"/>
@@ -134,7 +127,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultShippingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerBillingAddressWithState">
+    <actionGroup name="VerifyCustomerBillingAddressWithState" deprecated="Use `VerifyCustomerBillingAddressWithStateActionGroup` instead">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Billing Address, including the State, is present and correct.</description>
         </annotations>
@@ -142,7 +135,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
             <argument name="address"/>
         </arguments>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `VerifyCustomerBillingAddressWithStateActionGroup` instead -->
         <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultBillingAddressFirstnameAndLastname"/>
@@ -154,7 +146,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultBillingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerShippingAddressWithState">
+    <actionGroup name="VerifyCustomerShippingAddressWithState" deprecated="Use `VerifyCustomerShippingAddressWithStateActionGroup` instead">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Shipping Address, including the State, is present and correct.</description>
         </annotations>
@@ -162,7 +154,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
             <argument name="address"/>
         </arguments>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `VerifyCustomerShippingAddressWithStateActionGroup` instead -->
         <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultShippingAddressFirstnameAndLastname"/>
@@ -174,7 +165,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultShippingAddressTelephone"/>
     </actionGroup>
 
-    <actionGroup name="VerifyCustomerNameOnFrontend">
+    <actionGroup name="VerifyCustomerNameOnFrontend" deprecated="Use `VerifyCustomerNameOnFrontendActionGroup` instead">
         <annotations>
             <description>Goes to the Storefront Customer Dashboard page. Validates that the Customer First/Last Name is present and correct.</description>
         </annotations>
@@ -182,7 +173,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
             <argument name="customer"/>
         </arguments>
 
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `VerifyCustomerNameOnFrontendActionGroup` instead -->
         <amOnPage url="customer/account/edit/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPageLoad"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('Account Information')}}" stepKey="clickAccountInformationFromSidebarCurrentTab"/>
