@@ -6,6 +6,9 @@
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
+/**
+ * Basic implementation for attribute sets
+ */
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -52,7 +55,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Perform actions after object save
+     * Perform actions after object save.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this

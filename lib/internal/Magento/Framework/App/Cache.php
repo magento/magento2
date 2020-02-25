@@ -5,8 +5,7 @@
  */
 
 /**
- * System cache model
- * support id and tags prefix support,
+ * System cache model support id and tags prefix support.
  */
 namespace Magento\Framework\App;
 

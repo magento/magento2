@@ -374,8 +374,7 @@ class Config
         }
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
 
-        if (
-            $this->isCacheEnabled() &&
+        if ($this->isCacheEnabled() &&
             ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))
         ) {
             $this->_entityTypeData = $this->serializer->unserialize($cache);

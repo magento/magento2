@@ -161,7 +161,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue(md5($remoteData)));
+            ->will($this->returnValue(\hash('sha256', $remoteData)));
 
         $this->remoteCacheMockExample
             ->expects($this->at(1))
@@ -250,7 +250,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->willReturn(md5($remoteData));
+            ->willReturn(\hash('sha256', $remoteData));
 
         $this->remoteCacheMockExample
             ->expects($this->at(1))

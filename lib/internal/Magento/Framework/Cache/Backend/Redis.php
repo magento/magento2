@@ -28,7 +28,7 @@ class Redis extends \Cm_Cache_Backend_Redis
     /**
      * @param array $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->preloadKeys = $options['preload_keys'] ?? [];
         parent::__construct($options);
@@ -62,8 +62,7 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * The idea is that base implementation doesn't handle errors on save operations.
-     * Which may occurs when Redis cannot evict keys, which is expected in some cases.
+     * Cover errors on save operations, which may occurs when Redis cannot evict keys, which is expected in some cases.
      *
      * @param string $data
      * @param string $id
@@ -71,7 +70,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      * @param bool $specificLifetime
      * @return bool
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         try {
             parent::save($data, $id, $tags, $specificLifetime);

@@ -43,7 +43,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private const HASH_SUFFIX = ':hash';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $_options = [
         'remote_backend' => '',
@@ -104,7 +104,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDirectives($directives)
     {
@@ -114,21 +114,21 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     /**
      * Return hash sign of the data.
      *
-     * @param $data
+     * @param string $data
      * @return string
      */
-    private function getDataVersion($data)
+    private function getDataVersion(string $data)
     {
-        return \md5($data);
+        return \hash('sha256', $data);
     }
 
     /**
      * Load data version by id from remote.
      *
-     * @param $id
+     * @param string $id
      * @return false|string
      */
-    private function loadRemoteDataVersion($id)
+    private function loadRemoteDataVersion(string $id)
     {
         return $this->remote->load(
             $id . self::HASH_SUFFIX
@@ -138,13 +138,13 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     /**
      * Save new data version to remote.
      *
-     * @param $data
-     * @param $id
-     * @param $tags
-     * @param $specificLifetime
+     * @param string $data
+     * @param string $id
+     * @param array $tags
+     * @param mixed $specificLifetime
      * @return bool
      */
-    private function saveRemoteDataVersion($data, $id, $tags, $specificLifetime)
+    private function saveRemoteDataVersion(string $data, string $id, array $tags, $specificLifetime = false)
     {
         return $this->remote->save($this->getDataVersion($data), $id . self::HASH_SUFFIX, $tags, $specificLifetime);
     }
@@ -161,7 +161,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
@@ -190,7 +190,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function test($id)
     {
@@ -198,7 +198,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -216,7 +216,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($id)
     {
@@ -226,7 +226,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -234,7 +234,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIds()
     {
@@ -242,7 +242,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTags()
     {
@@ -250,7 +250,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -258,7 +258,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -266,7 +266,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -274,7 +274,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFillingPercentage()
     {
@@ -282,7 +282,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMetadatas($id)
     {
@@ -290,7 +290,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function touch($id, $extraLifetime)
     {
@@ -298,7 +298,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCapabilities()
     {
