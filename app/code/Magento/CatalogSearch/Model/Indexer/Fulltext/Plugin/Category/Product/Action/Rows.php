@@ -43,7 +43,7 @@ class Rows
     /**
      * @param IndexerRegistry $indexerRegistry
      * @param StoreManagerInterface $storeManager
-     * @param ResourceConnection $connection
+     * @param ResourceConnection $resource
      * @param TableMaintainer $tableMaintainer
      */
     public function __construct(
