@@ -86,7 +86,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         /** @var Image $image */
         $image = $this->objectManager->create(\Magento\Customer\Model\Metadata\Form\Image::class, $params);
-        $processCustomerAddressValueMethod = new \ReflectionMethod(\Magento\Customer\Model\Metadata\Form\Image::class, 'processCustomerAddressValue');
+        $processCustomerAddressValueMethod = new \ReflectionMethod(
+            \Magento\Customer\Model\Metadata\Form\Image::class,
+            'processCustomerAddressValue'
+        );
         $processCustomerAddressValueMethod->setAccessible(true);
         $actual = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertEquals($this->expectedFileName, $actual);
@@ -95,8 +98,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
- * @magentoAppIsolation enabled
- */
+     * @magentoAppIsolation enabled
+     */
     public function testProcessCustomerValue()
     {
         $this->mediaDirectory->delete('customer');
@@ -123,7 +126,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         /** @var Image $image */
         $image = $this->objectManager->create(\Magento\Customer\Model\Metadata\Form\Image::class, $params);
-        $processCustomerAddressValueMethod = new \ReflectionMethod(\Magento\Customer\Model\Metadata\Form\Image::class, 'processCustomerValue');
+        $processCustomerAddressValueMethod = new \ReflectionMethod(
+            \Magento\Customer\Model\Metadata\Form\Image::class,
+            'processCustomerValue'
+        );
         $processCustomerAddressValueMethod->setAccessible(true);
         $result = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertInstanceOf('Magento\Framework\Api\ImageContent', $result);
@@ -160,7 +166,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         /** @var Image $image */
         $image = $this->objectManager->create(\Magento\Customer\Model\Metadata\Form\Image::class, $params);
-        $processCustomerAddressValueMethod = new \ReflectionMethod(\Magento\Customer\Model\Metadata\Form\Image::class, 'processCustomerValue');
+        $processCustomerAddressValueMethod = new \ReflectionMethod(
+            \Magento\Customer\Model\Metadata\Form\Image::class,
+            'processCustomerValue'
+        );
         $processCustomerAddressValueMethod->setAccessible(true);
         $result = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertInstanceOf('array', $result);
