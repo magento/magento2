@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomerFromGridActionGroup">
+        <annotations>
+            <description>Select Customer in grid and Delete.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerEmail" type="string" defaultValue="{{Simple_US_Customer.email}}"/>
+        </arguments>
+
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="chooseCustomer"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="openActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitConfirmationPopupLoaded"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickAcceptButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitCustomerDeleteMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
