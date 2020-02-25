@@ -1,5 +1,4 @@
 ARG PHP_VERSION="7.2.1"
-ENV INSTALL_DIR /var/www/html
 FROM php:${PHP_VERSION:+${PHP_VERSION}-}fpm-alpine
 LABEL maintainer="Cristian Pini"
 ENV TZ=Europe/London
@@ -15,10 +14,9 @@ RUN docker-php-ext-configure gd --with-png-dir=/usr/include/ \
  && docker-php-ext-configure zip --with-libzip \
  && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
  && docker-php-ext-enable xdebug;
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-COPY ./memory-limit-php.ini /usr/local/etc/php/conf.d/memory-limit-php.ini
-COPY ./max-input-vars-php.ini /usr/local/etc/php/conf.d/max-input-vars-php.ini
-COPY --chown=www-data ../../ $INSTALL_DIR
-#RUN chown -hR www-data:www-data $INSTALL_DIR 
+COPY docker/php/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+COPY docker/php/memory-limit-php.ini /usr/local/etc/php/conf.d/memory-limit-php.ini
+COPY docker/php/max-input-vars-php.ini /usr/local/etc/php/conf.d/max-input-vars-php.ini
+COPY --chown=www-data . /var/www/html 
 USER www-data
 
