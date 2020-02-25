@@ -3,50 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Model\Layout;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 
 /**
- * Class DepersonalizePlugin
+ * Depersonalize customer data.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class DepersonalizePlugin
 {
     /**
      * @var DepersonalizeChecker
      */
-    protected $depersonalizeChecker;
+    private $depersonalizeChecker;
 
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var CheckoutSession
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     /**
      * @param DepersonalizeChecker $depersonalizeChecker
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param CheckoutSession $checkoutSession
      * @codeCoverageIgnore
      */
     public function __construct(
         DepersonalizeChecker $depersonalizeChecker,
-        \Magento\Checkout\Model\Session $checkoutSession
+        CheckoutSession $checkoutSession
     ) {
-        $this->checkoutSession = $checkoutSession;
         $this->depersonalizeChecker = $depersonalizeChecker;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
-     * After generate Xml
+     * Change sensitive customer data if the depersonalization is needed.
      *
-     * @param \Magento\Framework\View\LayoutInterface $subject
-     * @param \Magento\Framework\View\LayoutInterface $result
-     * @return \Magento\Framework\View\LayoutInterface
+     * @param LayoutInterface $subject
+     * @return void
      */
-    public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
+    public function afterGenerateElements(LayoutInterface $subject)
     {
         if ($this->depersonalizeChecker->checkIfDepersonalize($subject)) {
             $this->checkoutSession->clearStorage();
         }
-        return $result;
     }
 }
