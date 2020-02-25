@@ -638,16 +638,16 @@ QUERY;
         $categoryList = $response['categoryList'];
         $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl('media');
         $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . ltrim($categoryModel->getImage(), '/');
-        $expectedImageUrl = str_replace('index.php', '', $expectedImageUrl);
+        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
 
         $this->assertEquals($categoryId, $categoryList[0]['id']);
         $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
-        $categoryList[0]['image'] = str_replace('index.php', '', $categoryList[0]['image']);
+        $categoryList[0]['image'] = str_replace('index.php/', '', $categoryList[0]['image']);
         $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
 
         $childCategory = $categoryList[0]['children'][0];
         $this->assertEquals('Child Image Category', $childCategory['name']);
-        $childCategory['image'] = str_replace('index.php', '', $childCategory['image']);
+        $childCategory['image'] = str_replace('index.php/', '', $childCategory['image']);
         $this->assertEquals($expectedImageUrl, $childCategory['image']);
     }
 
