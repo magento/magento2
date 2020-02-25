@@ -3,33 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\StoreWebsiteRelationInterface;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Website;
-use Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver;
-use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver;
+use Magento\Store\Api\StoreWebsiteRelationInterface;
 
 /**
- * Class ProductProcessUrlRewriteSavingObserverTest
+ * Class ProductToWebsiteChangeObserverTest
  *
- * Tests the ProductProcessUrlRewriteSavingObserver to ensure the
+ * Tests the ProductToWebsiteChangeObserver to ensure the
  * replace method (refresh existing URLs) and deleteByData (remove
  * old URLs) are called the correct number of times.
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
+class ProductToWebsiteChangeObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -52,6 +52,11 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     protected $product;
 
     /**
+     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productRepository;
+
+    /**
      * @var ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productUrlRewriteGenerator;
@@ -62,7 +67,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     protected $objectManager;
 
     /**
-     * @var ProductProcessUrlRewriteSavingObserver
+     * @var ProductToWebsiteChangeObserver
      */
     protected $model;
 
@@ -94,31 +99,11 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     protected function setUp()
     {
         $this->urlPersist = $this->createMock(UrlPersistInterface::class);
-        $this->product = $this->createPartialMock(
-            Product::class,
-            [
-                'getId',
-                'dataHasChangedFor',
-                'getVisibility',
-                'getIsChangedWebsites',
-                'getIsChangedCategories',
-                'getStoreId',
-                'getWebsiteIds'
-            ]
-        );
-        $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
-        $this->event = $this->createPartialMock(Event::class, ['getProduct']);
-        $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
-        $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
         $this->productUrlRewriteGenerator = $this->createPartialMock(
             ProductUrlRewriteGenerator::class,
             ['generate']
         );
-        $this->productUrlRewriteGenerator->expects($this->any())
-            ->method('generate')
-            ->will($this->returnValue([3 => 'rewrite']));
-        $this->objectManager = new ObjectManager($this);
+
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->website1 = $this->createPartialMock(Website::class, ['getWebsiteId']);
         $this->website1->expects($this->any())->method('getWebsiteId')->willReturn(1);
@@ -136,12 +121,28 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
             ->method('getStoreByWebsiteId')
             ->will($this->returnValueMap([[1, [1]], [2, [2, 5]]]));
 
+        $this->product = $this->createPartialMock(
+            Product::class,
+            ['getId', 'getVisibility', 'getStoreId', 'getWebsiteIds']
+        );
+        $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
+        $this->productRepository =  $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productRepository->expects($this->any())->method('getById')->willReturn($this->product);
+        $this->event = $this->createPartialMock(
+            Event::class,
+            ['getProducts', 'getActionType', 'getWebsiteIds']
+        );
+        $this->event->expects($this->any())->method('getProducts')->willReturn([$this->product]);
+        $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
+
+        $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            ProductProcessUrlRewriteSavingObserver::class,
+            ProductToWebsiteChangeObserver::class,
             [
                 'productUrlRewriteGenerator' => $this->productUrlRewriteGenerator,
                 'urlPersist' => $this->urlPersist,
-                'storeManager' => $this->storeManager,
+                'productRepository' => $this->productRepository,
                 'storeWebsiteRelation' => $this->storeWebsiteRelation
             ]
         );
@@ -155,91 +156,91 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     public function urlKeyDataProvider()
     {
         return [
-            'url changed' => [
-                'isChangedUrlKey'       => true,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
+            'in_all_no_changes' => [
+                'visibilityResult'      => Visibility::VISIBILITY_BOTH,
+                'expectedReplaceCount'  => 1,
+                'expectedDeleteCount'   => 0,
+                'productInWebsites'     => [1, 2],
+                'actionType'            => null,
+                'websitesChanged'       => [],
+                'rewrites'              => [1 => 'url', 2 => 'url', 5 => 'url']
+            ],
+            'add_to_website_from_empty' => [
+                'visibilityResult'      => Visibility::VISIBILITY_BOTH,
+                'expectedReplaceCount'  => 1,
+                'expectedDeleteCount'   => 0,
+                'productInWebsites'     => [1, 2],
+                'actionType'            => 'add',
+                'websitesChanged'       => [1, 2],
+                'rewrites'              => [1 => 'url', 2 => 'url', 5 => 'url']
+            ],
+            'add_to_website_existing'   => [
+                'visibilityResult'      => Visibility::VISIBILITY_BOTH,
+                'expectedReplaceCount'  => 1,
+                'expectedDeleteCount'   => 0,
+                'productInWebsites'     => [1, 2],
+                'actionType'            => 'add',
+                'websitesChanged'       => [2],
+                'rewrites'              => [1 => 'url', 2 => 'url', 5 => 'url']
+            ],
+            'remove_single' => [
                 'visibilityResult'      => Visibility::VISIBILITY_BOTH,
                 'expectedReplaceCount'  => 1,
                 'expectedDeleteCount'   => 2,
-                'productInWebsites'     => [1]
-
+                'productInWebsites'     => [1],
+                'actionType'            => 'remove',
+                'websitesChanged'       => [2],
+                'rewrites'              => [1 => 'url']
             ],
-            'no changes' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
+            'remove_all' => [
                 'visibilityResult'      => Visibility::VISIBILITY_BOTH,
                 'expectedReplaceCount'  => 0,
-                'expectedDeleteCount'   => 0,
-                'productInWebsites'     => [1, 2]
+                'expectedDeleteCount'   => 3,
+                'productInWebsites'     => [],
+                'actionType'            => 'remove',
+                'websitesChanged'       => [1, 2],
+                'rewrites'              => []
             ],
-            'visibility changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => true,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => Visibility::VISIBILITY_BOTH,
-                'expectedReplaceCount'  => 1,
-                'expectedDeleteCount'   => 0,
-                'productInWebsites'     => [1, 2]
-            ],
-            'websites changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => true,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => Visibility::VISIBILITY_BOTH,
-                'expectedReplaceCount'  => 1,
-                'expectedDeleteCount'   => 0,
-                'productInWebsites'     => [1, 2]
-            ],
-            'categories changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => true,
-                'visibilityResult'      => Visibility::VISIBILITY_BOTH,
-                'expectedReplaceCount'  => 1,
-                'expectedDeleteCount'   => 0,
-                'productInWebsites'     => [1, 2]
-            ],
-            'url changed invisible' => [
-                'isChangedUrlKey'       => true,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
+            'not_visible_add' => [
                 'visibilityResult'      => Visibility::VISIBILITY_NOT_VISIBLE,
                 'expectedReplaceCount'  => 0,
                 'expectedDeleteCount'   => 0,
-                'productInWebsites'     => [1, 2]
+                'productInWebsites'     => [1, 2],
+                'actionType'            => 'add',
+                'websitesChanged'       => [1, 2],
+                'rewrites'              => []
+            ],
+            'not_visible_remove' => [
+                'visibilityResult'      => Visibility::VISIBILITY_NOT_VISIBLE,
+                'expectedReplaceCount'  => 0,
+                'expectedDeleteCount'   => 3,
+                'productInWebsites'     => [],
+                'actionType'            => 'remove',
+                'websitesChanged'       => [1, 2],
+                'rewrites'              => []
             ],
         ];
     }
 
     /**
-     * @param bool $isChangedUrlKey
-     * @param bool $isChangedVisibility
-     * @param bool $isChangedWebsites
-     * @param bool $isChangedCategories
      * @param bool $visibilityResult
      * @param int $expectedReplaceCount
      * @param int $expectedDeleteCount
      * @param int $productInWebsites
+     * @param string $actionType
+     * @param array $websitesChanged
+     * @param array $rewrites
      *
      * @dataProvider urlKeyDataProvider
      */
     public function testExecuteUrlKey(
-        $isChangedUrlKey,
-        $isChangedVisibility,
-        $isChangedWebsites,
-        $isChangedCategories,
         $visibilityResult,
         $expectedReplaceCount,
         $expectedDeleteCount,
-        $productInWebsites
+        $productInWebsites,
+        $actionType,
+        $websitesChanged,
+        $rewrites
     ) {
         $this->product->expects($this->any())->method('getStoreId')->will(
             $this->returnValue(Store::DEFAULT_STORE_ID)
@@ -247,23 +248,12 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         $this->product->expects($this->any())->method('getWebsiteIds')->will(
             $this->returnValue($productInWebsites)
         );
+        $this->event->expects($this->any())->method('getActionType')->willReturn($actionType);
+        $this->event->expects($this->any())->method('getWebsiteIds')->willReturn($websitesChanged);
 
-        $this->product->expects($this->any())
-            ->method('dataHasChangedFor')
-            ->will($this->returnValueMap(
-                [
-                    ['visibility', $isChangedVisibility],
-                    ['url_key', $isChangedUrlKey]
-                ]
-            ));
-
-        $this->product->expects($this->any())
-            ->method('getIsChangedWebsites')
-            ->will($this->returnValue($isChangedWebsites));
-
-        $this->product->expects($this->any())
-            ->method('getIsChangedCategories')
-            ->will($this->returnValue($isChangedCategories));
+        $this->productUrlRewriteGenerator->expects($this->any())
+            ->method('generate')
+            ->will($this->returnValue($rewrites));
 
         $this->product->expects($this->any())
             ->method('getVisibility')
@@ -271,7 +261,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $this->urlPersist->expects($this->exactly($expectedReplaceCount))
             ->method('replace')
-            ->with([3 => 'rewrite']);
+            ->with($rewrites);
 
         $this->urlPersist->expects($this->exactly($expectedDeleteCount))
             ->method('deleteByData');

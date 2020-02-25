@@ -11,9 +11,17 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Store\Api\StoreWebsiteRelationInterface;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserver
+ *
+ * Observer to update the Rewrite URLs for a product.
+ * This observer is triggered on the save function when making changes
+ * to the products website on the Product Edit page.
  */
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
@@ -33,19 +41,37 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $productUrlPathGenerator;
 
     /**
+     * @var StoreManagerInterface $storeManager
+     */
+    private $storeManager;
+
+    /**
+     * @var StoreWebsiteRelationInterface
+     */
+    private $storeWebsiteRelation;
+
+    /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlPathGenerator|null $productUrlPathGenerator
+     * @param StoreManagerInterface|null $storeManager
+     * @param StoreWebsiteRelationInterface|null $storeWebsiteRelation
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator = null
+        ProductUrlPathGenerator $productUrlPathGenerator = null,
+        StoreManagerInterface $storeManager = null,
+        StoreWebsiteRelationInterface $storeWebsiteRelation = null
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productUrlPathGenerator = $productUrlPathGenerator ?: ObjectManager::getInstance()
             ->get(ProductUrlPathGenerator::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
+        $this->storeWebsiteRelation = $storeWebsiteRelation ?: ObjectManager::getInstance()
+            ->get(StoreWebsiteRelationInterface::class);
     }
 
     /**
@@ -65,10 +91,24 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             || $product->getIsChangedWebsites()
             || $product->dataHasChangedFor('visibility')
         ) {
-            if ($product->isVisibleInSiteVisibility()) {
+            if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
                 $product->unsUrlPath();
                 $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+
+                //Remove any rewrite URLs for websites the product is not in
+                foreach ($this->storeManager->getWebsites() as $website) {
+                    $websiteId = $website->getWebsiteId();
+                    if (!in_array($websiteId, $product->getWebsiteIds())) {
+                        foreach ($this->storeWebsiteRelation->getStoreByWebsiteId($websiteId) as $storeId) {
+                            $this->urlPersist->deleteByData([
+                                UrlRewrite::ENTITY_ID => $product->getId(),
+                                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                                UrlRewrite::STORE_ID => $storeId
+                            ]);
+                        }
+                    }
+                }
             }
         }
     }

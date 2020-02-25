@@ -17,7 +17,11 @@ use Magento\Store\Api\StoreWebsiteRelationInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Observer to assign the products to website
+ * Class ProductToWebsiteChangeObserver
+ *
+ * Observer to update the Rewrite URLs for a product.
+ * This observer is triggered by the product_action_attribute.website.update
+ * consumer in response to Mass Action changes in the Admin Product Grid.
  */
 class ProductToWebsiteChangeObserver implements ObserverInterface
 {
@@ -37,11 +41,6 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
     protected $productRepository;
 
     /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * @var StoreWebsiteRelationInterface
      */
     private $storeWebsiteRelation;
@@ -52,6 +51,8 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
      * @param ProductRepositoryInterface $productRepository
      * @param RequestInterface $request
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
+     *
+     *  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
@@ -63,7 +64,6 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productRepository = $productRepository;
-        $this->request = $request;
         $this->storeWebsiteRelation = $storeWebsiteRelation ?:
             ObjectManager::getInstance()->get(StoreWebsiteRelationInterface::class);
     }
@@ -77,24 +77,29 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         foreach ($observer->getEvent()->getProducts() as $productId) {
+            /* @var \Magento\Catalog\Model\Product $product */
             $product = $this->productRepository->getById(
                 $productId,
                 false,
-                $this->request->getParam('store_id', Store::DEFAULT_STORE_ID)
+                Store::DEFAULT_STORE_ID,
+                true
             );
 
-            if (!empty($this->productUrlRewriteGenerator->generate($product))) {
-                if ($this->request->getParam('remove_website_ids')) {
-                    foreach ($this->request->getParam('remove_website_ids') as $webId) {
-                        foreach ($this->storeWebsiteRelation->getStoreByWebsiteId($webId) as $storeId) {
-                            $this->urlPersist->deleteByData([
-                                UrlRewrite::ENTITY_ID => $product->getId(),
-                                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-                                UrlRewrite::STORE_ID => $storeId
-                            ]);
-                        }
+            // Remove the URLs from websites this product no longer belongs to
+            if ($observer->getEvent()->getActionType() == "remove" && $observer->getEvent()->getWebsiteIds()) {
+                foreach ($observer->getEvent()->getWebsiteIds() as $webId) {
+                    foreach ($this->storeWebsiteRelation->getStoreByWebsiteId($webId) as $storeId) {
+                        $this->urlPersist->deleteByData([
+                            UrlRewrite::ENTITY_ID => $product->getId(),
+                            UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                            UrlRewrite::STORE_ID => $storeId
+                        ]);
                     }
                 }
+            }
+
+            // Refresh all existing URLs for the product
+            if (!empty($this->productUrlRewriteGenerator->generate($product))) {
                 if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
                     $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
                 }
