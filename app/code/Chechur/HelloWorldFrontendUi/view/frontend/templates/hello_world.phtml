@@ -1,0 +1,17 @@
+<?php ?>
+<div class="hello-world-container" data-bind="scope: 'hello-world'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+   {
+       "*": {
+           "Magento_Ui/js/core/app": {
+               "components": {
+                   "hello-world": {
+                       "component": "Chechur_HelloWorldFrontendUi/js/hello-world"
+                   }
+               }
+           }
+       }
+   }
+</script>
