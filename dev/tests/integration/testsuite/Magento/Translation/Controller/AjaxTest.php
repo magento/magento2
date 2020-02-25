@@ -46,20 +46,29 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
                 [
                     [
                         'original' => 'phrase1',
-                        'custom' => 'translation1'
-                    ]
+                        'custom' => 'translation1',
+                    ],
                 ],
-                '{"phrase1":"translation1"}'
+                '{"phrase1":"translation1"}',
             ],
             [
                 [
                     [
                         'original' => 'phrase2',
-                        'custom' => 'translation2'
-                    ]
+                        'custom' => 'translation2',
+                    ],
                 ],
-                '{"phrase1":"translation1","phrase2":"translation2"}'
-            ]
+                '{"phrase1":"translation1","phrase2":"translation2"}',
+            ],
+            [
+                [
+                    [
+                        'original' => 'phrase3',
+                        'custom' => 'translation with &',
+                    ],
+                ],
+                '{"phrase1":"translation1","phrase2":"translation2","phrase3":"translation with &"}',
+            ],
         ];
     }
 }

@@ -87,7 +87,9 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
                 ->where('locale = :locale')
                 ->order('store_id');
             $bind = [':locale' => $locale, ':store_id' => $storeId];
-            $dbData = $connection->fetchPairs($select, $bind);
+            $dbData = array_map(function ($value) {
+                return htmlspecialchars_decode($value);
+            }, $connection->fetchPairs($select, $bind));
             $data = array_replace($data, $dbData);
         }
         return $data;
