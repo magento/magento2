@@ -416,7 +416,7 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertNotEmpty($response['categoryList']);
         $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
-        $categoryList[0]['name'] = str_replace('index.php/', '', $categoryList[0]['name']);
+        $categoryList[0]['image'] = str_replace('index.php/', '', $categoryList[0]['image']);
         $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
         $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
     }
