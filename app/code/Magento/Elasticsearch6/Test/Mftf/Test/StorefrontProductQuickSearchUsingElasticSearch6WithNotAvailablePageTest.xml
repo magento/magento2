@@ -25,8 +25,9 @@
         <remove keyForRemoval="selectDisplayedProductInGridPerPage"/>
         <remove keyForRemoval="assertFirstProductDisplayedOnCatalogSearchPage"/>
         <remove keyForRemoval="assertSecondProductDisplayedOnCatalogSearchPage"/>
-        <grabTextFrom selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="grabNumberOfLastPage"/>
-        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="navigateToUnavailableCatalogSearchResultPage" before="assertEmptyResultsPage">
+        <remove keyForRemoval="selectDisplayedProductInGridPerPage"/>
+        <remove keyForRemoval="assertStillOnSecondPage"/>
+        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="navigateToUnavailableCatalogSearchResultPage" before="waitForPageLoad">
             <argument name="phrase" value="AAA"/>
             <argument name="pageNumber" value="999"/>
         </actionGroup>
