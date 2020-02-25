@@ -7,6 +7,9 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Layout Container Class
+ */
 class Container implements Layout\GeneratorInterface
 {
     /**#@+
@@ -39,10 +42,11 @@ class Container implements Layout\GeneratorInterface
         'table',
         'tfoot',
         'ul',
+        'article',
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return string
      */
@@ -95,8 +99,12 @@ class Container implements Layout\GeneratorInterface
     }
 
     /**
+     * Validate container options
+     *
      * @param array $options
+     *
      * @return void
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateOptions($options)

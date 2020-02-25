@@ -66,23 +66,28 @@
         <waitForPageLoad stepKey="waitForUrlRewritePage"/>
 
         <!-- Verify third level category's Redirect Path, Target Path and Redirect Type after the URL update -->
-        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          visible="true"
+                          stepKey="clickOnResetButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="updateredirecturl" stepKey="fillUpdatedURLInRedirectPathFilter"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="updateredirecturl" stepKey="fillUpdatedURLInRedirectPathFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
-        <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No" stepKey="seeTheRedirectType"/>
-        <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="catalog/category/view/id/{$categoryId}" stepKey="seeTheTargetPath"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updateredirecturl.html" stepKey="seeTheRedirectPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="No" stepKey="seeTheRedirectType"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="catalog/category/view/id/{$categoryId}" stepKey="seeTheTargetPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updateredirecturl.html" stepKey="seeTheRedirectPath"/>
 
         <!-- Verify third level category's Redirect path, Target Path and Redirect type for old URL -->
-        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton1"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetButton1"/>
         <waitForPageLoad stepKey="waitForPageToLoad4"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$$createThreeLevelNestedCategories.name$$" stepKey="fillOldUrlInRedirectPathFilter"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton1"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$$createThreeLevelNestedCategories.name$$" stepKey="fillOldUrlInRedirectPathFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/$$createThreeLevelNestedCategories.name$$.html" stepKey="seeTheRedirectPathForOldUrl"/>
-        <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updateredirecturl.html" stepKey="seeTheTargetPathForOldUrl"/>
-        <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="Permanent (301)" stepKey="seeTheRedirectTypeForOldUrl"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/$$createThreeLevelNestedCategories.name$$.html" stepKey="seeTheRedirectPathForOldUrl"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updateredirecturl.html" stepKey="seeTheTargetPathForOldUrl"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="Permanent (301)" stepKey="seeTheRedirectTypeForOldUrl"/>
     </test>
 </tests>

@@ -14,6 +14,8 @@
             <stories value="System Integration"/>
             <title value="Admin system integration"/>
             <description value="Admin Deletes Created Integration"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28027"/>
             <group value="integration"/>
             <group value="mtf_migrated"/>
         </annotations>
