@@ -26,10 +26,9 @@
         <remove keyForRemoval="assertFirstProductDisplayedOnCatalogSearchPage"/>
         <remove keyForRemoval="assertSecondProductDisplayedOnCatalogSearchPage"/>
         <grabTextFrom selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="grabNumberOfLastPage"/>
-        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="navigateToUnavailableCatalogSearchResultPage">
+        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="navigateToUnavailableCatalogSearchResultPage" before="assertEmptyResultsPage">
             <argument name="phrase" value="AAA"/>
             <argument name="pageNumber" value="999"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="assertEmptyResultsPage"/>
     </test>
 </tests>

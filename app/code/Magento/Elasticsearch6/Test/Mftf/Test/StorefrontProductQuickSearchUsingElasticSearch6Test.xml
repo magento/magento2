@@ -59,8 +59,7 @@
         </actionGroup>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="2" stepKey="selectDisplayedProductInGridPerPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        
-        <seeInCurrentUrl stepKey="assertStillOnSecondPage" url="?p=2"/>
+
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="assertEmptyResultsPage"/>
     </test>
 </tests>
