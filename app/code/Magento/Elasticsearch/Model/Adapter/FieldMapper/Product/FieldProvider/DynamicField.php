@@ -8,18 +8,17 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
 use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Provide dynamic fields for product.
@@ -83,7 +82,7 @@ class DynamicField implements FieldProviderInterface
      * @param CategoryListInterface $categoryList
      * @param FieldNameResolver $fieldNameResolver
      * @param AttributeProvider $attributeAdapterProvider
-     * @param Collection|null $categoryCollection
+     * @param Collection $categoryCollection
      */
     public function __construct(
         FieldTypeConverterInterface $fieldTypeConverter,
@@ -93,7 +92,7 @@ class DynamicField implements FieldProviderInterface
         CategoryListInterface $categoryList,
         FieldNameResolver $fieldNameResolver,
         AttributeProvider $attributeAdapterProvider,
-        Collection $categoryCollection = null
+        Collection $categoryCollection
     ) {
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -102,8 +101,7 @@ class DynamicField implements FieldProviderInterface
         $this->categoryList = $categoryList;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
-        $this->categoryCollection = $categoryCollection ?:
-            ObjectManager::getInstance()->get(Collection::class);
+        $this->categoryCollection = $categoryCollection;
     }
 
     /**
