@@ -242,10 +242,6 @@ define([
                 return this.selectPage();
             }
 
-            if (this.indetermine() && selected === total) {
-                return this.selectPage();
-            }
-
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
@@ -449,7 +445,9 @@ define([
                 excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 totalRecords    = this.totalRecords(),
-                allSelected     = totalRecords && totalSelected === totalRecords;
+                allSelected     = totalRecords && totalSelected === totalRecords,
+                pageTotal       = this.getIds().length,
+                pageSelected    = this.getPageSelections().length;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
@@ -461,6 +459,12 @@ define([
 
             this.allSelected(allSelected);
             this.indetermine(totalSelected && !allSelected);
+
+            if (pageTotal !== pageSelected) {
+                this.allSelected(false);
+            } else if (pageTotal === pageSelected) {
+                this.allSelected(true);
+            }
 
             return this;
         },
@@ -497,6 +501,9 @@ define([
                 newSelections = _.union(this.getIds(true), this.selected());
 
                 this.selected(newSelections);
+            } else {
+                this.countSelected()
+                    .updateState();
             }
         },
 
