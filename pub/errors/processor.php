@@ -167,11 +167,13 @@ class Processor
         DriverInterface $driver = null
     ) {
         $this->_response = $response;
-        $this->_errorDir  = __DIR__ . '/';
-        $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->driver = $driver ?: ObjectManager::getInstance()->get(DriverInterface::class);
+        $this->_errorDir  = $this->driver->getRealPath(__DIR__) . '/';
+        $this->_reportDir = $this->driver->getParentDirectory(
+            $this->driver->getParentDirectory($this->_errorDir)
+        ) . '/var/report/';
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
@@ -181,7 +183,7 @@ class Processor
             }
         }
 
-        $this->_indexDir = $this->_getIndexDir();
+        $this->_indexDir = $this->driver->getRealPath($this->_getIndexDir());
         $this->_root  = is_dir($this->_indexDir . 'app');
 
         $this->_prepareConfig();
@@ -265,9 +267,9 @@ class Processor
         //The url needs to be updated base on Document root path.
         return $this->getBaseUrl() .
         str_replace(
-            str_replace('\\', '/', $this->driver->getRealPath($this->_indexDir)),
+            str_replace('\\', '/', $this->_indexDir),
             '',
-            str_replace('\\', '/', $this->driver->getRealPath($this->_errorDir))
+            str_replace('\\', '/', $this->_errorDir)
         ) . '/' . $this->_config->skin . '/';
     }
 
