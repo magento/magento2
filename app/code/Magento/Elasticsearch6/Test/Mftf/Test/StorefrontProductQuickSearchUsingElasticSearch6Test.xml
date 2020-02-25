@@ -30,6 +30,8 @@
                 <field key="name">Product Simple AAA</field>
             </createData>
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+            <magentoCLI stepKey="flushConfigCache" command="cache:flush config"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
 
         <after>
@@ -57,11 +59,8 @@
         </actionGroup>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="2" stepKey="selectDisplayedProductInGridPerPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
-            <argument name="product" value="$createFirstProduct$"/>
-        </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
-            <argument name="product" value="$createSecondProduct$"/>
-        </actionGroup>
+        
+        <seeInCurrentUrl stepKey="assertStillOnSecondPage" url="?p=2"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="assertEmptyResultsPage"/>
     </test>
 </tests>
