@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f06887dfc3e06489a251fbb5c18d30ca",
+    "content-hash": "d13e79b9e96092fc47dfd2b0ab21fb3b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -7381,16 +7381,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.6.2",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "8b332582751a830b3a6eafe1b09ac3b403e9a20e"
+                "reference": "76693d9cb7c5f6c01ef231f184372eb784f3e555"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/8b332582751a830b3a6eafe1b09ac3b403e9a20e",
-                "reference": "8b332582751a830b3a6eafe1b09ac3b403e9a20e",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/76693d9cb7c5f6c01ef231f184372eb784f3e555",
+                "reference": "76693d9cb7c5f6c01ef231f184372eb784f3e555",
                 "shasum": ""
             },
             "require": {
@@ -7462,7 +7462,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-02-13T21:29:32+00:00"
+            "time": "2020-02-20T21:09:13+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -10525,6 +10525,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
+        "magento/magento2-functional-testing-framework": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
