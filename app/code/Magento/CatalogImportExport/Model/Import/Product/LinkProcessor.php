@@ -140,6 +140,7 @@ class LinkProcessor
         $productIds = [];
         $linkRows = [];
         $positionRows = [];
+        $linksToDelete = [];
 
         $bunch = array_filter($bunch, [$importEntity, 'isRowAllowedToImport'], ARRAY_FILTER_USE_BOTH);
         foreach ($bunch as $rowData) {
@@ -156,6 +157,12 @@ class LinkProcessor
             );
             foreach ($linkNameToId as $linkName => $linkId) {
                 $linkSkus = explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+
+                //process empty value
+                if (!empty($linkSkus[0]) && $linkSkus[0] === $importEntity->getEmptyAttributeValueConstant()) {
+                    $linksToDelete[$linkId][] = $productId;
+                    continue;
+                }
                 $linkPositions = ! empty($rowData[$linkName . 'position'])
                     ? explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
@@ -203,7 +210,41 @@ class LinkProcessor
                 }
             }
         }
+
+        $this->deleteProductsLinks($importEntity, $resource, $linksToDelete);
         $this->saveLinksData($importEntity, $resource, $productIds, $linkRows, $positionRows);
+    }
+
+    /**
+     * Delete links
+     *
+     * @param Product $importEntity
+     * @param Link $resource
+     * @param array $linksToDelete
+     * @return void
+     * @throws LocalizedException
+     */
+    private function deleteProductsLinks(
+        Product $importEntity,
+        Link $resource,
+        array $linksToDelete
+    )
+    {
+        if (!empty($linksToDelete) && Import::BEHAVIOR_APPEND === $importEntity->getBehavior()) {
+            foreach ($linksToDelete as $linkTypeId => $productIds) {
+                if (!empty($productIds)) {
+                    $whereLinkId = $importEntity->getConnection()->quoteInto('link_type_id', $linkTypeId);
+                    $whereProductId =  $importEntity->getConnection()->quoteInto(
+                        'product_id IN (?)',
+                        array_unique($productIds)
+                    );
+                    $importEntity->getConnection()->delete(
+                        $resource->getMainTable(),
+                        $whereLinkId . ' AND ' . $whereProductId
+                    );
+                }
+            }
+        }
     }
 
     /**
