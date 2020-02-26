@@ -67,10 +67,14 @@ class ResetPasswordTest extends TestCase
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                sprintf('//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]', 1, $customerSecure->getRpToken()),
+                sprintf(
+                    '//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]',
+                    1,
+                    $customerSecure->getRpToken()
+                ),
                 $mailTemplate
             ),
-            'Password creation link was not found.'
+            'Reset password creation link was not found.'
         );
     }
 
