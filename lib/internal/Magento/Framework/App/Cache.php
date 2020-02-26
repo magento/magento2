@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\App;
+
 /**
  * System cache model support id and tags prefix support.
  */
-namespace Magento\Framework\App;
-
 class Cache implements CacheInterface
 {
     /**
