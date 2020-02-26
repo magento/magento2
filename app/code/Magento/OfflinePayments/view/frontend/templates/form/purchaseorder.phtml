@@ -13,9 +13,9 @@ $methodCode = $block->escapeHtml($block->getMethodCode());
     <div class="field number required">
         <label for="po_number" class="label"><span><?= $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
         <div class="control">
-            <input type="text" id="po_number" name="payment[po_number]" title="<?= $block->escapeHtml(__('Purchase Order Number')) ?>"
+            <input type="text" id="po_number" name="payment[po_number]" title="<?= $block->escapeHtmlAttr(__('Purchase Order Number')) ?>"
                    class="input-text required-entry"
-                   value="<?= $block->escapeHtml($block->getInfoData('po_number')) ?>" />
+                   value="<?= $block->escapeHtmlAttr($block->getInfoData('po_number')) ?>" />
         </div>
     </div>
 </fieldset>

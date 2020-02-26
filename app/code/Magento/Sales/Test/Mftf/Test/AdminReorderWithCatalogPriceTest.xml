@@ -7,11 +7,11 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminReorderWithCatalogPriceTest">
+    <test name="AdminReorderWithCatalogPriceTest" deprecated="This test is unstable. Please use AdminReorderWithCatalogPriceRuleDiscountTest instead.">
         <annotations>
             <features value="Sales"/>
             <stories value="Admin create order"/>
-            <title value="Reorder doesn't show discount price in Order Totals block"/>
+            <title value="DEPRECATED. Reorder doesn't show discount price in Order Totals block"/>
             <description value="Reorder doesn't show discount price in Order Totals block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-16695"/>
@@ -19,7 +19,7 @@
             <group value="sales"/>
             <group value="catalogRule"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use AdminReorderWithCatalogPriceRuleDiscountTest instead.</issueId>
             </skip>
         </annotations>
         <before>

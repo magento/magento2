@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,7 +16,7 @@ class ListAction extends \Magento\Backend\App\AbstractAction
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @deprecated
+     * @deprecated 100.3.0
      */
     protected $jsonHelper;
 
@@ -44,6 +43,8 @@ class ListAction extends \Magento\Backend\App\AbstractAction
     }
 
     /**
+     * System message list action
+     *
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()

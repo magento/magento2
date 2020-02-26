@@ -21,6 +21,7 @@
             <arguments>
                 <argument name="css_class" xsi:type="string">product</argument>
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
+                <argument name="translate" xsi:type="boolean">false</argument>
             </arguments>
         </referenceBlock>
         <referenceBlock name="root">

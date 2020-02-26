@@ -839,8 +839,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $src_w
      * @param int $src_h
      * @param int $pct
-     *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function imagecopymergeWithAlphaFix(
         $dst_im,
@@ -876,12 +877,24 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             return false;
         }
 
+        if (false === imagesavealpha($tmpImg, true)) {
+            return false;
+        }
+
         if (false === imagecopy($tmpImg, $src_im, 0, 0, 0, 0, $sizeX, $sizeY)) {
             return false;
         }
 
-        $transparancy = 127 - (($pct*127)/100);
-        if (false === imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparancy)) {
+        $transparency = 127 - (($pct*127)/100);
+        if (false === imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparency)) {
+            return false;
+        }
+
+        if (false === imagealphablending($dst_im, true)) {
+            return false;
+        }
+
+        if (false === imagesavealpha($dst_im, true)) {
             return false;
         }
 

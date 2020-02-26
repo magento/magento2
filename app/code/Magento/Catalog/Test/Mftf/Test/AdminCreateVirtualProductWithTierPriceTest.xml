@@ -92,14 +92,14 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductBigQty.urlKey}}" stepKey="seeUrlKey"/>
 
+        <!--Run full reindex and clear caches -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!--Verify customer see created virtual product on category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{virtualProductBigQty.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
-
-        <!--Run full reindex and clear caches -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Verify customer see created virtual product with tier price(from above step) on storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>

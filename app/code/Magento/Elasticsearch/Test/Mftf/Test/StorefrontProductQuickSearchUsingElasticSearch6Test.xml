@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductQuickSearchUsingElasticSearch6Test">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Storefront Search"/>
+            <title value="Product quick search doesn't throw exception after ES is chosen as search engine with different amount per page"/>
+            <description value="Verify no elastic search exception is thrown when searching for products, when displayed products per page are greater or equal the size of available products."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-23086"/>
+            <useCaseId value="MC-22852"/>
+            <group value="catalog"/>
+            <group value="elasticsearch"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="catalog_search"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createFirstProduct">
+                <field key="name">AAA Product Simple AAA</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSecondProduct">
+                <field key="name">Product Simple AAA</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchSimpleProduct">
+            <argument name="phrase" value="AAA"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductOnCatalogSearchPage">
+            <argument name="product" value="$createFirstProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertSecondProductIsMissingOnCatalogSearchPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
+        </actionGroup>
+        <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickNextPageCatalogSearchPager"/>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductOnCatalogSearchPage">
+            <argument name="product" value="$createSecondProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertFirstProductIsMissingOnCatalogSearchPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
+        </actionGroup>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="2" stepKey="selectDisplayedProductInGridPerPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
+            <argument name="product" value="$createFirstProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
+            <argument name="product" value="$createSecondProduct$"/>
+        </actionGroup>
+    </test>
+    <test name="StorefrontProductQuickSearchUsingElasticSearch6WithNotAvailablePageTest" extends="StorefrontProductQuickSearchUsingElasticSearch6Test">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Storefront Search"/>
+            <title value="Product quick search doesn't throw exception after ES is chosen as search engine with selected page out of range"/>
+            <description value="Verify no elastic search exception is thrown when try to get page with selected page out of range."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-29123"/>
+            <useCaseId value="MC-22852"/>
+            <group value="catalog"/>
+            <group value="elasticsearch"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="catalog_search"/>
+        </annotations>
+        <remove keyForRemoval="selectDisplayedProductInGridPerPage"/>
+        <remove keyForRemoval="assertFirstProductDisplayedOnCatalogSearchPage"/>
+        <remove keyForRemoval="assertSecondProductDisplayedOnCatalogSearchPage"/>
+        <grabTextFrom selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="grabNumberOfLastPage"/>
+        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="navigateToUnavailableCatalogSearchResultPage">
+            <argument name="phrase" value="AAA"/>
+            <argument name="pageNumber" value="999"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="scrollToBottomToolbarPager"/>
+        <grabTextFrom selector="{{StorefrontCategoryBottomToolbarSection.currentPage}}" stepKey="grabNumberOfCurrentPage"/>
+        <assertEquals stepKey="assertCurrentPageIsLastPageOfCatalogSearchResult">
+            <expectedResult type="variable">grabNumberOfLastPage</expectedResult>
+            <actualResult type="variable">grabNumberOfCurrentPage</actualResult>
+        </assertEquals>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertProductOnLastCatalogSearchPage">
+            <argument name="product" value="$createSecondProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertFirstProductIsMissingOnLastCatalogSearchPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1013,7 +1013,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
-     * @deprecated 100.2.0 Use self::loadAttributesForObject instead
+     * @deprecated 101.0.0 Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1021,6 +1021,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected function loadAttributesMetadata($attributes)
     {
         $this->loadAttributesForObject($attributes);
+
+        return $this;
     }
 
     /**
@@ -1433,8 +1435,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $insertEntity = true;
         $entityTable = $this->getEntityTable();
         $entityIdField = $this->getEntityIdField();
+        // phpstan:ignore "Undefined variable"
         $entityId = $newObject->getId();
 
+        // phpstan:ignore "Undefined variable"
         unset($entityRow[$entityIdField]);
         if (!empty($entityId) && is_numeric($entityId)) {
             $bind = ['entity_id' => $entityId];
@@ -1450,6 +1454,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Process base row
          */
+        // phpstan:ignore "Undefined variable"
         $entityObject = new DataObject($entityRow);
         $entityRow = $this->_prepareDataForTable($entityObject, $entityTable);
         if ($insertEntity) {
@@ -1460,6 +1465,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $connection->insert($entityTable, $entityRow);
                 $entityId = $connection->lastInsertId($entityTable);
             }
+            // phpstan:ignore "Undefined variable"
             $newObject->setId($entityId);
         } else {
             $where = sprintf('%s=%d', $connection->quoteIdentifier($entityIdField), $entityId);
@@ -1472,6 +1478,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!empty($insert)) {
             foreach ($insert as $attributeId => $value) {
                 $attribute = $this->getAttribute($attributeId);
+                // phpstan:ignore "Undefined variable"
                 $this->_insertAttribute($newObject, $attribute, $value);
             }
         }
@@ -1482,6 +1489,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!empty($update)) {
             foreach ($update as $attributeId => $v) {
                 $attribute = $this->getAttribute($attributeId);
+                // phpstan:ignore "Undefined variable"
                 $this->_updateAttribute($newObject, $attribute, $v['value_id'], $v['value']);
             }
         }
@@ -1491,12 +1499,14 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
          */
         if (!empty($delete)) {
             foreach ($delete as $table => $values) {
+                // phpstan:ignore "Undefined variable"
                 $this->_deleteAttributes($newObject, $table, $values);
             }
         }
 
         $this->_processAttributeValues();
 
+        // phpstan:ignore "Undefined variable"
         $newObject->isObjectNew(false);
 
         return $this;
@@ -1573,7 +1583,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
-            $connection->insertOnDuplicate($table, $data, ['value']);
+            $connection->insertOnDuplicate($table, $data, array_keys($data[0]));
         }
 
         foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
@@ -1607,7 +1617,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             self::$_attributeBackendTables[$backendTable] = $this->getConnection()->describeTable($backendTable);
         }
         $describe = self::$_attributeBackendTables[$backendTable];
-        return $this->getConnection()->prepareColumnValue($describe['value'], $value);
+        $columnName = $attribute->isStatic() ? $attribute->getAttributeCode() : 'value';
+
+        return $this->getConnection()->prepareColumnValue($describe[$columnName], $value);
     }
 
     /**
@@ -1979,7 +1991,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $attributes
      * @param AbstractEntity|null $object
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {

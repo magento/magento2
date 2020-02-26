@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -271,6 +272,10 @@ class Session extends \Magento\Framework\Session\SessionManager
                          * can to create links with other objects.
                          */
                         $quote = $this->quoteRepository->get($this->getQuoteId());
+                    }
+
+                    if ($quote->getTotalsCollectedFlag() === false) {
+                        $quote->collectTotals();
                     }
                 } catch (NoSuchEntityException $e) {
                     $this->setQuoteId(null);

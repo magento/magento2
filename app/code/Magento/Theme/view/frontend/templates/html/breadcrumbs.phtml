@@ -11,7 +11,7 @@
             <li class="item <?= $block->escapeHtmlAttr($crumbName) ?>">
             <?php if ($crumbInfo['link']) : ?>
                 <a href="<?= $block->escapeUrl($crumbInfo['link']) ?>"
-                   title="<?= $block->escapeHtml($crumbInfo['title']) ?>">
+                   title="<?= $block->escapeHtmlAttr($crumbInfo['title']) ?>">
                     <?= $block->escapeHtml($crumbInfo['label']) ?>
                 </a>
             <?php elseif ($crumbInfo['last']) : ?>

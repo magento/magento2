@@ -12,19 +12,19 @@ use Magento\Vault\Block\CardRendererInterface;
 $ccNumberView = $block->escapeHtml($block->getNumberLast4Digits());
 ?>
 <tr>
-    <td data-th="<?= $block->escapeHtml(__('Card Number')) ?>" class="col card-number">
+    <td data-th="<?= $block->escapeHtmlAttr(__('Card Number')) ?>" class="col card-number">
         <span><?= $block->escapeHtml(__('ending')) ?></span> <?= /* @noEscape */ $ccNumberView ?>
     </td>
-    <td data-th="<?= $block->escapeHtml(__('Expiration Date')) ?>" class="col card-expire">
+    <td data-th="<?= $block->escapeHtmlAttr(__('Expiration Date')) ?>" class="col card-expire">
         <?= $block->escapeHtml($block->getExpDate()) ?>
     </td>
-    <td data-th="<?= $block->escapeHtml(__('Type')) ?>" class="col card-type">
+    <td data-th="<?= $block->escapeHtmlAttr(__('Type')) ?>" class="col card-type">
         <img src="<?= /* @noEscape */ $block->getIconUrl() ?>"
              width="<?= /* @noEscape */ $block->getIconWidth() ?>"
              height="<?= /* @noEscape */ $block->getIconHeight() ?>"
         >
     </td>
-    <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+    <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
         <form
             class="form"
             action="<?= $block->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"

@@ -69,26 +69,6 @@ class Options implements OptionSourceInterface
     }
 
     /**
-     * Sanitize website/store option name
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function sanitizeName($name)
-    {
-        $matches = [];
-        preg_match('/\$[:]*{(.)*}/', $name, $matches);
-        if (count($matches) > 0) {
-            $name = $this->escaper->escapeHtml($this->escaper->escapeJs($name));
-        } else {
-            $name = $this->escaper->escapeHtml($name);
-        }
-
-        return $name;
-    }
-
-    /**
      * Generate current options
      *
      * @return void
@@ -108,22 +88,26 @@ class Options implements OptionSourceInterface
                     /** @var  \Magento\Store\Model\Store $store */
                     foreach ($storeCollection as $store) {
                         if ($store->getGroupId() == $group->getId()) {
-                            $name = $this->sanitizeName($store->getName());
+                            $name = $store->getName();
                             $stores[$name]['label'] = str_repeat(' ', 8) . $name;
                             $stores[$name]['value'] = $store->getId();
+                            $stores[$name]['__disableTmpl'] = true;
                         }
                     }
                     if (!empty($stores)) {
-                        $name = $this->sanitizeName($group->getName());
+                        $name = $group->getName();
                         $groups[$name]['label'] = str_repeat(' ', 4) . $name;
                         $groups[$name]['value'] = array_values($stores);
+                        $groups[$name]['__disableTmpl'] = true;
+
                     }
                 }
             }
             if (!empty($groups)) {
-                $name = $this->sanitizeName($website->getName());
+                $name = $website->getName();
                 $this->currentOptions[$name]['label'] = $name;
                 $this->currentOptions[$name]['value'] = array_values($groups);
+                $this->currentOptions[$name]['__disableTmpl'] = true;
             }
         }
     }

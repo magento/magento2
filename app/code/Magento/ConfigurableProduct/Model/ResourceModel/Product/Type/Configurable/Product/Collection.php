@@ -74,6 +74,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add parent ids to `in` filter before load.
      *
      * @return $this
+     * @since 100.3.0
      */
     protected function _renderFilters()
     {

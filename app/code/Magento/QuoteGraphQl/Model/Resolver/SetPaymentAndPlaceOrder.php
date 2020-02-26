@@ -22,7 +22,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 /**
  * Resolver for setting payment method and placing order
  *
- * @deprecated Should use setPaymentMethodOnCart and placeOrder mutations in single request.
+ * @deprecated 100.3.4 Should use setPaymentMethodOnCart and placeOrder mutations in single request.
  * @see \Magento\QuoteGraphQl\Model\Resolver\SetPaymentMethodOnCart
  * @see \Magento\QuoteGraphQl\Model\Resolver\PlaceOrder
  */

@@ -10,6 +10,7 @@ namespace Magento\Framework\Pricing;
  * Interface PriceCurrencyInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface PriceCurrencyInterface
 {
@@ -78,7 +79,7 @@ interface PriceCurrencyInterface
     /**
      * Round price
      *
-     * @deprecated
+     * @deprecated 102.0.1
      * @param float $price
      * @return float
      */

@@ -14,7 +14,7 @@ use Magento\Framework\DB\Select;
 /**
  * Join stock table with stock condition to select.
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class ApplyStockConditionToSelect

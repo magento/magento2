@@ -245,8 +245,8 @@ class Config
     /**
      * Associate object with identifier
      *
-     * @param   mixed $obj
-     * @param   mixed $id
+     * @param mixed $obj
+     * @param mixed $id
      * @return void
      * @codeCoverageIgnore
      */
@@ -271,8 +271,8 @@ class Config
     /**
      * Specify reference for entity type id
      *
-     * @param   int $id
-     * @param   string $code
+     * @param int $id
+     * @param string $code
      * @return $this
      * @codeCoverageIgnore
      */
@@ -296,9 +296,9 @@ class Config
     /**
      * Specify reference between entity attribute id and attribute code
      *
-     * @param   int $id
-     * @param   string $code
-     * @param   string $entityTypeCode
+     * @param int $id
+     * @param string $code
+     * @param string $entityTypeCode
      * @return $this
      */
     protected function _addAttributeReference($id, $code, $entityTypeCode)
@@ -507,12 +507,12 @@ class Config
     /**
      * Get attributes by entity type
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param string $entityType
      * @return AbstractAttribute[]
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getAttributes($entityType)
     {
@@ -522,9 +522,9 @@ class Config
     /**
      * Get attribute by code for entity type
      *
-     * @param   mixed $entityType
-     * @param   mixed $code
-     * @return  AbstractAttribute
+     * @param mixed $entityType
+     * @param mixed $code
+     * @return AbstractAttribute
      * @throws LocalizedException
      */
     public function getAttribute($entityType, $code)
@@ -722,7 +722,7 @@ class Config
     /**
      * Get codes of all entity type attributes
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param mixed $entityType
@@ -737,13 +737,13 @@ class Config
     /**
      * Get all entity type attributes
      *
-     * @param  int|string|Type $entityType
-     * @param  \Magento\Framework\DataObject|null $object
+     * @param int|string|Type $entityType
+     * @param \Magento\Framework\DataObject|null $object
      * @return AbstractAttribute[]
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getEntityAttributes($entityType, $object = null)
     {
@@ -822,6 +822,10 @@ class Config
             $fullAttributeData = array_key_exists('is_required', $attributeData);
 
             if ($existsFullAttribute || (!$existsFullAttribute && !$fullAttributeData)) {
+                $scopeIsRequired = $attributeData['scope_is_required'] ?? null;
+                if ($scopeIsRequired !== null) {
+                    $attribute->setData('scope_is_required', $scopeIsRequired);
+                }
                 return $attribute;
             }
         }

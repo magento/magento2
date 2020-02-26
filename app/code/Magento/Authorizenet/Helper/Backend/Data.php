@@ -18,7 +18,7 @@ use Magento\Backend\Model\UrlInterface;
  *
  * @api
  * @since 100.0.2
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Data extends FrontendDataHelper
 {
@@ -64,7 +64,7 @@ class Data extends FrontendDataHelper
      * Retrieve place order url
      *
      * @param array $params
-     * @return  string
+     * @return string
      */
     public function getSuccessOrderUrl($params)
     {

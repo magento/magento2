@@ -13,7 +13,7 @@
 
 <div class="block paypal acceptance">
     <div class="block-content">
-        <a href="#" title="<?= $block->escapeHtml(__('Additional Options')) ?>"
+        <a href="#" title="<?= $block->escapeHtmlAttr(__('Additional Options')) ?>"
            onclick="javascript:window.open(
                '<?= $block->escapeUrl($block->getAboutPaypalPageUrl()) ?>',
                'paypal',
@@ -21,8 +21,8 @@
                ); return false;"
            class="action paypal additional">
             <img src="<?= $block->escapeUrl($block->getLogoImageUrl()) ?>"
-                 alt="<?= $block->escapeHtml(__('Additional Options')) ?>"
-                 title="<?= $block->escapeHtml(__('Additional Options')) ?>" />
+                 alt="<?= $block->escapeHtmlAttr(__('Additional Options')) ?>"
+                 title="<?= $block->escapeHtmlAttr(__('Additional Options')) ?>" />
         </a>
     </div>
 </div>

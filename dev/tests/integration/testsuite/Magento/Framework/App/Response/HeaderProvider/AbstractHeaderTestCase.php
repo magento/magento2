@@ -28,6 +28,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
             [
                 'preferences' =>
                     [
+                        // phpcs:ignore Magento2.PHP.LiteralNamespaces.LiteralClassUsage
                         HttpResponse::class => 'Magento\Framework\App\Response\Http\Interceptor'
                     ]
             ]

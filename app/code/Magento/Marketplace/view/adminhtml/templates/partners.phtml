@@ -12,17 +12,17 @@ $partners = $block->getPartners();
         <div class="partner">
             <img
                 class="partner-image"
-                src="<?= $block->escapeHtml($partner['img']) ?>"
-                alt="<?= $block->escapeHtml($partner['title']) ?>"/>
+                src="<?= $block->escapeUrl($partner['img']) ?>"
+                alt="<?= $block->escapeHtmlAttr($partner['title']) ?>"/>
             <h3 class="partner-title"><?= $block->escapeHtml($partner['title']) ?></h3>
             <p class="partner-description">
                 <?= $block->escapeHtml($partner['description']) ?>
                 <br />
-                <a href="<?= $block->escapeHtml($partner['url_page']) ?>" target="_blank">
+                <a href="<?= $block->escapeUrl($partner['url_page']) ?>" target="_blank">
                     <?= $block->escapeHtml(__('Read More')) ?>
                 </a>
                 <br />
-                <a href="<?= $block->escapeHtml($partner['url_partner_page']) ?>" target="_blank">
+                <a href="<?= $block->escapeUrl($partner['url_partner_page']) ?>" target="_blank">
                     <?= $block->escapeHtml(__('Partner Page')) ?>
                 </a>
             </p>
