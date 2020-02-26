@@ -114,6 +114,8 @@ class RouterTest extends TestCase
     {
         $this->request->method('getPathInfo')
             ->willReturn('');
+        $this->request->method('getRequestString')
+            ->willReturn('');
         $this->urlFinder->method('findOneByData')
             ->willReturn(null);
         $this->storeManager->method('getStore')
@@ -141,6 +143,8 @@ class RouterTest extends TestCase
             ->with('___from_store')
             ->willReturn($oldStoreAlias);
         $this->request->method('getPathInfo')
+            ->willReturn($initialRequestPath);
+        $this->request->method('getRequestString')
             ->willReturn($initialRequestPath);
         $oldStore = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -192,6 +196,7 @@ class RouterTest extends TestCase
     public function testNoRewriteAfterStoreSwitcherWhenNoOldRewrite()
     {
         $this->request->method('getPathInfo')->willReturn('request-path');
+        $this->request->method('getRequestString')->willReturn('request-path');
         $this->request->method('getParam')->with('___from_store')
             ->willReturn('old-store');
         $oldStore = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
@@ -217,6 +222,7 @@ class RouterTest extends TestCase
     public function testNoRewriteAfterStoreSwitcherWhenOldRewriteEqualsToNewOne()
     {
         $this->request->method('getPathInfo')->willReturn('request-path');
+        $this->request->method('getRequestString')->willReturn('request-path');
         $this->request->method('getParam')->with('___from_store')
             ->willReturn('old-store');
         $oldStore = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
@@ -268,6 +274,8 @@ class RouterTest extends TestCase
             ->willReturn($this->store);
         $this->request->method('getPathInfo')
             ->willReturn($requestPath);
+        $this->request->method('getRequestString')
+            ->willReturn($requestPath);
         $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -311,6 +319,8 @@ class RouterTest extends TestCase
         $this->storeManager->method('getStore')
             ->willReturn($this->store);
         $this->request->method('getPathInfo')
+            ->willReturn($requestPath);
+        $this->request->method('getRequestString')
             ->willReturn($requestPath);
         $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()
@@ -369,6 +379,8 @@ class RouterTest extends TestCase
         $this->storeManager->method('getStore')->willReturn($this->store);
         $this->request->method('getPathInfo')
             ->willReturn($requestPath);
+        $this->request->method('getRequestString')
+            ->willReturn($requestPath);
         $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->method('getEntityType')->willReturn('custom');
@@ -407,6 +419,8 @@ class RouterTest extends TestCase
         $requestPath = 'request-path';
         $this->storeManager->method('getStore')->willReturn($this->store);
         $this->request->method('getPathInfo')
+            ->willReturn($requestPath);
+        $this->request->method('getRequestString')
             ->willReturn($requestPath);
         $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();

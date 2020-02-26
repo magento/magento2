@@ -90,9 +90,26 @@ class Router implements RouterInterface
             $this->storeManager->getStore()->getId()
         );
 
-        if ($rewrite === null || $rewrite->getRequestPath() === $rewrite->getTargetPath()) {
-            // Either no rewrite rule matching current URl found or found one with request path equal to
-            // target path, continuing with processing of this URL.
+        if ($rewrite === null) {
+            // No rewrite rule matching current URl found, continuing with
+            // processing of this URL.
+            return null;
+        }
+
+        $requestStringTrimmed = ltrim($request->getRequestString(), '/');
+        $rewriteRequestPath = $rewrite->getRequestPath();
+        $rewriteTargetPath = $rewrite->getTargetPath();
+        $rewriteTargetPathTrimmed = ltrim($rewriteTargetPath, '/');
+
+        if (preg_replace('/\?.*/', '', $rewriteRequestPath) === preg_replace('/\?.*/', '', $rewriteTargetPath) &&
+            (
+                !$requestStringTrimmed ||
+                !$rewriteTargetPathTrimmed ||
+                strpos($requestStringTrimmed, $rewriteTargetPathTrimmed) === 0
+            )
+        ) {
+            // Request and target paths of rewrite found without query params are equal and current request string
+            // starts with request target path, continuing with processing of this URL.
             return null;
         }
 
@@ -104,9 +121,9 @@ class Router implements RouterInterface
         // Rule provides actual URL that can be processed by a controller.
         $request->setAlias(
             UrlInterface::REWRITE_REQUEST_PATH_ALIAS,
-            $rewrite->getRequestPath()
+            $rewriteRequestPath
         );
-        $request->setPathInfo('/' . $rewrite->getTargetPath());
+        $request->setPathInfo('/' . $rewriteTargetPath);
         return $this->actionFactory->create(
             Forward::class
         );
