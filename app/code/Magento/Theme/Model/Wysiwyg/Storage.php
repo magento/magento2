@@ -8,6 +8,7 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Theme wysiwyg storage model
@@ -87,6 +88,11 @@ class Storage
     private $file;
 
     /**
+     * @var DriverInterface
+     */
+    private $filesystemDriver;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Filesystem $filesystem
@@ -96,6 +102,7 @@ class Storage
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Magento\Framework\Filesystem\Io\File|null $file
+     * @param DriverInterface|null $filesystemDriver
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -106,7 +113,8 @@ class Storage
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Filesystem\Io\File $file = null
+        \Magento\Framework\Filesystem\Io\File $file = null,
+        DriverInterface $filesystemDriver = null
     ) {
         $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;
@@ -117,6 +125,8 @@ class Storage
         $this->file = $file ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Filesystem\Io\File::class
         );
+        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()
+            ->get(DriverInterface::class);
     }
 
     /**
@@ -331,8 +341,9 @@ class Storage
     {
         $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
         $pathCmp = rtrim($path, '/');
+        $absolutePath = $this->filesystemDriver->getRealPathSafety($this->mediaWriteDirectory->getAbsolutePath($path));
 
-        if ($rootCmp == $pathCmp || $rootCmp === $this->mediaWriteDirectory->getAbsolutePath($path)) {
+        if ($rootCmp == $pathCmp || $rootCmp === $absolutePath) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t delete root directory %1 right now.', $path)
             );

@@ -9,6 +9,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Wysiwyg;
 
+use Magento\Framework\Filesystem\DriverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -59,6 +62,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     protected $urlDecoder;
 
+    /**
+     * @var DriverInterface|MockObject
+     */
+    private $filesystemDriver;
+
     protected function setUp()
     {
         $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
@@ -99,6 +107,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->directoryWrite = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
         $this->urlDecoder = $this->createPartialMock(\Magento\Framework\Url\DecoderInterface::class, ['decode']);
+        $this->filesystemDriver = $this->createMock(DriverInterface::class);
 
         $this->_filesystem->expects(
             $this->once()
@@ -114,7 +123,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $this->_objectManager,
             $this->_imageFactory,
             $this->urlEncoder,
-            $this->urlDecoder
+            $this->urlDecoder,
+            null,
+            $this->filesystemDriver
         );
 
         $this->_storageRoot = '/root';
@@ -575,13 +586,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with($fakePath)
             ->willReturn($directoryPath);
 
-        $this->_helperStorage->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getStorageRoot'
-        )->will(
-            $this->returnValue($directoryPath)
-        );
+        $this->filesystemDriver->method('getRealPathSafety')
+            ->with($directoryPath)
+            ->willReturn($directoryPath);
+
+        $this->_helperStorage
+            ->method('getStorageRoot')
+            ->willReturn($directoryPath);
 
         $this->_storageModel->deleteDirectory($fakePath);
     }
