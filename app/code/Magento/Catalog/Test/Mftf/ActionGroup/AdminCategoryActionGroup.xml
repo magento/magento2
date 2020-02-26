@@ -445,7 +445,7 @@
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
     </actionGroup>
 
-    <actionGroup name="DeleteDefaultCategoryChildren">
+    <actionGroup name="DeleteDefaultCategoryChildren" deprecated="Use deleteData action for categories created via api. StorefrontCatalogNavigationMenuUIDesktopTest will be refactored in 2.4 to reflect this change.">
         <annotations>
             <description>Deletes all children categories of Default Root Category.</description>
         </annotations>
