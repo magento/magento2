@@ -44,6 +44,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Whether to allow SID in store directive: NO
      *
      * @var bool
+     * @deprecated SID is not being used as query parameter anymore.
      */
     protected $_useSessionInUrl = false;
 
@@ -51,7 +52,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Modifier Callbacks
      *
      * @var array
-     * @deprecated Use the new Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -263,10 +264,14 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param bool $flag
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated SID query parameter is not used in URLs anymore.
      */
     public function setUseSessionInUrl($flag)
     {
-        $this->_useSessionInUrl = $flag;
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
@@ -659,7 +664,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $default assumed modifier if none present
      * @return array
-     * @deprecated Use the new FilterApplier or Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -678,7 +683,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $modifiers
      * @return string
-     * @deprecated Use the new FilterApplier or Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -706,7 +711,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $type
      * @return string
-     * @deprecated Use the new FilterApplier or Directive Processor interfaces
+     * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
      */
     public function modifierEscape($value, $type = 'html')
     {

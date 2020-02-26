@@ -395,11 +395,13 @@ class DefaultType extends \Magento\Framework\DataObject
     }
 
     /**
+     * Return final chargeable price for option
+     *
      * @param float $price Price of option
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
-     * @deprecated 102.0.4 typo in method name
+     * @deprecated 102.0.6 typo in method name
      * @see _getChargeableOptionPrice
      */
     protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
@@ -414,6 +416,7 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
+     * @since 102.0.6
      */
     protected function _getChargeableOptionPrice($price, $isPercent, $basePrice)
     {

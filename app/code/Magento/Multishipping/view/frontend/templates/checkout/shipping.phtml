@@ -63,14 +63,14 @@
                                             <?php $_excl = $block->getShippingPrice($_address, $_rate->getPrice(), $this->helper(Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()); ?>
                                             <?php $_incl = $block->getShippingPrice($_address, $_rate->getPrice(), true); ?>
                                             <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
-                                            <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
+                                            <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
                                             <?php endif; ?>
                                                 <?= $block->escapeHtml($_incl, ['span']) ?>
                                             <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
                                             </span>
                                             <?php endif; ?>
                                             <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
-                                            <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+                                            <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
                                                 <?= $block->escapeHtml($_excl, ['span']) ?>
                                             </span>
                                             <?php endif; ?>

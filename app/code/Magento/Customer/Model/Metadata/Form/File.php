@@ -57,7 +57,7 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $fileProcessorFactory;
 

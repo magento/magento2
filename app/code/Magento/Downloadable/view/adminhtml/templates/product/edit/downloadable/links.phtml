@@ -20,7 +20,7 @@
     <div class="admin__field" <?= $block->escapeHtml(!$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : '') ?>>
         <label class="admin__field-label" for="downloadable_links_title"><span><?= $block->escapeHtml(__('Title')) ?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?= $block->escapeHtml($block->getLinksTitle()) ?>" <?= ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?= $block->escapeHtmlAttr($block->getLinksTitle()) ?>" <?= ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()) : ?>
                 <div class="admin__field admin__field-option">
                     <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= $block->getUsedDefault() ? 'checked="checked"' : '' ?> />

@@ -20,7 +20,7 @@ $block->getConfigJson();
     <div class="admin__field"<?= $block->escapeHtml(!$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : '') ?>>
         <label class="admin__field-label" for="downloadable_samples_title"><span><?= $block->escapeHtml(__('Title')) ?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?= $block->escapeHtml($block->getSamplesTitle()) ?>" <?= /* @noEscape */ ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?= $block->escapeHtmlAttr($block->getSamplesTitle()) ?>" <?= /* @noEscape */ ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()) : ?>
                 <div class="admin__field admin__field-option">
                     <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= /* @noEscape */ $block->getUsedDefault() ? 'checked="checked"' : '' ?> />

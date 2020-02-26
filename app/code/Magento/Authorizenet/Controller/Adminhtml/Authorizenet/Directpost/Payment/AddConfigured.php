@@ -13,7 +13,7 @@ use Magento\Sales\Controller\Adminhtml\Order\Create\AddConfigured as BaseAddConf
 
 /**
  * Class AddConfigured
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class AddConfigured extends BaseAddConfigured implements HttpPutActionInterface
 {

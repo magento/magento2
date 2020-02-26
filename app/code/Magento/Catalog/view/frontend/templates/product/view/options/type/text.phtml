@@ -12,7 +12,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 
 <div class="field<?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) {
     echo ' textarea';
-} ?><?= /* @noEscape */ $class ?>">
+                 } ?><?= /* @noEscape */ $class ?>">
     <label class="label" for="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
         <?= /* @noEscape */ $block->getFormattedPrice() ?>
@@ -33,11 +33,11 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                    id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
                    class="input-text product-custom-option"
                 <?php if (!empty($_textValidate)) {?>
-                    data-validate="<?= $block->escapeHtml(json_encode($_textValidate)) ?>"
+                    data-validate="<?= $block->escapeHtmlAttr(json_encode($_textValidate)) ?>"
                 <?php } ?>
                    name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                   value="<?= $block->escapeHtml($block->getDefaultValue()) ?>"/>
+                   value="<?= $block->escapeHtmlAttr($block->getDefaultValue()) ?>"/>
         <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
             <?php $_textAreaValidate = null;
             if ($_option->getIsRequire()) {
@@ -51,7 +51,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             <textarea id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
                       class="product-custom-option"
                     <?php if (!empty($_textAreaValidate)) {?>
-                        data-validate="<?= $block->escapeHtml(json_encode($_textAreaValidate)) ?>"
+                        data-validate="<?= $block->escapeHtmlAttr(json_encode($_textAreaValidate)) ?>"
                     <?php } ?>
                       name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                       data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"

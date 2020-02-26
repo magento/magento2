@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 /**
  * Adminhtml creditmemo bar
  *
- * @deprecated
+ * @deprecated 101.0.6
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2

@@ -185,7 +185,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param string $path The configuration path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getElementByConfigPath($path)
     {
@@ -368,7 +368,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * ```
      *
      * @return array An array of config path to config structure path map
-     * @since 100.2.0
+     * @since 100.1.12
      */
     public function getFieldPaths()
     {

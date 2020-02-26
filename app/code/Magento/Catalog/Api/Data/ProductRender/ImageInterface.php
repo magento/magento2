@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Represents physical characteristics of image, that can be used in product listing or product view
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface ImageInterface extends ExtensibleDataInterface
 {
@@ -24,7 +24,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $url
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setUrl($url);
 
@@ -32,7 +32,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * Retrieve image url
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getUrl();
 
@@ -43,7 +43,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * What size should this image have, etc...
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getCode();
 
@@ -52,7 +52,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $code
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setCode($code);
 
@@ -61,7 +61,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $height
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setHeight($height);
 
@@ -69,7 +69,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * Retrieve image height
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getHeight();
 
@@ -77,7 +77,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * Set image width in px
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getWidth();
 
@@ -86,7 +86,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $width
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setWidth($width);
 
@@ -96,7 +96,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * Image label is short description of this image
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getLabel();
 
@@ -105,7 +105,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $label
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setLabel($label);
 
@@ -115,7 +115,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * This width is image dimension, which represents the width, that can be used for performance improvements
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getResizedWidth();
 
@@ -124,7 +124,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $width
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setResizedWidth($width);
 
@@ -133,7 +133,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param string $height
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setResizedHeight($height);
 
@@ -141,7 +141,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * Retrieve resize height
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getResizedHeight();
 
@@ -149,7 +149,7 @@ interface ImageInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\ImageExtensionInterface|null
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getExtensionAttributes();
 
@@ -158,7 +158,7 @@ interface ImageInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\ImageExtensionInterface $extensionAttributes
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\ImageExtensionInterface $extensionAttributes

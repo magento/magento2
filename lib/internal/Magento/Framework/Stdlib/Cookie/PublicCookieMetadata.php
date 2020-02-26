@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib\Cookie;
  * Class PublicCookieMetadata
  *
  * @api
+ * @since 100.0.2
  */
 class PublicCookieMetadata extends CookieMetadata
 {

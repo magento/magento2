@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
  * Data object processor for array serialization using class reflection
  *
  * @api
+ * @since 100.0.2
  */
 class DataObjectProcessor
 {

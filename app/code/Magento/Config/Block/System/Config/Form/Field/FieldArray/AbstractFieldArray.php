@@ -282,7 +282,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
 
     /**
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getAddButtonLabel()
     {

@@ -223,7 +223,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Get collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
-     * @deprecated 101.1.0 because collections should be used directly via factory
+     * @deprecated 102.0.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
@@ -313,8 +313,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Retrieve default value for attribute code
      *
-     * @param   string $attributeCode
-     * @return  array|boolean
+     * @param string $attributeCode
+     * @return array|boolean
      *
      * @deprecated 101.0.0
      */
@@ -348,8 +348,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Check if object attribute has value in current store
      *
-     * @param   string $attributeCode
-     * @return  bool
+     * @param string $attributeCode
+     * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      *
      * @deprecated 101.0.0

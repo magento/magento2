@@ -87,7 +87,7 @@
                         <?= /* @noEscape */ $item->getOrderItem()->getQtyOrdered()*1 ?>
                     </td>
                     <td>
-                        <input type="hidden" name="price" value="<?= $block->escapeHtml($item->getPrice()) ?>">
+                        <input type="hidden" name="price" value="<?= $block->escapeHtmlAttr($item->getPrice()) ?>">
                         <input type="text"
                                name="qty"
                                value="<?= /* @noEscape */ $item->getQty()*1 ?>"

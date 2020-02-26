@@ -15,8 +15,8 @@
     <?= $block->getButtonsHtml('header') ?>
 </div>
 
-<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeHtml($block->getSaveUrl()) ?>" method="post">
-    <input name="form_key" type="hidden" value="<?= $block->escapeHtml($block->getFormKey()) ?>" />
+<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post">
+    <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     <?= $block->getChildHtml('form') ?>
 </form>
 <script type="text/x-magento-init">

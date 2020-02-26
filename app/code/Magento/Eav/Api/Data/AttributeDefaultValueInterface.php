@@ -11,7 +11,7 @@ namespace Magento\Eav\Api\Data;
  * Allows to manage attribute default value through interface
  * @api
  * @package Magento\Eav\Api\Data
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface AttributeDefaultValueInterface
 {
@@ -20,13 +20,13 @@ interface AttributeDefaultValueInterface
     /**
      * @param string $defaultValue
      * @return \Magento\Framework\Api\MetadataObjectInterface
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function setDefaultValue($defaultValue);
 
     /**
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getDefaultValue();
 }

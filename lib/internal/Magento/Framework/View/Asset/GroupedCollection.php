@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Asset;
  * List of page assets that combines into groups ones having the same properties
  *
  * @api
+ * @since 100.0.2
  */
 class GroupedCollection extends Collection
 {

@@ -185,7 +185,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      * @throws MailException
      * @see setFromByScope()
      *
-     * @deprecated This function sets the from address but does not provide
+     * @deprecated 100.3.3 This function sets the from address but does not provide
      * a way of setting the correct from addresses based on the scope.
      */
     public function setFrom($from)

@@ -558,4 +558,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField">
+        <arguments>
+            <argument name="excludedAttributes" xsi:type="array">
+                <item name="price" xsi:type="string">price</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

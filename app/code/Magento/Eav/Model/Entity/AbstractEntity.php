@@ -1013,7 +1013,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
-     * @deprecated 100.2.0 Use self::loadAttributesForObject instead
+     * @deprecated 101.0.0 Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1991,7 +1991,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $attributes
      * @param AbstractEntity|null $object
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {

@@ -8,9 +8,10 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 /**
  * MySQL search data provider container.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  * @api
+ * @since 100.0.2
  */
 class DataProviderContainer
 {
