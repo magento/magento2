@@ -18,6 +18,8 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -25,6 +27,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
+use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
@@ -80,6 +83,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     private $logger;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -98,6 +106,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ['logger' => $this->logger]
         );
         $this->importedProducts = [];
+        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         parent::setUp();
@@ -2681,35 +2690,46 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * Import file by providing import filename in parameters.
+     * Import file by providing import filename and bunch size.
      *
      * @param string $fileName
-     * @return void
+     * @param int $bunchSize
+     * @return bool
      */
-    private function importFile(string $fileName): void
+    private function importFile(string $fileName, int $bunchSize = 100): bool
     {
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $importExportData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $importExportData->expects($this->atLeastOnce())
+            ->method('getBunchSize')
+            ->willReturn($bunchSize);
+        $this->_model = $this->objectManager->create(
+            ImportProduct::class,
+            ['importExportData' => $importExportData]
+        );
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
-                'file' => __DIR__ . '/_files/' . $fileName,
+                'file' => __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $fileName,
                 'directory' => $directory,
             ]
         );
         $errors = $this->_model->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'behavior' => Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
-                \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE => 1,
+                Import::FIELDS_ENCLOSURE => 1,
             ]
         )
-        ->setSource($source)
-        ->validateData();
+            ->setSource($source)
+            ->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() === 0);
 
-        $this->_model->importData();
+        return $this->_model->importData();
     }
 
     /**
@@ -3050,5 +3070,34 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $simpleProduct = $this->productRepository->get('simple', false, null, true);
         $this->assertEquals('Varchar default value', $simpleProduct->getData('varchar_attribute'));
         $this->assertEquals('Short description', $simpleProduct->getData('short_description'));
+    }
+
+    /**
+     * Checks possibility to double importing products using the same import file.
+     *
+     * Bunch size is using to test importing the same product that will be chunk to different bunches.
+     * Example:
+     * - first bunch
+     * product-sku,default-store
+     * product-sku,second-store
+     * - second bunch
+     * product-sku,third-store
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testCheckDoubleImportOfProducts()
+    {
+        /** @var SearchCriteria $searchCriteria */
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+
+        $this->assertEquals(true, $this->importFile('products_with_two_store_views.csv', 2));
+        $productsAfterFirstImport = $this->productRepository->getList($searchCriteria)->getItems();
+        $this->assertEquals(3, count($productsAfterFirstImport));
+
+        $this->assertEquals(true, $this->importFile('products_with_two_store_views.csv', 2));
+        $productsAfterSecondImport = $this->productRepository->getList($searchCriteria)->getItems();
+        $this->assertEquals(3, count($productsAfterSecondImport));
     }
 }
