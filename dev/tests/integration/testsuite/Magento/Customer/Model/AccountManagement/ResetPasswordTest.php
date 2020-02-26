@@ -113,10 +113,10 @@ class ResetPasswordTest extends TestCase
      * @dataProvider passwordResetErrorsProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @param string $email
-     * @param int $websiteId
+     * @param int|null $websiteId
      * @return void
      */
-    public function testPasswordResetErrors(string $email, int $websiteId = null): void
+    public function testPasswordResetErrors(string $email, ?int $websiteId = null): void
     {
         $websiteId = $websiteId ?? (int)$this->storeManager->getWebsite('base')->getId();
         $this->expectExceptionObject(
