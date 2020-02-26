@@ -28,6 +28,11 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         $this->key = substr(__CLASS__, -32, 32);
     }
 
+    /**
+     * @param int $length
+     *
+     * @return string
+     */
     protected function getRandomString(int $length): string
     {
         $result = '';
@@ -48,18 +53,33 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @param string $cipherName
+     * @param string $modeName
+     *
+     * @return int
+     */
     private function getKeySize(string $cipherName, string $modeName): int
     {
         $this->requireCipherInfo();
         return self::$cipherInfo[$cipherName][$modeName]['key_size'];
     }
 
+    /**
+     * @param string $cipherName
+     * @param string $modeName
+     *
+     * @return int
+     */
     private function getInitVectorSize(string $cipherName, string $modeName): int
     {
         $this->requireCipherInfo();
         return self::$cipherInfo[$cipherName][$modeName]['iv_size'];
     }
 
+    /**
+     * @return array
+     */
     public function getCipherModeCombinations(): array
     {
         $result = [];
@@ -87,6 +107,9 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($initVector, $crypt->getInitVector());
     }
 
+    /**
+     * @return array
+     */
     public function getConstructorExceptionData(): array
     {
         $key = substr(__CLASS__, -32, 32);
@@ -130,6 +153,9 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($cryptExpected->getInitVector(), $cryptActual->getInitVector());
     }
 
+    /**
+     * @return array
+     */
     public function getCryptData(): array
     {
         $fixturesFilename = __DIR__ . '/../Crypt/_files/_crypt_fixtures.php';

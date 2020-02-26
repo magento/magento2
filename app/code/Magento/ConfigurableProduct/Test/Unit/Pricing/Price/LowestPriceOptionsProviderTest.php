@@ -6,8 +6,8 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -102,9 +102,11 @@ class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetProducts()
     {
         $productId = 1;
+        $storeId = 1;
         $linkedProducts = ['some', 'linked', 'products', 'dataobjects'];
-        $product = $this->getMockBuilder(ProductInterface::class)->disableOriginalConstructor()->getMock();
+        $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getId')->willReturn($productId);
+        $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
         $this->linkedProductSelectBuilder->expects($this->any())->method('build')->with($productId)->willReturn([]);
         $this->productCollection
             ->expects($this->once())

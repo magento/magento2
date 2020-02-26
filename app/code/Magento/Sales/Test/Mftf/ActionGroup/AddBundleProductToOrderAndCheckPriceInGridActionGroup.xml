@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddBundleProductToOrderAndCheckPriceInGridActionGroup" extends="AddBundleProductToOrderActionGroup">
+        <annotations>
+            <description>EXTENDS: addBundleProductToOrder. Validates that the provided Product Price is present and correct in the 'Items Ordered' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="price" type="string"/>
+        </arguments>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.rowPrice('1')}}" stepKey="grabProductPriceFromGrid" after="clickOk"/>
+        <assertEquals stepKey="assertProductPriceInGrid" message="Bundle product price in grid should be equal {{price}}" after="grabProductPriceFromGrid">
+            <expectedResult type="string">{{price}}</expectedResult>
+            <actualResult type="variable">grabProductPriceFromGrid</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

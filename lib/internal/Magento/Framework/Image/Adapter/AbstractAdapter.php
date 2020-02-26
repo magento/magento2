@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\Image\Adapter;
@@ -42,9 +41,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     const POSITION_CENTER = 'center';
 
-    /**
-     * Default font size
-     */
     const DEFAULT_FONT_SIZE = 15;
 
     /**
@@ -175,7 +171,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Save image to specific path.
      *
-     * If some folders of path does not exist they will be created
+     * If some folders of the path do not exist they will be created.
      *
      * @param null|string $destination
      * @param null|string $newName
@@ -205,6 +201,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $angle
      * @return void
+     * @deprecated unused
      */
     abstract public function rotate($angle);
 
@@ -292,7 +289,7 @@ abstract class AbstractAdapter implements AdapterInterface
         if ($this->_fileMimeType) {
             return $this->_fileMimeType;
         } else {
-            $this->_fileMimeType = image_type_to_mime_type($this->getImageType());
+            $this->_fileMimeType = image_type_to_mime_type((int) $this->getImageType());
             return $this->_fileMimeType;
         }
     }
@@ -524,7 +521,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _getFileAttributes()
     {
-        $pathinfo = pathinfo($this->_fileName);
+        $pathinfo = pathinfo((string) $this->_fileName);
 
         $this->_fileSrcPath = $pathinfo['dirname'];
         $this->_fileSrcName = $pathinfo['basename'];
@@ -626,6 +623,7 @@ abstract class AbstractAdapter implements AdapterInterface
             $frameHeight !== null && $frameHeight <= 0 ||
             empty($frameWidth) && empty($frameHeight)
         ) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \InvalidArgumentException('Invalid image dimensions.');
         }
     }
@@ -675,7 +673,7 @@ abstract class AbstractAdapter implements AdapterInterface
             $destination = $this->_fileSrcPath;
         } else {
             if (empty($newName)) {
-                $info = pathinfo($destination);
+                $info = pathinfo((string) $destination);
                 $newName = $info['basename'];
                 $destination = $info['dirname'];
             }
@@ -693,6 +691,7 @@ abstract class AbstractAdapter implements AdapterInterface
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $this->logger->critical($e);
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \DomainException(
                     'Unable to write file into directory ' . $destination . '. Access forbidden.'
                 );
@@ -726,14 +725,23 @@ abstract class AbstractAdapter implements AdapterInterface
     public function validateUploadFile($filePath)
     {
         if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException("File '{$filePath}' does not exists.");
+            throw new \InvalidArgumentException('Upload file does not exist.');
         }
+
         if (filesize($filePath) === 0) {
             throw new \InvalidArgumentException('Wrong file size.');
         }
-        if (!getimagesize($filePath)) {
+
+        try {
+            $imageSize = getimagesize($filePath);
+        } catch (\Exception $e) {
+            $imageSize = false;
+        }
+
+        if (!$imageSize) {
             throw new \InvalidArgumentException('Disallowed file type.');
         }
+
         $this->checkDependencies();
         $this->open($filePath);
 

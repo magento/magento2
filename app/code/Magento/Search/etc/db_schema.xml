@@ -46,6 +46,10 @@
         <index referenceId="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
             <column name="is_processed"/>
         </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID_POPULARITY" indexType="btree">
+            <column name="store_id"/>
+            <column name="popularity"/>
+        </index>
     </table>
     <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">
         <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true"

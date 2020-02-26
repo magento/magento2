@@ -58,7 +58,10 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
 
         $this->blockActions = $objectManager->getObject(
             BlockActions::class,
-            ['context' => $context, 'urlBuilder' => $this->urlBuilder]
+            [
+                'context' => $context,
+                'urlBuilder' => $this->urlBuilder
+            ]
         );
 
         $objectManager->setBackwardCompatibleProperty($this->blockActions, 'escaper', $this->escaper);
@@ -93,6 +96,7 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
                     'edit' => [
                         'href' => 'test/url/edit',
                         'label' => __('Edit'),
+                        '__disableTmpl' => true,
                     ],
                     'delete' => [
                         'href' => 'test/url/delete',
@@ -102,6 +106,7 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
                             'message' => __('Are you sure you want to delete a %1 record?', $title),
                         ],
                         'post' => true,
+                        '__disableTmpl' => true,
                     ],
                 ],
             ],
