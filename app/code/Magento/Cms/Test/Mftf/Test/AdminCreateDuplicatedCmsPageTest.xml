@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicatedCmsPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Page Duplication and Reset Removal MAGETWO-87096"/>
+            <title value="Admin should be able to duplicate a CMS Page"/>
+            <description value="Admin should be able to duplicate a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89184"/>
+            <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPageCreationForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Verify Save&Duplicate button and Save&Close button-->
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <see selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
+        <see selector="{{CmsNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
+        <!--Create new CMS Page page-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="FillOutBlockContent"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="You saved the page." stepKey="seeSavedPageMsgOnForm"/>
+        <see userInput="You duplicated the page." stepKey="seeDuplicatedPageMsg"/>
+        <!--Verify duplicated CMS Page-->
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="assertContent"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
+        <see userInput="You saved the page." stepKey="seeSavedCMSPageMsgOnGrid"/>
+        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
+    </test>
+</tests>
