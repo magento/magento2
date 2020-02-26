@@ -10,6 +10,9 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config;
 use Magento\Translation\App\Config\Type\Translation;
 
+/**
+ * Class responsible for reading translation from database.
+ */
 class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
 {
@@ -171,6 +174,8 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
+     * Get deploy configurations.
+     *
      * @deprecated 100.1.2
      * @return DeploymentConfig
      */
@@ -183,6 +188,8 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
+     * Get app configurations.
+     *
      * @deprecated 100.1.2
      * @return Config
      */
