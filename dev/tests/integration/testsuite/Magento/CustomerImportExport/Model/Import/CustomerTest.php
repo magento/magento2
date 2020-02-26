@@ -396,8 +396,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
         $this->doImport(__DIR__ . '/_files/customers_with_gender_to_import.csv', Import::BEHAVIOR_ADD_UPDATE);
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
-        $this->assertEquals($statusBeforeImport, 'valid');
-        $this->assertEquals($statusAfterImport, 'invalid');
+        $this->assertEquals('valid', $statusBeforeImport);
+        $this->assertEquals('invalid', $statusAfterImport);
     }
 
     /**
