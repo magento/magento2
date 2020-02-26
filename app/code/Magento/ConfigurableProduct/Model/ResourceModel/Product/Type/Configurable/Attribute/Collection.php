@@ -328,8 +328,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     'product_super_attribute_id' => $itemId,
                     'default_label' => $option['default_title'],
                     'store_label' => $option['default_title'],
-                    'use_default_value' => true,
-                    'sku' => $option['sku']
+                    'use_default_value' => true
                 ];
             }
             $item->setOptionsMap($values);

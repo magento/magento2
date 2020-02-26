@@ -15,8 +15,6 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Collection for fetching options for all configurable options pulled back in result set.
@@ -49,26 +47,18 @@ class Collection
     private $attributeMap = [];
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @param CollectionFactory $attributeCollectionFactory
      * @param ProductFactory $productFactory
      * @param MetadataPool $metadataPool
-     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
-        MetadataPool $metadataPool,
-        ProductRepositoryInterface $productRepository
+        MetadataPool $metadataPool
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;
         $this->metadataPool = $metadataPool;
-        $this->productRepository = $productRepository;
     }
 
     /**
@@ -133,31 +123,11 @@ class Collection
             $this->attributeMap[$productId][$attribute->getId()]['id'] = $attribute->getId();
             $this->attributeMap[$productId][$attribute->getId()]['attribute_code']
                 = $attribute->getProductAttribute()->getAttributeCode();
-            $this->attributeMap[$productId][$attribute->getId()]['values'] = $this->getAllowedOptions($attributeData);
+            $this->attributeMap[$productId][$attribute->getId()]['values'] = $attributeData['options'];
             $this->attributeMap[$productId][$attribute->getId()]['label']
                 = $attribute->getProductAttribute()->getStoreLabel();
         }
 
         return $this->attributeMap;
-    }
-
-    /**
-     * Returns List of Allowed Options
-     *
-     * @param $attributeData
-     * @return array
-     */
-    protected function getAllowedOptions($attributeData) {
-        $options = [];
-
-        foreach ($attributeData['options'] as $keyOption => $valOption) {
-            $configurableProduct = $this->productRepository->get($valOption['sku']);
-
-            if ($configurableProduct->getStatus() != Status::STATUS_DISABLED) {
-                $options[$keyOption] = $valOption;
-            }
-        }
-
-        return $options;
     }
 }
