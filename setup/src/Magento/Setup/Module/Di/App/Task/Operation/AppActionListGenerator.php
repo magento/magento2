@@ -24,6 +24,10 @@ class AppActionListGenerator implements OperationInterface
      */
     private $configWriter;
 
+    /**
+     * @param ModuleReader $moduleReader
+     * @param ConfigWriterInterface $configWriter
+     */
     public function __construct(
         ModuleReader $moduleReader,
         ConfigWriterInterface $configWriter
