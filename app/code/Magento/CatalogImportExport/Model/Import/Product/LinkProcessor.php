@@ -228,8 +228,7 @@ class LinkProcessor
         Product $importEntity,
         Link $resource,
         array $linksToDelete
-    )
-    {
+    ) {
         if (!empty($linksToDelete) && Import::BEHAVIOR_APPEND === $importEntity->getBehavior()) {
             foreach ($linksToDelete as $linkTypeId => $productIds) {
                 if (!empty($productIds)) {
