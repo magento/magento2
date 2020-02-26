@@ -7,7 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Config\Observer\Config\Backend\Admin;
 
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
 
 /**
  * Class AfterCustomUrlChangedObserver redirects to new custom admin URL.
@@ -19,38 +24,38 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
     /**
      * Backend data
      *
-     * @var \Magento\Backend\Helper\Data
+     * @var Data
      */
     protected $_backendData;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_authSession;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $_response;
 
     /**
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param Data $backendData
+     * @param Registry $coreRegistry
+     * @param Session $authSession
+     * @param ResponseInterface $response
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\App\ResponseInterface $response
+        Data $backendData,
+        Registry $coreRegistry,
+        Session $authSession,
+        ResponseInterface $response
     ) {
         $this->_backendData = $backendData;
         $this->_coreRegistry = $coreRegistry;
@@ -61,11 +66,11 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
     /**
      * Log out user and redirect to new admin custom url
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return void
+     * @param Observer $observer
+     * @return $this|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->_coreRegistry->registry('custom_admin_path_redirect') === null) {
             return;
@@ -74,7 +79,7 @@ class AfterCustomUrlChangedObserver implements ObserverInterface
         $this->_authSession->destroy();
         $adminUrl = $this->_backendData->getHomePageUrl();
         $this->_response->setRedirect($adminUrl)->sendResponse();
-        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
-        exit(0);
+
+        return $this;
     }
 }
