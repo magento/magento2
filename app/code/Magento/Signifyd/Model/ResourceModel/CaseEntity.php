@@ -9,6 +9,9 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Implementation of case resource model
+ *
+ * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class CaseEntity extends AbstractDb
 {
