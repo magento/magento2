@@ -8,7 +8,7 @@
  * @var $block \Magento\CatalogInventory\Block\Stockqty\Composite
  */
 ?>
-<?php if ($block->getChildStockQtyLeft()) : ?>
+<?php if ($block->isMsgVisible()) : ?>
     <div class="availability only">
         <a href="#"
            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>"}}'

@@ -60,9 +60,20 @@ abstract class Composite extends AbstractStockqty
         $childStockQty = 0;
 
         foreach ($this->getChildProducts() as $childProduct) {
-            $childStockQty += $childProductStockQty = $this->getProductStockQty($childProduct);
+            $childStockQty += $this->getProductStockQty($childProduct);
         }
 
         return $childStockQty;
+    }
+
+    /**
+     * Retrieve visibility of stock qty message
+     *
+     * @return bool
+     */
+    public function isMsgVisible()
+    {
+        return $this->getChildStockQtyLeft() > 0
+            && $this->getChildStockQtyLeft() <= $this->getThresholdQty();
     }
 }
