@@ -85,6 +85,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $customerResource;
 
     /**
+     * @var \Magento\Customer\Model\Indexer\Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Init new instance of address entity adapter
      */
     protected function setUp()
@@ -95,6 +100,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
         $this->_entityAdapter = Bootstrap::getObjectManager()->create(
             $this->_testClassName
+        );
+        $this->indexerProcessor = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Indexer\Processor::class
         );
     }
 
@@ -493,5 +501,29 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         //Import
         $imported = $this->_entityAdapter->importData();
         $this->assertTrue($imported, 'Must be successfully imported');
+    }
+
+    /**
+     * Test customer indexer gets invalidated after import when Update on Schedule mode is set
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testCustomerIndexer(): void
+    {
+        $file = __DIR__ . '/_files/address_import_update.csv';
+        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+        $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv($file, $directoryWrite);
+        $this->_entityAdapter
+            ->setParameters(['behavior' => ImportModel::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->validateData()
+            ->hasToBeTerminated();
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->_entityAdapter->importData();
+        $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->assertEquals('valid', $statusBeforeImport);
+        $this->assertEquals('invalid', $statusAfterImport);
     }
 }
