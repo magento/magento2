@@ -21,6 +21,7 @@ use Magento\TestFramework\ObjectManager;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateTest extends \PHPUnit\Framework\TestCase
 {

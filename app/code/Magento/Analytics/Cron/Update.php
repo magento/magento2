@@ -76,7 +76,7 @@ class Update
         $attemptsCount = (int)$this->flagManager
             ->getFlagData(SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE);
 
-        if (($attemptsCount >= 0) && $this->analyticsToken->isTokenExist()) {
+        if (($attemptsCount > 0) && $this->analyticsToken->isTokenExist()) {
             $attemptsCount--;
             $this->flagManager
                 ->saveFlag(SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
