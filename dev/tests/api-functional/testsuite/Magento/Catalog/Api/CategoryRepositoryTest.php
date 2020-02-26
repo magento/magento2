@@ -4,17 +4,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RulesFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Authorization\Model\RoleFactory;
-use Magento\Authorization\Model\RulesFactory;
 
 /**
  * Test repository web API.
@@ -25,8 +26,10 @@ class CategoryRepositoryTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/categories';
     const SERVICE_NAME = 'catalogCategoryRepositoryV1';
+    const FIXTURE_CATEGORY_ID = 333;
+    const FIXTURE_SECOND_STORE_CODE = 'fixture_second_store';
 
-    private $modelId = 333;
+    private $modelId = self::FIXTURE_CATEGORY_ID;
 
     /**
      * @var RoleFactory
@@ -68,7 +71,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             'available_sort_by' => ['position', 'name'],
             'include_in_menu' => true,
             'name' => 'Category 1',
-            'id' => 333,
+            'id' => self::FIXTURE_CATEGORY_ID,
             'is_active' => true,
         ];
 
@@ -96,14 +99,15 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * Load category data.
      *
-     * @param int $id
+     * @param int $categoryId
+     * @param string|null $storeCode
      * @return array
      */
-    protected function getInfoCategory($id)
+    protected function getInfoCategory(int $categoryId, ?string $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $id,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $categoryId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -112,7 +116,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
+        return $this->_webApiCall($serviceInfo, ['categoryId' => $categoryId], null, $storeCode);
     }
 
     /**
@@ -148,7 +152,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             UrlRewrite::ENTITY_ID => $categoryId,
             UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE
         ];
-        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite*/
+        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite */
         $urlRewrite = $storage->findOneByData($data);
 
         // Assert that a url rewrite is auto-generated for the category created from the data fixture
@@ -161,6 +165,104 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertTrue($this->deleteCategory($this->modelId));
         // After the category is deleted, assert that the associated url rewrite is also auto-deleted
         $this->assertNull($storage->findOneByData($data));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testCreateCategoryMultipleStores()
+    {
+        $this->updateCategoryCustomAttribute(
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            'new-url-key',
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $updatedSecondStoreCategory = $this->getInfoCategory(
+            self::FIXTURE_CATEGORY_ID,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $this->assertSame(
+            'new-url-key',
+            $this->getCategoryAttributeValue($updatedSecondStoreCategory, 'url_key')
+        );
+
+        $this->updateCategoryCustomAttribute(
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            null,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $this->updateCategoryCustomAttribute(
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            'new-global-key'
+        );
+
+        $revertedSecondStoreCategory = $this->getInfoCategory(
+            self::FIXTURE_CATEGORY_ID,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        // After setting `url_key` to null for Second Store, the value should follow Global.
+        $this->assertSame(
+            'new-global-key',
+            $this->getCategoryAttributeValue($revertedSecondStoreCategory, 'url_key')
+        );
+    }
+
+    /**
+     * Returns custom attribute value based on attribute key
+     *
+     * @param array $categoryData
+     * @param string $attributeCode
+     * @return string|null
+     */
+    private function getCategoryAttributeValue(array $categoryData, string $attributeCode): ?string
+    {
+        $attributes = $categoryData['custom_attributes'];
+
+        if (isset($attributes['attribute_code'])) {
+            return $attributes['value'];
+        }
+
+        foreach ($attributes as $attribute) {
+            if ($attribute['attribute_code'] === $attributeCode) {
+                return $attribute['value'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Performs URL Key update
+     *
+     * @param int $categoryId
+     * @param string $attributeCode
+     * @param string|null $attributeValue
+     * @param int|null $storeCode
+     */
+    private function updateCategoryCustomAttribute(
+        int $categoryId,
+        string $attributeCode,
+        ?string $attributeValue,
+        ?string $storeCode = null
+    ): void {
+        $updateRequest = [
+            'custom_attributes' => [
+                [
+                    'attribute_code' => $attributeCode,
+                    'value' => $attributeValue
+                ]
+            ]
+        ];
+
+        $this->updateCategory($categoryId, $updateRequest, null, $storeCode);
     }
 
     public function testDeleteNoSuchEntityException()
@@ -194,7 +296,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testUpdate()
     {
-        $categoryId = 333;
+        $categoryId = self::FIXTURE_CATEGORY_ID;
         $categoryData = [
             'name' => 'Update Category Test',
             'is_active' => false,
@@ -300,9 +402,10 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param int $id
      * @param array $data
      * @param string|null $token
+     * @param string|null $storeCode
      * @return array
      */
-    protected function updateCategory($id, $data, ?string $token = null)
+    protected function updateCategory($id, $data, ?string $token = null, ?string $storeCode = null)
     {
         $serviceInfo =
             [
@@ -322,10 +425,10 @@ class CategoryRepositoryTest extends WebapiAbstract
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
+            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
         } else {
             $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
+            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
         }
     }
 
@@ -369,8 +472,8 @@ class CategoryRepositoryTest extends WebapiAbstract
      * Test design settings authorization
      *
      * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
-     * @throws \Throwable
      * @return void
+     * @throws \Throwable
      */
     public function testSaveDesign(): void
     {
