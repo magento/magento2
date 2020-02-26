@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUsingElasticSearchWithWeightAttributeTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Storefront Search"/>
+            <title value="Using ElasticSearch with weight attribute"/>
+            <description value="Use ElasticSearch for products with weight attributes"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-31368"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <!--Create Simple Product with weight-->
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete create product -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <!-- Change attribute property: Use in Search >No -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttributeInAdmin">
+                <argument name="productAttributeCode" value="weight"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeUnsearchableInAQuickSearch">
+                <argument name="useInSearchValue" value="No"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <!-- Logout from admin -->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 2 -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttribute">
+            <argument name="productAttributeCode" value="weight"/>
+        </actionGroup>
+        <!-- Change attribute property: Use in Search >Yes -->
+        <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
+        <!-- Step 3 -->
+        <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        <!-- Step 4 -->
+        <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearFPC"/>
+        <!-- Step 5 -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+        <!-- Step 6 -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByAnyValue">
+            <argument name="phrase" value="exampleTestValue2020"/>
+        </actionGroup>
+        <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductMessage"/>
+    </test>
+</tests>

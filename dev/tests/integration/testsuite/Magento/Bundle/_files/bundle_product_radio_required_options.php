@@ -34,7 +34,7 @@ $bundleProduct = $productFactory->create();
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsiteId])
-    ->setName('Bundle Product')
+    ->setName('Bundle Product Radio Required Options')
     ->setSku('bundle-product-radio-required-options')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)

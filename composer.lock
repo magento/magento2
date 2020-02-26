@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9aed77ed02c1241422ae2e1f2b70033",
+    "content-hash": "e2985f35fb2faa7db742c4d5bc7161bc",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -398,16 +398,16 @@
         },
         {
             "name": "composer/spdx-licenses",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "7ac1e6aec371357df067f8a688c3d6974df68fa5"
+                "reference": "0c3e51e1880ca149682332770e25977c70cf9dae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/7ac1e6aec371357df067f8a688c3d6974df68fa5",
-                "reference": "7ac1e6aec371357df067f8a688c3d6974df68fa5",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/0c3e51e1880ca149682332770e25977c70cf9dae",
+                "reference": "0c3e51e1880ca149682332770e25977c70cf9dae",
                 "shasum": ""
             },
             "require": {
@@ -454,7 +454,7 @@
                 "spdx",
                 "validator"
             ],
-            "time": "2019-07-29T10:31:59+00:00"
+            "time": "2020-02-14T07:44:31+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -4317,16 +4317,16 @@
         },
         {
             "name": "seld/phar-utils",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/phar-utils.git",
-                "reference": "84715761c35808076b00908a20317a3a8a67d17e"
+                "reference": "8800503d56b9867d43d9c303b9cbcc26016e82f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/84715761c35808076b00908a20317a3a8a67d17e",
-                "reference": "84715761c35808076b00908a20317a3a8a67d17e",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/8800503d56b9867d43d9c303b9cbcc26016e82f0",
+                "reference": "8800503d56b9867d43d9c303b9cbcc26016e82f0",
                 "shasum": ""
             },
             "require": {
@@ -4355,9 +4355,9 @@
             ],
             "description": "PHAR file format utilities, for when PHP phars you up",
             "keywords": [
-                "phra"
+                "phar"
             ],
-            "time": "2020-01-13T10:41:09+00:00"
+            "time": "2020-02-14T15:25:33+00:00"
         },
         {
             "name": "symfony/console",
@@ -5413,16 +5413,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.133.13",
+            "version": "3.133.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "225409f1df6df25c46d72369034e1e5894629173"
+                "reference": "18289bf4a3fe68e9a0853f29d82b6cd4b1de2f9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/225409f1df6df25c46d72369034e1e5894629173",
-                "reference": "225409f1df6df25c46d72369034e1e5894629173",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/18289bf4a3fe68e9a0853f29d82b6cd4b1de2f9e",
+                "reference": "18289bf4a3fe68e9a0853f29d82b6cd4b1de2f9e",
                 "shasum": ""
             },
             "require": {
@@ -5493,7 +5493,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-02-12T19:12:46+00:00"
+            "time": "2020-02-14T19:09:24+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -7593,16 +7593,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "b00f5e195e1ed7f6335bce3052be9a0291f4d0db"
+                "reference": "8b332582751a830b3a6eafe1b09ac3b403e9a20e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b00f5e195e1ed7f6335bce3052be9a0291f4d0db",
-                "reference": "b00f5e195e1ed7f6335bce3052be9a0291f4d0db",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/8b332582751a830b3a6eafe1b09ac3b403e9a20e",
+                "reference": "8b332582751a830b3a6eafe1b09ac3b403e9a20e",
                 "shasum": ""
             },
             "require": {
@@ -7674,7 +7674,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-02-11T22:23:54+00:00"
+            "time": "2020-02-13T21:29:32+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -10650,16 +10650,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "573381c0a64f155a0d9a23f4b0c797194805b925"
+                "reference": "aed98a490f9a8f78468232db345ab9cf606cf598"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/573381c0a64f155a0d9a23f4b0c797194805b925",
-                "reference": "573381c0a64f155a0d9a23f4b0c797194805b925",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
+                "reference": "aed98a490f9a8f78468232db345ab9cf606cf598",
                 "shasum": ""
             },
             "require": {
@@ -10694,7 +10694,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2019-11-24T13:36:37+00:00"
+            "time": "2020-02-14T12:15:55+00:00"
         },
         {
             "name": "weew/helpers-array",
