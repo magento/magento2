@@ -8,14 +8,14 @@
  * @var $block \Magento\CatalogInventory\Block\Stockqty\Composite
  */
 ?>
-<?php if ($block->isMsgVisible()) : ?>
+<?php if ($block->getChildStockQtyLeft()) : ?>
     <div class="availability only">
         <a href="#"
            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>"}}'
            id="<?= $block->escapeHtmlAttr($block->getPlaceholderId()) ?>"
-           title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>"
+           title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getChildStockQtyLeft()))) ?>"
            class="action show">
-            <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
+            <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getChildStockQtyLeft())}</strong>") ?>
         </a>
     </div>
     <div class="availability only detailed" id="<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>">

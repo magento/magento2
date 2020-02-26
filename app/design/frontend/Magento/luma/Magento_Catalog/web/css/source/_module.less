@@ -232,8 +232,23 @@
             float: right;
             padding-bottom: @indent__s;
             padding-left: 10%;
+            position: relative;
             text-align: right;
             vertical-align: top;
+
+            .availability.detailed {
+                display: none;
+                background: #ffffff;
+                position: absolute;
+                right: 0;
+                min-width: 200px;
+                margin-top: 20px;
+
+                &.active {
+                    display: block;
+                }
+            }
+
         }
 
         .stock {

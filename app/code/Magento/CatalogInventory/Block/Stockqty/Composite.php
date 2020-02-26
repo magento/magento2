@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product;
 /**
  * Product stock qty block for abstract composite product
  */
-abstract class Composite extends DefaultStockqty
+abstract class Composite extends AbstractStockqty
 {
     /**
      * Child products cache
@@ -48,5 +48,21 @@ abstract class Composite extends DefaultStockqty
     public function getDetailsPlaceholderId()
     {
         return $this->getPlaceholderId() . '-details';
+    }
+
+    /**
+     *  Get stock qty of child products
+     *
+     * @return float|int
+     */
+    public function getChildStockQtyLeft()
+    {
+        $childStockQty = 0;
+
+        foreach ($this->getChildProducts() as $childProduct) {
+            $childStockQty += $childProductStockQty = $this->getProductStockQty($childProduct);
+        }
+
+        return $childStockQty;
     }
 }
