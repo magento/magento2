@@ -22,12 +22,8 @@ $quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
 /** @var CartRepositoryInterface $cartRepository */
 $cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
 
-/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-
 /** @var $product \Magento\Catalog\Model\Product */
-$productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
 $product = $productRepository->get('configurable');
-/* Create simple products per each option */
 /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $options = Bootstrap::getObjectManager()->create(
     \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
