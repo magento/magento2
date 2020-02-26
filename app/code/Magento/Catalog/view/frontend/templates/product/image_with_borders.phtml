@@ -17,7 +17,7 @@
              <?= $escaper->escapeHtmlAttr($block->getCustomAttributes()) ?>
              src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
              loading="lazy"
-             max-width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
-             max-height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+             width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+             height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
              alt="<?= /* @noEscape */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
 </span>
