@@ -263,7 +263,7 @@ class Customer extends AbstractCustomer
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
-        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->create(Processor::class);
+        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->get(Processor::class);
     }
 
     /**

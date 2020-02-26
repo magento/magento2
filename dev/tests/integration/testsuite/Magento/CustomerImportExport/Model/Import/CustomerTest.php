@@ -40,6 +40,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     protected $directoryWrite;
 
     /**
+     * @var \Magento\Customer\Model\Indexer\Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Create all necessary data for tests
      */
     protected function setUp()
@@ -49,6 +54,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CustomerImportExport\Model\Import\Customer::class);
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
+        $this->indexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Customer\Model\Indexer\Processor::class);
 
         $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
         $propertyAccessor->setAccessible(true);
@@ -375,6 +382,22 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('David-updated', $customer->getFirstname());
         $this->assertEquals('Lamar-updated', $customer->getLastname());
         $this->assertEquals(1, $customer->getStoreId());
+    }
+
+    /**
+     * Test customer indexer gets invalidated when it is Update on Schedule mode
+     *
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testCustomerIndexer(): void
+    {
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->doImport(__DIR__ . '/_files/customers_with_gender_to_import.csv', Import::BEHAVIOR_ADD_UPDATE);
+        $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->assertEquals($statusBeforeImport, 'valid');
+        $this->assertEquals($statusAfterImport, 'invalid');
     }
 
     /**
