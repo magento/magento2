@@ -23,7 +23,7 @@ use Magento\Framework\UrlInterface;
  * It contains standard action behavior (event dispatching, flag checks)
  * Action classes that do not extend from this class will lose this behavior and might not function correctly
  *
- * @deprecated 2.4.0, use \Magento\Framework\App\ActionInterface
+ * @deprecated Use \Magento\Framework\App\ActionInterface
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api

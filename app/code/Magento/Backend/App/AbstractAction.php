@@ -20,6 +20,8 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * Generic backend controller
  *
+ * @deprecated Use \Magento\Framework\App\ActionInterface
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
