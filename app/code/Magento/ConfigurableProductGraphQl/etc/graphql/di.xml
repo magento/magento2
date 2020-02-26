@@ -36,4 +36,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder">
+        <plugin name="configurable_product_graphql_option_select" type="Magento\ConfigurableProductGraphQl\Model\Plugin\AttributeOptionSelect" />
+    </type>
 </config>
