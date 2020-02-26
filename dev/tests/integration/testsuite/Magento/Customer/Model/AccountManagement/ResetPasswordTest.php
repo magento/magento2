@@ -12,6 +12,7 @@ use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -36,6 +37,9 @@ class ResetPasswordTest extends TestCase
     /** @var CustomerRegistry */
     private $customerRegistry;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
     /**
      * @inheritdoc
      */
@@ -45,6 +49,7 @@ class ResetPasswordTest extends TestCase
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         parent::setUp();
     }
 
@@ -69,7 +74,7 @@ class ResetPasswordTest extends TestCase
             Xpath::getElementsCountForXpath(
                 sprintf(
                     '//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]',
-                    1,
+                    $customerSecure->getId(),
                     $customerSecure->getRpToken()
                 ),
                 $mailTemplate
@@ -86,8 +91,9 @@ class ResetPasswordTest extends TestCase
     public function testSendPasswordResetLink(): void
     {
         $email = 'customer@example.com';
+        $websiteId = (int)$this->storeManager->getWebsite('base')->getId();
 
-        $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET, 1);
+        $this->accountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET, $websiteId);
     }
 
     /**
@@ -104,49 +110,38 @@ class ResetPasswordTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @dataProvider passwordResetErrorsProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @param string $email
+     * @param int $websiteId
      * @return void
      */
-    public function testSendPasswordResetLinkBadEmailOrWebsite(): void
+    public function testPasswordResetErrors(string $email, int $websiteId = null): void
     {
-        $email = 'foo@example.com';
-
-        try {
-            $this->accountManagement->initiatePasswordReset(
-                $email,
-                AccountManagement::EMAIL_RESET,
-                0
-            );
-            $this->fail('Expected exception not thrown.');
-        } catch (NoSuchEntityException $e) {
-            $expectedParams = [
-                'fieldName' => 'email',
-                'fieldValue' => $email,
-                'field2Name' => 'websiteId',
-                'field2Value' => 0,
-            ];
-            $this->assertEquals($expectedParams, $e->getParameters());
-        }
+        $websiteId = $websiteId ?? (int)$this->storeManager->getWebsite('base')->getId();
+        $this->expectExceptionObject(
+            NoSuchEntityException::doubleField('email', $email, 'websiteId', $websiteId)
+        );
+        $this->accountManagement->initiatePasswordReset(
+            $email,
+            AccountManagement::EMAIL_RESET,
+            $websiteId
+        );
     }
 
     /**
-     * @magentoAppArea frontend
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @return void
+     * @return array
      */
-    public function testSendPasswordResetLinkBadEmailDefaultWebsite(): void
+    public function passwordResetErrorsProvider(): array
     {
-        $email = 'foo@example.com';
-
-        try {
-            $this->accountManagement->initiatePasswordReset(
-                $email,
-                AccountManagement::EMAIL_RESET
-            );
-            $this->fail('Expected exception not thrown.');
-        } catch (NoSuchEntityException $nsee) {
-            // App area is frontend, so we expect websiteId of 1.
-            $this->assertEquals('No such entity with email = foo@example.com, websiteId = 1', $nsee->getMessage());
-        }
+        return [
+            'wrong_email' => [
+                'email' => 'foo@example.com',
+            ],
+            'wrong_website_id' => [
+                'email' => 'customer@example.com',
+                'website_id' => 0,
+            ],
+        ];
     }
 }
