@@ -16,6 +16,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Response;
+use Magento\Framework\Profiler;
 
 /**
  * Dispatch the controller_action_predispatch and controller_action_post_dispatch events.
@@ -63,7 +64,7 @@ class EventDispatchPlugin
      * Build the event parameter array
      *
      * @param ActionInterface $subject
-     * @return mixed[]
+     * @return array
      */
     private function getEventParameters(ActionInterface $subject): array
     {
@@ -89,7 +90,6 @@ class EventDispatchPlugin
     /**
      * Check if action flags are set that would suppress the post dispatch events.
      *
-     * @param ActionInterface $subject
      * @return bool
      */
     private function isSetActionNoPostDispatchFlag(): bool
@@ -123,6 +123,7 @@ class EventDispatchPlugin
      */
     private function dispatchPostDispatchEvents(ActionInterface $action)
     {
+        Profiler::start('postdispatch');
         $this->eventManager->dispatch(
             'controller_action_postdispatch_' . $this->request->getFullActionName(),
             $this->getEventParameters($action)
@@ -132,5 +133,6 @@ class EventDispatchPlugin
             $this->getEventParameters($action)
         );
         $this->eventManager->dispatch('controller_action_postdispatch', $this->getEventParameters($action));
+        Profiler::stop('postdispatch');
     }
 }
