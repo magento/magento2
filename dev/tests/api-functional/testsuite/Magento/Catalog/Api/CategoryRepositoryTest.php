@@ -168,10 +168,12 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * When update Category Attribute with `null` value - it should follow the default value (global one)
+     *
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      */
-    public function testCreateCategoryMultipleStores()
+    public function testCategoryUpdateWithStoreScopeNullValuesShouldFollowDefaultValue()
     {
         $this->updateCategoryCustomAttribute(
             self::FIXTURE_CATEGORY_ID,
@@ -212,6 +214,37 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertSame(
             'new-global-key',
             $this->getCategoryAttributeValue($revertedSecondStoreCategory, 'url_key')
+        );
+    }
+
+    /**
+     * Change of Category Name should not touch it's `url_key` attribute
+     *
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testCategoryNameUpdateShouldNotAffectUrlKey()
+    {
+        $categoryFixtureInfo = $this->getInfoCategory(self::FIXTURE_CATEGORY_ID);
+
+        $this->updateCategory(self::FIXTURE_CATEGORY_ID, ['name' => 'New Category Name']);
+
+        // Update `url_key` globally
+        $this->updateCategoryCustomAttribute(
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            'new-url-key'
+        );
+
+        $categoryUpdatedInfo = $this->getInfoCategory(
+            self::FIXTURE_CATEGORY_ID,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        // Expect that Store-level value was updated
+        $this->assertSame(
+            'new-url-key',
+            $this->getCategoryAttributeValue($categoryUpdatedInfo, 'url_key')
         );
     }
 
