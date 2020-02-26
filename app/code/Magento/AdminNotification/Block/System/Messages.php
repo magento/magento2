@@ -74,8 +74,8 @@ class Messages extends Template
     {
         $items = array_values($this->_messages->getItems());
 
-        if (isset($items[0]) && (int)$items[0]->getSeverity() === MessageInterface::SEVERITY_CRITICAL) {
-            return $items[0];
+        if (!empty($items) && current($items)->getSeverity() === MessageInterface::SEVERITY_CRITICAL) {
+            return current($items);
         }
         return null;
     }

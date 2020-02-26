@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Model\NotificationService;
 use Magento\Backend\App\Action;
+use Magento\Framework\Exception\LocalizedException;
 
 class MarkAsRead extends Notification
 {
@@ -40,7 +41,7 @@ class MarkAsRead extends Notification
             try {
                 $this->notificationService->markAsRead($notificationId);
                 $this->messageManager->addSuccessMessage(__('The message has been marked as Read.'));
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage(
