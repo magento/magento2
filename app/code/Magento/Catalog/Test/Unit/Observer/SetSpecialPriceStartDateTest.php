@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Observer;
 
-use Magento\Framework\Event;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Observer\SetSpecialPriceStartDate;
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Catalog\Observer\SetSpecialPriceStartDate
@@ -62,7 +62,7 @@ class SetSpecialPriceStartDateTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->createMock(Observer::class);
@@ -90,7 +90,7 @@ class SetSpecialPriceStartDateTest extends TestCase
     /**
      * Test observer execute method
      */
-    public function testExecuteModifySpecialFromDate()
+    public function testExecuteModifySpecialFromDate(): void
     {
         $specialPrice = 15;
         $specialFromDate = null;
@@ -108,12 +108,12 @@ class SetSpecialPriceStartDateTest extends TestCase
 
         $this->dateObject->expects($this->any())
             ->method('setTime')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->timezone
             ->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($this->dateObject));
+            ->willReturn($this->dateObject);
 
         $this->productMock
             ->expects($this->once())
