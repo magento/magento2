@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\Message\MessageInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Add products to cart
+ * Adding products to cart using GraphQL
  */
 class AddProductsToCart
 {
