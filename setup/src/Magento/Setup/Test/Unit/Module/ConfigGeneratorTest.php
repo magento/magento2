@@ -15,7 +15,11 @@ use Magento\Setup\Model\ConfigGenerator;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\CryptKeyGenerator;
 use PHPUnit\Framework\TestCase;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
+/**
+ * Test for Magento\Setup\Model\ConfigGenerator class.
+ */
 class ConfigGeneratorTest extends TestCase
 {
     /**
@@ -44,11 +48,17 @@ class ConfigGeneratorTest extends TestCase
         $configDataFactoryMock = (new ObjectManager($this))
             ->getObject(ConfigDataFactory::class, ['objectManager' => $objectManagerMock]);
 
+        $driverOptions = $this->getMockBuilder(DriverOptions::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDriverOptions'])
+            ->getMock();
+
         $this->configGeneratorObject = new ConfigGenerator(
             $randomMock,
             $deployConfig,
             $configDataFactoryMock,
-            $cryptKeyGenerator
+            $cryptKeyGenerator,
+            $driverOptions
         );
     }
 
@@ -64,6 +74,7 @@ class ConfigGeneratorTest extends TestCase
     {
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 

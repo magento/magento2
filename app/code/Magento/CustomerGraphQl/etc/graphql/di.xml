@@ -13,4 +13,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQl\Model\Query\ContextFactory">
+        <arguments>
+            <argument name="contextParametersProcessors" xsi:type="array">
+                <item name="add_user_info_to_context" xsi:type="object">Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -223,6 +223,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * Set generator pool.
+     *
      * @param Layout\GeneratorPool $generatorPool
      * @return $this
      */
@@ -233,6 +235,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * Set builder.
+     *
      * @param Layout\BuilderInterface $builder
      * @return $this
      */
@@ -255,7 +259,10 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
-     * TODO Will be eliminated in MAGETWO-28359
+     * Public build.
+     *
+     * Will be eliminated in MAGETWO-28359
+     *
      * @return void
      */
     public function publicBuild()
@@ -992,6 +999,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * Add adjustable renderer.
+     *
      * @param string $namespace
      * @param string $staticType
      * @param string $dynamicType
@@ -1011,6 +1020,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * Get renderer options.
+     *
      * @param string $namespace
      * @param string $staticType
      * @param string $dynamicType
@@ -1031,6 +1042,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * Execute renderer.
+     *
      * @param string $namespace
      * @param string $staticType
      * @param string $dynamicType
@@ -1049,6 +1062,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
                 ->setTemplate($options['template'])
                 ->assign($data);
 
+            // phpcs:ignore Magento2.Security.LanguageConstruct
             echo $this->_renderBlock($block->getNameInLayout());
         }
     }

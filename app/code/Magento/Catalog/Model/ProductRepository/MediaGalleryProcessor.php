@@ -92,7 +92,17 @@ class MediaGalleryProcessor
                     if ($updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }
-                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
+                    if (isset($updatedEntry['content'])) {
+                        //need to recreate image and reset object
+                        $existingEntry['recreate'] = true;
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                        $newEntry = array_merge($existingEntry, $updatedEntry);
+                        $newEntries[] = $newEntry;
+                        unset($existingMediaGallery[$key]);
+                    } else {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                        $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
+                    }
                 } else {
                     //set the removed flag
                     $existingEntry['removed'] = true;
@@ -231,7 +241,7 @@ class MediaGalleryProcessor
     private function processMediaAttributes(ProductInterface $product, array $images): void
     {
         foreach ($images as $image) {
-            if (!isset($image['removed']) && !empty($image['types'])) {
+            if (empty($image['removed']) && !empty($image['types'])) {
                 $this->processor->setMediaAttribute($product, $image['types'], $image['file']);
             }
         }

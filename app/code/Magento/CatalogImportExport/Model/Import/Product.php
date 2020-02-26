@@ -14,6 +14,8 @@ use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -39,6 +41,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
@@ -141,7 +144,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_PRODUCT_WEBSITES = '_product_websites';
 
     /**
-     * Media gallery attribute code.
+     * Attribute code for media gallery.
      */
     const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
 
@@ -151,12 +154,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_MEDIA_IMAGE = '_media_image';
 
     /**
-     * Inventory use config.
+     * Inventory use config label.
      */
     const INVENTORY_USE_CONFIG = 'Use Config';
 
     /**
-     * Inventory use config prefix.
+     * Prefix for inventory use config.
      */
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
@@ -304,6 +307,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
         'invalidNewToDateValue' => 'Make sure new_to_date is later than or the same as new_from_date',
+        // Can't add new translated strings in patch release
+        'invalidLayoutUpdate' => 'Invalid format.',
+        'insufficientPermissions' => 'Invalid format.',
     ];
     //@codingStandardsIgnoreEnd
 
@@ -746,6 +752,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productRepository;
 
     /**
+     * @var StatusProcessor
+     */
+    private $statusProcessor;
+    /**
+     * @var StockProcessor
+     */
+    private $stockProcessor;
+
+    /**
      * @var LinkProcessor
      */
     private $linkProcessor;
@@ -795,6 +810,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param StockItemImporterInterface|null $stockItemImporter
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
+     * @param StatusProcessor|null $statusProcessor
+     * @param StockProcessor|null $stockProcessor
      * @param LinkProcessor|null $linkProcessor
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -846,6 +863,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         StockItemImporterInterface $stockItemImporter = null,
         DateTimeFactory $dateTimeFactory = null,
         ProductRepositoryInterface $productRepository = null,
+        StatusProcessor $statusProcessor = null,
+        StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null
     ) {
         $this->_eventManager = $eventManager;
@@ -882,6 +901,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
         $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()
             ->get(StockItemImporterInterface::class);
+        $this->statusProcessor = $statusProcessor ?: ObjectManager::getInstance()
+            ->get(StatusProcessor::class);
+        $this->stockProcessor = $stockProcessor ?: ObjectManager::getInstance()
+            ->get(StockProcessor::class);
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
                 ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
@@ -1206,8 +1229,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
+            // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
             $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
+            // phpcs:enable
         }
         $this->_initErrorTemplates();
         // remove doubles
@@ -1282,12 +1307,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _saveProductAttributes(array $attributesData)
     {
         $linkField = $this->getProductEntityLinkField();
+        $statusAttributeId = (int) $this->retrieveAttributeByCode('status')->getId();
         foreach ($attributesData as $tableName => $skuData) {
+            $linkIdBySkuForStatusChanged = [];
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
                 $linkId = $this->_oldSku[strtolower($sku)][$linkField];
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
+                        if ($attributeId === $statusAttributeId) {
+                            $this->statusProcessor->setStatus($sku, $storeId, $storeValue);
+                            $linkIdBySkuForStatusChanged[strtolower($sku)] = $linkId;
+                        }
                         $tableData[] = [
                             $linkField => $linkId,
                             'attribute_id' => $attributeId,
@@ -1296,6 +1327,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         ];
                     }
                 }
+            }
+            if ($linkIdBySkuForStatusChanged) {
+                $this->statusProcessor->loadOldStatus($linkIdBySkuForStatusChanged);
             }
             $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
         }
@@ -1511,6 +1545,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function _saveProducts()
     {
@@ -1564,6 +1599,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
                 }
+
+                $storeId = !empty($rowData[self::COL_STORE])
+                    ? $this->getStoreIdByCode($rowData[self::COL_STORE])
+                    : Store::DEFAULT_STORE_ID;
+                $rowExistingImages = $existingImages[$storeId][$rowSku] ?? [];
+                $rowStoreMediaGalleryValues = $rowExistingImages;
+                $rowExistingImages += $existingImages[Store::DEFAULT_STORE_ID][$rowSku] ?? [];
 
                 if (self::SCOPE_STORE == $rowScope) {
                     // set necessary data from SCOPE_DEFAULT row
@@ -1668,19 +1710,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 // 5. Media gallery phase
                 list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
-                $storeId = !empty($rowData[self::COL_STORE])
-                    ? $this->getStoreIdByCode($rowData[self::COL_STORE])
-                    : Store::DEFAULT_STORE_ID;
                 $imageHiddenStates = $this->getImagesHiddenStates($rowData);
                 foreach (array_keys($imageHiddenStates) as $image) {
-                    if (array_key_exists($rowSku, $existingImages)
-                        && array_key_exists($image, $existingImages[$rowSku])
-                    ) {
-                        $rowImages[self::COL_MEDIA_IMAGE][] = $image;
+                    //Mark image as uploaded if it exists
+                    if (array_key_exists($image, $rowExistingImages)) {
                         $uploadedImages[$image] = $image;
                     }
-
-                    if (empty($rowImages)) {
+                    //Add image to hide to images list if it does not exist
+                    if (empty($rowImages[self::COL_MEDIA_IMAGE])
+                        || !in_array($image, $rowImages[self::COL_MEDIA_IMAGE])
+                    ) {
                         $rowImages[self::COL_MEDIA_IMAGE][] = $image;
                     }
                 }
@@ -1721,24 +1760,29 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             continue;
                         }
 
-                        if (isset($existingImages[$rowSku][$uploadedFile])) {
-                            $currentFileData = $existingImages[$rowSku][$uploadedFile];
+                        if (isset($rowExistingImages[$uploadedFile])) {
+                            $currentFileData = $rowExistingImages[$uploadedFile];
+                            $currentFileData['store_id'] = $storeId;
+                            $storeMediaGalleryValueExists = isset($rowStoreMediaGalleryValues[$uploadedFile]);
+                            if (array_key_exists($uploadedFile, $imageHiddenStates)
+                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
+                            ) {
+                                $imagesForChangeVisibility[] = [
+                                    'disabled' => $imageHiddenStates[$uploadedFile],
+                                    'imageData' => $currentFileData,
+                                    'exists' => $storeMediaGalleryValueExists
+                                ];
+                                $storeMediaGalleryValueExists = true;
+                            }
+
                             if (isset($rowLabels[$column][$columnImageKey])
                                 && $rowLabels[$column][$columnImageKey] !=
                                 $currentFileData['label']
                             ) {
                                 $labelsForUpdate[] = [
                                     'label' => $rowLabels[$column][$columnImageKey],
-                                    'imageData' => $currentFileData
-                                ];
-                            }
-
-                            if (array_key_exists($uploadedFile, $imageHiddenStates)
-                                && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
-                            ) {
-                                $imagesForChangeVisibility[] = [
-                                    'disabled' => $imageHiddenStates[$uploadedFile],
-                                    'imageData' => $currentFileData
+                                    'imageData' => $currentFileData,
+                                    'exists' => $storeMediaGalleryValueExists
                                 ];
                             }
                         } else {
@@ -1885,6 +1929,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         return $this;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     // phpcs:enable
 
@@ -2032,9 +2077,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getUploader()
     {
         if ($this->_fileUploader === null) {
-            $this->_fileUploader = $this->_uploaderFactory->create();
+            $fileUploader = $this->_uploaderFactory->create();
 
-            $this->_fileUploader->init();
+            $fileUploader->init();
 
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
@@ -2045,7 +2090,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
             }
 
-            if (!$this->_fileUploader->setTmpDir($tmpPath)) {
+            if (!$fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not readable.', $tmpPath)
                 );
@@ -2054,11 +2099,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $destinationPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationPath);
-            if (!$this->_fileUploader->setDestDir($destinationPath)) {
+            if (!$fileUploader->setDestDir($destinationPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not writable.', $destinationPath)
                 );
             }
+
+            $this->_fileUploader = $fileUploader;
         }
         return $this->_fileUploader;
     }
@@ -2174,6 +2221,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $stockData = [];
             $productIdsToReindex = [];
+            $stockChangedProductIds = [];
             // Format bunch to stock data rows
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
@@ -2183,8 +2231,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $row = [];
                 $sku = $rowData[self::COL_SKU];
                 if ($this->skuProcessor->getNewSku($sku) !== null) {
+                    $stockItem = $this->getRowExistingStockItem($rowData);
+                    $existingStockItemData = $stockItem->getData();
                     $row = $this->formatStockDataForRow($rowData);
                     $productIdsToReindex[] = $row['product_id'];
+                    $storeId = $this->getRowStoreId($rowData);
+                    if (!empty(array_diff_assoc($row, $existingStockItemData))
+                        || $this->statusProcessor->isStatusChanged($sku, $storeId)
+                    ) {
+                        $stockChangedProductIds[] = $row['product_id'];
+                    }
                 }
 
                 if (!isset($stockData[$sku])) {
@@ -2197,9 +2253,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->stockItemImporter->import($stockData);
             }
 
+            $this->reindexStockStatus($stockChangedProductIds);
             $this->reindexProducts($productIdsToReindex);
         }
         return $this;
+    }
+
+    /**
+     * Reindex stock status for provided product IDs
+     *
+     * @param array $productIds
+     */
+    private function reindexStockStatus(array $productIds): void
+    {
+        if ($productIds) {
+            $this->stockProcessor->reindexList($productIds);
+        }
     }
 
     /**
@@ -2457,7 +2526,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->addRowError(
                         ValidatorInterface::ERROR_DUPLICATE_URL_KEY,
                         $rowNum,
-                        $rowData[self::COL_NAME],
+                        $urlKey,
                         $message,
                         $errorLevel
                     )
@@ -2492,6 +2561,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
+        if (!empty($rowData[self::COL_SKU]) && empty($rowData[self::URL_KEY])
+            && $this->getBehavior() === Import::BEHAVIOR_APPEND
+            && $this->isSkuExist($rowData[self::COL_SKU])) {
+            return false;
+        }
+
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
                 || $rowData[self::COL_VISIBILITY]
@@ -2731,8 +2806,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             try {
                 $rowData = $source->current();
             } catch (\InvalidArgumentException $e) {
-                $this->addRowError($e->getMessage(), $this->_processedRowsCount);
-                $this->_processedRowsCount++;
                 $source->next();
                 continue;
             }
@@ -2815,7 +2888,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return trim(strtolower($urlKey));
         }
 
-        if (!empty($rowData[self::COL_NAME])) {
+        if (!empty($rowData[self::COL_NAME])
+            && (array_key_exists(self::URL_KEY, $rowData) || !$this->isSkuExist($rowData[self::COL_SKU]))) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
@@ -2968,6 +3042,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
 
+        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
+            $rowData['is_in_stock'] = 0;
+        }
+
         $row = array_merge(
             $this->defaultStockData,
             array_intersect_key($existStockData, $this->defaultStockData),
@@ -3038,5 +3116,31 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return (!$this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
             ? ProcessingError::ERROR_LEVEL_CRITICAL
             : ProcessingError::ERROR_LEVEL_NOT_CRITICAL;
+    }
+
+    /**
+     * Get row store ID
+     *
+     * @param array $rowData
+     * @return int
+     */
+    private function getRowStoreId(array $rowData): int
+    {
+        return !empty($rowData[self::COL_STORE])
+            ? (int) $this->getStoreIdByCode($rowData[self::COL_STORE])
+            : Store::DEFAULT_STORE_ID;
+    }
+
+    /**
+     * Get row stock item model
+     *
+     * @param array $rowData
+     * @return StockItemInterface
+     */
+    private function getRowExistingStockItem(array $rowData): StockItemInterface
+    {
+        $productId = $this->skuProcessor->getNewSku($rowData[self::COL_SKU])['entity_id'];
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
+        return $this->stockRegistry->getStockItem($productId, $websiteId);
     }
 }

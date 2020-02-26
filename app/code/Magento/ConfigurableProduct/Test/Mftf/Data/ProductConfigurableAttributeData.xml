@@ -29,6 +29,11 @@
         <data key="name" unique="suffix">Orange</data>
         <data key="price">99.99</data>
     </entity>
+    <entity name="productAttributeColor" type="product_attribute">
+        <data key="default_label" unique="suffix">color</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_quantity">1</data>
+    </entity>
     <entity name="colorDefaultProductAttribute" type="product_attribute">
         <data key="default_label">Color</data>
         <data key="input_type">Dropdown</data>

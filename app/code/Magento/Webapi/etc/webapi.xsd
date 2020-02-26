@@ -8,68 +8,17 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="routes" type="routesType"/>
-
-    <xs:complexType name="routesType">
-        <xs:sequence>
-            <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="routeType">
-        <xs:sequence>
-            <xs:element name="service" type="serviceType"/>
-            <xs:element name="resources" type="resourcesType"/>
-            <xs:element name="data" type="dataType" minOccurs="0"/>
-        </xs:sequence>
-        <xs:attribute name="method" use="required">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="GET"/>
-                    <xs:enumeration value="PUT"/>
-                    <xs:enumeration value="POST"/>
-                    <xs:enumeration value="DELETE"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-        <xs:attribute name="url" type="xs:string" use="required"/>
-        <xs:attribute name="secure" type="xs:boolean"/>
-    </xs:complexType>
-
-    <xs:complexType name="serviceType">
-        <xs:attribute name="class" type="xs:string" use="required"/>
-        <xs:attribute name="method" type="xs:string" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="resourcesType" >
-        <xs:sequence>
-            <xs:element name="resource" type="resourceType" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="resourceType">
-       <xs:attribute name="ref" use="required">
-           <xs:simpleType>
-               <xs:restriction base="xs:string">
-                   <xs:pattern value=".+(, ?.+)*"/>
-               </xs:restriction>
-           </xs:simpleType>
-       </xs:attribute>
-    </xs:complexType>
-
-    <xs:complexType name="dataType" >
-        <xs:sequence>
-            <xs:element name="parameter" type="parameterType" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="parameterType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="name" type="xs:string" use="required"/>
-                <xs:attribute name="force" type="xs:boolean"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-
+    <xs:redefine schemaLocation="urn:magento:module:Magento_Webapi:etc/webapi_base.xsd">
+        <xs:complexType name="routeType">
+            <xs:complexContent>
+                <xs:extension base="routeType">
+                    <xs:sequence>
+                        <xs:element name="service" type="serviceType" minOccurs="0"/>
+                        <xs:element name="resources" type="resourcesType" minOccurs="0"/>
+                        <xs:element name="data" type="dataType" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
 </xs:schema>

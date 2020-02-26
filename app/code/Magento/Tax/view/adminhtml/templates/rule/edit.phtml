@@ -10,11 +10,12 @@
 require([
     'jquery',
     'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/confirm',
     "jquery/ui",
     'mage/multiselect',
     "mage/mage",
     'Magento_Ui/js/modal/modal'
-], function($, alert){
+], function($, alert, confirm) {
 
     $.widget("adminhtml.dialogRates", $.mage.modal, {
         options: {
@@ -160,53 +161,58 @@ require([
             taxRateField.find('.mselect-list')
                     .on('click.mselect-edit', '.mselect-edit', this.edit)
                     .on("click.mselect-delete", ".mselect-delete", function () {
-                        if (!confirm('<?= $block->escapeJs(__('Do you really want to delete this tax rate?')) ?>')) {
-                            return;
-                        }
-
                         var that = $(this),
                             select = that.closest('.mselect-list').prev(),
                             rateValue = that.parent().find('input[type="checkbox"]').val();
 
-                        $('body').trigger('processStart');
-                        var ajaxOptions = {
-                            type: 'POST',
-                            data: {
-                                tax_calculation_rate_id: rateValue,
-                                form_key: $('input[name="form_key"]').val()
-                            },
-                            dataType: 'json',
-                            url: '<?= $block->escapeJs($block->escapeUrl($block->getTaxRateDeleteUrl())) ?>',
-                            success: function(result, status) {
-                                $('body').trigger('processStop');
-                                if (result.success) {
-                                    that.parent().remove();
-                                    select.find('option').each(function() {
-                                        if (this.value === rateValue) {
-                                            $(this).remove();
+                        confirm({
+                            content: '<?= $block->escapeJs(__('Do you really want to delete this tax rate?')) ?>',
+                            actions: {
+                                /**
+                                 * Confirm action.
+                                 */
+                                confirm: function () {
+                                    $('body').trigger('processStart');
+                                    var ajaxOptions = {
+                                        type: 'POST',
+                                        data: {
+                                            tax_calculation_rate_id: rateValue,
+                                            form_key: $('input[name="form_key"]').val()
+                                        },
+                                        dataType: 'json',
+                                        url: '<?= $block->escapeJs($block->escapeUrl($block->getTaxRateDeleteUrl())) ?>',
+                                        success: function(result, status) {
+                                            $('body').trigger('processStop');
+                                            if (result.success) {
+                                                that.parent().remove();
+                                                select.find('option').each(function() {
+                                                    if (this.value === rateValue) {
+                                                        $(this).remove();
+                                                    }
+                                                });
+                                                select.trigger('change.hiddenSelect');
+                                            } else {
+                                                if (result.error_message)
+                                                    alert({
+                                                        content: result.error_message
+                                                    });
+                                                else
+                                                    alert({
+                                                        content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                                    });
+                                            }
+                                        },
+                                        error: function () {
+                                            $('body').trigger('processStop');
+                                            alert({
+                                                content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                            });
                                         }
-                                    });
-                                    select.trigger('change.hiddenSelect');
-                                } else {
-                                    if (result.error_message)
-                                        alert({
-                                            content: result.error_message
-                                        });
-                                    else
-                                        alert({
-                                            content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
-                                        });
+                                    };
+                                    $.ajax(ajaxOptions);
                                 }
-                            },
-                            error: function () {
-                                $('body').trigger('processStop');
-                                alert({
-                                    content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
-                                });
                             }
-                        };
-                        $.ajax(ajaxOptions);
-
+                        });
                     })
                     .on('click.mselectAdd', '.mselect-button-add', function () {
                         taxRateForm

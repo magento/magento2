@@ -30,13 +30,13 @@
 
         <after>
             <!--delete created configurable product-->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
             <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
             <!--delete root category-->
@@ -58,10 +58,10 @@
          <!--Create a configurable swatch product via the UI -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createRootCategory.name$$]" stepKey="searchAndSelectCategory"/>

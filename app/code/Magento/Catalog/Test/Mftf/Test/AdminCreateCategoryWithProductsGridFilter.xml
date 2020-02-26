@@ -21,14 +21,14 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct1">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct1">
                 <argument name="product" value="defaultSimpleProduct"/>
             </actionGroup>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct2">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct2">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultView" stepKey="NavigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>

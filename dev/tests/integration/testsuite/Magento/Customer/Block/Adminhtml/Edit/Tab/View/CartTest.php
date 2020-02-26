@@ -7,6 +7,7 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -31,6 +32,11 @@ class CartTest extends \PHPUnit\Framework\TestCase
     private $coreRegistry;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -49,6 +55,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ['coreRegistry' => $this->coreRegistry, 'data' => ['website_id' => 1]]
         );
         $this->block->getPreparedCollection();
+        $this->escaper = $objectManager->get(Escaper::class);
     }
 
     /**
@@ -84,7 +91,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testToHtmlEmptyCart()
     {
         $this->assertEquals(0, $this->block->getCollection()->getSize());
-        $this->assertContains('There are no items in customer\'s shopping cart.', $this->block->toHtml());
+        $this->assertContains(
+            $this->escaper->escapeHtml('There are no items in customer\'s shopping cart.'),
+            $this->block->toHtml()
+        );
     }
 
     /**
@@ -99,6 +109,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('Simple Product', $html);
         $this->assertContains('simple', $html);
         $this->assertContains('$10.00', $html);
-        $this->assertContains('catalog/product/edit/id/1', $html);
+        $this->assertContains($this->escaper->escapeHtmlAttr('catalog/product/edit/id/1'), $html);
     }
 }

@@ -111,7 +111,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * 4. Clear shopping cart
      * 5. Add test product(s) to shopping cart with specify quantity
      * 6. If "salesRule/data/coupon_code" not empty:
-     *    - fill "Enter your code" input in Dіscount Codes
+     *    - fill "Enter your code" input in Discount Codes
      *    - click "Apply Coupon" button
      * 7. If "address/data/country_id" not empty:
      *    On Estimate Shipping and Tax:

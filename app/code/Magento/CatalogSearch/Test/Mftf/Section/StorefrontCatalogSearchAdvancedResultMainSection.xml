@@ -17,5 +17,6 @@
         <element name="message" type="text" selector="div.message div"/>
         <element name="itemFound" type="text" selector=".search.found>strong"/>
         <element name="productName" type="text" selector=".product.name.product-item-name>a"/>
+        <element name="nthProductName" type="text" selector="li.product-item:nth-of-type({{var1}}) .product-item-name>a" parameterized="true"/>
     </section>
 </sections>

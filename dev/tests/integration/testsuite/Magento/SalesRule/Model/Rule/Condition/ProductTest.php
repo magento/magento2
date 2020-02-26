@@ -6,21 +6,24 @@
 
 namespace Magento\SalesRule\Model\Rule\Condition;
 
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Model\Rule;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
+    use ConditionHelper;
+
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -50,8 +53,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->load('test_cart_with_configurable', 'reserved_order_id');
 
         // Load the SalesRule looking for products in a specific category
-        /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
+        /** @var $rule Rule */
+        $rule = $this->objectManager->get(Registry::class)
             ->registry('_fixture/Magento_SalesRule_Category');
 
         // Prepare the parent product with the given category setting
@@ -80,8 +83,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->load('test_cart_with_bundle_and_options', 'reserved_order_id');
 
         // Load the SalesRule looking for excluding products with selected sku
-        /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
+        /** @var $rule Rule */
+        $rule = $this->objectManager->get(Registry::class)
             ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
 
         $this->assertEquals(false, $rule->validate($quote));
@@ -129,47 +132,23 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Gets quote by reserved order id.
+     * Ensure that SalesRules filtering on quote items quantity validates configurable product parent category correctly
      *
-     * @param string $reservedOrderId
-     * @return CartInterface
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
+     * @magentoDataFixture Magento/SalesRule/_files/rules_parent_category.php
      */
-    private function getQuote($reservedOrderId)
+    public function testValidateParentCategoryWithConfigurable()
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
-            ->create();
+        $quote = $this->getQuote('test_cart_with_configurable');
+        $registry = $this->objectManager->get(Registry::class);
+        /** @var Rule $rule */
+        $rule = $this->objectManager->create(Rule::class);
+        $ruleId = $registry->registry('50% Off on Configurable parent category');
+        $rule->load($ruleId);
 
-        /** @var CartRepositoryInterface $quoteRepository */
-        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
-        $items = $quoteRepository->getList($searchCriteria)->getItems();
-        return array_pop($items);
-    }
-
-    /**
-     * Gets rule by name.
-     *
-     * @param string $name
-     * @return \Magento\SalesRule\Model\Rule
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getSalesRule(string $name): \Magento\SalesRule\Model\Rule
-    {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('name', $name)
-            ->create();
-
-        /** @var CartRepositoryInterface $quoteRepository */
-        $ruleRepository = $this->objectManager->get(RuleRepositoryInterface::class);
-        $items = $ruleRepository->getList($searchCriteria)->getItems();
-
-        $rule = array_pop($items);
-        /** @var \Magento\SalesRule\Model\Converter\ToModel $converter */
-        $converter = $this->objectManager->get(\Magento\SalesRule\Model\Converter\ToModel::class);
-
-        return $converter->toModel($rule);
+        $this->assertFalse(
+            $rule->validate($quote->getBillingAddress()),
+            'Cart price rule validation failed.'
+        );
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddVisualSwatchWithProductWithStorefrontPreviewImageConfigActionGroup" extends="AddVisualSwatchToProductActionGroup">
+        <selectOption selector="{{AdminNewAttributePanel.updateProductPreviewImage}}" userInput="Yes" stepKey="selectUpdatePreviewImage" after="selectInputType"/>
+        <click selector="{{AdminNewAttributePanel.storefrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab" after="fillDefaultStoreLabel2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.storefrontPropertiesTitle}}" after="goToStorefrontPropertiesTab" stepKey="waitTabLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" userInput="Filterable (with results)" stepKey="selectUseInLayer" after="waitTabLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInProductListing}}" userInput="Yes" stepKey="switchOnUsedInProductListing" after="selectUseInLayer"/>
+        <selectOption selector="{{AdminNewAttributePanel.usedForStoringInProductListing}}" userInput="Yes" stepKey="switchOnUsedForStoringInProductListing"  after="switchOnUsedInProductListing"/>
+    </actionGroup>
+</actionGroups>

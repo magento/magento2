@@ -5,29 +5,51 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Html;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title as PageTitle;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Theme\Block\Html\Title;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TitleTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test class for \Magento\Theme\Block\Html\Title
+ */
+class TitleTest extends TestCase
 {
+    /**
+     * Config path to 'Translate Title' header settings
+     */
+    private const XML_PATH_HEADER_TRANSLATE_TITLE = 'design/header/translate_title';
+
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
-    protected $pageConfigMock;
+    private $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageTitle|MockObject
      */
-    protected $pageTitleMock;
+    private $pageTitleMock;
 
     /**
-     * @var \Magento\Theme\Block\Html\Title
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $htmlTitle;
+    private $scopeConfigMock;
+
+    /**
+     * @var Title
+     */
+    private $htmlTitle;
 
     /**
      * @return void
@@ -35,17 +57,22 @@ class TitleTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
-        $this->pageTitleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(PageTitle::class);
 
         $context = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             ['pageConfig' => $this->pageConfigMock]
         );
 
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+
         $this->htmlTitle = $this->objectManagerHelper->getObject(
-            \Magento\Theme\Block\Html\Title::class,
-            ['context' => $context]
+            Title::class,
+            [
+                'context' => $context,
+                'scopeConfig' => $this->scopeConfigMock
+            ]
         );
     }
 
@@ -64,10 +91,16 @@ class TitleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param bool $shouldTranslateTitle
+     *
      * @return void
+     * @dataProvider dataProviderShouldTranslateTitle
      */
-    public function testGetPageTitle()
+    public function testGetPageTitle($shouldTranslateTitle)
     {
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(static::XML_PATH_HEADER_TRANSLATE_TITLE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($shouldTranslateTitle);
         $title = 'some title';
 
         $this->pageTitleMock->expects($this->once())
@@ -77,28 +110,58 @@ class TitleTest extends \PHPUnit\Framework\TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
-        $this->assertEquals($title, $this->htmlTitle->getPageTitle());
+        $result = $this->htmlTitle->getPageTitle();
+
+        if ($shouldTranslateTitle) {
+            $this->assertInstanceOf(Phrase::class, $result);
+        } else {
+            $this->assertInternalType('string', $result);
+        }
+
+        $this->assertEquals($title, $result);
     }
 
     /**
+     * @param bool $shouldTranslateTitle
+     *
      * @return void
+     * @dataProvider dataProviderShouldTranslateTitle
      */
-    public function testGetPageHeadingWithSetPageTitle()
+    public function testGetPageHeadingWithSetPageTitle($shouldTranslateTitle)
     {
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(static::XML_PATH_HEADER_TRANSLATE_TITLE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($shouldTranslateTitle);
+
         $title = 'some title';
 
         $this->htmlTitle->setPageTitle($title);
         $this->pageConfigMock->expects($this->never())
             ->method('getTitle');
 
-        $this->assertEquals($title, $this->htmlTitle->getPageHeading());
+        $result = $this->htmlTitle->getPageHeading();
+
+        if ($shouldTranslateTitle) {
+            $this->assertInstanceOf(Phrase::class, $result);
+        } else {
+            $this->assertInternalType('string', $result);
+        }
+
+        $this->assertEquals($title, $result);
     }
 
     /**
+     * @param bool $shouldTranslateTitle
+     *
      * @return void
+     * @dataProvider dataProviderShouldTranslateTitle
      */
-    public function testGetPageHeading()
+    public function testGetPageHeading($shouldTranslateTitle)
     {
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(static::XML_PATH_HEADER_TRANSLATE_TITLE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($shouldTranslateTitle);
+
         $title = 'some title';
 
         $this->pageTitleMock->expects($this->once())
@@ -108,6 +171,29 @@ class TitleTest extends \PHPUnit\Framework\TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
-        $this->assertEquals($title, $this->htmlTitle->getPageHeading());
+        $result = $this->htmlTitle->getPageHeading();
+
+        if ($shouldTranslateTitle) {
+            $this->assertInstanceOf(Phrase::class, $result);
+        } else {
+            $this->assertInternalType('string', $result);
+        }
+
+        $this->assertEquals($title, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderShouldTranslateTitle(): array
+    {
+        return [
+            [
+                true
+            ],
+            [
+                false
+            ]
+        ];
     }
 }

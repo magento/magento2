@@ -17,6 +17,7 @@
         <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>
+        <element name="disableAutomaticGroupChange" type="input" selector="input[name='customer[disable_auto_group_change]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
         <element name="groupIdValue" type="text" selector="//*[@name='customer[group_id]']/option"/>
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
@@ -33,5 +34,7 @@
         <element name="emailRequiredMessage" type="text" selector="//input[@name='customer[email]']/../label[contains(.,'This is a required field.')]"/>
         <element name="customAttribute" type="select" selector="//select[contains(@name, 'customer[{{attribute_code}}]')]" parameterized="true"/>
         <element name="disabledGroup" type="text" selector="//div[@class='admin__action-group-wrap admin__action-multiselect-wrap action-select-wrap _disabled']"/>
+        <element name="customerAttribute" type="input" selector="//input[contains(@name,'{{attributeCode}}')]" parameterized="true"/>
+        <element name="attributeImage" type="block" selector="//div[contains(concat(' ',normalize-space(@class),' '),' file-uploader-preview ')]//img"/>
     </section>
 </sections>

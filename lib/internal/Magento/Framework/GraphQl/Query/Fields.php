@@ -46,10 +46,12 @@ class Fields
             if (isset($variables)) {
                 $queryFields = array_merge($queryFields, $this->extractVariables($variables));
             }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $e) {
             // If a syntax error is encountered do not collect fields
         }
-        if (isset($queryFields['IntrospectionQuery'])) {
+        if (isset($queryFields['IntrospectionQuery']) || (isset($queryFields['__schema'])) ||
+            (isset($queryFields['__type']))) {
             // It must be possible to query any fields during introspection query
             $queryFields = [];
         }
@@ -80,6 +82,7 @@ class Fields
         $fields = [];
         foreach ($variables as $key => $value) {
             if (is_array($value)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $fields = array_merge($fields, $this->extractVariables($value));
             }
             $fields[$key] = $key;

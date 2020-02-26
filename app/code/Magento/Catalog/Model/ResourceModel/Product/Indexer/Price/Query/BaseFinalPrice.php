@@ -200,11 +200,13 @@ class BaseFinalPrice
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
-        $finalPrice = $connection->getLeastSql([
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -262,7 +264,8 @@ class BaseFinalPrice
                 ]
             ),
             'NULL',
-            $this->getConnection()->getLeastSql([
+            $this->getConnection()->getLeastSql(
+                [
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -279,7 +282,8 @@ class BaseFinalPrice
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
-            ])
+                ]
+            )
         );
     }
 

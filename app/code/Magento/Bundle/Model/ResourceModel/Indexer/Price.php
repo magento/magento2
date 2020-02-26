@@ -7,6 +7,7 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -128,7 +129,7 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @param array $dimensions
      * @param \Traversable $entityIds
      * @throws \Exception
@@ -137,18 +138,20 @@ class Price implements DimensionalIndexerInterface
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 
-        $temporaryPriceTable = $this->indexTableStructureFactory->create([
-            'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
-            'entityField' => 'entity_id',
-            'customerGroupField' => 'customer_group_id',
-            'websiteField' => 'website_id',
-            'taxClassField' => 'tax_class_id',
-            'originalPriceField' => 'price',
-            'finalPriceField' => 'final_price',
-            'minPriceField' => 'min_price',
-            'maxPriceField' => 'max_price',
-            'tierPriceField' => 'tier_price',
-        ]);
+        $temporaryPriceTable = $this->indexTableStructureFactory->create(
+            [
+                'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
+                'entityField' => 'entity_id',
+                'customerGroupField' => 'customer_group_id',
+                'websiteField' => 'website_id',
+                'taxClassField' => 'tax_class_id',
+                'originalPriceField' => 'price',
+                'finalPriceField' => 'final_price',
+                'minPriceField' => 'min_price',
+                'maxPriceField' => 'max_price',
+                'tierPriceField' => 'tier_price',
+            ]
+        );
 
         $entityIds = iterator_to_array($entityIds);
 
@@ -331,11 +334,13 @@ class Price implements DimensionalIndexerInterface
                 'ROUND((1 - ' . $tierExpr . ' / 100) * ' . $price . ', 4)',
                 'NULL'
             );
-            $finalPrice = $connection->getLeastSql([
-                $price,
-                $connection->getIfNullSql($specialPriceExpr, $price),
-                $connection->getIfNullSql($tierPrice, $price),
-            ]);
+            $finalPrice = $connection->getLeastSql(
+                [
+                    $price,
+                    $connection->getIfNullSql($specialPriceExpr, $price),
+                    $connection->getIfNullSql($tierPrice, $price),
+                ]
+            );
         } else {
             $finalPrice = new \Zend_Db_Expr('0');
             $tierPrice = $connection->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
@@ -390,8 +395,8 @@ class Price implements DimensionalIndexerInterface
         $connection = $this->getConnection();
 
         $this->prepareBundleSelectionTable();
-        $this->calculateBundleSelectionPrice($dimensions, \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED);
-        $this->calculateBundleSelectionPrice($dimensions, \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC);
+        $this->calculateFixedBundleSelectionPrice();
+        $this->calculateDynamicBundleSelectionPrice($dimensions);
 
         $this->prepareBundleOptionTable();
 
@@ -422,80 +427,17 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
-     * Calculate bundle product selections price by product type
+     * Get base select for bundle selection price
      *
-     * @param array $dimensions
-     * @param int $priceType
-     * @return void
+     * @return Select
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function calculateBundleSelectionPrice($dimensions, $priceType)
+    private function getBaseBundleSelectionPriceSelect(): Select
     {
-        $connection = $this->getConnection();
-
-        if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-            $selectionPriceValue = $connection->getCheckSql(
-                'bsp.selection_price_value IS NULL',
-                'bs.selection_price_value',
-                'bsp.selection_price_value'
-            );
-            $selectionPriceType = $connection->getCheckSql(
-                'bsp.selection_price_type IS NULL',
-                'bs.selection_price_type',
-                'bsp.selection_price_type'
-            );
-            $priceExpr = new \Zend_Db_Expr(
-                $connection->getCheckSql(
-                    $selectionPriceType . ' = 1',
-                    'ROUND(i.price * (' . $selectionPriceValue . ' / 100),4)',
-                    $connection->getCheckSql(
-                        'i.special_price > 0 AND i.special_price < 100',
-                        'ROUND(' . $selectionPriceValue . ' * (i.special_price / 100),4)',
-                        $selectionPriceValue
-                    )
-                ) . '* bs.selection_qty'
-            );
-
-            $tierExpr = $connection->getCheckSql(
-                'i.base_tier IS NOT NULL',
-                $connection->getCheckSql(
-                    $selectionPriceType . ' = 1',
-                    'ROUND(i.base_tier - (i.base_tier * (' . $selectionPriceValue . ' / 100)),4)',
-                    $connection->getCheckSql(
-                        'i.tier_percent > 0',
-                        'ROUND((1 - i.tier_percent / 100) * ' . $selectionPriceValue . ',4)',
-                        $selectionPriceValue
-                    )
-                ) . ' * bs.selection_qty',
-                'NULL'
-            );
-
-            $priceExpr = $connection->getLeastSql([
-                $priceExpr,
-                $connection->getIfNullSql($tierExpr, $priceExpr),
-            ]);
-        } else {
-            $price = 'idx.min_price * bs.selection_qty';
-            $specialExpr = $connection->getCheckSql(
-                'i.special_price > 0 AND i.special_price < 100',
-                'ROUND(' . $price . ' * (i.special_price / 100), 4)',
-                $price
-            );
-            $tierExpr = $connection->getCheckSql(
-                'i.tier_percent IS NOT NULL',
-                'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)',
-                'NULL'
-            );
-            $priceExpr = $connection->getLeastSql([
-                $specialExpr,
-                $connection->getIfNullSql($tierExpr, $price),
-            ]);
-        }
-
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $linkField = $metadata->getLinkField();
-        $select = $connection->select()->from(
+
+        $select = $this->getConnection()->select()->from(
             ['i' => $this->getBundlePriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
@@ -510,22 +452,62 @@ class Price implements DimensionalIndexerInterface
             ['bs' => $this->getTable('catalog_product_bundle_selection')],
             'bs.option_id = bo.option_id',
             ['selection_id']
-        )->joinLeft(
+        );
+
+        return $select;
+    }
+
+    /**
+     * Apply selections price for fixed bundles
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function applyFixedBundleSelectionPrice()
+    {
+        $connection = $this->getConnection();
+
+        $selectionPriceValue = 'bsp.selection_price_value';
+        $selectionPriceType = 'bsp.selection_price_type';
+        $priceExpr = new \Zend_Db_Expr(
+            $connection->getCheckSql(
+                $selectionPriceType . ' = 1',
+                'ROUND(i.price * (' . $selectionPriceValue . ' / 100),4)',
+                $connection->getCheckSql(
+                    'i.special_price > 0 AND i.special_price < 100',
+                    'ROUND(' . $selectionPriceValue . ' * (i.special_price / 100),4)',
+                    $selectionPriceValue
+                )
+            ) . '* bs.selection_qty'
+        );
+        $tierExpr = $connection->getCheckSql(
+            'i.base_tier IS NOT NULL',
+            $connection->getCheckSql(
+                $selectionPriceType . ' = 1',
+                'ROUND(i.base_tier - (i.base_tier * (' . $selectionPriceValue . ' / 100)),4)',
+                $connection->getCheckSql(
+                    'i.tier_percent > 0',
+                    'ROUND((1 - i.tier_percent / 100) * ' . $selectionPriceValue . ',4)',
+                    $selectionPriceValue
+                )
+            ) . ' * bs.selection_qty',
+            'NULL'
+        );
+        $priceExpr = $connection->getLeastSql(
+            [
+                $priceExpr,
+                $connection->getIfNullSql($tierExpr, $priceExpr),
+            ]
+        );
+
+        $select = $this->getBaseBundleSelectionPriceSelect();
+        $select->joinInner(
             ['bsp' => $this->getTable('catalog_product_bundle_selection_price')],
             'bs.selection_id = bsp.selection_id AND bsp.website_id = i.website_id',
-            ['']
-        )->join(
-            ['idx' => $this->getMainTable($dimensions)],
-            'bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id' .
-            ' AND i.website_id = idx.website_id',
-            []
-        )->join(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'bs.product_id = e.entity_id AND e.required_options=0',
             []
         )->where(
             'i.price_type=?',
-            $priceType
+            \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED
         )->columns(
             [
                 'group_type' => $connection->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
@@ -534,7 +516,117 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => $tierExpr,
             ]
         );
+        $query = $select->crossUpdateFromSelect($this->getBundleSelectionTable());
+        $connection->query($query);
+    }
 
+    /**
+     * Calculate selections price for fixed bundles
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function calculateFixedBundleSelectionPrice()
+    {
+        $connection = $this->getConnection();
+
+        $selectionPriceValue = 'bs.selection_price_value';
+        $selectionPriceType = 'bs.selection_price_type';
+        $priceExpr = new \Zend_Db_Expr(
+            $connection->getCheckSql(
+                $selectionPriceType . ' = 1',
+                'ROUND(i.price * (' . $selectionPriceValue . ' / 100),4)',
+                $connection->getCheckSql(
+                    'i.special_price > 0 AND i.special_price < 100',
+                    'ROUND(' . $selectionPriceValue . ' * (i.special_price / 100),4)',
+                    $selectionPriceValue
+                )
+            ) . '* bs.selection_qty'
+        );
+        $tierExpr = $connection->getCheckSql(
+            'i.base_tier IS NOT NULL',
+            $connection->getCheckSql(
+                $selectionPriceType . ' = 1',
+                'ROUND(i.base_tier - (i.base_tier * (' . $selectionPriceValue . ' / 100)),4)',
+                $connection->getCheckSql(
+                    'i.tier_percent > 0',
+                    'ROUND((1 - i.tier_percent / 100) * ' . $selectionPriceValue . ',4)',
+                    $selectionPriceValue
+                )
+            ) . ' * bs.selection_qty',
+            'NULL'
+        );
+        $priceExpr = $connection->getLeastSql(
+            [
+                $priceExpr,
+                $connection->getIfNullSql($tierExpr, $priceExpr),
+            ]
+        );
+
+        $select = $this->getBaseBundleSelectionPriceSelect();
+        $select->where(
+            'i.price_type=?',
+            \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED
+        )->columns(
+            [
+                'group_type' => $connection->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
+                'is_required' => 'bo.required',
+                'price' => $priceExpr,
+                'tier_price' => $tierExpr,
+            ]
+        );
+        $query = $select->insertFromSelect($this->getBundleSelectionTable());
+        $connection->query($query);
+
+        $this->applyFixedBundleSelectionPrice();
+    }
+
+    /**
+     * Calculate selections price for dynamic bundles
+     *
+     * @param array $dimensions
+     * @return void
+     * @throws \Exception
+     */
+    private function calculateDynamicBundleSelectionPrice($dimensions)
+    {
+        $connection = $this->getConnection();
+
+        $price = 'idx.min_price * bs.selection_qty';
+        $specialExpr = $connection->getCheckSql(
+            'i.special_price > 0 AND i.special_price < 100',
+            'ROUND(' . $price . ' * (i.special_price / 100), 4)',
+            $price
+        );
+        $tierExpr = $connection->getCheckSql(
+            'i.tier_percent IS NOT NULL',
+            'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)',
+            'NULL'
+        );
+        $priceExpr = $connection->getLeastSql(
+            [
+                $specialExpr,
+                $connection->getIfNullSql($tierExpr, $price),
+            ]
+        );
+
+        $select = $this->getBaseBundleSelectionPriceSelect();
+        $select->join(
+            ['idx' => $this->getMainTable($dimensions)],
+            'bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id' .
+            ' AND i.website_id = idx.website_id',
+            []
+        )->where(
+            'i.price_type=?',
+            \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
+        )->columns(
+            [
+                'group_type' => $connection->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
+                'is_required' => 'bo.required',
+                'price' => $priceExpr,
+                'tier_price' => $tierExpr,
+            ]
+        );
         $query = $select->insertFromSelect($this->getBundleSelectionTable());
         $connection->query($query);
     }
@@ -613,7 +705,7 @@ class Price implements DimensionalIndexerInterface
      * Create bundle price.
      *
      * @param IndexTableStructure $priceTable
-     * @return  void
+     * @return void
      */
     private function applyBundlePrice($priceTable): void
     {
@@ -699,7 +791,7 @@ class Price implements DimensionalIndexerInterface
     /**
      * Get connection
      *
-     * return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface

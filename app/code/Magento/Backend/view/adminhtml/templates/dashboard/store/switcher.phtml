@@ -3,31 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<p class="switcher"><label for="store_switcher"><?= /* @escapeNotVerified */ __('View Statistics For:') ?></label>
+<p class="switcher"><label for="store_switcher"><?= $block->escapeHtml(__('View Statistics For:')) ?></label>
 <?= $block->getHintHtml() ?>
 <select name="store_switcher" id="store_switcher" class="left-col-block" onchange="return switchStore(this);">
-    <option value=""><?= /* @escapeNotVerified */ __('All Websites') ?></option>
-    <?php foreach ($block->getWebsiteCollection() as $_website): ?>
+    <option value=""><?= $block->escapeHtml(__('All Websites')) ?></option>
+    <?php foreach ($block->getWebsiteCollection() as $_website) : ?>
         <?php $showWebsite = false; ?>
-        <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
+        <?php foreach ($block->getGroupCollection($_website) as $_group) : ?>
             <?php $showGroup = false; ?>
-            <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
-                <?php if ($showWebsite == false): ?>
+            <?php foreach ($block->getStoreCollection($_group) as $_store) : ?>
+                <?php if ($showWebsite == false) : ?>
                     <?php $showWebsite = true; ?>
-                    <option website="true" value="<?= /* @escapeNotVerified */ $_website->getId() ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_website->getName() ?></option>
+                    <option website="true" value="<?= $block->escapeHtmlAttr($_website->getId()) ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()) : ?> selected="selected"<?php endif; ?>><?= $block->escapeHtml($_website->getName()) ?></option>
                 <?php endif; ?>
-                <?php if ($showGroup == false): ?>
+                <?php if ($showGroup == false) : ?>
                     <?php $showGroup = true; ?>
-                    <!--optgroup label="&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?>"-->
-                    <option group="true" value="<?= /* @escapeNotVerified */ $_group->getId() ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?></option>
+                    <!--optgroup label="&nbsp;&nbsp;&nbsp;<?= $block->escapeHtmlAttr($_group->getName()) ?>"-->
+                    <option group="true" value="<?= $block->escapeHtmlAttr($_group->getId()) ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()) : ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_group->getName()) ?></option>
                 <?php endif; ?>
-                <option value="<?= /* @escapeNotVerified */ $_store->getId() ?>"<?php if ($block->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_store->getName() ?></option>
+                <option value="<?= $block->escapeHtmlAttr($_store->getId()) ?>"<?php if ($block->getStoreId() == $_store->getId()) : ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_store->getName()) ?></option>
             <?php endforeach; ?>
-            <?php if ($showGroup): ?>
+            <?php if ($showGroup) : ?>
                 <!--</optgroup>-->
             <?php endif; ?>
         <?php endforeach; ?>
@@ -57,7 +54,7 @@
                 var select = $('order_amounts_period');
             }
             var periodParam = select.value ? 'period/' + select.value + '/' : '';
-            setLocation('<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + storeParam + periodParam);
+            setLocation('<?= $block->escapeJs($block->getSwitchUrl()) ?>' + storeParam + periodParam);
         }
     });
 </script>
