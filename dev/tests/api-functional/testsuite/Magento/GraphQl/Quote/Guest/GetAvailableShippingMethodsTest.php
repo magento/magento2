@@ -84,12 +84,13 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     /**
      * Test case: get available shipping methods from current customer quote with configurable product
      *
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_address_quote_with_configurable_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_configurable_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
     public function testGetAvailableShippingMethodsWithConfigurableProduct()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_cart_with_configurable');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $response = $this->graphQlQuery($this->getQuery($maskedQuoteId));
 
         self::assertArrayHasKey('cart', $response);
