@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
+class LinkProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
