@@ -457,14 +457,8 @@ define([
                 this.selectAll();
             }
 
-            this.allSelected(allSelected);
+            this.allSelected(pageTotal === pageSelected);
             this.indetermine(totalSelected && !allSelected);
-
-            if (pageTotal !== pageSelected) {
-                this.allSelected(false);
-            } else if (pageTotal === pageSelected) {
-                this.allSelected(true);
-            }
 
             return this;
         },
@@ -502,8 +496,7 @@ define([
 
                 this.selected(newSelections);
             } else {
-                this.countSelected()
-                    .updateState();
+                this.updateState();
             }
         },
 
