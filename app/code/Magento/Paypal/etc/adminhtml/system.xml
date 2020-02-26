@@ -36,6 +36,13 @@
                 <fieldset_css>paypal-top-section payments-other-header</fieldset_css>
                 <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>
+            <group id="deprecated_payment_methods" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Deprecated Payment Methods:</label>
+                <comment><![CDATA[<b>Note:</b> These payment methods have been deprecated because they are no longer compliant. We recommend that these payment method to be disabled to prevent new orders, since the payment processor might not support them. Please migrate to the official payment methods extensions from Magento Marketplace instead and disable deprecated payment integrations as soon as possible.]]></comment>
+                <attribute type="expanded">1</attribute>
+                <fieldset_css>paypal-top-section payments-other-header deprecated-message</fieldset_css>
+                <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+            </group>
         </section>
         <section id="payment_all_paypal" showInDefault="0" showInWebsite="0" showInStore="0">
             <include path="Magento_Paypal::system/paypal_payflowpro.xml"/>
@@ -380,6 +387,9 @@
             <group id="paypal_payment_gateways" showInDefault="1" showInWebsite="1" showInStore="1">
                 <group id="paypal_payflowpro_nz" extends="payment_all_paypal/paypal_payflowpro"/>
             </group>
+        </section>
+        <section id="deprecated_payment_methods" extends="payment" showInDefault="0" showInWebsite="0" showInStore="0">
+            <label>Deprecated Payment Methods:</label>
         </section>
     </system>
 </config>
