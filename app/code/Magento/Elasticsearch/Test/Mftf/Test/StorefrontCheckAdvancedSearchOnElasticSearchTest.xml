@@ -53,7 +53,7 @@
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Navigate to Frontend -->

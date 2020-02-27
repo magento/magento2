@@ -52,7 +52,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select Created Category-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
