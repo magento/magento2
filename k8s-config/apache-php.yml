@@ -44,7 +44,7 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: eu.gcr.io/magento2-269418/magento2-apache24:1
+        - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:
             - containerPort: 80
@@ -56,7 +56,7 @@ spec:
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
             subPath: var
-        - image: eu.gcr.io/magento2-269418/magento2-php72:1
+        - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
             - containerPort: 9000
