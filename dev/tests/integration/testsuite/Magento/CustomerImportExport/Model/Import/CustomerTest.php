@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ImportExport\Model\Import;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Test for class \Magento\CustomerImportExport\Model\Import\Customer which covers validation logic
@@ -397,8 +398,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->indexerProcessor->getIndexer()->setScheduled(true);
         $this->doImport(__DIR__ . '/_files/customers_with_gender_to_import.csv', Import::BEHAVIOR_ADD_UPDATE);
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
-        $this->assertEquals('valid', $statusBeforeImport);
-        $this->assertEquals('invalid', $statusAfterImport);
+        $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
+        $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
     }
 
     /**
