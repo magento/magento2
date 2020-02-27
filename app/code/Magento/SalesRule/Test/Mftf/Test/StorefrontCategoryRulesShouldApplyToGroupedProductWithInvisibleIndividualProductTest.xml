@@ -14,7 +14,7 @@
             <title value="Category rules should apply to grouped product with invisible individual products"/>
             <description value="Category rules should apply to grouped product with invisible individual products"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-13608"/>
+            <testCaseId value="MC-31863"/>
             <group value="SalesRule"/>
         </annotations>
         <before>

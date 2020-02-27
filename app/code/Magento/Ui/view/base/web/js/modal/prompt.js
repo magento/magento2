@@ -51,8 +51,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal();
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }, {
                 text: $.mage.__('OK'),
@@ -61,8 +61,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal(true);
+                click: function (event) {
+                    this.closeModal(event, true);
                 }
             }]
         },
@@ -75,7 +75,7 @@ define([
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
             this.modal.find(this.options.modalContent).append(this.getFormTemplate());
-            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this));
 
             if (this.options.validation) {
                 this.setValidationClasses();
@@ -152,8 +152,10 @@ define([
         /**
          * Close modal window
          */
-        closeModal: function (result) {
+        closeModal: function (event, result) {
             var value;
+
+            result = result || false;
 
             if (result) {
                 if (this.options.validation && !this.validate()) {
@@ -161,12 +163,12 @@ define([
                 }
 
                 value = this.modal.find(this.options.promptField).val();
-                this.options.actions.confirm.call(this, value);
+                this.options.actions.confirm.call(event, value);
             } else {
-                this.options.actions.cancel.call(this, result);
+                this.options.actions.cancel.call(event, result);
             }
 
-            this.options.actions.always();
+            this.options.actions.always(event);
             this.element.bind('promptclosed', _.bind(this._remove, this));
 
             return this._super();
@@ -177,3 +179,4 @@ define([
         return $('<div class="prompt-message"></div>').html(config.content).prompt(config);
     };
 });
+
