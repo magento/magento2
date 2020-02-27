@@ -15,7 +15,9 @@ use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class LinkProcessor
+ * Processor for links between products
+ *
+ * Remark: Via DI it is possible to supply additional link types.
  */
 class LinkProcessor
 {
@@ -76,7 +78,7 @@ class LinkProcessor
      * @param Product $importEntity
      * @param Data $dataSourceModel
      * @param string $linkField
-     * @return $this
+     * @return void
      * @throws LocalizedException
      */
     public function saveLinks(
@@ -128,6 +130,7 @@ class LinkProcessor
      *
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         Product $importEntity,
@@ -163,6 +166,7 @@ class LinkProcessor
                     $linksToDelete[$linkId][] = $productId;
                     continue;
                 }
+
                 $linkPositions = ! empty($rowData[$linkName . 'position'])
                     ? explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
@@ -180,7 +184,7 @@ class LinkProcessor
                     }
                 );
                 foreach ($linkSkus as $linkedKey => $linkedSku) {
-                    $linkedId = $this->getProductLinkedId($linkedSku);
+                    $linkedId = $this->getProductLinkedId($importEntity, $linkedSku);
                     if ($linkedId == null) {
                         // Import file links to a SKU which is skipped for some reason, which leads to a "NULL"
                         // link causing fatal errors.
@@ -260,6 +264,19 @@ class LinkProcessor
     }
 
     /**
+     * Get existing SKU record
+     *
+     * @param Product $importEntity
+     * @param string $sku
+     * @return mixed
+     */
+    private function getExistingSku(Product $importEntity, string $sku)
+    {
+        $sku = strtolower($sku);
+        return $importEntity->getOldSku()[$sku];
+    }
+
+    /**
      * Fetches Product Links
      *
      * @param Product $importEntity
@@ -289,15 +306,18 @@ class LinkProcessor
     /**
      * Gets the Id of the Sku
      *
+     * @param Product $importEntity
      * @param string $linkedSku
-     *
      * @return int|null
      */
-    private function getProductLinkedId(string $linkedSku): ?int
+    private function getProductLinkedId(Product $importEntity, string $linkedSku): ?int
     {
         $linkedSku = trim($linkedSku);
         $newSku = $this->skuProcessor->getNewSku($linkedSku);
-        $linkedId = ! empty($newSku) ? $newSku['entity_id'] : $this->getExistingSku($linkedSku)['entity_id'];
+
+        $linkedId = ! empty($newSku) ?
+            $newSku['entity_id'] :
+            $this->getExistingSku($importEntity, $linkedSku)['entity_id'];
 
         return $linkedId;
     }
