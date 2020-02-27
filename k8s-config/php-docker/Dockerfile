@@ -14,9 +14,8 @@ RUN docker-php-ext-configure gd --with-png-dir=/usr/include/ \
  && docker-php-ext-configure zip --with-libzip \
  && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
  && docker-php-ext-enable xdebug;
-COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-COPY memory-limit-php.ini /usr/local/etc/php/conf.d/memory-limit-php.ini
-COPY max-input-vars-php.ini /usr/local/etc/php/conf.d/max-input-vars-php.ini
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
+RUN echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini 
 COPY --chown=www-data . /var/www/html 
 USER www-data
 

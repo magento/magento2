@@ -1,0 +1,4 @@
+12cd2920b77cf55d680e9efa84535bf636573027
+
+
+https://itnext.io/packaging-and-scaling-fast-cgi-applications-in-docker-for-kubernetes-done-right-8440829fe1e9

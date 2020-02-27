@@ -1,0 +1,7 @@
+secretGenerator:
+- name: mysql
+  literals:
+  - password=YOUR_PASSWORD
+resources:
+- k8s-config/mysql.yml
+- k8s-config/apache-php.yml

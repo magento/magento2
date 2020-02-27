@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: magento
+    tier: frontend
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: magento-pv-claim
+  labels:
+    app: magento
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: magento
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: magento
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: magento
+        tier: frontend
+    spec:
+      containers:
+        - image: eu.gcr.io/magento2-269418/magento2-apache24:1
+          name: apache
+          ports:
+            - containerPort: 80
+              name: apache
+          volumeMounts:
+          - mountPath: /var/www/html/media
+            name: magento-persistent-storage
+            subPath: media
+          - mountPath: /var/www/html/var
+            name: magento-persistent-storage
+            subPath: var
+        - image: eu.gcr.io/magento2-269418/magento2-php72:1
+          name: php
+          ports:
+            - containerPort: 9000
+              name: php
+          volumeMounts:
+          - mountPath: /var/www/html/media
+            name: magento-persistent-storage
+            subPath: media
+          - mountPath: /var/www/html/var
+            name: magento-persistent-storage
+            subPath: var      
+      volumes:
+      - name: magento-persistent-storage
+        persistentVolumeClaim:
+          claimName: magento-pv-claim
