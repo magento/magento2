@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -519,11 +520,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->setSource($source)
             ->validateData()
             ->hasToBeTerminated();
-        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $this->indexerProcessor->getIndexer()->reindexAll();
         $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
         $this->_entityAdapter->importData();
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
-        $this->assertEquals('valid', $statusBeforeImport);
-        $this->assertEquals('invalid', $statusAfterImport);
+        $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
+        $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
     }
 }
