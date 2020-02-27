@@ -8,12 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontCustomerLogoutActionGroup">
-        <annotations>
-            <description>Goes to the Storefront Customer Logout page.</description>
-        </annotations>
-
-        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
-        <waitForPageLoad stepKey="waitForSignOut"/>
+    <actionGroup name="StorefrontFillRegistrationFormActionGroup" extends="StorefrontCreateCustomerSignedUpNewsletterActionGroup">
+        <remove keyForRemoval="checkSignUpForNewsletter"/>
+        <remove keyForRemoval="clickCreateAccountButton"/>
+        <remove keyForRemoval="waitForCreateAccountButtonToLoad"/>
     </actionGroup>
 </actionGroups>
