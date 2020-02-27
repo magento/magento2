@@ -462,7 +462,8 @@ define([
             if (showTooltip === 1) {
                 // Connect Tooltip
                 container
-                    .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
+                    .find('[data-option-type="1"], [data-option-type="2"],' +
+                        ' [data-option-type="0"], [data-option-type="3"]')
                     .SwatchRendererTooltip();
             }
 
