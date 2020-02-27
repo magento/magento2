@@ -73,7 +73,7 @@ class LinkProcessorTest extends \PHPUnit\Framework\TestCase
         $this->linkFactory->method('create')->willReturn($this->resource);
 
         $this->skuProcessor = $this->createMock(
-            \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class,
+            \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class
         );
         $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
