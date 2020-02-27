@@ -21,5 +21,7 @@
         <element name="stockIndication" type="block" selector=".stock" />
         <element name="attributeSelectByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//select" parameterized="true"/>
         <element name="attributeOptionByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//option[text()='{{optionName}}']" parameterized="true"/>
+        <element name="onlyXProductsLeft" type="block" selector=".availability.only .action" />
+        <element name="onlyXProductsLeftDetailed" type="block" selector=".availability.only.detailed" />
     </section>
 </sections>
