@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,9 +8,13 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Model\NotificationService;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class MarkAsRead extends Notification
+/**
+ * AdminNotification MarkAsRead controller
+ */
+class MarkAsRead extends Notification implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -25,6 +28,10 @@ class MarkAsRead extends Notification
      */
     private $notificationService;
 
+    /**
+     * @param Action\Context $context
+     * @param NotificationService $notificationService
+     */
     public function __construct(Action\Context $context, NotificationService $notificationService)
     {
         parent::__construct($context);
@@ -32,7 +39,7 @@ class MarkAsRead extends Notification
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function execute()
     {
@@ -50,9 +57,8 @@ class MarkAsRead extends Notification
                 );
             }
 
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
-            return;
+            return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
-        $this->_redirect('adminhtml/*/');
+        return $this->_redirect('adminhtml/*/');
     }
 }

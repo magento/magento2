@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,8 +8,12 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Model\InboxFactory as InboxModelFactory;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class Remove extends Notification
+/**
+ * AdminNotification Remove controller
+ */
+class Remove extends Notification implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -24,6 +27,10 @@ class Remove extends Notification
      */
     private $inboxModelFactory;
 
+    /**
+     * @param Action\Context $context
+     * @param InboxModelFactory $inboxModelFactory
+     */
     public function __construct(Action\Context $context, InboxModelFactory $inboxModelFactory)
     {
         parent::__construct($context);
@@ -31,7 +38,7 @@ class Remove extends Notification
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function execute()
     {
@@ -39,8 +46,7 @@ class Remove extends Notification
             $model = $this->inboxModelFactory->create()->load($id);
 
             if (!$model->getId()) {
-                $this->_redirect('adminhtml/*/');
-                return;
+                return $this->_redirect('adminhtml/*/');
             }
 
             try {
@@ -55,9 +61,8 @@ class Remove extends Notification
                 );
             }
 
-            $this->_redirect('adminhtml/*/');
-            return;
+            return $this->_redirect('adminhtml/*/');
         }
-        $this->_redirect('adminhtml/*/');
+        return $this->_redirect('adminhtml/*/');
     }
 }

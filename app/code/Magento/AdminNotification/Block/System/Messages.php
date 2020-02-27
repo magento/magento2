@@ -12,6 +12,9 @@ use Magento\Framework\Json\Helper\Data as JsonDataHelper;
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
+/**
+ * AdminNotification Messages class
+ */
 class Messages extends Template
 {
     /**
