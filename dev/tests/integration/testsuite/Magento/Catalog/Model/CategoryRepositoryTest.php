@@ -143,6 +143,12 @@ class CategoryRepositoryTest extends TestCase
     {
         $categoryRepository = $this->repositoryFactory->create();
 
+        $categoryDefault = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID
+        );
+
+        $this->assertSame('category-defaultstore', $categoryDefault->getUrlKey());
+
         $categoryFirstStore = $categoryRepository->get(
             self::FIXTURE_TWO_STORES_CATEGORY_ID,
             self::FIXTURE_FIRST_STORE_CODE
