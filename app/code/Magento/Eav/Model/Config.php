@@ -228,7 +228,7 @@ class Config
      */
     protected function _load($id)
     {
-        return isset($this->_objects[$id]) ? $this->_objects[$id] : null;
+        return $this->_objects[$id] ?? null;
     }
 
     /**
@@ -239,14 +239,14 @@ class Config
      */
     private function loadAttributes($entityTypeCode)
     {
-        return isset($this->attributes[$entityTypeCode]) ? $this->attributes[$entityTypeCode] : [];
+        return $this->attributes[$entityTypeCode] ?? [];
     }
 
     /**
      * Associate object with identifier
      *
-     * @param   mixed $obj
-     * @param   mixed $id
+     * @param mixed $obj
+     * @param mixed $id
      * @return void
      * @codeCoverageIgnore
      */
@@ -271,8 +271,8 @@ class Config
     /**
      * Specify reference for entity type id
      *
-     * @param   int $id
-     * @param   string $code
+     * @param int $id
+     * @param string $code
      * @return $this
      * @codeCoverageIgnore
      */
@@ -290,15 +290,15 @@ class Config
      */
     protected function _getEntityTypeReference($id)
     {
-        return isset($this->_references['entity'][$id]) ? $this->_references['entity'][$id] : null;
+        return $this->_references['entity'][$id] ?? null;
     }
 
     /**
      * Specify reference between entity attribute id and attribute code
      *
-     * @param   int $id
-     * @param   string $code
-     * @param   string $entityTypeCode
+     * @param int $id
+     * @param string $code
+     * @param string $entityTypeCode
      * @return $this
      */
     protected function _addAttributeReference($id, $code, $entityTypeCode)
@@ -522,9 +522,9 @@ class Config
     /**
      * Get attribute by code for entity type
      *
-     * @param   mixed $entityType
-     * @param   mixed $code
-     * @return  AbstractAttribute
+     * @param mixed $entityType
+     * @param mixed $code
+     * @return AbstractAttribute
      * @throws LocalizedException
      */
     public function getAttribute($entityType, $code)
@@ -737,8 +737,8 @@ class Config
     /**
      * Get all entity type attributes
      *
-     * @param  int|string|Type $entityType
-     * @param  \Magento\Framework\DataObject|null $object
+     * @param int|string|Type $entityType
+     * @param \Magento\Framework\DataObject|null $object
      * @return AbstractAttribute[]
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -822,6 +822,10 @@ class Config
             $fullAttributeData = array_key_exists('is_required', $attributeData);
 
             if ($existsFullAttribute || (!$existsFullAttribute && !$fullAttributeData)) {
+                $scopeIsRequired = $attributeData['scope_is_required'] ?? null;
+                if ($scopeIsRequired !== null) {
+                    $attribute->setData('scope_is_required', $scopeIsRequired);
+                }
                 return $attribute;
             }
         }

@@ -129,7 +129,6 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->willReturnMap(
                 [
-                    ['items', null, null],
                     ['uenc', null, $beforeUrl],
                 ]
             );
@@ -141,34 +140,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('setBeforeCompareUrl')
             ->with($beforeUrl . '1')
             ->willReturnSelf();
-        $this->listCompareMock->expects($this->never())->method('addProducts');
         $this->redirectFactoryMock->expects($this->never())->method('create');
-        $this->index->execute();
-    }
-
-    public function testExecuteWithItems()
-    {
-        $this->request->expects($this->any())
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['items', null, '1,2,3'],
-                    ['uenc', null, null],
-                ]
-            );
-        $this->decoderMock->expects($this->never())->method('decode');
-        $this->catalogSession->expects($this->never())->method('setBeforeCompareUrl');
-
-        $this->listCompareMock->expects($this->once())
-            ->method('addProducts')
-            ->with([1, 2, 3]);
-        $redirect = $this->createPartialMock(\Magento\Framework\Controller\Result\Redirect::class, ['setPath']);
-        $redirect->expects($this->once())
-            ->method('setPath')
-            ->with('*/*/*');
-        $this->redirectFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($redirect);
         $this->index->execute();
     }
 }

@@ -64,7 +64,7 @@
         </actionGroup>
 
         <!-- Add product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>

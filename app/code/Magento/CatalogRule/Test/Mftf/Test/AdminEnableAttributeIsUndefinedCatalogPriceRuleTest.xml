@@ -70,11 +70,11 @@
         <!--Create catalog price rule-->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
-        <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule">
+        <actionGroup ref="CreateCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition">
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeActionGroup" stepKey="createCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>
@@ -113,11 +113,11 @@
         <!--Create new Catalog Price Rule-->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
         <waitForPageLoad stepKey="waitForPriceRulePage1"/>
-        <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule1">
+        <actionGroup ref="CreateCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule1">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup1"/>
-        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition1">
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup1"/>
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeActionGroup" stepKey="createCatalogPriceRuleCondition1">
             <argument name="attributeName" value="$$createSecondProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetValue" value="is"/>
             <argument name="targetSelectValue" value="is undefined"/>

@@ -53,7 +53,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigGeneralPage2"/>
+            <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigGeneralPage2"/>
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsiteActionGroup">
                 <argument name="website" value="_defaultWebsite"/>
             </actionGroup>
@@ -65,7 +65,7 @@
         </after>
         <!--Check that all countries are allowed initially and get amount-->
         <comment userInput="Check that all countries are allowed initially and get amount" stepKey="checkAllCountriesAreAllowed"/>
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigGeneralPage"/>
+        <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigGeneralPage"/>
         <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
         <executeJS function="return document.querySelectorAll('{{CountryOptionsSection.allowedCountries}} option').length" stepKey="countriesAmount"/>
         <!-- Create customer for US -->

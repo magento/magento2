@@ -26,37 +26,37 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Wishlist\Controller\Shared\WishlistProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Controller\Shared\WishlistProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistProviderMock;
 
     /**
-     * @var \Magento\Wishlist\Model\ItemCarrier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ItemCarrier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemCarrierMock;
 
     /**
-     * @var \Magento\Wishlist\Model\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\Wishlist|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardMock;
 

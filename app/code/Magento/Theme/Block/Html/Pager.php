@@ -450,7 +450,11 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl([$this->getPageVarName() => $page]);
+        return $this->getPagerUrl(
+            [
+                $this->getPageVarName() => $page > 1 ? $page : null,
+            ]
+        );
     }
 
     /**

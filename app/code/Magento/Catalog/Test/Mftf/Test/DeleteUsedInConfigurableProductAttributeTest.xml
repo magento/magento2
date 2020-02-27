@@ -73,6 +73,9 @@
 
             <!-- Logout -->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Go to Stores > Attributes > Products. Search and select the product attribute that was used to create the configurable product-->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
