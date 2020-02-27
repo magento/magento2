@@ -8,6 +8,9 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -63,10 +66,15 @@ class LinkProcessorTest extends \PHPUnit\Framework\TestCase
         $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
         $this->resource->method('getMainTable')->willReturn('main_link_table');
 
-        $this->linkFactory = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class, ['create']);
+        $this->linkFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class,
+            ['create']
+        );
         $this->linkFactory->method('create')->willReturn($this->resource);
 
-        $this->skuProcessor = $this->createMock(\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class, []);
+        $this->skuProcessor = $this->createMock(
+            \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class,
+        );
         $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
