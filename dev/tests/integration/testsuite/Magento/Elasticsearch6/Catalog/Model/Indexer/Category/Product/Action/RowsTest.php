@@ -9,10 +9,16 @@ namespace Magento\Elasticsearch6\Catalog\Model\Indexer\Category\Product\Action;
 
 use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Model\Indexer\Category\Product\Action\Rows;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Search\Request\Builder;
+use Magento\Framework\Search\Request\Config;
+use Magento\Framework\Search\Request\Config\Converter;
 use Magento\Framework\Search\SearchEngineInterface;
 use Magento\Framework\Search\SearchResponseBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -78,12 +84,35 @@ class RowsTest extends \PHPUnit\Framework\TestCase
             true
         );
 
-        $searchResponse = $this->searchByName('Simple');
-        $categoryIds = $this->getCategoryIdsFromResponse($searchResponse);
+        $collection = $this->searchByCategoryId((int) $categoryA->getId());
+        $collection->_loadEntities();
+        $productIds = [];
 
-        $this->assertNotEmpty($categoryIds);
+        foreach ($collection->getItems() as $product) {
+            $productIds[] = $product->getId();
+        }
 
-        $this->assertContains($categoryA->getId(), $categoryIds);
+        $this->assertProductsArePresentInCollection($productIds);
+    }
+
+    /**
+     * Assert that expected products are present in collection.
+     *
+     * @param array $productIds
+     *
+     * @return void
+     */
+    private function assertProductsArePresentInCollection(array $productIds): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+
+        $firstProductId = $productRepository->get('simpleB')->getId();
+        $secondProductId = $productRepository->get('simpleC')->getId();
+
+        $this->assertCount(2, $productIds);
+        $this->assertContains($secondProductId, $productIds);
+        $this->assertContains($firstProductId, $productIds);
     }
 
     /**
@@ -107,52 +136,50 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Search docs in Elasticsearch by name.
+     * Search docs in Elasticsearch by category id.
      *
-     * @param string $text
-     * @return SearchResultInterface
+     * @param int $categoryId
+     * @return Collection
      */
-    private function searchByName(string $text): SearchResultInterface
+    private function searchByCategoryId(int $categoryId): Collection
     {
-        /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
-        $converter = $this->objectManager->create(\Magento\Framework\Search\Request\Config\Converter::class);
+        /** @var Converter $converter */
+        $converter = $this->objectManager->get(Converter::class);
         $document = new \DOMDocument();
         $document->load($this->getRequestConfigPath());
         $requestConfig = $converter->convert($document);
-        /** @var \Magento\Framework\Search\Request\Config $config */
-        $config = $this->objectManager->create(\Magento\Framework\Search\Request\Config::class);
+        /** @var Config $config */
+        $config = $this->objectManager->get(Config::class);
         $config->merge($requestConfig);
 
-        $requestBuilder = $this->objectManager->create(
-            \Magento\Framework\Search\Request\Builder::class,
+        $requestBuilder = $this->objectManager->get(
+            Builder::class,
             ['config' => $config]
         );
-        $requestBuilder->bind('fulltext_search_query', $text);
-        $requestBuilder->setRequestName('one_match_with_aggregations');
+        $requestBuilder->bind('category_ids', $categoryId);
+        $requestBuilder->bind('visibility', [2,4]);
+        $requestBuilder->setRequestName('catalog_view_container');
         $queryRequest = $requestBuilder->create();
 
-        $searchEngine = $this->objectManager->create(SearchEngineInterface::class);
+        $searchEngine = $this->objectManager->get(SearchEngineInterface::class);
         $queryResult = $searchEngine->search($queryRequest);
 
-        $searchResponseBuilder = $this->objectManager->create(SearchResponseBuilder::class);
+        $searchResponseBuilder = $this->objectManager->get(SearchResponseBuilder::class);
+        $searchResponse = $searchResponseBuilder->build($queryResult);
 
-        return $searchResponseBuilder->build($queryResult);
-    }
+        $searchResultApplierFactory = $this->objectManager->get(SearchResultApplierFactory::class);
+        $collection = $this->objectManager->get(Collection::class);
+        $searchResultApplierFactory->create(
+            [
+                'collection' => $collection,
+                'searchResult' => $searchResponse,
+                'orders' => [],
+                'size' => 12,
+                'currentPage' => 1,
+            ]
+        )->apply();
 
-    /**
-     * Extract category ids from search result.
-     *
-     * @param SearchResultInterface $searchResponse
-     * @return array
-     */
-    private function getCategoryIdsFromResponse(SearchResultInterface $searchResponse): array
-    {
-        $categoryIds = [];
-        foreach ($searchResponse->getAggregations()->getBucket('category_bucket')->getValues() as $value) {
-            $categoryIds[] = $value->getValue();
-        }
-
-        return $categoryIds;
+        return $collection;
     }
 
     /**
