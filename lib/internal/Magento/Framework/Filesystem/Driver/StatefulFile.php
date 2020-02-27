@@ -16,11 +16,11 @@ use Magento\Framework\Phrase;
 /**
  * Filesystem driver that uses the local filesystem.
  *
- * Assumed that stat cache is cleanup before test filesystem
+ * Assumed that stat cache is cleanup by data modification methods
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class File implements DriverInterface
+class StatefulFile implements DriverInterface
 {
     /**
      * @var string
@@ -50,9 +50,7 @@ class File implements DriverInterface
      */
     public function isExists($path)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @file_exists($filename);
+        $result = @file_exists($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -70,9 +68,7 @@ class File implements DriverInterface
      */
     public function stat($path)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @stat($filename);
+        $result = @stat($this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase('Cannot gather stats! %1', [$this->getWarningMessage()])
@@ -90,9 +86,7 @@ class File implements DriverInterface
      */
     public function isReadable($path)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @is_readable($filename);
+        $result = @is_readable($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -110,9 +104,7 @@ class File implements DriverInterface
      */
     public function isFile($path)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @is_file($filename);
+        $result = @is_file($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -130,9 +122,7 @@ class File implements DriverInterface
      */
     public function isDirectory($path)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @is_dir($filename);
+        $result = @is_dir($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -152,9 +142,7 @@ class File implements DriverInterface
      */
     public function fileGetContents($path, $flag = null, $context = null)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @file_get_contents($filename, $flag, $context);
+        $result = @file_get_contents($this->getScheme() . $path, $flag, $context);
         if (false === $result) {
             throw new FileSystemException(
                 new Phrase(
@@ -175,9 +163,7 @@ class File implements DriverInterface
      */
     public function isWritable($path)
     {
-        $filename = $this->getScheme() . $path;
-        clearstatcache(false, $filename);
-        $result = @is_writable($filename);
+        $result = @is_writable($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
@@ -207,6 +193,7 @@ class File implements DriverInterface
      */
     public function createDirectory($path, $permissions = 0777)
     {
+        clearstatcache(true, $path);
         return $this->mkdirRecursive($path, $permissions);
     }
 
@@ -229,6 +216,7 @@ class File implements DriverInterface
             $this->mkdirRecursive($parentDir, $permissions);
         }
         $result = @mkdir($path, $permissions);
+        clearstatcache(true, $path);
         if (!$result) {
             if (is_dir($path)) {
                 $result = true;
@@ -278,7 +266,6 @@ class File implements DriverInterface
      */
     public function search($pattern, $path)
     {
-        clearstatcache();
         $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
         $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
@@ -299,6 +286,8 @@ class File implements DriverInterface
         $targetDriver = $targetDriver ?: $this;
         if (get_class($targetDriver) == get_class($this)) {
             $result = @rename($this->getScheme() . $oldPath, $newPath);
+            clearstatcache(true, $this->getScheme() . $oldPath);
+            clearstatcache(true, $newPath);
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
@@ -330,6 +319,7 @@ class File implements DriverInterface
         $targetDriver = $targetDriver ?: $this;
         if (get_class($targetDriver) == get_class($this)) {
             $result = @copy($this->getScheme() . $source, $destination);
+            clearstatcache(true, $destination);
         } else {
             $content = $this->fileGetContents($source);
             $result = $targetDriver->filePutContents($destination, $content);
@@ -363,6 +353,7 @@ class File implements DriverInterface
         $result = false;
         if ($targetDriver === null || get_class($targetDriver) == get_class($this)) {
             $result = @symlink($this->getScheme() . $source, $destination);
+            clearstatcache(true, $destination);
         }
         if (!$result) {
             throw new FileSystemException(
@@ -389,6 +380,7 @@ class File implements DriverInterface
     public function deleteFile($path)
     {
         $result = @unlink($this->getScheme() . $path);
+        clearstatcache(true, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
@@ -439,6 +431,7 @@ class File implements DriverInterface
         } else {
             $result = @rmdir($fullPath);
         }
+        clearstatcache(true, $fullPath);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
@@ -461,6 +454,7 @@ class File implements DriverInterface
     public function changePermissions($path, $permissions)
     {
         $result = @chmod($this->getScheme() . $path, $permissions);
+        clearstatcache(false, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
@@ -489,6 +483,8 @@ class File implements DriverInterface
         } else {
             $result = @chmod($path, $dirPermissions);
         }
+        clearstatcache(false, $this->getScheme() . $path);
+
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
@@ -538,6 +534,7 @@ class File implements DriverInterface
         } else {
             $result = @touch($this->getScheme() . $path, $modificationTime);
         }
+        clearstatcache(true, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
@@ -561,7 +558,8 @@ class File implements DriverInterface
     public function filePutContents($path, $content, $mode = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
-        if ($result === false) {
+        clearstatcache(true, $this->getScheme() . $path);
+        if (!$result) {
             throw new FileSystemException(
                 new Phrase(
                     'The specified "%1" file couldn\'t be written. %2',
@@ -583,6 +581,7 @@ class File implements DriverInterface
     public function fileOpen($path, $mode)
     {
         $result = @fopen($this->getScheme() . $path, $mode);
+        clearstatcache(true, $this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase('File "%1" cannot be opened %2', [$path, $this->getWarningMessage()])
@@ -603,14 +602,13 @@ class File implements DriverInterface
     public function fileReadLine($resource, $length, $ending = null)
     {
         // phpcs:disable
-        $result = @stream_get_line($resource, $length, $ending);
+            $result = @stream_get_line($resource, $length, $ending);
         // phpcs:enable
         if (false === $result) {
             throw new FileSystemException(
                 new Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
-
         return $result;
     }
 
