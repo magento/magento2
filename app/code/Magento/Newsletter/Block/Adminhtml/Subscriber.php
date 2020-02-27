@@ -17,6 +17,8 @@ use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 use Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory;
 
 /**
+ * Newsletter Subscriber block
+ *
  * @api
  * @since 100.0.2
  */
