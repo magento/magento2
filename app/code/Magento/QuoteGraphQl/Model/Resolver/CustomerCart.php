@@ -3,21 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
+use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 
 /**
  * Get cart for the customer
@@ -43,6 +45,7 @@ class CustomerCart implements ResolverInterface
      * @var QuoteIdMaskResourceModel
      */
     private $quoteIdMaskResourceModel;
+
     /**
      * @var QuoteIdToMaskedQuoteIdInterface
      */
@@ -66,7 +69,7 @@ class CustomerCart implements ResolverInterface
         $this->cartManagement = $cartManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
-         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
     /**
@@ -74,9 +77,13 @@ class CustomerCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        /** @var ContextInterface $context */
         $currentUserId = $context->getUserId();
 
-        /** @var ContextInterface $context */
+        if ($currentUserId === 0 && (int) $context->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+            throw new GraphQlAuthorizationException(__('The authorization token is expired.'));
+        }
+
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The request is allowed for logged in customer'));
         }
