@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,9 +8,13 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Model\NotificationService;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class AjaxMarkAsRead extends Notification
+/**
+ * AdminNotification AjaxMarkAsRead controller
+ */
+class AjaxMarkAsRead extends Notification implements HttpPostActionInterface
 {
     /**
      * @var NotificationService

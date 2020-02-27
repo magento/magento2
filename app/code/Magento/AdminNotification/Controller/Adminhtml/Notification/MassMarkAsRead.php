@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,8 +8,12 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Controller\Adminhtml\Notification;
 use Magento\AdminNotification\Model\InboxFactory as InboxModelFactory;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class MassMarkAsRead extends Notification
+/**
+ * AdminNotification MassMarkAsRead controller
+ */
+class MassMarkAsRead extends Notification implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -24,6 +27,10 @@ class MassMarkAsRead extends Notification
      */
     private $inboxModelFactory;
 
+    /**
+     * @param Action\Context $context
+     * @param InboxModelFactory $inboxModelFactory
+     */
     public function __construct(Action\Context $context, InboxModelFactory $inboxModelFactory)
     {
         parent::__construct($context);
@@ -31,7 +38,9 @@ class MassMarkAsRead extends Notification
     }
 
     /**
-     * @return void
+     * @inheritdoc
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -58,6 +67,6 @@ class MassMarkAsRead extends Notification
                 );
             }
         }
-        $this->_redirect('adminhtml/*/');
+        return $this->_redirect('adminhtml/*/');
     }
 }
