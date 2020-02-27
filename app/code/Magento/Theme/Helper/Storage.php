@@ -255,9 +255,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
             if ($path && $path !== self::NODE_ROOT) {
                 $path = $this->convertIdToPath($path);
 
-                $realPath = $this->filesystemDriver->getRealPathSafety($path);
-
-                $path = $realPath ?: $path;
+                $path = $this->filesystemDriver->getRealPathSafety($path);
 
                 if (strpos($path, $currentPath) !== 0) {
                     $path = $currentPath;

@@ -274,6 +274,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetThumbnailPathNotFound()
     {
+        $this->filesystemDriver->method('getRealpathSafety')
+            ->willReturnArgument(0);
         $image = 'notFoundImage.png';
         $root = '/image';
         $sourceNode = '/not/a/root';
@@ -455,6 +457,20 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getCurrentPathDataProvider
      */
+    public function testGetCurrentPathCachesResult()
+    {
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with(Storage::PARAM_NODE)
+            ->willReturn(Storage::NODE_ROOT);
+
+        $actualPath = $this->helper->getCurrentPath();
+        self::assertSame('/image', $actualPath);
+    }
+
+    /**
+     * @dataProvider getCurrentPathDataProvider
+     */
     public function testGetCurrentPath(
         string $expectedPath,
         string $requestedPath,
@@ -479,8 +495,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 ->willReturnArgument(0);
         }
 
-        $this->request->expects($this->once())
-            ->method('getParam')
+        $this->request->method('getParam')
             ->with(Storage::PARAM_NODE)
             ->willReturn($requestedPath);
 
@@ -494,11 +509,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $rootPath = '/' . \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
 
         return [
-            [$rootPath, Storage::NODE_ROOT],
-            [$rootPath, $rootPath . '/foo'],
-            [$rootPath, $rootPath . '/something', true, null, '/bar'],
-            ['foo/', $rootPath . '/foo', true, 'foo/'],
-            [$rootPath, $rootPath . '/foo', false],
+            'requested path "root" should short-circuit' => [$rootPath, Storage::NODE_ROOT],
+            'non-existent directory should default to the base path' => [$rootPath, $rootPath . '/foo'],
+            'requested path that resolves to a bad path should default to root' =>
+                [$rootPath, $rootPath . '/something', true, null, '/bar'],
+            'real path should resolve to relative path' => ['foo/', $rootPath . '/foo', true, 'foo/'],
         ];
     }
 }
