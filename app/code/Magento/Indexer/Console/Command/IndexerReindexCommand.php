@@ -120,14 +120,20 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $relatedIndexers = [];
         $dependentIndexers = [];
         foreach ($indexers as $indexer) {
-            $relatedIndexers[] = $this->getRelatedIndexerIds($indexer->getId());
-            $dependentIndexers[] = $this->getDependentIndexerIds($indexer->getId());
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $relatedIndexers = array_merge(
+                $relatedIndexers,
+                $this->getRelatedIndexerIds($indexer->getId())
+            );
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $dependentIndexers = array_merge(
+                $dependentIndexers,
+                $this->getDependentIndexerIds($indexer->getId())
+            );
         }
-        $relatedIndexers = $relatedIndexers ? array_unique(array_merge(...$relatedIndexers)) : [];
-        $dependentIndexers = $dependentIndexers ? array_merge(...$dependentIndexers) : [];
 
         $invalidRelatedIndexers = [];
-        foreach ($relatedIndexers as $relatedIndexer) {
+        foreach (array_unique($relatedIndexers) as $relatedIndexer) {
             if ($allIndexers[$relatedIndexer]->isInvalid()) {
                 $invalidRelatedIndexers[] = $relatedIndexer;
             }
@@ -157,12 +163,15 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     {
         $relatedIndexerIds = [];
         foreach ($this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
-            $relatedIndexerIds[] = [$relatedIndexerId];
-            $relatedIndexerIds[] = $this->getRelatedIndexerIds($relatedIndexerId);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $relatedIndexerIds = array_merge(
+                $relatedIndexerIds,
+                [$relatedIndexerId],
+                $this->getRelatedIndexerIds($relatedIndexerId)
+            );
         }
-        $relatedIndexerIds = $relatedIndexerIds ? array_unique(array_merge(...$relatedIndexerIds)) : [];
 
-        return $relatedIndexerIds;
+        return array_unique($relatedIndexerIds);
     }
 
     /**
@@ -177,13 +186,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
             $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
             if (array_search($indexerId, $dependencies) !== false) {
-                $dependentIndexerIds[] = [$id];
-                $dependentIndexerIds[] = $this->getDependentIndexerIds($id);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                $dependentIndexerIds = array_merge(
+                    $dependentIndexerIds,
+                    [$id],
+                    $this->getDependentIndexerIds($id)
+                );
             }
         }
-        $dependentIndexerIds = $dependentIndexerIds ? array_unique(array_merge(...$dependentIndexerIds)) : [];
 
-        return $dependentIndexerIds;
+        return array_unique($dependentIndexerIds);
     }
 
     /**
