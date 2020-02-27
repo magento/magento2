@@ -445,9 +445,9 @@ define([
                 excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 totalRecords    = this.totalRecords(),
-                allSelected     = totalRecords && totalSelected === totalRecords,
                 pageTotal       = this.getIds().length,
-                pageSelected    = this.getPageSelections().length;
+                pageSelected    = this.getPageSelections().length,
+                allSelected     = totalRecords && pageTotal === pageSelected;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
@@ -457,7 +457,7 @@ define([
                 this.selectAll();
             }
 
-            this.allSelected(pageTotal === pageSelected);
+            this.allSelected(allSelected);
             this.indetermine(totalSelected && !allSelected);
 
             return this;
