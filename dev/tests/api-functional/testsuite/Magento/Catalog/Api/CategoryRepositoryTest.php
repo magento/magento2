@@ -225,8 +225,6 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testCategoryNameUpdateShouldNotAffectUrlKey()
     {
-        $categoryFixtureInfo = $this->getInfoCategory(self::FIXTURE_CATEGORY_ID);
-
         $this->updateCategory(self::FIXTURE_CATEGORY_ID, ['name' => 'New Category Name']);
 
         // Update `url_key` globally
@@ -278,7 +276,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param int $categoryId
      * @param string $attributeCode
      * @param string|null $attributeValue
-     * @param int|null $storeCode
+     * @param string|null $storeCode
      */
     private function updateCategoryCustomAttribute(
         int $categoryId,

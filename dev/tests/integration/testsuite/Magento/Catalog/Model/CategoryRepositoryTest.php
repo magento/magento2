@@ -9,10 +9,12 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterfaceFactory;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryRepositoryTest extends TestCase
 {
+    const FIXTURE_CATEGORY_ID = 333;
+    const FIXTURE_SECOND_STORE_CODE = 'fixture_second_store';
     /**
      * @var CategoryLayoutUpdateManager
      */
@@ -42,6 +46,11 @@ class CategoryRepositoryTest extends TestCase
     private $categoryCollectionFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -52,14 +61,15 @@ class CategoryRepositoryTest extends TestCase
         $this->layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
         $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
         $this->categoryCollectionFactory = Bootstrap::getObjectManager()->create(CategoryCollectionFactory::class);
+        $this->storeManager = Bootstrap::getObjectManager()->create(StoreManagerInterface::class);
     }
 
     /**
-     * Create subject object.
+     * Create new instance of Category Repository
      *
      * @return CategoryRepositoryInterface
      */
-    private function createRepo(): CategoryRepositoryInterface
+    private function createRepository(): CategoryRepositoryInterface
     {
         return $this->repositoryFactory->create();
     }
@@ -76,14 +86,14 @@ class CategoryRepositoryTest extends TestCase
     public function testCustomLayout(): void
     {
         //New valid value
-        $repo = $this->createRepo();
-        $category = $repo->get(333);
+        $repo = $this->createRepository();
+        $category = $repo->get(self::FIXTURE_CATEGORY_ID);
         $newFile = 'test';
-        $this->layoutManager->setCategoryFakeFiles(333, [$newFile]);
+        $this->layoutManager->setCategoryFakeFiles(self::FIXTURE_CATEGORY_ID, [$newFile]);
         $category->setCustomAttribute('custom_layout_update_file', $newFile);
         $repo->save($category);
-        $repo = $this->createRepo();
-        $category = $repo->get(333);
+        $repo = $this->createRepository();
+        $category = $repo->get(self::FIXTURE_CATEGORY_ID);
         $this->assertEquals($newFile, $category->getCustomAttribute('custom_layout_update_file')->getValue());
 
         //Setting non-existent value
@@ -111,7 +121,7 @@ class CategoryRepositoryTest extends TestCase
         $productCollection = $this->productCollectionFactory->create();
         $deletedCategories = ['3', '4', '5', '13'];
         $categoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
-        $this->createRepo()->deleteByIdentifier(3);
+        $this->createRepository()->deleteByIdentifier(3);
         $this->assertEquals(
             0,
             $productCollection->addCategoriesFilter(['in' => $deletedCategories])->getSize(),
@@ -125,5 +135,90 @@ class CategoryRepositoryTest extends TestCase
             $difference,
             'Wrong categories was deleted'
         );
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testCategoryUpdateWithStoreScopeNullValuesShouldFollowDefaultValue()
+    {
+        $categoryRepository = $this->createRepository();
+
+        $categoryGlobalScope = $categoryRepository->get(self::FIXTURE_CATEGORY_ID);
+        $categoryStoreScope = $categoryRepository->get(self::FIXTURE_CATEGORY_ID, self::FIXTURE_SECOND_STORE_CODE);
+
+        $fixtureCategoryUrlKey = 'category-1';
+        $updatedCategoryUrlKey = 'some-magic-key';
+
+        $this->assertSame($fixtureCategoryUrlKey, $categoryGlobalScope->getUrlKey());
+        $this->assertSame($fixtureCategoryUrlKey, $categoryStoreScope->getUrlKey());
+
+        $this->updateCategoryCustomAttribute(
+            $categoryRepository,
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            $updatedCategoryUrlKey,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $categoryGlobalScope = $categoryRepository->get(self::FIXTURE_CATEGORY_ID);
+        $categoryStoreScope = $categoryRepository->get(self::FIXTURE_CATEGORY_ID, self::FIXTURE_SECOND_STORE_CODE);
+
+        $this->assertSame($fixtureCategoryUrlKey, $categoryGlobalScope->getUrlKey());
+        $this->assertSame($updatedCategoryUrlKey, $categoryStoreScope->getUrlKey());
+
+        $this->updateCategoryCustomAttribute(
+            $categoryRepository,
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            null,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $newGlobalUrlKey = 'new-global-key';
+
+        $this->updateCategoryCustomAttribute(
+            $categoryRepository,
+            self::FIXTURE_CATEGORY_ID,
+            'url_key',
+            $newGlobalUrlKey,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $categoryGlobalScope = $categoryRepository->get(self::FIXTURE_CATEGORY_ID);
+        $categoryStoreScope = $categoryRepository->get(self::FIXTURE_CATEGORY_ID, self::FIXTURE_SECOND_STORE_CODE);
+
+        $this->assertSame($newGlobalUrlKey, $categoryGlobalScope->getUrlKey());
+        $this->assertSame($newGlobalUrlKey, $categoryStoreScope->getUrlKey());
+    }
+
+    private function updateCategoryCustomAttribute(
+        CategoryRepositoryInterface $categoryRepository,
+        int $categoryId,
+        string $attributeCode,
+        ?string $attributeValue,
+        ?string $storeCode = null
+    ): void {
+        $fallbackStoreCode = $this->getStore()->getCode();
+
+        if ($storeCode !== null) {
+            $this->storeManager->setCurrentStore($storeCode);
+        }
+
+        $updatedCategory = $categoryRepository->get($categoryId);
+        $updatedCategory->setCustomAttribute($attributeCode, $attributeValue);
+        $categoryRepository->save($updatedCategory);
+
+        if ($storeCode !== null) {
+            $this->storeManager->setCurrentStore($fallbackStoreCode);
+        }
+    }
+
+    private function getStore(?string $storeCode = null): StoreInterface
+    {
+        return $this->storeManager->getStore($storeCode);
     }
 }
