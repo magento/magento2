@@ -70,8 +70,7 @@ class DateTime
     }
 
     /**
-     * Converts input date into date with timezone offset
-     * Input date must be in GMT timezone
+     * Converts input date into date with timezone offset. Input date must be in GMT timezone.
      *
      * @param  string $format
      * @param  int|string $input date in GMT timezone
@@ -114,8 +113,7 @@ class DateTime
     }
 
     /**
-     * Converts input date into timestamp with timezone offset
-     * Input date must be in GMT timezone
+     * Converts input date into timestamp with timezone offset. Input date must be in GMT timezone.
      *
      * @param  int|string $input date in GMT timezone
      * @return int
