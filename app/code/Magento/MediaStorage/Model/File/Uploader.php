@@ -6,6 +6,8 @@
 
 namespace Magento\MediaStorage\Model\File;
 
+use Magento\Framework\Validation\ValidationException;
+
 /**
  * Core file uploader model
  *
@@ -41,20 +43,28 @@ class Uploader extends \Magento\Framework\File\Uploader
     protected $_validator;
 
     /**
+     * @var \Magento\MediaStorage\Model\File\Validator\Image
+     */
+    private $imageValidator;
+
+    /**
      * @param string $fileId
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
+     * @param \Magento\MediaStorage\Model\File\Validator\Image $imageValidator
      */
     public function __construct(
         $fileId,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
-        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
+        \Magento\MediaStorage\Model\File\Validator\Image $imageValidator
     ) {
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
+        $this->imageValidator = $imageValidator;
         parent::__construct($fileId);
     }
 
@@ -129,5 +139,17 @@ class Uploader extends \Magento\Framework\File\Uploader
     {
         $this->_validateFile();
         return $this->_file;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _validateFile()
+    {
+        parent::_validateFile();
+
+        if (!$this->imageValidator->isValid($this->_file['tmp_name'])) {
+            throw new ValidationException(__('File validation failed.'));
+        }
     }
 }
