@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b292997ff7767b89b6e08b0c550db7d",
+    "content-hash": "f06887dfc3e06489a251fbb5c18d30ca",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1851,17 +1851,17 @@
             ],
             "authors": [
                 {
+                    "name": "Ben Ramsey",
+                    "email": "ben@benramsey.com",
+                    "homepage": "https://benramsey.com"
+                },
+                {
                     "name": "Marijn Huizendveld",
                     "email": "marijn.huizendveld@gmail.com"
                 },
                 {
                     "name": "Thibaud Fabre",
                     "email": "thibaud@aztech.io"
-                },
-                {
-                    "name": "Ben Ramsey",
-                    "email": "ben@benramsey.com",
-                    "homepage": "https://benramsey.com"
                 }
             ],
             "description": "Formerly rhumsaa/uuid. A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
@@ -7381,16 +7381,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "b00f5e195e1ed7f6335bce3052be9a0291f4d0db"
+                "reference": "8b332582751a830b3a6eafe1b09ac3b403e9a20e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b00f5e195e1ed7f6335bce3052be9a0291f4d0db",
-                "reference": "b00f5e195e1ed7f6335bce3052be9a0291f4d0db",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/8b332582751a830b3a6eafe1b09ac3b403e9a20e",
+                "reference": "8b332582751a830b3a6eafe1b09ac3b403e9a20e",
                 "shasum": ""
             },
             "require": {
@@ -7462,7 +7462,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-02-11T22:23:54+00:00"
+            "time": "2020-02-13T21:29:32+00:00"
         },
         {
             "name": "mikey179/vfsstream",
