@@ -11,8 +11,6 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__.'/../../../ConfigurableProduct/_files/product_configurable.php';
-
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 /** @var QuoteFactory $quoteFactory */
@@ -28,6 +26,10 @@ $product = $productRepository->get('configurable');
 $options = Bootstrap::getObjectManager()->create(
     \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
 );
+
+$attributeRepository = Bootstrap::getObjectManager()->get(\Magento\Eav\Api\AttributeRepositoryInterface::class);
+$attribute = $attributeRepository->get('catalog_product', 'test_configurable');
+
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 
 $requestInfo = new \Magento\Framework\DataObject(

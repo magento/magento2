@@ -87,6 +87,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/configurable_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_configurable_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */

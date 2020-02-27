@@ -85,6 +85,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * Test case: get available shipping methods from current customer quote with configurable product
      *
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/configurable_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_configurable_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
