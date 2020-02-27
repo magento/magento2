@@ -75,13 +75,8 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
         </before>
-        <after>
-            <!--Delete Created Data-->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-        </after>
 
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <!--Open Product on Store Front Page -->
         <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
