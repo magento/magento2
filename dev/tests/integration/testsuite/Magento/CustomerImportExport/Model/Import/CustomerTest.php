@@ -385,15 +385,16 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test customer indexer gets invalidated when it is Update on Schedule mode
+     * Test customer indexer gets invalidated after import when Update on Schedule mode is set
      *
      * @magentoDbIsolation enabled
      * @return void
      */
     public function testCustomerIndexer(): void
     {
-        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $this->indexerProcessor->getIndexer()->reindexAll();
         $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
         $this->doImport(__DIR__ . '/_files/customers_with_gender_to_import.csv', Import::BEHAVIOR_ADD_UPDATE);
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
         $this->assertEquals('valid', $statusBeforeImport);
