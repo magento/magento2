@@ -298,9 +298,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function getWebsites($withDefault = false)
     {
         $websites = [];
-        if (!$withDefault) {
-            unset($websites[0]);
-        }
         foreach ($this->_websites as $id => $code) {
             if (!$withDefault && $id == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                 continue;

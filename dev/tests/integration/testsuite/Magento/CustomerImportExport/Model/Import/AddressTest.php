@@ -362,6 +362,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $requiredAttributes[] = $keyAttribute;
         foreach (['update', 'remove'] as $action) {
             foreach ($this->_updateData[$action] as $attributes) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $requiredAttributes = array_merge($requiredAttributes, array_keys($attributes));
             }
         }
