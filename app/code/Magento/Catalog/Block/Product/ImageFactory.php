@@ -120,7 +120,7 @@ class ImageFactory
         if (empty($label)) {
             $label = $product->getName();
         }
-        return (string) $label;
+        return (string)$label;
     }
 
     /**
@@ -166,7 +166,7 @@ class ImageFactory
                 'width' => $imageMiscParams['image_width'],
                 'height' => $imageMiscParams['image_height'],
                 'label' => $this->getLabel($product, $imageMiscParams['image_type']),
-                'ratio' => $this->getRatio($imageMiscParams['image_width'], $imageMiscParams['image_height']),
+                'ratio' => $this->getRatio($imageMiscParams['image_width'] ?? 0, $imageMiscParams['image_height'] ?? 0),
                 'custom_attributes' => $this->filterCustomAttributes($attributes),
                 'class' => $this->getClass($attributes),
                 'product_id' => $product->getId()
