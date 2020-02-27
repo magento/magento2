@@ -150,11 +150,6 @@
 }
 
 .deprecated-message > .comment {
-    background: @deprecated__light_color;
-    border: 1px solid @deprecated__dark_color;
-    border-radius: 3px;
-    color: @deprecated__dark_color;
-    margin: 5px 0 0;
-    padding: 3px 7px;
-    position: relative;
+    &:extend(.message all);
+    &:extend(.message-notice all);
 }
