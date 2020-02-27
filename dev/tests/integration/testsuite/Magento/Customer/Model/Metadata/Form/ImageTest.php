@@ -58,8 +58,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(Filesystem::class);
+        $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->imageFixtureDir = realpath(__DIR__ . '/../../../_files/image');
         $this->expectedFileName = '/m/a/' . $this->fileName;
