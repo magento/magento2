@@ -96,21 +96,23 @@
         <!-- Open Url Rewrite page and see the url rewrite for the moved category -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
         <waitForPageLoad stepKey="waitForUrlRewritePageLoad"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="fillCategoryUrlKey"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
-        <waitForPageLoad stepKey="waitForUrlPageToLoad"/>
-        <!-- Verify new Redirect Path after move -->
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('2')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheRequestPathAfterMove"/>
-        <!-- Verify new Target Path after move -->
-        <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('2')}}" userInput="catalog/category/view/id/{$categoryId}" stepKey="verifyTheTargetPathAfterMove"/>
-        <!-- Verify new RedirectType after move -->
-        <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('2')}}" userInput="No" stepKey="verifyTheRedirectTypeAfterMove"/>
-        <!-- Verify before move Redirect Path displayed with associated Target Path and Redirect Type-->
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SecondLevelSubCat.name_lwr}}" stepKey="fillTheCategoryUrlKey"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton2"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="fillCategoryUrlKey"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
         <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="Permanent (301)" stepKey="verifyTheRedirectTypeBeforeMove"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{FirstLevelSubCat.name_lwr}}/{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheRequestPathBeforeMove"/>
-        <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheTargetPathBeforeMove"/>
+        <!-- Verify new Redirect Path after move -->
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('2', 'Request Path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheRequestPathAfterMove"/>
+        <!-- Verify new Target Path after move -->
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('2', 'Target Path')}}" userInput="catalog/category/view/id/{$categoryId}" stepKey="verifyTheTargetPathAfterMove"/>
+        <!-- Verify new RedirectType after move -->
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('2', 'Redirect Type')}}" userInput="No" stepKey="verifyTheRedirectTypeAfterMove"/>
+        <!-- Verify before move Redirect Path displayed with associated Target Path and Redirect Type-->
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SecondLevelSubCat.name_lwr}}" stepKey="fillTheCategoryUrlKey"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForSearch1"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="Permanent (301)" stepKey="verifyTheRedirectTypeBeforeMove"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{FirstLevelSubCat.name_lwr}}/{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheRequestPathBeforeMove"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheTargetPathBeforeMove"/>
     </test>
 </tests>

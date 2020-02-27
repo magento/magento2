@@ -24,6 +24,7 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
@@ -61,7 +62,8 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1.00" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-
+        <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+          
         <!-- Add 1 product to the cart -->
         <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>

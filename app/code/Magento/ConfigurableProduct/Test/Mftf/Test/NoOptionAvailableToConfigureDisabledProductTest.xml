@@ -103,6 +103,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Disable child product -->
         <comment userInput="Disable child product" stepKey="disableChildProduct"/>
