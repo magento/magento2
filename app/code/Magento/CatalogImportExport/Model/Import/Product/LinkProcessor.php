@@ -130,7 +130,6 @@ class LinkProcessor
      *
      * @return void
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         Product $importEntity,
@@ -151,13 +150,8 @@ class LinkProcessor
             $productId = $this->skuProcessor->getNewSku($sku)[$linkField];
             $productIds[] = $productId;
             $productLinkKeys = $this->fetchProductLinks($importEntity, $resource, $productId);
-            $linkNameToId = array_filter(
-                $this->linkNameToId,
-                function ($linkName) use ($rowData) {
-                    return isset($rowData[$linkName . 'sku']);
-                },
-                ARRAY_FILTER_USE_KEY
-            );
+            $linkNameToId = $this->filterProvidedLinkTypes($rowData);
+
             foreach ($linkNameToId as $linkName => $linkId) {
                 $linkSkus = explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
 
@@ -171,18 +165,8 @@ class LinkProcessor
                     ? explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
 
-                $linkSkus = array_filter(
-                    $linkSkus,
-                    function ($linkedSku) use ($sku, $importEntity) {
-                        $linkedSku = trim($linkedSku);
+                $linkSkus = $this->filterValidLinks($importEntity, $sku, $linkSkus);
 
-                        return (
-                                $this->skuProcessor->getNewSku($linkedSku) !== null
-                                || $this->isSkuExist($importEntity, $linkedSku)
-                            )
-                            && strcasecmp($linkedSku, $sku) !== 0;
-                    }
-                );
                 foreach ($linkSkus as $linkedKey => $linkedSku) {
                     $linkedId = $this->getProductLinkedId($importEntity, $linkedSku);
                     if ($linkedId == null) {
@@ -372,5 +356,46 @@ class LinkProcessor
     private function composeLinkKey(int $productId, int $linkedId, int $linkTypeId): string
     {
         return "{$productId}-{$linkedId}-{$linkTypeId}";
+    }
+
+    /**
+     * Filter out link types which are not provided in the rowData
+     *
+     * @param array $rowData
+     * @return array
+     */
+    private function filterProvidedLinkTypes(array $rowData)
+    {
+        return array_filter(
+            $this->linkNameToId,
+            function ($linkName) use ($rowData) {
+                return isset($rowData[$linkName . 'sku']);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+    }
+
+    /**
+     * Filter out invalid links
+     *
+     * @param Product $importEntity
+     * @param string $sku
+     * @param array $linkSkus
+     * @return array
+     */
+    private function filterValidLinks(Product $importEntity, string $sku, array $linkSkus)
+    {
+        return array_filter(
+            $linkSkus,
+            function ($linkedSku) use ($sku, $importEntity) {
+                $linkedSku = trim($linkedSku);
+
+                return (
+                        $this->skuProcessor->getNewSku($linkedSku) !== null
+                        || $this->isSkuExist($importEntity, $linkedSku)
+                    )
+                    && strcasecmp($linkedSku, $sku) !== 0;
+            }
+        );
     }
 }
