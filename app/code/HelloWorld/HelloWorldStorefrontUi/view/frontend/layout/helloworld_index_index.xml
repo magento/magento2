@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="HelloWorld\HelloWorldStorefrontUi\Block\Display" name="helloworldstorefrontui_index_index" template="HelloWorld_HelloWorldStorefrontUi::index.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

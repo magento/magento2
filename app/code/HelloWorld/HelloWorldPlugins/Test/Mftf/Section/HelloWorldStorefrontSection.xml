@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="HelloWorldStorefrontSection">
+        <element name="message" type="text" selector="p.display-message-from-api"/>
+        <element name="helloWorldMessage" type="text" selector="p.display-message-from-api h1"/>
+    </section>
+</sections>

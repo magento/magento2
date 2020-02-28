@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="HelloWorldStorefrontActionGroup">
+        <annotations>
+            <description>Check message on hello world page.</description>
+        </annotations>
+        <arguments>
+            <argument name="prefix" defaultValue="prefix" type="string"/>
+            <argument name="helloworld" defaultValue="Hello World" type="string"/>
+            <argument name="suffix" defaultValue="suffix" type="string"/>
+        </arguments>
+        <amOnPage stepKey="signupPage" url="helloworld/"/>
+        <waitForElementVisible selector="{{HelloWorldStorefrontSection.message}}" stepKey="waitWhenMessageBeVisible"/>
+        <see selector="{{HelloWorldStorefrontSection.message}}" userInput="{{prefix}}" stepKey="seePrefix"/>
+        <see selector="{{HelloWorldStorefrontSection.helloWorldMessage}}" userInput="{{helloworld}}" stepKey="seeHelloWorld"/>
+        <see selector="{{HelloWorldStorefrontSection.message}}" userInput="{{suffix}}" stepKey="seeSuffix"/>
+    </actionGroup>
+</actionGroups>
