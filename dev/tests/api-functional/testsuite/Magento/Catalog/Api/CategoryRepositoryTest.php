@@ -232,6 +232,8 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testCategoryNameUpdateForStoreShouldNotStopUrlKeyFromFollowingGlobalValue()
     {
+        $this->markTestSkipped('https://github.com/magento/magento2/issues/27065');
+
         $this->updateCategory(
             self::FIXTURE_CATEGORY_ID,
             ['name' => 'New Category Name'],
