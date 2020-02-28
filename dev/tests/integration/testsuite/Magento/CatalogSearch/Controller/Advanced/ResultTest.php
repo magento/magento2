@@ -135,8 +135,8 @@ class ResultTest extends AbstractController
                     'description' => '',
                     'short_description' => '',
                     'price' => [
-                        'from' => '50',
-                        'to' => '150',
+                        'from' => 50,
+                        'to' => 150,
                     ],
                     'test_searchable_attribute' => '',
                 ],
