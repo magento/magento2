@@ -1,39 +1,45 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\NotificationService;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 
-class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+/**
+ * Controller used to mark system notification as read
+ */
+class AjaxMarkAsRead extends Notification implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\AdminNotification\Model\NotificationService
+     * @var NotificationService
      */
     private $notificationService;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\AdminNotification\Model\NotificationService|null $notificationService
-     * @throws \RuntimeException
+     * @param NotificationService $notificationService
      */
     public function __construct(
         Action\Context $context,
-        \Magento\AdminNotification\Model\NotificationService $notificationService = null
+        NotificationService $notificationService
     ) {
         parent::__construct($context);
-        $this->notificationService = $notificationService?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\AdminNotification\Model\NotificationService::class);
+        $this->notificationService = $notificationService;
     }
 
     /**
      * Mark notification as read (AJAX action)
      *
-     * @return \Magento\Framework\Controller\Result\Json|void
+     * @return Json|void
      * @throws \InvalidArgumentException
      */
     public function execute()
@@ -50,7 +56,7 @@ class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
             $responseData['success'] = false;
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($responseData);
         return $resultJson;
