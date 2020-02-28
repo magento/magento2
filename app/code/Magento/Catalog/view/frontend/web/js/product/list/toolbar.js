@@ -81,6 +81,9 @@ define([
             );
         },
 
+        /**
+         * @private
+         */
         getUrlParams: function () {
             var decode = window.decodeURIComponent,
                 urlPaths = this.options.url.split('?'),
@@ -97,10 +100,18 @@ define([
             return params;
         },
 
+        /**
+         * @returns {String}
+         * @private
+         */
         getCurrentLimit: function () {
             return this.getUrlParams()[this.options.limit] || this.options.limitDefault;
         },
 
+        /**
+         * @returns {String}
+         * @private
+         */
         getCurrentPage: function () {
             return this.getUrlParams()[this.options.page] || 1;
         },
@@ -118,7 +129,7 @@ define([
                 form, params, key, input, formKey, newPage;
 
             if (currentPage > 1 && paramName === this.options.limit) {
-                    newPage = Math.floor(this.getCurrentLimit() * (currentPage-1) / paramValue) + 1;
+                newPage = Math.floor(this.getCurrentLimit() * (currentPage - 1) / paramValue) + 1;
 
                 if (newPage > 1) {
                     paramData[this.options.page] = newPage;
