@@ -95,6 +95,10 @@ class CategoryRepository implements CategoryRepositoryInterface
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
 
+        $useDefaultAttributes = array_filter($category->getData(), function ($attributeValue) {
+            return null === $attributeValue;
+        });
+
         if ($category->getId()) {
             $metadata = $this->getMetadataPool()->getMetadata(CategoryInterface::class);
 
@@ -109,7 +113,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
         $category->addData($existingData);
 
-        $this->updateUseDefaultAttributes($category);
+        $this->updateUseDefaultAttributes($category, $useDefaultAttributes);
 
         try {
             $this->validateCategory($category);
@@ -216,6 +220,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     private function getCategoryStoreId(CategoryInterface $category): int
     {
+//        return $this->storeManager->getStore()->getId();
         if (method_exists($category, 'getStoreId') && $category->getStoreId() !== null) {
             $categoryStoreId = (int)$category->getStoreId();
         }
@@ -227,14 +232,11 @@ class CategoryRepository implements CategoryRepositoryInterface
      * This method fetches values of Category that should be inherited from global scope
      *
      * @param CategoryInterface $category
+     * @param array $useDefaultAttributes
      * @return void
      */
-    private function updateUseDefaultAttributes(CategoryInterface $category): void
+    private function updateUseDefaultAttributes(CategoryInterface $category, array $useDefaultAttributes = []): void
     {
-        $useDefaultAttributes = array_filter($category->getData(), function ($attributeValue) {
-            return null === $attributeValue;
-        });
-
         $category->setData('use_default', array_map(function () {
             return true;
         }, $useDefaultAttributes));
