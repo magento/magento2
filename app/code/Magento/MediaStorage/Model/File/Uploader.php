@@ -54,19 +54,16 @@ class Uploader extends \Magento\Framework\File\Uploader
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
-     * @param Image $imageValidator
      */
     public function __construct(
         $fileId,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
-        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
-        Image $imageValidator = null
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
     ) {
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
-        $this->imageValidator = $imageValidator?: ObjectManager::getInstance()->get(Image::class);
         parent::__construct($fileId);
     }
 
@@ -150,8 +147,24 @@ class Uploader extends \Magento\Framework\File\Uploader
     {
         parent::_validateFile();
 
-        if (!$this->imageValidator->isValid($this->_file['tmp_name'])) {
+        if (!$this->getImageValidator()->isValid($this->_file['tmp_name'])) {
             throw new ValidationException(__('File validation failed.'));
         }
+    }
+
+    /**
+     * Return image validator class.
+     *
+     * Child classes __construct() don't call parent, so we have to retrieve class instance with private function.
+     *
+     * @return Image
+     */
+    private function getImageValidator(): Image
+    {
+        if (!$this->imageValidator) {
+            $this->imageValidator = ObjectManager::getInstance()->get(Image::class);
+        }
+
+        return $this->imageValidator;
     }
 }
