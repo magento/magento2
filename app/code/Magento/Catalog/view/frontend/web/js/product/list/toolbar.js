@@ -23,6 +23,7 @@ define([
             direction: 'product_list_dir',
             order: 'product_list_order',
             limit: 'product_list_limit',
+            page: 'p',
             modeDefault: 'grid',
             directionDefault: 'asc',
             orderDefault: 'position',
@@ -80,7 +81,7 @@ define([
             );
         },
 
-        getUrlParams: function() {
+        getUrlParams: function () {
             var decode = window.decodeURIComponent,
                 urlPaths = this.options.url.split('?'),
                 urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
@@ -96,17 +97,13 @@ define([
             return params;
         },
 
-        getCurrentLimit: function()
-        {
-            var currentLimit = this.getUrlParams()[this.options.limit];
-
-            if (currentLimit === undefined) {
-                currentLimit = this.options.limitDefault;
-            }
-
-            return currentLimit;
+        getCurrentLimit: function () {
+            return this.getUrlParams()[this.options.limit] || this.options.limitDefault;
         },
 
+        getCurrentPage: function () {
+            return this.getUrlParams()[this.options.page] || 1;
+        },
 
         /**
          * @param {String} paramName
@@ -117,10 +114,17 @@ define([
             var urlPaths = this.options.url.split('?'),
                 baseUrl = urlPaths[0],
                 paramData = this.getUrlParams(),
-                form, params, key, input, formKey;
+                currentPage = this.getCurrentPage(),
+                form, params, key, input, formKey, newPage;
 
-            if (paramName === this.options.limit && paramValue > this.getCurrentLimit()) {
-                delete paramData['p'];
+            if (currentPage > 1 && paramName === this.options.limit) {
+                newPage = Math.floor(this.getCurrentLimit() * this.getCurrentPage() / paramValue);
+
+                if (newPage > 1) {
+                    paramData[this.options.page] = newPage;
+                } else {
+                    delete paramData[this.options.page];
+                }
             }
 
             paramData[paramName] = paramValue;
