@@ -888,10 +888,6 @@
                         "app/.htaccess"
                     ],
                     [
-                        "app/functions.php",
-                        "app/functions.php"
-                    ],
-                    [
                         "app/autoload.php",
                         "app/autoload.php"
                     ],
