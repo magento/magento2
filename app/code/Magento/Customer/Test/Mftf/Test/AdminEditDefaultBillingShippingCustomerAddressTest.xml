@@ -46,6 +46,7 @@
         <!--Step4. Fill all the fields with test data and press *Save* button-->
         <click selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}" stepKey="enableDefaultBillingAddress"/>
         <click selector="{{AdminCustomerAddressesSection.defaultShippingAddress}}" stepKey="enableDefaultShippingAddress"/>
+        <waitForElementVisible selector="{{AdminCustomerAddressesSection.firstNameForAddress}}" stepKey="waitForTheAddressEditModalFields"/>
         <fillField userInput="{{US_Address_TX.firstname}}" selector="{{AdminCustomerAddressesSection.firstNameForAddress}}" stepKey="fillFirstName"/>
         <fillField userInput="{{US_Address_TX.lastname}}" selector="{{AdminCustomerAddressesSection.lastNameForAddress}}" stepKey="fillLastName"/>
         <fillField userInput="{{US_Address_TX.company}}" selector="{{AdminCustomerAddressesSection.company}}" stepKey="fillCompany"/>
