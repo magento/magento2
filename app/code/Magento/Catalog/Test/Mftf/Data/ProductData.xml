@@ -212,6 +212,17 @@
         <data key="quantity">1001</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
+    <entity name="SimpleProductDisabledStockQuantityZero" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Disabled Quantity Zero</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">2</data>
+        <data key="quantity">0</data>
+        <requiredEntity type="product_extension_attribute">EavStock0</requiredEntity>
+    </entity>
     <entity name="SimpleProductNotVisibleIndividually" type="product">
         <data key="name" unique="suffix">Simple Product Not Visible Individually</data>
         <data key="sku" unique="suffix">simple_product_not_visible_individually</data>
