@@ -58,6 +58,8 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
         );
 
         $this->subscriptionHandler->processEnabled();
+
+        return $this;
     }
 
     /**

@@ -67,6 +67,8 @@ class ActivateDataCollection implements DataPatchInterface
                 $this->collectionTimeBackendModel->afterSave();
             }
         }
+
+        return $this;
     }
 
     /**
