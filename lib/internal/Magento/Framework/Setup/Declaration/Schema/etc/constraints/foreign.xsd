@@ -33,7 +33,6 @@
             <xs:enumeration value="CASCADE" />
             <xs:enumeration value="SET NULL" />
             <xs:enumeration value="NO ACTION" />
-            <xs:enumeration value="RESTRICT" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
