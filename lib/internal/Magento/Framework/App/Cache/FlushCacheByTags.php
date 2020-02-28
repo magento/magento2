@@ -54,9 +54,11 @@ class FlushCacheByTags
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(AbstractResource $subject, \Closure $proceed, AbstractModel $object): AbstractResource
-    {
-        $result = $proceed($object);
+    public function afterSave(
+        AbstractResource $subject,
+        AbstractResource $result,
+        AbstractModel $object
+    ): AbstractResource {
         $tags = $this->tagResolver->getTags($object);
         $this->cleanCacheByTags($tags);
 
@@ -68,10 +70,12 @@ class FlushCacheByTags
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(AbstractResource $subject, \Closure $proceed, AbstractModel $object): AbstractResource
-    {
+    public function afterDelete(
+        AbstractResource $subject,
+        AbstractResource $result,
+        AbstractModel $object
+    ): AbstractResource {
         $tags = $this->tagResolver->getTags($object);
-        $result = $proceed($object);
         $this->cleanCacheByTags($tags);
 
         return $result;
