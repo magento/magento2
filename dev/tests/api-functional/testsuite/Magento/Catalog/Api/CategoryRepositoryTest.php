@@ -24,10 +24,11 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class CategoryRepositoryTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/categories';
-    const SERVICE_NAME = 'catalogCategoryRepositoryV1';
-    const FIXTURE_CATEGORY_ID = 333;
-    const FIXTURE_SECOND_STORE_CODE = 'fixture_second_store';
+    private const RESOURCE_PATH = '/V1/categories';
+    private const SERVICE_NAME = 'catalogCategoryRepositoryV1';
+    private const FIXTURE_CATEGORY_ID = 333;
+    private const FIXTURE_SECOND_STORE_CODE = 'fixture_second_store';
+    private const STORE_CODE_GLOBAL = 'all';
 
     private $modelId = self::FIXTURE_CATEGORY_ID;
 
@@ -175,10 +176,12 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testCategoryUpdateWithStoreScopeNullValuesShouldFollowDefaultValue()
     {
+        $newSecondStoreUrlKey = 'new-url-key';
+
         $this->updateCategoryCustomAttribute(
             self::FIXTURE_CATEGORY_ID,
             'url_key',
-            'new-url-key',
+            $newSecondStoreUrlKey,
             self::FIXTURE_SECOND_STORE_CODE
         );
 
@@ -187,11 +190,13 @@ class CategoryRepositoryTest extends WebapiAbstract
             self::FIXTURE_SECOND_STORE_CODE
         );
 
+        // Verify `url_key` for Second Store was updated.
         $this->assertSame(
-            'new-url-key',
+            $newSecondStoreUrlKey,
             $this->getCategoryAttributeValue($updatedSecondStoreCategory, 'url_key')
         );
 
+        // Reset `url_key` for Second Store to `null` value (follow global value)
         $this->updateCategoryCustomAttribute(
             self::FIXTURE_CATEGORY_ID,
             'url_key',
@@ -199,10 +204,12 @@ class CategoryRepositoryTest extends WebapiAbstract
             self::FIXTURE_SECOND_STORE_CODE
         );
 
+        $newGlobalUrlKey = 'new-global-key';
         $this->updateCategoryCustomAttribute(
             self::FIXTURE_CATEGORY_ID,
             'url_key',
-            'new-global-key'
+            $newGlobalUrlKey,
+            self::STORE_CODE_GLOBAL
         );
 
         $revertedSecondStoreCategory = $this->getInfoCategory(
@@ -210,9 +217,9 @@ class CategoryRepositoryTest extends WebapiAbstract
             self::FIXTURE_SECOND_STORE_CODE
         );
 
-        // After setting `url_key` to null for Second Store, the value should follow Global.
+        // Verify `url_key` for Second Store follows Global value.
         $this->assertSame(
-            'new-global-key',
+            $newGlobalUrlKey,
             $this->getCategoryAttributeValue($revertedSecondStoreCategory, 'url_key')
         );
     }
@@ -225,18 +232,22 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testCategoryNameUpdateShouldNotAffectUrlKey()
     {
-        $this->updateCategory(self::FIXTURE_CATEGORY_ID, ['name' => 'New Category Name']);
-
-        // Update `url_key` globally
         $this->updateCategoryCustomAttribute(
             self::FIXTURE_CATEGORY_ID,
             'url_key',
-            'new-url-key'
+            'new-url-key',
+            self::STORE_CODE_GLOBAL
+        );
+
+        $this->updateCategory(
+            self::FIXTURE_CATEGORY_ID,
+            ['name' => 'New Category Name'],
+            null,
+            self::STORE_CODE_GLOBAL
         );
 
         $categoryUpdatedInfo = $this->getInfoCategory(
-            self::FIXTURE_CATEGORY_ID,
-            self::FIXTURE_SECOND_STORE_CODE
+            self::FIXTURE_CATEGORY_ID
         );
 
         // Expect that Store-level value was updated
@@ -282,7 +293,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         int $categoryId,
         string $attributeCode,
         ?string $attributeValue,
-        ?string $storeCode = null
+        ?string $storeCode = 'all'
     ): void {
         $updateRequest = [
             'custom_attributes' => [

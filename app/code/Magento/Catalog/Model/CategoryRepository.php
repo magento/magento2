@@ -7,102 +7,100 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Repository for categories.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
+class CategoryRepository implements CategoryRepositoryInterface
 {
+    private const CACHE_TAG_ALL_STORES = 'all';
+
     /**
      * @var Category[]
      */
     protected $instances = [];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     protected $categoryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category
+     * @var CategoryResourceModel
      */
-    protected $categoryResource;
+    protected $categoryResourceModel;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var ExtensibleDataObjectConverter
      */
     private $extensibleDataObjectConverter;
 
     /**
      * List of fields that can used config values in case when value does not defined directly
      *
-     * @var array
+     * @var string[]
      */
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
 
     /**
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param CategoryFactory $categoryFactory
+     * @param CategoryResourceModel $categoryResourceModel
+     * @param StoreManagerInterface $storeManager
+     * @param ExtensibleDataObjectConverter|null $extensibleDataObjectConverter
      */
     public function __construct(
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        CategoryFactory $categoryFactory,
+        CategoryResourceModel $categoryResourceModel,
+        StoreManagerInterface $storeManager,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter = null
     ) {
         $this->categoryFactory = $categoryFactory;
-        $this->categoryResource = $categoryResource;
+        $this->categoryResourceModel = $categoryResourceModel;
         $this->storeManager = $storeManager;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter
+            ?? ObjectManager::getInstance()->get(ExtensibleDataObjectConverter::class);
     }
 
     /**
      * @inheritdoc
      */
-    public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
+    public function save(CategoryInterface $category)
     {
-        $storeId = (int)$this->storeManager->getStore()->getId();
-        $existingData = $this->getExtensibleDataObjectConverter()
-            ->toNestedArray($category, [], \Magento\Catalog\Api\Data\CategoryInterface::class);
+        $storeId = $this->getCategoryStoreId($category);
+
+        $existingData = $this->extensibleDataObjectConverter->toNestedArray($category, [], CategoryInterface::class);
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
 
         if ($category->getId()) {
-            $metadata = $this->getMetadataPool()->getMetadata(
-                CategoryInterface::class
-            );
+            $metadata = $this->getMetadataPool()->getMetadata(CategoryInterface::class);
 
             $category = $this->get($category->getId(), $storeId);
-            $existingData[$metadata->getLinkField()] = $category->getData(
-                $metadata->getLinkField()
-            );
-
-            if (isset($existingData['image']) && is_array($existingData['image'])) {
-                if (!empty($existingData['image']['delete'])) {
-                    $existingData['image'] = null;
-                } else {
-                    if (isset($existingData['image'][0]['name']) && isset($existingData['image'][0]['tmp_name'])) {
-                        $existingData['image'] = $existingData['image'][0]['name'];
-                    } else {
-                        unset($existingData['image']);
-                    }
-                }
-            }
+            $existingData[$metadata->getLinkField()] = $category->getData($metadata->getLinkField());
+            $existingData = $this->handleCategoryImage($existingData);
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
             $parentCategory = $this->get($parentId, $storeId);
@@ -110,19 +108,19 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $existingData['parent_id'] = $parentId;
         }
         $category->addData($existingData);
+
+        $this->updateUseDefaultAttributes($category);
+
         try {
             $this->validateCategory($category);
-            $this->categoryResource->save($category);
+            $this->categoryResourceModel->save($category);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
-                __(
-                    'Could not save category: %1',
-                    $e->getMessage()
-                ),
+                __('Could not save category: %1', $e->getMessage()),
                 $e
             );
         }
-        unset($this->instances[$category->getId()]);
+        $this->flushCategoryCache($category->getId());
         return $this->get($category->getId(), $storeId);
     }
 
@@ -131,40 +129,39 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = $storeId ?? 'all';
+        $cacheKey = $storeId ?? self::CACHE_TAG_ALL_STORES;
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
             if (null !== $storeId) {
                 $category->setStoreId($storeId);
             }
-            $category->load($categoryId);
+
+            $this->categoryResourceModel->load($category, $categoryId);
+
             if (!$category->getId()) {
                 throw NoSuchEntityException::singleField('id', $categoryId);
             }
             $this->instances[$categoryId][$cacheKey] = $category;
         }
+
         return $this->instances[$categoryId][$cacheKey];
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category)
+    public function delete(CategoryInterface $category)
     {
         try {
             $categoryId = $category->getId();
-            $this->categoryResource->delete($category);
+            $this->categoryResourceModel->delete($category);
         } catch (\Exception $e) {
-            throw new StateException(
-                __(
-                    'Cannot delete category with id %1',
-                    $category->getId()
-                ),
-                $e
-            );
+            throw new StateException(__('Cannot delete category with id %1', $category->getId()), $e);
         }
-        unset($this->instances[$categoryId]);
+
+        $this->flushCategoryCache($categoryId);
+
         return true;
     }
 
@@ -174,15 +171,15 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     public function deleteByIdentifier($categoryId)
     {
         $category = $this->get($categoryId);
-        return  $this->delete($category);
+        return $this->delete($category);
     }
 
     /**
      * Validate category process
      *
-     * @param  Category $category
+     * @param Category $category
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function validateCategory(Category $category)
     {
@@ -197,12 +194,12 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         if ($validate !== true) {
             foreach ($validate as $code => $error) {
                 if ($error === true) {
-                    $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                    $attribute = $this->categoryResourceModel->getAttribute($code)->getFrontend()->getLabel();
+                    throw new LocalizedException(
                         __('The "%1" attribute is required. Enter and try again.', $attribute)
                     );
                 } else {
-                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
+                    throw new LocalizedException(__($error));
                 }
             }
         }
@@ -210,32 +207,84 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * Lazy loader for the converter.
+     * If CategoryInterface object has `store_id` set, use it during save. Otherwise use Current `store_id`.
      *
-     * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @param CategoryInterface $category
+     * @return int
      *
-     * @deprecated 101.0.0
+     * @throws NoSuchEntityException
      */
-    private function getExtensibleDataObjectConverter()
+    private function getCategoryStoreId(CategoryInterface $category): int
     {
-        if ($this->extensibleDataObjectConverter === null) {
-            $this->extensibleDataObjectConverter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\ExtensibleDataObjectConverter::class);
+        if (method_exists($category, 'getStoreId') && $category->getStoreId() !== null) {
+            $categoryStoreId = (int)$category->getStoreId();
         }
-        return $this->extensibleDataObjectConverter;
+
+        return $categoryStoreId ?? $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * This method fetches values of Category that should be inherited from global scope
+     *
+     * @param CategoryInterface $category
+     * @return void
+     */
+    private function updateUseDefaultAttributes(CategoryInterface $category): void
+    {
+        $useDefaultAttributes = array_filter($category->getData(), function ($attributeValue) {
+            return null === $attributeValue;
+        });
+
+        $category->setData('use_default', array_map(function () {
+            return true;
+        }, $useDefaultAttributes));
     }
 
     /**
      * Lazy loader for the metadata pool.
      *
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @return MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         }
+
         return $this->metadataPool;
+    }
+
+    /**
+     * Method removes object by ID from Repository internal cache.
+     *
+     * @param int $categoryId
+     * @see \Magento\Catalog\Model\CategoryRepository::$instances
+     */
+    private function flushCategoryCache(int $categoryId): void
+    {
+        unset($this->instances[$categoryId]);
+    }
+
+    /**
+     * Determines whether Delete or Update action was requested. Performs necessary actions.
+     *
+     * @param array $categoryData
+     * @return array
+     */
+    private function handleCategoryImage(array $categoryData): array
+    {
+        if (isset($categoryData['image']) && is_array($categoryData['image'])) {
+            if (isset($categoryData['image']['delete']) && !empty($categoryData['image']['delete'])) {
+                $categoryData['image'] = null;
+            } else {
+                if (isset($categoryData['image'][0]['name']) && isset($categoryData['image'][0]['tmp_name'])) {
+                    $categoryData['image'] = $categoryData['image'][0]['name'];
+                } else {
+                    unset($categoryData['image']);
+                }
+            }
+        }
+
+        return $categoryData;
     }
 }

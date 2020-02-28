@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\EntityManager\Operation\Update;
 
-use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Operation\AttributePool;
+use Magento\Framework\EntityManager\TypeResolver;
 
-/**
- * Class UpdateAttributes
- */
 class UpdateAttributes
 {
     /**
@@ -59,6 +58,7 @@ class UpdateAttributes
             $entityData = $action->execute($entityType, $entityData, $arguments);
         }
         $entity = $hydrator->hydrate($entity, $entityData);
+
         return $entity;
     }
 }
