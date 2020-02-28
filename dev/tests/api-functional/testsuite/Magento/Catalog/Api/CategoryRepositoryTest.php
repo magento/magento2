@@ -230,8 +230,15 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      */
-    public function testCategoryNameUpdateShouldNotAffectUrlKey()
+    public function testCategoryNameUpdateForStoreShouldNotStopUrlKeyFromFollowingGlobalValue()
     {
+        $this->updateCategory(
+            self::FIXTURE_CATEGORY_ID,
+            ['name' => 'New Category Name'],
+            null,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
         $this->updateCategoryCustomAttribute(
             self::FIXTURE_CATEGORY_ID,
             'url_key',
@@ -239,15 +246,9 @@ class CategoryRepositoryTest extends WebapiAbstract
             self::STORE_CODE_GLOBAL
         );
 
-        $this->updateCategory(
-            self::FIXTURE_CATEGORY_ID,
-            ['name' => 'New Category Name'],
-            null,
-            self::STORE_CODE_GLOBAL
-        );
-
         $categoryUpdatedInfo = $this->getInfoCategory(
-            self::FIXTURE_CATEGORY_ID
+            self::FIXTURE_CATEGORY_ID,
+            self::FIXTURE_SECOND_STORE_CODE
         );
 
         // Expect that Store-level value was updated
