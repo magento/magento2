@@ -211,7 +211,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'zip_is_range',
             'checkbox',
-            ['name' => 'zip_is_range', 'label' => __('Zip/Post is Range'), 'value' => '1']
+            [
+                'name' => 'zip_is_range',
+                'label' => __('Zip/Post is Range'),
+                'value' => '1',
+                'class' => 'zip-is-range-checkbox'
+            ]
         );
 
         if (!isset($formData['tax_postcode'])) {
