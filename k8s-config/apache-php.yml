@@ -57,7 +57,7 @@ spec:
       initContainers:
         - name: php-volume-mount-hack
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["sh", "-c", "chown -R 82:82 media/ var/"]
+          command: ["sh", "-c", "chown -R 82:82 /var/www/html/media /var/www/html/var"]
           volumeMounts:
             - mountPath: /var/www/html/media
               name: magento-persistent-storage
@@ -67,7 +67,7 @@ spec:
               subPath: var
         - name: apache-volume-mount-hack
           image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
-          command: ["sh", "-c", "chown -R 82:82 media/ var/"]
+          command: ["sh", "-c", "chown -R 82:82 /var/www/html/media /var/www/html/var"]
           volumeMounts:
             - mountPath: /var/www/html/media
               name: magento-persistent-storage
