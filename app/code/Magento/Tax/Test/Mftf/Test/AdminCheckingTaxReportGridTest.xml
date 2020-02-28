@@ -110,18 +110,16 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
 
             <!-- Delete Customer and clear filter -->
-            <actionGroup ref="NavigateToAllCustomerPage" stepKey="goToCustomerPage"/>
-            <actionGroup ref="AdminFilterCustomerGridByEmail" stepKey="filterCustomerGrid">
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer.email}}"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteCustomerFromGridActionGroup" stepKey="deleteCustomer"/>
             <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
                 <argument name="message" value="A total of 1 record(s) were deleted."/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterCustomer"/>
 
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open Created product. In Tax Class select new created Product Tax class.-->
@@ -143,7 +141,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
 
         <!--Create an order with these 2 products in that zip code.-->
-        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="navigateToNewOrder"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrder"/>
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
         <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButton"/>
@@ -173,12 +171,13 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <!-- Grab tax amounts -->
+        <!-- need check selector -->
         <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemTaxAmountByProductName($createFirstProduct.name$)}}" stepKey="amountOfTaxOnFirstProduct"/>
         <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemTaxAmountByProductName($createSecondProduct.name$)}}" stepKey="amountOfTaxOnSecondProduct"/>
-        <grabTextFrom selector="{{AdminOrderTotalSection.totalTax('3')}}" stepKey="amountOfTotalTax"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.totalTax}}" stepKey="amountOfTotalTax"/>
 
         <!--Create Invoice and Shipment for this Order.-->
-        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="seeInvoiceOrderPage"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="seeInvoiceOrderPage"/>
 
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="clickSubmitInvoice"/>
 
@@ -194,12 +193,9 @@
         <waitForPageLoad time="30" stepKey="waitForRefresh"/>
 
         <!--Select Dates-->
-        <click selector="{{AdminTaxReportsSection.fromDateButton}}" stepKey="clickDateFrom"/>
-        <click selector="{{AdminTaxReportsSection.goTodayButton}}" stepKey="clickGoTodayDateFrom"/>
-        <click selector="{{AdminTaxReportsSection.buttonDatepicker('Close')}}" stepKey="clickCloseButton"/>
-        <click selector="{{AdminTaxReportsSection.toDate}}" stepKey="clickDateTo"/>
-        <click selector="{{AdminTaxReportsSection.goTodayButton}}" stepKey="clickGoTodayDateTo"/>
-        <click selector="{{AdminTaxReportsSection.buttonDatepicker('Close')}}" stepKey="clickAgainCloseButton"/>
+        <generateDate stepKey="today" date="+0 day" format="m/d/Y"/>
+        <fillField selector="{{AdminTaxReportsSection.fromDate}}" userInput="$today" stepKey="fillDateFrom"/>
+        <fillField selector="{{AdminTaxReportsSection.toDateInput}}" userInput="$today" stepKey="fillDateTo"/>
         <!--Click "Show report" in the upper right corner.-->
         <click selector="{{AdminTaxReportsSection.showReportButton}}" stepKey="clickShowReportButton"/>
         <waitForPageLoad time="60" stepKey="waitForReload"/>

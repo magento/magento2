@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderTotalSection">
-        <element name="totalTax" type="text" selector=".order-subtotal-table tbody > tr:nth-of-type({{row}}) td span.price" parameterized="true"/>
+        <element name="totalTax" type="text" selector="//div[contains(@class,'order-totals')]//div[@class='summary-collapse']/../../td/span[@class='price']"/>
     </section>
 </sections>

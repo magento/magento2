@@ -18,6 +18,6 @@
 
         <conditionalClick selector="{{AdminTaxRuleFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleFormSection.additionalSettingsOpened}}" visible="false" stepKey="openAdditionalSettings"/>
         <waitForElementVisible selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxClass)}}" stepKey="waitForVisibleTaxClass"/>
-        <click selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxClass)}}" stepKey="assignProdTaxClass"/>
+        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxClass)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxClass)}}" visible="false" stepKey="assignProdTaxClass"/>
     </actionGroup>
 </actionGroups>
