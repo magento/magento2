@@ -3,7 +3,7 @@ FILE: ...tation/_fixtures/ClassAnnotationNoSpacingBetweenLinesFixture.php\n
 ----------------------------------------------------------------------\n
 FOUND 1 ERROR AFFECTING 1 LINE\n
 ----------------------------------------------------------------------\n
- 13 | ERROR | [x] There must be exactly one blank line between lines\n
+ 13 | ERROR | [x] There must be exactly one blank line between lines short and long descriptions\n
 ----------------------------------------------------------------------\n
 PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY\n
 ----------------------------------------------------------------------\n
