@@ -48,7 +48,7 @@
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
@@ -166,7 +166,7 @@
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
