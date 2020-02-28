@@ -56,7 +56,7 @@
             <deleteData createDataKey="createFourthSimpleProduct" stepKey="deleteFourthSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCmsPage" stepKey="deleteCmsPage"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateAndOpenCreatedCmsPage">
             <argument name="identifier" value="$createCmsPage.identifier$"/>
