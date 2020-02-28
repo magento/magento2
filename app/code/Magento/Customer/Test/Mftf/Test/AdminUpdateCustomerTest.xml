@@ -42,7 +42,7 @@
             <argument name="email" value="updated$$customer.email$$"/>
         </actionGroup>
         <!--Update Customer Addresses -->
-        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressSetDefaultShippingAndBilling">
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressSetDefaultShippingAndBillingActionGroup">
             <argument name="customerAddress" value="CustomerAddressSimple"/>
         </actionGroup>
         <actionGroup stepKey="saveAndCheckSuccessMessage" ref="AdminSaveCustomerAndAssertSuccessMessage"/>
@@ -115,7 +115,7 @@
         <remove keyForRemoval="checkCustomerAccountInformation"/>
 
         <!--Update Customer Addresses With No Zip and No State -->
-        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressNoZipNoState">
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressNoZipNoStateActionGroup">
             <argument name="customerAddress" value="addressNoZipNoState"/>
         </actionGroup>
 
@@ -170,7 +170,7 @@
         <remove keyForRemoval="checkDefaultShipping"/>
 
         <!--Update Customer Addresses With Default Billing and Shipping Unchecked -->
-        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressesFrom">
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressesFromActionGroup">
             <argument name="customerAddress" value="CustomerAddressSimple"/>
         </actionGroup>
 

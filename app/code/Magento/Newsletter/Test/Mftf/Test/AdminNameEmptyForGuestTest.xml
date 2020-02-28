@@ -11,6 +11,7 @@
     <test name="AdminNameEmptyForGuestTest">
         <annotations>
             <features value="Newsletter"/>
+            <stories value="Newsletter Subscribers grid"/>
             <group value="Newsletter"/>
             <title value="Empty name for Guest Customer"/>
             <description value="'Customer First Name' and 'Customer Last Name' should be empty for Guest Customer in Newsletter Subscribers Grid"/>
