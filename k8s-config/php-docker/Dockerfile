@@ -5,7 +5,7 @@ ENV TZ=Europe/London
 RUN apk update; \
     apk upgrade; \
     apk add --no-cache tzdata freetype freetype-dev libxslt-dev libpng libjpeg libxml2-dev zlib libwebp-dev libpng-dev jpeg-dev icu-dev zlib-dev libzip-dev; \
-    apk add --no-cache $PHPIZE_DEPS && pecl install xdebug-2.7.2; 
+    apk add --no-cache $PHPIZE_DEPS; 
 
 RUN docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                    --with-jpeg-dir=/usr/include/ \
@@ -13,9 +13,11 @@ RUN docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                    --with-freetype-dir=/usr/inlcude/ \
  && docker-php-ext-configure zip --with-libzip \
  && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
- && docker-php-ext-enable xdebug;
-RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
-RUN echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini 
+ && apk del .build-deps;
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
+&& echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini 
 COPY --chown=www-data . /var/www/html 
+RUN composer install \
+&& composer config repositories.magento composer https://repo.magento.com/ \
+&& chmod u+x bin/magento
 USER www-data
-
