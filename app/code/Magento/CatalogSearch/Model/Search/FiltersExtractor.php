@@ -10,11 +10,10 @@ use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;
 
 /**
- * Class FiltersExtractor
  * Extracts filters from QueryInterface
  *
- * @deprecated
- * @see \Magento\ElasticSearch
+ * @deprecated Use Magento\Elasticsearch implementation of QueryInterface
+ * @see \Magento\Elasticsearch
  */
 class FiltersExtractor
 {
@@ -26,19 +25,19 @@ class FiltersExtractor
      */
     public function extractFiltersFromQuery(QueryInterface $query)
     {
-        $filters = [];
+        $filters = [[]];
 
         switch ($query->getType()) {
             case QueryInterface::TYPE_BOOL:
                 /** @var \Magento\Framework\Search\Request\Query\BoolExpression $query */
                 foreach ($query->getMust() as $subQuery) {
-                    $filters = array_merge($filters, $this->extractFiltersFromQuery($subQuery));
+                    $filters[] = $this->extractFiltersFromQuery($subQuery);
                 }
                 foreach ($query->getShould() as $subQuery) {
-                    $filters = array_merge($filters, $this->extractFiltersFromQuery($subQuery));
+                    $filters[] = $this->extractFiltersFromQuery($subQuery);
                 }
                 foreach ($query->getMustNot() as $subQuery) {
-                    $filters = array_merge($filters, $this->extractFiltersFromQuery($subQuery));
+                    $filters[] = $this->extractFiltersFromQuery($subQuery);
                 }
                 break;
 
@@ -46,9 +45,9 @@ class FiltersExtractor
                 /** @var Filter $query */
                 $filter = $query->getReference();
                 if (FilterInterface::TYPE_BOOL === $filter->getType()) {
-                    $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
+                    $filters[] = $this->getFiltersFromBoolFilter($filter);
                 } else {
-                    $filters[] = $filter;
+                    $filters[] = [$filter];
                 }
                 break;
 
@@ -56,39 +55,41 @@ class FiltersExtractor
                 break;
         }
 
-        return $filters;
+        return array_merge(...$filters);
     }
 
     /**
+     * Returns list of filters from Bool filter
+     *
      * @param BoolExpression $boolExpression
      * @return FilterInterface[]
      */
     private function getFiltersFromBoolFilter(BoolExpression $boolExpression)
     {
-        $filters = [];
+        $filters = [[]];
 
         /** @var BoolExpression $filter */
         foreach ($boolExpression->getMust() as $filter) {
             if ($filter->getType() === FilterInterface::TYPE_BOOL) {
-                $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
+                $filters[] = $this->getFiltersFromBoolFilter($filter);
             } else {
-                $filters[] = $filter;
+                $filters[] = [$filter];
             }
         }
         foreach ($boolExpression->getShould() as $filter) {
             if ($filter->getType() === FilterInterface::TYPE_BOOL) {
-                $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
+                $filters[] = $this->getFiltersFromBoolFilter($filter);
             } else {
-                $filters[] = $filter;
+                $filters[] = [$filter];
             }
         }
         foreach ($boolExpression->getMustNot() as $filter) {
             if ($filter->getType() === FilterInterface::TYPE_BOOL) {
-                $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
+                $filters[] = $this->getFiltersFromBoolFilter($filter);
             } else {
-                $filters[] = $filter;
+                $filters[] = [$filter];
             }
         }
-        return $filters;
+        return array_merge(...$filters);
     }
 }
