@@ -179,7 +179,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $headers = $this->getHeaderMap();
         $bearerToken = $headers['Authorization'];
         $this->makeTokenExpired($bearerToken);
-        $this->expectExceptionMessage('The authorization token is expired.');
+        $this->expectExceptionMessage('The request is allowed for logged in customer');
         $this->expectException(ResponseContainsErrorsException::class);
 
         $this->graphQlMutation($customerCartQuery, [], '', $headers);

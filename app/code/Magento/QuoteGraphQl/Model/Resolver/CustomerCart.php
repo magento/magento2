@@ -17,7 +17,6 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 
@@ -79,12 +78,10 @@ class CustomerCart implements ResolverInterface
     {
         /** @var ContextInterface $context */
         $currentUserId = $context->getUserId();
+        /** @var bool $isCustomer */
+        $isCustomer = (bool) $context->getExtensionAttributes()->getIsCustomer();
 
-        if ($currentUserId === 0 && (int) $context->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
-            throw new GraphQlAuthorizationException(__('The authorization token is expired.'));
-        }
-
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+        if (!$isCustomer || $isCustomer && $currentUserId === 0) {
             throw new GraphQlAuthorizationException(__('The request is allowed for logged in customer'));
         }
         try {

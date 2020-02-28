@@ -191,7 +191,7 @@ class TokenUserContext implements UserContextInterface
     private function validateToken(Token $token): void
     {
         if ($token->getRevoked() || $this->isTokenExpired($token)) {
-            //userId 0 will mean that the token revoked or expired
+            //userId 0 will mean that the token is not valid
             $this->userId = 0;
             $this->userType = $token->getUserType();
 
