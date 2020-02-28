@@ -43,9 +43,6 @@ spec:
         app: magento
         tier: frontend
     spec:
-      securityContext:
-        runAsUser: 82
-        runAsGroup: 82
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
@@ -70,7 +67,14 @@ spec:
             subPath: media
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
-            subPath: var      
+            subPath: var
+      initContainers:
+          - name: php-volume-mount-hack
+            image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+            command: ["sh", "-c", "chown -R 82:82 media/ var/"]
+          - name: apache-volume-mount-hack
+            image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
+            command: ["sh", "-c", "chown -R 82:82 media/ var/"]
       volumes:
       - name: magento-persistent-storage
         persistentVolumeClaim:
