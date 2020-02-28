@@ -5,12 +5,12 @@
  */
 namespace Magento\Quote\Model\ResourceModel\Quote;
 
-use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Quote resource model
+ * Quote item resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractDb
 {
@@ -25,7 +25,7 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -41,7 +41,7 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function prepareDataForUpdate($object)
     {
