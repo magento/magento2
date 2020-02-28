@@ -87,11 +87,12 @@ class FlushCacheByTags
         if (!$tags) {
             return;
         }
+        $uniqueTags = null;
         foreach ($this->cacheList as $cacheType) {
             if ($this->cacheState->isEnabled($cacheType)) {
                 $this->cachePool->get($cacheType)->clean(
                     \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                    \array_unique($tags)
+                    $uniqueTags = $uniqueTags ?? \array_unique($tags)
                 );
             }
         }
