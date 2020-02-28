@@ -60,7 +60,7 @@ class SendTest extends TestCase
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $this->layout->createBlock(Send::class);
         $this->session = $this->objectManager->get(Session::class);
-        $this->accountManagement = $this->objectManager->create(AccountManagementInterface::class);
+        $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
     }
 
     /**

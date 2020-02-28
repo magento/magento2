@@ -42,7 +42,7 @@ class SendFriendTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->sendFriend = $this->objectManager->create(SendFriend::class);
+        $this->sendFriend = $this->objectManager->get(SendFriendFactory::class)->create();
         $this->cookieManager = $this->objectManager->get(CookieManagerInterface::class);
         $this->request = $this->objectManager->get(RequestInterface::class);
     }
@@ -208,8 +208,7 @@ class SendFriendTest extends TestCase
         if ($expectedResult === true) {
             $this->assertTrue($result);
         } else {
-            $this->assertNotNull($result[0]);
-            $this->assertEquals($expectedResult, (string)$result[0]);
+            $this->assertEquals($expectedResult, (string)reset($result) ?? '');
         }
     }
 
