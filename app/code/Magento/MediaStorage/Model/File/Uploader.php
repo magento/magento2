@@ -6,7 +6,9 @@
 
 namespace Magento\MediaStorage\Model\File;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validation\ValidationException;
+use Magento\MediaStorage\Model\File\Validator\Image;
 
 /**
  * Core file uploader model
@@ -43,7 +45,7 @@ class Uploader extends \Magento\Framework\File\Uploader
     protected $_validator;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\Image
+     * @var Image
      */
     private $imageValidator;
 
@@ -52,19 +54,19 @@ class Uploader extends \Magento\Framework\File\Uploader
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
-     * @param \Magento\MediaStorage\Model\File\Validator\Image $imageValidator
+     * @param Image $imageValidator
      */
     public function __construct(
         $fileId,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
-        \Magento\MediaStorage\Model\File\Validator\Image $imageValidator
+        Image $imageValidator = null
     ) {
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
-        $this->imageValidator = $imageValidator;
+        $this->imageValidator = $imageValidator?: ObjectManager::getInstance()->get(Image::class);
         parent::__construct($fileId);
     }
 
