@@ -388,8 +388,5 @@
                 <group id="paypal_payflowpro_nz" extends="payment_all_paypal/paypal_payflowpro"/>
             </group>
         </section>
-        <section id="deprecated_payment_methods" extends="payment" showInDefault="0" showInWebsite="0" showInStore="0">
-            <label>Deprecated Payment Methods:</label>
-        </section>
     </system>
 </config>
