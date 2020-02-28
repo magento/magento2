@@ -29,7 +29,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteSimpleCustomer"/>
         </after>
