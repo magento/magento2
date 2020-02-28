@@ -49,32 +49,32 @@ spec:
           ports:
             - containerPort: 80
               name: apache
-          volumeMounts:
-          - mountPath: /var/www/html/media
-            name: magento-persistent-storage
-            subPath: media
-          - mountPath: /var/www/html/var
-            name: magento-persistent-storage
-            subPath: var
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
             - containerPort: 9000
               name: php
-          volumeMounts:
-          - mountPath: /var/www/html/media
-            name: magento-persistent-storage
-            subPath: media
-          - mountPath: /var/www/html/var
-            name: magento-persistent-storage
-            subPath: var
       initContainers:
-          - name: php-volume-mount-hack
-            image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-            command: ["sh", "-c", "chown -R 82:82 media/ var/"]
-          - name: apache-volume-mount-hack
-            image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
-            command: ["sh", "-c", "chown -R 82:82 media/ var/"]
+        - name: php-volume-mount-hack
+          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+          command: ["sh", "-c", "chown -R 82:82 media/ var/"]
+          volumeMounts:
+            - mountPath: /var/www/html/media
+              name: magento-persistent-storage
+              subPath: media
+            - mountPath: /var/www/html/var
+              name: magento-persistent-storage
+              subPath: var
+        - name: apache-volume-mount-hack
+          image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
+          command: ["sh", "-c", "chown -R 82:82 media/ var/"]
+          volumeMounts:
+            - mountPath: /var/www/html/media
+              name: magento-persistent-storage
+              subPath: media
+            - mountPath: /var/www/html/var
+              name: magento-persistent-storage
+              subPath: var
       volumes:
       - name: magento-persistent-storage
         persistentVolumeClaim:
