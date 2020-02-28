@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Analytics\Setup\Patch\Data;
 
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
@@ -39,33 +42,33 @@ class ActivateDataCollection implements DataPatchInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param SubscriptionStatusProvider $subscriptionStatusProvider
-     * @param CollectionTime $collectionTimeBackandModel
+     * @param CollectionTime $collectionTimeBackendModel
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         SubscriptionStatusProvider $subscriptionStatusProvider,
-        CollectionTime $collectionTimeBackandModel
+        CollectionTime $collectionTimeBackendModel
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->subscriptionStatusProvider = $subscriptionStatusProvider;
-        $this->collectionTimeBackendModel = $collectionTimeBackandModel;
+        $this->collectionTimeBackendModel = $collectionTimeBackendModel;
     }
 
     /**
      * @inheritDoc
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function apply()
     {
         $subscriptionStatus = $this->subscriptionStatusProvider->getStatus();
-        if ($subscriptionStatus !== $this->subscriptionStatusProvider->getStatusForDisabledSubscription()) {
-            $isCollectionProcessActivated = $this->scopeConfig->getValue(CollectionTime::CRON_SCHEDULE_PATH);
-            if (!$isCollectionProcessActivated) {
-                $this->collectionTimeBackendModel
-                    ->setValue($this->scopeConfig->getValue($this->analyticsCollectionTimeConfigPath));
-                $this->collectionTimeBackendModel->setPath($this->analyticsCollectionTimeConfigPath);
-                $this->collectionTimeBackendModel->afterSave();
-            }
+        $isCollectionProcessActivated = $this->scopeConfig->getValue(CollectionTime::CRON_SCHEDULE_PATH);
+        if ($subscriptionStatus !== $this->subscriptionStatusProvider->getStatusForDisabledSubscription()
+            && !$isCollectionProcessActivated
+        ) {
+            $this->collectionTimeBackendModel
+                ->setValue($this->scopeConfig->getValue($this->analyticsCollectionTimeConfigPath));
+            $this->collectionTimeBackendModel->setPath($this->analyticsCollectionTimeConfigPath);
+            $this->collectionTimeBackendModel->afterSave();
         }
 
         return $this;

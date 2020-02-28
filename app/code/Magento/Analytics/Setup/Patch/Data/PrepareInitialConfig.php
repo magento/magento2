@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Analytics\Setup\Patch\Data;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
@@ -13,7 +15,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Initial patch
+ * Active subscription process for Advanced Reporting
  */
 class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
 {
