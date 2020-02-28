@@ -396,6 +396,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                         'disabled' => false,
                         'label' => 'Test Video Created',
                         'types' => [],
+                        'position' => 1,
                         'content' => [
                             'type' => 'image/png',
                             'name' => 'thumbnail.png',
@@ -423,6 +424,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                         'disabled' => false,
                         'label' => 'Test Video Updated',
                         'types' => [],
+                        'position' => 1,
                         'content' => [
                             'type' => 'image/png',
                             'name' => 'thumbnail.png',
