@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Customer\Helper\View;
+use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
@@ -28,8 +28,8 @@ class SendTest extends AbstractController
     /** @var Session */
     private $customerSession;
 
-    /** @var View */
-    private $customerViewHelper;
+    /** @var CustomerNameGenerationInterface */
+    private $customerNameGeneration;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
@@ -45,7 +45,7 @@ class SendTest extends AbstractController
         parent::setUp();
 
         $this->customerSession = $this->_objectManager->get(Session::class);
-        $this->customerViewHelper = $this->_objectManager->create(View::class);
+        $this->customerNameGeneration = $this->_objectManager->get(CustomerNameGenerationInterface::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->transportBuilder = $this->_objectManager->get(TransportBuilderMock::class);
@@ -75,12 +75,13 @@ class SendTest extends AbstractController
             $this->equalTo([(string)__('Your wish list has been shared.')]),
             MessageInterface::TYPE_SUCCESS
         );
+        $this->assertNotNull($this->transportBuilder->getSentMessage());
         $messageContent = $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
         $this->assertContains($shareMessage, $messageContent);
         $this->assertContains(
             sprintf(
                 '%s wants to share this Wish List',
-                $this->customerViewHelper->getCustomerName($this->customerSession->getCustomerDataObject())
+                $this->customerNameGeneration->getCustomerName($this->customerSession->getCustomerDataObject())
             ),
             $messageContent
         );

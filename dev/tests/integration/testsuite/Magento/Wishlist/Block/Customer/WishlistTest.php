@@ -69,7 +69,8 @@ class WishlistTest extends TestCase
         $pagerBlockHtml = $this->getWishListBlock()->getChildBlock('wishlist_item_pager')->toHtml();
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 1), $pagerBlockHtml)
+            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 1), $pagerBlockHtml),
+            "Element items count wasn't found."
         );
     }
 
@@ -86,7 +87,8 @@ class WishlistTest extends TestCase
         $pagerBlockHtml = $this->getWishListBlock()->getChildBlock('wishlist_item_pager')->toHtml();
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 3), $pagerBlockHtml)
+            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 3), $pagerBlockHtml),
+            "Element items count wasn't found."
         );
     }
 

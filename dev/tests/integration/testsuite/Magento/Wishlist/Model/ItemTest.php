@@ -12,8 +12,8 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Model\CartFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 use Magento\Wishlist\Model\Item\OptionFactory;
-use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,8 +36,8 @@ class ItemTest extends TestCase
     /** @var OptionFactory */
     private $optionFactory;
 
-    /** @var WishlistFactory */
-    private $wishlistFactory;
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistByCustomerId;
 
     /** @var CartFactory */
     private $cartFactory;
@@ -56,16 +56,19 @@ class ItemTest extends TestCase
         parent::setUp();
 
         $this->objectManager = ObjectManager::getInstance();
-        $this->dataObjectFactory = $this->objectManager->create(DataObjectFactory::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
         $this->model = $this->objectManager->get(Item::class);
         $this->itemFactory = $this->objectManager->get(ItemFactory::class);
         $this->optionFactory = $this->objectManager->get(OptionFactory::class);
-        $this->wishlistFactory = $this->objectManager->get(WishlistFactory::class);
+        $this->getWishlistByCustomerId = $this->objectManager->get(GetWishlistByCustomerId::class);
         $this->cartFactory = $this->objectManager->get(CartFactory::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->cartFactory->create()->truncate();
@@ -119,11 +122,12 @@ class ItemTest extends TestCase
      */
     public function testAddItemToCart(): void
     {
-        $item = $this->getWishListItemsByCustomerId(1)->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-1');
+        $this->assertNotNull($item);
         $cart = $this->cartFactory->create();
         $this->assertTrue($item->addToCart($cart));
         $this->assertCount(1, $cart->getQuote()->getItemsCollection());
-        $this->assertCount(1, $this->getWishListItemsByCustomerId(1));
+        $this->assertCount(1, $this->getWishlistByCustomerId->execute(1)->getItemCollection());
     }
 
     /**
@@ -134,11 +138,12 @@ class ItemTest extends TestCase
      */
     public function testAddItemToCartAndDeleteFromWishList(): void
     {
-        $item = $this->getWishListItemsByCustomerId(1)->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-1');
+        $this->assertNotNull($item);
         $cart = $this->cartFactory->create();
         $item->addToCart($cart, true);
         $this->assertCount(1, $cart->getQuote()->getItemsCollection());
-        $this->assertCount(0, $this->getWishListItemsByCustomerId(1));
+        $this->assertCount(0, $this->getWishlistByCustomerId->execute(1)->getItemCollection());
     }
 
     /**
@@ -176,16 +181,5 @@ class ItemTest extends TestCase
         $product = $this->productRepository->get('simple_not_visible_1');
         $item = $this->itemFactory->create()->setProduct($product)->setStoreId($product->getStoreId());
         $this->assertFalse($item->addToCart($this->cartFactory->create()));
-    }
-
-    /**
-     * Get wish list items collection.
-     *
-     * @param int $customerId
-     * @return WishlistCollection
-     */
-    private function getWishListItemsByCustomerId(int $customerId): WishlistCollection
-    {
-        return $this->wishlistFactory->create()->loadByCustomerId($customerId)->getItemCollection();
     }
 }

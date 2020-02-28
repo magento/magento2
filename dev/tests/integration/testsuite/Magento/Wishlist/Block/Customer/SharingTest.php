@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
  * Class test share wish list block.
  *
  * @magentoDbIsolation enabled
- * @magentoAppIsolation disabled
  * @magentoAppArea frontend
  */
 class SharingTest extends TestCase
@@ -45,14 +44,18 @@ class SharingTest extends TestCase
     public function testDisplayWishListSharingForm(): void
     {
         $elementsXpath = [
-            'emails' => "//form[contains(@class, 'share')]//textarea[@name='emails' and @id='email_address']",
-            'message' => "//form[contains(@class, 'share')]//textarea[@name='message' and @id='message']",
-            'share_button' => "//form[contains(@class, 'share')]//button[contains(@class, 'submit')]"
+            'Emails input' => "//form[contains(@class, 'share')]//textarea[@name='emails' and @id='email_address']",
+            'Message input' => "//form[contains(@class, 'share')]//textarea[@name='message' and @id='message']",
+            'Share button' => "//form[contains(@class, 'share')]//button[contains(@class, 'submit')]"
                 . "/span[contains(text(), 'Share Wish List')]",
         ];
         $blockHtml = $this->block->setTemplate('Magento_Wishlist::sharing.phtml')->toHtml();
-        foreach ($elementsXpath as $xpath) {
-            $this->assertEquals(1, Xpath::getElementsCountForXpath($xpath, $blockHtml));
+        foreach ($elementsXpath as $element => $xpath) {
+            $this->assertEquals(
+                1,
+                Xpath::getElementsCountForXpath($xpath, $blockHtml),
+                sprintf("%s was not found.", $element)
+            );
         }
     }
 }

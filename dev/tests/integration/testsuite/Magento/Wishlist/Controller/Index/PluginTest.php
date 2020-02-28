@@ -37,6 +37,7 @@ class PluginTest extends AbstractController
     protected function setUp()
     {
         parent::setUp();
+
         $this->customerSession = $this->_objectManager->get(CustomerSession::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
     }
@@ -48,6 +49,7 @@ class PluginTest extends AbstractController
     {
         $this->customerSession->logout();
         $this->customerSession = null;
+
         parent::tearDown();
     }
 

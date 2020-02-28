@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,6 +30,9 @@ class WishlistTest extends TestCase
 
     /** @var WishlistFactory */
     private $wishlistFactory;
+
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistByCustomerId;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
@@ -46,6 +50,7 @@ class WishlistTest extends TestCase
     {
         $this->objectManager = ObjectManager::getInstance();
         $this->wishlistFactory = $this->objectManager->get(WishlistFactory::class);
+        $this->getWishlistByCustomerId = $this->objectManager->get(GetWishlistByCustomerId::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
@@ -63,7 +68,7 @@ class WishlistTest extends TestCase
         $productSku = 'simple';
         $customerId = 1;
         $product = $this->productRepository->get($productSku);
-        $wishlist = $this->getWishListByCustomerId($customerId);
+        $wishlist = $this->getWishlistByCustomerId->execute($customerId);
         $wishlist->addNewItem(
             $product,
             '{"qty":2}'
@@ -77,7 +82,7 @@ class WishlistTest extends TestCase
             $this->dataObjectFactory->create(['data' => ['qty' => 4]])
         );
         $wishlist->addNewItem($product);
-        $wishlistItem = $this->getWishListByCustomerId($customerId)->getItemCollection()->getFirstItem();
+        $wishlistItem = $this->getWishlistByCustomerId->getItemBySku(1, $productSku);
         $this->assertInstanceOf(Item::class, $wishlistItem);
         $this->assertEquals($wishlistItem->getQty(), 10);
     }
@@ -93,7 +98,7 @@ class WishlistTest extends TestCase
         $productSku = 'simple';
         $customerId = 1;
         $product = $this->productRepository->get($productSku);
-        $wishlist = $this->getWishListByCustomerId($customerId);
+        $wishlist = $this->getWishlistByCustomerId->execute($customerId);
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid wishlist item configuration.'));
         $wishlist->addNewItem($product, '{"qty":2');
     }
@@ -106,10 +111,8 @@ class WishlistTest extends TestCase
     public function testGetItemCollection(): void
     {
         $productSku = 'simple';
-        $customerId = 1;
-        $itemCollection = $this->getWishListByCustomerId($customerId)->getItemCollection();
-        $item = $itemCollection->getFirstItem();
-        $this->assertEquals($productSku, $item->getProduct()->getSku());
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, $productSku);
+        $this->assertNotNull($item);
     }
 
     /**
@@ -124,7 +127,7 @@ class WishlistTest extends TestCase
         $product = $this->productRepository->get($productSku);
         $product->setStatus(ProductStatus::STATUS_DISABLED);
         $this->productRepository->save($product);
-        $this->assertEmpty($this->getWishListByCustomerId($customerId)->getItemCollection()->getItems());
+        $this->assertEmpty($this->getWishlistByCustomerId->execute($customerId)->getItemCollection()->getItems());
     }
 
     /**
@@ -141,9 +144,10 @@ class WishlistTest extends TestCase
         $attributeId = key($configurableOptions);
         $option = reset($configurableOptions[$attributeId]);
         $buyRequest = ['super_attribute' => [$attributeId => $option['value_index']]];
-        $wishlist = $this->getWishListByCustomerId(1);
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
         $wishlist->addNewItem($configurableProduct, $buyRequest);
-        $item = $this->getWishListByCustomerId($wishlist->getCustomerId())->getItemCollection()->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'Configurable product');
+        $this->assertNotNull($item);
         $this->assertWishListItem($item, $option['sku'], $buyRequest);
     }
 
@@ -161,11 +165,13 @@ class WishlistTest extends TestCase
         $bundleOptions = $bundleOptionList->getItems($bundleProduct);
         $option = reset($bundleOptions);
         $productLinks = $option->getProductLinks();
+        $this->assertNotNull($productLinks[0]);
         $buyRequest = ['bundle_option' => [$option->getOptionId() => $productLinks[0]->getId()]];
         $skuWithChosenOption = implode('-', [$bundleProduct->getSku(), $productLinks[0]->getSku()]);
-        $wishlist = $this->getWishListByCustomerId(1);
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
         $wishlist->addNewItem($bundleProduct, $buyRequest);
-        $item = $this->getWishListByCustomerId($wishlist->getCustomerId())->getItemCollection()->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'fixed_bundle_product_without_discounts');
+        $this->assertNotNull($item);
         $this->assertWishListItem($item, $skuWithChosenOption, $buyRequest);
     }
 
@@ -176,7 +182,7 @@ class WishlistTest extends TestCase
      */
     public function testAddNotExistingItemToWishList(): void
     {
-        $wishlist = $this->getWishListByCustomerId(1);
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
         $this->expectExceptionObject(new LocalizedException(__('Cannot specify product.')));
         $wishlist->addNewItem(989);
     }
@@ -190,7 +196,7 @@ class WishlistTest extends TestCase
     public function testAddOutOfStockItemToWishList(): void
     {
         $product = $this->productRepository->get('simple_ms_out_of_stock');
-        $wishlist = $this->getWishListByCustomerId(1);
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
         $this->expectExceptionObject(new LocalizedException(__('Cannot add product without stock to wishlist.')));
         $wishlist->addNewItem($product);
     }
@@ -202,11 +208,12 @@ class WishlistTest extends TestCase
      */
     public function testUpdateItemQtyInWishList(): void
     {
-        $wishlist = $this->getWishListByCustomerId(1);
-        $item = $wishlist->getItemCollection()->getFirstItem();
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $this->assertNotNull($item);
         $buyRequest = $this->dataObjectFactory->create(['data' => ['qty' => 55]]);
         $wishlist->updateItem($item->getId(), $buyRequest);
-        $updatedItem = $this->getWishListByCustomerId(1)->getItemCollection()->getFirstItem();
+        $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
         $this->assertEquals(55, $updatedItem->getQty());
     }
 
@@ -226,8 +233,9 @@ class WishlistTest extends TestCase
      */
     public function testUpdateNotExistingProductInWishList(): void
     {
-        $wishlist = $this->getWishListByCustomerId(1);
-        $item = $wishlist->getItemCollection()->getFirstItem();
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $this->assertNotNull($item);
         $item->getProduct()->setId(null);
         $this->expectExceptionObject(new LocalizedException(__('The product does not exist.')));
         $wishlist->updateItem($item, []);
@@ -246,16 +254,5 @@ class WishlistTest extends TestCase
         $this->assertEquals($itemSku, $item->getProduct()->getSku());
         $buyRequestOption = $item->getOptionByCode('info_buyRequest');
         $this->assertEquals($buyRequest, $this->json->unserialize($buyRequestOption->getValue()));
-    }
-
-    /**
-     * Get customer wish list.
-     *
-     * @param int $customerId
-     * @return Wishlist
-     */
-    private function getWishListByCustomerId(int $customerId): Wishlist
-    {
-        return $this->wishlistFactory->create()->loadByCustomerId($customerId, true);
     }
 }

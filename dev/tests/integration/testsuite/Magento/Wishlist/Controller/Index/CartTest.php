@@ -13,8 +13,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractController;
-use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistCollection;
-use Magento\Wishlist\Model\WishlistFactory;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 
 /**
  * Test for add product to cart from wish list.
@@ -27,8 +26,8 @@ class CartTest extends AbstractController
     /** @var Session */
     private $customerSession;
 
-    /** @var WishlistFactory */
-    private $wishlistFactory;
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistByCustomerId;
 
     /** @var CartFactory */
     private $cartFactory;
@@ -44,7 +43,7 @@ class CartTest extends AbstractController
         parent::setUp();
 
         $this->customerSession = $this->_objectManager->get(Session::class);
-        $this->wishlistFactory = $this->_objectManager->get(WishlistFactory::class);
+        $this->getWishlistByCustomerId = $this->_objectManager->get(GetWishlistByCustomerId::class);
         $this->cartFactory = $this->_objectManager->get(CartFactory::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
     }
@@ -67,11 +66,12 @@ class CartTest extends AbstractController
     public function testAddSimpleProductToCart(): void
     {
         $this->customerSession->setCustomerId(1);
-        $item = $this->getWishListItemsByCustomerId(1)->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-1');
+        $this->assertNotNull($item);
         $this->performAddToCartRequest(['item' => $item->getId(), 'qty' => 3]);
         $message = sprintf('You added %s to your shopping cart.', $item->getName());
         $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_SUCCESS);
-        $this->assertCount(0, $this->getWishListItemsByCustomerId(1));
+        $this->assertCount(0, $this->getWishlistByCustomerId->execute(1)->getItemCollection());
         $cart = $this->cartFactory->create();
         $this->assertEquals(1, $cart->getItemsCount());
         $this->assertEquals(3, $cart->getItemsQty());
@@ -85,7 +85,8 @@ class CartTest extends AbstractController
     public function testAddItemWithNotChosenOptionToCart(): void
     {
         $this->customerSession->setCustomerId(1);
-        $item = $this->getWishListItemsByCustomerId(1)->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'Configurable product');
+        $this->assertNotNull($item);
         $this->performAddToCartRequest(['item' => $item->getId(), 'qty' => 1]);
         $redirectUrl = sprintf("wishlist/index/configure/id/%s/product_id/%s", $item->getId(), $item->getProductId());
         $this->assertRedirect($this->stringContains($redirectUrl));
@@ -115,16 +116,5 @@ class CartTest extends AbstractController
     {
         $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('wishlist/index/cart');
-    }
-
-    /**
-     * Get wish list items collection.
-     *
-     * @param int $customerId
-     * @return WishlistCollection
-     */
-    private function getWishListItemsByCustomerId(int $customerId): WishlistCollection
-    {
-        return $this->wishlistFactory->create()->loadByCustomerId($customerId)->getItemCollection();
     }
 }

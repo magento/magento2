@@ -11,18 +11,17 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 use Magento\Wishlist\Block\Customer\Wishlist\Items;
-use Magento\Wishlist\Model\WishlistFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test wish list item column.
  *
  * @magentoDbIsolation enabled
- * @magentoAppIsolation disabled
  * @magentoAppArea frontend
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -35,13 +34,13 @@ class ColumnTest extends TestCase
     private $customerSession;
 
     /** @var LayoutInterface */
-    private $_layout;
+    private $layout;
 
     /** @var Column */
-    private $_block;
+    private $block;
 
-    /** @var WishlistFactory */
-    private $wishlistFactory;
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistItemsByCustomerId;
 
     /**
      * @inheritdoc
@@ -50,10 +49,10 @@ class ColumnTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerSession = $this->objectManager->get(Session::class);
-        $this->_layout = $this->objectManager->get(LayoutInterface::class);
-        $this->_block = $this->_layout->addBlock(Column::class, 'test');
-        $this->_layout->addBlock(Text::class, 'child', 'test');
-        $this->wishlistFactory = $this->objectManager->get(WishlistFactory::class);
+        $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->block = $this->layout->addBlock(Column::class, 'test');
+        $this->layout->addBlock(Text::class, 'child', 'test');
+        $this->getWishlistItemsByCustomerId = $this->objectManager->get(GetWishlistByCustomerId::class);
     }
 
     /**
@@ -74,9 +73,9 @@ class ColumnTest extends TestCase
     public function testToHtml(): void
     {
         $item = new \StdClass();
-        $this->_block->setItem($item);
-        $this->_block->toHtml();
-        $this->assertSame($item, $this->_layout->getBlock('child')->getItem());
+        $this->block->setItem($item);
+        $this->block->toHtml();
+        $this->assertSame($item, $this->layout->getBlock('child')->getItem());
     }
 
     /**
@@ -85,8 +84,8 @@ class ColumnTest extends TestCase
     public function testGetJs(): void
     {
         $expected = uniqid();
-        $this->_layout->getBlock('child')->setJs($expected);
-        $this->assertEquals($expected, $this->_block->getJs());
+        $this->layout->getBlock('child')->setJs($expected);
+        $this->assertEquals($expected, $this->block->getJs());
     }
 
     /**
@@ -97,27 +96,31 @@ class ColumnTest extends TestCase
     public function testWishListItemButtons(): void
     {
         $buttons = [
-            "//button[contains(@class, 'tocart')]/span[contains(text(), 'Add to Cart')]",
-            "//a[contains(@class, 'edit')]/span[contains(text(), 'Edit')]",
-            "//a[contains(@class, 'delete')]/span[contains(text(), 'Remove item')]",
+            "Add to Cart button" => "//button[contains(@class, 'tocart')]/span[contains(text(), 'Add to Cart')]",
+            "Edit button" => "//a[contains(@class, 'edit')]/span[contains(text(), 'Edit')]",
+            "Remove item button" => "//a[contains(@class, 'delete')]/span[contains(text(), 'Remove item')]",
         ];
-        $wishlist = $this->wishlistFactory->create()->loadByCustomerId(1);
-        $item = $wishlist->getItemCollection()->getFirstItem();
-        $block = $this->getWishListItemsBlockHtml()->getChildBlock('customer.wishlist.item.inner');
+        $item = $this->getWishlistItemsByCustomerId->getItemBySku(1, 'simple');
+        $this->assertNotNull($item);
+        $block = $this->getWishListItemsBlock()->getChildBlock('customer.wishlist.item.inner');
         $blockHtml = $block->setItem($item)->toHtml();
-        foreach ($buttons as $xpath) {
-            $this->assertEquals(1, Xpath::getElementsCountForXpath($xpath, $blockHtml));
+        foreach ($buttons as $buttonName => $xpath) {
+            $this->assertEquals(
+                1,
+                Xpath::getElementsCountForXpath($xpath, $blockHtml),
+                sprintf("%s wasn't found.", $buttonName)
+            );
         }
     }
 
     /**
-     * Get wish list items block html.
+     * Get wish list items block.
      *
      * @return Items
      */
-    private function getWishListItemsBlockHtml(): Items
+    private function getWishListItemsBlock(): Items
     {
-        $page = $this->objectManager->create(Page::class);
+        $page = $this->objectManager->create(PageFactory::class)->create();
         $page->addHandle([
             'default',
             'wishlist_index_index',

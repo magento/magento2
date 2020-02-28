@@ -11,8 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractController;
-use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistCollection;
-use Magento\Wishlist\Model\WishlistFactory;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 
 /**
  * Test for remove product from wish list.
@@ -26,8 +25,8 @@ class RemoveTest extends AbstractController
     /** @var Session */
     private $customerSession;
 
-    /** @var WishlistFactory */
-    private $wishlistFactory;
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistByCustomerId;
 
     /**
      * @inheritdoc
@@ -37,7 +36,7 @@ class RemoveTest extends AbstractController
         parent::setUp();
 
         $this->customerSession = $this->_objectManager->get(Session::class);
-        $this->wishlistFactory = $this->_objectManager->get(WishlistFactory::class);
+        $this->getWishlistByCustomerId = $this->_objectManager->get(GetWishlistByCustomerId::class);
     }
 
     /**
@@ -57,13 +56,14 @@ class RemoveTest extends AbstractController
     {
         $customerId = 1;
         $this->customerSession->setCustomerId($customerId);
-        $item = $this->getWishListItemsByCustomerId($customerId)->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku($customerId, 'simple');
+        $this->assertNotNull($item);
         $productName = $item->getProduct()->getName();
         $this->getRequest()->setParam('item', $item->getId())->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('wishlist/index/remove');
         $message = sprintf("\n%s has been removed from your Wish List.\n", $productName);
         $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_SUCCESS);
-        $this->assertCount(0, $this->getWishListItemsByCustomerId($customerId));
+        $this->assertCount(0, $this->getWishlistByCustomerId->execute($customerId)->getItemCollection());
     }
 
     /**
@@ -75,16 +75,5 @@ class RemoveTest extends AbstractController
         $this->getRequest()->setParams(['item' => 989])->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('wishlist/index/remove');
         $this->assert404NotFound();
-    }
-
-    /**
-     * Get wish list items collection.
-     *
-     * @param int $customerId
-     * @return WishlistCollection
-     */
-    private function getWishListItemsByCustomerId(int $customerId): WishlistCollection
-    {
-        return $this->wishlistFactory->create()->loadByCustomerId($customerId)->getItemCollection();
     }
 }

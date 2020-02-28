@@ -8,12 +8,13 @@ declare(strict_types=1);
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Checkout\Model\CartFactory;
+use Magento\Checkout\Model\Cart as CartModel;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractController;
-use Magento\Wishlist\Model\WishlistFactory;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 
 /**
  * Test for add all products to cart from wish list.
@@ -26,15 +27,18 @@ class AllcartTest extends AbstractController
     /** @var Session */
     private $customerSession;
 
-    /** @var Cart */
+    /** @var CartModel */
     private $cart;
 
     /** @var Escaper */
     private $escaper;
 
-    /** @var WishlistFactory */
-    private $wishlistFactory;
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistByCustomerId;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -42,9 +46,12 @@ class AllcartTest extends AbstractController
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->cart = $this->_objectManager->get(CartFactory::class)->create();
         $this->escaper = $this->_objectManager->get(Escaper::class);
-        $this->wishlistFactory = $this->_objectManager->get(WishlistFactory::class);
+        $this->getWishlistByCustomerId = $this->_objectManager->get(GetWishlistByCustomerId::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->customerSession->setCustomerId(null);
@@ -61,10 +68,11 @@ class AllcartTest extends AbstractController
     {
         $this->customerSession->setCustomerId(1);
         $this->performAddAllToCartRequest();
-        $wishlistCollection = $this->wishlistFactory->create()->loadByCustomerId(1)->getItemCollection();
+        $wishlistCollection = $this->getWishlistByCustomerId->execute(1)->getItemCollection();
         $this->assertCount(1, $wishlistCollection);
         $this->assertCount(0, $this->cart->getQuote()->getItemsCollection());
-        $item = $wishlistCollection->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $this->assertNotNull($item);
         $expectedMessage = $this->escaper->escapeHtml(
             sprintf('You can buy this product only in quantities of 5 at a time for "%s".', $item->getName())
         );

@@ -15,9 +15,8 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 use Magento\Wishlist\Model\Item;
-use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistCollection;
-use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * Test for update wish list item.
@@ -30,9 +29,6 @@ class UpdateItemOptionsTest extends AbstractController
     /** @var Session */
     private $customerSession;
 
-    /** @var WishlistFactory */
-    private $wishlistFactory;
-
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
@@ -42,6 +38,9 @@ class UpdateItemOptionsTest extends AbstractController
     /** @var SerializerInterface */
     private $json;
 
+    /** @var GetWishlistByCustomerId */
+    private $getWishlistByCustomerId;
+
     /**
      * @inheritdoc
      */
@@ -50,7 +49,7 @@ class UpdateItemOptionsTest extends AbstractController
         parent::setUp();
 
         $this->customerSession = $this->_objectManager->get(Session::class);
-        $this->wishlistFactory = $this->_objectManager->get(WishlistFactory::class);
+        $this->getWishlistByCustomerId = $this->_objectManager->get(GetWishlistByCustomerId::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->escaper = $this->_objectManager->get(Escaper::class);
@@ -76,7 +75,8 @@ class UpdateItemOptionsTest extends AbstractController
     public function testUpdateItemOptions(): void
     {
         $this->customerSession->setCustomerId(1);
-        $item = $this->getWishListItemsByCustomerId(1)->getFirstItem();
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'Configurable product');
+        $this->assertNotNull($item);
         $params = [
             'id' => $item->getId(),
             'product' => $item->getProductId(),
@@ -87,7 +87,10 @@ class UpdateItemOptionsTest extends AbstractController
         $message = sprintf("%s has been updated in your Wish List.", $item->getProduct()->getName());
         $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_SUCCESS);
         $this->assertRedirect($this->stringContains('wishlist/index/index/wishlist_id/' . $item->getWishlistId()));
-        $this->assertUpdatedItem($this->getWishListItemsByCustomerId(1)->getFirstItem(), $params);
+        $this->assertUpdatedItem(
+            $this->getWishlistByCustomerId->getItemBySku(1, 'Configurable product'),
+            $params
+        );
     }
 
     /**
@@ -160,17 +163,6 @@ class UpdateItemOptionsTest extends AbstractController
     {
         $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('wishlist/index/updateItemOptions');
-    }
-
-    /**
-     * Get wish list items collection.
-     *
-     * @param int $customerId
-     * @return WishlistCollection
-     */
-    private function getWishListItemsByCustomerId(int $customerId): WishlistCollection
-    {
-        return $this->wishlistFactory->create()->loadByCustomerId($customerId)->getItemCollection();
     }
 
     /**
