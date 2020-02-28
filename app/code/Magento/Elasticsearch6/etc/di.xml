@@ -136,11 +136,11 @@
         </arguments>
     </type>
 
-    <type name="Magento\Elasticsearch6\Model\DataProvider\Suggestions">
+    <virtualType name="Magento\Elasticsearch6\Model\DataProvider\Suggestions" type="Magento\Elasticsearch\Model\DataProvider\Base\Suggestions">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
         </arguments>
-    </type>
+    </virtualType>
 
     <virtualType name="elasticsearch6FieldNameResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
