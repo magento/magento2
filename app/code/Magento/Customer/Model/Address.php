@@ -193,7 +193,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function getCustomerId()
     {
-        return $this->_getData('customer_id') ? $this->_getData('customer_id') : $this->getParentId();
+        return $this->_getData('customer_id') ? (int) $this->_getData('customer_id') : (int) $this->getParentId();
     }
 
     /**
