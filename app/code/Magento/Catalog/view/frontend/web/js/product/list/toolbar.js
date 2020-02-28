@@ -88,7 +88,8 @@ define([
             var decode = window.decodeURIComponent,
                 urlPaths = this.options.url.split('?'),
                 urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
-                params = {}, parameters, i;
+                params = {},
+                parameters, i;
 
             for (i = 0; i < urlParams.length; i++) {
                 parameters = urlParams[i].split('=');
