@@ -24,9 +24,6 @@ define([
                 name: 'magento'
             });
             originToolbar = toolbarObj;
-            spyOn(toolbarObj, 'waitDOMElements').and.callFake(function () {
-                return $.Deferred().promise();
-            });
         });
 
         afterEach(function () {
@@ -43,8 +40,25 @@ define([
             });
         });
 
+        describe('"waitDOMElements" method', function () {
+            it('Check method return', function () {
+                var promise;
+                spyOn(toolbarObj, 'waitDOMElements').and.callFake(function () {
+                    var d = $.Deferred();
+
+                    d.promise().complete = function () {};
+                    promise = d.promise();
+                    return promise;
+                });
+                expect(toolbarObj.waitDOMElements()).toEqual(promise);
+            });
+        });
+
         describe('Test show toolbar method', function () {
             it('Check toolbar show method return same instance', function () {
+                expect(toolbarObj.show().visible).toBeTruthy();
+                expect(typeof toolbarObj.show().visible).toEqual('boolean');
+                expect(toolbarObj.show().visible).toEqual(true);
                 expect(toolbarObj.show()).toEqual(toolbarObj);
             });
         });
