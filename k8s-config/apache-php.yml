@@ -43,38 +43,33 @@ spec:
         app: magento
         tier: frontend
     spec:
+      securityContext:
+        fsGroup: 82
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:
             - containerPort: 80
               name: apache
+          volumeMounts:
+          - mountPath: /var/www/html/media
+            name: magento-persistent-storage
+            subPath: media
+          - mountPath: /var/www/html/var
+            name: magento-persistent-storage
+            subPath: var
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
             - containerPort: 9000
               name: php
-      initContainers:
-        - name: php-volume-mount-hack
-          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["sh", "-c", "chown -R 82:82 /var/www/html/media /var/www/html/var"]
           volumeMounts:
-            - mountPath: /var/www/html/media
-              name: magento-persistent-storage
-              subPath: media
-            - mountPath: /var/www/html/var
-              name: magento-persistent-storage
-              subPath: var
-        - name: apache-volume-mount-hack
-          image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
-          command: ["sh", "-c", "chown -R 82:82 /var/www/html/media /var/www/html/var"]
-          volumeMounts:
-            - mountPath: /var/www/html/media
-              name: magento-persistent-storage
-              subPath: media
-            - mountPath: /var/www/html/var
-              name: magento-persistent-storage
-              subPath: var
+          - mountPath: /var/www/html/media
+            name: magento-persistent-storage
+            subPath: media
+          - mountPath: /var/www/html/var
+            name: magento-persistent-storage
+            subPath: var      
       volumes:
       - name: magento-persistent-storage
         persistentVolumeClaim:
