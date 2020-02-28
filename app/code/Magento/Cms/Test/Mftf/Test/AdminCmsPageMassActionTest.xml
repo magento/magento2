@@ -10,6 +10,7 @@
     <test name="AdminCmsPageMassActionTest">
         <annotations>
             <features value="CmsPage"/>
+            <stories value="Create CMS Page"/>
             <title value="Create two CMS Pages and perform mass disable action"/>
             <description value="Admin should be able to perform mass actions to CMS pages"/>
             <stories value="Admin Grid Mass Action" />
