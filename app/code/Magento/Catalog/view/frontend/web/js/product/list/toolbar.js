@@ -118,7 +118,7 @@ define([
                 form, params, key, input, formKey, newPage;
 
             if (currentPage > 1 && paramName === this.options.limit) {
-                newPage = Math.floor(this.getCurrentLimit() * this.getCurrentPage() / paramValue);
+                    newPage = Math.floor(this.getCurrentLimit() * (currentPage-1) / paramValue) + 1;
 
                 if (newPage > 1) {
                     paramData[this.options.page] = newPage;
