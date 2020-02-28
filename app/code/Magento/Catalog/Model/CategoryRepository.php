@@ -70,18 +70,21 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @param CategoryResourceModel $categoryResourceModel
      * @param StoreManagerInterface $storeManager
      * @param ExtensibleDataObjectConverter|null $extensibleDataObjectConverter
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         CategoryFactory $categoryFactory,
         CategoryResourceModel $categoryResourceModel,
         StoreManagerInterface $storeManager,
-        ExtensibleDataObjectConverter $extensibleDataObjectConverter = null
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResourceModel = $categoryResourceModel;
         $this->storeManager = $storeManager;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter
             ?? ObjectManager::getInstance()->get(ExtensibleDataObjectConverter::class);
+        $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -100,7 +103,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         });
 
         if ($category->getId()) {
-            $metadata = $this->getMetadataPool()->getMetadata(CategoryInterface::class);
+            $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
 
             $category = $this->get($category->getId(), $storeId);
             $existingData[$metadata->getLinkField()] = $category->getData($metadata->getLinkField());
@@ -240,20 +243,6 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->setData('use_default', array_map(function () {
             return true;
         }, $useDefaultAttributes));
-    }
-
-    /**
-     * Lazy loader for the metadata pool.
-     *
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-
-        return $this->metadataPool;
     }
 
     /**

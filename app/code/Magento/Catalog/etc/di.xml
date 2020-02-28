@@ -585,7 +585,8 @@
     </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
-            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
+            <argument name="categoryResourceModel" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
+            <argument name="metadataPool" xsi:type="object">Magento\Framework\EntityManager\MetadataPool\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
