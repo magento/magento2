@@ -84,12 +84,12 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     /**
      * @inheritdoc
      */
-    public function createCustomerAccessToken($username, $password)
+    public function createCustomerAccessToken($username, $password, $websiteId)
     {
         $this->validatorHelper->validate($username, $password);
         $this->getRequestThrottler()->throttle($username, RequestThrottler::USER_TYPE_CUSTOMER);
         try {
-            $customerDataObject = $this->accountManagement->authenticate($username, $password);
+            $customerDataObject = $this->accountManagement->authenticate($username, $password, $websiteId);
         } catch (\Exception $e) {
             $this->getRequestThrottler()->logAuthenticationFailure($username, RequestThrottler::USER_TYPE_CUSTOMER);
             throw new AuthenticationException(

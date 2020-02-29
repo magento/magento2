@@ -599,10 +599,10 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function authenticate($username, $password)
+    public function authenticate($username, $password, $websiteId = null)
     {
         try {
-            $customer = $this->customerRepository->get($username);
+            $customer = $this->customerRepository->get($username, $websiteId);
         } catch (NoSuchEntityException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
