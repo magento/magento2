@@ -9,11 +9,11 @@ namespace Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Abstract Type Class
  *
- * @api
  * Abstract model for product type implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -496,7 +496,7 @@ abstract class AbstractType
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
                         $uploader = isset($queueOptions['uploader']) ? $queueOptions['uploader'] : null;
 
-                        $path = dirname($dst);
+                        $path = DriverInterface::getParentDirectory($dst);
 
                         try {
                             $rootDir = $this->_filesystem->getDirectoryWrite(
@@ -511,13 +511,9 @@ abstract class AbstractType
 
                         $uploader->setDestination($path);
 
-                        if (empty($src) || empty($dst) || !$uploader->receive($src)) {
-                            /**
-                             * @todo: show invalid option
-                             */
-                            if (isset($queueOptions['option'])) {
-                                $queueOptions['option']->setIsValid(false);
-                            }
+                        if ((empty($src) || empty($dst) || !$uploader->receive($src)) && isset($queueOptions['option'])) {
+                            $queueOptions['option']->setIsValid(false);
+                        } else {
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('The file upload failed. Try to upload again.')
                             );
