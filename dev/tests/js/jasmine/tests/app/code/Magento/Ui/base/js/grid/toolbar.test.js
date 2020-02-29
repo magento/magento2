@@ -2,8 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/*eslint max-nested-callbacks: 0*/
+/* eslint-disable max-nested-callbacks */
 define([
     'Magento_Ui/js/grid/toolbar',
     'jquery'
@@ -45,9 +44,8 @@ define([
                 var promise;
                 spyOn(toolbarObj, 'waitDOMElements').and.callFake(function () {
                     var d = $.Deferred();
-
-                    d.promise().complete = function () {};
                     promise = d.promise();
+
                     return promise;
                 });
                 expect(toolbarObj.waitDOMElements()).toEqual(promise);
