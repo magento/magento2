@@ -69,6 +69,38 @@
         }
     }
 
+    .checkout-agreements-block {
+        .checkout-agreements {
+            .checkout-agreement {
+                input[type="checkbox"] {
+                    display: block;
+                    float: left;
+                    width: 13px;
+                    height: 13px
+                }
+
+                .label {
+                    display: block;
+                    float: left;
+                    width: calc(~"100% - 20px");
+                    text-align: left;
+                    margin-bottom: 10px;
+                    &:after {
+                        .lib-visually-hidden();
+                    } 
+                    .action-show {
+                        text-align: left;
+                        &:before {
+                            content: '*';
+                            color: #e02b27;
+                            font-size: 1.2rem;
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .checkout-onepage-success {
         &:extend(.abs-add-clearfix all);
 
