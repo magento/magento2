@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -12,8 +13,6 @@ use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 
 /**
  * Interface StockState
- * 
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class StockState implements StockStateInterface
 {
@@ -49,7 +48,7 @@ class StockState implements StockStateInterface
 
     /**
      * To verify the stock status
-     * 
+     *
      * @param int $productId
      * @param int $scopeId
      * @return bool
@@ -63,7 +62,7 @@ class StockState implements StockStateInterface
 
     /**
      * To verify notification
-     * 
+     *
      * @param int $productId
      * @param int $scopeId
      * @return bool
@@ -92,8 +91,7 @@ class StockState implements StockStateInterface
     }
 
     /**
-     * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions
-     * or original qty if such value does not exist
+     * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions or original qty if such value does not exist
      *
      * @param int $productId
      * @param float $qty
@@ -123,7 +121,7 @@ class StockState implements StockStateInterface
 
     /**
      * To check quantity increment
-     * 
+     *
      * @param int $productId
      * @param float $qty
      * @param int $websiteId
@@ -138,7 +136,7 @@ class StockState implements StockStateInterface
 
     /**
      * To check quote item quantity
-     * 
+     *
      * @param int $productId
      * @param float $itemQty
      * @param float $qtyToCheck
