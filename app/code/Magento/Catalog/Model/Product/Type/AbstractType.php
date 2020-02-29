@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Abstract Type Class
+ *
  * @api
  * Abstract model for product type implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -355,6 +357,7 @@ abstract class AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and then prepare options belonging to specific product type.
      *
      * @param  \Magento\Framework\DataObject $buyRequest
@@ -440,6 +443,7 @@ abstract class AbstractType
 
     /**
      * Initialize product(s) for add to cart process.
+     *
      * Advanced version of func to prepare product for cart - processMode can be specified there.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -532,6 +536,7 @@ abstract class AbstractType
 
     /**
      * Add file to File Queue
+     *
      * @param array $queueOptions Array of File Queue
      *                              (eg. ['operation'=>'move',
      *                                    'src_name'=>'filename',
@@ -593,8 +598,7 @@ abstract class AbstractType
                         ->setProcessMode($processMode)
                         ->validateUserValue($buyRequest->getOptions());
                 } catch (LocalizedException $e) {
-                    if(!in_array($e->getMessage(), $results))
-                    {
+                    if (!in_array($e->getMessage(), $results)) {
                         $results[] = $e->getMessage();
                     }
                     continue;
@@ -646,8 +650,7 @@ abstract class AbstractType
     }
 
     /**
-     * Prepare additional options/information for order item which will be
-     * created from this product
+     * Prepare additional options/information for order item which will be created from this product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
@@ -903,7 +906,7 @@ abstract class AbstractType
     /**
      * Set store filter for associated products
      *
-     * @param $store int|\Magento\Store\Model\Store
+     * @param int|\Magento\Store\Model\Store $store
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -943,6 +946,7 @@ abstract class AbstractType
 
     /**
      * Implementation of product specify logic of which product needs to be assigned to option.
+     *
      * For example if product which was added to option already removed from catalog.
      *
      * @param \Magento\Catalog\Model\Product $optionProduct
@@ -982,6 +986,7 @@ abstract class AbstractType
 
     /**
      * Retrieve additional searchable data from type instance
+     *
      * Using based on product id and store_id data
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -1002,6 +1007,7 @@ abstract class AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
+     *
      * At least one product in each group has to be purchased
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -1095,6 +1101,8 @@ abstract class AbstractType
     }
 
     /**
+     * Get Associated Products
+     *
      * @param \Magento\Catalog\Model\Product\Type\AbstractType $product
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
