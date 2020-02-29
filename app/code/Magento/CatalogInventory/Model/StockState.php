@@ -52,9 +52,7 @@ class StockState implements StockStateInterface
      */
     public function verifyStock($productId, $scopeId = null)
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->verifyStock($stockItem);
     }
@@ -66,9 +64,7 @@ class StockState implements StockStateInterface
      */
     public function verifyNotification($productId, $scopeId = null)
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->verifyNotification($stockItem);
     }
@@ -84,9 +80,7 @@ class StockState implements StockStateInterface
      */
     public function checkQty($productId, $qty, $scopeId = null)
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->checkQty($stockItem, $qty);
     }
@@ -102,9 +96,7 @@ class StockState implements StockStateInterface
      */
     public function suggestQty($productId, $qty, $scopeId = null)
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->suggestQty($stockItem, $qty);
     }
@@ -118,9 +110,7 @@ class StockState implements StockStateInterface
      */
     public function getStockQty($productId, $scopeId = null)
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->getStockQty($stockItem);
     }
@@ -133,9 +123,7 @@ class StockState implements StockStateInterface
      */
     public function checkQtyIncrements($productId, $qty, $websiteId = null)
     {
-        // if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
         return $this->stockStateProvider->checkQtyIncrements($stockItem, $qty);
     }
@@ -150,9 +138,7 @@ class StockState implements StockStateInterface
      */
     public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty);
     }
