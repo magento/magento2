@@ -90,7 +90,7 @@ class SetBillingAddressOnCart
             );
         }
 
-        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
+        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput,$sameAsShipping);
 
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
     }
@@ -109,16 +109,17 @@ class SetBillingAddressOnCart
     private function createBillingAddress(
         ContextInterface $context,
         ?int $customerAddressId,
-        ?array $addressInput
+        ?array $addressInput,
+        $sameAsShipping
     ): Address {
         if (null === $customerAddressId) {
             $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
 
             $customerId = $context->getUserId();
             // need to save address only for registered user and if save_in_address_book = true
-            if (0 !== $customerId
+            if ((0 !== $customerId
                 && isset($addressInput['save_in_address_book'])
-                && (bool)$addressInput['save_in_address_book'] === true
+                && (bool)$addressInput['save_in_address_book'] && $sameAsShipping !== true) === true
             ) {
                 $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
             }
