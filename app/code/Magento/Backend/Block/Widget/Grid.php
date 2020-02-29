@@ -33,7 +33,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_varNameSort = 'sort';
+    protected $_varNameSort = 'sort_order';
 
     /**
      * @var string
@@ -352,7 +352,7 @@ class Grid extends \Magento\Backend\Block\Widget
         if ($this->getCollection()) {
             $this->_preparePage();
 
-            $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
+            $columnId = $this->getParam($this->getVarNameSort(), $this->_varNameSort);
             $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
             $filter = $this->getParam($this->getVarNameFilter(), null);
 
