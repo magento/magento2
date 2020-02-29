@@ -10,6 +10,7 @@
     <test name="AdminSignifydConfigDependentOnActiveFieldTest">
         <annotations>
             <features value="Signifyd"/>
+            <stories value="Signify ID Settings"/>
             <title value="Signifyd config dependent on active field" />
             <description value="Signifyd system configs dependent by Enable this Solution field."/>
             <severity value="MINOR"/>
@@ -20,7 +21,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set fraud_protection/signifyd/active 0" stepKey="disableSignifyd"/>
         </after>
 

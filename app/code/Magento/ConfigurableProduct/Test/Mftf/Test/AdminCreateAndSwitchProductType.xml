@@ -148,7 +148,8 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create configurable product from downloadable product page-->
         <comment userInput="Create configurable product" stepKey="commentCreateProduct"/>

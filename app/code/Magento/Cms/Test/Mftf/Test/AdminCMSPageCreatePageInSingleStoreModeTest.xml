@@ -10,6 +10,7 @@
     <test name="AdminCMSPageCreatePageInSingleStoreModeTest">
         <annotations>
             <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
             <title value="Create CMS Page via the Admin in single store mode"/>
             <description value="Admin should be able to create a CMS Page"/>
             <severity value="CRITICAL"/>
@@ -25,7 +26,7 @@
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeDisabledConfigData.path}} {{StorefrontSingleStoreModeDisabledConfigData.value}}" stepKey="disableSingleStoreMode" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>

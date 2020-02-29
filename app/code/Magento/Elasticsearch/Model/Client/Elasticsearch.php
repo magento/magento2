@@ -278,7 +278,7 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping' => 'string',
                                 'mapping' => [
                                     'type' => 'integer',
-                                    'index' => 'no'
+                                    'index' => 'not_analyzed',
                                 ],
                             ],
                         ],
@@ -288,7 +288,7 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping' => 'string',
                                 'mapping' => [
                                     'type' => 'string',
-                                    'index' => 'no'
+                                    'index' => 'not_analyzed',
                                 ],
                             ],
                         ]
