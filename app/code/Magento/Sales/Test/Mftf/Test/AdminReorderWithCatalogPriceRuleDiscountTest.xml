@@ -45,7 +45,7 @@
         <after>
             <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open order by Id-->
