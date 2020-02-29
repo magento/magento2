@@ -27,7 +27,7 @@
     * [#23924](https://github.com/magento/magento2/issues/23924) -- Export Csv, Export Excel in Report->Marketing->(Abandoned Cart, Products in Cart) has wrong ACL (fixed in [magento/magento2#23925](https://github.com/magento/magento2/pull/23925))
     * [#23984](https://github.com/magento/magento2/issues/23984) -- No validation "Sort Order" in "New Rating" form (fixed in [magento/magento2#23985](https://github.com/magento/magento2/pull/23985))
     * [#24027](https://github.com/magento/magento2/issues/24027) -- In 2.3.2 in Module-Newsletter Subcribe button is hidden by .sr-only (fixed in [magento/magento2#24028](https://github.com/magento/magento2/pull/24028))
-    * [#167](https://github.com/magento/magento2/issues/167) -- Fatal error: Class 'Mage' not found (fixed in [magento/graphql-ce#800](https://github.com/magento/graphql-ce/pull/800))
+    * [#167](https://github.com/magento/graphql-ce/issues/167) -- Fatal error: Class 'Mage' not found (fixed in [magento/graphql-ce#800](https://github.com/magento/graphql-ce/pull/800))
     * [#773](https://github.com/magento/magento2/issues/773) -- problem jquery (fixed in [magento/graphql-ce#797](https://github.com/magento/graphql-ce/pull/797))
     * [#20164](https://github.com/magento/magento2/issues/20164) -- Fatal error with Google Tag Manager on Magento Cloud Commerce 2.2.5 (fixed in [magento/partners-magento2ee#14](https://github.com/magento/partners-magento2ee/pull/14))
     * [#18685](https://github.com/magento/magento2/issues/18685) -- Quote Item Prices are NULL in cart related events. (fixed in [magento/magento2#23839](https://github.com/magento/magento2/pull/23839))
