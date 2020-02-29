@@ -17,28 +17,34 @@
             </values>
         </policy>
         <policy id="connect-src">
-            <value id="cardinal_commerce_geo_stag" type="host">geostag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_geo" type="host">geo.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_leaf_stag" type="host">1eafstag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_leaf" type="host">1eaf.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_cent_stag" type="host">centinelapistag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_cent" type="host">centinelapi.cardinalcommerce.com</value>
+            <values>
+                <value id="cardinal_commerce_geo_stag" type="host">geostag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_geo" type="host">geo.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_leaf_stag" type="host">1eafstag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_leaf" type="host">1eaf.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_cent_stag" type="host">centinelapistag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_cent" type="host">centinelapi.cardinalcommerce.com</value>
+            </values>
         </policy>
         <policy id="frame-src">
-            <value id="cardinal_commerce_geo_stag" type="host">geostag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_geo" type="host">geo.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_leaf_stag" type="host">1eafstag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_leaf" type="host">1eaf.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_cent_stag" type="host">centinelapistag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_cent" type="host">centinelapi.cardinalcommerce.com</value>
+            <values>
+                <value id="cardinal_commerce_geo_stag" type="host">geostag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_geo" type="host">geo.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_leaf_stag" type="host">1eafstag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_leaf" type="host">1eaf.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_cent_stag" type="host">centinelapistag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_cent" type="host">centinelapi.cardinalcommerce.com</value>
+            </values>
         </policy>
         <policy id="form-action">
-            <value id="cardinal_commerce_geo_stag" type="host">geostag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_geo" type="host">geo.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_leaf_stag" type="host">1eafstag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_leaf" type="host">1eaf.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_cent_stag" type="host">centinelapistag.cardinalcommerce.com</value>
-            <value id="cardinal_commerce_cent" type="host">centinelapi.cardinalcommerce.com</value>
+            <values>
+                <value id="cardinal_commerce_geo_stag" type="host">geostag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_geo" type="host">geo.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_leaf_stag" type="host">1eafstag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_leaf" type="host">1eaf.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_cent_stag" type="host">centinelapistag.cardinalcommerce.com</value>
+                <value id="cardinal_commerce_cent" type="host">centinelapi.cardinalcommerce.com</value>
+            </values>
         </policy>
     </policies>
 </csp_whitelist>
