@@ -21,9 +21,10 @@ define([
                 authenticationPopup.showModal();
 
                 return false;
+            }else{
+                $(element).attr('disabled', true);
+                window.location.href = config.checkoutUrl;
             }
-            $(element).attr('disabled', true);
-            location.href = config.checkoutUrl;
         });
 
     };
