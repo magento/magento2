@@ -14,6 +14,8 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Returns data for toolbars of Sorting and Pagination
+ *
  * @api
  * @since 100.0.2
  */

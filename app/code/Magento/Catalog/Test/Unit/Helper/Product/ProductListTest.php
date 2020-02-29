@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
-
 use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
