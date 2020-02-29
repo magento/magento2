@@ -4,9 +4,8 @@
  */
 /* eslint-disable max-nested-callbacks */
 define([
-    'Magento_Ui/js/grid/toolbar',
-    'jquery'
-], function (Toolbar, $) {
+    'Magento_Ui/js/grid/toolbar'
+], function (Toolbar) {
     'use strict';
 
     describe('Magento_Ui/js/grid/toolbar', function () {
@@ -36,12 +35,6 @@ define([
             it('Check method type', function () {
                 toolbarType = typeof toolbarObj.initialize;
                 expect(toolbarType).toEqual('function');
-            });
-        });
-
-        describe('"waitDOMElements" method', function () {
-            it('Check method return', function () {
-                expect(toolbarObj.waitDOMElements()).toEqual($.Deferred().promise());
             });
         });
 
