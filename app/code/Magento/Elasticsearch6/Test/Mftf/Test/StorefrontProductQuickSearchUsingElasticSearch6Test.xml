@@ -30,6 +30,7 @@
                 <field key="name">Product Simple AAA</field>
             </createData>
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+            <magentoCLI command="config:set {{CustomGridPerPageDefaultConfigData.path}} {{CustomGridPerPageDefaultConfigData.value}}" stepKey="setCustomGridPerPageDefaults"/>
             <magentoCLI stepKey="flushConfigCache" command="cache:flush config"/>
             <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
@@ -38,6 +39,7 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+            <magentoCLI command="config:set {{DefaultGridPerPageDefaultConfigData.path}} {{DefaultGridPerPageDefaultConfigData.value}}" stepKey="setDefaultGridPerPageDefaults"/>
         </after>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
@@ -60,7 +62,13 @@
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="2" stepKey="selectDisplayedProductInGridPerPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
-        <seeInCurrentUrl stepKey="assertStillOnSecondPage" url="?p=2"/>
-        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="assertEmptyResultsPage"/>
+        <dontSeeInCurrentUrl stepKey="assertRedirectedToFirstPage" url="?p=2"/>
+
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
+            <argument name="product" value="$createFirstProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
+            <argument name="product" value="$createSecondProduct$"/>
+        </actionGroup>
     </test>
 </tests>

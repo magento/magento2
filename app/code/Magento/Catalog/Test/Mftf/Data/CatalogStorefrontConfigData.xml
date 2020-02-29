@@ -69,4 +69,12 @@
         <data key="path">catalog/frontend/grid_per_page_values</data>
         <data key="value">1,2</data>
     </entity>
+    <entity name="DefaultGridPerPageDefaultConfigData">
+        <data key="path">catalog/frontend/grid_per_page</data>
+        <data key="value">12</data>
+    </entity>
+    <entity name="CustomGridPerPageDefaultConfigData">
+        <data key="path">catalog/frontend/grid_per_page</data>
+        <data key="value">1</data>
+    </entity>
 </entities>
