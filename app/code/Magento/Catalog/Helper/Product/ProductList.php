@@ -21,11 +21,19 @@ use Magento\Store\Model\ScopeInterface;
  */
 class ProductList
 {
+    public const XML_PATH_LIST_MODE = 'catalog/frontend/list_mode';
+    public const DEFAULT_SORT_DIRECTION = 'asc';
+
     /**
-     * List mode configuration path
+     * @deprecated
      */
-    const XML_PATH_LIST_MODE = 'catalog/frontend/list_mode';
-    const DEFAULT_SORT_DIRECTION = 'asc';
+    const VIEW_MODE_LIST = 'list';
+
+    /**
+     * @deprecated
+     */
+    const VIEW_MODE_GRID = 'grid';
+
 
     /**
      * @var ScopeConfigInterface
