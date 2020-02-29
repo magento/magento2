@@ -37,7 +37,7 @@
             <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!-- Logout from admin -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Step 2 -->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttribute">
