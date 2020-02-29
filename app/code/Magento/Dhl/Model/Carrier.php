@@ -676,6 +676,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'H' => __('Economy select'),
             'J' => __('Jumbo box'),
             'M' => __('Express 10:30'),
+            'N' => __('Domestic express'),
             'V' => __('Europack'),
             'Y' => __('Express 12:00'),
         ];
