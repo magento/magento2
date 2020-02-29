@@ -222,9 +222,6 @@
                                                                             <item name="min_text_length" xsi:type="number">0</item>
                                                                         </item>
                                                                     </item>
-                                                                    <item name="country_id" xsi:type="array">
-                                                                        <item name="sortOrder" xsi:type="string">115</item>
-                                                                    </item>
                                                                     <item name="telephone" xsi:type="array">
                                                                         <item name="config" xsi:type="array">
                                                                             <item name="tooltip" xsi:type="array">
