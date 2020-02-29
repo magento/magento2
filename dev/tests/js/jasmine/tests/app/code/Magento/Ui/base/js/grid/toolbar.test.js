@@ -41,14 +41,7 @@ define([
 
         describe('"waitDOMElements" method', function () {
             it('Check method return', function () {
-                var promise;
-                spyOn(toolbarObj, 'waitDOMElements').and.callFake(function () {
-                    var d = $.Deferred();
-                    promise = d.promise();
-
-                    return promise;
-                });
-                expect(toolbarObj.waitDOMElements()).toEqual(promise);
+                expect(toolbarObj.waitDOMElements()).toEqual($.Deferred().promise());
             });
         });
 
