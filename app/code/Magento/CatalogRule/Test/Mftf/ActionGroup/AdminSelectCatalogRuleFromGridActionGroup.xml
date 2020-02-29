@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSelectCatalogRuleFromGridActionGroup">
+        <annotations>
+            <description>Clicks on the Admin Catalog Price Rule row that contains the provided Catalog Price Rule name.</description>
+        </annotations>
         <arguments>
             <argument name="catalogRuleName" type="string"/>
         </arguments>
+
         <click selector="{{AdminCatalogPriceRuleGrid.selectRowByRuleName(catalogRuleName)}}" stepKey="selectRow"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
     </actionGroup>

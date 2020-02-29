@@ -6,7 +6,7 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate'
 ], function ($, confirm) {
     'use strict';

@@ -71,4 +71,25 @@ QUERY;
 
         $this->graphQlQuery($query);
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Country "id" value should be specified
+     */
+    public function testMissedInputParameterException()
+    {
+        $query = <<<QUERY
+{
+  country {
+    available_regions {
+      code
+      id
+      name
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlQuery($query);
+    }
 }

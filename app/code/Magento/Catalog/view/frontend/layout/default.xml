@@ -26,6 +26,9 @@
                             <item name="updateRequestConfig" xsi:type="array">
                                 <item name="url" xsi:type="serviceUrl" path="/products-render-info"/>
                             </item>
+                            <item name="requestConfig" xsi:type="array">
+                                <item name="syncUrl" xsi:type="url" path="catalog/product/frontend_action_synchronize"/>
+                            </item>
                         </item>
                     </argument>
                 </arguments>

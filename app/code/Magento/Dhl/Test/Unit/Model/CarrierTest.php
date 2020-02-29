@@ -187,7 +187,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/debug' => 1,
             'shipping/origin/country_id' => 'GB'
         ];
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**
@@ -443,6 +443,50 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return [
             'valid_length' => ['2.3.1'],
             'exceeds_length' => ['dev-MC-1000']
+        ];
+    }
+
+    /**
+     * Tests if the DHL client returns the appropriate API URL.
+     *
+     * @dataProvider getGatewayURLProvider
+     * @param $sandboxMode
+     * @param $expectedURL
+     * @throws \ReflectionException
+     */
+    public function testGetGatewayURL($sandboxMode, $expectedURL)
+    {
+        $scopeConfigValueMap = [
+            ['carriers/dhl/gateway_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/sandbox_url', 'store', null, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/sandbox_mode', 'store', null, $sandboxMode]
+        ];
+
+        $this->scope->method('getValue')
+            ->willReturnMap($scopeConfigValueMap);
+
+        $this->model = $this->objectManager->getObject(
+            Carrier::class,
+            [
+                'scopeConfig' => $this->scope
+            ]
+        );
+
+        $method = new \ReflectionMethod($this->model, 'getGatewayURL');
+        $method->setAccessible(true);
+        $this->assertEquals($expectedURL, $method->invoke($this->model));
+    }
+
+    /**
+     * Data provider for testGetGatewayURL
+     *
+     * @return array
+     */
+    public function getGatewayURLProvider()
+    {
+        return [
+            'standard_url' => [0, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            'sandbox_url' => [1, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet']
         ];
     }
 

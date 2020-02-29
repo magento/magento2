@@ -18,9 +18,6 @@
             <testCaseId value="MC-16154"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17274"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login as admin -->
@@ -36,7 +33,7 @@
             <!-- Delete created data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!-- Create order -->

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderSelectShippingMethodActionGroup">
+        <annotations>
+            <description>Select Shipping method from admin order page.</description>
+        </annotations>
+        <arguments>
+            <argument name="methodTitle" type="string" defaultValue="flatrate"/>
+            <argument name="methodName" type="string" defaultValue="fixed"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminInvoicePaymentShippingSection.getShippingMethod}}" stepKey="waitForShippingMethodsOpen"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethod}}" stepKey="openShippingMethod"/>
+        <conditionalClick selector="{{AdminInvoicePaymentShippingSection.getShippingMethod}}" dependentSelector="{{AdminInvoicePaymentShippingSection.fixedPriceShippingMethod(methodTitle, methodName)}}" visible="false" stepKey="openShippingMethodSecondTime"/>
+        <waitForElementVisible selector="{{AdminInvoicePaymentShippingSection.fixedPriceShippingMethod(methodName, methodTitle)}}" stepKey="waitForShippingMethod"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.fixedPriceShippingMethod(methodName, methodTitle)}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+    </actionGroup>
+</actionGroups>

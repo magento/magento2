@@ -14,6 +14,7 @@
         <element name="catalogRuleIdentifierSearch" type="input" selector=".col-name .admin__control-text"/>
         <element name="searchButton" type="input" selector=".admin__filter-actions [title='Search']"/>
         <element name="firstRow" type="block" selector="tr[data-role='row']"/>
+        <element name="rowByName" type="block" selector="//td[contains(text(), '{{searchingName}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
 

@@ -18,7 +18,6 @@ use Magento\Paypal\Model\Payflow\Request;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -113,10 +112,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     {
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query
             = <<<QUERY
  mutation {
@@ -124,13 +119,12 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
             payflow_link: 
             {
-           cancel_url:"{$baseUrl}paypal/payflow/cancelPayment"
-           return_url:"{$baseUrl}paypal/payflow/returnUrl"
+           cancel_url:"paypal/payflow/cancelPayment"
+           return_url:"paypal/payflow/returnUrl"
+           error_url:"paypal/payflow/errorUrl"
           }
-        }
       }
   }) {    
        cart {
@@ -141,7 +135,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -185,7 +179,6 @@ QUERY;
         $customerToken = $tokenModel->createCustomerToken(1)->getToken();
 
         $requestHeaders = [
-            'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $customerToken
         ];
@@ -198,11 +191,11 @@ QUERY;
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 }

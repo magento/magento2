@@ -7,8 +7,12 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminPageIsNot404ActionGroup">
+        <annotations>
+            <description>Validates that the '404 Error' message is present and correct in the Admin Page Header.</description>
+        </annotations>
+
         <dontSee userInput="404 Error" selector="{{AdminHeaderSection.pageHeading}}" stepKey="dontSee404PageHeading"/>
     </actionGroup>
 </actionGroups>

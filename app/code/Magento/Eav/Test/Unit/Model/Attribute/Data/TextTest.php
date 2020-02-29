@@ -138,7 +138,6 @@ class TextTest extends \PHPUnit\Framework\TestCase
             ['QazWsx12345', [
                 __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
             ],
-            [' 12345 ', true],
         ];
     }
 

@@ -19,11 +19,11 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="openProductFillForm">
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
         <!-- Fill form for Virtual Product Type -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Simple Product"  stepKey="seeProductTypeInGrid"/>

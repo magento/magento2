@@ -9,6 +9,11 @@ namespace Magento\Framework\App\Test\Unit\Console;
 use Magento\Framework\Console\CommandList;
 use Symfony\Component\Console\Command\Command;
 
+/**
+ * Test for
+ *
+ * @see Magento\Framework\Console\CommandList
+ */
 class CommandListTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -17,7 +22,7 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
     private $commandList;
 
     /**
-     * @var Symfony\Component\Console\Command\Command
+     * @var Command
      */
     private $testCommand;
 

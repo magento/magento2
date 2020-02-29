@@ -56,7 +56,7 @@
         <!--Set filter to product name-->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeSet"/>
@@ -77,7 +77,7 @@
         <!--Set filter to product name-->
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage2"/>
         <waitForPageLoad stepKey="WaitForPageToLoad2"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName2">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName2">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(BundleProduct.defaultAttribute)}}" stepKey="seeAttributeSet2"/>

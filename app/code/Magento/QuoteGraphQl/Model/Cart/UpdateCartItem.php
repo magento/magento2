@@ -93,8 +93,6 @@ class UpdateCartItem
                 )
             );
         }
-
-        $this->quoteRepository->save($cart);
     }
 
     /**
@@ -105,7 +103,7 @@ class UpdateCartItem
      * @param float $quantity
      * @throws GraphQlNoSuchEntityException
      * @throws NoSuchEntityException
-     * @throws GraphQlNoSuchEntityException
+     * @throws GraphQlInputException
      */
     private function updateItemQuantity(int $itemId, Quote $cart, float $quantity)
     {
@@ -117,7 +115,6 @@ class UpdateCartItem
         }
         $cartItem->setQty($quantity);
         $this->validateCartItem($cartItem);
-        $this->cartItemRepository->save($cartItem);
     }
 
     /**

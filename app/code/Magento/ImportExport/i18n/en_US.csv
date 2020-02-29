@@ -29,9 +29,7 @@ Import,Import
 "File to Import","File to Import"
 "Select File to Import","Select File to Import"
 "Images File Directory","Images File Directory"
-"For Type ""Local Server"" use relative path to Magento installation,
-                                e.g. var/export, var/import, var/export/some/dir","For Type ""Local Server"" use relative path to Magento installation,
-                                e.g. var/export, var/import, var/export/some/dir"
+"For Type ""Local Server"" use relative path to &lt;Magento root directory&gt;/var/import/images, e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>For example, in case <i>product_images</i>, files should be placed into <i>&lt;Magento root directory&gt;/var/import/images/product_images</i> folder.","For Type ""Local Server"" use relative path to &lt;Magento root directory&gt;/var/import/images, e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>For example, in case <i>product_images</i>, files should be placed into <i>&lt;Magento root directory&gt;/var/import/images/product_images</i> folder."
 "Download Sample File","Download Sample File"
 "Please correct the data sent value.","Please correct the data sent value."
 Import/Export,Import/Export
@@ -123,3 +121,6 @@ Summary,Summary
 "New product data is added to existing product data entries in the database. All fields except SKU can be updated.","New product data is added to existing product data entries in the database. All fields except SKU can be updated."
 "All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>","All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>"
 "Any entities in the import data that match existing entities in the database are deleted from the database.","Any entities in the import data that match existing entities in the database are deleted from the database."
+"Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file","Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file"
+"Invalid data","Invalid data"
+"Invalid response","Invalid response"

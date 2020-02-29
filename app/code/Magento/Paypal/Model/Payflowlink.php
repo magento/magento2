@@ -36,7 +36,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @var string
      */
-    protected $_code = \Magento\Paypal\Model\Config::METHOD_PAYFLOWLINK;
+    protected $_code = Config::METHOD_PAYFLOWLINK;
 
     /**
      * @var string
@@ -115,6 +115,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @var \Magento\Framework\Math\Random
      */
     private $mathRandom;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $_requestHttp;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -237,8 +242,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     public function initialize($paymentAction, $stateObject)
     {
         switch ($paymentAction) {
-            case \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH:
-            case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
+            case Config::PAYMENT_ACTION_AUTH:
+            case Config::PAYMENT_ACTION_SALE:
                 $payment = $this->getInfoInstance();
                 /** @var Order $order */
                 $order = $payment->getOrder();
@@ -345,6 +350,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
                 $payment->registerAuthorizationNotification($payment->getBaseAmountAuthorized());
                 break;
             case self::TRXTYPE_SALE:
+                $order->setState(Order::STATE_PROCESSING);
                 $payment->registerCaptureNotification($payment->getBaseAmountAuthorized());
                 break;
             default:
@@ -425,7 +431,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $request->setCreatesecuretoken('Y')
             ->setSecuretokenid($this->mathRandom->getUniqueHash())
             ->setTrxtype($this->_getTrxTokenType());
-        $request = $this->updateRequestReturnUrls($request, $payment);
 
         $order = $payment->getOrder();
         $request->setAmt(sprintf('%.2F', $order->getBaseTotalDue()))
@@ -501,14 +506,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     protected function _getTrxTokenType()
     {
-        switch ($this->getConfigData('payment_action')) {
-            case \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH:
-                return self::TRXTYPE_AUTH_ONLY;
-            case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
-                return self::TRXTYPE_SALE;
-            default:
-                break;
-        }
+        $tokenTypes = [
+            Config::PAYMENT_ACTION_AUTH => self::TRXTYPE_AUTH_ONLY,
+            Config::PAYMENT_ACTION_SALE => self::TRXTYPE_SALE
+        ];
+
+        return $tokenTypes[$this->getConfigData('payment_action')] ?? '';
     }
 
     /**
@@ -600,31 +603,5 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         }
 
         return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;
-    }
-
-    /**
-     * Update the redirect urls on the request if they are set on the payment
-     *
-     * @param \Magento\Paypal\Model\Payflow\Request $request
-     * @param \Magento\Sales\Model\Order\Payment $payment
-     * @return \Magento\Paypal\Model\Payflow\Request
-     */
-    private function updateRequestReturnUrls(
-        \Magento\Paypal\Model\Payflow\Request $request,
-        \Magento\Sales\Model\Order\Payment $payment
-    ): \Magento\Paypal\Model\Payflow\Request {
-        $paymentData = $payment->getAdditionalInformation();
-
-        if (!empty($paymentData['cancel_url'])) {
-            $request->setCancelurl($paymentData['cancel_url']);
-        }
-        if (!empty($paymentData['return_url'])) {
-            $request->setReturnurl($paymentData['return_url']);
-        }
-        if (!empty($paymentData['error_url'])) {
-            $request->setErrorurl($paymentData['error_url']);
-        }
-
-        return $request;
     }
 }
