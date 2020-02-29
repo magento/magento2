@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogInventory\Model;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -91,7 +90,8 @@ class StockState implements StockStateInterface
     }
 
     /**
-     * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions or original qty if such value does not exist
+     * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions
+     * or original qty if such value does not exist
      *
      * @param int $productId
      * @param float $qty
