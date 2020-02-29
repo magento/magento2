@@ -68,7 +68,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ['value' => 'validate-email', 'label' => __('Email')],
             ['value' => 'validate-url', 'label' => __('URL')],
             ['value' => 'validate-alpha', 'label' => __('Letters')],
-            ['value' => 'validate-alphanum', 'label' => __('Letters (a-z, A-Z) or Numbers (0-9)')]
+            ['value' => 'validate-alphanum', 'label' => __('Letters (a-z, A-Z) or Numbers (0-9)')],
+            ['value' => 'validate-length maximum-length-64', 'label' => __('Validate Length Maximum Length is 64 Characters')]
         ];
     }
 
