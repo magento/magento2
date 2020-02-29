@@ -15,6 +15,8 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class YtdStart extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
+     * Get Month and Day Element
+     *
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
