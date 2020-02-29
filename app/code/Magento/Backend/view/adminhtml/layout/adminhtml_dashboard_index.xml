@@ -56,14 +56,17 @@
                             <argument name="label" xsi:type="string" translate="true">Orders</argument>
                             <argument name="title" xsi:type="string" translate="true">Orders</argument>
                             <argument name="update_url" xsi:type="string">adminhtml/dashboard_chart/orders</argument>
+                            <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\ChartsPeriod</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Tab" name="dashboard.chart.amounts" as="amounts" template="Magento_Backend::dashboard/chart.phtml">
                         <arguments>
+                            <argument name="chart_precision" xsi:type="number">2</argument>
                             <argument name="html_id" xsi:type="string">amounts</argument>
                             <argument name="label" xsi:type="string" translate="true">Amounts</argument>
                             <argument name="title" xsi:type="string" translate="true">Amounts</argument>
                             <argument name="update_url" xsi:type="string">adminhtml/dashboard_chart/amounts</argument>
+                            <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\ChartsPeriod</argument>
                         </arguments>
                     </block>
                 </block>

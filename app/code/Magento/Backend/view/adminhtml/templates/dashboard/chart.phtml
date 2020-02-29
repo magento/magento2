@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Backend\ViewModel\ChartsPeriod;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /**
  * @var Template $block
  * @var Escaper $escaper
+ * @var ChartsPeriod $viewModel
  */
+$viewModel = $block->getViewModel();
 ?>
 <div class="dashboard-diagram">
     <div class="dashboard-diagram-graph">
@@ -28,6 +31,10 @@ use Magento\Framework\View\Element\Template;
                     '_current' => true
                 ])) ?>",
                 "periodSelect": "#dashboard_chart_period",
+                "periodUnits": <?= /** @noEscape */ $viewModel->getPeriodUnits() ?>,
+                <?php if ($precision = $block->getData('chart_precision')): ?>
+                "precision": <?= (int)$precision ?>,
+                <?php endif; ?>
                 "type": "<?= $escaper->escapeJs($block->getData('html_id')) ?>"
             }
         }

@@ -17,6 +17,8 @@ define([
         options: {
             updateUrl: '',
             periodSelect: null,
+            periodUnits: [],
+            precision: 0,
             type: ''
         },
         chart: null,
@@ -72,38 +74,11 @@ define([
             $(this.element).toggle(response.data.length > 0);
             $(this.element).next('.dashboard-diagram-nodata').toggle(response.data.length === 0);
 
-            this.chart.options.scales.xAxes[0].time.unit = this.getPeriodUnit();
+            this.chart.options.scales.xAxes[0].time.unit = this.options.periodUnits[this.period] ?
+                this.options.periodUnits[this.period] : 'hour';
             this.chart.data.datasets[0].data = response.data;
             this.chart.data.datasets[0].label = response.label;
             this.chart.update();
-        },
-
-        /**
-         * @returns {String} time unit per currently set period
-         */
-        getPeriodUnit: function () {
-            switch (this.period) {
-                case '7d':
-                case '1m':
-                    return 'day';
-
-                case '1y':
-                case '2y':
-                    return 'month';
-            }
-
-            return 'hour';
-        },
-
-        /**
-         * @returns {Number} precision of numeric chart data
-         */
-        getPrecision: function () {
-            if (this.options.type === 'amounts') {
-                return 2;
-            }
-
-            return 0;
         },
 
         /**
@@ -137,7 +112,7 @@ define([
                         yAxes: [{
                             ticks: {
                                 beginAtZero: true,
-                                precision: this.getPrecision()
+                                precision: this.options.precision
                             }
                         }]
                     }

@@ -54,7 +54,13 @@ class Orders extends Dashboard implements HttpPostActionInterface
     public function execute(): Json
     {
         $data = [
-            'data' => $this->chart->getByPeriod($this->_request->getParam('period'), 'quantity'),
+            'data' => $this->chart->getByPeriod(
+                $this->_request->getParam('period'),
+                'quantity',
+                $this->_request->getParam('store'),
+                $this->_request->getParam('website'),
+                $this->_request->getParam('group')
+            ),
             'label' => __('Quantity')
         ];
 

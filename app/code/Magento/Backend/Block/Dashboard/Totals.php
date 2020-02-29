@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Block\Dashboard;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Model\Dashboard\Period;
 use Magento\Framework\Module\Manager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
@@ -61,7 +62,7 @@ class Totals extends Bar
         ) || $this->getRequest()->getParam(
             'group'
         );
-        $period = $this->getRequest()->getParam('period', '24h');
+        $period = $this->getRequest()->getParam('period', Period::PERIOD_24_HOURS);
 
         /* @var $collection Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(

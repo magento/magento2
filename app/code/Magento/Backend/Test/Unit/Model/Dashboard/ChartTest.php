@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Dashboard;
 
-use Magento\Backend\Helper\Dashboard\Data as DataHelper;
 use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
 use Magento\Backend\Model\Dashboard\Chart;
 use Magento\Backend\Model\Dashboard\Chart\Date as DateRetriever;
-use Magento\Framework\App\RequestInterface;
+use Magento\Backend\Model\Dashboard\Period;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
@@ -29,19 +30,9 @@ class ChartTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var RequestInterface|MockObject
-     */
-    private $requestMock;
-
-    /**
      * @var DateRetriever|MockObject
      */
     private $dateRetrieverMock;
-
-    /**
-     * @var DataHelper|MockObject
-     */
-    private $dataHelperMock;
 
     /**
      * @var OrderHelper|MockObject
@@ -57,24 +48,9 @@ class ChartTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->requestMock->method('getParam')->willReturn(null);
-
         $this->dateRetrieverMock = $this->getMockBuilder(DateRetriever::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->dataHelperMock = $this->getMockBuilder(DataHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataHelperMock->method('getDatePeriods')
-            ->willReturn([
-                '24h' => __('Last 24 Hours'),
-                '7d' => __('Last 7 Days'),
-                '1m' => __('Current Month'),
-                '1y' => __('YTD'),
-                '2y' => __('2YTD')
-            ]);
 
         $this->orderHelperMock = $this->getMockBuilder(OrderHelper::class)
             ->disableOriginalConstructor()
@@ -86,13 +62,14 @@ class ChartTest extends TestCase
         $this->orderHelperMock->method('getCollection')
             ->willReturn($this->collectionMock);
 
+        $period = $this->objectManagerHelper->getObject(Period::class);
+
         $this->model = $this->objectManagerHelper->getObject(
             Chart::class,
             [
-                'request' => $this->requestMock,
                 'dateRetriever' => $this->dateRetrieverMock,
-                'dataHelper' => $this->dataHelperMock,
-                'orderHelper' => $this->orderHelperMock
+                'orderHelper' => $this->orderHelperMock,
+                'period' => $period
             ]
         );
     }
@@ -156,7 +133,7 @@ class ChartTest extends TestCase
     {
         return [
             [
-                '7d',
+                Period::PERIOD_7_DAYS,
                 'revenue',
                 [
                     [
@@ -178,7 +155,7 @@ class ChartTest extends TestCase
                 ]
             ],
             [
-                '1m',
+                Period::PERIOD_1_MONTH,
                 'quantity',
                 [
                     [
@@ -200,7 +177,7 @@ class ChartTest extends TestCase
                 ]
             ],
             [
-                '1y',
+                Period::PERIOD_1_YEAR,
                 'quantity',
                 [
                     [

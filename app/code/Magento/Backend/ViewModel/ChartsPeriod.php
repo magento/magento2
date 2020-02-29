@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Backend\ViewModel;
 
-use Magento\Backend\Helper\Dashboard\Data;
+use Magento\Backend\Model\Dashboard\Period;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -16,16 +17,25 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class ChartsPeriod implements ArgumentInterface
 {
     /**
-     * @var Data
+     * @var Period
      */
-    private $dataHelper;
+    private $period;
 
     /**
-     * @param Data $dataHelper
+     * @var Json
      */
-    public function __construct(Data $dataHelper)
-    {
-        $this->dataHelper = $dataHelper;
+    private $serializer;
+
+    /**
+     * @param Period $period
+     * @param Json $serializer
+     */
+    public function __construct(
+        Period $period,
+        Json $serializer
+    ) {
+        $this->period = $period;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -35,6 +45,16 @@ class ChartsPeriod implements ArgumentInterface
      */
     public function getDatePeriods(): array
     {
-        return $this->dataHelper->getDatePeriods();
+        return $this->period->getDatePeriods();
+    }
+
+    /**
+     * Get json-encoded chart period units
+     *
+     * @return string
+     */
+    public function getPeriodUnits(): string
+    {
+        return $this->serializer->serialize($this->period->getPeriodChartUnits());
     }
 }

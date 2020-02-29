@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Model\Dashboard\Chart;
 
 use DateTimeZone;
+use Magento\Backend\Model\Dashboard\Period;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
 
@@ -17,14 +18,14 @@ use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
 class Date
 {
     /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
      * @var CollectionFactory
      */
     private $collectionFactory;
+
+    /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
 
     /**
      * Date constructor.
@@ -35,8 +36,8 @@ class Date
         CollectionFactory $collectionFactory,
         TimezoneInterface $localeDate
     ) {
-        $this->localeDate = $localeDate;
         $this->collectionFactory = $collectionFactory;
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -46,7 +47,7 @@ class Date
      *
      * @return array
      */
-    public function getByPeriod($period): array
+    public function getByPeriod(string $period): array
     {
         [$dateStart, $dateEnd] = $this->collectionFactory->create()->getDateRange(
             $period,
@@ -60,7 +61,7 @@ class Date
         $dateStart->setTimezone(new DateTimeZone($timezoneLocal));
         $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
 
-        if ($period === '24h') {
+        if ($period === Period::PERIOD_24_HOURS) {
             $dateEnd->modify('-1 hour');
         } else {
             $dateEnd->setTime(23, 59, 59);
@@ -71,13 +72,13 @@ class Date
 
         while ($dateStart <= $dateEnd) {
             switch ($period) {
-                case '7d':
-                case '1m':
+                case Period::PERIOD_7_DAYS:
+                case Period::PERIOD_1_MONTH:
                     $d = $dateStart->format('Y-m-d');
                     $dateStart->modify('+1 day');
                     break;
-                case '1y':
-                case '2y':
+                case Period::PERIOD_1_YEAR:
+                case Period::PERIOD_2_YEARS:
                     $d = $dateStart->format('Y-m');
                     $dateStart->modify('first day of next month');
                     break;

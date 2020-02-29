@@ -7,21 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Model\Dashboard;
 
-use Magento\Backend\Helper\Dashboard\Data as DataHelper;
 use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
 use Magento\Backend\Model\Dashboard\Chart\Date;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * Dashboard chart data retriever
  */
 class Chart
 {
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
     /**
      * @var Date
      */
@@ -33,47 +26,52 @@ class Chart
     private $orderHelper;
 
     /**
-     * @var DataHelper
+     * @var Period
      */
-    private $dataHelper;
+    private $period;
 
     /**
      * Chart constructor.
-     * @param RequestInterface $request
      * @param Date $dateRetriever
      * @param OrderHelper $orderHelper
-     * @param DataHelper $dataHelper
+     * @param Period $period
      */
     public function __construct(
-        RequestInterface $request,
         Date $dateRetriever,
         OrderHelper $orderHelper,
-        DataHelper $dataHelper
+        Period $period
     ) {
-        $this->request = $request;
         $this->dateRetriever = $dateRetriever;
         $this->orderHelper = $orderHelper;
-        $this->dataHelper = $dataHelper;
+        $this->period = $period;
     }
 
     /**
-     * Get chart data by period and chart type parameter
+     * Get chart data by period and chart type parameter, with possibility to pass scope parameters
      *
      * @param string $period
      * @param string $chartParam
+     * @param string|null $store
+     * @param string|null $website
+     * @param string|null $group
      *
      * @return array
      */
-    public function getByPeriod($period, $chartParam): array
-    {
-        $this->orderHelper->setParam('store', $this->request->getParam('store'));
-        $this->orderHelper->setParam('website', $this->request->getParam('website'));
-        $this->orderHelper->setParam('group', $this->request->getParam('group'));
+    public function getByPeriod(
+        string $period,
+        string $chartParam,
+        string $store = null,
+        string $website = null,
+        string $group = null
+    ): array {
+        $this->orderHelper->setParam('store', $store);
+        $this->orderHelper->setParam('website', $website);
+        $this->orderHelper->setParam('group', $group);
 
-        $availablePeriods = array_keys($this->dataHelper->getDatePeriods());
+        $availablePeriods = array_keys($this->period->getDatePeriods());
         $this->orderHelper->setParam(
             'period',
-            $period && in_array($period, $availablePeriods, false) ? $period : '24h'
+            $period && in_array($period, $availablePeriods, false) ? $period : Period::PERIOD_24_HOURS
         );
 
         $dates = $this->dateRetriever->getByPeriod($period);

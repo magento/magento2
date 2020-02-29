@@ -23,6 +23,11 @@ class ChartDisabled implements ArgumentInterface
     private const XML_PATH_ENABLE_CHARTS = 'admin/dashboard/enable_charts';
 
     /**
+     * Route to Stores -> Configuration section
+     */
+    private const ROUTE_SYSTEM_CONFIG = 'adminhtml/system_config/edit';
+
+    /**
      * @var UrlInterface
      */
     private $urlBuilder;
@@ -52,7 +57,7 @@ class ChartDisabled implements ArgumentInterface
     public function getConfigUrl(): string
     {
         return $this->urlBuilder->getUrl(
-            'adminhtml/system_config/edit',
+            static::ROUTE_SYSTEM_CONFIG,
             ['section' => 'admin', '_fragment' => 'admin_dashboard-link']
         );
     }
