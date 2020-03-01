@@ -26,7 +26,7 @@
 
         <after>
             <!-- Delete the created category -->
-            <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory"/>
+            <actionGroup ref="DeleteMostRecentCategoryActionGroup" stepKey="getRidOfCreatedCategory"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
@@ -35,7 +35,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="SimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
@@ -43,12 +43,12 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Fill out the form for the new category -->
-        <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
         <!-- Check that category was created -->
-        <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
+        <actionGroup ref="CategoryPresentActionGroup" stepKey="checkIfCategoryPresent">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 

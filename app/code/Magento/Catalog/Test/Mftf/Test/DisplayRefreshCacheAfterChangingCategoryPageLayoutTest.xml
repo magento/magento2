@@ -30,12 +30,12 @@
             <!-- Delete category and log out -->
             <comment userInput="Delete category and log out" stepKey="deleteCategoryAndLogOut"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logOutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdmin"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
         <!-- Navigate to category details page -->
         <comment userInput="Navigate to category details page" stepKey="navigateToAdminCategoryPage"/>
-        <actionGroup ref="goToAdminCategoryPageById" stepKey="goToAdminCategoryPage">
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
             <argument name="id" value="$$simpleCategory.id$$"/>
         </actionGroup>
         <!-- Open design tab and set layout -->

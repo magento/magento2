@@ -16,15 +16,4 @@
         <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
         <waitForPageLoad stepKey="waitForSignOut"/>
     </actionGroup>
-
-    <actionGroup name="StorefrontSignOutActionGroup">
-        <annotations>
-            <description>Clicks on Customer Account. Clicks on 'Sign-Out'. Validates that the success message is present and correct. PLEASE NOTE: The Success Message is hardcoded.</description>
-        </annotations>
-
-        <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
-        <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="You are signed out" stepKey="signOut"/>
-    </actionGroup>
 </actionGroups>

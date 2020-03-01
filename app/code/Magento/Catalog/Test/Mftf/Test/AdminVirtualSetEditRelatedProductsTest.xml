@@ -17,20 +17,23 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3415"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-194"/>
+            </skip>
         </annotations>
         <before></before>
         <after>
             <!-- Delete virtual product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="defaultVirtualProduct"/>
             </actionGroup>
         </after>
 
         <!-- Create product -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
 
