@@ -83,11 +83,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     }
 
     /**
-     * Get cart total repository
-     *
-     * @param int $cartId
-     * @return QuoteTotalsInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @inheritdoc
      */
     public function get($cartId): QuoteTotalsInterface
     {
@@ -109,10 +105,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
             $addressTotalsData,
             QuoteTotalsInterface::class
         );
-        $items = [];
-        foreach ($quote->getAllVisibleItems() as $index => $item) {
-            $items[$index] = $this->itemConverter->modelToDataObject($item);
-        }
+        $items = array_map([$this->itemConverter, 'modelToDataObject'], $quote->getAllVisibleItems());
         $calculatedTotals = $this->totalsConverter->process($addressTotals);
         $quoteTotals->setTotalSegments($calculatedTotals);
 

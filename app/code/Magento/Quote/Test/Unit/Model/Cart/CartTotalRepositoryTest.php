@@ -20,6 +20,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Cart\TotalsConverter;
+use Magento\Quote\Api\Data\TotalsInterfaceFactory;
+use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -30,24 +32,12 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class CartTotalRepositoryTest extends TestCase
 {
-    /**
-     * @var int
-     */
     private const STUB_CART_ID = 12;
 
-    /**
-     * @var int
-     */
     private const STUB_ITEMS_QTY = 100;
 
-    /**
-     * @var string
-     */
     private const STUB_CURRENCY_CODE = 'en_US';
 
-    /**
-     * @var string
-     */
     private const STUB_COUPON = 'coupon';
 
     /**
@@ -76,7 +66,7 @@ class CartTotalRepositoryTest extends TestCase
     private $quoteMock;
 
     /**
-     * @var \Magento\Quote\Api\Data\TotalsInterfaceFactory|MockObject
+     * @var TotalsInterfaceFactory|MockObject
      */
     private $totalsFactoryMock;
 
@@ -104,10 +94,14 @@ class CartTotalRepositoryTest extends TestCase
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->totalsFactoryMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\TotalsInterfaceFactory::class,
-            ['create']
+            TotalsInterfaceFactory::class,
+            [
+                'create'
+            ]
         );
-        $this->quoteMock = $this->createPartialMock(Quote::class, [
+        $this->quoteMock = $this->createPartialMock(
+            Quote::class,
+            [
                 'isVirtual',
                 'getShippingAddress',
                 'getBillingAddress',
@@ -116,19 +110,31 @@ class CartTotalRepositoryTest extends TestCase
                 'getQuoteCurrencyCode',
                 'getItemsQty',
                 'collectTotals'
-            ]);
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+            ]
+        );
+        $this->quoteRepositoryMock = $this->createMock(
+            CartRepositoryInterface::class
+        );
         $this->addressMock = $this->createPartialMock(
             Address::class,
-            ['getData', 'getTotals']
+            [
+                'getData',
+                'getTotals'
+            ]
         );
-        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->converterMock = $this->createMock(ItemConverter::class);
+        $this->dataObjectHelperMock = $this->getMockBuilder(
+            DataObjectHelper::class
+        )->disableOriginalConstructor()->getMock();
+        $this->converterMock = $this->createMock(
+            ItemConverter::class
+        );
 
-        $this->couponServiceMock = $this->createMock(CouponManagementInterface::class);
-        $this->totalsConverterMock = $this->createMock(TotalsConverter::class);
+        $this->couponServiceMock = $this->createMock(
+            CouponManagementInterface::class
+        );
+        $this->totalsConverterMock = $this->createMock(
+            TotalsConverter::class
+        );
 
         $this->model = new CartTotalRepository(
             $this->totalsFactoryMock,
@@ -189,8 +195,10 @@ class CartTotalRepositoryTest extends TestCase
             ->method('getTotals')
             ->willReturn($addressTotals);
 
-        $totalsMock = $this->createMock(\Magento\Quote\Api\Data\TotalsInterface::class);
-        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totalsMock);
+        $totalsMock = $this->createMock(QuoteTotalsInterface::class);
+        $this->totalsFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($totalsMock);
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
         $this->converterMock->expects($this->once())
             ->method('modelToDataObject')
