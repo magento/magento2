@@ -9,5 +9,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontHeaderSection">
         <element name="welcomeMessage" type="text" selector=".greet.welcome"/>
+        <element name="logoLink" type="button" selector=".header .logo"/>
     </section>
 </sections>

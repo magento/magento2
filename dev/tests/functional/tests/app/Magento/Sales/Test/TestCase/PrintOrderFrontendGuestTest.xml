@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\PrintOrderFrontendGuestTest" summary="Print Order from Guest on Frontend" ticketId="MAGETWO-30253">
         <variation name="PrintOrderFrontendGuestTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="customer" xsi:type="array">
                 <item name="dataset" xsi:type="string">johndoe_with_addresses</item>
             </data>

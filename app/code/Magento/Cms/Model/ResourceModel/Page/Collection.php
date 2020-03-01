@@ -74,7 +74,9 @@ class Collection extends AbstractCollection
     {
         if (!$this->getFlag('store_filter_added')) {
             $this->performAddStoreFilter($store, $withAdmin);
+            $this->setFlag('store_filter_added', true);
         }
+
         return $this;
     }
 

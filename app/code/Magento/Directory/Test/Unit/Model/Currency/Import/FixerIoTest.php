@@ -74,7 +74,7 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
         $responseBody = '{"success":"true","base":"USD","date":"2015-10-07","rates":{"EUR":0.9022}}';
         $expectedCurrencyRateList = ['USD' => ['EUR' => 0.9022, 'UAH' => null]];
         $message = "We can't retrieve a rate from "
-            . "http://data.fixer.io/api/latest?access_key=api_key&base=USD&symbols=EUR,UAH for UAH.";
+            . "http://data.fixer.io for UAH.";
 
         $this->scopeConfig->method('getValue')
             ->withConsecutive(

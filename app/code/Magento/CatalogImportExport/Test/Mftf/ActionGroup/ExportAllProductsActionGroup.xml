@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ExportAllProductsActionGroup">
+        <annotations>
+            <description>Exports the unfiltered Products list. Validates that the Success Message is present.</description>
+        </annotations>
+
+        <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible" time="5"/>
+        <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue"/>
+        <wait stepKey="waitForScroll" time="5"/>
+        <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
+        <wait stepKey="waitForClick" time="5"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

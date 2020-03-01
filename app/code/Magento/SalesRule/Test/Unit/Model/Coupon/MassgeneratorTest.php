@@ -23,7 +23,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->charset = str_split(md5((string)time()));
+        $this->charset = str_split(sha1((string)time()));
     }
 
     /**
@@ -103,24 +103,25 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
         $dateMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['gmtTimestamp']);
         $dateTimeMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime::class, ['formatDate']);
         $couponFactoryMock = $this->createPartialMock(\Magento\SalesRule\Model\CouponFactory::class, ['create']);
-        $couponMock = $this->createPartialMock(\Magento\SalesRule\Model\Coupon::class, [
+        $couponMock = $this->createPartialMock(
+            \Magento\SalesRule\Model\Coupon::class,
+            [
                 '__wakeup',
                 'setId',
                 'setRuleId',
                 'setUsageLimit',
                 'setUsagePerCustomer',
-                'setExpirationDate',
                 'setCreatedAt',
                 'setType',
                 'setCode',
                 'save'
-            ]);
+            ]
+        );
 
         $couponMock->expects($this->any())->method('setId')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setRuleId')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setUsageLimit')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setUsagePerCustomer')->will($this->returnSelf());
-        $couponMock->expects($this->any())->method('setExpirationDate')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setCreatedAt')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setType')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setCode')->will($this->returnSelf());

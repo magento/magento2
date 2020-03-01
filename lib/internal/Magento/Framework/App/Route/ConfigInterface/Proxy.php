@@ -60,6 +60,8 @@ class Proxy implements
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
      */
     public function __sleep()

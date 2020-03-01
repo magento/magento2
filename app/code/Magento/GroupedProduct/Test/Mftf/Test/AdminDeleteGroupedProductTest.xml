@@ -10,6 +10,7 @@
     <test name="AdminDeleteGroupedProductTest">
         <annotations>
             <features value="GroupedProduct"/>
+            <stories value="Delete product"/>
             <title value="Delete Grouped Product"/>
             <description value="Admin should be able to delete a grouped product"/>
             <testCaseId value="MC-11019"/>
@@ -30,9 +31,9 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProductFilteredBySkuAndName">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteGroupedProductFilteredBySkuAndName">
             <argument name="product" value="$$createGroupedProduct$$"/>
         </actionGroup>
         <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>

@@ -67,7 +67,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -76,6 +77,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Check if can add attributes on product form.
+     *
      * @return boolean
      */
     private function canAddAttributes()
@@ -89,7 +92,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -111,6 +115,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta customize attribute modal.
+     *
      * @param array $meta
      * @return array
      */
@@ -207,6 +213,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta to customize create attribute modal.
+     *
      * @param array $meta
      * @return array
      */
@@ -289,6 +297,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta to customize attribute grid.
+     *
      * @param array $meta
      * @return array
      */
@@ -309,7 +319,7 @@ class Attributes extends AbstractModifier
                         'immediateUpdateBySelection' => true,
                         'behaviourType' => 'edit',
                         'externalFilterMode' => true,
-                        'dataLinks' => ['imports' => false, 'exports' => true],
+                        'dataLinks' => ['imports' => false, 'exports' => false],
                         'formProvider' => 'ns = ${ $.namespace }, index = product_form',
                         'groupCode' => static::GROUP_CODE,
                         'groupName' => static::GROUP_NAME,

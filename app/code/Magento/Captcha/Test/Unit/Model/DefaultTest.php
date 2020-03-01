@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Model;
+
+use Magento\Framework\Math\Random;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -253,13 +257,15 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData([
-            'user_create_word' => [
-                'data' => 'AbCdEf5',
-                'words' => 'AbCdEf5',
-                'expires' => time() + self::EXPIRE_FRAME
+        $session->setData(
+            [
+                'user_create_word' => [
+                    'data' => 'AbCdEf5',
+                    'words' => 'AbCdEf5',
+                    'expires' => time() + self::EXPIRE_FRAME
+                ]
             ]
-        ]);
+        );
         return $session;
     }
 
@@ -373,6 +379,40 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
             [true, 'contact_us'],
             [false, 'user_create'],
             [false, 'user_forgotpassword']
+        ];
+    }
+
+    /**
+     * @param string $string
+     * @dataProvider generateWordProvider
+     * @throws \ReflectionException
+     */
+    public function testGenerateWord($string)
+    {
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->expects($this->once())
+            ->method('getRandomString')
+            ->will($this->returnValue($string));
+        $captcha = new \Magento\Captcha\Model\DefaultModel(
+            $this->session,
+            $this->_getHelperStub(),
+            $this->_resLogFactory,
+            'user_create',
+            $randomMock
+        );
+        $method = new \ReflectionMethod($captcha, 'generateWord');
+        $method->setAccessible(true);
+        $this->assertEquals($string, $method->invoke($captcha));
+    }
+    /**
+     * @return array
+     */
+    public function generateWordProvider()
+    {
+        return [
+            ['ABC123'],
+            ['1234567890'],
+            ['The quick brown fox jumps over the lazy dog.']
         ];
     }
 }

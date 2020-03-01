@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="sales.order_creditmemo.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">order_creditmemos</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection</argument>
                     <argument name="use_ajax" xsi:type="boolean">true</argument>
                     <argument name="default_sort" xsi:type="string">created_at</argument>
                     <argument name="default_dir" xsi:type="string">DESC</argument>

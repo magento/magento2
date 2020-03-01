@@ -3,12 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <nav data-mage-init='{"globalNavigation": {}}' class="admin__menu">
-    <?= /* @escapeNotVerified */ $block->renderNavigation($block->getMenuModel(), 0, 12) ?>
+    <?= /* @noEscape */ $block->renderNavigation($block->getMenuModel(), 0, 12) ?>
 </nav>
 

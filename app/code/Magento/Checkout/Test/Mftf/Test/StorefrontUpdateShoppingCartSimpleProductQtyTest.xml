@@ -11,9 +11,11 @@
     <test name="StorefrontUpdateShoppingCartSimpleProductQtyTest">
         <annotations>
             <features value="Checkout"/>
+            <stories value="Shopping cart"/>
             <title value="Check updating shopping cart while updating items qty"/>
             <description value="Check updating shopping cart while updating items qty"/>
             <testCaseId value="MC-14731" />
+            <severity value="AVERAGE"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -24,7 +26,7 @@
             </createData>
 
             <!-- Add the newly created product to the shopping cart -->
-            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
         </before>
@@ -54,7 +56,7 @@
         <see userInput="{{quoteQty3Price123.currency}}{{quoteQty3Price123.subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertCartSubtotal"/>
 
         <!-- Minicart product price and subtotal should be updated -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openMinicart"/>
         <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
         <assertEquals stepKey="assertProductQtyInMinicart">
             <actualResult type="variable">grabProductQtyInMinicart</actualResult>

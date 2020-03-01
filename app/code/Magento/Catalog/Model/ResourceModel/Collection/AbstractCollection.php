@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
 
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Catalog EAV collection resource abstract model
  *
@@ -45,8 +43,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     *
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -60,8 +56,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ResourceModelPoolInterface $resourceModelPool = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -74,8 +69,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
-            $connection,
-            $resourceModelPool
+            $connection
         );
     }
 

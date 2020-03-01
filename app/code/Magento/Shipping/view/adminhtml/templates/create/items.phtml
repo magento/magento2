@@ -3,32 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
+//phpcs:disable Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore
 ?>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= /* @escapeNotVerified */ __('Items to Ship') ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Items to Ship')) ?></span>
     </div>
     <div class="admin__table-wrapper">
         <table class="data-table admin__table-primary order-shipment-table">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
-                    <th class="col-ordered-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
-                    <th class="col-qty<?php if ($block->isShipmentRegular()): ?> last<?php endif; ?>">
-                        <span><?= /* @escapeNotVerified */ __('Qty to Ship') ?></span>
+                    <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
+                    <th class="col-ordered-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
+                    <th class="col-qty<?php if ($block->isShipmentRegular()) : ?> last<?php endif; ?>">
+                        <span><?= $block->escapeHtml(__('Qty to Ship')) ?></span>
                     </th>
-                    <?php if (!$block->canShipPartiallyItem()): ?>
-                    <th class="col-ship last"><span><?= /* @escapeNotVerified */ __('Ship') ?></span></th>
+                    <?php if (!$block->canShipPartiallyItem()) : ?>
+                    <th class="col-ship last"><span><?= $block->escapeHtml(__('Ship')) ?></span></th>
                     <?php endif; ?>
                 </tr>
             </thead>
             <?php $_items = $block->getShipment()->getAllItems() ?>
-            <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
-                <tbody class="<?= /* @escapeNotVerified */ $_i%2 ? 'odd' : 'even' ?>">
+            <?php $_i = 0; foreach ($_items as $_item) :
+                if ($_item->getOrderItem()->getParentItem()) :
+                    continue;
+                endif;
+                $_i++ ?>
+                <tbody class="<?= $_i%2 ? 'odd' : 'even' ?>">
                     <?= $block->getItemHtml($_item) ?>
                     <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                 </tbody>
@@ -39,24 +42,24 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= /* @escapeNotVerified */ __('Shipment Total') ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Shipment Total')) ?></span>
     </div>
     <div class="admin__page-section-content order-comments-history">
         <div class="admin__page-section-item">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= /* @escapeNotVerified */ __('Shipment Comments') ?></span>
+                <span class="title"><?= $block->escapeHtml(__('Shipment Comments')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div id="order-history_form" class="admin__field">
                     <label class="admin__field-label"
                            for="shipment_comment_text">
-                        <span><?= /* @escapeNotVerified */ __('Comment Text') ?></span></label>
+                        <span><?= $block->escapeHtml(__('Comment Text')) ?></span></label>
                     <div class="admin__field-control">
                         <textarea id="shipment_comment_text"
                                   class="admin__control-textarea"
                                   name="shipment[comment_text]"
                                   rows="3"
-                                  cols="5"><?= /* @escapeNotVerified */ $block->getShipment()->getCommentText() ?></textarea>
+                                  cols="5"><?= $block->escapeHtml($block->getShipment()->getCommentText()) ?></textarea>
                     </div>
                 </div>
             </div>
@@ -64,10 +67,10 @@
     </div>
     <div class="admin__page-section-item order-totals order-totals-actions">
         <div class="admin__page-section-item-title">
-            <span class="title"><?= /* @escapeNotVerified */ __('Shipment Options') ?></span>
+            <span class="title"><?= $block->escapeHtml(__('Shipment Options')) ?></span>
         </div>
         <div class="admin__page-section-item-content">
-            <?php if ($block->canCreateShippingLabel()): ?>
+            <?php if ($block->canCreateShippingLabel()) : ?>
                 <div class="field choice admin__field admin__field-option field-create">
                     <input id="create_shipping_label"
                            class="admin__control-checkbox"
@@ -77,7 +80,7 @@
                            onclick="toggleCreateLabelCheckbox();"/>
                     <label class="admin__field-label"
                            for="create_shipping_label">
-                        <span><?= /* @escapeNotVerified */ __('Create Shipping Label') ?></span></label>
+                        <span><?= $block->escapeHtml(__('Create Shipping Label')) ?></span></label>
                 </div>
             <?php endif ?>
 
@@ -89,10 +92,10 @@
                        type="checkbox"/>
                 <label class="admin__field-label"
                        for="notify_customer">
-                    <span><?= /* @escapeNotVerified */ __('Append Comments') ?></span></label>
+                    <span><?=$block->escapeHtml(__('Append Comments')) ?></span></label>
             </div>
 
-            <?php if ($block->canSendShipmentEmail()): ?>
+            <?php if ($block->canSendShipmentEmail()) : ?>
                 <div class="field choice admin__field admin__field-option field-email">
                     <input id="send_email"
                            class="admin__control-checkbox"
@@ -101,7 +104,7 @@
                            type="checkbox"/>
                     <label class="admin__field-label"
                            for="send_email">
-                        <span><?= /* @escapeNotVerified */ __('Email Copy of Shipment') ?></span></label>
+                        <span><?= $block->escapeHtml(__('Email Copy of Shipment')) ?></span></label>
                 </div>
             <?php endif; ?>
             <?= $block->getChildHtml('submit_before') ?>
@@ -147,7 +150,7 @@ window.toggleCreateLabelCheckbox = function() {
 window.submitShipment = function(btn) {
     if (!validQtyItems()) {
         alert({
-            content: '<?= /* @escapeNotVerified */ __('Invalid value(s) for Qty to Ship') ?>'
+            content: '<?= $block->escapeJs($block->escapeHtml(__('Invalid value(s) for Qty to Ship'))) ?>'
         });
         return;
     }

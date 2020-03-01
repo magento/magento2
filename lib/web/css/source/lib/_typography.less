@@ -10,15 +10,35 @@
 .lib-font-face(
     @family-name,
     @font-path,
+    @font-format: false,
     @font-weight: normal,
-    @font-style: normal
-) {
+    @font-style: normal,
+    @font-display: auto
+) when (@font-format = false) {
     @font-face {
         font-family: @family-name;
         src: url('@{font-path}.woff2') format('woff2'),
         url('@{font-path}.woff') format('woff');
         font-weight: @font-weight;
         font-style: @font-style;
+        font-display: @font-display;
+    }
+}
+
+.lib-font-face(
+    @family-name,
+    @font-path,
+    @font-format: false,
+    @font-weight: normal,
+    @font-style: normal,
+    @font-display: auto
+) when not (@font-format = false) {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.@{font-format}') format(@font-format);
+        font-weight: @font-weight;
+        font-style: @font-style;
+        font-display: @font-display;
     }
 }
 

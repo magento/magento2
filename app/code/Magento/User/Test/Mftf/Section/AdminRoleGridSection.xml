@@ -17,6 +17,7 @@
 
     <section name="AdminDeleteRoleSection">
         <element name="theRole" selector="//td[contains(text(), 'Role')]" type="button"/>
+        <element name="role" parameterized="true" selector="//td[contains(text(), '{{args}}')]" type="button"/>
         <element name="current_pass" type="button" selector="#current_password"/>
         <element name="delete" selector="//button/span[contains(text(), 'Delete Role')]" type="button"/>
         <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCartPriceRuleSuccessSaveMessageActionGroup">
+        <annotations>
+            <description>Clicks on the Save button on the Admin Cart Price Rule creation/edit page. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeAssertSuccessSaveMessage"/>
+    </actionGroup>
+</actionGroups>

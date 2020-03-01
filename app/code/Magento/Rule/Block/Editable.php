@@ -58,11 +58,11 @@ class Editable extends AbstractBlock implements RendererInterface
                 '" name="' .
                 $this->escapeHtmlAttr($element->getName()) .
                 '" value="' .
-                $element->getValue() .
+                $this->escapeHtmlAttr($element->getValue()) .
                 '" data-form-part="' .
-                $element->getData('data-form-part') .
+                $this->escapeHtmlAttr($element->getData('data-form-part')) .
                 '"/> ' .
-                htmlspecialchars(
+                $this->escapeHtml(
                     $valueName
                 ) . '&nbsp;';
         } else {

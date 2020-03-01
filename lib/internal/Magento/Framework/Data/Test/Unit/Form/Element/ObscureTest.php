@@ -3,18 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Obscure
  */
-namespace Magento\Framework\Data\Test\Unit\Form\Element;
-
 class ObscureTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_objectManagerMock;
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Obscure
@@ -25,11 +22,14 @@ class ObscureTest extends \PHPUnit\Framework\TestCase
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $this->objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $this->_model = new \Magento\Framework\Data\Form\Element\Obscure(
             $factoryMock,
             $collectionFactoryMock,
-            $escaperMock
+            $escaper
         );
         $formMock = new \Magento\Framework\DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
