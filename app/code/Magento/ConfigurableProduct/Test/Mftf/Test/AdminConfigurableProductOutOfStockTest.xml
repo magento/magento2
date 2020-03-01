@@ -134,7 +134,7 @@
         <see stepKey="checkForOutOfStock3" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
     </test>
 
-    <test name="AdminConfigurableProductOutOfStockTestDeleteChildren">
+    <test name="AdminConfigurableProductOutOfStockTestDeleteChildrenTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Product visibility when in stock/out of stock"/>
