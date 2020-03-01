@@ -4,6 +4,7 @@
  */
 
 /*jscs:disable jsDoc*/
+/* eslint-disable max-nested-callbacks */
 
 define([
     'squire',
@@ -17,7 +18,7 @@ define([
                 totals: ko.observable({
                     items: [],
                     subtotal: 0
-                }),
+                })
             },
             'Magento_Customer/js/customer-data': {
                 get: jasmine.createSpy().and.returnValue(
@@ -43,16 +44,19 @@ define([
 
     describe('Magento_Checkout/js/model/totals', function () {
 
-        it('does not reload cart in customer data when its subtotal is the same as the one in the quote', function (done) {
-            mocks['Magento_Checkout/js/model/quote'].totals({
-                items: [],
-                subtotal: 0
-            });
-            injector.require(['Magento_Checkout/js/model/totals'], function () {
-                expect(mocks['Magento_Customer/js/customer-data'].reload).not.toHaveBeenCalled();
-                done();
-            });
-        });
+        it(
+            'does not reload cart in customer data when its subtotal is the same as the one in the quote',
+            function (done) {
+                mocks['Magento_Checkout/js/model/quote'].totals({
+                    items: [],
+                    subtotal: 0
+                });
+                injector.require(['Magento_Checkout/js/model/totals'], function () {
+                    expect(mocks['Magento_Customer/js/customer-data'].reload).not.toHaveBeenCalled();
+                    done();
+                });
+            }
+        );
 
         it('reloads cart in customer data when its subtotal is different then the one in the quote', function (done) {
             mocks['Magento_Checkout/js/model/quote'].totals({
@@ -93,6 +97,7 @@ define([
 
             it('exposes quote items', function (done) {
                 var totalsItems, quoteItems = [];
+
                 mocks['Magento_Checkout/js/model/quote'].totals({
                     items: quoteItems,
                     subtotal: 0
@@ -106,6 +111,7 @@ define([
 
             it('exposes updated quote items when new values are pushed', function (done) {
                 var totalsItems, quoteItems = [];
+
                 mocks['Magento_Checkout/js/model/quote'].totals({});
                 injector.require(['Magento_Checkout/js/model/totals'], function (totals) {
                     mocks['Magento_Checkout/js/model/quote'].totals({
@@ -137,7 +143,7 @@ define([
 
             it('returns null when segment cannot be found', function (done) {
                 mocks['Magento_Checkout/js/model/quote'].totals({
-                    total_segments: []
+                    'total_segments': []
                 });
                 injector.require(['Magento_Checkout/js/model/totals'], function (totals) {
                     expect(totals.getSegment('test')).toBe(null);
@@ -149,8 +155,9 @@ define([
                 var segment = {
                     code: 'test'
                 };
+
                 mocks['Magento_Checkout/js/model/quote'].totals({
-                    total_segments: [
+                    'total_segments': [
                         segment
                     ]
                 });
