@@ -31,6 +31,8 @@ class QuoteItemQtyList
         $qty = $itemQty;
         if (isset(
             $this->_checkedQuoteItems[$quoteId][$productId]['qty']
+        ) && isset(
+            $this->_checkedQuoteItems[$quoteId][$productId]['items']
         ) && !in_array(
             $quoteItemId,
             $this->_checkedQuoteItems[$quoteId][$productId]['items']
@@ -40,7 +42,10 @@ class QuoteItemQtyList
         }
 
         $this->_checkedQuoteItems[$quoteId][$productId]['qty'] = $qty;
-        $this->_checkedQuoteItems[$quoteId][$productId]['items'][] = $quoteItemId;
+
+        if($quoteItemId !== null) {
+            $this->_checkedQuoteItems[$quoteId][$productId]['items'][] = $quoteItemId;
+        }
 
         return $qty;
     }
