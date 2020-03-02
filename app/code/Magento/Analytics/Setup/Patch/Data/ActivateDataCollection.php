@@ -56,6 +56,7 @@ class ActivateDataCollection implements DataPatchInterface
 
     /**
      * @inheritDoc
+     *
      * @throws LocalizedException
      */
     public function apply()
