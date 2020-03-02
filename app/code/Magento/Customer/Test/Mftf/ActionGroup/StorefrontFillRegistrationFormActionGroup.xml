@@ -8,7 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="LoginAdminWithCredentialsActionGroup">
-        <conditionalClick selector="{{AdminUsageNotificationSection.adminUsageDontAllowButton}}" dependentSelector="{{AdminUsageNotificationSection.adminUsageDontAllowButton}}" visible="true" stepKey="clickDontAllowButtonIfVisible" before="closeAdminNotification"/>
+    <actionGroup name="StorefrontFillRegistrationFormActionGroup" extends="StorefrontCreateCustomerSignedUpNewsletterActionGroup">
+        <remove keyForRemoval="checkSignUpForNewsletter"/>
+        <remove keyForRemoval="clickCreateAccountButton"/>
+        <remove keyForRemoval="waitForCreateAccountButtonToLoad"/>
     </actionGroup>
 </actionGroups>

@@ -84,7 +84,7 @@
             </actionGroup>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete all created data -->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>

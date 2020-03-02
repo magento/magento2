@@ -23,7 +23,7 @@
         </annotations>
 
         <!--Login to admin area-->
-        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!--Go to backup index page-->
         <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupPage"/>
