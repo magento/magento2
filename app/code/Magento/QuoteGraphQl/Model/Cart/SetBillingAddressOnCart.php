@@ -90,7 +90,7 @@ class SetBillingAddressOnCart
             );
         }
 
-        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput,$sameAsShipping);
+        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput, $sameAsShipping);
 
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
     }
@@ -101,6 +101,7 @@ class SetBillingAddressOnCart
      * @param ContextInterface $context
      * @param int|null $customerAddressId
      * @param array $addressInput
+     * @param bool $sameAsShipping
      * @return Address
      * @throws GraphQlAuthorizationException
      * @throws GraphQlInputException
