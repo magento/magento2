@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Integration\Test\TestCase\CreateIntegrationWithDuplicatedNameTest" summary="Create Integration with existing name" ticketId="MAGETWO-16756">
         <variation name="CreateIntegrationWithDuplicatedNameTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="integration/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNameDuplicationErrorMessage" />
         </variation>

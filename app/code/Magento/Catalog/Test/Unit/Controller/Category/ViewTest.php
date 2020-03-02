@@ -178,7 +178,13 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testApplyCustomLayoutUpdate()
+    /**
+     * Apply custom layout update is correct
+     *
+     * @dataProvider getInvocationData
+     * @return void
+     */
+    public function testApplyCustomLayoutUpdate(array $expectedData): void
     {
         $categoryId = 123;
         $pageLayout = 'page_layout';
@@ -199,11 +205,70 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\DataObject::class,
             ['getPageLayout', 'getLayoutUpdates']
         );
+        $this->category->expects($this->at(1))
+            ->method('hasChildren')
+            ->willReturn(true);
+        $this->category->expects($this->at(2))
+            ->method('hasChildren')
+            ->willReturn($expectedData[1][0]['type'] === 'default' ? true : false);
+        $this->category->expects($this->once())
+            ->method('getDisplayMode')
+            ->willReturn($expectedData[2][0]['displaymode']);
+        $this->expectationForPageLayoutHandles($expectedData);
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
         $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
-
         $this->catalogDesign->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
 
         $this->action->execute();
+    }
+
+    /**
+     * Expected invocation for Layout Handles
+     *
+     * @param array $data
+     * @return void
+     */
+    private function expectationForPageLayoutHandles($data): void
+    {
+        $index = 1;
+
+        foreach ($data as $expectedData) {
+            $this->page->expects($this->at($index))
+            ->method('addPageLayoutHandles')
+            ->with($expectedData[0], $expectedData[1], $expectedData[2]);
+            $index++;
+        }
+    }
+
+    /**
+     * Data provider for execute method.
+     *
+     * @return array
+     */
+    public function getInvocationData(): array
+    {
+        return [
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default_without_children'], null, false],
+                    [['displaymode' => 'products'], null, false]
+                ]
+            ],
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default_without_children'], null, false],
+                    [['displaymode' => 'page'], null, false]
+                ]
+            ],
+            [
+                'layoutHandles' => [
+                    [['type' => 'default'], null, false],
+                    [['type' => 'default'], null, false],
+                    [['displaymode' => 'poducts_and_page'], null, false]
+                ]
+            ]
+        ];
     }
 }

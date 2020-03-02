@@ -12,6 +12,7 @@
             <stories value="Update CMS Page URL Redirect With Temporary Redirect"/>
             <title value="Update CMS Page URL Redirect With Temporary Redirect"/>
             <description value="Login as Admin and tried to update the created URL Rewrite for CMS page"/>
+            <severity value="MINOR"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -22,7 +23,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create Custom Store View-->

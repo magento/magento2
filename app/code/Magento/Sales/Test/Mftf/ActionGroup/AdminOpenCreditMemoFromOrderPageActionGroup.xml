@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenCreditMemoFromOrderPageActionGroup">
+        <annotations>
+            <description>Admin open creditmemo from order</description>
+        </annotations>
+        <conditionalClick selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" dependentSelector="{{AdminOrderCreditMemosTabSection.viewGridRow('1')}}" visible="false" stepKey="openCreditMemosTab"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.viewMemo}}" stepKey="waitForCreditMemosTabOpened"/>
+        <click selector="{{AdminOrderCreditMemosTabSection.viewGridRow('1')}}" stepKey="viewMemo"/>
+        <waitForPageLoad stepKey="waitForCreditMemoOpened"/>
+    </actionGroup>
+</actionGroups>
