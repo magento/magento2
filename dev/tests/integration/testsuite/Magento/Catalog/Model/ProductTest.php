@@ -3,20 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\TestFramework\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Tests product model:
@@ -769,8 +766,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      */
-    public function testExistsStoreValueFlagForMultipleProducts() {
-
+    public function testExistsStoreValueFlagForMultipleProducts()
+    {
         $descriptionProduct = $this->productRepository->get('store_description');
         $nameProduct = $this->productRepository->get('store_name');
 
@@ -778,10 +775,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $store = $storeManager->getStore('fixturestore');
 
-        $nameProduct->addAttributeUpdate('name','Overwritten Name',$store->getId());
+        $nameProduct->addAttributeUpdate('name', 'Overwritten Name', $store->getId());
         $descriptionProduct->addAttributeUpdate('description', 'Overwritten Description', $store->getId());
 
-        $descriptionProduct = $this->productRepository->get('store_description',false, $store->getId(), true);
+        $descriptionProduct = $this->productRepository->get('store_description', false, $store->getId(), true);
         $nameProduct = $this->productRepository->get('store_name', false, $store->getId(), true);
 
         $this->assertTrue($descriptionProduct->getExistsStoreValueFlag('description'));
