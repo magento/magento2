@@ -13,9 +13,11 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception;
+use Magento\Store\Model\StoreManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateAccountTest extends TestCase
 {
@@ -48,6 +51,11 @@ class CreateAccountTest extends TestCase
     private $dataObjectHelper;
 
     /**
+     * @var StoreManager
+     */
+    private $storeManager;
+
+    /**
      * @var array
      */
     private $defaultCustomerData = [
@@ -65,6 +73,7 @@ class CreateAccountTest extends TestCase
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->customerFactory = $this->objectManager->get(CustomerInterfaceFactory::class);
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
+        $this->storeManager = $this->objectManager->get(StoreManager::class);
         parent::setUp();
     }
 
@@ -157,6 +166,31 @@ class CreateAccountTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Test for create customer account for second website (with existing email for default website)
+     * with global account scope config.
+     *
+     * @magentoConfigFixture current_store customer/account_share/scope 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     *
+     * @return void
+     */
+    public function testCreateAccountInGlobalScope(): void
+    {
+        $customerEntity = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customerEntity,
+            $this->defaultCustomerData,
+            CustomerInterface::class
+        );
+        $storeId = $this->storeManager->getStore('fixture_second_store')->getStoreId();
+        $customerEntity->setStoreId($storeId);
+        $message = 'A customer with the same email address already exists in an associated website.';
+        $this->expectExceptionObject(new InputMismatchException(__($message)));
+        $this->accountManagement->createAccount($customerEntity, '_aPassword1');
     }
 
     /**
