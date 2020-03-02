@@ -14,6 +14,12 @@
                 <value id="authorize_net_direct_test" type="host">test.authorize.net</value>
             </values>
         </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="authorize_net_direct" type="host">secure.authorize.net</value>
+                <value id="authorize_net_direct_test" type="host">test.authorize.net</value>
+            </values>
+        </policy>
         <policy id="form-action">
             <values>
                 <value id="authorize_net_direct" type="host">secure.authorize.net</value>
