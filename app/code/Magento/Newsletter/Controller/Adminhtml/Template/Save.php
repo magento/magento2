@@ -32,9 +32,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
         }
 
         try {
-            $template->addData(
-                $request->getParams()
-            )->setTemplateSubject(
+            $template->setTemplateSubject(
                 $request->getParam('subject')
             )->setTemplateCode(
                 $request->getParam('code')
