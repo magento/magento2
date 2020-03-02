@@ -177,7 +177,7 @@
         <grabTextFrom selector="{{AdminOrderTotalSection.totalTax}}" stepKey="amountOfTotalTax"/>
 
         <!--Create Invoice and Shipment for this Order.-->
-        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="seeInvoiceOrderPage"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreatingInvoice"/>
 
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="clickSubmitInvoice"/>
 
@@ -193,9 +193,9 @@
         <waitForPageLoad time="30" stepKey="waitForRefresh"/>
 
         <!--Select Dates-->
-        <generateDate stepKey="today" date="+0 day" format="m/d/Y"/>
-        <fillField selector="{{AdminTaxReportsSection.fromDate}}" userInput="$today" stepKey="fillDateFrom"/>
-        <fillField selector="{{AdminTaxReportsSection.toDateInput}}" userInput="$today" stepKey="fillDateTo"/>
+        <generateDate date="+0 day" format="m/d/Y" stepKey="today"/>
+        <fillField selector="{{AdminTaxReportsSection.fromDate}}" userInput="{$today}" stepKey="fillDateFrom"/>
+        <fillField selector="{{AdminTaxReportsSection.toDateInput}}" userInput="{$today}" stepKey="fillDateTo"/>
         <!--Click "Show report" in the upper right corner.-->
         <click selector="{{AdminTaxReportsSection.showReportButton}}" stepKey="clickShowReportButton"/>
         <waitForPageLoad time="60" stepKey="waitForReload"/>
