@@ -20,6 +20,7 @@
         <element name="itemTaxPercent" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-tax-percent" parameterized="true"/>
         <element name="itemDiscountAmount" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-discont .price" parameterized="true"/>
         <element name="itemTotal" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
+        <element name="itemTaxAmountByProductName" type="text" selector="//table[contains(@class,'edit-order-table')]//div[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'col-tax-amount')]//span" parameterized="true"/>
 
         <element name="productNameColumn" type="text" selector=".edit-order-table .col-product .product-title"/>
         <element name="productNameOptions" type="text" selector=".edit-order-table .col-product .item-options"/>
