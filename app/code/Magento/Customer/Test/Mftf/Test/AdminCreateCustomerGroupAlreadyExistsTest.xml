@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
                     2. Navigate to Stores > Other Settings > Customer Groups.
