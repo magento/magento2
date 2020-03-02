@@ -13,6 +13,8 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch6\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * @magentoDbIsolation enabled
@@ -21,6 +23,11 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  */
 class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
+    private $searchEngine;
+
     /**
      * @var ConnectionManager
      */
@@ -66,6 +73,15 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Make sure that correct engine is set
+     */
+    protected function assertPreConditions()
+    {
+        $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
+    }
+
+    /**
      * @param string $text
      * @return array
      */
@@ -95,7 +111,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix composite_product_search
      */
     public function testSearchConfigurableProductBySimpleProductName()
@@ -104,7 +119,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix composite_product_search
      */
     public function testSearchConfigurableProductBySimpleProductAttributeMultiselect()
@@ -113,7 +127,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix composite_product_search
      */
     public function testSearchConfigurableProductBySimpleProductAttributeSelect()
@@ -122,7 +135,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix composite_product_search
      */
     public function testSearchConfigurableProductBySimpleProductAttributeShortDescription()
@@ -145,5 +157,20 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             }
         }
         return false;
+    }
+
+    /**
+     * Returns installed on server search service
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine()
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = 'elasticsearch' . $version;
+        }
+        return $this->searchEngine;
     }
 }
