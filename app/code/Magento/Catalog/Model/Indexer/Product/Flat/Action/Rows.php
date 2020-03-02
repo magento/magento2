@@ -5,14 +5,14 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
+use Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction;
 use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
 
 /**
  * Class Rows reindex action for mass actions
- *
  */
-class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+class Rows extends AbstractAction
 {
     /**
      * @var Eraser
