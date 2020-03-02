@@ -28,6 +28,9 @@
                     <label>Time of day to send data</label>
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel</frontend_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\CollectionTime</backend_model>
+                    <depends>
+                        <field id="analytics/general/enabled">1</field>
+                    </depends>
                 </field>
                 <field id="vertical" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <hint>Industry Data</hint>
