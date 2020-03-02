@@ -21,7 +21,7 @@ define([
                 authenticationPopup.showModal();
 
                 return false;
-            }else{
+            } else {
                 $(element).attr('disabled', true);
                 window.location.href = config.checkoutUrl;
             }
