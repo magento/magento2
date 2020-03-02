@@ -1,0 +1,10 @@
+sku,name,store_view_code,product_type,attribute_set_code,price,custom_options
+simple1,Simple 1,,simple,Default,100,"name=Test Option 1,type=field"
+simple1,Simple 1,fixturestore,simple,Default,,"name=Test Option 1,type=field"
+simple1,Simple 1,fixture_second_store,simple,Default,,"name=Test Option 1,type=field"
+simple2,Simple 2,,simple,Default,200,"name=Test Option 1,type=field"
+simple2,Simple 2,fixturestore,simple,Default,,"name=Test Option 1,type=field"
+simple2,Simple 2,fixture_second_store,simple,Default,,"name=Test Option 1,type=field"
+simple3,Simple 3,,simple,Default,300,"name=Test Option 1,type=field"
+simple3,Simple 3,fixturestore,simple,Default,,"name=Test Option 1,type=field"
+simple3,Simple 3,fixture_second_store,simple,Default,,"name=Test Option 1,type=field"
