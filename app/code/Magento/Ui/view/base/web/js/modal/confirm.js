@@ -49,7 +49,7 @@ define([
                 }
             }, {
                 text: $t('OK'),
-                class: 'action primary action-accept',
+                class: 'action primary action-primary action-accept',
 
                 /**
                  * Click handler.
