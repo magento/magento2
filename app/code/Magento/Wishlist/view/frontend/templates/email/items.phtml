@@ -18,7 +18,7 @@
                 <td class="col product">
                     <p>
                         <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                            <?= /* @noEscape */ $block->getImage($_product, 'product_small_image')->toHtml() ?>
+                            <?= /* @noEscape */ $block->getImage($block->getProductForThumbnail($item), 'product_small_image')->toHtml() ?>
                         </a>
                     </p>
 
