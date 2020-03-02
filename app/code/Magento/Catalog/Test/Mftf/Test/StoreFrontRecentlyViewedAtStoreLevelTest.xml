@@ -126,7 +126,7 @@
             <argument name="productPosition" value="1"/>
         </actionGroup>
 
-        <grabTextFrom selector="{{StoreFrontRecentProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
         <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertNotSeeProduct3"/>
 
         <!-- Switch Storeview-->
@@ -142,7 +142,7 @@
             <argument name="productPosition" value="1"/>
         </actionGroup>
 
-        <grabTextFrom selector="{{StoreFrontRecentProductSection.ProductName('2')}}" stepKey="grabStoreView2DontSeeHomeProduct3"/>
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabStoreView2DontSeeHomeProduct3"/>
         <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertStoreView2NotSeeProduct3"/>
 
         <!-- Switch to default store-->
@@ -159,7 +159,7 @@
             <argument name="productName" value="$$createSimpleProduct3.name$$"/>
             <argument name="productPosition" value="1"/>
         </actionGroup>
-        <grabTextFrom selector="{{StoreFrontRecentProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
         <assertNotContains expected="$$createSimpleProduct1.name$$" actual="$grabDontSeeHomeProduct1" stepKey="assertNotSeeProduct1"/>
 
     </test>
