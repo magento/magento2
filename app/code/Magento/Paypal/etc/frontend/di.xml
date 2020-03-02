@@ -158,22 +158,10 @@
                     <item name="label" xsi:type="string">buynow</item>
                 </item>
             </argument>
-            <argument name="allowedFunding" xsi:type="array">
-                <item name="checkout" xsi:type="array">
-                    <item name="0" xsi:type="string">CREDIT</item>
-                    <item name="1" xsi:type="string">ELV</item>
-                </item>
-                <item name="cart" xsi:type="array">
-                    <item name="0" xsi:type="string">CREDIT</item>
-                    <item name="1" xsi:type="string">ELV</item>
-                </item>
-                <item name="mini_cart" xsi:type="array">
-                    <item name="0" xsi:type="string">CREDIT</item>
-                    <item name="1" xsi:type="string">ELV</item>
-                </item>
-                <item name="product" xsi:type="array">
-                    <item name="0" xsi:type="string">CREDIT</item>
-                </item>
+            <argument name="disallowedFundingMap" xsi:type="array">
+                <item name="CREDIT" xsi:type="string">credit</item>
+                <item name="CARD" xsi:type="string">card</item>
+                <item name="ELV" xsi:type="string">sepa</item>
             </argument>
             <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
         </arguments>

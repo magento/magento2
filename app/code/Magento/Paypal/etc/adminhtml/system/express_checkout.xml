@@ -155,10 +155,10 @@
                 <tooltip>You can look up your merchant ID by logging into https://www.paypal.com/. Click the profile icon on the top right side of the page and then select Profile and settings in the Business Profile menu. (If you do not see the profile icon at the top of the page, click Profile, which appears in the top menu when the My Account tab is selected.) Click My business info on the left, and the Merchant account ID is displayed in the list of profile items on the right.</tooltip>
                 <config_path>payment/paypal_express/merchant_id</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\MerchantId</frontend_model>
+                <validate>required-entry</validate>
                 <depends>
                     <field id="enable_in_context_checkout">1</field>
                 </depends>
-                <validate>required-entry</validate>
             </field>
             <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="0" showInWebsite="0">
                 <label>Enable PayPal Credit</label>

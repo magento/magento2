@@ -12,24 +12,35 @@ namespace Magento\Paypal\Model\System\Config\Source;
  */
 class DisableFundingOptions
 {
+
+    /**
+     * @var array
+     */
+    private $disallowedFundingOptions;
+
+    /**
+     * DisableFundingOptions constructor.
+     * @param array $disallowedFundingOptions
+     */
+    public function __construct($disallowedFundingOptions = [])
+    {
+        $this->disallowedFundingOptions = $disallowedFundingOptions;
+    }
+
     /**
      * @inheritdoc
      */
     public function toOptionArray(): array
     {
-        return [
-            [
-                'value' => 'CREDIT',
-                'label' => __('PayPal Credit')
-            ],
-            [
-                'value' => 'CARD',
-                'label' => __('PayPal Guest Checkout Credit Card Icons')
-            ],
-            [
-                'value' => 'ELV',
-                'label' => __('Elektronisches Lastschriftverfahren - German ELV')
-            ]
-        ];
+        return array_map(
+            function ($k, $v) {
+                return [
+                    'value' => $k,
+                    'label' => __($v)
+                ];
+            },
+            array_keys($this->disallowedFundingOptions),
+            $this->disallowedFundingOptions
+        );
     }
 }

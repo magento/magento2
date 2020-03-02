@@ -11,9 +11,12 @@ use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Paypal\Model\Config as PayPalConfig;
 
 /**
- * Smart button config
+ * Provides configuration values for PayPal in-context checkout
+ *
+ * Class SmartButtonConfig
  */
 class SmartButtonConfig
 {
@@ -33,35 +36,40 @@ class SmartButtonConfig
     private $defaultStyles;
 
     /**
-     * @var array
-     */
-    private $allowedFunding;
-
-    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var array
+     */
+    private $disallowedFundingMap;
+
+    /**
+     * Base url for Paypal SDK
+     */
+    const BASE_URL = 'https://www.paypal.com/sdk/js?';
 
     /**
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param array $defaultStyles
-     * @param array $allowedFunding
+     * @param array $disallowedFundingMap
      */
     public function __construct(
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
         ScopeConfigInterface $scopeConfig,
         $defaultStyles = [],
-        $allowedFunding = []
+        $disallowedFundingMap = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
         $this->scopeConfig = $scopeConfig;
         $this->defaultStyles = $defaultStyles;
-        $this->allowedFunding = $allowedFunding;
+        $this->disallowedFundingMap = $disallowedFundingMap;
     }
 
     /**
@@ -76,38 +84,90 @@ class SmartButtonConfig
             Data::XML_PATH_GUEST_CHECKOUT,
             ScopeInterface::SCOPE_STORE
         );
+
+        $isSandbox = (int)$this->config->getValue('sandbox_flag');
+        $clientId = $isSandbox ?
+            $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
+        $merchantId = $this->config->getValue('merchant_id');
+        $locale = $this->localeResolver->getLocale();
+        $disallowedFunding = implode(",", $this->getDisallowedFunding());
+
         return [
-            'merchantId' => $this->config->getValue('merchant_id'),
-            'environment' => ((int)$this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
-            'locale' => $this->localeResolver->getLocale(),
-            'allowedFunding' => $this->getAllowedFunding($page),
-            'disallowedFunding' => $this->getDisallowedFunding(),
+            'merchantId' => $merchantId,
+            'environment' => ( $isSandbox ? 'sandbox' : 'production'),
+            'locale' => $locale,
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
-            'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed
+            'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
+            'sdkUrl' => $this->generatePaypalSdkUrl($clientId, $merchantId, $locale, $disallowedFunding)
         ];
     }
 
     /**
-     * Returns disallowed funding from configuration
+     * Generate the url to download the Paypal SDK
+     *
+     * @param string $clientId
+     * @param string $merchantId
+     * @param string $locale
+     * @param string $disallowedFunding
+     * @return string
+     */
+    private function generatePaypalSdkUrl(
+        string $clientId,
+        string $merchantId,
+        string $locale,
+        string $disallowedFunding
+    ) : string {
+        $params =
+            [
+                'client-id' => $clientId,
+                'commit' => 'false',
+                'merchant-id' => $merchantId,
+                'locale' => $locale,
+                'intent' => $this->getIntent(),
+            ];
+        if ($disallowedFunding) {
+            $params['disable-funding'] =  $disallowedFunding;
+        }
+
+        return self::BASE_URL . http_build_query($params);
+    }
+
+    /**
+     * Return intent value from the configuration payment_action value
+     *
+     * @return string
+     */
+    private function getIntent(): string
+    {
+        $paymentAction = $this->config->getValue('paymentAction');
+        $mappedIntentValues = [
+            Config::PAYMENT_ACTION_AUTH => 'authorize',
+            Config::PAYMENT_ACTION_SALE => 'capture',
+            Config::PAYMENT_ACTION_ORDER => 'order'
+        ];
+        return $mappedIntentValues[$paymentAction];
+    }
+
+    /**
+     * Returns disallowed funding from configuration after updating values
      *
      * @return array
      */
     private function getDisallowedFunding(): array
     {
         $disallowedFunding = $this->config->getValue('disable_funding_options');
-        return $disallowedFunding ? explode(',', $disallowedFunding) : [];
-    }
+        $isGuestPayPalAvailable = $this->config->getValue('solution_type') === PayPalConfig::EC_SOLUTION_TYPE_SOLE;
+        $disallowedFundingArray = $disallowedFunding ? explode(',', $disallowedFunding) : [];
+        $disallowedFundingArray = !$isGuestPayPalAvailable && !in_array('CARD', $disallowedFundingArray)
+            ? array_merge_recursive(['CARD'], $disallowedFundingArray)
+            : $disallowedFundingArray;
 
-    /**
-     * Returns allowed funding
-     *
-     * @param string $page
-     * @return array
-     */
-    private function getAllowedFunding(string $page): array
-    {
-        return array_values(array_diff($this->allowedFunding[$page], $this->getDisallowedFunding()));
+        // Map old configuration values to current ones
+        return array_map(function ($oldValue) {
+            return $this->disallowedFundingMap[$oldValue] ?? $oldValue;
+        },
+            $disallowedFundingArray);
     }
 
     /**

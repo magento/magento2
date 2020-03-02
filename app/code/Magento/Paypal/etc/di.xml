@@ -258,4 +258,21 @@
     <type name="Magento\Sales\Model\Order\Payment">
         <plugin name="paypal_transparent" type="Magento\Paypal\Plugin\TransparentOrderPayment"/>
     </type>
+    <type name="Magento\Paypal\Model\System\Config\Source\DisableFundingOptions">
+        <arguments>
+            <argument name="disallowedFundingOptions" xsi:type="array">
+                <item name="CREDIT" xsi:type="string">PayPal Credit</item>
+                <item name="CARD" xsi:type="string">PayPal Guest Checkout Credit Card Icons</item>
+                <item name="ELV" xsi:type="string">Elektronisches Lastschriftverfahren - German ELV</item>
+                <item name="venmo" xsi:type="string">Venmo</item>
+                <item name="bancontact" xsi:type="string">BanContact</item>
+                <item name="eps" xsi:type="string">eps</item>
+                <item name="giropay" xsi:type="string">giropay</item>
+                <item name="ideal" xsi:type="string">iDEAL</item>
+                <item name="mybank" xsi:type="string">MyBank</item>
+                <item name="p24" xsi:type="string">Przelewy24</item>
+                <item name="sofort" xsi:type="string">Sofort</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

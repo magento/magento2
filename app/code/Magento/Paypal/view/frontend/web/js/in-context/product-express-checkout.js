@@ -74,6 +74,25 @@ define([
             return promise;
         },
 
+        /**
+         * After payment execute
+         *
+         * @param {Object} res
+         * @param {Function} resolve
+         * @param {Function} reject
+         *
+         * @return {*}
+         */
+        afterPayment: function (res, resolve, reject) {
+            if (res.success) {
+                return resolve(res.token);
+            }
+
+            this.addAlert(res['error_message']);
+
+            return reject(new Error(res['error_message']));
+        },
+
         /** @inheritdoc */
         prepareClientConfig: function () {
             this._super();

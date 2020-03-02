@@ -1512,6 +1512,8 @@ class Config extends AbstractConfig
             case 'allow_ba_signup':
             case 'in_context':
             case 'merchant_id':
+            case 'client_id':
+            case 'sandbox_client_id':
             case 'supported_locales':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
