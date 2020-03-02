@@ -364,8 +364,6 @@
         <!-- 8. Clear magento cache -->
         <magentoCLI command="cache:flush" stepKey="flushCacheAfterTranslateDisabled"/>
 
-        <actionGroup ref="AdminCleanStaticAndVarDirsActionGroup" stepKey="cleanStaticAndVarDirs"/>
-
         <!-- 9. Clear browser locale storage for magento site -->
         <executeJS function="localStorage.clear();" stepKey="clearStorage"/>
         <resetCookie userInput="mage-translation-storage" stepKey="resetTranslationStorage"/>
