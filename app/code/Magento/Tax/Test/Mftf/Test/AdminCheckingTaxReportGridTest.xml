@@ -174,7 +174,7 @@
         <!-- need check selector -->
         <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemTaxAmountByProductName($createFirstProduct.name$)}}" stepKey="amountOfTaxOnFirstProduct"/>
         <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemTaxAmountByProductName($createSecondProduct.name$)}}" stepKey="amountOfTaxOnSecondProduct"/>
-        <grabTextFrom selector="{{AdminOrderTotalSection.totalTax}}" stepKey="amountOfTotalTax"/>
+        <grabTextFrom selector="{{AdminOrderFormTotalSection.totalTax}}" stepKey="amountOfTotalTax"/>
 
         <!--Create Invoice and Shipment for this Order.-->
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreatingInvoice"/>
