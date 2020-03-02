@@ -7385,12 +7385,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "f1820ff3cf8401f02137ddb1457b6a0d298e64d5"
+                "reference": "3a18c6bca1d7fd5a8a62033148968a4888ff8f21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/f1820ff3cf8401f02137ddb1457b6a0d298e64d5",
-                "reference": "f1820ff3cf8401f02137ddb1457b6a0d298e64d5",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/3a18c6bca1d7fd5a8a62033148968a4888ff8f21",
+                "reference": "3a18c6bca1d7fd5a8a62033148968a4888ff8f21",
                 "shasum": ""
             },
             "require": {
@@ -7462,7 +7462,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-02-27T19:58:02+00:00"
+            "time": "2020-03-02T19:48:04+00:00"
         },
         {
             "name": "mikey179/vfsstream",
