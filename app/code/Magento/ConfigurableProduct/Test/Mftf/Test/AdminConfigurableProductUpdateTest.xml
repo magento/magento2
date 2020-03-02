@@ -41,7 +41,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search for prefix of the 3 products we created via api -->
@@ -286,7 +286,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product via the UI -->
@@ -335,7 +335,7 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product via the UI -->

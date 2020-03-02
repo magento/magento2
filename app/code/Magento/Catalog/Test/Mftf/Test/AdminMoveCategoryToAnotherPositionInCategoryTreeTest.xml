@@ -28,7 +28,7 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="SecondLevelSubCat">
                 <argument name="categoryEntity" value="SecondLevelSubCat"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Category Page -->

@@ -47,7 +47,7 @@
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
         </after>
 

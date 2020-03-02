@@ -53,7 +53,7 @@
             <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
                 <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Go to category and check price-->

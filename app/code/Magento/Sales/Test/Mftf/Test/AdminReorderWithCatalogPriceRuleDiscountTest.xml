@@ -46,7 +46,7 @@
             <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
                 <argument name="ruleName" value="{{CatalogRuleToPercent.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open order by Id-->

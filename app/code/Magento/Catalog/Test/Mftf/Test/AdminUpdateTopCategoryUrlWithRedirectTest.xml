@@ -34,7 +34,7 @@
             <deleteData createDataKey="createThreeLevelNestedCategories" stepKey="deleteThreeNestedCategories"/>
             <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteTwoLevelNestedCategory"/>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Category page -->

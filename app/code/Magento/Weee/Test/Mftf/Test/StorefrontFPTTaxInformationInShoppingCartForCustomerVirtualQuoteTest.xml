@@ -52,7 +52,7 @@
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
         </after>
 
