@@ -33,7 +33,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open product page-->
         <comment userInput="Open product page" stepKey="openProdPage"/>
@@ -60,7 +60,7 @@
         <waitForPageLoad stepKey="waitForProdAddToCmpList"/>
         <!--Assert success message-->
         <comment userInput="Assert success message" stepKey="assertSuccessMsg"/>
-        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage"/>
+        <grabTextFrom selector="{{StorefrontMessagesSection.success}}" stepKey="grabTextFromSuccessMessage"/>
         <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage"/>
         <!--See product in the comparison list-->
         <comment userInput="See product in the comparison list" stepKey="seeProductInComparisonList"/>
@@ -82,7 +82,7 @@
         <waitForPageLoad stepKey="waitProdAddingToCmpList"/>
         <!--Assert success message-->
         <comment userInput="Assert success message" stepKey="assertSuccessMsg2"/>
-        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage2"/>
+        <grabTextFrom selector="{{StorefrontMessagesSection.success}}" stepKey="grabTextFromSuccessMessage2"/>
         <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage2"/>
         <!--Check that product displays on add to compare widget-->
         <comment userInput="Check that product displays on add to compare widget" stepKey="checkProdNameOnWidget"/>
