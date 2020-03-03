@@ -503,7 +503,7 @@ abstract class AbstractAction
         )->joinInner(
             ['cc2' => $temporaryTreeTable],
             $this->connection->quoteInto(
-                'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN ()',
+                'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (?)',
                 $rootCatIds,
                 \Zend_Db::BIGINT_TYPE
             ),
