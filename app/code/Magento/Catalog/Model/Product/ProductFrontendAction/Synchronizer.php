@@ -20,6 +20,8 @@ use Magento\Framework\EntityManager\EntityManager;
  *
  * Service which allows to sync product widget information, such as product id with db. In order to reuse this info
  * on different devices
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Synchronizer
 {
@@ -94,6 +96,7 @@ class Synchronizer
      *
      * @param string $namespace
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getLifeTimeByNamespace($namespace)
     {
@@ -119,6 +122,7 @@ class Synchronizer
      * @param array $productsData (product action data, that came from frontend)
      * @param string $typeId namespace (type of action)
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function filterNewestActions(array $productsData, $typeId)
     {
@@ -166,6 +170,7 @@ class Synchronizer
      * @param array $productsData
      * @param string $typeId
      * @return void
+     * @throws \Exception
      */
     public function syncActions(array $productsData, $typeId)
     {
@@ -189,8 +194,7 @@ class Synchronizer
             foreach ($collection as $item) {
                 $this->entityManager->delete($item);
             }
-
-            foreach ($productsData as $productId => $productData) {
+            foreach ($productsData as $productData) {
                 /** @var ProductFrontendActionInterface $action */
                 $action = $this->productFrontendActionFactory->create(
                     [
@@ -198,7 +202,7 @@ class Synchronizer
                             'visitor_id' => $customerId ? null : $visitorId,
                             'customer_id' => $this->session->getCustomerId(),
                             'added_at' => $productData['added_at'],
-                            'product_id' => $productId,
+                            'product_id' => $productData['product_id'],
                             'type_id' => $typeId
                         ]
                     ]

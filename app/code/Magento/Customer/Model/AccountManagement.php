@@ -1041,10 +1041,10 @@ class AccountManagement implements AccountManagementInterface
         }
         $customerEmail = $customer->getEmail();
         $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
+        $this->checkPasswordStrength($newPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
-        $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->disableAddressValidation($customer);
@@ -1612,6 +1612,37 @@ class AccountManagement implements AccountManagementInterface
             );
         } else {
             return $this->emailNotification;
+        }
+    }
+
+    /**
+     * Destroy all active customer sessions by customer id (current session will not be destroyed).
+     *
+     * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
+     * configured session lifetime.
+     *
+     * @param string|int $customerId
+     * @return void
+     */
+    private function destroyCustomerSessions($customerId)
+    {
+        $this->sessionManager->regenerateId();
+        $sessionLifetime = $this->scopeConfig->getValue(
+            \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $dateTime = $this->dateTimeFactory->create();
+        $activeSessionsTime = $dateTime->setTimestamp($dateTime->getTimestamp() - $sessionLifetime)
+            ->format(DateTime::DATETIME_PHP_FORMAT);
+        /** @var \Magento\Customer\Model\ResourceModel\Visitor\Collection $visitorCollection */
+        $visitorCollection = $this->visitorCollectionFactory->create();
+        $visitorCollection->addFieldToFilter('customer_id', $customerId);
+        $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
+        $visitorCollection->addFieldToFilter('session_id', ['neq' => $this->sessionManager->getSessionId()]);
+        /** @var \Magento\Customer\Model\Visitor $visitor */
+        foreach ($visitorCollection->getItems() as $visitor) {
+            $sessionId = $visitor->getSessionId();
+            $this->saveHandler->destroy($sessionId);
         }
     }
 
