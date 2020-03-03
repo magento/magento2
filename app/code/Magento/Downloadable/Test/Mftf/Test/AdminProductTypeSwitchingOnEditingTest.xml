@@ -50,7 +50,7 @@
             <!--Delete product-->
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change product type to Downloadable-->
         <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>
