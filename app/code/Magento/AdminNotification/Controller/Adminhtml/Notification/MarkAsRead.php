@@ -40,8 +40,6 @@ class MarkAsRead extends Notification implements HttpGetActionInterface
 
     /**
      * @inheritdoc
-     *
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
