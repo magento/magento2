@@ -195,4 +195,3 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block->setAttributeData($attributeData);
     }
 }
-
