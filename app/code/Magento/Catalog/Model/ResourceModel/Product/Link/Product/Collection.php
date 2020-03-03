@@ -239,7 +239,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $products = [$products];
             }
             $this->_hasLinkFilter = true;
-            $this->getSelect()->where('links.linked_product_id NOT IN (?)', $products);
+            $this->getSelect()->where('links.linked_product_id NOT IN (?)', $products, \Zend_Db::BIGINT_TYPE);
         }
         return $this;
     }
@@ -257,7 +257,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $products = [$products];
             }
             $identifierField = $this->getLinkField();
-            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
+            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products, \Zend_Db::BIGINT_TYPE);
             $this->_hasLinkFilter = true;
         }
 
@@ -319,10 +319,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $linkField = $this->getLinkField();
         if ($this->productIds) {
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id in (?)', $this->productIds);
+                $this->getSelect()->where('links.product_id in (?)', $this->productIds, \Zend_Db::BIGINT_TYPE);
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $connection->quoteInto('links.product_id in (?)', $this->productIds);
+                $joinCondition[] = $connection->quoteInto('links.product_id in (?)', $this->productIds, \Zend_Db::BIGINT_TYPE);
             }
             if (count($this->productIds) === 1) {
                 $this->addFieldToFilter(

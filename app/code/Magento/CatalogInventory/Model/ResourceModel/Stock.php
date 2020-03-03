@@ -127,12 +127,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
         $itemTable = $this->getTable('cataloginventory_stock_item');
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
             ->where('website_id = ?', $websiteId)
-            ->where('product_id IN(?)', $productIds)
+            ->where('product_id IN(?)', $productIds, \Zend_Db::BIGINT_TYPE)
             ->forUpdate(true);
 
         $productTable = $this->getTable('catalog_product_entity');
         $selectProducts = $this->getConnection()->select()->from(['p' => $productTable], [])
-            ->where('entity_id IN (?)', $productIds)
+            ->where('entity_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE)
             ->columns(
                 [
                     'product_id' => 'entity_id',
@@ -147,7 +147,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
         foreach ($this->getConnection()->fetchAll($selectProducts) as $p) {
             $items[$p['product_id']]['type_id'] = $p['type_id'];
         }
-        
+
         return $items;
     }
 

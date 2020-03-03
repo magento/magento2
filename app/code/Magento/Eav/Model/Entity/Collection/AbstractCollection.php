@@ -1238,10 +1238,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 ['t_d.attribute_id']
             )->where(
                 " e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::BIGINT_TYPE
             )->where(
                 't_d.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::BIGINT_TYPE
             );
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {

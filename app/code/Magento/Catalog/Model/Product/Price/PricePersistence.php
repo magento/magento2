@@ -97,7 +97,7 @@ class PricePersistence
             ->select()
             ->from($this->attributeResource->getTable($this->table));
         return $this->attributeResource->getConnection()->fetchAll(
-            $select->where($this->getEntityLinkField() . ' IN (?)', $ids)
+            $select->where($this->getEntityLinkField() . ' IN (?)', $ids, \Zend_Db::BIGINT_TYPE)
                 ->where('attribute_id = ?', $this->getAttributeId())
         );
     }

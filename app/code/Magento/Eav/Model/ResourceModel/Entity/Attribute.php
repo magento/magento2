@@ -769,7 +769,8 @@ class Attribute extends AbstractDb
             ['attribute_id']
         )->where(
             'attribute_id IN (?)',
-            $attributeIds
+            $attributeIds,
+            \Zend_Db::BIGINT_TYPE
         );
 
         return $connection->fetchCol($select);

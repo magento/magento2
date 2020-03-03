@@ -119,7 +119,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
             "entity_id IN (?)",
-            $ids
+            $ids,
+            \Zend_Db::BIGINT_TYPE
         );
 
         $resultIds = [];

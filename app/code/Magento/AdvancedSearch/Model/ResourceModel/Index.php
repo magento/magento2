@@ -108,7 +108,7 @@ class Index extends AbstractDb
                     ['entity_id', 'customer_group_id', 'website_id', 'min_price']
                 );
                 if ($productIds) {
-                    $select->where('entity_id IN (?)', $productIds);
+                    $select->where('entity_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE);
                 }
                 $catalogProductIndexPriceSelect[] = $select;
             }
@@ -177,7 +177,7 @@ class Index extends AbstractDb
         );
 
         if ($productIds) {
-            $select->where('product_id IN (?)', $productIds);
+            $select->where('product_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE);
         }
 
         $result = [];

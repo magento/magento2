@@ -222,7 +222,7 @@ class Configurable implements DimensionalIndexerInterface
             ['le.entity_id', 'customer_group_id', 'website_id']
         );
         if ($entityIds !== null) {
-            $select->where('le.entity_id IN (?)', $entityIds);
+            $select->where('le.entity_id IN (?)', $entityIds, \Zend_Db::BIGINT_TYPE);
         }
         $query = $select->insertFromSelect($temporaryOptionsTableName);
         $this->getConnection()->query($query);

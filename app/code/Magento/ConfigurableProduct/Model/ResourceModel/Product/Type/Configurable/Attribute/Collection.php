@@ -285,7 +285,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 ['use_default' => $useDefaultCheck, 'label' => $labelCheck]
             )->where(
                 'def.product_super_attribute_id IN (?)',
-                array_keys($this->_items)
+                array_keys($this->_items),
+                \Zend_Db::BIGINT_TYPE
             )->where(
                 'def.store_id = ?',
                 0

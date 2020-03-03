@@ -321,7 +321,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
             $select = $connection->select()->from($attributeTable, [$linkField, 'value'])
-                ->where("{$linkField} IN (?)", $productIds)
+                ->where("{$linkField} IN (?)", $productIds, \Zend_Db::BIGINT_TYPE)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
                 ->where('store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
 

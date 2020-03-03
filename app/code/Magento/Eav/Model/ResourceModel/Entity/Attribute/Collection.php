@@ -221,7 +221,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 )
                 ->where(
                     'entity_attribute.attribute_set_id IN (?)',
-                    $setIds
+                    $setIds,
+                    \Zend_Db::BIGINT_TYPE
                 )
                 ->group('entity_attribute.attribute_id')
                 ->having(new \Zend_Db_Expr('COUNT(*)') . ' = ' . count($setIds));
@@ -394,7 +395,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     ['group_sort_order' => 'sort_order']
                 )->where(
                     'attribute_id IN (?)',
-                    $attributeIds
+                    $attributeIds,
+                    \Zend_Db::BIGINT_TYPE
                 );
                 $result = $connection->fetchAll($select);
 

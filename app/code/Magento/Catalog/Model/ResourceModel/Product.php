@@ -232,7 +232,8 @@ class Product extends AbstractResource
             ['product_id', 'website_id']
         )->where(
             'product_id IN (?)',
-            $productIds
+            $productIds,
+            \Zend_Db::BIGINT_TYPE
         );
         $productsWebsites = [];
         foreach ($this->getConnection()->fetchAll($select) as $productInfo) {
@@ -357,7 +358,7 @@ class Product extends AbstractResource
         $entityId = $product->getData($entityIdField);
         foreach ($backendTables as $backendTable => $attributes) {
             $connection = $this->getConnection();
-            $where = $connection->quoteInto('attribute_id IN (?)', $attributes);
+            $where = $connection->quoteInto('attribute_id IN (?)', $attributes, \Zend_Db::BIGINT_TYPE);
             $where .= $connection->quoteInto(" AND {$entityIdField} = ?", $entityId);
             $connection->delete($backendTable, $where);
         }
@@ -594,7 +595,8 @@ class Product extends AbstractResource
             ['entity_id', 'sku']
         )->where(
             'entity_id IN (?)',
-            $productIds
+            $productIds,
+            \Zend_Db::BIGINT_TYPE
         );
         return $this->getConnection()->fetchAll($select);
     }

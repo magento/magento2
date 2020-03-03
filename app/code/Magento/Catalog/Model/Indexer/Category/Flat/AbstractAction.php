@@ -414,7 +414,8 @@ class AbstractAction
             [$linkField]
         )->where(
             'e.entity_id IN (?)',
-            $entityIds
+            $entityIds,
+            \Zend_Db::BIGINT_TYPE
         );
 
         return $this->connection->fetchCol($select);
@@ -459,10 +460,12 @@ class AbstractAction
             ]
         )->where(
             "e.entity_id IN (?)",
-            $entityIds
+            $entityIds,
+            \Zend_Db::BIGINT_TYPE
         )->where(
             'def.store_id IN (?)',
-            [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId]
+            [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId],
+            \Zend_Db::BIGINT_TYPE
         );
 
         return $this->connection->fetchAll($select);

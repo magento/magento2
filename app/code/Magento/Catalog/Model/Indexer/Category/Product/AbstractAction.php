@@ -502,10 +502,11 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['cc2' => $temporaryTreeTable],
-            'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
-                ',',
-                $rootCatIds
-            ) . ')',
+            $this->connection->quoteInto(
+                'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN ()',
+                $rootCatIds,
+                \Zend_Db::BIGINT_TYPE
+            ),
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],

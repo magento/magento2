@@ -340,7 +340,9 @@ class FlatTableBuilder
                             [$attributeCode => 't.value']
                         );
                     if (!empty($changedIds)) {
-                        $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
+                        $select->where(
+                            $this->_connection->quoteInto('et.entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE)
+                        );
                     }
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
@@ -363,7 +365,9 @@ class FlatTableBuilder
                         [$columnName => $columnValue]
                     )->where($columnValue . ' IS NOT NULL');
                     if (!empty($changedIds)) {
-                        $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
+                        $select->where(
+                            $this->_connection->quoteInto('et.entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE))
+                        ;
                     }
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);

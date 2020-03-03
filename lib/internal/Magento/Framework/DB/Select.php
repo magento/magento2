@@ -113,7 +113,7 @@ class Select extends \Zend_Db_Select
             $type = null;
         }
         if (is_array($value)) {
-            $cond = $this->getConnection()->quoteInto($cond, $value);
+            $cond = $this->getConnection()->quoteInto($cond, $value, $type);
             $value = null;
         }
         return parent::where($cond, $value, $type);
