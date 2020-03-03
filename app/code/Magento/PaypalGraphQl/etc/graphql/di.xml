@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\QuoteGraphQl\Model\Resolver\SetPaymentMethodOnCart">
+        <plugin name="paypal_express_payment_method" type="Magento\PaypalGraphQl\Model\Plugin\Resolver\SetPaymentMethodOnCart"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart">
+        <plugin name="hosted_pro_payment_method" type="Magento\PaypalGraphQl\Model\Plugin\Cart\HostedPro\SetPaymentMethodOnCart"/>
+    </type>
+    <type name="Magento\Paypal\Model\Payflowlink">
+        <plugin name="payflow_link_update_redirect_urls" type="Magento\PaypalGraphQl\Model\Plugin\Payflowlink"/>
+    </type>
+
+    <type name="Magento\PaypalGraphQl\Model\Plugin\Resolver\SetPaymentMethodOnCart">
+        <arguments>
+            <argument name="allowedPaymentMethodCodes" xsi:type="array">
+                <item name="paypal_express" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</item>
+                <item name="payflow_express" xsi:type="const">\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\PaypalGraphQl\Model\Provider\Checkout">
+        <arguments>
+            <argument name="checkoutTypes" xsi:type="array">
+                <item name="paypal_express" xsi:type="string">\Magento\Paypal\Model\Express\Checkout</item>
+                <item name="payflow_express" xsi:type="string">\Magento\Paypal\Model\PayflowExpress\Checkout</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\PaypalGraphQl\Model\Provider\Config">
+        <arguments>
+            <argument name="configTypes" xsi:type="array">
+                <item name="paypal_express" xsi:type="string">\Magento\Paypal\Model\Config</item>
+                <item name="payflow_express" xsi:type="string">\Magento\Paypal\Model\Config</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="payflow_link" xsi:type="object">Magento\PaypalGraphQl\Model\PayflowLinkAdditionalDataProvider</item>
+                <item name="payflow_advanced" xsi:type="object">Magento\PaypalGraphQl\Model\PayflowLinkAdditionalDataProvider</item>
+                <item name="payflowpro" xsi:type="object">\Magento\PaypalGraphQl\Model\PayflowProAdditionalDataProvider</item>
+                <item name="hosted_pro" xsi:type="object">\Magento\PaypalGraphQl\Model\HostedProAdditionalDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

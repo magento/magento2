@@ -9,9 +9,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="DefaultConfigForUPSTypeTest">
         <annotations>
-            <title value="Default Configuration for UPS Type"/>
-            <description value="Default Configuration for UPS Type"/>
             <features value="Ups"/>
+            <stories value="UPS configuration"/>
+            <title value="Default Configuration for UPS Type"/>
+            <stories value="UPS"/>
+            <description value="Default Configuration for UPS Type"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-99012"/>
             <useCaseId value="MAGETWO-98947"/>
@@ -24,7 +26,7 @@
             <!--Collapse UPS tab and logout-->
             <comment userInput="Collapse UPS tab and logout" stepKey="collapseTabAndLogout"/>
             <click selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" stepKey="collapseTab"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Set shipping methods UPS type to default -->
         <comment userInput="Set shipping methods UPS type to default" stepKey="setToDefaultShippingMethodsUpsType"/>

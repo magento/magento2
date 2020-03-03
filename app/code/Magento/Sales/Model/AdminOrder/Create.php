@@ -29,11 +29,6 @@ use Psr\Log\LoggerInterface;
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
-     * Xml default email domain path
-     */
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
-
-    /**
      * Quote session object
      *
      * @var \Magento\Backend\Model\Session\Quote
@@ -398,6 +393,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function initRuleData()
     {
+        $this->_coreRegistry->unregister('rule_data');
         $this->_coreRegistry->register(
             'rule_data',
             new \Magento\Framework\DataObject(
@@ -415,7 +411,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Set collect totals flag for quote
      *
-     * @param   bool $flag
+     * @param bool $flag
+     *
      * @return $this
      */
     public function setRecollect($flag)
@@ -514,6 +511,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         /* Check if we edit guest order */
         $session->setCustomerId($order->getCustomerId() ?: false);
         $session->setStoreId($order->getStoreId());
+        if ($session->getData('reordered')) {
+            $this->getQuote()->setCustomerGroupId($order->getCustomerGroupId());
+        }
 
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
@@ -771,7 +771,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function getCustomerGroupId()
     {
         $groupId = $this->getQuote()->getCustomerGroupId();
-        if (!$groupId) {
+        if (!isset($groupId)) {
             $groupId = $this->getSession()->getCustomerGroupId();
         }
 
@@ -1790,7 +1790,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setWebsiteId($store->getWebsiteId())
                 ->setCreatedAt(null);
             $customer = $this->_validateCustomerData($customer);
-        } else if (!$customer->getId()) {
+        } elseif (!$customer->getId()) {
             /** Create new customer */
             $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
             $customer->setSuffix($customerBillingAddressDataObject->getSuffix())
@@ -1862,6 +1862,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } elseif ($addressType == \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_SHIPPING) {
             try {
                 $billingAddressDataObject = $this->accountManagement->getDefaultBillingAddress($customer->getId());
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
                 /** Billing address does not exist. */
             }
@@ -1984,6 +1985,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_errors = array_merge($this->_errors, $messages);
             }
         }

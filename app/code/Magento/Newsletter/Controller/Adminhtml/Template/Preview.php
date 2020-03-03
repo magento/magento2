@@ -6,12 +6,14 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Newsletter\Controller\Adminhtml\Template;
 
 /**
  * View a rendered template.
  */
-class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpGetActionInterface
+class Preview extends Template implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * Preview Newsletter template
@@ -25,7 +27,7 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template implemen
         $data = $this->getRequest()->getParams();
         $isEmptyRequestData = empty($data) || !isset($data['id']);
         $isEmptyPreviewData = !$this->_getSession()->hasPreviewData() || empty($this->_getSession()->getPreviewData());
-        
+
         if ($isEmptyRequestData && $isEmptyPreviewData) {
             $this->_forward('noroute');
             return $this;

@@ -11,6 +11,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Abstract element.
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -101,7 +103,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function getId()
     {
-        return isset($this->_data['id']) ? $this->_data['id'] : '';
+        return $this->_data['id'] ?? '';
     }
 
     /**
@@ -131,7 +133,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function getFrontendModel()
     {
-        return isset($this->_data['frontend_model']) ? $this->_data['frontend_model'] : '';
+        return $this->_data['frontend_model'] ?? '';
     }
 
     /**
@@ -192,7 +194,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function getClass()
     {
-        return isset($this->_data['class']) ? $this->_data['class'] : '';
+        return $this->_data['class'] ?? '';
     }
 
     /**

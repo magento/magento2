@@ -3,29 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php $_childHtml = trim($block->getChildHtml('', false)); ?>
-<?php if ($_childHtml): ?>
-<?php $_item = $block->getItem() ?>
-<tr>
-    <td colspan="10" class="last">
-        <a class="action-link" href="#" id="gift_options_link_<?= /* @escapeNotVerified */ $_item->getId() ?>"><?= /* @escapeNotVerified */ __('Gift Options') ?></a>
-        <script>
-require([
-	"Magento_Sales/order/giftoptions_tooltip"
-], function(){
-
-	giftOptionsTooltip.addTargetLink('gift_options_link_<?= /* @escapeNotVerified */ $_item->getId() ?>', <?= /* @escapeNotVerified */ $_item->getId() ?>);
-
-});
-</script>
-        <div id="gift_options_data_<?= /* @escapeNotVerified */ $_item->getId() ?>">
-            <?= /* @escapeNotVerified */ $_childHtml ?>
-        </div>
-    </td>
-</tr>
+<?php if ($_childHtml) : ?>
+    <?php $_item = $block->getItem() ?>
+    <tr>
+        <td colspan="10" class="last">
+            <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>">
+                <?= $block->escapeHtml(__('Gift Options')) ?>
+            </a>
+            <script>
+    require([
+        "Magento_Sales/order/giftoptions_tooltip"
+    ], function(){
+        giftOptionsTooltip.addTargetLink(
+            'gift_options_link_<?= (int) ($_item->getId()) ?>',
+            <?= (int) $_item->getId() ?>
+        );
+    });
+    </script>
+            <div id="gift_options_data_<?= (int) $_item->getId() ?>">
+                <?= /* @noEscape */ $_childHtml ?>
+            </div>
+        </td>
+    </tr>
 <?php endif ?>

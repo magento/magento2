@@ -31,11 +31,11 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getConfiguredAmount(): \Magento\Framework\Pricing\Amount\AmountInterface
     {
-        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
-        $customOption = $this->getProduct()->getCustomOption('simple_product');
-        $product = $customOption ? $customOption->getProduct() : $this->getProduct();
-
-        return $product->getPriceInfo()->getPrice(ConfiguredPriceInterface::CONFIGURED_PRICE_CODE)->getAmount();
+        return $this
+            ->getProduct()
+            ->getPriceInfo()
+            ->getPrice(ConfiguredPriceInterface::CONFIGURED_PRICE_CODE)
+            ->getAmount();
     }
 
     /**
@@ -45,11 +45,11 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getConfiguredRegularAmount(): \Magento\Framework\Pricing\Amount\AmountInterface
     {
-        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
-        $customOption = $this->getProduct()->getCustomOption('simple_product');
-        $product = $customOption ? $customOption->getProduct() : $this->getProduct();
-
-        return $product->getPriceInfo()->getPrice(ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE)->getAmount();
+        return $this
+            ->getProduct()
+            ->getPriceInfo()
+            ->getPrice(ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE)
+            ->getAmount();
     }
 
     /**
@@ -57,10 +57,7 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getValue()
     {
-        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
-        $customOption = $this->getProduct()->getCustomOption('simple_product');
-        $product = $customOption ? $customOption->getProduct() : $this->getProduct();
-        $price = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
+        $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
 
         return max(0, $price);
     }
@@ -72,5 +69,18 @@ class ConfigurableProduct extends AbstractPrice
     {
         $this->item = $item;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProduct()
+    {
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = parent::getProduct();
+        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
+        $customOption = $product->getCustomOption('simple_product');
+
+        return $customOption ? ($customOption->getProduct() ?? $product) : $product;
     }
 }

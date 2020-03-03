@@ -49,27 +49,24 @@ class Builder
     /**
      * @var Sort
      */
-    protected $sortBuilder;
+    private $sortBuilder;
 
     /**
      * @param Config $clientConfig
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param AggregationBuilder $aggregationBuilder
      * @param ScopeResolverInterface $scopeResolver
-     * @param Sort|null $sortBuilder
      */
     public function __construct(
         Config $clientConfig,
         SearchIndexNameResolver $searchIndexNameResolver,
         AggregationBuilder $aggregationBuilder,
-        ScopeResolverInterface $scopeResolver,
-        Sort $sortBuilder = null
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->clientConfig = $clientConfig;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->aggregationBuilder = $aggregationBuilder;
         $this->scopeResolver = $scopeResolver;
-        $this->sortBuilder = $sortBuilder ?: ObjectManager::getInstance()->get(Sort::class);
     }
 
     /**
@@ -91,7 +88,7 @@ class Builder
                 'from' => $request->getFrom(),
                 'size' => $request->getSize(),
                 'stored_fields' => ['_id', '_score'],
-                'sort' => $this->sortBuilder->getSort($request),
+                'sort' => $this->getSortBuilder()->getSort($request),
                 'query' => [],
             ],
         ];
@@ -111,5 +108,18 @@ class Builder
         array $searchQuery
     ) {
         return $this->aggregationBuilder->build($request, $searchQuery);
+    }
+
+    /**
+     * Get sort builder instance.
+     *
+     * @return Sort
+     */
+    private function getSortBuilder()
+    {
+        if (null === $this->sortBuilder) {
+            $this->sortBuilder = ObjectManager::getInstance()->get(Sort::class);
+        }
+        return $this->sortBuilder;
     }
 }

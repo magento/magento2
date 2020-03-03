@@ -29,7 +29,6 @@ class RequireJs extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Data\Form\FormKey $formKey,
         array $data = []
     ) {
-        $this->formKey = $formKey;
         parent::__construct(
             $context,
             $data

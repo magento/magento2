@@ -61,8 +61,13 @@ class Client
             'operationName' => !empty($operationName) ? $operationName : null
         ];
         $postData = $this->json->jsonEncode($requestArray);
+        try {
+            $responseBody = $this->curlClient->post($url, $postData, $headers);
+        } catch (\Exception $e) {
+            // if response code > 400 then response is the exception message
+            $responseBody = $e->getMessage();
+        }
 
-        $responseBody = $this->curlClient->post($url, $postData, $headers);
         return $this->processResponse($responseBody);
     }
 
@@ -86,7 +91,12 @@ class Client
         ];
         array_filter($requestArray);
 
-        $responseBody = $this->curlClient->get($url, $requestArray, $headers);
+        try {
+            $responseBody = $this->curlClient->get($url, $requestArray, $headers);
+        } catch (\Exception $e) {
+            // if response code > 400 then response is the exception message
+            $responseBody = $e->getMessage();
+        }
         return $this->processResponse($responseBody);
     }
 
@@ -114,6 +124,36 @@ class Client
         }
 
         return $responseArray['data'];
+    }
+
+    /**
+     * Perform HTTP GET request, return response data and headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function getWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        $url = $this->getEndpointUrl();
+        $requestArray = [
+            'query' => $query,
+            'variables' => $variables ? $this->json->jsonEncode($variables) : null,
+            'operationName' => !empty($operationName) ? $operationName : null
+        ];
+        array_filter($requestArray);
+
+        $response = $this->curlClient->getWithFullResponse($url, $requestArray, $headers);
+        $responseBody = $this->processResponse($response['body']);
+        $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+
+        return ['headers' => $responseHeaders, 'body' => $responseBody];
     }
 
     /**
@@ -159,5 +199,28 @@ class Client
     public function getEndpointUrl()
     {
         return rtrim(TESTS_BASE_URL, '/') . '/graphql';
+    }
+
+    /**
+     * Parse response headers into associative array
+     *
+     * @param string $headers
+     * @return array
+     */
+    private function processResponseHeaders(string $headers): array
+    {
+        $headersArray = [];
+
+        $headerLines = preg_split('/((\r?\n)|(\r\n?))/', $headers);
+        foreach ($headerLines as $headerLine) {
+            $headerParts = preg_split('/:/', $headerLine);
+            if (count($headerParts) == 2) {
+                $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
+            } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {
+                $headersArray[trim('Status-Line')] = trim($headerLine);
+            }
+        }
+
+        return $headersArray;
     }
 }

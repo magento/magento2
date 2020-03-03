@@ -11,7 +11,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Customer\Api\Data\CustomerInterface;
 
@@ -39,7 +38,6 @@ class SaveCustomer
      *
      * @param CustomerInterface $customer
      * @throws GraphQlAlreadyExistsException
-     * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
      */
     public function execute(CustomerInterface $customer): void

@@ -22,7 +22,7 @@
             <createData entity="NewRootCategory" stepKey="rootCategory" />
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Verify Created root Category-->

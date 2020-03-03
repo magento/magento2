@@ -13,6 +13,9 @@ use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 
+/**
+ * @inheritDoc
+ */
 class AfterAddressSave implements ObserverInterface
 {
     /**
@@ -60,6 +63,8 @@ class AfterAddressSave implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

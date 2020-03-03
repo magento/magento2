@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\MoveRecentlyViewedProductsOnOrderPageTest" summary="Add Products to Order from Recently Viewed Products Section" ticketId="MAGETWO-29723">
         <variation name="MoveRecentlyViewedProductsOnOrderPageTestVariation1">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">configurableProduct::default</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
         <variation name="MoveRecentlyViewedProductsOnOrderPageTestVariation2">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>

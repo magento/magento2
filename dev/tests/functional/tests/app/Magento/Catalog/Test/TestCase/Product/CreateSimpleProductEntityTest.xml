@@ -182,6 +182,8 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation10" summary="Create in stock product and check threshold" ticketId="MAGETWO-43345">
+            <data name="issue" xsi:type="string">https://github.com/magento-engcom/msi/issues/1620</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="configData" xsi:type="string">inventory_threshold_5</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>

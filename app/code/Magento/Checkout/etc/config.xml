@@ -11,6 +11,7 @@
             <options>
                 <onepage_checkout_enabled>1</onepage_checkout_enabled>
                 <guest_checkout>1</guest_checkout>
+                <display_billing_address_on>0</display_billing_address_on>
                 <max_items_display_count>10</max_items_display_count>
             </options>
             <cart>
@@ -33,5 +34,21 @@
                 <template>checkout_payment_failed_template</template>
             </payment_failed>
         </checkout>
+        <captcha>
+            <frontend>
+                <areas>
+                    <sales_rule_coupon_request>
+                        <label>Applying coupon code</label>
+                    </sales_rule_coupon_request>
+                </areas>
+            </frontend>
+        </captcha>
+        <customer>
+            <captcha>
+                <shown_to_logged_in_user>
+                    <sales_rule_coupon_request>1</sales_rule_coupon_request>
+                </shown_to_logged_in_user>
+            </captcha>
+        </customer>
     </default>
 </config>
