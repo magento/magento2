@@ -43,7 +43,7 @@ class CollectionTimeLabel extends Field
      *
      * @return string
      */
-    public function render(AbstractElement $element)
+    public function render(AbstractElement $element): string
     {
         $timeZoneCode = $this->_localeDate->getConfigTimezone();
         $locale = $this->localeResolver->getLocale();
