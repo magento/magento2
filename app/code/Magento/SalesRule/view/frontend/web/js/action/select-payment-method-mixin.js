@@ -16,7 +16,7 @@ define([
     return function (selectPaymentMethodAction) {
 
         return wrapper.wrap(selectPaymentMethodAction, function (originalSelectPaymentMethodAction, paymentMethod) {
-            if(paymentMethod != null) {
+            if (paymentMethod != null) {
                 originalSelectPaymentMethodAction(paymentMethod);
                 $.when(
                     setPaymentInformationAction(
