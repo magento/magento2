@@ -24,6 +24,9 @@ class ShareTest extends TestCase
     /** @var Share */
     private $share;
 
+    /** @var WebsiteRepositoryInterface */
+    private $website;
+
     /**
      * @inheritdoc
      */
@@ -33,6 +36,7 @@ class ShareTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->share = $this->objectManager->get(Share::class);
+        $this->website = $this->objectManager->create(WebsiteRepositoryInterface::class);
     }
 
     /**
@@ -52,10 +56,9 @@ class ShareTest extends TestCase
      */
     public function testGetSharedWebsiteIdsMultipleSites(): void
     {
-        $website = $this->objectManager->create(WebsiteRepositoryInterface::class);
-        $expectedIds[] = $website->get('base')->getId();
-        $expectedIds[] = $website->get('secondwebsite')->getId();
-        $expectedIds[] = $website->get('thirdwebsite')->getId();
+        $expectedIds[] = $this->website->get('base')->getId();
+        $expectedIds[] = $this->website->get('secondwebsite')->getId();
+        $expectedIds[] = $this->website->get('thirdwebsite')->getId();
         $websiteIds = $this->share->getSharedWebsiteIds(42);
         $this->assertEquals($expectedIds, $websiteIds);
     }
@@ -68,11 +71,12 @@ class ShareTest extends TestCase
      *
      * @return void
      */
-    public function testShare(): void
+    public function testEnableGlobalAccountShareScope(): void
     {
         $message = 'We can\'t share customer accounts globally when the accounts share'
             . ' identical email addresses on more than one website.';
         $this->expectExceptionObject(new LocalizedException(__($message)));
-        $this->share->setPath(Share::XML_PATH_CUSTOMER_ACCOUNT_SHARE)->setValue(Share::SHARE_GLOBAL)->save();
+        $this->share->setPath(Share::XML_PATH_CUSTOMER_ACCOUNT_SHARE)->setValue((string)Share::SHARE_GLOBAL)
+            ->beforeSave();
     }
 }

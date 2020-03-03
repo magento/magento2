@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\CustomerFactory;
+use Magento\Customer\Model\GroupManagement;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -20,13 +22,14 @@ $accountManagment = $objectManager->get(AccountManagementInterface::class);
 $customerFactory = $objectManager->get(CustomerFactory::class);
 /** @var AttributeRepository $attributeRepository */
 $attributeRepository = $objectManager->get(AttributeRepository::class);
-$gender = $attributeRepository->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'gender')
+$gender = $attributeRepository->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, CustomerInterface::GENDER)
     ->getSource()->getOptionId('Male');
+$defaultGroupId = $objectManager->get(GroupManagement::class)->getDefaultGroup($store->getStoreId())->getId();
 
 $customer = $customerFactory->create();
 $customer->setWebsiteId($websiteId)
     ->setEmail('customer@example.com')
-    ->setGroupId(1)
+    ->setGroupId($defaultGroupId)
     ->setStoreId($store->getStoreId())
     ->setFirstname('John')
     ->setLastname('Smith')

@@ -7,14 +7,11 @@ declare(strict_types=1);
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../../Magento/Store/_files/second_website_with_two_stores_rollback.php';
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var Registry $registry */
-$registry = $objectManager->get(Registry::class);
 /** @var CustomerRepositoryInterface $customerRepository */
 $customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
 $registry->unregister('isSecureArea');

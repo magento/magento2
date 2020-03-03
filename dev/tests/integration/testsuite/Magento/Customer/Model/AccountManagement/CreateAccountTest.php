@@ -17,7 +17,7 @@ use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception;
-use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -51,7 +51,7 @@ class CreateAccountTest extends TestCase
     private $dataObjectHelper;
 
     /**
-     * @var StoreManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -73,7 +73,7 @@ class CreateAccountTest extends TestCase
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->customerFactory = $this->objectManager->get(CustomerInterfaceFactory::class);
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
-        $this->storeManager = $this->objectManager->get(StoreManager::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         parent::setUp();
     }
 

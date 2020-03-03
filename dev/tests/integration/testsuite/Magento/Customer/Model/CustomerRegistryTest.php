@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -31,9 +32,14 @@ class CustomerRegistryTest extends TestCase
     private $model;
 
     /**
-     * @var StoreManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var CustomerResourceModel
+     */
+    private $customerResourceModel;
 
     /**
      * @var int
@@ -49,7 +55,8 @@ class CustomerRegistryTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(CustomerRegistry::class);
-        $this->storeManager = $this->objectManager->get(StoreManager::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->customerResourceModel = $this->objectManager->get(CustomerResourceModel::class);
         $this->defaultWebsiteId = $this->storeManager->getWebsite('base')->getWebsiteId();
     }
 
@@ -88,9 +95,8 @@ class CustomerRegistryTest extends TestCase
     {
         $customerId = 1;
         $customerBeforeDeletion = $this->model->retrieve($customerId);
-        $this->objectManager->get(
-            Customer::class
-        )->load($customerId)->delete();
+        $this->customerResourceModel->load($customerBeforeDeletion, $customerBeforeDeletion->getId());
+        $this->customerResourceModel->delete($customerBeforeDeletion);
         $this->assertEquals($customerBeforeDeletion, $this->model->retrieve($customerId));
         $this->assertEquals($customerBeforeDeletion, $this->model
             ->retrieveByEmail('customer@example.com', $this->defaultWebsiteId));
@@ -113,18 +119,9 @@ class CustomerRegistryTest extends TestCase
     public function testRetrieveEmailException(): void
     {
         $email = 'customer@example.com';
-        try {
-            $this->model->retrieveByEmail($email, $this->defaultWebsiteId);
-            $this->fail("NoSuchEntityException was not thrown as expected.");
-        } catch (NoSuchEntityException $e) {
-            $expectedParams = [
-                'fieldName' => 'email',
-                'fieldValue' => $email,
-                'field2Name' => 'websiteId',
-                'field2Value' => 1,
-            ];
-            $this->assertEquals($expectedParams, $e->getParameters());
-        }
+        $message = sprintf('No such entity with email = %s, websiteId = %s', $email, $this->defaultWebsiteId);
+        $this->expectExceptionObject(new NoSuchEntityException(__($message)));
+        $this->model->retrieveByEmail($email, $this->defaultWebsiteId);
     }
 
     /**
@@ -138,7 +135,7 @@ class CustomerRegistryTest extends TestCase
         $customerId = 1;
         $customer = $this->model->retrieve($customerId);
         $this->assertInstanceOf(Customer::class, $customer);
-        $customer->delete();
+        $this->customerResourceModel->delete($customer);
         $this->model->remove($customerId);
         $this->expectException(NoSuchEntityException::class);
         $this->model->retrieve($customerId);
@@ -155,7 +152,7 @@ class CustomerRegistryTest extends TestCase
         $email = 'customer@example.com';
         $customer = $this->model->retrieve(1);
         $this->assertInstanceOf(Customer::class, $customer);
-        $customer->delete();
+        $this->customerResourceModel->delete($customer);
         $this->model->removeByEmail($email, $this->defaultWebsiteId);
         $this->expectException(NoSuchEntityException::class);
         $this->model->retrieveByEmail($email, $customer->getWebsiteId());
