@@ -100,8 +100,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'method' => 'getFrontendInput',
-                'value' => 'price',
+                'method' => 'getAttributeCode',
+                'value' => FilterList::PRICE_FILTER,
                 'expectedClass' => 'PriceFilterClass',
             ],
             [
@@ -110,8 +110,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                 'expectedClass' => 'DecimalFilterClass',
             ],
             [
-                'method' => 'getFrontendInput',
-                'value' => 'text',
+                'method' => 'getAttributeCode',
+                'value' => null,
                 'expectedClass' => 'AttributeFilterClass',
             ]
         ];
