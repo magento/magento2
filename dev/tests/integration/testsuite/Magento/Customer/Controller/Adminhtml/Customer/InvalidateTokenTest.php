@@ -10,8 +10,6 @@ namespace Magento\Customer\Controller\Adminhtml\Customer;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -22,9 +20,6 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class InvalidateTokenTest extends AbstractBackendController
 {
-    /** @var ObjectManagerInterface */
-    private $objectManager;
-
     /** @var Escaper */
     private $escaper;
 
@@ -35,8 +30,7 @@ class InvalidateTokenTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->escaper = $this->objectManager->get(Escaper::class);
+        $this->escaper = $this->_objectManager->get(Escaper::class);
     }
 
     /**
