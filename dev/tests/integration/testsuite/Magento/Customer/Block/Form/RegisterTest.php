@@ -145,11 +145,21 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testTelephoneWithStoreLabel(): void
     {
+        /** @var \Magento\Store\Model\StoreManager $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->create(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
+        $websites = $storeManager->getWebsites();
         /** @var \Magento\Customer\Model\Attribute $model */
         $model = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Attribute::class
         );
-        $model->loadByCode('customer_address', 'telephone')->setIsVisible('1')->setStoreLabel('Telephone2');
+        $model->loadByCode('customer_address', 'telephone')->setIsVisible('1');
+        $storeLabels = $model->getStoreLabels();
+        foreach ($websites as $website) {
+            $storeLabels[$website->getId()] = 'Phone NumberX';
+        }
+        $model->setStoreLabels([$storeLabels]);
         $model->save();
 
         /** @var \Magento\Customer\Block\Form\Register $block */
@@ -160,7 +170,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $this->setAttributeDataProvider($block);
 
         $this->assertNotContains('title="Phone&#x20;Number"', $block->toHtml());
-        $this->assertContains('title="Telephone2"', $block->toHtml());
+        $this->assertContains('title="Phone&#x20;NumberX"', $block->toHtml());
     }
 
     /**
@@ -185,3 +195,4 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $block->setAttributeData($attributeData);
     }
 }
+
