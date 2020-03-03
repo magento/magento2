@@ -27,7 +27,7 @@
         <after>
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Admin > Content > Configuration	page -->
         <comment userInput="Go to Configuration Page" stepKey="commentOpenConfigurationPage"/>
