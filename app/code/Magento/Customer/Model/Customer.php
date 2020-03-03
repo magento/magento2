@@ -1003,6 +1003,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getAttributeSetId()
     {
+        // phpstan:ignore "Call to an undefined static method*"
         return parent::getAttributeSetId() ?: CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
     }
 
