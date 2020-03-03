@@ -42,10 +42,9 @@
                 <argument name="price" value="Discount"/>
                 <argument name="amount" value="25"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
 
-            <!-- Run reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>
             <deleteData createDataKey="createBundleProductCreateBundleProduct" stepKey="deleteDynamicBundleProduct"/>
