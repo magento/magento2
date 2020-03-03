@@ -41,17 +41,19 @@ class AttributeTest extends TestCase
      * Check index status after create non searchable attribute.
      *
      * @return void
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      */
     public function testCheckIndexStatusAfterCreateNonSearchableAttribute(): void
     {
-        $this->assertTrue($this->indexerProcessor->getIndexer()->isInvalid());
+        $this->assertTrue($this->indexerProcessor->getIndexer()->isValid());
     }
 
     /**
      * Check index status after create searchable attribute.
      *
      * @return void
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoDataFixture Magento/CatalogSearch/_files/search_attributes.php
      */
     public function testCheckIndexStatusAfterCreateSearchableAttribute(): void
