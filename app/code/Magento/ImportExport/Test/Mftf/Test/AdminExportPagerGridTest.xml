@@ -21,7 +21,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="navigateToExportPage"/>
         <actionGroup ref="AdminAssertVisiblePagerActionGroup" stepKey="seeGridPager"/>
