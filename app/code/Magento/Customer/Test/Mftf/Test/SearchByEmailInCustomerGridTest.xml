@@ -28,7 +28,7 @@
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
