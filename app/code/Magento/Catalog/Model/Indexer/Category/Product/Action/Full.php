@@ -282,7 +282,7 @@ class Full extends AbstractAction
             $this->connection->delete($this->tableMaintainer->getMainTmpTable((int)$store->getId()));
             $entityIds = $this->connection->fetchCol($query);
             $resultSelect = clone $basicSelect;
-            $resultSelect->where($whereCondition, $entityIds);
+            $resultSelect->where($whereCondition, $entityIds, \Zend_Db::BIGINT_TYPE);
             $this->connection->query(
                 $this->connection->insertFromSelect(
                     $resultSelect,
