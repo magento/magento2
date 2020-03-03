@@ -39,6 +39,8 @@ class MassMarkAsRead extends Notification implements HttpPostActionInterface
 
     /**
      * @inheritdoc
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
