@@ -39,7 +39,7 @@
                 <argument name="perPage" value="100"/>
             </actionGroup>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>

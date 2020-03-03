@@ -37,7 +37,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add product to cart -->
