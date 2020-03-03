@@ -12,6 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 
 /**
  * Check catalogsearch_fulltext index status after create product attribute.
@@ -64,17 +65,31 @@ class AttributeTest extends TestCase
     /**
      * Check index status after update non searchable attribute to searchable.
      *
+     * @param string $field
      * @return void
+     * @dataProvider searchableAttributesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      */
-    public function testCheckIndexStatusAfterUpdateNonSearchableAttributeToSearchable(): void
+    public function testCheckIndexStatusAfterUpdateNonSearchableAttributeToSearchable(string $field): void
     {
         $this->indexerProcessor->reindexAll();
         $this->assertTrue($this->indexerProcessor->getIndexer()->isValid());
         $this->attribute->loadByCode(Product::ENTITY, 'dropdown_attribute');
         $this->assertFalse($this->attribute->isObjectNew());
-        $this->attribute->setIsSearchable(true)->save();
+        $this->attribute->setData($field, true)->save();
         $this->assertTrue($this->indexerProcessor->getIndexer()->isInvalid());
+    }
+
+    /**
+     * @return array
+     */
+    public function searchableAttributesDataProvider(): array
+    {
+        return [
+            [EavAttributeInterface::IS_SEARCHABLE],
+            [EavAttributeInterface::IS_FILTERABLE],
+            [EavAttributeInterface::IS_VISIBLE_IN_ADVANCED_SEARCH]
+        ];
     }
 
     /**
