@@ -139,6 +139,31 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testTelephoneWithStoreLabel(): void
+    {
+        /** @var \Magento\Customer\Model\Attribute $model */
+        $model = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Attribute::class
+        );
+        $model->loadByCode('customer_address', 'telephone')->setIsVisible('1')->setStoreLabel('Telephone2');
+        $model->save();
+
+        /** @var \Magento\Customer\Block\Form\Register $block */
+        $block = Bootstrap::getObjectManager()->create(
+            Register::class
+        )->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
+        $this->setAttributeDataProvider($block);
+
+        $this->assertNotContains('title="Phone&#x20;Number"', $block->toHtml());
+        $this->assertContains('title="Telephone2"', $block->toHtml());
+    }
+
+    /**
      * @inheritdoc
      */
     protected function tearDown()
