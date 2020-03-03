@@ -139,7 +139,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['delete', 'getDriver', 'create', 'getRelativePath', 'isExist', 'isFile']
+            ['delete', 'getDriver', 'create', 'getRelativePath', 'getAbsolutePath', 'isExist', 'isFile']
         );
         $this->directoryMock->expects(
             $this->any()
@@ -283,6 +283,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testDeleteDirectoryOverRoot()
     {
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
+        $this->directoryMock->expects($this->atLeastOnce())->method('getAbsolutePath')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
@@ -294,6 +295,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testDeleteRootDirectory()
     {
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
+        $this->directoryMock->expects($this->atLeastOnce())->method('getAbsolutePath')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 

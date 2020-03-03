@@ -984,7 +984,7 @@ class File implements DriverInterface
         );
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
         if (end($pathParts) == '.') {
-            $pathParts[count($pathParts)] = '';
+            $pathParts[count($pathParts) - 1] = '';
         }
         $realPath = [];
         foreach ($pathParts as $pathPart) {
