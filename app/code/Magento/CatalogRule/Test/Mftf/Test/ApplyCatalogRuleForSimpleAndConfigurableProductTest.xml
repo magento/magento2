@@ -87,7 +87,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Delete products and category -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
