@@ -11,6 +11,7 @@ use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Test for getting cart information
@@ -22,20 +23,32 @@ class GetCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
+     * Get cart without errors
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
+     * @return void
      */
-    public function testGetCart()
+    public function testGetCart(): void
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
@@ -45,8 +58,11 @@ class GetCartTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('items', $response['cart']);
         self::assertArrayHasKey('id', $response['cart']);
+        self::assertArrayHasKey('errors', $response['cart']);
         self::assertEquals($maskedQuoteId, $response['cart']['id']);
         self::assertCount(2, $response['cart']['items']);
+
+        self::assertEmpty($response['cart']['errors']);
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
         self::assertEquals(2, $response['cart']['items'][0]['quantity']);
@@ -55,6 +71,40 @@ class GetCartTest extends GraphQlAbstract
         self::assertNotEmpty($response['cart']['items'][1]['id']);
         self::assertEquals(2, $response['cart']['items'][1]['quantity']);
         self::assertEquals('virtual-product', $response['cart']['items'][1]['product']['sku']);
+    }
+
+    /**
+     * Get cart with errors
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @return void
+     */
+    public function testGetCartErrors(): void
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $product = $this->productRepository->get('simple_product');
+        $product->setStockData(['is_in_stock' => 0]);
+        $this->productRepository->save($product);
+
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+        self::assertArrayHasKey('id', $response['cart']);
+        self::assertArrayHasKey('errors', $response['cart']);
+        self::assertEquals($maskedQuoteId, $response['cart']['id']);
+        self::assertCount(1, $response['cart']['items']);
+        self::assertCount(1, $response['cart']['errors']);
+
+        self::assertEquals('stock', $response['cart']['errors'][0]['type']);
+        self::assertEquals(
+            'Some of the products are out of stock.',
+            $response['cart']['errors'][0]['message']
+        );
     }
 
     /**
@@ -193,6 +243,10 @@ QUERY;
       product {
         sku
       }
+    }
+    errors {
+      type
+      message
     }
   }
 }

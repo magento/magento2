@@ -206,6 +206,7 @@ type Cart {
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
     total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
     is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual")
+    errors: [CartMessages] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartMessages") @doc(description: "An array of cart errors")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
@@ -273,6 +274,11 @@ type AvailableShippingMethod {
 type AvailablePaymentMethod {
     code: String! @doc(description: "The payment method code")
     title: String! @doc(description: "The payment method title.")
+}
+
+type CartMessages {
+    type: String @doc(description: "Error type")
+    message: String @doc(description: "Error message")
 }
 
 type SelectedPaymentMethod {
