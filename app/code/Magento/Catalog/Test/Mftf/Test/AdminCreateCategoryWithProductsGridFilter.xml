@@ -29,7 +29,7 @@
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
         <waitForPageLoad stepKey="waitForProductList"/>

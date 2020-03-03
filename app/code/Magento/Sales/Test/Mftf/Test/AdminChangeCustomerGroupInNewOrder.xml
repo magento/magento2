@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="openNewOrder"/>
