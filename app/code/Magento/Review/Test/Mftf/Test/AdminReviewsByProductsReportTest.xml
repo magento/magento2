@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StoreFrontReviewByCustomerReportTest">
+    <test name="AdminReviewsByProductsReportTest">
         <annotations>
             <features value="Review"/>
-            <stories value="Review By Customers"/>
-            <title value="StoreFront reports review by Customers"/>
-            <description value="Review By Customer Grid Filters"/>
+            <stories value="Review By Products"/>
+            <title value="Admin Reports Review by Products"/>
+            <description value="Review By Products Grid Filters"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-31447"/>
+            <testCaseId value="MC-32083"/>
         </annotations>
         <before>
             <!--Login-->
@@ -37,37 +37,32 @@
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-
             <!--Logout-->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!-- Go to frontend and make a user account and login with it -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="CustomerEntityOne"/>
-        </actionGroup>
-        <!-- Go to the product view page -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
-        </actionGroup>
-        <!-- Click on reviews and add 2 reviews with current user -->
-        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addFirstReview"/>
-        <!-- Go to Pending reviews page and clear filters -->
-        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
-        <!-- Moderate first product reviews: change review status from pending to approved, save -->
-        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
-        <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
-        <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
-
-        <!-- Navigate to Reports > Reviews >By Customers -->
-        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByCustomersPage">
+        <!-- Navigate to Marketing > User Content> All Review -->
+        <amOnPage url="{{AdminReviewsPage.url}}" stepKey="openReviewsPage"/>
+        <!--Click on Add New Review -->
+        <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnFirstNewReview"/>
+        <!--Select Product by SKU and Create Review1 -->
+        <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU($$createProduct1.sku$$)}}" stepKey="addNewReviewBySKU"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewOne"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addFirstReview"/>
+        <!--Click on Add New Review -->
+        <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnSecondNewReview"/>
+        <!--Select Product by SKU and Create Review2 -->
+        <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU($$createProduct2.sku$$)}}" stepKey="addNewReviewTwoBySKU"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewTwo"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addSecondReview"/>
+        <!-- Navigate to Reports > Reviews >By Products -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByProductsPage">
             <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
-            <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByCustomers.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByProducts.dataUiId}}"/>
         </actionGroup>
         <!--Sort Review Column -->
-        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabCustomerbReviewQuantity"/>
-        <actionGroup ref="AdminSortCustomerReviewActionGroup" stepKey="navigateToCustomerReportsReview">
-            <argument name="reviewCount" value="$grabCustomerbReviewQuantity" />
+        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabReviewQuantity"/>
+        <actionGroup ref="AdminSortProductReviewActionGroup" stepKey="navigateToReportsReview">
+            <argument name="reviewCount" value="$grabReviewQuantity" />
         </actionGroup>
     </test>
 </tests>
