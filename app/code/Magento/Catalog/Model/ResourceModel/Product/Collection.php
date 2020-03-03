@@ -1911,6 +1911,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param bool $joinLeft
      * @return $this
      * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _productLimitationPrice($joinLeft = false)
     {
@@ -1929,14 +1930,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $connection = $this->getConnection();
         $select = $this->getSelect();
-        $joinCond = join(
-            ' AND ',
-            [
-                'price_index.entity_id = e.entity_id',
-                $connection->quoteInto('price_index.website_id = ?', $filters['website_id']),
-                $connection->quoteInto('price_index.customer_group_id = ?', $filters['customer_group_id'])
-            ]
-        );
+        $joinCondArray = [];
+        $joinCondArray[] = 'price_index.entity_id = e.entity_id';
+        $joinCondArray[] = $connection->quoteInto('price_index.customer_group_id = ?', $filters['customer_group_id']);
+        // Add website condition only if it's different from admin scope
+        if (((int) $filters['website_id']) !== Store::DEFAULT_STORE_ID) {
+            $joinCondArray[] = $connection->quoteInto('price_index.website_id = ?', $filters['website_id']);
+        }
+        $joinCond = join(' AND ', $joinCondArray);
 
         $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset($fromPart['price_index'])) {
