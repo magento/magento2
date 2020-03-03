@@ -19,10 +19,10 @@
             <argument name="subtotal" type="string"/>
             <argument name="qty" type="string"/>
         </arguments>
-        
+
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{productName}}"  stepKey="seeProductNameInCheckoutSummary"/>
-        <see selector="{{CheckoutCartProductSection.checkoutCartProductPrice}}" userInput="{{productPrice}}" stepKey="seeProductPriceInCart"/>
-        <see selector="{{CheckoutCartProductSection.checkoutCartSubtotal}}" userInput="{{subtotal}}" stepKey="seeSubtotalPrice"/>
-        <seeInField selector="{{CheckoutCartProductSection.qtyByContains(productSku)}}" userInput="{{qty}}" stepKey="seeProductQuantity"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(productName)}}" userInput="{{productPrice}}" stepKey="seeProductPriceInCart"/>
+        <see selector="{{CheckoutCartProductSection.productSubtotalByName(productName)}}" userInput="{{subtotal}}" stepKey="seeSubtotalPrice"/>
+        <seeInField selector="{{CheckoutCartProductSection.ProductQuantityByName(productName)}}" userInput="{{qty}}" stepKey="seeProductQuantity"/>
     </actionGroup>
 </actionGroups>

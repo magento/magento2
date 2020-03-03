@@ -33,7 +33,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimp1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimp2"/>

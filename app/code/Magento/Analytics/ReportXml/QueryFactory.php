@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Creates Query object according to configuration
+ *
  * Factory for @see \Magento\Analytics\ReportXml\Query
  */
 class QueryFactory
@@ -46,6 +50,11 @@ class QueryFactory
     private $selectHydrator;
 
     /**
+     * @var Json
+     */
+    private $jsonSerializer;
+
+    /**
      * QueryFactory constructor.
      *
      * @param CacheInterface $queryCache
@@ -54,6 +63,7 @@ class QueryFactory
      * @param SelectBuilderFactory $selectBuilderFactory
      * @param Config $config
      * @param array $assemblers
+     * @param Json $jsonSerializer
      */
     public function __construct(
         CacheInterface $queryCache,
@@ -61,7 +71,8 @@ class QueryFactory
         ObjectManagerInterface $objectManager,
         SelectBuilderFactory $selectBuilderFactory,
         Config $config,
-        array $assemblers
+        array $assemblers,
+        Json $jsonSerializer
     ) {
         $this->config = $config;
         $this->selectBuilderFactory = $selectBuilderFactory;
@@ -69,6 +80,7 @@ class QueryFactory
         $this->queryCache = $queryCache;
         $this->objectManager = $objectManager;
         $this->selectHydrator = $selectHydrator;
+        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**
@@ -101,14 +113,10 @@ class QueryFactory
             $selectBuilder = $assembler->assemble($selectBuilder, $queryConfig);
         }
         $select = $selectBuilder->create();
-        return $this->objectManager->create(
-            Query::class,
-            [
-                'select' => $select,
-                'selectHydrator' => $this->selectHydrator,
-                'connectionName' => $selectBuilder->getConnectionName(),
-                'config' => $queryConfig
-            ]
+        return $this->createQueryObject(
+            $select,
+            $selectBuilder->getConnectionName(),
+            $queryConfig
         );
     }
 
@@ -122,19 +130,42 @@ class QueryFactory
     {
         $cached = $this->queryCache->load($queryName);
         if ($cached) {
-            $queryData = json_decode($cached, true);
-            return $this->objectManager->create(
-                Query::class,
-                [
-                    'select' => $this->selectHydrator->recreate($queryData['select_parts']),
-                    'selectHydrator' => $this->selectHydrator,
-                    'connectionName' => $queryData['connectionName'],
-                    'config' => $queryData['config']
-                ]
+            $queryData = $this->jsonSerializer->unserialize($cached);
+            return $this->createQueryObject(
+                $this->selectHydrator->recreate($queryData['select_parts']),
+                $queryData['connectionName'],
+                $queryData['config']
             );
         }
         $query = $this->constructQuery($queryName);
-        $this->queryCache->save(json_encode($query), $queryName);
+        $this->queryCache->save(
+            $this->jsonSerializer->serialize($query),
+            $queryName
+        );
         return $query;
+    }
+
+    /**
+     * Create query class using objectmanger
+     *
+     * @param Select $select
+     * @param string $connection
+     * @param array $queryConfig
+     * @return Query
+     */
+    private function createQueryObject(
+        Select $select,
+        string $connection,
+        array $queryConfig
+    ) {
+        return $this->objectManager->create(
+            Query::class,
+            [
+                'select' => $select,
+                'selectHydrator' => $this->selectHydrator,
+                'connectionName' => $connection,
+                'config' => $queryConfig
+            ]
+        );
     }
 }
