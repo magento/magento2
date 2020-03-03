@@ -9,6 +9,8 @@ namespace Magento\Ui\Component\Filters\Type;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
+ * Date grid filter UI Component
+ *
  * @api
  * @since 100.0.2
  */
@@ -84,30 +86,18 @@ class Date extends AbstractFilter
                 if (isset($value['from'])) {
                     $this->applyFilterByType(
                         'gteq',
-                        $this->wrappedComponent->convertDate(
-                            $value['from'],
-                            0,
-                            0,
-                            0,
-                            !$this->getData('config/skipTimeZoneConversion')
-                        )
+                        $this->convertDatetime((string)$value['from'])
                     );
                 }
 
                 if (isset($value['to'])) {
                     $this->applyFilterByType(
                         'lteq',
-                        $this->wrappedComponent->convertDate(
-                            $value['to'],
-                            23,
-                            59,
-                            59,
-                            !$this->getData('config/skipTimeZoneConversion')
-                        )
+                        $this->convertDatetime((string)$value['to'], 23, 59, 59)
                     );
                 }
             } else {
-                $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));
+                $this->applyFilterByType('eq', $this->convertDatetime((string)$value));
             }
         }
     }
@@ -129,5 +119,32 @@ class Date extends AbstractFilter
 
             $this->getContext()->getDataProvider()->addFilter($filter);
         }
+    }
+
+    /**
+     * Convert given date to default (UTC) timezone
+     *
+     * @param string $value
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
+     * @return \DateTime
+     */
+    private function convertDatetime(string $value, int $hour = 0, int $minute = 0, int $second = 0): ?\DateTime
+    {
+        $value = $this->getData('config/options/showsTime')
+            ? $this->wrappedComponent->convertDatetime(
+                $value,
+                !$this->getData('config/skipTimeZoneConversion')
+            )
+            : $this->wrappedComponent->convertDate(
+                $value,
+                $hour,
+                $minute,
+                $second,
+                !$this->getData('config/skipTimeZoneConversion')
+            );
+
+        return $value;
     }
 }

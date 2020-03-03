@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Block\Order\Email\Items\Order;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -30,30 +31,30 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve the item options
+     * Returns array of Item options
      *
      * @return array
      */
     public function getItemOptions()
     {
-        $result = [];
+        $result = [[]];
         if ($options = $this->getItem()->getProductOptions()) {
             if (isset($options['options'])) {
-                $result = array_merge($result, $options['options']);
+                $result[] = $options['options'];
             }
             if (isset($options['additional_options'])) {
-                $result = array_merge($result, $options['additional_options']);
+                $result[] = $options['additional_options'];
             }
             if (isset($options['attributes_info'])) {
-                $result = array_merge($result, $options['attributes_info']);
+                $result[] = $options['attributes_info'];
             }
         }
 
-        return $result;
+        return array_merge(...$result);
     }
 
     /**
-     * Retrieve the Html for the given value
+     * Formats the value in HTML
      *
      * @param string|array $value
      * @return string
@@ -61,23 +62,18 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     public function getValueHtml($value)
     {
         if (is_array($value)) {
-            return sprintf(
-                '%d',
-                $value['qty']
-            ) . ' x ' . $this->escapeHtml(
-                $value['title']
-            ) . " " . $this->getItem()->getOrder()->formatPrice(
-                $value['price']
-            );
+            return sprintf('%d', $value['qty'])
+                . ' x ' . $this->escapeHtml($value['title'])
+                . " " . $this->getItem()->getOrder()->formatPrice($value['price']);
         } else {
             return $this->escapeHtml($value);
         }
     }
 
     /**
-     * Retrieve the item SKU
+     * Returns Product SKU for Item provided
      *
-     * @param mixed $item
+     * @param OrderItem $item
      * @return mixed
      */
     public function getSku($item)
