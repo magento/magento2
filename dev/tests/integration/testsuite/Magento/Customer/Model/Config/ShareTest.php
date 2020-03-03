@@ -25,7 +25,7 @@ class ShareTest extends TestCase
     private $share;
 
     /** @var WebsiteRepositoryInterface */
-    private $website;
+    private $websiteRepository;
 
     /**
      * @inheritdoc
@@ -36,7 +36,7 @@ class ShareTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->share = $this->objectManager->get(Share::class);
-        $this->website = $this->objectManager->create(WebsiteRepositoryInterface::class);
+        $this->websiteRepository = $this->objectManager->create(WebsiteRepositoryInterface::class);
     }
 
     /**
@@ -56,9 +56,9 @@ class ShareTest extends TestCase
      */
     public function testGetSharedWebsiteIdsMultipleSites(): void
     {
-        $expectedIds[] = $this->website->get('base')->getId();
-        $expectedIds[] = $this->website->get('secondwebsite')->getId();
-        $expectedIds[] = $this->website->get('thirdwebsite')->getId();
+        $expectedIds[] = $this->websiteRepository->get('base')->getId();
+        $expectedIds[] = $this->websiteRepository->get('secondwebsite')->getId();
+        $expectedIds[] = $this->websiteRepository->get('thirdwebsite')->getId();
         $websiteIds = $this->share->getSharedWebsiteIds(42);
         $this->assertEquals($expectedIds, $websiteIds);
     }

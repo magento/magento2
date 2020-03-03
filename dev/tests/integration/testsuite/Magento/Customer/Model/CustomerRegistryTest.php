@@ -119,8 +119,9 @@ class CustomerRegistryTest extends TestCase
     public function testRetrieveEmailException(): void
     {
         $email = 'customer@example.com';
-        $message = sprintf('No such entity with email = %s, websiteId = %s', $email, $this->defaultWebsiteId);
-        $this->expectExceptionObject(new NoSuchEntityException(__($message)));
+        $this->expectExceptionObject(
+            NoSuchEntityException::doubleField('email', $email, 'websiteId', $this->defaultWebsiteId)
+        );
         $this->model->retrieveByEmail($email, $this->defaultWebsiteId);
     }
 
@@ -188,8 +189,9 @@ class CustomerRegistryTest extends TestCase
     {
         $email = 'customer@example.com';
         $websiteId = $this->storeManager->getWebsite('test')->getWebsiteId();
-        $message = sprintf('No such entity with email = %s, websiteId = %s', $email, $websiteId);
-        $this->expectExceptionObject(new NoSuchEntityException(__($message)));
+        $this->expectExceptionObject(
+            NoSuchEntityException::doubleField('email', $email, 'websiteId', $websiteId)
+        );
         $this->model->retrieveByEmail($email, $websiteId);
     }
 }
