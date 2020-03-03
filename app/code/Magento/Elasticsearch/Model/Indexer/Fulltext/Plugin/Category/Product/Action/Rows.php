@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action;
+namespace Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action;
 
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\App\ResourceConnection;
