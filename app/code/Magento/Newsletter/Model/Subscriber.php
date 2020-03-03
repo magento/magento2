@@ -353,6 +353,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function isSubscribed()
     {
+        return $this->getId() && (int)$this->getStatus() === self::STATUS_SUBSCRIBED;
+    }
+
+    /**
+     * Return customer subscription status taking pending subscriptions into consideration.
+     *
+     * @return bool
+     */
+    private function isSubscribedOrPending()
+    {
         return $this->getId() && (
             (int)$this->getStatus() === self::STATUS_SUBSCRIBED
                 ||
@@ -553,7 +563,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function updateSubscription($customerId)
     {
         $this->loadByCustomerId($customerId);
-        $this->_updateCustomerSubscription($customerId, $this->isSubscribed());
+        $this->_updateCustomerSubscription($customerId, $this->isSubscribedOrPending());
         return $this;
     }
 
