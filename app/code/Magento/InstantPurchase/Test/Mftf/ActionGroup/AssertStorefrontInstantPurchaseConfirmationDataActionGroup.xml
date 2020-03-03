@@ -14,12 +14,12 @@
         <arguments>
             <argument name="shippingStreet" type="string" defaultValue="{{US_Address_TX.street[0]}}"/>
             <argument name="billingStreet" type="string" defaultValue="{{US_Address_TX_Default_Billing.street[0]}}"/>
-            <argument name="cartEnding" type="string" defaultValue="{{StoredPaymentMethods.cardNumberEnding}}"/>
+            <argument name="cardEnding" type="string" defaultValue="{{StoredPaymentMethods.cardNumberEnding}}"/>
         </arguments>
         <click selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="clickInstantPurchaseButton"/>
-        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForButtonAppears"/>
+        <waitForElementVisible selector="{{ModalConfirmationSection.OkButton}}" stepKey="waitForButtonAppears"/>
         <seeElement selector="{{StorefrontInstantPurchasePopupSection.shippingAddress(shippingStreet)}}" stepKey="assertShippingAddress"/>
         <seeElement selector="{{StorefrontInstantPurchasePopupSection.billingAddress(billingStreet)}}" stepKey="assertBillingAddress"/>
-        <seeElement selector="{{StorefrontInstantPurchasePopupSection.paymentMethod(cartEnding)}}" stepKey="assertCartEnding"/>
+        <seeElement selector="{{StorefrontInstantPurchasePopupSection.paymentMethod(cardEnding)}}" stepKey="assertCardEnding"/>
     </actionGroup>
 </actionGroups>

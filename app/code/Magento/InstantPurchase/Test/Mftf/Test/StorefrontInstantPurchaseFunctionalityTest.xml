@@ -9,11 +9,11 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontInstantPurchaseFunctionalityTest">
         <annotations>
-            <features value="Instant Purchase"/>
+            <features value="InstantPurchase"/>
             <stories value="Using Instant Purchase"/>
             <title value="Checks that Instant Purchase functionality works fine"/>
             <description value="Checks that customer with different billing and shipping addresses work with Instant Purchase functionality fine"/>
-            <useCaseId value="MC-20400"/>
+            <useCaseId value="MAGETWO-90898"/>
             <testCaseId value="MC-6432"/>
             <severity value="CRITICAL"/>
             <group value="instant_purchase"/>
@@ -63,14 +63,14 @@
             <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
             <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate"/>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStep"/>
-            <!-- Fill Braintree cart data -->
+            <!-- Fill Braintree card data -->
             <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="selectBraintreePaymentMethod"/>
             <waitForPageLoad stepKey="waitForBraintreeFormLoad"/>
             <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="scrollToCreditCardSection"/>
-            <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="fillCartData">
+            <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="fillCardData">
                 <argument name="cartData" value="PaymentAndShippingInfo"/>
             </actionGroup>
-            <waitForPageLoad stepKey="waitForFillCartData"/>
+            <waitForPageLoad stepKey="waitForFillCardData"/>
             <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
             <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
                 <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
@@ -123,11 +123,11 @@
         <actionGroup ref="AssertStorefrontInstantPurchaseConfirmationDataActionGroup" stepKey="assertInstantPurchasePopupData">
             <argument name="shippingStreet" value="{{US_Address_NY.street[0]}}"/>
             <argument name="billingStreet" value="{{US_Address_NY.street[0]}}"/>
-            <argument name="cartEnding" value="{{StoredPaymentMethods.cardNumberEnding}}"/>
+            <argument name="cardEnding" value="{{StoredPaymentMethods.cardNumberEnding}}"/>
         </actionGroup>
         <!-- 3. Confirm Instant Purchase -->
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="placeOrderAgain"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="placeOrderAgain"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see userInput="Your order number is:" selector="{{StorefrontMessagesSection.success}}" stepKey="seePlaceOrderSuccessMessage"/>
         <!-- 4. Customer changes his default address -->
         <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
@@ -142,14 +142,14 @@
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRateAgain"/>
         <click selector="{{CheckoutShippingMethodsSection.shipHereButton}}" stepKey="changeShippingAddress"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStepAgain"/>
-        <!-- Fill Braintree cart data -->
+        <!-- Fill Braintree card data -->
         <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="selectBraintreePaymentMethodAgain"/>
         <waitForPageLoad stepKey="waitForBraintreeFormLoadAgain"/>
         <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="scrollToCreditCardSectionAgain"/>
-        <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="fillCartDataAgain">
-            <argument name="cartData" value="VisaDefaultCart"/>
+        <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="fillCardDataAgain">
+            <argument name="cartData" value="VisaDefaultCard"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForFillCartDataAgain"/>
+        <waitForPageLoad stepKey="waitForFillCardDataAgain"/>
         <!-- 5.2 Customer save this payment method -->
         <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUseAgain"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrderAgain">
@@ -163,11 +163,11 @@
         <actionGroup ref="AssertStorefrontInstantPurchaseConfirmationDataActionGroup" stepKey="assertInstantPurchasePopupDataAgain">
             <argument name="shippingStreet" value="{{US_Address_NY.street[0]}}"/>
             <argument name="billingStreet" value="{{UK_Not_Default_Address.street[0]}}"/>
-            <argument name="cartEnding" value="{{VisaDefaultCartInfo.cardNumberEnding}}"/>
+            <argument name="cardEnding" value="{{VisaDefaultCardInfo.cardNumberEnding}}"/>
         </actionGroup>
         <!-- 8. Confirm Instant Purchase -->
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="placeOrderFinalTime"/>
-        <waitForPageLoad stepKey="waitForPageLoadAgain"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="placeOrderFinalTime"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessageAgain"/>
         <see userInput="Your order number is:" selector="{{StorefrontMessagesSection.success}}" stepKey="seePlaceOrderSuccessMessageAgain"/>
     </test>
 </tests>
