@@ -10,7 +10,7 @@
 ?>
 
 <img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-    <?= $escaper->escapeHtml($block->getCustomAttributes()) ?>
+    <?= /** @noEscape */ $block->getCustomAttributes() ?>
     src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
     loading="lazy"
     width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"

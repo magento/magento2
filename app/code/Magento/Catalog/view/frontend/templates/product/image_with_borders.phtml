@@ -14,7 +14,7 @@
     <span class="product-image-wrapper"
           style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-            <?= $escaper->escapeHtmlAttr($block->getCustomAttributes()) ?>
+            <?= /** @noEscape */ $block->getCustomAttributes()  ?>
             src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
             loading="lazy"
             width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
