@@ -20,8 +20,8 @@
         <plugin name="customer-session-depersonalize"
                 type="Magento\Customer\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
     </type>
-    <type name="Magento\Framework\App\Action\AbstractAction">
-        <plugin name="customer-app-action-dispatchController-context-plugin"
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="customer-app-action-executeController-context-plugin"
                 type="Magento\Customer\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>
     <preference for="Magento\Customer\CustomerData\SectionPoolInterface"
