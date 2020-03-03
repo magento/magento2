@@ -14,9 +14,9 @@ namespace Magento\Security\Model;
 interface UserExpirationInterface
 {
 
-    private const EXPIRES_AT = 'expires_at';
+    public const EXPIRES_AT = 'expires_at';
 
-    private const USER_ID = 'user_id';
+    public const USER_ID = 'user_id';
 
     /**
      * `expires_at` getter.
