@@ -12,7 +12,7 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Layout\LayoutPlugin;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
@@ -35,7 +35,7 @@ class LayoutPluginTest extends TestCase
     private $responseMock;
 
     /**
-     * @var LayoutInterface|MockObject
+     * @var Layout|MockObject
      */
     private $layoutMock;
 
@@ -54,7 +54,7 @@ class LayoutPluginTest extends TestCase
      */
     protected function setUp()
     {
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createPartialMock(Layout::class, ['isCacheable', 'getAllBlocks']);
         $this->responseMock = $this->createMock(Http::class);
         $this->configMock = $this->createMock(Config::class);
         $this->maintenanceModeMock = $this->createMock(MaintenanceMode::class);

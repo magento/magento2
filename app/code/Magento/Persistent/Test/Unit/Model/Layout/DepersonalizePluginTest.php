@@ -59,7 +59,7 @@ class DepersonalizePluginTest extends TestCase
     }
 
     /**
-     * Tests afterGenerateElements method when depersonalization is needed.
+     * Test afterGenerateElements method when depersonalization is needed.
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class DepersonalizePluginTest extends TestCase
     }
 
     /**
-     * Tests afterGenerateElements method when depersonalization is not needed.
+     * Test afterGenerateElements method when depersonalization is not needed.
      *
      * @return void
      */

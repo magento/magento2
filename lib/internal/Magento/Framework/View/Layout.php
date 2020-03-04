@@ -1103,7 +1103,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
-     * Checks existed non-cacheable layout elements.
+     * Check existed non-cacheable layout elements.
      *
      * @return bool
      */

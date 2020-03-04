@@ -351,7 +351,10 @@ class LayoutTest extends TestCase
         );
     }
 
-    public function testGetChildNonExistBlock()
+    /**
+     * @return void
+     */
+    public function testGetChildNonExistBlock(): void
     {
         $this->structureMock->expects($this->once())
             ->method('getChildId')

@@ -55,7 +55,7 @@ class DepersonalizePlugin
     }
 
     /**
-     * Resolves sensitive customer data if the depersonalization is needed.
+     * Resolve sensitive customer data if the depersonalization is needed.
      *
      * @param LayoutInterface $subject
      * @return void
@@ -70,7 +70,7 @@ class DepersonalizePlugin
     }
 
     /**
-     * Changes sensitive customer data if the depersonalization is needed.
+     * Change sensitive customer data if the depersonalization is needed.
      *
      * @param LayoutInterface $subject
      * @return void
