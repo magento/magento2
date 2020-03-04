@@ -14,6 +14,7 @@ namespace Magento\Wishlist\Block\Share\Email;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Wishlist\Model\Item;
 
@@ -23,7 +24,9 @@ use Magento\Wishlist\Model\Item;
  */
 class Items extends \Magento\Wishlist\Block\AbstractBlock
 {
-    /** @var ItemResolverInterface */
+    /**
+     * @var ItemResolverInterface
+     */
     private $itemResolver;
 
     /**
@@ -32,23 +35,24 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
     protected $_template = 'Magento_Wishlist::email/items.phtml';
 
     /**
+     * Items constructor.
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param ItemResolverInterface $itemResolver
      * @param array $data
      * @param ConfigInterface|null $config
      * @param UrlBuilder|null $urlBuilder
+     * @param ItemResolverInterface|null $itemResolver
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        ItemResolverInterface $itemResolver,
         array $data = [],
         ConfigInterface $config = null,
-        UrlBuilder $urlBuilder = null
+        UrlBuilder $urlBuilder = null,
+        ItemResolverInterface $itemResolver = null
     ) {
-        $this->itemResolver = $itemResolver;
         parent::__construct($context, $httpContext, $data, $config, $urlBuilder);
+        $this->itemResolver = $itemResolver ?? ObjectManager::getInstance()->get(ItemResolverInterface::class);
     }
 
     /**
@@ -57,7 +61,7 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
      * @param Item $item
      * @return Product
      */
-    public function getProductForThumbnail(Item $item) : Product
+    public function getProductForThumbnail(Item $item): Product
     {
         return $this->itemResolver->getFinalProduct($item);
     }
