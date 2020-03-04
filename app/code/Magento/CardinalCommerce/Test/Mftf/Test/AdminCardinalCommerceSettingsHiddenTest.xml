@@ -22,7 +22,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set three_d_secure/cardinal/enabled_authorizenet 0" stepKey="disableCardinalCommerce"/>
         </after>
 

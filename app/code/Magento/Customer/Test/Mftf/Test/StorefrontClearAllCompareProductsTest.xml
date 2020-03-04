@@ -111,7 +111,7 @@
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
 
             <!-- Delete Created Entities -->
             <deleteData createDataKey="createSimpleCustomer1" stepKey="deleteSimpleCustomer1"/>
