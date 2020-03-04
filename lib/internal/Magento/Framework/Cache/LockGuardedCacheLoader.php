@@ -37,18 +37,33 @@ class LockGuardedCacheLoader
     private $delayTimeout;
 
     /**
+     * Timeout for information to be collected and saved.
+     * If timeout passed that means that data cannot be saved right now.
+     * And we will just return collected data.
+     *
+     * Value of the variable in milliseconds.
+     *
+     * @var int
+     */
+    private $loadTimeout;
+
+    /**
+     * LockGuardedCacheLoader constructor.
      * @param LockManagerInterface $locker
      * @param int $lockTimeout
      * @param int $delayTimeout
+     * @param int $loadTimeout
      */
     public function __construct(
         LockManagerInterface $locker,
         int $lockTimeout = 10000,
-        int $delayTimeout = 20
+        int $delayTimeout = 20,
+        int $loadTimeout = 10000
     ) {
         $this->locker = $locker;
         $this->lockTimeout = $lockTimeout;
         $this->delayTimeout = $delayTimeout;
+        $this->loadTimeout = $loadTimeout;
     }
 
     /**
@@ -67,21 +82,21 @@ class LockGuardedCacheLoader
         callable $dataSaver
     ) {
         $cachedData = $dataLoader(); //optimistic read
-
-        while ($cachedData === false && $this->locker->isLocked($lockName)) {
-            usleep($this->delayTimeout * 1000);
-            $cachedData = $dataLoader();
-        }
+        $deadline = microtime(true) + $this->loadTimeout;
 
         while ($cachedData === false) {
-            try {
-                if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+            if ($deadline <= microtime(true)) {
+                return $dataCollector();
+            }
+
+            if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+                try {
                     $data = $dataCollector();
                     $dataSaver($data);
                     $cachedData = $data;
+                } finally {
+                    $this->locker->unlock($lockName);
                 }
-            } finally {
-                $this->locker->unlock($lockName);
             }
 
             if ($cachedData === false) {
