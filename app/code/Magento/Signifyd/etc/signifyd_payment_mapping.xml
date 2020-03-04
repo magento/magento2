@@ -66,10 +66,6 @@
             <magento_code>worldpay</magento_code>
             <signifyd_code>PAYMENT_CARD</signifyd_code>
         </payment_method>
-        <payment_method name="eway">
-            <magento_code>eway</magento_code>
-            <signifyd_code>PAYMENT_CARD</signifyd_code>
-        </payment_method>
         <payment_method name="cybersource">
             <magento_code>cybersource</magento_code>
             <signifyd_code>PAYMENT_CARD</signifyd_code>
