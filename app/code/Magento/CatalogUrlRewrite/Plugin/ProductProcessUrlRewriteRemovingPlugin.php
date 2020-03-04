@@ -75,7 +75,7 @@ class ProductProcessUrlRewriteRemovingPlugin
      * Function afterUpdateWebsites
      *
      * @param Action $subject
-     * @param $result
+     * @param void $result
      * @param array $productIds
      * @param array $websiteIds
      * @param string $type
