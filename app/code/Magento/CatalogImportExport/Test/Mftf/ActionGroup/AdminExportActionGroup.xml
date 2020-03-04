@@ -78,7 +78,7 @@
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
     </actionGroup>
 
-    <actionGroup name="deleteAllExportedFiles">
+    <actionGroup name="deleteAllExportedFiles" deprecated="Use DeleteExportedFileActionGroup on each exported file instead.">
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
         <executeInSelenium
             function="

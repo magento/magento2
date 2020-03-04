@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCatalogPriceRuleDeleteAllActionGroup">
+    <actionGroup name="AdminCatalogPriceRuleDeleteAllActionGroup" deprecated="Use RemoveCatalogPriceRule for each created rule instead.">
         <annotations>
             <description>Open Catalog Price Rule grid and delete all rules one by one. Need to avoid interference with other tests that test catalog price rules.</description>
         </annotations>
