@@ -132,7 +132,7 @@ class Attribute extends AbstractPlugin
      */
     private function shouldInvalidateSearchIndex(
         AbstractModel $attribute
-    ) {
+    ):bool {
         $shouldInvalidate = false;
         $fields = [
             EavAttributeInterface::IS_SEARCHABLE,
