@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="EndToEndB2CGuestUserTest">
+    <test name="EndToEndB2CGuestUserMysqlTest">
         <before>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -219,5 +219,5 @@
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="compareGrabConfigProductImageSrcInComparison" after="compareAssertConfigProductInComparison"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabConfigProductImageSrcInComparison" stepKey="compareAssertConfigProductImageNotDefaultInComparison" after="compareGrabConfigProductImageSrcInComparison"/>
-   </test>
+    </test>
 </tests>

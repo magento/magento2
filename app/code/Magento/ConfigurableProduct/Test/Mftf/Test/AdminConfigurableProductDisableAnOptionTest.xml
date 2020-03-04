@@ -8,19 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminConfigurableProductDeleteTest">
+    <test name="AdminConfigurableProductDisableAnOptionTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Create, Read, Update, Delete"/>
-            <title value="admin should be able to delete a configurable product"/>
-            <description value="admin should be able to delete a configurable product"/>
-            <testCaseId value="MC-87"/>
+            <title value="Admin should be able to disable a product configuration"/>
+            <description value="Admin should be able to disable a product configuration"/>
+            <testCaseId value="MC-119"/>
             <group value="ConfigurableProduct"/>
             <severity value="AVERAGE"/>
         </annotations>
 
         <before>
-            <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
+            <!-- This was copied and modified from the EndToEndB2CGuestUserTest -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -66,39 +66,34 @@
         </before>
 
         <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <!-- assert product visible in storefront -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="gotoStorefront1"/>
+        <!--check storefront for both options-->
+        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront1"/>
         <waitForPageLoad stepKey="wait1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProduct"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="seeOption1Storefront"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
 
-        <!-- go to admin and delete -->
-        <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <!--go to admin and disable an option-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
         <waitForPageLoad stepKey="wait2"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
-        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
-            <argument name="keyword" value="ApiConfigurableProduct.name"/>
-        </actionGroup>
-        <click selector="label.data-grid-checkbox-cell-inner" stepKey="clickCheckbox"/>
-        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
-        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
-        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMsg"/>
-
-        <!-- after delete, assert product page is 404 -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="gotoStorefront2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisable"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="wait3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="dontSeeProduct"/>
+
+        <!--check storefront for one option-->
+        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront2"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="dontSeeOption1InStorefront"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Again"/>
     </test>
 </tests>
