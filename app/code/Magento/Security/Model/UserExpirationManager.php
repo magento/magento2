@@ -7,7 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory as AdminSessionCollectionFactory;
 use Magento\Security\Model\ResourceModel\UserExpiration\Collection as ExpiredUsersCollection;
+use Magento\Security\Model\ResourceModel\UserExpiration\CollectionFactory as UserExpirationCollectionFactory;
+use Magento\User\Model\ResourceModel\User\CollectionFactory as UserCollectionFactory;
 
 /**
  * Class to handle admin user expirations. Temporary admin users can be created with an expiration
@@ -19,7 +24,7 @@ class UserExpirationManager
 {
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     private $dateTime;
 
@@ -34,7 +39,7 @@ class UserExpirationManager
     private $adminSessionInfoCollectionFactory;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     private $authSession;
 
@@ -44,27 +49,27 @@ class UserExpirationManager
     private $userExpirationCollectionFactory;
 
     /**
-     * @var \Magento\User\Model\ResourceModel\User\CollectionFactory
+     * @var UserCollectionFactory
      */
     private $userCollectionFactory;
 
     /**
      * UserExpirationManager constructor.
      *
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param Session $authSession
      * @param ConfigInterface $securityConfig
-     * @param ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory
-     * @param ResourceModel\UserExpiration\CollectionFactory $userExpirationCollectionFactory
-     * @param \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param AdminSessionCollectionFactory $adminSessionInfoCollectionFactory
+     * @param UserExpirationCollectionFactory $userExpirationCollectionFactory
+     * @param UserCollectionFactory $userCollectionFactory
+     * @param DateTime $dateTime
      */
     public function __construct(
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Security\Model\ConfigInterface $securityConfig,
-        \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory,
-        \Magento\Security\Model\ResourceModel\UserExpiration\CollectionFactory $userExpirationCollectionFactory,
-        \Magento\User\Model\ResourceModel\User\CollectionFactory $userCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+        Session $authSession,
+        ConfigInterface $securityConfig,
+        AdminSessionCollectionFactory $adminSessionInfoCollectionFactory,
+        UserExpirationCollectionFactory $userExpirationCollectionFactory,
+        UserCollectionFactory $userCollectionFactory,
+        DateTime $dateTime
     ) {
         $this->dateTime = $dateTime;
         $this->securityConfig = $securityConfig;

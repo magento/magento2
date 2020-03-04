@@ -11,6 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\Plugin\AuthenticationException;
 use Magento\Security\Model\UserExpirationManager;
+use Magento\User\Model\UserFactory;
 
 /**
  * Check for expired users.
@@ -23,7 +24,7 @@ class AdminUserAuthenticateBefore implements ObserverInterface
     private $userExpirationManager;
 
     /**
-     * @var \Magento\User\Model\UserFactory
+     * @var UserFactory
      */
     private $userFactory;
 
@@ -31,11 +32,11 @@ class AdminUserAuthenticateBefore implements ObserverInterface
      * AdminUserAuthenticateBefore constructor.
      *
      * @param UserExpirationManager $userExpirationManager
-     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param UserFactory $userFactory
      */
     public function __construct(
-        \Magento\Security\Model\UserExpirationManager $userExpirationManager,
-        \Magento\User\Model\UserFactory $userFactory
+        UserExpirationManager $userExpirationManager,
+        UserFactory $userFactory
     ) {
         $this->userExpirationManager = $userExpirationManager;
         $this->userFactory = $userFactory;

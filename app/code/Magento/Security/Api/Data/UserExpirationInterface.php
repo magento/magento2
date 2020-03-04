@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Security\Api\Data;
 
+use \Magento\Security\Api\Data\UserExpirationExtensionInterface;
+
 /**
  * Interface UserExpirationInterface to be used as a DTO for expires_at property on User model.
  */
@@ -51,15 +53,15 @@ interface UserExpirationInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Security\Api\Data\UserExpirationExtensionInterface|null
+     * @return UserExpirationExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Security\Api\Data\UserExpirationExtensionInterface $extensionAttributes
+     * @param UserExpirationExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Security\Api\Data\UserExpirationExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(UserExpirationExtensionInterface $extensionAttributes);
 }

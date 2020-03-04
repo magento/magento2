@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\Plugin;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Security\Model\ResourceModel\UserExpiration;
+use Magento\Security\Model\UserExpirationFactory;
+
 /**
  * Add the `expires_at` form field to the User main form.
  */
@@ -14,31 +18,31 @@ class AdminUserForm
 {
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     private $localeDate;
 
     /**
-     * @var \Magento\Security\Model\ResourceModel\UserExpiration
+     * @var UserExpiration
      */
     private $userExpirationResource;
 
     /**
-     * @var \Magento\Security\Api\Data\UserExpirationInterfaceFactory
+     * @var UserExpirationFactory
      */
     private $userExpirationFactory;
 
     /**
      * UserForm constructor.
      *
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Security\Model\UserExpirationFactory $userExpirationFactory
-     * @param \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
+     * @param TimezoneInterface $localeDate
+     * @param UserExpirationFactory $userExpirationFactory
+     * @param UserExpiration $userExpirationResource
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Security\Model\UserExpirationFactory $userExpirationFactory,
-        \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
+        TimezoneInterface $localeDate,
+        UserExpirationFactory $userExpirationFactory,
+        UserExpiration $userExpirationResource
     ) {
         $this->localeDate = $localeDate;
         $this->userExpirationResource = $userExpirationResource;

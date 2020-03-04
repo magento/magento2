@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Security\Api\Data\UserExpirationExtensionInterface;
 use Magento\Security\Api\Data\UserExpirationInterface;
 
 /**
  * Admin User Expiration model.
  */
-class UserExpiration extends \Magento\Framework\Model\AbstractExtensibleModel implements UserExpirationInterface
+class UserExpiration extends AbstractExtensibleModel implements UserExpirationInterface
 {
 
     /**
@@ -78,7 +80,7 @@ class UserExpiration extends \Magento\Framework\Model\AbstractExtensibleModel im
     /**
      * @inheritDoc
      */
-    public function setExtensionAttributes(\Magento\Security\Api\Data\UserExpirationExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(UserExpirationExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

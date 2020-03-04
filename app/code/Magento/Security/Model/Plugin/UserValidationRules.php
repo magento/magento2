@@ -7,20 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\Plugin;
 
+use Magento\Security\Model\UserExpiration\Validator;
+
 /**
  * \Magento\User\Model\UserValidationRules decorator
  */
 class UserValidationRules
 {
-    /**@var \Magento\Security\Model\UserExpiration\Validator */
+    /**@var Validator */
     private $validator;
 
     /**
      * UserValidationRules constructor.
      *
-     * @param \Magento\Security\Model\UserExpiration\Validator $validator
+     * @param Validator $validator
      */
-    public function __construct(\Magento\Security\Model\UserExpiration\Validator $validator)
+    public function __construct(Validator $validator)
     {
         $this->validator = $validator;
     }

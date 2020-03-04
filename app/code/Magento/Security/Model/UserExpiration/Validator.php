@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\UserExpiration;
 
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Validator\AbstractValidator;
 
 /**
@@ -15,21 +17,21 @@ use Magento\Framework\Validator\AbstractValidator;
 class Validator extends AbstractValidator
 {
 
-    /**@var \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
+    /**@var TimezoneInterface */
     private $timezone;
 
-    /**@var \Magento\Framework\Stdlib\DateTime\DateTime */
+    /**@var DateTime */
     private $dateTime;
 
     /**
      * Validator constructor.
      *
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param TimezoneInterface $timezone
+     * @param DateTime $dateTime
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+        TimezoneInterface $timezone,
+        DateTime $dateTime
     ) {
         $this->timezone = $timezone;
         $this->dateTime = $dateTime;

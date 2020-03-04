@@ -9,6 +9,8 @@ namespace Magento\Security\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Security\Model\ResourceModel\UserExpiration as UserExpirationResource;
+use Magento\Security\Model\UserExpirationFactory;
 
 /**
  * Save UserExpiration on admin user record.
@@ -16,24 +18,24 @@ use Magento\Framework\Event\ObserverInterface;
 class AfterAdminUserSave implements ObserverInterface
 {
     /**
-     * @var \Magento\Security\Model\UserExpirationFactory
+     * @var UserExpirationFactory
      */
     private $userExpirationFactory;
 
     /**
-     * @var \Magento\Security\Model\ResourceModel\UserExpiration
+     * @var UserExpirationResource
      */
     private $userExpirationResource;
 
     /**
      * AfterAdminUserSave constructor.
      *
-     * @param \Magento\Security\Model\UserExpirationFactory $userExpirationFactory
-     * @param \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
+     * @param UserExpirationFactory $userExpirationFactory
+     * @param UserExpirationResource $userExpirationResource
      */
     public function __construct(
-        \Magento\Security\Model\UserExpirationFactory $userExpirationFactory,
-        \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
+        UserExpirationFactory $userExpirationFactory,
+        UserExpirationResource $userExpirationResource
     ) {
 
         $this->userExpirationFactory = $userExpirationFactory;
@@ -45,6 +47,7 @@ class AfterAdminUserSave implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function execute(Observer $observer)
     {
