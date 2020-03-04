@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontConfigurableProductBasicInfoTest">
+    <test name="StorefrontConfigurableProductOptionsTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="View configurable product details in storefront"/>
-            <title value="Guest customer should see basic Configurable Product details"/>
-            <description value="Guest customer should see basic Configurable Product details"/>
+            <title value="Guest customer should be able to see product configuration options"/>
+            <description value="Guest customer should be able to see product configuration options"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-77"/>
+            <testCaseId value="MC-92"/>
             <group value="ConfigurableProduct"/>
         </annotations>
 
@@ -38,18 +38,18 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <!-- Verify configurable product details in storefront product view -->
+        <!-- Verify configurable product options in storefront product view -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
         <waitForPageLoad stepKey="wait"/>
         <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
-        <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="seeProductSku"/>
-        <see userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeProductPriceLabel"/>
-        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="seeProductStockStatus"/>
-        <see userInput="1.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice"/>
-        <see userInput="{{colorProductAttribute.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeProductAttributeTitle"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="{{colorProductAttribute.default_label}}" stepKey="seeColorAttributeName1"/>
-        <see userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown1"/>
-        <see userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown2"/>
-        <see userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown3"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel1"/>
+        <see userInput="1.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice1"/>
+        <selectOption userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption2"/>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel2"/>
+        <see userInput="2.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice2"/>
+        <selectOption userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption3"/>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel3"/>
+        <see userInput="3.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice3"/>
     </test>
 </tests>
