@@ -52,31 +52,25 @@ spec:
             - containerPort: 80
               name: apache
           volumeMounts:
-          - mountPath: /var/www/html/media
-            name: magento-persistent-storage
-            subPath: media
-          - mountPath: /var/www/html/var
-            name: magento-persistent-storage
-            subPath: var
-          - mountPath: /var/www/html/pub
-            name: magento-persistent-storage
-            subPath: pub
+          - mountPath: /var/www/html
+            name: magento-shared-data
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
             - containerPort: 9000
               name: php
           volumeMounts:
+          - mountPath: /var/www/html
+            name: magento-shared
           - mountPath: /var/www/html/media
             name: magento-persistent-storage
             subPath: media
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
-            subPath: var
-          - mountPath: /var/www/html/pub
-            name: magento-persistent-storage
-            subPath: pub      
+            subPath: var      
       volumes:
+      - name: magento-shared
+        emptyDir: {}
       - name: magento-persistent-storage
         persistentVolumeClaim:
           claimName: magento-pv-claim
