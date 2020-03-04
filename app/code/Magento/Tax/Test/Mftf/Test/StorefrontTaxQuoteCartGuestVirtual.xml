@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontTaxQuoteCheckoutGuestVirtual">
+    <test name="StorefrontTaxQuoteCartGuestVirtual">
         <annotations>
             <features value="Tax"/>
-            <stories value="Tax Calculation in One Page Checkout"/>
-            <title value="Tax for Virtual Product Quote should be recalculated according to inputted data on Checkout flow for Guest Customer"/>
-            <description value="Tax for Virtual Product Quote should be recalculated according to inputted data on Checkout flow for Guest Customer"/>
+            <stories value="Tax Calculation in Shopping Cart"/>
+            <title value="Tax for Virtual Product Quote should be recalculated in Shopping Cart for Guest Customer"/>
+            <description value="Tax for Virtual Product Quote should be recalculated in Shopping Cart for Guest Customer"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-255"/>
+            <testCaseId value="MC-298"/>
             <group value="Tax"/>
         </annotations>
         <before>
@@ -82,31 +82,38 @@
         <waitForPageLoad stepKey="waitForProductAdded"/>
         <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
 
-        <!-- Assert that taxes are applied correctly for CA -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForShippingSection"/>
+        <!-- Assert that taxes are applied correctly for NY -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
+        <!-- Assert that taxes are applied correctly for CA -->
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
-        <see stepKey="seeTax2" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"/>
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
+        <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"/>
         <click stepKey="expandTax2" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent2" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxCA.rate}}%)"/>
-        <see stepKey="seeTotalIncl2" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$108.24"/>
-        <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
+        <see stepKey="seeTotalIncl3" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$108.24"/>
+        <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="GuestCheckoutSelectPaymentAndFillNewBillingAddressActionGroup" stepKey="changeAddress">
-            <argument name="customerVar" value="Simple_US_Customer_NY"/>
-            <argument name="customerAddressVar" value="US_Address_NY"/>
-            <argument name="paymentMethod" value="Check / Money order"/>
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
+            <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
 
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
-        <see stepKey="seeEditButton" selector="{{CheckoutShippingSection.editAddressButton}}" userInput="Edit"/>
-        <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxNY.state}}"/>
+        <!-- Assert that taxes are applied correctly for Switzerland -->
+        <see stepKey="seeTax2" selector="{{CheckoutPaymentSection.tax}}" userInput="$0.00"/>
+        <see stepKey="seeTotalIncl2" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$$$virtualProduct1.price$$"/>
+        <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$$virtualProduct1.price$$"/>
+
+        <!-- Change the address -->
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
+            <argument name="taxCode" value="SimpleTaxNY"/>
+        </actionGroup>
 
         <!-- Assert that taxes are applied correctly for NY -->
-        <waitForElementVisible stepKey="waitForOverviewVisible2" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.37"/>
         <click stepKey="expandTax" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxNY.rate}}%)"/>
