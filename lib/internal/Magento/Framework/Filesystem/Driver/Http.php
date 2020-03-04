@@ -11,7 +11,7 @@ namespace Magento\Framework\Filesystem\Driver;
 use Magento\Framework\Exception\FileSystemException;
 
 /**
- * Http driver file class.
+ * Allows interacting with http endpoint like with FileSystem
  */
 class Http extends File
 {
@@ -83,8 +83,9 @@ class Http extends File
      */
     public function fileGetContents($path, $flags = null, $context = null)
     {
-        clearstatcache();
-        $result = @file_get_contents($this->getScheme() . $path, $flags, $context);
+        $fullPath = $this->getScheme() . $path;
+        clearstatcache(false, $fullPath);
+        $result = @file_get_contents($fullPath, $flags, $context);
         if (false === $result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
