@@ -362,7 +362,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @return bool
      */
-    private function isSubscribedOrPending()
+    private function isSubscribedOrPending(): bool
     {
         return $this->getId() && (
             (int)$this->getStatus() === self::STATUS_SUBSCRIBED
