@@ -58,6 +58,9 @@ spec:
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
             subPath: var
+          - mountPath: /var/www/html/pub
+            name: magento-persistent-storage
+            subPath: pub
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
@@ -69,7 +72,10 @@ spec:
             subPath: media
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
-            subPath: var      
+            subPath: var
+          - mountPath: /var/www/html/pub
+            name: magento-persistent-storage
+            subPath: pub      
       volumes:
       - name: magento-persistent-storage
         persistentVolumeClaim:
