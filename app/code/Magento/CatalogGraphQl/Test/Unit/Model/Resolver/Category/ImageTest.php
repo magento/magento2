@@ -34,7 +34,7 @@ class ImageTest extends TestCase
     public function testResolve()
     {
         $field = $this->createMock(\Magento\Framework\GraphQl\Config\Element\Field::class);
-        $store = $this->createMock(\Magento\Store\Model\Store\Interceptor::class);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com'));
         $extensionAttribute = $this->createPartialMock(\Magento\GraphQl\Model\Query\ContextExtension::class, ['getStore']);
         $extensionAttribute->expects($this->once())->method('getStore')->will($this->returnValue($store));
@@ -49,7 +49,7 @@ class ImageTest extends TestCase
         $value = ['model' =>  $categoryMock];
         $imageUrl = $this->image->resolve($field, $context, $info, $value);
         if ($imageUrl) {
-        	$this->assertEquals($imageUrl, 'http://example.com/media/catalog/tmp/category/image.jpeg');
+            $this->assertEquals($imageUrl, 'http://example.com/media/catalog/tmp/category/image.jpeg');
         }
     }
 }
