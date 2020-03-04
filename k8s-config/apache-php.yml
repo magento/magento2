@@ -59,10 +59,10 @@ spec:
           ports:
             - containerPort: 9000
               name: php
-              lifecycle:
-                postStart:
-                  exec:   
-                    command: ["/bin/sh", "-c", "mv /var/www/magento/* /var/www/html"]
+          lifecycle:
+            postStart:
+              exec:   
+                command: ["/bin/sh", "-c", "mv /var/www/magento/* /var/www/html"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
