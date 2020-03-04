@@ -83,7 +83,7 @@
                 <argument name="postcode" value=""/>
                 <argument name="street" value=""/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Guest Customer Test Scenario -->

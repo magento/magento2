@@ -29,7 +29,7 @@
                 <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
             </actionGroup>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Content > Themes. Change theme to Blank -->

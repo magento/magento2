@@ -101,6 +101,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
         $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->requestMock = $this->createMock(HttpRequest::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->observer = $objectManager->getObject(
@@ -110,7 +111,8 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
                 'captchaStringResolver' => $this->captchaStringResolverMock,
                 '_session' => $this->sessionMock,
                 '_actionFlag' => $this->actionFlagMock,
-                'messageManager' => $this->messageManagerMock
+                'messageManager' => $this->messageManagerMock,
+                'request' => $this->requestMock
             ]
         );
 
@@ -122,16 +124,12 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->with($formId)
             ->willReturn($this->captchaMock);
 
-        $this->requestMock = $this->createMock(HttpRequest::class);
         $this->httpResponseMock = $this->createMock(HttpResponse::class);
 
         $this->controllerMock = $this->getMockBuilder(Action::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl', 'getRequest', 'getResponse'])
+            ->setMethods(['getUrl', 'getResponse'])
             ->getMockForAbstractClass();
-        $this->controllerMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
         $this->controllerMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->httpResponseMock);
