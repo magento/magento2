@@ -25,7 +25,7 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct2">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
@@ -100,7 +100,7 @@
             <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct1" />
             <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

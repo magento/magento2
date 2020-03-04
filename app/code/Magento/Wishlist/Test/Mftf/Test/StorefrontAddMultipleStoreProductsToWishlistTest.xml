@@ -48,7 +48,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
         </after>
 
