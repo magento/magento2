@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdvanceCatalogSearchBundleByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+    <test name="AdvanceCatalogSearchBundleByPriceTest" extends="AdvanceCatalogSearchSimpleProductByPriceTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search Bundle product with product name"/>
-            <description value="Guest customer should be able to advance search Bundle product with product name"/>
+            <title value="Guest customer should be able to advance search Bundle product with product price"/>
+            <description value="Guest customer should be able to advance search Bundle product with product price"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-139"/>
+            <testCaseId value="MC-251"/>
             <group value="Bundle"/>
             <group value="SearchEngineElasticsearch"/>
         </annotations>
@@ -36,6 +36,15 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
             </createData>
+            <getData entity="GetProduct" stepKey="arg1">
+                <requiredEntity createDataKey="product"/>
+            </getData>
+            <getData entity="GetProduct" stepKey="arg2">
+                <requiredEntity createDataKey="simple1"/>
+            </getData>
+            <getData entity="GetProduct" stepKey="arg3">
+                <requiredEntity createDataKey="simple2"/>
+            </getData>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>

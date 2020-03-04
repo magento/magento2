@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdvanceCatalogSearchBundleByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+    <test name="AdvanceCatalogSearchBundleByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Advanced Catalog Product Search for all product types"/>
-            <title value="Guest customer should be able to advance search Bundle product with product name"/>
-            <description value="Guest customer should be able to advance search Bundle product with product name"/>
+            <title value="Guest customer should be able to advance search Bundle product with product short description"/>
+            <description value="Guest customer should be able to advance search Bundle product with product short description"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-139"/>
+            <testCaseId value="MC-250"/>
             <group value="Bundle"/>
             <group value="SearchEngineElasticsearch"/>
         </annotations>
