@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminConfigurableProductSearchTest">
+    <test name="AdminConfigurableProductFilterByTypeTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Search"/>
-            <title value="admin should be able to search for a configurable product"/>
-            <description value="admin should be able to search for a configurable product"/>
-            <testCaseId value="MC-100"/>
+            <title value="admin should be able to filter by type configurable product"/>
+            <description value="admin should be able to filter by type configurable product"/>
+            <testCaseId value="MC-66"/>
             <group value="ConfigurableProduct"/>
             <severity value="AVERAGE"/>
         </annotations>
@@ -81,12 +81,10 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="wait1"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
-        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
-            <argument name="keyword" value="ApiConfigurableProduct.name"/>
-        </actionGroup>
-        <waitForPageLoad stepKey="wait2"/>
-        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneResult"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeInGrid"/>
-        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeInActiveFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickShowFilters"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{ApiConfigurableProduct.type_id}}" stepKey="selectConfigurableType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Type: Configurable Product" stepKey="seeFilter"/>
+        <see selector="{{AdminProductGridSection.table}}" userInput="$$createConfigProduct.name$$" stepKey="seeProduct"/>
     </test>
 </tests>
