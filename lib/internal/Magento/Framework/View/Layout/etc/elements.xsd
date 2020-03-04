@@ -140,6 +140,7 @@
             <xs:enumeration value="table"/>
             <xs:enumeration value="tfoot"/>
             <xs:enumeration value="ul"/>
+            <xs:enumeration value="article"/>
             <xs:enumeration value="h1"/>
             <xs:enumeration value="h2"/>
             <xs:enumeration value="h3"/>
