@@ -17,7 +17,6 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * Class InstallDefaultCategories data patch.
  *
- * @package Magento\Catalog\Setup\Patch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterface
@@ -54,7 +53,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -350,10 +350,11 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             'frontend_model',
             \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class
         );
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -361,7 +362,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -369,7 +370,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
