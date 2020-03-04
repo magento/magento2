@@ -5,10 +5,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Model\Data;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\SalesRule\Api\Data\ConditionInterface;
+use Magento\SalesRule\Api\Data\RuleExtensionInterface;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\Data\RuleLabelInterface;
 
 /**
  * Class Rule
@@ -16,7 +21,7 @@ use Magento\SalesRule\Api\Data\RuleInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @codeCoverageIgnore
  */
-class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements RuleInterface
+class Rule extends AbstractExtensibleObject implements RuleInterface
 {
     const KEY_RULE_ID = 'rule_id';
     const KEY_NAME = 'name';
@@ -187,7 +192,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
      * Set whether the coupon is active
      *
      * @param bool $isActive
-     * @return bool
+     * @return $this
      */
     public function setIsActive($isActive)
     {
@@ -197,7 +202,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * Get condition for the rule
      *
-     * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
+     * @return ConditionInterface|null
      */
     public function getCondition()
     {
@@ -207,7 +212,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * Set condition for the rule
      *
-     * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $condition
+     * @param ConditionInterface|null $condition
      * @return $this
      */
     public function setCondition(ConditionInterface $condition = null)
@@ -218,7 +223,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * Get action condition
      *
-     * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
+     * @return ConditionInterface|null
      */
     public function getActionCondition()
     {
@@ -228,7 +233,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * Set action condition
      *
-     * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $actionCondition
+     * @param ConditionInterface|null $actionCondition
      * @return $this
      */
     public function setActionCondition(ConditionInterface $actionCondition = null)
@@ -283,7 +288,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * Get display label
      *
-     * @return \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null
+     * @return RuleLabelInterface[]|null
      */
     public function getStoreLabels()
     {
@@ -293,7 +298,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * Set display label
      *
-     * @param \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null $storeLabels
+     * @param RuleLabelInterface[]|null $storeLabels
      * @return $this
      */
     public function setStoreLabels(array $storeLabels = null)
@@ -622,7 +627,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * @inheritdoc
      *
-     * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
+     * @return RuleExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -632,11 +637,11 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     /**
      * @inheritdoc
      *
-     * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
+     * @param RuleExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
+        RuleExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

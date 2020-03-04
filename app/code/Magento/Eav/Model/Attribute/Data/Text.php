@@ -45,7 +45,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     public function extractValue(RequestInterface $request)
     {
-        $value = $this->_getRequestValue($request);
+        $value = trim($this->_getRequestValue($request));
         return $this->_applyInputFilter($value);
     }
 
@@ -75,6 +75,8 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         if (empty($value) && $value !== '0' && $attribute->getDefaultValue() === null) {
             $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
+
+            return $errors;
         }
 
         $validateLengthResult = $this->validateLength($attribute, $value);
@@ -168,7 +170,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     private function validateInputRule(string $value): array
     {
-        $result = $this->_validateInputRule(trim($value));
+        $result = $this->_validateInputRule($value);
         return \is_array($result) ? $result : [];
     }
 }

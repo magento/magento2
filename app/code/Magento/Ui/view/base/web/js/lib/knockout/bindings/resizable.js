@@ -9,7 +9,7 @@ define([
     'uiRegistry',
     'underscore',
     '../template/renderer',
-    'jquery/ui'
+    'jquery-ui-modules/resizable'
 ], function (ko, $, async, registry, _, renderer) {
     'use strict';
 

@@ -53,18 +53,25 @@ class KeywordTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getFieldTypeProvider
-     * @param $isComplexType
-     * @param $isSearchable
-     * @param $isAlwaysIndexable
-     * @param $isFilterable
-     * @param $expected
+     * @param bool $isComplexType
+     * @param bool $isSearchable
+     * @param bool $isAlwaysIndexable
+     * @param bool $isFilterable
+     * @param bool $isBoolean
+     * @param string $expected
      * @return void
      */
-    public function testGetFieldType($isComplexType, $isSearchable, $isAlwaysIndexable, $isFilterable, $expected)
-    {
+    public function testGetFieldType(
+        bool $isComplexType,
+        bool $isSearchable,
+        bool $isAlwaysIndexable,
+        bool $isFilterable,
+        bool $isBoolean,
+        string $expected
+    ): void {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isComplexType', 'isSearchable', 'isAlwaysIndexable', 'isFilterable'])
+            ->setMethods(['isComplexType', 'isSearchable', 'isAlwaysIndexable', 'isFilterable', 'isBooleanType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isComplexType')
@@ -78,6 +85,9 @@ class KeywordTypeTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())
             ->method('isFilterable')
             ->willReturn($isFilterable);
+        $attributeMock->expects($this->any())
+            ->method('isBooleanType')
+            ->willReturn($isBoolean);
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
             ->willReturn('something');
@@ -94,13 +104,14 @@ class KeywordTypeTest extends \PHPUnit\Framework\TestCase
     public function getFieldTypeProvider()
     {
         return [
-            [true, true, true, true, 'something'],
-            [true, false, false, false, 'something'],
-            [true, false, false, true, 'something'],
-            [false, false, false, true, 'something'],
-            [false, false, false, false, ''],
-            [false, false, true, false, ''],
-            [false, true, false, false, ''],
+            [true, true, true, true, false, 'something'],
+            [true, false, false, false, false, 'something'],
+            [true, false, false, true, false, 'something'],
+            [false, false, false, true, false, 'something'],
+            [false, false, false, false, false, ''],
+            [false, false, true, false, false, ''],
+            [false, true, false, false, false, ''],
+            [true, true, true, true, true, ''],
         ];
     }
 }

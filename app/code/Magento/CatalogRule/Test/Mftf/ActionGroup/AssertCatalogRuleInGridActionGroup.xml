@@ -9,12 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCatalogRuleInGridActionGroup">
+        <annotations>
+            <description>Validates that the provided Catalog Rule Name, Status, Websites and Catalog Rule ID are present in the 1st row of the Admin Catalog Price Rule grid.</description>
+        </annotations>
         <arguments>
             <argument name="catalogRuleName" type="string"/>
             <argument name="status" type="string" defaultValue=""/>
             <argument name="websites" type="string"/>
             <argument name="catalogRuleId" type="string"/>
         </arguments>
+        
         <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{catalogRuleId}}" stepKey="seeCatalogRuleId"/>
         <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{catalogRuleName}}" stepKey="seeCatalogRuleName"/>
         <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{status}}" stepKey="seeCatalogRuleStatus"/>

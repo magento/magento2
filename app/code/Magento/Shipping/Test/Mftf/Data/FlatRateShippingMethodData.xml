@@ -51,7 +51,7 @@
         <data key="value">5.00</data>
     </entity>
     <entity name="flatRateHandlingFeeDefault" type="handling_fee">
-        <data key="value">F</data>
+        <data key="value">0</data>
     </entity>
     <entity name="flatRateSpecificerrmsgDefault" type="specificerrmsg">
         <data key="value">This shipping method is not available. To use this shipping method, please contact us.</data>

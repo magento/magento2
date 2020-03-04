@@ -16,7 +16,7 @@
                 <?php if (!$block->getPrintStatus()) : ?>
                     <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                     <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
-                        <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
+                        <?= $block->escapeHtml($_formatedOptionValue['value'], ['a', 'img']) ?>
                         <?php if (isset($_formatedOptionValue['full_view'])) : ?>
                         <div class="tooltip content">
                             <dl class="item options">

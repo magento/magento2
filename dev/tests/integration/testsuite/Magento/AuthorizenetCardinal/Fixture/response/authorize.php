@@ -12,7 +12,7 @@ return [
         'authCode' => 'abc123',
         'avsResultCode' => 'P',
         'cvvResultCode' => '',
-        'cavvResultCode' => '',
+        'cavvResultCode' => '2',
         'transId' => '123456',
         'refTransID' => '',
         'transHash' => 'foobar',

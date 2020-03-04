@@ -122,7 +122,7 @@
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
             input[type="checkbox"] {
-                margin-top: @indent__s;
+                margin-top: 0;
             }
         }
 
@@ -156,7 +156,7 @@
                 .admin__field {
                     margin-top: 8px;
                 }
-            } 
+            }
         }
     }
     &.composite-bundle {
@@ -307,7 +307,7 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        
+
         &.field-import_file {
             .input-file {
                 margin-top: 6px;
@@ -361,6 +361,11 @@
         cursor: inherit;
         opacity: 1;
         outline: inherit;
+        .admin__action-multiselect-wrap {
+            .admin__action-multiselect {
+                .__form-control-pattern__disabled();
+            }
+        }
     }
 
     &._hidden {
@@ -663,7 +668,7 @@
                 display: inline-block;
             }
         }
-        
+
 
         + .admin__field:last-child {
             width: auto;
@@ -699,7 +704,7 @@
                 width: 100%;
             }
         }
-        & > .admin__field-label { 
+        & > .admin__field-label {
             text-align: left;
         }
 

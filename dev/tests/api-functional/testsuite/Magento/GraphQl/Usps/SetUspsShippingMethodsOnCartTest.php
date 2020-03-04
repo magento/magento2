@@ -67,10 +67,6 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      */
     protected function setUp()
     {
-        $this->markTestSkipped(
-            'Need to implement mock instead of real carrier service call ' .
-            'https://github.com/magento/graphql-ce/issues/739'
-        );
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -115,10 +111,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_TITLE . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['method_title']
-        );
+        self::assertEquals($methodLabel, $shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**
@@ -191,10 +184,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
-        self::assertEquals(
-            self::CARRIER_TITLE . ' - ' . $methodLabel,
-            $shippingAddress['selected_shipping_method']['method_title']
-        );
+        self::assertEquals($methodLabel, $shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**

@@ -5,7 +5,6 @@
 
 define([
     'jquery',
-    'jquery/ui',
     'jquery/validate',
     'mage/translate'
 ], function ($) {

@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,34 +19,27 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
-    const CONTENT_TYPE = 'application/json';
-
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /** @var ObjectManager */
     private $objectManager;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
-
-    /** @var GraphQl */
-    private $graphql;
 
     /** @var SerializerInterface */
     private $jsonSerializer;
 
-    /** @var Http */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
     protected function setUp() : void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->request = $this->objectManager->get(Http::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
@@ -71,11 +64,10 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
       cart_id: "$maskedQuoteId"
       payment_method: {
           code: "$methodCode"
-          additional_data:
-         {authorizenet_acceptjs: 
+          authorizenet_acceptjs: 
             {opaque_data_descriptor: "COMMON.ACCEPT.INAPP.PAYMENT",
              opaque_data_value: "abx",
-             cc_last_4: 1111}}
+             cc_last_4: 1111}
       }
   }) {    
     cart {
@@ -86,18 +78,8 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
   }
 }
 QUERY;
-        $postData = [
-            'query' => $query,
-            'variables' => null,
-            'operationName' => null
-        ];
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-        $response = $this->graphql->dispatch($this->request);
+
+        $response = $this->graphQlRequest->send($query);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
         $this->assertArrayHasKey('setPaymentMethodOnCart', $output['data']);

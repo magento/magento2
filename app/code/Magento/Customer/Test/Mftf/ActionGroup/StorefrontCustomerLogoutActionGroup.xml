@@ -9,13 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCustomerLogoutActionGroup">
-        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
-    </actionGroup>
+        <annotations>
+            <description>Goes to the Storefront Customer Logout page.</description>
+        </annotations>
 
-    <actionGroup name="StorefrontSignOutActionGroup">
-        <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
-        <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="You are signed out" stepKey="signOut"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
+        <waitForPageLoad stepKey="waitForSignOut"/>
     </actionGroup>
 </actionGroups>

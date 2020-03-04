@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCustomerGroupNotInGridActionGroup">
+        <annotations>
+            <description>Filters the Admin Customers grid for the Customer Group (Code). Validates that the grid is empty.</description>
+        </annotations>
         <arguments>
-            <argument name="customerGroup" type="entity" />
+            <argument name="customerGroup" type="entity"/>
         </arguments>
+
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerGroupIndexPage"/>
         <fillField userInput="{{customerGroup.code}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('customer_group_code')}}" stepKey="fillNameFieldOnFiltersSection"/>

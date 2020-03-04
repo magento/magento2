@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /** @var Magento\Customer\Block\Account\Customer $block */
 ?>
-<?php if($block->customerLoggedIn()): ?>
+<?php if ($block->customerLoggedIn()) : ?>
     <li class="customer-welcome">
         <span class="customer-name"
               role="link"
@@ -36,10 +35,10 @@
             }
         }
         </script>
-        <?php if($block->getChildHtml()):?>
-        <div class="customer-menu" data-target="dropdown">
-            <?= $block->getChildHtml() ?>
-        </div>
+        <?php if ($block->getChildHtml()) :?>
+            <div class="customer-menu" data-target="dropdown">
+                <?= $block->getChildHtml() ?>
+            </div>
         <?php endif; ?>
     </li>
 <?php endif; ?>

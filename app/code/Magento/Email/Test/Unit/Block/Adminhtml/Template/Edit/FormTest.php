@@ -75,7 +75,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getVariablesOptionArray')
             ->willReturn(['template var 1', 'template var 2']);
         $this->assertEquals(
-            ['var1', 'var2', 'var3', 'custom var 1', 'custom var 2', 'template var 1', 'template var 2'],
+            ['var1', 'var2', 'var3', 'custom var 1', 'custom var 2', ['template var 1', 'template var 2']],
             $this->form->getVariables()
         );
     }
