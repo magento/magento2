@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Layer;
 
+use Magento\Catalog\Model\Config\LayerCategoryConfig;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Layer navigation filters
  */
@@ -45,17 +48,26 @@ class FilterList
     protected $filters = [];
 
     /**
+     * @var LayerCategoryConfig|null
+     */
+    private $layerCategoryConfig;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param FilterableAttributeListInterface $filterableAttributes
      * @param array $filters
+     * @param LayerCategoryConfig|null $layerCategoryConfig
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         FilterableAttributeListInterface $filterableAttributes,
-        array $filters = []
+        array $filters = [],
+        LayerCategoryConfig $layerCategoryConfig = null
     ) {
         $this->objectManager = $objectManager;
         $this->filterableAttributes = $filterableAttributes;
+        $this->layerCategoryConfig = $layerCategoryConfig ?:
+            ObjectManager::getInstance()->get(LayerCategoryConfig::class);
 
         /** Override default filter type models */
         $this->filterTypes = array_merge($this->filterTypes, $filters);
@@ -70,9 +82,11 @@ class FilterList
     public function getFilters(\Magento\Catalog\Model\Layer $layer)
     {
         if (!count($this->filters)) {
-            $this->filters = [
-                $this->objectManager->create($this->filterTypes[self::CATEGORY_FILTER], ['layer' => $layer]),
-            ];
+            if ($this->layerCategoryConfig->isCategoryFilterVisibleInLayerNavigation()) {
+                $this->filters = [
+                    $this->objectManager->create($this->filterTypes[self::CATEGORY_FILTER], ['layer' => $layer]),
+                ];
+            }
             foreach ($this->filterableAttributes->getList() as $attribute) {
                 $this->filters[] = $this->createAttributeFilter($attribute, $layer);
             }
