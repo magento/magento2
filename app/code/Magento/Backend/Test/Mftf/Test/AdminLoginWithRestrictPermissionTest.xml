@@ -39,7 +39,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
@@ -52,7 +52,7 @@
             </actionGroup>
         </after>
         <!--Log out of admin and login with newly created user-->
-        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
             <argument name="adminUser" value="admin2"/>
         </actionGroup>

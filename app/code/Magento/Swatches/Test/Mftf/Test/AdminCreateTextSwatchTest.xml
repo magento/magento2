@@ -22,7 +22,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a new product attribute of type "Text Swatch" -->

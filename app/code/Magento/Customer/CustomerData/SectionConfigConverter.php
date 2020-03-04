@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\CustomerData;
 
+/**
+ * Class that receives xml merged source and process it.
+ */
 class SectionConfigConverter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -13,7 +16,7 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
     const INVALIDATE_ALL_SECTIONS_MARKER = '*';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($source)
     {
@@ -21,10 +24,18 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
         foreach ($source->getElementsByTagName('action') as $action) {
             $actionName = strtolower($action->getAttribute('name'));
             foreach ($action->getElementsByTagName('section') as $section) {
-                $sections[$actionName][] = strtolower($section->getAttribute('name'));
+                $sectionName = strtolower($section->getAttribute('name'));
+
+                if ($sectionName === self::INVALIDATE_ALL_SECTIONS_MARKER) {
+                    $sections[$actionName] = [];
+                    $sections[$actionName][] = self::INVALIDATE_ALL_SECTIONS_MARKER;
+                    break;
+                } else {
+                    $sections[$actionName][] = $sectionName;
+                }
             }
             if (!isset($sections[$actionName])) {
-                $sections[$actionName] = self::INVALIDATE_ALL_SECTIONS_MARKER;
+                $sections[$actionName][] = self::INVALIDATE_ALL_SECTIONS_MARKER;
             }
         }
         return [

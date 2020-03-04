@@ -29,7 +29,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProductFilteredBySkuAndName">
             <argument name="product" value="$$createDynamicBundleProduct$$"/>

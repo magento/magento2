@@ -97,7 +97,7 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>
