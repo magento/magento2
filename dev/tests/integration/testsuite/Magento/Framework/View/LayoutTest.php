@@ -253,17 +253,28 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     public function addContainerDataProvider()
     {
         return [
+            ['aside'],
             ['dd'],
             ['div'],
             ['dl'],
             ['fieldset'],
+            ['main'],
+            ['nav'],
             ['header'],
+            ['footer'],
             ['ol'],
             ['p'],
             ['section'],
             ['table'],
             ['tfoot'],
-            ['ul']
+            ['ul'],
+            ['article'],
+            ['h1'],
+            ['h2'],
+            ['h3'],
+            ['h4'],
+            ['h5'],
+            ['h6'],
         ];
     }
 
