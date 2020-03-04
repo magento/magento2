@@ -28,7 +28,7 @@ class ProductProcessUrlRewriteRemovingPlugin
     /**
      * @var ProductRepositoryInterface $productRepository
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var StoreWebsiteRelationInterface $storeWebsiteRelation
@@ -38,12 +38,12 @@ class ProductProcessUrlRewriteRemovingPlugin
     /**
      * @var UrlPersistInterface $urlPersist
      */
-    protected $urlPersist;
+    private $urlPersist;
 
     /**
      * @var ProductUrlRewriteGenerator $productUrlRewriteGenerator
      */
-    protected $productUrlRewriteGenerator;
+    private $productUrlRewriteGenerator;
 
     /**
      * @var DbStorage $dbStorage
@@ -72,13 +72,16 @@ class ProductProcessUrlRewriteRemovingPlugin
     }
 
     /**
+     * Function afterUpdateWebsites
+     *
      * @param Action $subject
-     * @param null $result
+     * @param $result
      * @param array $productIds
      * @param array $websiteIds
      * @param string $type
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterUpdateWebsites(
         Action $subject,
