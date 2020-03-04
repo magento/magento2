@@ -8,30 +8,29 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontAddNewCustomerAddressTest">
+    <test name="StorefrontAddCustomerDefaultAddressTest">
         <annotations>
             <features value="Customer address"/>
             <stories value="Implement handling of large number of addresses on storefront Address book"/>
-            <title value="Storefront - My account - Address Book - add new address"/>
-            <description value="Storefront user should be able to create a new address via the storefront"/>
+            <title value="Storefront - My account - Address Book - add new default billing/shipping address"/>
+            <description value="Storefront user should be able to create a new default address via the storefront"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97364"/>
             <group value="customer"/>
             <group value="create"/>
         </annotations>
         <before>
-            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="AddNewAddress">
+        <actionGroup ref="StorefrontAddCustomerDefaultAddressActionGroup" stepKey="AddNewDefaultAddress">
             <argument name="Address" value="US_Address_TX"/>
         </actionGroup>
         <see userInput="{{US_Address_TX.street[0]}}"
