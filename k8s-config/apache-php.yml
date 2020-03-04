@@ -59,6 +59,10 @@ spec:
           ports:
             - containerPort: 9000
               name: php
+              lifecycle:
+                postStart:
+                  exec:   
+                    command: ["/bin/sh", "-c", "mv /var/www/magento/* /var/www/html"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
@@ -67,12 +71,8 @@ spec:
             subPath: media
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
-            subPath: var  
-          lifecycle:
-            postStart:
-              exec:   
-                command: ["/bin/sh", "-c", "mv /var/www/magento/* /var/www/html"]
-        volumes:
+            subPath: var 
+      volumes:
       - name: magento-shared
         emptyDir: {}
       - name: magento-persistent-storage
