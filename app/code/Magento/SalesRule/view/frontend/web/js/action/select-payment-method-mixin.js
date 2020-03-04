@@ -16,36 +16,34 @@ define([
     return function (selectPaymentMethodAction) {
 
         return wrapper.wrap(selectPaymentMethodAction, function (originalSelectPaymentMethodAction, paymentMethod) {
-            originalSelectPaymentMethodAction(paymentMethod);
-            $.when(
-                function () {
-                    if (paymentMethod != null) {
-                        setPaymentInformationAction(
-                            messageContainer,
-                            {
-                                method: paymentMethod.method
-                            }
-                        )
+            if (paymentMethod != null) {
+                originalSelectPaymentMethodAction(paymentMethod);
+                $.when(
+                    setPaymentInformationAction(
+                        messageContainer,
+                        {
+                            method: paymentMethod.method
+                        }
+                    )
+                ).done(
+                    function () {
+                        var deferred = $.Deferred(),
+
+                            /**
+                             * Update coupon form.
+                             */
+                            updateCouponCallback = function () {
+                                if (quote.totals() && !quote.totals()['coupon_code']) {
+                                    coupon.setCouponCode('');
+                                    coupon.setIsApplied(false);
+                                }
+                            };
+
+                        getTotalsAction([], deferred);
+                        $.when(deferred).done(updateCouponCallback);
                     }
-                }
-            ).done(
-                function () {
-                    var deferred = $.Deferred(),
-
-                        /**
-                         * Update coupon form.
-                         */
-                        updateCouponCallback = function () {
-                            if (quote.totals() && !quote.totals()['coupon_code']) {
-                                coupon.setCouponCode('');
-                                coupon.setIsApplied(false);
-                            }
-                        };
-
-                    getTotalsAction([], deferred);
-                    $.when(deferred).done(updateCouponCallback);
-                }
-            );
+                );
+            }
         });
     };
 
