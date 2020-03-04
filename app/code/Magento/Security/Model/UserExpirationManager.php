@@ -134,7 +134,7 @@ class UserExpirationManager
     public function isUserExpired(string $userId): bool
     {
         $isExpired = false;
-        /** @var \Magento\Security\Model\UserExpirationInterface $expiredRecord */
+        /** @var \Magento\Security\Api\Data\UserExpirationInterface $expiredRecord */
         $expiredRecord = $this->userExpirationCollectionFactory->create()
             ->addExpiredRecordsForUserFilter($userId)
             ->getFirstItem();

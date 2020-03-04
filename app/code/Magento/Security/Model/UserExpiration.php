@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
+use Magento\Security\Api\Data\UserExpirationInterface;
+
 /**
  * Admin User Expiration model.
  */
-class UserExpiration extends \Magento\Framework\Model\AbstractModel implements UserExpirationInterface
+class UserExpiration extends \Magento\Framework\Model\AbstractExtensibleModel implements UserExpirationInterface
 {
 
     /**
@@ -63,5 +65,21 @@ class UserExpiration extends \Magento\Framework\Model\AbstractModel implements U
     public function setUserId($userId)
     {
         return $this->setData(self::USER_ID, $userId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExtensionAttributes(\Magento\Security\Api\Data\UserExpirationExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
