@@ -150,11 +150,11 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\StoreManagerInterface::class
         );
         $websites = $storeManager->getWebsites();
-        /** @var \Magento\Customer\Model\Attribute $model */
-        $model = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Attribute::class
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = Bootstrap::getObjectManager()->create(
+            \Magento\Eav\Model\Config::class
         );
-        $model->loadByCode('customer_address', 'telephone')->setIsVisible('1');
+        $model = $eavConfig->getAttribute('customer_address', 'telephone');
         $storeLabels = $model->getStoreLabels();
         foreach ($websites as $website) {
             $storeLabels[$website->getId()] = 'Phone NumberX';
