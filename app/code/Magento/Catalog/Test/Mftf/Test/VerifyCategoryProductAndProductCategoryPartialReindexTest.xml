@@ -202,6 +202,7 @@
         <!-- Run Cron once to reindex product changes -->
         <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="30"/>
         <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
+        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="30"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 
