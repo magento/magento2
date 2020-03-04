@@ -62,7 +62,7 @@ class CreateTest extends AbstractBackendController
      * during creation second partial invoice.
      *
      * @return void
-     * @magentoConfigFixture default_store payment/braintree/merchant_account_id Magneto
+     * @magentoConfigFixture default_store payment/braintree/merchant_account_id Magento
      * @magentoConfigFixture current_store payment/braintree/merchant_account_id USA_Merchant
      * @magentoDataFixture Magento/Braintree/Fixtures/partial_invoice.php
      */
@@ -71,11 +71,14 @@ class CreateTest extends AbstractBackendController
         $order = $this->getOrder('100000002');
 
         $this->adapter->method('sale')
-            ->with(self::callback(function ($request) {
-                self::assertEquals('USA_Merchant', $request['merchantAccountId']);
-                return true;
-            }))
-            ->willReturn($this->getTransactionStub());
+            ->with(
+                self::callback(
+                    function ($request) {
+                        self::assertEquals('USA_Merchant', $request['merchantAccountId']);
+                        return true;
+                    }
+                )
+            )->willReturn($this->getTransactionStub());
 
         $uri = 'backend/sales/order_invoice/save/order_id/' . $order->getEntityId();
         $this->prepareRequest($uri);

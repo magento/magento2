@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface;
 
 /**
  * Category products resolver, used by GraphQL endpoints to retrieve products assigned to a category
@@ -21,33 +20,25 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 class Products implements ResolverInterface
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductQueryInterface
      */
-    private $productRepository;
+    private $searchQuery;
 
     /**
-     * @var Builder
+     * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $searchApiCriteriaBuilder;
 
     /**
-     * @var Filter
-     */
-    private $filterQuery;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param Builder $searchCriteriaBuilder
-     * @param Filter $filterQuery
+     * @param ProductQueryInterface $searchQuery
+     * @param SearchCriteriaBuilder $searchApiCriteriaBuilder
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        Builder $searchCriteriaBuilder,
-        Filter $filterQuery
+        ProductQueryInterface $searchQuery,
+        SearchCriteriaBuilder $searchApiCriteriaBuilder
     ) {
-        $this->productRepository = $productRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterQuery = $filterQuery;
+        $this->searchQuery = $searchQuery;
+        $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder;
     }
 
     /**
@@ -60,31 +51,29 @@ class Products implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $args['filter'] = [
-            'category_id' => [
-                'eq' => $value['id']
-            ]
-        ];
-        $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
         if ($args['currentPage'] < 1) {
             throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
         }
         if ($args['pageSize'] < 1) {
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
-        $searchCriteria->setCurrentPage($args['currentPage']);
-        $searchCriteria->setPageSize($args['pageSize']);
-        $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
+
+        $args['filter'] = [
+            'category_id' => [
+                'eq' => $value['id']
+            ]
+        ];
+        $searchResult = $this->searchQuery->getResult($args, $info);
 
         //possible division by 0
-        if ($searchCriteria->getPageSize()) {
-            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
+        if ($searchResult->getPageSize()) {
+            $maxPages = ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } else {
             $maxPages = 0;
         }
 
-        $currentPage = $searchCriteria->getCurrentPage();
-        if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
+        $currentPage = $searchResult->getCurrentPage();
+        if ($searchResult->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
             $currentPage = new GraphQlInputException(
                 __(
                     'currentPage value %1 specified is greater than the number of pages available.',
@@ -97,7 +86,7 @@ class Products implements ResolverInterface
             'total_count' => $searchResult->getTotalCount(),
             'items'       => $searchResult->getProductsSearchResult(),
             'page_info'   => [
-                'page_size'    => $searchCriteria->getPageSize(),
+                'page_size'    => $searchResult->getPageSize(),
                 'current_page' => $currentPage,
                 'total_pages' => $maxPages
             ]

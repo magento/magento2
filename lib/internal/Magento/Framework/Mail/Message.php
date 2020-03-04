@@ -10,13 +10,16 @@ use Zend\Mime\Part;
 
 /**
  * Class Message for email transportation
+ *
+ * @deprecated
+ * @see \Magento\Framework\Mail\EmailMessage
  */
 class Message implements MailMessageInterface
 {
     /**
      * @var \Zend\Mail\Message
      */
-    private $zendMessage;
+    protected $zendMessage;
 
     /**
      * Message type
@@ -167,6 +170,7 @@ class Message implements MailMessageInterface
     {
         $part = new Part($body);
         $part->setCharset($this->zendMessage->getEncoding());
+        $part->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
         $part->setType($messageType);
         $mimeMessage = new \Zend\Mime\Message();
         $mimeMessage->addPart($part);

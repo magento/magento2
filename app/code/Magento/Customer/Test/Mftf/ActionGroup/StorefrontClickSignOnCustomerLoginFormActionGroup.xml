@@ -9,7 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontClickSignOnCustomerLoginFormActionGroup">
-        <click stepKey="clickSignInButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" />
-        <waitForPageLoad stepKey="waitForCustomerSignIn" />
+        <annotations>
+            <description>Click on the Customer Sign In button on the Storefront Customer Sign-In page.</description>
+        </annotations>
+        
+        <click stepKey="clickSignInButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForCustomerSignIn"/>
     </actionGroup>
 </actionGroups>

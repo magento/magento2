@@ -20,6 +20,15 @@ $simpleId = $productRepository->get('simple')->getId();
 $simpleDuplicatedId = $productRepository->get('simple-1')->getId();
 $virtualId = $productRepository->get('virtual-product')->getId();
 
+$config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
+);
+$config->setValue(
+    'reports/options/enabled',
+    1,
+    \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+);
+
 // imitate product views
 /** @var \Magento\Reports\Observer\CatalogProductViewObserver $reportObserver */
 $reportObserver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

@@ -7,6 +7,8 @@
 namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\Framework\App\Cache\Type\Block as BlockCache;
+use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -16,6 +18,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
@@ -34,6 +37,7 @@ use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
@@ -335,7 +339,7 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
-        $script[] = ['Enabling caches:', 'enableCaches', []];
+        $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
@@ -428,7 +432,7 @@ class Installer
         $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
-            if ((isset($currentModules[$module]) && !$currentModules[$module])) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
                 $result[$module] = 0;
             } else {
                 $result[$module] = 1;
@@ -603,7 +607,7 @@ class Installer
      */
     private function setupCoreTables(SchemaSetupInterface $setup)
     {
-        /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        /* @var $connection AdapterInterface */
         $connection = $setup->getConnection();
         $setup->startSetup();
 
@@ -619,12 +623,12 @@ class Installer
      * Create table 'session'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupSessionTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
         if (!$connection->isTableExists($setup->getTable('session'))) {
             $table = $connection->newTable(
@@ -658,12 +662,12 @@ class Installer
      * Create table 'cache'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupCacheTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
         if (!$connection->isTableExists($setup->getTable('cache'))) {
             $table = $connection->newTable(
@@ -712,12 +716,12 @@ class Installer
      * Create table 'cache_tag'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
         if (!$connection->isTableExists($setup->getTable('cache_tag'))) {
             $table = $connection->newTable(
@@ -748,16 +752,17 @@ class Installer
      * Create table 'flag'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupFlagTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
-        if (!$connection->isTableExists($setup->getTable('flag'))) {
+        $tableName = $setup->getTable('flag');
+        if (!$connection->isTableExists($tableName)) {
             $table = $connection->newTable(
-                $setup->getTable('flag')
+                $tableName
             )->addColumn(
                 'flag_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -779,7 +784,7 @@ class Installer
             )->addColumn(
                 'flag_data',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '64k',
+                '16m',
                 [],
                 'Flag Data'
             )->addColumn(
@@ -795,6 +800,8 @@ class Installer
                 'Flag'
             );
             $connection->createTable($table);
+        } else {
+            $this->updateColumnType($connection, $tableName, 'flag_data', 'mediumtext');
         }
     }
 
@@ -862,6 +869,12 @@ class Installer
      */
     public function installDataFixtures(array $request = [])
     {
+        $frontendCaches = [
+            PageCache::TYPE_IDENTIFIER,
+            BlockCache::TYPE_IDENTIFIER,
+            LayoutCache::TYPE_IDENTIFIER,
+        ];
+
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
@@ -872,7 +885,11 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
+        $this->log->log('Disabling caches:');
+        $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
+        $this->log->log('Enabling caches:');
+        $this->updateCaches(true, $frontendCaches);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -921,7 +938,7 @@ class Installer
      */
     private function handleDBSchemaData($setup, $type, array $request)
     {
-        if (!(($type === 'schema') || ($type === 'data'))) {
+        if (!($type === 'schema' || $type === 'data')) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
@@ -1244,23 +1261,39 @@ class Installer
     }
 
     /**
-     * Enables caches after installing application
+     * Enable or disable caches for specific types that are available
      *
+     * If no types are specified then it will enable or disable all available types
+     * Note this is called by install() via callback.
+     *
+     * @param bool $isEnabled
+     * @param array $types
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
-    private function enableCaches()
+    private function updateCaches($isEnabled, $types = [])
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
-        $types = $cacheManager->getAvailableTypes();
-        $enabledTypes = $cacheManager->setEnabled($types, true);
-        $cacheManager->clean($enabledTypes);
+
+        $availableTypes = $cacheManager->getAvailableTypes();
+        $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
+        $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
+        if ($isEnabled) {
+            $cacheManager->clean($enabledTypes);
+        }
+
+        // Only get statuses of specific cache types
+        $cacheStatus = array_filter(
+            $cacheManager->getStatus(),
+            function (string $key) use ($types) {
+                return in_array($key, $types);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
 
         $this->log->log('Current status:');
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $this->log->log(print_r($cacheManager->getStatus(), true));
+        $this->log->log(print_r($cacheStatus, true));
     }
 
     /**
@@ -1547,5 +1580,29 @@ class Installer
         );
 
         return !empty($adminData);
+    }
+
+    /**
+     * Update flag_data column data type to maintain consistency.
+     *
+     * @param AdapterInterface $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @param string $typeName
+     */
+    private function updateColumnType(
+        AdapterInterface $connection,
+        string $tableName,
+        string $columnName,
+        string $typeName
+    ): void {
+        $tableDescription = $connection->describeTable($tableName);
+        if ($tableDescription[$columnName]['DATA_TYPE'] !== $typeName) {
+            $connection->modifyColumn(
+                $tableName,
+                $columnName,
+                $typeName
+            );
+        }
     }
 }

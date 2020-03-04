@@ -43,6 +43,10 @@ class Field extends \Magento\Backend\Block\Template implements
             $element->setDisabled(true);
         }
 
+        if ($element->getIsDisableInheritance()) {
+            $element->setReadonly(true);
+        }
+
         $html = '<td class="label"><label for="' .
             $element->getHtmlId() . '"><span' .
             $this->_renderScopeLabel($element) . '>' .
@@ -94,7 +98,7 @@ class Field extends \Magento\Backend\Block\Template implements
         $htmlId = $element->getHtmlId();
         $namePrefix = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
         $checkedHtml = $element->getInherit() == 1 ? 'checked="checked"' : '';
-        $disabled = $element->getIsDisableInheritance() == true ? ' disabled="disabled"' : '';
+        $disabled = $element->getIsDisableInheritance() == true ? ' disabled="disabled" readonly="1"' : '';
 
         $html = '<td class="use-default">';
         $html .= '<input id="' .

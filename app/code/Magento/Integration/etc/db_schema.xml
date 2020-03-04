@@ -129,7 +129,7 @@
     <table name="oauth_token_request_log" resource="default" engine="innodb"
            comment="Log of token request authentication failures.">
         <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Log Id"/>
+                comment="Log ID"/>
         <column xsi:type="varchar" name="user_name" nullable="false" length="255"
                 comment="Customer email or admin login"/>
         <column xsi:type="smallint" name="user_type" padding="5" unsigned="true" nullable="false" identity="false"

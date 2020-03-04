@@ -117,7 +117,8 @@ class PayflowProResponse implements ResolverInterface
         }
 
         $maskedCartId = $args['input']['cart_id'];
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         $paypalPayload = $args['input']['paypal_payload'] ?? '';
 

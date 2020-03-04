@@ -7,10 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\ConfigFactory;
 
+/**
+ * Class SmartButtonConfigTest
+ */
 class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,9 +36,15 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->configMock = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject $scopeConfigMock */
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock->method('isSetFlag')
+            ->willReturn(true);
+
         /** @var \PHPUnit_Framework_MockObject_MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
@@ -43,12 +54,15 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
         $this->model = new SmartButtonConfig(
             $this->localeResolverMock,
             $configFactoryMock,
+            $scopeConfigMock,
             $this->getDefaultStyles(),
             $this->getAllowedFundings()
         );
     }
 
     /**
+     * Tests config.
+     *
      * @param string $page
      * @param string $locale
      * @param string $disallowedFundings
@@ -78,22 +92,33 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
         array $expected = []
     ) {
         $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn($locale);
-        $this->configMock->expects($this->any())->method('getValue')->will($this->returnValueMap([
-            ['merchant_id', null, 'merchant'],
-            ['sandbox_flag', null, true],
-            ['disable_funding_options', null, $disallowedFundings],
-            ["{$page}_page_button_customize", null, $isCustomize],
-            ["{$page}_page_button_layout", null, $layout],
-            ["{$page}_page_button_size", null, $size],
-            ["{$page}_page_button_color", null, $color],
-            ["{$page}_page_button_shape", null, $shape],
-            ["{$page}_page_button_label", null, $label],
-            [$page . '_page_button_' . $installmentPeriodLocale . '_installment_period', null, $installmentPeriodLabel]
-        ]));
+        $this->configMock->method('getValue')->will(
+            $this->returnValueMap(
+                [
+                    ['merchant_id', null, 'merchant'],
+                    ['sandbox_flag', null, true],
+                    ['disable_funding_options', null, $disallowedFundings],
+                    ["{$page}_page_button_customize", null, $isCustomize],
+                    ["{$page}_page_button_layout", null, $layout],
+                    ["{$page}_page_button_size", null, $size],
+                    ["{$page}_page_button_color", null, $color],
+                    ["{$page}_page_button_shape", null, $shape],
+                    ["{$page}_page_button_label", null, $label],
+                    [
+                        $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
+                        null,
+                        $installmentPeriodLabel
+                    ]
+                ]
+            )
+        );
 
         self::assertEquals($expected, $this->model->getConfig($page));
     }
 
+    /**
+     * @return array
+     */
     public function getConfigDataProvider()
     {
         return include __DIR__ . '/_files/expected_config.php';

@@ -29,11 +29,6 @@ use Psr\Log\LoggerInterface;
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
-     * Xml default email domain path
-     */
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
-
-    /**
      * Quote session object
      *
      * @var \Magento\Backend\Model\Session\Quote
@@ -1134,7 +1129,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->recollectCart();
             throw $e;
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
@@ -1991,6 +1985,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_errors = array_merge($this->_errors, $messages);
             }
         }
@@ -2010,7 +2005,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             } else {
                 try {
                     $method->validate();
-                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->_errors[] = $e->getMessage();
                 }

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Transparent\Form $block
  */
@@ -30,9 +29,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     }'
                     class="select">
                 <option value=""><?= $block->escapeHtml(__('--Please Select--')) ?></option>
-            <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
+            <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
                 <option value="<?= $block->escapeHtml($typeCode) ?>"
-                    <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
+                    <?php if ($typeCode == $ccType) : ?> selected="selected"<?php endif; ?>>
                     <?= $block->escapeHtml($typeName) ?>
                 </option>
             <?php endforeach; ?>
@@ -63,9 +62,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     <div class="control">
                         <select id="<?= /* @noEscape */ $code ?>_expiration" name="payment[cc_exp_month]" class="select month"
                                 data-validate='{required:true, "validate-cc-exp":"#<?= /* @noEscape */ $code ?>_expiration_yr"}'>
-                            <?php foreach ($block->getCcMonths() as $k => $v): ?>
+                            <?php foreach ($block->getCcMonths() as $k => $v) : ?>
                                 <option value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
-                                    <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
+                                    <?php if ($k == $ccExpMonth) : ?> selected="selected"<?php endif; ?>>
                                     <?= $block->escapeHtml($v) ?>
                                 </option>
                             <?php endforeach; ?>
@@ -76,9 +75,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     <div class="control">
                         <select id="<?= /* @noEscape */ $code ?>_expiration_yr" name="payment[cc_exp_year]"
                                 class="select year" data-validate='{required:true}'>
-                            <?php foreach ($block->getCcYears() as $k => $v): ?>
+                            <?php foreach ($block->getCcYears() as $k => $v) : ?>
                                 <option value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>
-                                "<?php if ($k == $ccExpYear): ?> selected="selected"<?php endif; ?>>
+                                "<?php if ($k == $ccExpYear) : ?> selected="selected"<?php endif; ?>>
                                     <?= $block->escapeHtml($v) ?>
                                 </option>
                             <?php endforeach; ?>
@@ -88,7 +87,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             </div>
         </div>
     </div>
-    <?php if ($block->hasVerification()): ?>
+    <?php if ($block->hasVerification()) : ?>
     <div class="field cvv required" id="<?= /* @noEscape */ $code ?>_cc_type_cvv_div">
         <label for="<?= /* @noEscape */ $code ?>_cc_cid" class="label">
             <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>

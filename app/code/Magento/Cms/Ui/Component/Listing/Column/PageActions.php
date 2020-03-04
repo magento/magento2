@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class PageActions
+ * Class prepare Page Actions
  */
 class PageActions extends Column
 {
@@ -86,7 +86,8 @@ class PageActions extends Column
                 if (isset($item['page_id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
-                        'label' => __('Edit')
+                        'label' => __('Edit'),
+                        '__disableTmpl' => true,
                     ];
                     $title = $this->getEscaper()->escapeHtml($item['title']);
                     $item[$name]['delete'] = [
@@ -94,9 +95,11 @@ class PageActions extends Column
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $title),
-                            'message' => __('Are you sure you want to delete a %1 record?', $title)
+                            'message' => __('Are you sure you want to delete a %1 record?', $title),
+                            '__disableTmpl' => true,
                         ],
-                        'post' => true
+                        'post' => true,
+                        '__disableTmpl' => true,
                     ];
                 }
                 if (isset($item['identifier'])) {
@@ -106,7 +109,9 @@ class PageActions extends Column
                             isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
                             isset($item['store_code']) ? $item['store_code'] : null
                         ),
-                        'label' => __('View')
+                        'label' => __('View'),
+                        '__disableTmpl' => true,
+                        'target' => '_blank'
                     ];
                 }
             }

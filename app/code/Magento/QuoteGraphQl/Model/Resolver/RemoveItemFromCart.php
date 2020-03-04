@@ -59,7 +59,8 @@ class RemoveItemFromCart implements ResolverInterface
         }
         $itemId = $args['input']['cart_item_id'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         try {
             $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);

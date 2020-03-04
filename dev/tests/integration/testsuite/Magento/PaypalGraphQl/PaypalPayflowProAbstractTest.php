@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Config\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\UrlInterface;
 
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 
@@ -143,8 +142,6 @@ abstract class PaypalPayflowProAbstractTest extends TestCase
      */
     protected function getCreatePayflowTokenMutation(string $cartId): string
     {
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
 
         return <<<QUERY
 mutation {
@@ -152,9 +149,9 @@ mutation {
     input: {
       cart_id:"{$cartId}",
       urls: {
-        cancel_url: "{$baseUrl}paypal/transparent/cancel/"
-        error_url: "{$baseUrl}paypal/transparent/error/"
-        return_url: "{$baseUrl}paypal/transparent/response/"
+        cancel_url: "paypal/transparent/cancel/"
+        error_url: "paypal/transparent/error/"
+        return_url: "paypal/transparent/response/"
       }
     }
   ) {

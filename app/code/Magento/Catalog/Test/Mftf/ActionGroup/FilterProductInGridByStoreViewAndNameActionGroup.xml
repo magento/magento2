@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FilterProductInGridByStoreViewAndNameActionGroup">
+        <annotations>
+            <description>Goes to the Admin Products grid page. Filters the grid based on the provided Store View. Validates that the Product Name is present in the 1st row of the grid.</description>
+        </annotations>
         <arguments>
             <argument name="storeView" type="string"/>
             <argument name="productName" type="string"/>
         </arguments>
+        
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchProduct"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>

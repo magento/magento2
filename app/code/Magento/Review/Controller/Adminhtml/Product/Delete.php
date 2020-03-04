@@ -11,7 +11,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
 /**
- * Delete action.
+ * Delete review action.
  */
 class Delete extends ProductController implements HttpPostActionInterface
 {
@@ -33,7 +33,7 @@ class Delete extends ProductController implements HttpPostActionInterface
         try {
             $this->getModel()->aggregate()->delete();
 
-            $this->messageManager->addSuccess(__('The review has been deleted.'));
+            $this->messageManager->addSuccessMessage(__('The review has been deleted.'));
             if ($this->getRequest()->getParam('ret') == 'pending') {
                 $resultRedirect->setPath('review/*/pending');
             } else {
@@ -41,9 +41,9 @@ class Delete extends ProductController implements HttpPostActionInterface
             }
             return $resultRedirect;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong  deleting this review.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong  deleting this review.'));
         }
 
         return $resultRedirect->setPath('review/*/edit/', ['id' => $reviewId]);

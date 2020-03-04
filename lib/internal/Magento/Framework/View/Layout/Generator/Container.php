@@ -8,10 +8,7 @@ namespace Magento\Framework\View\Layout\Generator;
 use Magento\Framework\View\Layout;
 
 /**
- * Creates html container and validates element
- *
- * Class Container
- * @package Magento\Framework\View\Layout\Generator
+ * Layout Container Class
  */
 class Container implements Layout\GeneratorInterface
 {
@@ -45,6 +42,7 @@ class Container implements Layout\GeneratorInterface
         'table',
         'tfoot',
         'ul',
+        'article',
         'h1',
         'h2',
         'h3',
@@ -107,10 +105,12 @@ class Container implements Layout\GeneratorInterface
     }
 
     /**
-     * Validates allowed htmlTags for layout
+     * Validate container options
      *
      * @param array $options
+     *
      * @return void
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateOptions($options)

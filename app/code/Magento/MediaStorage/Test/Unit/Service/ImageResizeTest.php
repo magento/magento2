@@ -17,6 +17,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
 use Magento\Framework\Config\View;
 use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\MediaStorage\Helper\File\Storage\Database;
@@ -119,7 +120,15 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
      * @var string
      */
     private $testfilepath;
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|StoreManagerInterface
+     */
+    private $storeManager;
 
+    /**
+     * @inheritDoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->testfilename = "image.jpg";
@@ -139,6 +148,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->themeCollectionMock = $this->createMock(Collection::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->databaseMock = $this->createMock(Database::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -203,6 +213,16 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('getViewConfig')
             ->willReturn($this->viewMock);
 
+        $store = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class);
+        $store
+            ->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $this->storeManager
+            ->expects($this->any())
+            ->method('getStores')
+            ->willReturn([$store]);
+
         $this->service = new \Magento\MediaStorage\Service\ImageResize(
             $this->appStateMock,
             $this->imageConfigMock,
@@ -214,7 +234,8 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             $this->themeCustomizationConfigMock,
             $this->themeCollectionMock,
             $this->filesystemMock,
-            $this->databaseMock
+            $this->databaseMock,
+            $this->storeManager
         );
     }
 
@@ -248,7 +269,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->with($this->testfilepath)
-            ->will($this->returnValue(false));
+            ->will($this->returnValue(true));
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')

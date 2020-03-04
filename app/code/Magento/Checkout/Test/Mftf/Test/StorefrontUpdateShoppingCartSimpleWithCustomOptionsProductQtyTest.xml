@@ -61,7 +61,7 @@
         <see userInput="{{quoteQty11Subtotal1320.currency}}{{quoteQty11Subtotal1320.subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
 
         <!-- Minicart product price and subtotal should be updated -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openMinicart"/>
         <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
         <assertEquals stepKey="assertProductQtyInMinicart">
             <expectedResult type="string">{{quoteQty11Subtotal1320.qty}}</expectedResult>
