@@ -41,7 +41,6 @@ class SetPurchaseOrderPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithSimpleProduct()
     {
@@ -57,7 +56,7 @@ mutation {
           code: "$methodCode"
           purchase_order_number: "$purchaseOrderNumber"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code
@@ -88,7 +87,6 @@ QUERY;
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      *
      * @expectedException Exception
      * @expectedExceptionMessage Purchase order number is a required field.
@@ -105,7 +103,7 @@ mutation {
       payment_method: {
           code: "$methodCode"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code
@@ -140,7 +138,7 @@ mutation {
           code: "$methodCode"
           purchase_order_number: "$purchaseOrderNumber"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code

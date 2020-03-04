@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Allow guest checkout option test
+ * Test for guest checkout.
  */
 class AllowGuestCheckoutOptionTest extends GraphQlAbstract
 {
@@ -169,7 +169,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setPaymentMethodOnCart(input: {
-    cart_id: "{$maskedQuoteId}", 
+    cart_id: "{$maskedQuoteId}",
     payment_method: {
       code: "{$methodCode}"
     }
@@ -254,9 +254,9 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$carrierCode"
         method_code: "$methodCode"
@@ -284,7 +284,6 @@ QUERY;
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
