@@ -67,7 +67,9 @@ spec:
             subPath: media
           - mountPath: /var/www/html/var
             name: magento-persistent-storage
-            subPath: var      
+            subPath: var    
+          command: ["/bin/mv"]
+          args: ["/var/www/magento/*", "/var/www/html"]
       volumes:
       - name: magento-shared
         emptyDir: {}
