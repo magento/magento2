@@ -53,7 +53,7 @@ spec:
               name: apache
           volumeMounts:
           - mountPath: /var/www/html
-            name: magento-shared-data
+            name: magento-shared
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
