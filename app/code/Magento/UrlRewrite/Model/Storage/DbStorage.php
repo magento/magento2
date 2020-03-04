@@ -375,4 +375,33 @@ class DbStorage extends AbstractStorage
             $this->prepareSelect($data)->deleteFromSelect($this->resource->getTableName(self::TABLE_NAME))
         );
     }
+
+    /**
+     * Function deleteEntitiesFromStores
+     *
+     * Deletes multiple URL Rewrites from database
+     *
+     * @param array $store_ids
+     * @param array $entity_ids
+     * @param int $entity_type
+     */
+    public function deleteEntitiesFromStores($store_ids, $entity_ids, $entity_type)
+    {
+        $select = $this->connection->select();
+        $select->from($this->resource->getTableName(self::TABLE_NAME));
+
+        $select->where(
+            $this->connection->quoteIdentifier(
+                UrlRewrite::STORE_ID
+            ) . ' IN (' . $this->connection->quote($store_ids, 'INTEGER') . ')' .
+            ' AND ' . $this->connection->quoteIdentifier(
+                UrlRewrite::ENTITY_ID
+            ) . ' IN (' . $this->connection->quote($entity_ids, 'INTEGER') . ')' .
+            ' AND ' . $this->connection->quoteIdentifier(
+                UrlRewrite::ENTITY_TYPE
+            ) . ' = ' . $this->connection->quote($entity_type)
+        );
+        $select = $select->deleteFromSelect($this->resource->getTableName(self::TABLE_NAME));
+        $this->connection->query($select);
+    }
 }

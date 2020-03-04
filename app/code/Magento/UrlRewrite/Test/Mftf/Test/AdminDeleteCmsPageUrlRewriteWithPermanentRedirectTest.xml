@@ -15,6 +15,7 @@
             <description value="Log in to admin and delete CMS Page URL rewrite with Permanent Redirect"/>
             <testCaseId value="MC-14649"/>
             <group value="mtf_migrated"/>
+            <group value="urlRewrite"/>
         </annotations>
         <before>
             <createData entity="simpleCmsPage" stepKey="createCMSPage"/>

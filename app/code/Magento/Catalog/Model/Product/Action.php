@@ -169,14 +169,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
             $categoryIndexer->reindexList(array_unique($productIds));
         }
 
-        //Dispatch event to update Rewrite URLs for new/removed websites
-        $this->_eventManager->dispatch(
-            'catalog_product_to_website_change',
-            [
-                'products' => $productIds,
-                'website_ids' => $websiteIds,
-                'action_type' => $type
-            ]
-        );
+        $this->_eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
     }
 }
