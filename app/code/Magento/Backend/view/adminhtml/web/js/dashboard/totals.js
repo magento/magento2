@@ -11,7 +11,7 @@ define([
 ], function ($) {
     'use strict';
 
-    $.widget('mage.graph', {
+    $.widget('mage.dashboardTotals', {
         options: {
             updateUrl: '',
             periodSelect: null
@@ -56,5 +56,5 @@ define([
         }
     });
 
-    return $.mage.graph;
+    return $.mage.dashboardTotals;
 });
