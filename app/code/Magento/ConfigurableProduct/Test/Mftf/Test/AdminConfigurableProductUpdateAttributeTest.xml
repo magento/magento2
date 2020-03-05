@@ -96,7 +96,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
@@ -216,7 +216,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->
             <deleteData createDataKey="createCategory" stepKey="deleteCatagory" />
