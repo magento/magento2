@@ -53,7 +53,7 @@ interface UserExpirationInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return UserExpirationExtensionInterface|null
+     * @return UserExpirationExtensionInterface
      */
     public function getExtensionAttributes();
 
