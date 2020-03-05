@@ -14,18 +14,14 @@ define([
         $(element).click(function (event) {
             var cart = customerData.get('cart'),
                 customer = customerData.get('customer');
-
-            event.preventDefault();
-
+                event.preventDefault();
             if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                 authenticationPopup.showModal();
-
                 return false;
             } else {
                 $(element).attr('disabled', true);
                 window.location.href = config.checkoutUrl;
             }
         });
-
     };
 });
