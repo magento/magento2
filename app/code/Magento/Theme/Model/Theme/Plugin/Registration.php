@@ -5,8 +5,7 @@
  */
 namespace Magento\Theme\Model\Theme\Plugin;
 
-use Magento\Backend\App\AbstractAction;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -16,32 +15,34 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeLoader;
 use Magento\Framework\Config\Theme;
 
 /**
+ * Plugin for Theme Registration
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Registration
 {
     /**
-     * @var \Magento\Theme\Model\Theme\Registration
+     * @var ThemeRegistration
      */
     protected $themeRegistration;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Collection
+     * @var ThemeCollection
      */
     protected $themeCollection;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @var ThemeLoader
      */
     protected $themeLoader;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var AppState
      */
     protected $appState;
 
@@ -69,15 +70,13 @@ class Registration
     /**
      * Add new theme from filesystem and update existing
      *
-     * @param AbstractAction $subject
-     * @param RequestInterface $request
+     * @param ActionInterface $subject
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        AbstractAction $subject,
-        RequestInterface $request
+    public function beforeExecute(
+        ActionInterface $subject
     ) {
         try {
             if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {
