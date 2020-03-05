@@ -24,7 +24,7 @@ class CatalogMediaUrlFormat implements \Magento\Framework\Data\OptionSourceInter
                 'value' => CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS,
                 'label' => __('Image optimization based on query parameters')
             ],
-            ['value' => CatalogMediaConfig::HASH, 'label' => __('Legacy mode (unique hash per image variant)')]
+            ['value' => CatalogMediaConfig::HASH, 'label' => __('Unique hash per image variant (Legacy mode)')]
         ];
     }
 }

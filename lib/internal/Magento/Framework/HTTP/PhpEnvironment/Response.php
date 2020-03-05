@@ -20,11 +20,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     protected $isRedirect = false;
 
     /**
-     * @var bool
-     */
-    private $headersSent;
-
-    /**
      * @inheritdoc
      */
     public function getHeader($name)
@@ -33,10 +28,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
-            // zend-http >= 2.10.11 can return \ArrayIterator instead of a single Header
-            if ($header instanceof \ArrayIterator) {
-                $header = $header->current();
-            }
         }
         return $header;
     }

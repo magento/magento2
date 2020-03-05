@@ -14,8 +14,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Framework\Storage\StorageInterface;
-use Magento\Framework\Storage\StorageProvider;
+use Magento\Framework\Filesystem\Driver\File as FilesystemDriver;
 
 /**
  * Image operations
@@ -204,9 +203,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * @var StorageInterface
+     * @var FilesystemDriver
      */
-    private $storage;
+    private $filesystemDriver;
 
     /**
      * Constructor
@@ -223,12 +222,12 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param ImageFactory $viewAssetImageFactory
      * @param PlaceholderFactory $viewAssetPlaceholderFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param StorageProvider $storageProvider
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param SerializerInterface $serializer
      * @param ParamsBuilder $paramsBuilder
+     * @param FilesystemDriver $filesystemDriver
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -246,30 +245,27 @@ class Image extends \Magento\Framework\Model\AbstractModel
         ImageFactory $viewAssetImageFactory,
         PlaceholderFactory $viewAssetPlaceholderFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        StorageProvider $storageProvider,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         SerializerInterface $serializer = null,
-        ParamsBuilder $paramsBuilder = null
+        ParamsBuilder $paramsBuilder = null,
+        FilesystemDriver $filesystemDriver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
-
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
-        $this->_imageFactory = $imageFactory;
-        $this->viewAssetImageFactory = $viewAssetImageFactory;
-
-        $this->storage = $storageProvider->get('media');
-
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->_imageFactory = $imageFactory;
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
+        $this->viewAssetImageFactory = $viewAssetImageFactory;
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
+        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()->get(FilesystemDriver::class);
     }
 
     /**
@@ -437,18 +433,17 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $this->_isBaseFilePlaceholder = false;
 
-        if ($file == 'no_selection' || empty($file)) {
+        $this->imageAsset = $this->viewAssetImageFactory->create(
+            [
+                'miscParams' => $this->getMiscParams(),
+                'filePath' => $file,
+            ]
+        );
+        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())) {
             $this->_isBaseFilePlaceholder = true;
             $this->imageAsset = $this->viewAssetPlaceholderFactory->create(
                 [
                     'type' => $this->getDestinationSubdir(),
-                ]
-            );
-        } else {
-            $this->imageAsset = $this->viewAssetImageFactory->create(
-                [
-                    'miscParams' => $this->getMiscParams(),
-                    'filePath' => $file,
                 ]
             );
         }
@@ -682,7 +677,12 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function isCached()
     {
         $path = $this->imageAsset->getPath();
-        return is_array($this->loadImageInfoFromCache($path)) || $this->_mediaDirectory->isExist($path);
+        try {
+            $isCached = is_array($this->loadImageInfoFromCache($path)) || $this->filesystemDriver->isExists($path);
+        } catch (FileSystemException $e) {
+            $isCached = false;
+        }
+        return $isCached;
     }
 
     /**
@@ -854,10 +854,28 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $directory = $this->_catalogProductMediaConfig->getBaseMediaPath() . '/cache';
         $this->_mediaDirectory->delete($directory);
-        $this->storage->deleteDir($directory);
 
         $this->_coreFileStorageDatabase->deleteFolder($this->_mediaDirectory->getAbsolutePath($directory));
         $this->clearImageInfoFromCache();
+    }
+
+    /**
+     * First check this file on FS
+     *
+     * If it doesn't exist - try to download it from DB
+     *
+     * @param string $filename
+     * @return bool
+     */
+    protected function _fileExists($filename)
+    {
+        if ($this->_mediaDirectory->isFile($filename)) {
+            return true;
+        } else {
+            return $this->_coreFileStorageDatabase->saveFileToFilesystem(
+                $this->_mediaDirectory->getAbsolutePath($filename)
+            );
+        }
     }
 
     /**
@@ -865,9 +883,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      * @throws NotLoadInfoImageException
-     * @deprecated Magento is not responsible for image resizing anymore. This method works with local filesystem only.
-     * Service that provides resized images should guarantee that the image sizes correspond to requested ones.
-     * Use `getWidth()` and `getHeight()` instead.
      */
     public function getResizedImageInfo()
     {
