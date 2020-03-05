@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class EmailMessageTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailMessageTest extends TestCase
 {
@@ -164,23 +165,42 @@ class EmailMessageTest extends TestCase
             'cc' => $cc,
             'replyTo' => $replyTo,
             'bcc' => $bcc,
-            'sender' => $sender
+            'sender' => $sender,
         ];
         $message = $this->messageFactory->create($data);
 
         $this->assertContains($content, $message->toString());
         $this->assertContains('Content-Type: ' . $type, $message->toString());
-        $senderString = 'Sender: ' . $sender->getName() . ' <' . $sender->getEmail() . '>';
+        $senderString = 'Sender: =?utf-8?Q?'
+            . str_replace(' ', '=20', $sender->getName())
+            . '?= <'
+            . $sender->getEmail()
+            . '>';
         $this->assertContains($senderString, $message->toString());
         $this->assertContains('From: ' . $from[0]->getEmail(), $message->toString());
-        $replyToString = 'Reply-To: ' . $replyTo[0]->getName() . ' <' . $replyTo[0]->getEmail() . '>';
+        $replyToString = 'Reply-To: =?utf-8?Q?'
+            . str_replace(' ', '=20', $replyTo[0]->getName())
+            . '?= <'
+            . $replyTo[0]->getEmail()
+            . '>';
         $this->assertContains($replyToString, $message->toString());
-        $toString = 'To: ' . $to[0]->getName() . ' <' . $to[0]->getEmail() . '>';
+        $toString = 'To: =?utf-8?Q?'
+            . str_replace(' ', '=20', $to[0]->getName())
+            . '?= <'
+            . $to[0]->getEmail()
+            . '>';
         $this->assertContains($toString, $message->toString());
-        $ccString = 'Cc: ' . $cc[0]->getName() . ' <' . $cc[0]->getEmail() . '>';
+        $ccString = 'Cc: =?utf-8?Q?'
+            . str_replace(' ', '=20', $cc[0]->getName())
+            . '?= <'
+            . $cc[0]->getEmail()
+            . '>';
         $this->assertContains($ccString, $message->toString());
         $this->assertContains('Bcc: ' . $bcc[0]->getEmail(), $message->toString());
-        $this->assertContains('Content-Description: ' . $this->description, $message->toString());
+        $contentDescription = 'Content-Description: =?utf-8?Q?'
+            . str_replace(' ', '=20', $this->description)
+            . '?=';
+        $this->assertContains($contentDescription, $message->toString());
         $this->assertContains('Subject: ' . $this->subject, $message->toString());
         $this->assertContains($content, $message->toString());
         //tests address factory
@@ -235,6 +255,7 @@ class EmailMessageTest extends TestCase
             'body' => $mimeMessage,
             'subject' => $this->subject,
             'to' => [$addressTo],
+            'encoding' => '',
         ];
         $message = $this->messageFactory->create($data);
 

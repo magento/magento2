@@ -134,11 +134,52 @@
                 <item name="price_range" xsi:type="array">
                     <item name="price" xsi:type="string">price</item>
                 </item>
+                <item name="thumbnail" xsi:type="array">
+                    <item name="label" xsi:type="array">
+                        <item name="attribute" xsi:type="string">thumbnail_label</item>
+                        <item name="fallback_attribute" xsi:type="string">name</item>
+                    </item>
+                    <item name="url" xsi:type="string">thumbnail</item>
+                </item>
+                <item name="small_image" xsi:type="array">
+                    <item name="label" xsi:type="array">
+                        <item name="attribute" xsi:type="string">small_image_label</item>
+                        <item name="fallback_attribute" xsi:type="string">name</item>
+                    </item>
+                    <item name="url" xsi:type="string">small_image</item>
+                </item>
+                <item name="image" xsi:type="array">
+                    <item name="label" xsi:type="array">
+                        <item name="attribute" xsi:type="string">image_label</item>
+                        <item name="fallback_attribute" xsi:type="string">name</item>
+                    </item>
+                    <item name="url" xsi:type="string">image</item>
+                </item>
+                <item name="media_gallery" xsi:type="array">
+                    <item name="label" xsi:type="array">
+                        <item name="attribute" xsi:type="string">image_label</item>
+                        <item name="fallback_attribute" xsi:type="string">name</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
 
     <type name="Magento\Catalog\Block\Product\ImageFactory">
         <plugin name="designLoader" type="Magento\CatalogGraphQl\Plugin\DesignLoader" />
+    </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader">
+        <arguments>
+            <argument name="categoryAttributeResolvers" xsi:type="array">
+                <item name="image" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Category\Image</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Catalog\Helper\Data">
+        <arguments>
+            <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\FilterEmulate</argument>
+        </arguments>
     </type>
 </config>

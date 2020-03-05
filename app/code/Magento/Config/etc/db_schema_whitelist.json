@@ -5,7 +5,8 @@
             "scope": true,
             "scope_id": true,
             "path": true,
-            "value": true
+            "value": true,
+            "updated_at": true
         },
         "constraint": {
             "PRIMARY": true,

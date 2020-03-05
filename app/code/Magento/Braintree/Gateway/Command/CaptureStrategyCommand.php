@@ -21,7 +21,8 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
- * Class CaptureStrategyCommand
+ * Braintree capture implementation.
+ *
  * @SuppressWarnings(PHPMD)
  */
 class CaptureStrategyCommand implements CommandInterface
@@ -84,7 +85,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SubjectReader $subjectReader
-     * @param BraintreeAdapterFactory $braintreeAdapterFactory,
+     * @param BraintreeAdapterFactory $braintreeAdapterFactory
      * @param BraintreeSearchAdapter $braintreeSearchAdapter
      */
     public function __construct(
@@ -112,9 +113,9 @@ class CaptureStrategyCommand implements CommandInterface
     {
         /** @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterface $paymentDO */
         $paymentDO = $this->subjectReader->readPayment($commandSubject);
-
         $command = $this->getCommand($paymentDO);
-        $this->commandPool->get($command)->execute($commandSubject);
+
+        return $this->commandPool->get($command)->execute($commandSubject);
     }
 
     /**
@@ -128,11 +129,8 @@ class CaptureStrategyCommand implements CommandInterface
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        // if auth transaction does not exist then execute authorize&capture command
+        // if capture transaction does not exist then execute capture command
         $existsCapture = $this->isExistsCaptureTransaction($payment);
-        if (!$payment->getAuthorizationTransaction() && !$existsCapture) {
-            return self::SALE;
-        }
 
         // do capture for authorization transaction
         if (!$existsCapture && !$this->isExpiredAuthorization($payment, $paymentDO->getOrder())) {

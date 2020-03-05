@@ -24,7 +24,6 @@ use PHPUnit\Framework\TestCase;
  * Testing option types: "Area", "File", "Drop-down", "Radio-Buttons",
  * "Checkbox", "Multiple Select", "Date", "Date & Time" and "Time".
  *
- * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
@@ -70,11 +69,11 @@ class CreateCustomOptionsTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->optionRepository = $this->objectManager->create(ProductCustomOptionRepositoryInterface::class);
-        $this->customOptionFactory = $this->objectManager->create(ProductCustomOptionInterfaceFactory::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->optionRepository = $this->objectManager->get(ProductCustomOptionRepositoryInterface::class);
+        $this->customOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
         $this->customOptionValueFactory = $this->objectManager
-            ->create(ProductCustomOptionValuesInterfaceFactory::class);
+            ->get(ProductCustomOptionValuesInterfaceFactory::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
@@ -83,7 +82,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
-     *
+     * @magentoAppArea adminhtml
+     * @magentoAppIsolation disabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      * @magentoConfigFixture secondstore_store catalog/price/scope 1
      */
@@ -120,6 +120,8 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeTextDataProvider
      *
      * @param array $optionData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeText(array $optionData): void
     {
@@ -140,6 +142,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
+     *
+     * @magentoDbIsolation enabled
      */
     public function testFileExtensions(string $rawExtensions, string $expectedExtensions): void
     {
@@ -174,6 +178,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $optionValueData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeSelect(array $optionData, array $optionValueData): void
     {
@@ -199,6 +205,8 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeDateDataProvider
      *
      * @param array $optionData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeDate(array $optionData): void
     {
@@ -217,6 +225,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param \Exception $expectedErrorObject
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionWithError(array $optionData, \Exception $expectedErrorObject): void
     {
