@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Backend\Model;
+namespace Magento\Backend\Model\Dashboard;
 
 use Magento\Backend\Model\Dashboard\Chart;
 use Magento\TestFramework\Helper\Bootstrap;
