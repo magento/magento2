@@ -54,7 +54,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete the rule -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Go to category and check price-->
