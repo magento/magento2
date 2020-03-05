@@ -53,14 +53,14 @@ interface UserExpirationInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return UserExpirationExtensionInterface
+     * @return \Magento\Security\Api\Data\UserExpirationExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param UserExpirationExtensionInterface $extensionAttributes
+     * @param \Magento\Security\Api\Data\UserExpirationExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(UserExpirationExtensionInterface $extensionAttributes);
