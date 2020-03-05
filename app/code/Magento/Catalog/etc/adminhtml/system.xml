@@ -140,7 +140,7 @@
             </group>
             <group id="layered_navigation">
                 <field id="display_category" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Display Category</label>
+                    <label>Display Category Filter</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>

@@ -48,26 +48,25 @@ class FilterList
     protected $filters = [];
 
     /**
-     * @var LayerCategoryConfig|null
+     * @var LayerCategoryConfig
      */
     private $layerCategoryConfig;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param FilterableAttributeListInterface $filterableAttributes
+     * @param LayerCategoryConfig $layerCategoryConfig
      * @param array $filters
-     * @param LayerCategoryConfig|null $layerCategoryConfig
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         FilterableAttributeListInterface $filterableAttributes,
-        array $filters = [],
-        LayerCategoryConfig $layerCategoryConfig = null
+        LayerCategoryConfig $layerCategoryConfig,
+        array $filters = []
     ) {
         $this->objectManager = $objectManager;
         $this->filterableAttributes = $filterableAttributes;
-        $this->layerCategoryConfig = $layerCategoryConfig ?:
-            ObjectManager::getInstance()->get(LayerCategoryConfig::class);
+        $this->layerCategoryConfig = $layerCategoryConfig;
 
         /** Override default filter type models */
         $this->filterTypes = array_merge($this->filterTypes, $filters);

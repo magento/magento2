@@ -69,14 +69,12 @@ class LayerCategoryConfig
     /**
      * Get the current store ID
      *
-     * @return int|null
+     * @return int
+     *
+     * @throws NoSuchEntityException
      */
-    private function getStoreId(): ?int
+    private function getStoreId(): int
     {
-        try {
-            return (int) $this->storeManager->getStore()->getId();
-        } catch (NoSuchEntityException $e) {
-            return null;
-        }
+        return (int) $this->storeManager->getStore()->getId();
     }
 }
