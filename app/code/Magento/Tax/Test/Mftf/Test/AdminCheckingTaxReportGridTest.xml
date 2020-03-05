@@ -16,7 +16,7 @@
             <description value="Tax Report Grid displays Tax amount in rows 'Total' and 'Subtotal' is a sum of all tax amounts"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-6230"/>
-            <useCaseId value="MAGETWO-91521"/>
+            <useCaseId value="MC-25815"/>
             <group value="Tax"/>
         </annotations>
         <before>
