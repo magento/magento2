@@ -216,7 +216,7 @@ class Bundle
         $excludedFiles = $this->bundleConfig->getExcludedFiles($area, $theme);
         foreach ($excludedFiles as $excludedFileId) {
             $excludedFilePath = $this->prepareExcludePath($excludedFileId);
-            if ($excludedFilePath === $filePath) {
+            if ($excludedFilePath === $filePath || $excludedFilePath === str_replace('.min.js', '.js', $filePath)) {
                 return true;
             }
         }

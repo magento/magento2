@@ -9,7 +9,8 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-developer": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-theme": "*"
     },
     "suggest": {
         "magento/module-deploy": "*"

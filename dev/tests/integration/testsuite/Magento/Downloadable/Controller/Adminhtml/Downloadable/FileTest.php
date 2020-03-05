@@ -1,36 +1,59 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
  * @magentoAppArea adminhtml
  */
 class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
+     * @var Json
+     */
+    private $jsonSerializer;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->jsonSerializer = $this->_objectManager->get(Json::class);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function tearDown()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $filePath = dirname(__DIR__) . '/_files/sample.tmp';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (is_file($filePath)) {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
             unlink($filePath);
         }
     }
 
     public function testUploadAction()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         copy(dirname(__DIR__) . '/_files/sample.txt', dirname(__DIR__) . '/_files/sample.tmp');
+        // phpcs:ignore Magento2.Security.Superglobal
         $_FILES = [
             'samples' => [
                 'name' => 'sample.txt',
                 'type' => 'text/plain',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'tmp_name' => dirname(__DIR__) . '/_files/sample.tmp',
                 'error' => 0,
                 'size' => 0,
@@ -40,7 +63,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
-        $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
+        $result = $this->jsonSerializer->unserialize($body);
         $this->assertEquals(0, $result['error']);
     }
 
@@ -52,9 +75,11 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testUploadProhibitedExtensions($fileName)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $path = dirname(__DIR__) . '/_files/';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         copy($path . 'sample.txt', $path . 'sample.tmp');
-
+        // phpcs:ignore Magento2.Security.Superglobal
         $_FILES = [
             'samples' => [
                 'name' => $fileName,
@@ -68,7 +93,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
-        $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
+        $result = $this->jsonSerializer->unserialize($body);
 
         self::assertArrayHasKey('errorcode', $result);
         self::assertEquals(0, $result['errorcode']);
@@ -88,6 +113,39 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ['sample.php4'],
             ['sample.php5'],
             ['sample.php7'],
+        ];
+    }
+
+    /**
+     * @dataProvider uploadWrongUploadTypeDataProvider
+     * @return void
+     */
+    public function testUploadWrongUploadType($postData): void
+    {
+        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
+
+        $this->dispatch('backend/admin/downloadable_file/upload');
+
+        $body = $this->getResponse()->getBody();
+        $result = $this->jsonSerializer->unserialize($body);
+        $this->assertEquals('Upload type can not be determined.', $result['error']);
+        $this->assertEquals(0, $result['errorcode']);
+    }
+
+    public function uploadWrongUploadTypeDataProvider(): array
+    {
+        return [
+            [
+                ['type' => 'test'],
+            ],
+            [
+                [
+                    'type' => [
+                        'type1' => 'test',
+                    ],
+                ],
+            ],
         ];
     }
 }

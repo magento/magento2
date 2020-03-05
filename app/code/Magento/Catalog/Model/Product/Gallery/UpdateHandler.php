@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
@@ -75,6 +76,16 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
                 $image['value_id'],
                 $product->getData($this->metadata->getLinkField())
             );
+        } elseif (!empty($image['recreate'])) {
+            $data['value_id'] = $image['value_id'];
+            $data['value'] = $image['file'];
+            $data['attribute_id'] = $this->getAttribute()->getAttributeId();
+
+            if (!empty($image['media_type'])) {
+                $data['media_type'] = $image['media_type'];
+            }
+
+            $this->resourceModel->saveDataRow(Gallery::GALLERY_TABLE, $data);
         }
 
         return $data;

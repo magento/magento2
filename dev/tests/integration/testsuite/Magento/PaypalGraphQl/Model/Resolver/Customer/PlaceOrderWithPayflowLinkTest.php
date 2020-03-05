@@ -123,6 +123,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
+           error_url:"paypal/payflow/errorUrl"
           }
       }
   }) {    
@@ -134,7 +135,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -190,11 +191,11 @@ QUERY;
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 }

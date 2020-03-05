@@ -90,7 +90,7 @@ class CollectionProcessor
                             ),
                             $connection->quoteInto(
                                 'catalog_rule.rule_date = ?',
-                                $this->dateTime->formatDate($this->localeDate->date(null, null, false), false)
+                                $this->dateTime->formatDate($this->localeDate->scopeDate($store->getId()), false)
                             ),
                         ]
                     ),

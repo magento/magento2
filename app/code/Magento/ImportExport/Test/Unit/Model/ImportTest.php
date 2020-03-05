@@ -640,6 +640,9 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $import->getEntity();
     }
 
+    /**
+     * @return array
+     */
     public function unknownEntitiesProvider()
     {
         return [

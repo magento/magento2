@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="admin">
+            <group id="usage" translate="label" type="text" sortOrder="2000" showInDefault="1">
+                <label>Admin Usage</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1">
+                    <label>Enable Admin Usage Tracking</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow Magento to track admin usage in order to improve the quality and user experience.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

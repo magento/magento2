@@ -339,7 +339,7 @@ class Links extends AbstractModifier
             'elementTmpl' => 'Magento_Downloadable/components/file-uploader',
             'fileInputName' => 'links',
             'uploaderConfig' => [
-                'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                'url' => $this->urlBuilder->getUrl(
                     'adminhtml/downloadable_file/upload',
                     ['type' => 'links', '_secure' => true]
                 ),
@@ -406,7 +406,7 @@ class Links extends AbstractModifier
             'fileInputName' => 'link_samples',
             'labelVisible' => false,
             'uploaderConfig' => [
-                'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                'url' => $this->urlBuilder->getUrl(
                     'adminhtml/downloadable_file/upload',
                     ['type' => 'link_samples', '_secure' => true]
                 ),
