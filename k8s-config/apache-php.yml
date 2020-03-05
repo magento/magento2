@@ -46,17 +46,11 @@ spec:
       securityContext:
         fsGroup: 82
       initContainers:
-        - name: prep-php-symlink
+        - name: copy-data
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["bin/sh", "-ec", "ln -s /var/www/target /mnt/app/html"]
+          command: ["/bin/cp", "-r", "/var/www/magento/", "/var/www/html/"]
           volumeMounts:
-          - mountPath: /mnt/app
-            name: magento-shared
-        - name: prep-apache-symlink
-          image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
-          command: ["bin/sh", "-ec", "ln -s /var/www/target /mnt/app/html"]
-          volumeMounts:
-          - mountPath: /mnt/app
+          - mountPath: /var/www/html
             name: magento-shared
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
@@ -65,22 +59,20 @@ spec:
             - containerPort: 80
               name: apache
           volumeMounts:
-          - mountPath: /mnt/app
+          - mountPath: /var/www/html
             name: magento-shared
-            subPath: html
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           ports:
             - containerPort: 9000
               name: php
           volumeMounts:
-          - mountPath: /mnt/app
+          - mountPath: /var/www/html
             name: magento-shared
-            subPath: html
-          - mountPath: /var/www/magento/media
+          - mountPath: /var/www/html/media
             name: magento-persistent-storage
             subPath: media
-          - mountPath: /var/www/magento/var
+          - mountPath: /var/www/html/var
             name: magento-persistent-storage
             subPath: var 
       volumes:
