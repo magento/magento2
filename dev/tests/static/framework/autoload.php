@@ -14,7 +14,14 @@ require $baseDir . '/app/autoload.php';
 require $baseDir . '/vendor/squizlabs/php_codesniffer/autoload.php';
 $testsBaseDir = $baseDir . '/dev/tests/static';
 $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
-$autoloadWrapper->addPsr4('Magento\\', $testsBaseDir . '/testsuite/Magento/');
+$autoloadWrapper->addPsr4(
+    'Magento\\',
+    [
+        $testsBaseDir . '/testsuite/Magento/',
+        $testsBaseDir . '/framework/Magento/',
+        $testsBaseDir . '/framework/tests/unit/testsuite/Magento',
+    ]
+);
 $autoloadWrapper->addPsr4(
     'Magento\\TestFramework\\',
     [

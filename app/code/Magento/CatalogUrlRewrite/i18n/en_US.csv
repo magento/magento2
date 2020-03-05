@@ -5,4 +5,6 @@
 "Product URL Suffix","Product URL Suffix"
 "Use Categories Path for Product URLs","Use Categories Path for Product URLs"
 "Create Permanent Redirect for URLs if URL Key Changed","Create Permanent Redirect for URLs if URL Key Changed"
-"Generate "category/product" URL Rewrites","Generate "category/product" URL Rewrites"
+"Generate ""category/product"" URL Rewrites","Generate ""category/product"" URL Rewrites"
+"URL key ""%1"" matches a reserved endpoint name (%2). Use another URL key.","URL key ""%1"" matches a reserved endpoint name (%2). Use another URL key."
+"<strong style=""color:red"">Warning!</strong> Turning this option off will result in permanent removal of category/product URL rewrites without an ability to restore them.","<strong style=""color:red"">Warning!</strong> Turning this option off will result in permanent removal of category/product URL rewrites without an ability to restore them."

@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSaveReviewActionGroup">
         <click selector="{{AdminEditReviewSection.saveReview}}" stepKey="saveReview"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the review." stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the review." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

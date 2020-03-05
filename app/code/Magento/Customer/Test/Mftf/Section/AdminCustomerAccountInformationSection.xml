@@ -17,6 +17,7 @@
         <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>
+        <element name="disableAutomaticGroupChange" type="input" selector="input[name='customer[disable_auto_group_change]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
         <element name="groupIdValue" type="text" selector="//*[@name='customer[group_id]']/option"/>
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>

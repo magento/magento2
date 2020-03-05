@@ -21,10 +21,10 @@
         <before>
             <createData entity="adminNoReportRole" stepKey="noReportUserRole"/>
             <createData entity="adminNoReport" stepKey="noReportUser"/>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
         <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameSearch"/>
@@ -51,7 +51,7 @@
         <scrollTo selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="scrollToMenuItem"/>
         <!--<see stepKey="seeAdvancedReportingConfigMenuItem" selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" userInput="Advanced Reporting"/>-->
         <seeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="seeAdvancedReportingConfigMenuItem"/>
-        <actionGroup ref="logout" stepKey="logoutOfAdmin2"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin2"/>
 
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameNoReport"/>

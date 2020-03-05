@@ -31,7 +31,7 @@ class IntrospectionConfiguration
     }
 
     /**
-     * Check the the environment config to determine if introspection should be disabled.
+     * Check the environment config to determine if introspection should be disabled.
      *
      * @return bool
      */

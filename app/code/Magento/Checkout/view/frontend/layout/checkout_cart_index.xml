@@ -189,6 +189,7 @@
                     <block class="Magento\Checkout\Block\Cart\Crosssell" name="checkout.cart.crosssell" template="Magento_Catalog::product/list/items.phtml" after="-" ifconfig="checkout/cart/crosssell_enabled">
                         <arguments>
                             <argument name="type" xsi:type="string">crosssell</argument>
+                            <argument name="view_model" xsi:type="object">Magento\Catalog\ViewModel\Product\Listing\PreparePostData</argument>
                         </arguments>
                         <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="crosssell.product.addto" as="addto">
                             <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"

@@ -7,6 +7,6 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCustomerSignOutPage" url="/customer/account/logout/" area="storefront" module="Magento_Customer"/>
 </pages>

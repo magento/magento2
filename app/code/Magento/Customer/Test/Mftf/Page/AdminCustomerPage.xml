@@ -13,5 +13,6 @@
         <section name="AdminCustomerMessagesSection"/>
         <section name="AdminCustomerGridSection"/>
         <section name="AdminCustomerFiltersSection"/>
+        <section name="AdminCustomerGridInlineEditorSection"/>
     </page>
 </pages>

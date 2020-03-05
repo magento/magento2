@@ -108,6 +108,10 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="multipleSelectProductAttribute" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="frontend_input_admin">Multiple Select</data>
+    </entity>
     <entity name="productDropDownAttributeNotSearchable" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">select</data>
@@ -307,6 +311,10 @@
     </entity>
     <entity name="dateProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">date</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="DatetimeProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">datetime</data>
         <data key="is_required_admin">No</data>
     </entity>
     <entity name="priceProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
