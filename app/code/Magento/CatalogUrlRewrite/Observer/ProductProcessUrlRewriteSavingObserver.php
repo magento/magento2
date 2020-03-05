@@ -13,12 +13,11 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\UrlRewrite\Model\Storage\DeleteEntitiesFromStores;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
-use Magento\UrlRewrite\Model\Storage\DbStorage;
-use Magento\Store\Model\Store;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserver
@@ -30,17 +29,17 @@ use Magento\Store\Model\Store;
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
     /**
-     * @var ProductUrlRewriteGenerator
+     * @var ProductUrlRewriteGenerator $productUrlRewriteGenerator
      */
     private $productUrlRewriteGenerator;
 
     /**
-     * @var UrlPersistInterface
+     * @var UrlPersistInterface $urlPersist
      */
     private $urlPersist;
 
     /**
-     * @var ProductUrlPathGenerator
+     * @var ProductUrlPathGenerator $productUrlPathGenerator
      */
     private $productUrlPathGenerator;
 
@@ -50,7 +49,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $storeManager;
 
     /**
-     * @var StoreWebsiteRelationInterface
+     * @var StoreWebsiteRelationInterface $storeWebsiteRelation
      */
     private $storeWebsiteRelation;
 
@@ -60,14 +59,14 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $productRepository;
 
     /**
-     * @var ProductScopeRewriteGenerator
+     * @var ProductScopeRewriteGenerator $productScopeRewriteGenerator
      */
     private $productScopeRewriteGenerator;
 
     /**
-     * @var DbStorage
+     * @var DeleteEntitiesFromStores $deleteEntitiesFromStores
      */
-    private $dbStorage;
+    private $deleteEntitiesFromStores;
 
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
@@ -77,7 +76,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      * @param ProductRepository $productRepository
      * @param ProductScopeRewriteGenerator $productScopeRewriteGenerator
-     * @param DbStorage $dbStorage
+     * @param DeleteEntitiesFromStores $deleteEntitiesFromStores
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
@@ -87,7 +86,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         StoreWebsiteRelationInterface $storeWebsiteRelation,
         ProductRepository $productRepository,
         ProductScopeRewriteGenerator $productScopeRewriteGenerator,
-        DbStorage $dbStorage
+        DeleteEntitiesFromStores $deleteEntitiesFromStores
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
@@ -96,7 +95,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         $this->storeWebsiteRelation = $storeWebsiteRelation;
         $this->productRepository = $productRepository;
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator;
-        $this->dbStorage = $dbStorage;
+        $this->deleteEntitiesFromStores = $deleteEntitiesFromStores;
     }
 
     /**
@@ -152,7 +151,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 }
             }
             if (count($storeIdsToRemove)) {
-                $this->dbStorage->deleteEntitiesFromStores(
+                $this->deleteEntitiesFromStores->execute(
                     $storeIdsToRemove,
                     [$product->getId()],
                     ProductUrlRewriteGenerator::ENTITY_TYPE

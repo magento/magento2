@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product\Action;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
 use Magento\Store\Model\Store;
-use Magento\UrlRewrite\Model\Storage\DbStorage;
+use Magento\UrlRewrite\Model\Storage\DeleteEntitiesFromStores;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 /**
@@ -46,29 +46,29 @@ class ProductProcessUrlRewriteRemovingPlugin
     private $productUrlRewriteGenerator;
 
     /**
-     * @var DbStorage $dbStorage
+     * @var DeleteEntitiesFromStores $deleteEntitiesFromStores
      */
-    private $dbStorage;
+    private $deleteEntitiesFromStores;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
-     * @param DbStorage $dbStorage
+     * @param DeleteEntitiesFromStores $deleteEntitiesFromStores
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         StoreWebsiteRelationInterface $storeWebsiteRelation,
         UrlPersistInterface $urlPersist,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        DbStorage $dbStorage
+        DeleteEntitiesFromStores $deleteEntitiesFromStores
     ) {
         $this->productRepository = $productRepository;
         $this->storeWebsiteRelation = $storeWebsiteRelation;
         $this->urlPersist = $urlPersist;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
-        $this->dbStorage = $dbStorage;
+        $this->deleteEntitiesFromStores = $deleteEntitiesFromStores;
     }
 
     /**
@@ -109,14 +109,14 @@ class ProductProcessUrlRewriteRemovingPlugin
 
         $storeIdsToRemove = [];
         // Remove the URLs from websites this product no longer belongs to
-        if ($type == "remove" && $websiteIds && $productIds) {
+        if ($type === "remove" && $websiteIds && $productIds) {
             foreach ($websiteIds as $webId) {
                 foreach ($this->storeWebsiteRelation->getStoreByWebsiteId($webId) as $storeid) {
                     $storeIdsToRemove[] = $storeid;
                 }
             }
             if (count($storeIdsToRemove)) {
-                $this->dbStorage->deleteEntitiesFromStores(
+                $this->deleteEntitiesFromStores->execute(
                     $storeIdsToRemove,
                     $productIds,
                     ProductUrlRewriteGenerator::ENTITY_TYPE
