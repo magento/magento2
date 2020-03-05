@@ -491,7 +491,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * If code is null return all options
      *
      * @param string $code
-     * @return array | null
+     * @return array|null
      */
     public function getProductOptionByCode($code = null)
     {
