@@ -704,6 +704,7 @@ class Application
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
+            DirectoryList::VAR_EXPORT => [$path => "{$var}/export"],
             DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::TMP_MATERIALIZATION_DIR => [$path => "{$var}/view_preprocessed/pub/static"],

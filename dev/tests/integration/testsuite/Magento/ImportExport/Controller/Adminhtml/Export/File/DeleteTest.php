@@ -22,7 +22,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @var WriteInterface
      */
-    private $varDirectory;
+    protected $varDirectory;
 
     /**
      * @var string
@@ -83,7 +83,7 @@ class DeleteTest extends AbstractBackendController
      * @param $destinationFilePath
      * @return void
      */
-    private function copyFile($destinationFilePath): void
+    protected function copyFile($destinationFilePath): void
     {
         //Refers to application root directory
         $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
