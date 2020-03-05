@@ -82,7 +82,14 @@ class View extends \Magento\Catalog\Block\Product\View
      */
     protected function _toHtml()
     {
-        $this->getProduct()->setShortDescription(null);
+
+        $product = $this->getProduct();
+
+        if (!$product) {
+            return '';
+        }
+
+        $product->setShortDescription(null);
 
         return parent::_toHtml();
     }
