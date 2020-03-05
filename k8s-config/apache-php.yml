@@ -48,7 +48,7 @@ spec:
       initContainers:
         - name: perform-move
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["/bin/mv", "-f", "./var/www/magento/*", "./var/www/html"]
+          command: ["/bin/mv", "/var/www/magento", "./var/www/html/"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
