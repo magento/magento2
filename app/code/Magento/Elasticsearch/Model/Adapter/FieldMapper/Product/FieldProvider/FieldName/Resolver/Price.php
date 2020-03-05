@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
@@ -15,6 +14,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 
 /**
  * Resolver field name for price attribute.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Price implements ResolverInterface
 {
@@ -33,13 +33,11 @@ class Price implements ResolverInterface
      * @param StoreManager $storeManager
      */
     public function __construct(
-        CustomerSession $customerSession = null,
-        StoreManager $storeManager = null
+        CustomerSession $customerSession,
+        StoreManager $storeManager
     ) {
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
-            ->get(StoreManager::class);
-        $this->customerSession = $customerSession ?: ObjectManager::getInstance()
-            ->get(CustomerSession::class);
+        $this->storeManager = $storeManager;
+        $this->customerSession = $customerSession;
     }
 
     /**

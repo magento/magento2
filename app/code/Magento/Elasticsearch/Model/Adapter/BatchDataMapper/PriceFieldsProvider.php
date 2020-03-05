@@ -11,7 +11,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 
 /**
@@ -48,23 +47,21 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
      * @param Index $resourceIndex
      * @param DataProvider $dataProvider
      * @param StoreManagerInterface $storeManager
-     * @param AttributeProvider|null $attributeAdapterProvider
-     * @param ResolverInterface|null $fieldNameResolver
+     * @param AttributeProvider $attributeAdapterProvider
+     * @param ResolverInterface $fieldNameResolver
      */
     public function __construct(
         Index $resourceIndex,
         DataProvider $dataProvider,
         StoreManagerInterface $storeManager,
-        AttributeProvider $attributeAdapterProvider = null,
-        ResolverInterface $fieldNameResolver = null
+        AttributeProvider $attributeAdapterProvider,
+        ResolverInterface $fieldNameResolver
     ) {
         $this->resourceIndex = $resourceIndex;
         $this->dataProvider = $dataProvider;
         $this->storeManager = $storeManager;
-        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
-            ->get(AttributeProvider::class);
-        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(ResolverInterface::class);
+        $this->attributeAdapterProvider = $attributeAdapterProvider;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
@@ -73,7 +70,7 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
     public function getFields(array $productIds, $storeId)
     {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        
+
         $priceData = $this->dataProvider->getSearchableAttribute('price')
             ? $this->resourceIndex->getPriceIndexData($productIds, $storeId)
             : [];

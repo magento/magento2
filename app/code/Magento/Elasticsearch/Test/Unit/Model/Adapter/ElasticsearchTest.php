@@ -12,12 +12,12 @@ use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 
 /**
- * Class ElasticsearchTest
+ * Test for Elasticsearch client
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -72,6 +72,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      * @var IndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexNameResolver;
+
+    /**
+     * @var \Magento\Elasticsearch\Model\Adapter\DataMapperInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $documentDataMapper;
 
     /**
      * Setup
@@ -135,7 +140,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $elasticsearchClientMock->expects($this->any())
             ->method('indices')
             ->willReturn($indicesMock);
-        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch::class)
             ->setConstructorArgs(
                 [
                     'options' => $this->getClientOptions(),

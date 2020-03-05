@@ -9,7 +9,6 @@ namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 
 /**
@@ -34,19 +33,17 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 
     /**
      * @param Index $resourceIndex
-     * @param AttributeProvider|null $attributeAdapterProvider
-     * @param ResolverInterface|null $fieldNameResolver
+     * @param AttributeProvider $attributeAdapterProvider
+     * @param ResolverInterface $fieldNameResolver
      */
     public function __construct(
         Index $resourceIndex,
-        AttributeProvider $attributeAdapterProvider = null,
-        ResolverInterface $fieldNameResolver = null
+        AttributeProvider $attributeAdapterProvider,
+        ResolverInterface $fieldNameResolver
     ) {
         $this->resourceIndex = $resourceIndex;
-        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
-            ->get(AttributeProvider::class);
-        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(ResolverInterface::class);
+        $this->attributeAdapterProvider = $attributeAdapterProvider;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**

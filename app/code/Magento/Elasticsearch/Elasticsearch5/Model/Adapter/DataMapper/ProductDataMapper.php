@@ -16,7 +16,6 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 
 /**
@@ -103,8 +102,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param FieldMapperInterface $fieldMapper
      * @param StoreManagerInterface $storeManager
      * @param DateFieldType $dateFieldType
-     * @param AttributeProvider|null $attributeAdapterProvider
-     * @param ResolverInterface|null $fieldNameResolver
+     * @param AttributeProvider $attributeAdapterProvider
+     * @param ResolverInterface $fieldNameResolver
      */
     public function __construct(
         Builder $builder,
@@ -113,8 +112,8 @@ class ProductDataMapper implements DataMapperInterface
         FieldMapperInterface $fieldMapper,
         StoreManagerInterface $storeManager,
         DateFieldType $dateFieldType,
-        AttributeProvider $attributeAdapterProvider = null,
-        ResolverInterface $fieldNameResolver = null
+        AttributeProvider $attributeAdapterProvider,
+        ResolverInterface $fieldNameResolver
     ) {
         $this->builder = $builder;
         $this->attributeContainer = $attributeContainer;
@@ -122,10 +121,8 @@ class ProductDataMapper implements DataMapperInterface
         $this->fieldMapper = $fieldMapper;
         $this->storeManager = $storeManager;
         $this->dateFieldType = $dateFieldType;
-        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
-            ->get(AttributeProvider::class);
-        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(ResolverInterface::class);
+        $this->attributeAdapterProvider = $attributeAdapterProvider;
+        $this->fieldNameResolver = $fieldNameResolver;
 
         $this->mediaGalleryRoles = [
             self::MEDIA_ROLE_IMAGE,

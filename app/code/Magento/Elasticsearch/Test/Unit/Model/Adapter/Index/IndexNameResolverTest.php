@@ -9,7 +9,7 @@ use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -112,7 +112,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
         $elasticsearchClientMock->expects($this->any())
             ->method('indices')
             ->willReturn($indicesMock);
-        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch::class)
             ->setConstructorArgs([
                 'options' => $this->getClientOptions(),
                 'elasticsearchClient' => $elasticsearchClientMock

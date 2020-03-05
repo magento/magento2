@@ -6,8 +6,6 @@
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Magento\Framework\App\ObjectManager;
-
 /**
  * Elasticsearch adapter
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -53,7 +51,7 @@ class Elasticsearch
     protected $clientConfig;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch
+     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface
      */
     protected $client;
 
@@ -78,17 +76,17 @@ class Elasticsearch
     private $batchDocumentDataMapper;
 
     /**
-     * Constructor for Elasticsearch adapter.
+     * Elasticsearch constructor.
      *
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
      * @param DataMapperInterface $documentDataMapper
      * @param FieldMapperInterface $fieldMapper
      * @param \Magento\Elasticsearch\Model\Config $clientConfig
-     * @param \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder
+     * @param Index\BuilderInterface $indexBuilder
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver
-     * @param array $options
+     * @param Index\IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
+     * @param array $options
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -99,8 +97,8 @@ class Elasticsearch
         \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
-        $options = [],
-        BatchDataMapperInterface $batchDocumentDataMapper = null
+        BatchDataMapperInterface $batchDocumentDataMapper,
+        $options = []
     ) {
         $this->connectionManager = $connectionManager;
         $this->documentDataMapper = $documentDataMapper;
@@ -109,8 +107,7 @@ class Elasticsearch
         $this->indexBuilder = $indexBuilder;
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
-        $this->batchDocumentDataMapper = $batchDocumentDataMapper ?:
-            ObjectManager::getInstance()->get(BatchDataMapperInterface::class);
+        $this->batchDocumentDataMapper = $batchDocumentDataMapper;
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
