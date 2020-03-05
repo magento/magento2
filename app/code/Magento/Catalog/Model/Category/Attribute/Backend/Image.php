@@ -196,8 +196,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if (!$baseMediaDir) {
             return false;
         }
+        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
 
-        return strpos($fileUrl, $baseMediaDir) !== false;
+        return $usingPathRelativeToBase;
     }
 
     /**
