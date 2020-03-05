@@ -149,15 +149,15 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $storeManager = Bootstrap::getObjectManager()->create(
             \Magento\Store\Model\StoreManagerInterface::class
         );
-        $websites = $storeManager->getWebsites();
+        $stores = $storeManager->getStores();
         /** @var \Magento\Eav\Model\Config $eavConfig */
         $eavConfig = Bootstrap::getObjectManager()->create(
             \Magento\Eav\Model\Config::class
         );
         $model = $eavConfig->getAttribute('customer_address', 'telephone');
         $storeLabels = $model->getStoreLabels();
-        foreach ($websites as $website) {
-            $storeLabels[$website->getId()] = 'Phone NumberX';
+        foreach ($stores as $store) {
+            $storeLabels[$store->getId()] = 'Phone NumberX';
         }
         $model->setStoreLabels([$storeLabels]);
         $model->save();
