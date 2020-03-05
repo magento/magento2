@@ -48,9 +48,9 @@ spec:
       initContainers:
         - name: perform-move
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["/bin/mv", "/var/www/magento/*", "/var/www/html/"]
+          command: ["/bin/mv", "/var/html", "/var/www/"]
           volumeMounts:
-          - mountPath: /var/www/html
+          - mountPath: /var/www
             name: magento-shared
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
@@ -59,7 +59,7 @@ spec:
             - containerPort: 80
               name: apache
           volumeMounts:
-          - mountPath: /var/www/html
+          - mountPath: /var/www
             name: magento-shared
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
@@ -67,7 +67,7 @@ spec:
             - containerPort: 9000
               name: php
           volumeMounts:
-          - mountPath: /var/www/html
+          - mountPath: /var/www
             name: magento-shared
           - mountPath: /var/www/html/media
             name: magento-persistent-storage
