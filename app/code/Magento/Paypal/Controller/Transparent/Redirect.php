@@ -5,8 +5,8 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
@@ -19,8 +19,13 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Class for redirecting the Paypal response result to Magento controller.
  */
-class Redirect extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
+class Redirect implements ActionInterface, CsrfAwareActionInterface, HttpPostActionInterface
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
     /**
      * @var LayoutFactory
      */
@@ -39,22 +44,21 @@ class Redirect extends \Magento\Framework\App\Action\Action implements CsrfAware
     /**
      * Constructor
      *
-     * @param Context $context
+     * @param RequestInterface $request
      * @param LayoutFactory $resultLayoutFactory
      * @param Transparent $transparent
      * @param Logger $logger
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
         LayoutFactory $resultLayoutFactory,
         Transparent $transparent,
         Logger $logger
     ) {
+        $this->request = $request;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->transparent = $transparent;
         $this->logger = $logger;
-
-        parent::__construct($context);
     }
 
     /**
@@ -82,7 +86,7 @@ class Redirect extends \Magento\Framework\App\Action\Action implements CsrfAware
      */
     public function execute()
     {
-        $gatewayResponse = (array)$this->getRequest()->getPostValue();
+        $gatewayResponse = (array)$this->request->getPostValue();
         $this->logger->debug(
             ['PayPal PayflowPro redirect:' => $gatewayResponse],
             $this->transparent->getDebugReplacePrivateDataKeys(),
