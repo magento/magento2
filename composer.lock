@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "522d676db5baf5864a824409c54948fc",
+    "content-hash": "3a25d06e6a86adbba9b2f2dfe202d69e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -7498,12 +7498,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "4462b2cf6c978a2554b8f1789c676f562acd261f"
+                "reference": "32e76001ac157f2953fedfed1a3ed32020ecf6ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/4462b2cf6c978a2554b8f1789c676f562acd261f",
-                "reference": "4462b2cf6c978a2554b8f1789c676f562acd261f",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/32e76001ac157f2953fedfed1a3ed32020ecf6ec",
+                "reference": "32e76001ac157f2953fedfed1a3ed32020ecf6ec",
                 "shasum": ""
             },
             "require": {
@@ -7575,7 +7575,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-03-03T20:05:39+00:00"
+            "time": "2020-03-05T17:05:08+00:00"
         },
         {
             "name": "mikey179/vfsstream",
