@@ -71,7 +71,7 @@ class LayerCategoryConfig
      *
      * @return int|null
      */
-    protected function getStoreId(): ?int
+    private function getStoreId(): ?int
     {
         try {
             return (int) $this->storeManager->getStore()->getId();

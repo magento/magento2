@@ -13,6 +13,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Filter List Test
+ *
+ * Check whenever the given filters list matches the expected result
  */
 class FilterListTest extends \PHPUnit\Framework\TestCase
 {
