@@ -48,13 +48,13 @@ spec:
       initContainers:
         - name: prep-php-symlink
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["bin/sh", "-ec", "ln -s /tmp /mnt/app/html"]
+          command: ["bin/sh", "-ec", "ln -s /var/www/target /mnt/app/html"]
           volumeMounts:
           - mountPath: /mnt/app
             name: magento-shared
         - name: prep-apache-symlink
           image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
-          command: ["bin/sh", "-ec", "ln -s /tmp /mnt/app/html"]
+          command: ["bin/sh", "-ec", "ln -s /var/www/target /mnt/app/html"]
           volumeMounts:
           - mountPath: /mnt/app
             name: magento-shared
