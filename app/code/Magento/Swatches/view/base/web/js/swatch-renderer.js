@@ -823,7 +823,9 @@ define([
         _OnChange: function ($this, $widget) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 attributeId = $parent.attr('attribute-id'),
-                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                $input = $parent.find('.' + $widget.options.classes.attributeInput),
+                $priceBox = $widget.element.parents($widget.options.selectorProduct)
+                    .find(this.options.selectorProductPrice);
 
             if ($widget.productForm.length > 0) {
                 $input = $widget.productForm.find(
@@ -842,6 +844,13 @@ define([
             $widget._Rebuild();
             $widget._UpdatePrice();
             $widget._loadMedia();
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    this._getSelectedOptionPriceIndex(),
+                    $widget.options.jsonConfig.optionPrices,
+                    $priceBox
+                ]);
+
             $input.trigger('change');
         },
 
