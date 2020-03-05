@@ -50,7 +50,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                                 <?php if (isset($_formatedOptionValue['full_view'])) :?>
                                     <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
                                 <?php else :?>
-                                    <?= $block->escapeHtml($_formatedOptionValue['value'], ['span']) ?>
+                                    <?= $block->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>
@@ -104,6 +104,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                                value="<?= $block->escapeHtmlAttr($block->getQty()) ?>"
                                type="number"
                                size="4"
+                               step="any"
                                title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
                                class="input-text qty"
                                data-validate="{required:true,'validate-greater-than-zero':true}"

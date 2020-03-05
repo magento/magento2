@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Helper;
 
 use Magento\Framework\App\ActionInterface;
@@ -117,6 +120,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param WishlistProviderInterface $wishlistProvider
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param Escaper $escaper
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -127,7 +133,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        Escaper $escaper = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -137,7 +144,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
-        $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context);
     }
 
@@ -352,7 +359,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve params for adding product to wishlist
      *
      * @param int $itemId
-     *
      * @return string
      */
     public function getMoveFromCartParams($itemId)
@@ -366,7 +372,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve params for updating product in wishlist
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     *
      * @return string|false
      */
     public function getUpdateParams($item)
@@ -541,6 +546,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getRssUrl($wishlistId = null)
     {
+        $params = [];
         $customer = $this->_getCurrentCustomer();
         if ($customer) {
             $key = $customer->getId() . ',' . $customer->getEmail();
@@ -574,6 +580,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Calculate count of wishlist items and put value to customer session.
+     *
      * Method called after wishlist modifications and trigger 'wishlist_items_renewed' event.
      * Depends from configuration.
      *
@@ -639,6 +646,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $product = $item->getProduct();
         }
         $buyRequest = $item->getBuyRequest();
+        $fragment = [];
         if (is_object($buyRequest)) {
             $config = $buyRequest->getSuperProductConfig();
             if ($config && !empty($config['product_id'])) {
@@ -648,7 +656,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->_storeManager->getStore()->getStoreId()
                 );
             }
+            $fragment = $buyRequest->getSuperAttribute() ?? [];
+            if ($buyRequest->getQty()) {
+                $additional['_query']['qty'] = $buyRequest->getQty();
+            }
         }
-        return $product->getUrlModel()->getUrl($product, $additional);
+        $url = $product->getUrlModel()->getUrl($product, $additional);
+        if ($fragment) {
+            $url .= '#' . http_build_query($fragment);
+        }
+
+        return $url;
     }
 }

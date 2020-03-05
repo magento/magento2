@@ -7,6 +7,9 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
+/**
+ * Test AttributeRepository Class
+ */
 class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -144,7 +147,8 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
                     'options' => [
                         [
                             'label' => 'Label',
-                            'value' => 'Value'
+                            'value' => 'Value',
+                            '__disableTmpl' => true
                         ]
                     ],
                     'is_used_in_grid' => true,

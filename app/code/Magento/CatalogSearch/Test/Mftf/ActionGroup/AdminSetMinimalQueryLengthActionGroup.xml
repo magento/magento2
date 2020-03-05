@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SetMinimalQueryLengthActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Catalog'. Sets the Minimal Query Length. CLicks on the Save button.</description>
+        </annotations>
         <arguments>
             <argument name="minLength" type="string" defaultValue="1"/>
         </arguments>
+
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="wait1"/>
         <scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab"/>

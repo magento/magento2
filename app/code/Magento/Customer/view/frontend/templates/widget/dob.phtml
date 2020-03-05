@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Widget\Dob $block */
 
 /*
@@ -37,3 +35,11 @@ $fieldCssClass .= $block->isRequired() ? ' required' : '';
         <?php endif; ?>
     </div>
 </div>
+
+<script type="text/x-magento-init">
+    {
+       "*": {
+           "Magento_Customer/js/validation": {}
+       }
+    }
+ </script>

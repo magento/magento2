@@ -10,14 +10,19 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Open the Minicart and check Summary -->
     <actionGroup name="StorefrontCheckCartDiscountAndSummaryActionGroup">
+        <annotations>
+            <description>Validates that the provided Order Total and Discount Totals are present and correct under the 'Summary' section of the Storefront Shopping Cart page.</description>
+        </annotations>
         <arguments>
             <argument name="total" type="string"/>
             <argument name="discount" type="string"/>
         </arguments>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForPrices"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
-        <wait time="10" stepKey="waitForTotalPrice"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="${{total}}" stepKey="assertTotal"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
     </actionGroup>
 </actionGroups>

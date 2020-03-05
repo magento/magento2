@@ -5,15 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Customer Account Information -->
-    <actionGroup name="AdminAssertCustomerAccountInformation" >
+    <actionGroup name="AdminAssertCustomerAccountInformation">
+        <annotations>
+            <description>Validates that the provided Customer details are present and correct on the Customer creation/edit page. Under the 'Account Information' section.</description>
+        </annotations>
         <arguments>
             <argument name="firstName" type="string" defaultValue=""/>
             <argument name="lastName" type="string" defaultValue=""/>
             <argument name="email" type="string" defaultValue=""/>
         </arguments>
+        
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="proceedToAccountInformation"/>
         <seeInField userInput="{{firstName}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="firstName"/>
         <seeInField userInput="{{lastName}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="lastName"/>

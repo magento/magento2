@@ -10,13 +10,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
   <!-- Add Product to Cart from the category page and check message -->
     <actionGroup name="StorefrontAddSimpleProductToCartActionGroup">
+        <annotations>
+            <description>Adds the provided Product to the Storefront Shopping Cart from a Storefront Category page. Validates that the provided Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
         </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage" />
+        
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
     </actionGroup>
 </actionGroups>
-

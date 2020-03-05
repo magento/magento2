@@ -3,16 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_source  = $block->getSource() ?>
 <?php $block->setPriceDataObject($_source) ?>
 
-<?php if ((float) $_source->getShippingAmount() || $_source->getShippingDescription()): ?>
+<?php if ((float) $_source->getShippingAmount() || $_source->getShippingDescription()) : ?>
     <tr>
-        <td class="label"><?= /* @escapeNotVerified */ __('Shipping &amp; Handling') ?></td>
-        <td><?= /* @escapeNotVerified */ $block->displayPriceAttribute('shipping_amount') ?></td>
+        <td class="label"><?= $block->escapeHtml(__('Shipping &amp; Handling')) ?></td>
+        <td><?= /* @noEscape */ $block->displayPriceAttribute('shipping_amount') ?></td>
     </tr>
 <?php endif; ?>

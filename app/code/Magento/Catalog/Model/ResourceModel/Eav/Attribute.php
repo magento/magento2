@@ -38,6 +38,18 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     const KEY_IS_GLOBAL = 'is_global';
 
+    private const ALLOWED_INPUT_TYPES = [
+        'boolean'     => true,
+        'date'        => true,
+        'datetime'    => true,
+        'multiselect' => true,
+        'price'       => true,
+        'select'      => true,
+        'text'        => true,
+        'textarea'    => true,
+        'weight'      => true,
+    ];
+
     /**
      * @var LockValidatorInterface
      */
@@ -236,7 +248,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
-        
+
         $this->_source = null;
 
         return parent::afterSave();
@@ -383,7 +395,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * Retrieve source model
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource|string|null
      */
     public function getSourceModel()
     {
@@ -403,18 +415,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function isAllowedForRuleCondition()
     {
-        $allowedInputTypes = [
-            'boolean',
-            'date',
-            'datetime',
-            'multiselect',
-            'price',
-            'select',
-            'text',
-            'textarea',
-            'weight',
-        ];
-        return $this->getIsVisible() && in_array($this->getFrontendInput(), $allowedInputTypes);
+        return $this->getIsVisible() && isset(self::ALLOWED_INPUT_TYPES[$this->getFrontendInput()]);
     }
 
     /**
@@ -845,14 +846,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->unsetData('entity_type');
         return array_diff(
             parent::__sleep(),
@@ -863,14 +859,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_indexerEavProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);

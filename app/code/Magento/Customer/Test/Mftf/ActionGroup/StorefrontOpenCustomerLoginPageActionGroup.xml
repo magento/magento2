@@ -5,10 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-        
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontOpenCustomerLoginPageActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Customer Sign-In page.</description>
+        </annotations>
+        
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
     </actionGroup>

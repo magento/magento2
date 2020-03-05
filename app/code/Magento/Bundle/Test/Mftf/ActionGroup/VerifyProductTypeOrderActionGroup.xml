@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="VerifyProductTypeOrder">
+        <annotations>
+            <description>Checks that Bundle is in the correct order in comparison to other product types on the add product dropdown.</description>
+        </annotations>
+
         <seeElement stepKey="seeBundleInOrder" selector="{{AdminProductDropdownOrderSection.bundleProduct}}"/>
     </actionGroup>
 </actionGroups>

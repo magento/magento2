@@ -203,11 +203,10 @@ class CrontabManager implements CrontabManagerInterface
      */
     private function save($content)
     {
-        $content = str_replace(['%', '"'], ['%%', '\"'], $content);
+        $content = str_replace(['%', '"', '$'], ['%%', '\"', '\$'], $content);
 
         try {
             $this->shell->execute('echo "' . $content . '" | crontab -');
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException $e) {
             throw new LocalizedException(
                 new Phrase('Error during saving of crontab: %1', [$e->getPrevious()->getMessage()]),

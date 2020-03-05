@@ -48,6 +48,46 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\CatalogSearch\Model\Layer\Filter\Decimal::class, ['layer' => $layer]);
         $this->_model->setAttributeModel($attribute);
     }
+    
+    /**
+     * Test the filter label is correct
+     */
+    public function testApplyFilterLabel()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $request \Magento\TestFramework\Request */
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('weight', '10-20');
+        $this->_model->apply($request);
+
+        $filters = $this->_model->getLayer()->getState()->getFilters();
+        $this->assertArrayHasKey(0, $filters);
+        $this->assertEquals(
+            '<span class="price">$10.00</span> - <span class="price">$19.99</span>',
+            (string)$filters[0]->getLabel()
+        );
+    }
+
+    /**
+     * Test the filter label is correct when there is empty To value
+     */
+    public function testApplyFilterLabelWithEmptyToValue()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $request \Magento\TestFramework\Request */
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('weight', '10-');
+        $this->_model->apply($request);
+
+        $filters = $this->_model->getLayer()->getState()->getFilters();
+        $this->assertArrayHasKey(0, $filters);
+        $this->assertEquals(
+            '<span class="price">$10.00</span> and above',
+            (string)$filters[0]->getLabel()
+        );
+    }
 
     public function testApplyNothing()
     {

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 namespace Magento\Swatches\Block\Product\Renderer;
 
 use Magento\Catalog\Block\Product\Context;
@@ -56,6 +57,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Name of swatch thumbnail for json config
      */
     const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
+
+    /**
+     * Config path which contains number of swatches per product
+     */
+    private const XML_PATH_SWATCHES_PER_PRODUCT = 'catalog/frontend/swatches_per_product';
 
     /**
      * @var Product
@@ -200,7 +206,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     public function getNumberSwatchesPerProduct()
     {
         return $this->_scopeConfig->getValue(
-            'catalog/frontend/swatches_per_product',
+            self::XML_PATH_SWATCHES_PER_PRODUCT,
             ScopeInterface::SCOPE_STORE
         );
     }

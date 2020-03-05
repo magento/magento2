@@ -27,7 +27,7 @@
                 <argument name="email" value="{{CustomerEntityOne.email}}" />
             </actionGroup>
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open New Customer Page -->

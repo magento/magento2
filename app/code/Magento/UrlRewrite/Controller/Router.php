@@ -5,15 +5,16 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
+use Magento\Framework\App\Action\Redirect;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\App\Action\Redirect;
-use Magento\Framework\App\ActionInterface;
 
 /**
  * UrlRewrite Controller Router
@@ -73,6 +74,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      *
      * @param RequestInterface|HttpRequest $request
      * @return ActionInterface|null
+     * @throws NoSuchEntityException
      */
     public function match(RequestInterface $request)
     {
@@ -116,7 +118,7 @@ class Router implements \Magento\Framework\App\RouterInterface
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
             || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
-            $target = $this->url->getUrl('', ['_direct' => $target]);
+            $target = $this->url->getUrl('', ['_direct' => $target, '_query' => $request->getParams()]);
         }
         return $this->redirect($request, $target, $rewrite->getRedirectType());
     }

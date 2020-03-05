@@ -31,7 +31,7 @@
         <div class="block block-customer-login"
              data-bind="attr: {'data-label': $t('or')}">
             <div class="block-title">
-                <strong id="block-customer-login-heading-checkout"
+                <strong id="block-customer-login-heading"
                     role="heading"
                     aria-level="2"
                     data-bind="i18n: 'Sign In'"></strong>
@@ -39,7 +39,7 @@
             <!-- ko foreach: getRegion('messages') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
-            <div class="block-content" aria-labelledby="block-customer-login-heading-checkout">
+            <div class="block-content" aria-labelledby="block-customer-login-heading">
                 <form data-role="login"
                       data-bind="submit:login"
                       method="post">
