@@ -12,7 +12,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
 use Magento\Store\Model\Store;
-use Magento\UrlRewrite\Model\Storage\DbStorage;
+use Magento\UrlRewrite\Model\Storage\DeleteEntitiesFromStores;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event;
@@ -116,9 +116,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $productRepository;
 
     /**
-     * @var DbStorage|MockObject
+     * @var DeleteEntitiesFromStores|MockObject
      */
-    private $dbStorage;
+    private $deleteEntitiesFromStores;
 
     /**
      * Set up
@@ -165,7 +165,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 [1, false, 2, true, $this->product2],
                 [1, false, 5, true, $this->product5]
             ]));
-        $this->dbStorage = $this->createPartialMock(DbStorage::class, ['deleteEntitiesFromStores']);
+        $this->deleteEntitiesFromStores = $this->createPartialMock(
+            DeleteEntitiesFromStores::class,
+            ['execute']
+        );
         $this->event = $this->createPartialMock(Event::class, ['getProduct']);
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
         $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
@@ -216,7 +219,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'storeManager' => $this->storeManager,
                 'storeWebsiteRelation' => $this->storeWebsiteRelation,
                 'productRepository' => $this->productRepository,
-                'dbStorage' => $this->dbStorage,
+                'deleteEntitiesFromStores' => $this->deleteEntitiesFromStores,
                 'productScopeRewriteGenerator' => $this->productScopeRewriteGenerator
             ]
         );
@@ -387,8 +390,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
             ->method('replace')
             ->with([1 => 'rewrite']);
 
-        $this->dbStorage->expects($this->any())
-            ->method('deleteEntitiesFromStores')
+        $this->deleteEntitiesFromStores->expects($this->any())
+            ->method('execute')
             ->with(
                 $expectedRemoves,
                 [1],

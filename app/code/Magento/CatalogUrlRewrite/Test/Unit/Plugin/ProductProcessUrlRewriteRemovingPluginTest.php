@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Plugin;
 use Magento\Catalog\Model\Product\Action;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\UrlRewrite\Model\Storage\DbStorage;
+use Magento\UrlRewrite\Model\Storage\DeleteEntitiesFromStores;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
@@ -97,9 +97,9 @@ class ProductProcessUrlRewriteRemovingPluginTest extends TestCase
     private $storeWebsiteRelation;
 
     /**
-     * @var DbStorage|MockObject
+     * @var DeleteEntitiesFromStores|MockObject
      */
-    private $dbStorage;
+    private $deleteEntitiesFromStores;
 
     /**
      * Set up
@@ -153,7 +153,10 @@ class ProductProcessUrlRewriteRemovingPluginTest extends TestCase
                 [3, false, 0, true, $this->product3]
             ]));
 
-        $this->dbStorage = $this->createPartialMock(DbStorage::class, ['deleteEntitiesFromStores']);
+        $this->deleteEntitiesFromStores = $this->createPartialMock(
+            DeleteEntitiesFromStores::class,
+            ['execute']
+        );
 
         $this->subject = $this->createMock(
             Action::class
@@ -167,7 +170,7 @@ class ProductProcessUrlRewriteRemovingPluginTest extends TestCase
                 'storeWebsiteRelation' => $this->storeWebsiteRelation,
                 'urlPersist' => $this->urlPersist,
                 'productUrlRewriteGenerator' => $this->productUrlRewriteGenerator,
-                'dbStorage' => $this->dbStorage
+                'deleteEntitiesFromStores' => $this->deleteEntitiesFromStores
 
             ]
         );
@@ -320,8 +323,8 @@ class ProductProcessUrlRewriteRemovingPluginTest extends TestCase
             ->method('replace')
             ->with($rewrites);
 
-        $this->dbStorage->expects($this->exactly($expectedDeleteCount))
-            ->method('deleteEntitiesFromStores')
+        $this->deleteEntitiesFromStores->expects($this->exactly($expectedDeleteCount))
+            ->method('execute')
             ->with(
                 $expectedStoreRemovals,
                 $productids,
