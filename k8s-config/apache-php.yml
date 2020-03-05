@@ -45,6 +45,13 @@ spec:
     spec:
       securityContext:
         fsGroup: 82
+      initContainers:
+        - name: perform-move
+          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+          command: ["/bin/mv", "/var/www/magento/*", "/var/www/html"]
+          volumeMounts:
+          - mountPath: /var/www/html
+            name: magento-shared
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
@@ -59,10 +66,6 @@ spec:
           ports:
             - containerPort: 9000
               name: php
-          lifecycle:
-            postStart:
-              exec:   
-                command: ["/bin/sh", "-c", "mv /var/www/magento/* /var/www/html"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
