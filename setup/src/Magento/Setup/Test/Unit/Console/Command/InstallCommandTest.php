@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Setup\Console\Command\InstallCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -62,6 +63,11 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
      * @var ConfigImportCommand|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configImportMock;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|IndexerReindexCommand
+     */
+    private $indexerReindexMock;
 
     /**
      * @var AdminUserCreateCommand|\PHPUnit_Framework_MockObject_MockObject
@@ -122,6 +128,10 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->indexerReindexMock = $this->getMockBuilder(IndexerReindexCommand::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->applicationMock->expects($this->any())
             ->method('getHelperSet')
             ->willReturn($this->helperSetMock);
@@ -132,9 +142,13 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getOptions')
             ->willReturn([]);
         $this->applicationMock->expects($this->any())
-            ->method('find')
-            ->with(ConfigImportCommand::COMMAND_NAME)
-            ->willReturn($this->configImportMock);
+                              ->method('find')
+                              ->willReturnMap(
+                                  [
+                                      [ConfigImportCommand::COMMAND_NAME, $this->configImportMock],
+                                      [IndexerReindexCommand::COMMAND_NAME, $this->indexerReindexMock],
+                                  ]
+                              );
 
         $this->command = new InstallCommand(
             $this->installerFactory,
@@ -164,6 +178,8 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->installer));
         $this->installer->expects($this->once())->method('install');
         $this->configImportMock->expects($this->once())
+            ->method('run');
+        $this->indexerReindexMock->expects($this->once())
             ->method('run');
 
         $commandTester = new CommandTester($this->command);

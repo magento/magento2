@@ -8,21 +8,22 @@ declare(strict_types=1);
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Magento\Framework\Setup\Declaration\Schema\Request;
+use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Framework\Setup\ConsoleLogger;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Command to install Magento application
@@ -228,6 +229,8 @@ class InstallCommand extends AbstractSetupCommand
         $arrayInput->setInteractive($input->isInteractive());
         $importConfigCommand->run($arrayInput, $output);
         $reindexCommand->run($arrayInput, $output);
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -366,7 +369,7 @@ class InstallCommand extends AbstractSetupCommand
         $option,
         $validateInline = false
     ) {
-        if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
+        if ($option instanceof SelectConfigOption) {
             if ($option->isValueRequired()) {
                 $question = new ChoiceQuestion(
                     $option->getDescription() . '? ',
@@ -395,8 +398,7 @@ class InstallCommand extends AbstractSetupCommand
         }
 
         $question->setValidator(function ($answer) use ($option, $validateInline) {
-
-            if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
+            if ($option instanceof SelectConfigOption) {
                 $answer = $option->getSelectOptions()[$answer];
             }
 
