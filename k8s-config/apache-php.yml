@@ -48,7 +48,7 @@ spec:
       initContainers:
         - name: copy-data
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["/bin/cp", "-r", "/var/www/magento/", "/var/www/html/"]
+          command: ["/bin/mv", "-r", "/var/www/magento/", "/var/www/html/"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
