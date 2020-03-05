@@ -15,6 +15,7 @@
             <testCaseId value="MC-30453"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

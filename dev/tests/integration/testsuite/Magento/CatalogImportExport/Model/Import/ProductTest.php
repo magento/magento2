@@ -2416,6 +2416,16 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'behavior' => Import::BEHAVIOR_REPLACE,
                 'expectedResult' => true,
             ],
+            [
+                'row' => ['sku' => 'sku with whitespace ',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => false,
+            ],
         ];
     }
 
