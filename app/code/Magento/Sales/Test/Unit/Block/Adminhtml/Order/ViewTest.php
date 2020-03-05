@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order;
 
+use Magento\Backend\Block\Widget\Button\ButtonList;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Phrase;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Verify view test block
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends TestCase
 {
@@ -34,7 +37,7 @@ class ViewTest extends TestCase
     /**
      * @var MockObject|Registry
      */
-    private $registryMock;
+    private $coreRegistryMock;
 
     /**
      * @var MockObject|Sales
@@ -89,10 +92,7 @@ class ViewTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
-        $buttonList = $this->createPartialMock(
-            \Magento\Backend\Block\Widget\Button\ButtonList::class,
-            ['remove', 'add']
-        );
+        $buttonList = $this->createPartialMock(ButtonList::class, ['remove', 'add']);
         $this->contextMock->expects($this->once())
             ->method('getButtonList')
             ->will($this->returnValue($buttonList));
@@ -139,14 +139,15 @@ class ViewTest extends TestCase
      */
     public function testGetBackUrl(): void
     {
+        $expectedUrl = 'admin/sales/order/';
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass());
-
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
-            ->with('sales/*/');
+            ->with('sales/*/')
+            ->willReturn($expectedUrl);
 
-        $this->block->getBackUrl();
+        $this->assertEquals($expectedUrl, $this->block->getBackUrl());
     }
 }
