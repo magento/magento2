@@ -5,8 +5,9 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
@@ -19,13 +20,8 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Class for redirecting the Paypal response result to Magento controller.
  */
-class Redirect implements ActionInterface, CsrfAwareActionInterface, HttpPostActionInterface
+class Redirect extends Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
     /**
      * @var LayoutFactory
      */
@@ -42,27 +38,26 @@ class Redirect implements ActionInterface, CsrfAwareActionInterface, HttpPostAct
     private $logger;
 
     /**
-     * Constructor
-     *
-     * @param RequestInterface $request
+     * @param Context $context
      * @param LayoutFactory $resultLayoutFactory
      * @param Transparent $transparent
      * @param Logger $logger
      */
     public function __construct(
-        RequestInterface $request,
+        Context $context,
         LayoutFactory $resultLayoutFactory,
         Transparent $transparent,
         Logger $logger
     ) {
-        $this->request = $request;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->transparent = $transparent;
         $this->logger = $logger;
+
+        parent::__construct($context);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function createCsrfValidationException(
         RequestInterface $request
@@ -71,7 +66,7 @@ class Redirect implements ActionInterface, CsrfAwareActionInterface, HttpPostAct
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function validateForCsrf(RequestInterface $request): ?bool
     {
@@ -86,7 +81,7 @@ class Redirect implements ActionInterface, CsrfAwareActionInterface, HttpPostAct
      */
     public function execute()
     {
-        $gatewayResponse = (array)$this->request->getPostValue();
+        $gatewayResponse = (array)$this->getRequest()->getPostValue();
         $this->logger->debug(
             ['PayPal PayflowPro redirect:' => $gatewayResponse],
             $this->transparent->getDebugReplacePrivateDataKeys(),
