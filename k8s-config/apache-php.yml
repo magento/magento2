@@ -69,10 +69,10 @@ spec:
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
-          - mountPath: /var/www/html/media
+          - mountPath: /var/www/html/magento/media
             name: magento-persistent-storage
             subPath: media
-          - mountPath: /var/www/html/var
+          - mountPath: /var/www/html/magento/var
             name: magento-persistent-storage
             subPath: var 
       volumes:
