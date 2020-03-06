@@ -16,6 +16,7 @@
         <element name="title" type="text" selector="#title"/>
         <element name="detail" type="textarea" selector="#detail"/>
         <element name="submitReview" type="button" selector="#save_button"/>
+        <element name="SuccessMessage" type="button" selector="div.message-success"/>
         <element name="gridProducts_filter_review_cnt" type="button" selector="#gridProducts_filter_review_cnt"/>
         <element name="searchButton" type="button" selector="//*[@id='gridProducts']//button[contains(@title, 'Search')]"/>
         <element name="gridReviewColumn" type="text" selector="//tbody//td[@data-column='review_cnt']"/>

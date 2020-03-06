@@ -42,18 +42,14 @@
         </after>
         <!-- Navigate to Marketing > User Content> All Review -->
         <amOnPage url="{{AdminReviewsPage.url}}" stepKey="openReviewsPage"/>
-        <!--Click on Add New Review -->
-        <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnFirstNewReview"/>
-        <!--Select Product by SKU and Create Review1 -->
-        <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU($$createProduct1.sku$$)}}" stepKey="addNewReviewBySKU"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewOne"/>
-        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addFirstReview"/>
-        <!--Click on Add New Review -->
-        <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnSecondNewReview"/>
-        <!--Select Product by SKU and Create Review2 -->
-        <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU($$createProduct2.sku$$)}}" stepKey="addNewReviewTwoBySKU"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addFirstReview">
+            <argument name="sku" value="$$createProduct1.sku$$"/>
+        </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewTwo"/>
-        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addSecondReview"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addSecondReview">
+            <argument name="sku" value="$$createProduct2.sku$$"/>
+        </actionGroup>
         <!-- Navigate to Reports > Reviews >By Products -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByProductsPage">
             <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
@@ -61,8 +57,8 @@
         </actionGroup>
         <!--Sort Review Column -->
         <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabReviewQuantity"/>
-        <actionGroup ref="AdminSortProductReviewActionGroup" stepKey="navigateToReportsReview">
-            <argument name="reviewCount" value="$grabReviewQuantity" />
+        <actionGroup ref="AdminFilterProductReviewActionGroup" stepKey="navigateToReportsReview">
+            <argument name="reviewCount" value="$grabReviewQuantity"/>
         </actionGroup>
     </test>
 </tests>
