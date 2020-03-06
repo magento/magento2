@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Unit\Block\Product;
+namespace Magento\Review\Test\Unit\Block\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Review\Block\Product\View\ListView;
@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class ViewTest
- * @package Magento\Review\Test\Unit\Block\Product
  */
 class ListViewTest extends TestCase
 {
