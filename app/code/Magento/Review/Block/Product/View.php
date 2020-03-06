@@ -82,7 +82,6 @@ class View extends \Magento\Catalog\Block\Product\View
      */
     protected function _toHtml()
     {
-
         $product = $this->getProduct();
 
         if (!$product) {
@@ -96,6 +95,7 @@ class View extends \Magento\Catalog\Block\Product\View
 
     /**
      * Replace review summary html with more detailed review summary
+     *
      * Reviews collection count will be jerked here
      *
      * @param \Magento\Catalog\Model\Product $product
