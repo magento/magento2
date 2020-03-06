@@ -1814,4 +1814,13 @@
             <argument name="cache" xsi:type="object">configured_block_cache</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Storage\StorageAdapterProvider">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="local" xsi:type="string">Magento\Framework\Storage\AdapterFactory\LocalFactory</item>
+                <item name="aws_s3" xsi:type="string">Magento\Framework\Storage\AdapterFactory\AwsS3Factory</item>
+                <item name="ms_azure" xsi:type="string">Magento\Framework\Storage\AdapterFactory\AzureFactory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
