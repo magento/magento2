@@ -7,6 +7,10 @@ namespace Magento\Paypal\Controller\Adminhtml\Transparent;
 
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Transparent;
@@ -14,7 +18,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Class for redirecting the Paypal response result to Magento controller.
  */
-class Redirect extends AbstractAction
+class Redirect extends AbstractAction implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
      * @var LayoutFactory
@@ -42,8 +46,7 @@ class Redirect extends AbstractAction
         LayoutFactory $resultLayoutFactory,
         Transparent $transparent,
         Logger $logger
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->transparent = $transparent;
         $this->logger = $logger;
@@ -67,5 +70,22 @@ class Redirect extends AbstractAction
         $resultLayout->getLayout()->getUpdate()->load(['transparent_payment_redirect']);
 
         return $resultLayout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 }
