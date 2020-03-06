@@ -7,11 +7,11 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -130,6 +130,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * @inheritdoc
+     *
      * @throws SerializationException
      */
     public function get($categoryId, $storeId = null)
@@ -245,10 +246,10 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * Returns a cache key based on scope
      *
-     * @param string|integer|null $storeId
+     * @param string|int|null $storeId
      *
      * @throws SerializationException
-     * @return integer
+     * @return int|string
      */
     private function getScopeCacheKey($storeId = null)
     {
@@ -261,6 +262,6 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 )
             );
         }
-        return $storeId ?? 'all';
+        return $storeId === null ? 'all' : (int)$storeId;
     }
 }

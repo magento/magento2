@@ -12,6 +12,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\StoreFactory;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -47,6 +48,11 @@ class CategoryRepositoryTest extends TestCase
     private $categoryCollectionFactory;
 
     /**
+     * @var StoreFactory
+     */
+    private $storeFactory;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -57,6 +63,7 @@ class CategoryRepositoryTest extends TestCase
         $this->layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
         $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
         $this->categoryCollectionFactory = Bootstrap::getObjectManager()->create(CategoryCollectionFactory::class);
+        $this->storeFactory = Bootstrap::getObjectManager()->create(StoreFactory::class);
     }
 
     /**
@@ -151,14 +158,14 @@ class CategoryRepositoryTest extends TestCase
 
         $categoryFirstStore = $categoryRepository->get(
             self::FIXTURE_TWO_STORES_CATEGORY_ID,
-            self::FIXTURE_FIRST_STORE_CODE
+            $this->storeFactory->create()->load(self::FIXTURE_FIRST_STORE_CODE)->getId()
         );
 
         $this->assertSame('category-defaultstore', $categoryFirstStore->getUrlKey());
 
         $categorySecondStore = $categoryRepository->get(
             self::FIXTURE_TWO_STORES_CATEGORY_ID,
-            self::FIXTURE_SECOND_STORE_CODE
+            $this->storeFactory->create()->load(self::FIXTURE_SECOND_STORE_CODE)->getId()
         );
 
         $this->assertSame('category-fixturestore', $categorySecondStore->getUrlKey());
