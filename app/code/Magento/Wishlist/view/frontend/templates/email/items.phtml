@@ -11,14 +11,15 @@
     <table>
         <tr>
             <?php $i = 0;
-            foreach ($block->getWishlistItems() as $item) : $i++ ?>
-                <?php /* @var $item \Magento\Wishlist\Model\Item */ ?>
-                <?php /* @var $_product \Magento\Catalog\Model\Product */ ?>
+            foreach ($block->getWishlistItems() as $item): $i++ ?>
+                <?php /* @var \Magento\Wishlist\Model\Item $item */ ?>
+                <?php /* @var \Magento\Catalog\Model\Product $_product */ ?>
                 <?php $_product = $item->getProduct(); ?>
                 <td class="col product">
                     <p>
                         <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>">
-                            <?= /* @noEscape */ $block->getImage($block->getProductForThumbnail($item), 'product_small_image')->toHtml() ?>
+                            <?php $productThumbnail = $block->getProductForThumbnail($item) ?>
+                            <?= /* @noEscape */ $block->getImage($productThumbnail, 'product_small_image')->toHtml() ?>
                         </a>
                     </p>
 
@@ -27,7 +28,7 @@
                             <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
                         </a>
                     </p>
-                    <?php if ($block->hasDescription($item)) : ?>
+                    <?php if ($block->hasDescription($item)): ?>
                         <p>
                             <strong><?= $block->escapeHtml(__('Comment')) ?>:</strong>
                             <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
@@ -39,14 +40,14 @@
                         </a>
                     </p>
                 </td>
-                <?php if ($i % 3 != 0) : ?>
+                <?php if ($i % 3 != 0): ?>
                     <td></td>
-                <?php else : ?>
+                <?php else: ?>
             </tr>
             <tr>
                 <td colspan="5">&nbsp;</td>
             </tr>
-                    <?php if ($i < $l) : ?>
+                    <?php if ($i < $l): ?>
                     <tr>
                     <?php endif ?>
                 <?php endif ?>
