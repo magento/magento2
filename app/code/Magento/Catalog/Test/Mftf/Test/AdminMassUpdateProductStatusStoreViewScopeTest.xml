@@ -21,7 +21,7 @@
             <group value="SearchEngineElasticsearch"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
@@ -80,7 +80,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
@@ -171,7 +171,7 @@
             <group value="SearchEngineMysql"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
@@ -230,7 +230,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->

@@ -21,7 +21,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set fraud_protection/signifyd/active 0" stepKey="disableSignifyd"/>
         </after>
 

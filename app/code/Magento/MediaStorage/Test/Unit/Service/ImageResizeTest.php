@@ -6,25 +6,27 @@
 namespace Magento\MediaStorage\Test\Unit\Service;
 
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
+use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
+use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Catalog\Model\View\Asset\Image as AssetImage;
+use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Config\View;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Framework\Image;
-use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
-use Magento\Framework\App\State;
+use Magento\Framework\Image\Factory as ImageFactory;
+use Magento\Framework\Storage\StorageInterface;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
-use Magento\Framework\Config\View;
-use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Service\ImageResize;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
-use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class ImageResizeTest
+ * Class ImageResizeTest test for \Magento\MediaStorage\Service\ImageResize
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,7 +34,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ImageResizeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Service\ImageResize
+     * @var ImageResize
      */
     protected $service;
 
@@ -120,10 +122,16 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
      * @var string
      */
     private $testfilepath;
+
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storage;
 
     /**
      * @inheritDoc
@@ -149,10 +157,16 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->databaseMock = $this->createMock(Database::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storageProvider = $this->createMock(\Magento\Framework\Storage\StorageProvider::class);
+        $this->storage = $this->getMockForAbstractClass(StorageInterface::class);
+        $storageProvider->expects($this->any())
+            ->method('get')
+            ->with('media')
+            ->willReturn($this->storage);
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAbsolutePath','isFile','getRelativePath'])
+            ->setMethods(['getAbsolutePath','isFile','getRelativePath', 'readFile'])
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
@@ -201,8 +215,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->any())
             ->method('getMediaEntities')
             ->willReturn(
-                ['product_small_image' =>
-                    [
+                ['product_small_image' => [
                         'type' => 'small_image',
                         'width' => 75,
                         'height' => 75
@@ -223,7 +236,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('getStores')
             ->willReturn([$store]);
 
-        $this->service = new \Magento\MediaStorage\Service\ImageResize(
+        $this->service = new ImageResize(
             $this->appStateMock,
             $this->imageConfigMock,
             $this->productImageMock,
@@ -235,7 +248,8 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             $this->themeCollectionMock,
             $this->filesystemMock,
             $this->databaseMock,
-            $this->storeManager
+            $this->storeManager,
+            $storageProvider
         );
     }
 
@@ -278,6 +292,14 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('saveFile')
             ->with($this->testfilepath);
 
+        $this->mediaDirectoryMock->expects($this->any())
+            ->method('readFile')
+            ->with($this->testfilepath)
+            ->willReturn('image data');
+        $this->storage->expects($this->once())
+            ->method('put')
+            ->with($this->testfilepath, 'image data');
+
         $generator = $this->service->resizeFromThemes(['test-theme']);
         while ($generator->valid()) {
             $generator->next();
@@ -315,6 +337,14 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->databaseMock->expects($this->once())
             ->method('saveFile')
             ->with($this->testfilepath);
+
+        $this->mediaDirectoryMock->expects($this->any())
+            ->method('readFile')
+            ->with($this->testfilepath)
+            ->willReturn('image data');
+        $this->storage->expects($this->once())
+            ->method('put')
+            ->with($this->testfilepath, 'image data');
 
         $this->service->resizeFromImageName($this->testfilename);
     }
