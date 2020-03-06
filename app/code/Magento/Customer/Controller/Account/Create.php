@@ -1,21 +1,27 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Registration;
+use Magento\Customer\Model\Registration as RegistrationModel;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\App\Action\Context;
 
-class Create extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
+class Create implements AccountInterface, HttpGetActionInterface
 {
     /**
-     * @var \Magento\Customer\Model\Registration
+     * @var RegistrationModel
      */
     protected $registration;
 
@@ -30,38 +36,44 @@ class Create extends \Magento\Customer\Controller\AbstractAccount implements Htt
     protected $resultPageFactory;
 
     /**
-     * @param Context $context
+     * @var RedirectFactory
+     */
+    private $resultRedirectFactory;
+
+    /**
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
      * @param Registration $registration
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
-        Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
-        Registration $registration
+        Registration $registration,
+        RedirectFactory $resultRedirectFactory = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->registration = $registration;
-        parent::__construct($context);
+        $this->resultRedirectFactory = $resultRedirectFactory
+            ?? ObjectManager::getInstance()->get(RedirectFactory::class);
     }
 
     /**
      * Customer register form page
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return ResultRedirect|ResultPage
      */
     public function execute()
     {
         if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            /** @var ResultRedirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/*');
             return $resultRedirect;
         }
 
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
         return $resultPage;
     }

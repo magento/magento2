@@ -8,22 +8,26 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class CreatePassword
  *
  * @package Magento\Customer\Controller\Account
  */
-class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
+class CreatePassword implements HttpGetActionInterface, AccountInterface
 {
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @var AccountManagementInterface
      */
     protected $accountManagement;
 
@@ -38,73 +42,103 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken
+     * @var ConfirmCustomerByToken
      */
     private $confirmByToken;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
-     * @param \Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken $confirmByToken
+     * @var MessageManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var RedirectFactory
+     */
+    private $redirectFactory;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @param RequestInterface $request
+     * @param Session $customerSession
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $redirectFactory
+     * @param AccountManagementInterface $accountManagement
+     * @param ConfirmCustomerByToken $confirmByToken
+     * @param MessageManagerInterface $messageManager
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
         Session $customerSession,
         PageFactory $resultPageFactory,
+        RedirectFactory $redirectFactory,
         AccountManagementInterface $accountManagement,
-        ConfirmCustomerByToken $confirmByToken = null
+        ConfirmCustomerByToken $confirmByToken,
+        MessageManagerInterface $messageManager
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->accountManagement = $accountManagement;
-        $this->confirmByToken = $confirmByToken
-            ?? ObjectManager::getInstance()->get(ConfirmCustomerByToken::class);
-
-        parent::__construct($context);
+        $this->confirmByToken = $confirmByToken;
+        $this->messageManager = $messageManager;
+        $this->redirectFactory = $redirectFactory;
+        $this->request = $request;
     }
 
     /**
      * Resetting password handler
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return ResultRedirect|ResultPage
      */
     public function execute()
     {
-        $resetPasswordToken = (string)$this->getRequest()->getParam('token');
-        $isDirectLink = $resetPasswordToken != '';
-        if (!$isDirectLink) {
-            $resetPasswordToken = (string)$this->session->getRpToken();
-        }
+        $resetPasswordToken = $this->getResetPasswordToken();
 
         try {
             $this->accountManagement->validateResetPasswordLinkToken(null, $resetPasswordToken);
 
             $this->confirmByToken->execute($resetPasswordToken);
 
-            if ($isDirectLink) {
+            if ($resetPasswordToken) {
                 $this->session->setRpToken($resetPasswordToken);
-                $resultRedirect = $this->resultRedirectFactory->create();
+                $resultRedirect = $this->redirectFactory->create();
                 $resultRedirect->setPath('*/*/createpassword');
 
                 return $resultRedirect;
-            } else {
-                /** @var \Magento\Framework\View\Result\Page $resultPage */
-                $resultPage = $this->resultPageFactory->create();
-                $resultPage->getLayout()
-                           ->getBlock('resetPassword')
-                           ->setResetPasswordLinkToken($resetPasswordToken);
-
-                return $resultPage;
             }
+
+            /** @var ResultPage $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getLayout()
+                ->getBlock('resetPassword')
+                ->setResetPasswordLinkToken($resetPasswordToken);
+
+            return $resultPage;
         } catch (\Exception $exception) {
             $this->messageManager->addErrorMessage(__('Your password reset link has expired.'));
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
+            /** @var ResultRedirect $resultRedirect */
+            $resultRedirect = $this->redirectFactory->create();
             $resultRedirect->setPath('*/*/forgotpassword');
 
             return $resultRedirect;
         }
+    }
+
+    /**
+     * Returns Reset Password Token from request or if missing, from Session
+     *
+     * @return string
+     */
+    private function getResetPasswordToken(): string
+    {
+        $resetPasswordToken = $this->request->getParam('token', '');
+
+        if (!$resetPasswordToken) {
+            $resetPasswordToken = $this->session->getRpToken();
+        }
+
+        return (string)$resetPasswordToken;
     }
 }

@@ -3,32 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Confirmation. Send confirmation link to specified email
  */
-class Confirmation extends AbstractAccount implements HttpGetActionInterface, HttpPostActionInterface
+class Confirmation implements HttpGetActionInterface, HttpPostActionInterface, AccountInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @var AccountManagementInterface
      */
     protected $customerAccountManagement;
 
@@ -48,48 +53,68 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
     private $customerUrl;
 
     /**
-     * @param Context $context
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var RedirectFactory
+     */
+    private $redirectFactory;
+
+    /**
+     * @var MessageManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @param RequestInterface $request
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $redirectFactory
      * @param StoreManagerInterface $storeManager
+     * @param MessageManagerInterface $messageManager
      * @param AccountManagementInterface $customerAccountManagement
      * @param Url $customerUrl
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
         Session $customerSession,
         PageFactory $resultPageFactory,
+        RedirectFactory $redirectFactory,
         StoreManagerInterface $storeManager,
+        MessageManagerInterface $messageManager,
         AccountManagementInterface $customerAccountManagement,
-        Url $customerUrl = null
+        Url $customerUrl
     ) {
+        $this->request = $request;
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
+        $this->redirectFactory = $redirectFactory;
         $this->storeManager = $storeManager;
+        $this->messageManager = $messageManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
-        parent::__construct($context);
+        $this->customerUrl = $customerUrl;
     }
 
     /**
      * Send confirmation link to specified email
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return ResultRedirect|ResultPage
      */
     public function execute()
     {
         if ($this->session->isLoggedIn()) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
+            /** @var ResultRedirect $resultRedirect */
+            $resultRedirect = $this->redirectFactory->create();
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
 
-        // try to confirm by email
-        $email = $this->getRequest()->getPost('email');
+        $email = $this->request->getPost('email');
         if ($email) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
+            /** @var ResultRedirect $resultRedirect */
+            $resultRedirect = $this->redirectFactory->create();
 
             try {
                 $this->customerAccountManagement->resendConfirmation(
@@ -104,18 +129,17 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }
+
             $this->session->setUsername($email);
             $resultRedirect->setPath('*/*/index', ['_secure' => true]);
             return $resultRedirect;
         }
 
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
-            $this->getRequest()->getParam('email', $email)
-        )->setLoginUrl(
-            $this->customerUrl->getLoginUrl()
-        );
+        $resultPage->getLayout()->getBlock('accountConfirmation')
+            ->setEmail($this->request->getParam('email', $email))
+            ->setLoginUrl($this->customerUrl->getLoginUrl());
         return $resultPage;
     }
 }

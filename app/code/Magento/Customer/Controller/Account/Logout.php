@@ -1,24 +1,23 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
-use Magento\Customer\Controller\AbstractAccount;
 
-/**
- * Sign out a customer.
- */
-class Logout extends AbstractAccount implements HttpGetActionInterface, HttpPostActionInterface
+class Logout implements HttpGetActionInterface, HttpPostActionInterface, AccountInterface
 {
     /**
      * @var Session
@@ -31,68 +30,60 @@ class Logout extends AbstractAccount implements HttpGetActionInterface, HttpPost
     private $cookieMetadataFactory;
 
     /**
-     * @var PhpCookieManager
+     * @var RedirectFactory
      */
-    private $cookieMetadataManager;
+    private $redirectFactory;
 
     /**
-     * @param Context $context
+     * @var RedirectInterface
+     */
+    private $redirect;
+
+    /**
+     * @var PhpCookieManager
+     */
+    private $cookieManager;
+
+    /**
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param PhpCookieManager $cookieManager
+     * @param RedirectFactory $redirectFactory
+     * @param RedirectInterface $redirect
      * @param Session $customerSession
      */
     public function __construct(
-        Context $context,
+        CookieMetadataFactory $cookieMetadataFactory,
+        PhpCookieManager $cookieManager,
+        RedirectFactory $redirectFactory,
+        RedirectInterface $redirect,
         Session $customerSession
     ) {
         $this->session = $customerSession;
-        parent::__construct($context);
-    }
-
-    /**
-     * Retrieve cookie manager
-     *
-     * @deprecated 100.1.0
-     * @return PhpCookieManager
-     */
-    private function getCookieManager()
-    {
-        if (!$this->cookieMetadataManager) {
-            $this->cookieMetadataManager = ObjectManager::getInstance()->get(PhpCookieManager::class);
-        }
-        return $this->cookieMetadataManager;
-    }
-
-    /**
-     * Retrieve cookie metadata factory
-     *
-     * @deprecated 100.1.0
-     * @return CookieMetadataFactory
-     */
-    private function getCookieMetadataFactory()
-    {
-        if (!$this->cookieMetadataFactory) {
-            $this->cookieMetadataFactory = ObjectManager::getInstance()->get(CookieMetadataFactory::class);
-        }
-        return $this->cookieMetadataFactory;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->redirectFactory = $redirectFactory;
+        $this->redirect = $redirect;
+        $this->cookieManager = $cookieManager;
     }
 
     /**
      * Customer logout action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResultRedirect
      */
     public function execute()
     {
         $lastCustomerId = $this->session->getId();
-        $this->session->logout()->setBeforeAuthUrl($this->_redirect->getRefererUrl())
+        $this->session->logout()->setBeforeAuthUrl($this->redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
-        if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
-            $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
+
+        if ($this->cookieManager->getCookie('mage-cache-sessid')) {
+            $metadata = $this->cookieMetadataFactory->createCookieMetadata();
             $metadata->setPath('/');
-            $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
+            $this->cookieManager->deleteCookie('mage-cache-sessid', $metadata);
         }
 
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var ResultRedirect $resultRedirect */
+        $resultRedirect = $this->redirectFactory->create();
         $resultRedirect->setPath('*/*/logoutSuccess');
         return $resultRedirect;
     }

@@ -4,20 +4,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -26,7 +28,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm extends AbstractAccount implements HttpGetActionInterface
+class Confirm extends Action implements HttpGetActionInterface, AccountInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -106,8 +108,8 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     /**
      * Retrieve cookie manager
      *
-     * @deprecated 100.2.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @deprecated 100.2.0
      */
     private function getCookieManager()
     {
@@ -122,8 +124,8 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated 100.2.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @deprecated 100.2.0
      */
     private function getCookieMetadataFactory()
     {
