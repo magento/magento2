@@ -39,7 +39,7 @@
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Product Index Page-->

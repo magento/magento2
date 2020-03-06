@@ -24,7 +24,7 @@
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="CreateOrderActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>

@@ -73,7 +73,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Assign product to custom website-->
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>

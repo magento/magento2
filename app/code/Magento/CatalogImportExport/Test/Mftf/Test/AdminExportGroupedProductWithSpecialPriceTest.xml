@@ -70,7 +70,7 @@
                 <argument name="rowIndex" value="0"/>
             </actionGroup>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to export page -->
