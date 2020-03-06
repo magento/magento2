@@ -70,6 +70,11 @@ class ViewTest extends TestCase
     private $localeDateMock;
 
     /**
+     * @var MockObject|RequestInterface
+     */
+    private $requestMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -81,10 +86,11 @@ class ViewTest extends TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
 
-        $this->contextMock->expects($this->any())
+        $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->willReturn($this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass());
+            ->willReturn($this->requestMock);
         $this->coreRegistryMock->expects($this->any())
             ->method('registry')
             ->with('sales_order')
@@ -133,19 +139,37 @@ class ViewTest extends TestCase
     }
 
     /**
-     * Verify getBackUrl method
+     * Verify getBackUrl method redirect ot orders grid
      *
      * @return void
      */
-    public function testGetBackUrl(): void
+    public function testGetBackUrlToOrdersGrid(): void
     {
-        $expectedUrl = 'admin/sales/order/';
-        $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass());
+        $expectedUrl = 'https://magento.local/admin/sales/order';
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('sales/*/')
+            ->willReturn($expectedUrl);
+
+        $this->assertEquals($expectedUrl, $this->block->getBackUrl());
+    }
+
+    /**
+     * Verify getBackUrl method redirect to customer edit page
+     *
+     * @return void
+     */
+    public function testGetBackUrlToCustomerEditPage(): void
+    {
+        $expectedUrl = 'https://magento.local/admin/customer/index/edit';
+
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getParam')
+            ->with('customer_id')
+            ->willReturn(1);
+        $this->urlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->with('customer/index/edit')
             ->willReturn($expectedUrl);
 
         $this->assertEquals($expectedUrl, $this->block->getBackUrl());
