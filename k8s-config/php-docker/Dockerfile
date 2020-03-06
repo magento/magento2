@@ -14,6 +14,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                 --with-freetype-dir=/usr/inlcude/ \
 && docker-php-ext-configure zip --with-libzip \
 && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
+&& apk cache clean && rm -rf /var/cache/* /tmp/* /var/tmp/* \
 && echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \ 
 && mkdir -p /var/www/magento \
@@ -23,4 +24,4 @@ USER www-data
 RUN cd /var/www/magento \
 && composer install \
 && composer config repositories.magento composer https://repo.magento.com/ \
-&& chmod u+x bin/magento
+&& chmod u+x bin/magento start.sh
