@@ -140,7 +140,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testTelephoneWithStoreLabel(): void
