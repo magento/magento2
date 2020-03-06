@@ -127,9 +127,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->stores[2] = $this->initialiseStore(2, 2);
         $this->stores[5] = $this->initialiseStore(5, 2);
 
-        $this->product = $this->initialiseProduct($this->stores[0], 0);
+        $this->product = $this->initialiseProduct();
 
-        $this->productCollection = $this->createPartialMock(Collection::class,
+        $this->productCollection = $this->createPartialMock(
+            Collection::class,
             ['getAllAttributeValues']
         );
 
@@ -199,11 +200,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     /**
      * Initialise product for test
      *
-     * @param $store
-     * @param $storeId
      * @return MockObject
      */
-    public function initialiseProduct($store, $storeId)
+    public function initialiseProduct()
     {
         $product = $this->createPartialMock(
             Product::class,
@@ -253,6 +252,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      * Data provider
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function urlKeyDataProvider()
     {
@@ -477,9 +477,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      * @param int $productInWebsites
      * @param int $expectedReplaceCount
      * @param array $expectedRemoves
+     * @throws UrlAlreadyExistsException
      *
      * @dataProvider urlKeyDataProvider
-     * @throws UrlAlreadyExistsException
      */
     public function testExecuteUrlKey(
         $productScope,

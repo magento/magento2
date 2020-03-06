@@ -96,6 +96,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param Observer $observer
      * @return void
      * @throws UrlAlreadyExistsException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(Observer $observer)
     {
