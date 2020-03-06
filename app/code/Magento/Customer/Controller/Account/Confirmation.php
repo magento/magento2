@@ -23,7 +23,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Confirmation. Send confirmation link to specified email
+ * Send confirmation link to specified email
  */
 class Confirmation implements HttpGetActionInterface, HttpPostActionInterface, AccountInterface
 {

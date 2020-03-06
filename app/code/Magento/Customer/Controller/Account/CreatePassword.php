@@ -19,11 +19,6 @@ use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class CreatePassword
- *
- * @package Magento\Customer\Controller\Account
- */
 class CreatePassword implements HttpGetActionInterface, AccountInterface
 {
     /**
@@ -55,6 +50,7 @@ class CreatePassword implements HttpGetActionInterface, AccountInterface
      * @var RedirectFactory
      */
     private $redirectFactory;
+    
     /**
      * @var RequestInterface
      */

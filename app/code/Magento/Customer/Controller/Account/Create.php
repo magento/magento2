@@ -12,7 +12,6 @@ use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Registration as RegistrationModel;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\Page as ResultPage;
@@ -55,8 +54,7 @@ class Create implements AccountInterface, HttpGetActionInterface
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->registration = $registration;
-        $this->resultRedirectFactory = $resultRedirectFactory
-            ?? ObjectManager::getInstance()->get(RedirectFactory::class);
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Forgot Password controller
  */
-class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
+class ForgotPassword implements HttpGetActionInterface
 {
     /**
      * @var PageFactory
@@ -26,38 +30,43 @@ class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount implem
     protected $session;
 
     /**
-     * @param Context $context
+     * @var RedirectFactory
+     */
+    private $redirectFactory;
+
+    /**
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $redirectFactory
      */
     public function __construct(
-        Context $context,
         Session $customerSession,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        RedirectFactory $redirectFactory
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
+        $this->redirectFactory = $redirectFactory;
     }
 
     /**
      * Forgot customer password page
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return ResultRedirect|ResultPage
      */
     public function execute()
     {
         if ($this->session->isLoggedIn()) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
+            /** @var ResultRedirect $resultRedirect */
+            $resultRedirect = $this->redirectFactory->create();
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
 
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->getBlock('forgotPassword')->setEmailValue($this->session->getForgottenEmail());
-
+        $resultPage->getLayout()->getBlock('forgotPassword')
+            ->setEmailValue($this->session->getForgottenEmail());
         $this->session->unsForgottenEmail();
 
         return $resultPage;

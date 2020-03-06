@@ -1,38 +1,36 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
+class Index implements HttpGetActionInterface, AccountInterface
 {
     /**
      * @var PageFactory
      */
-    protected $resultPageFactory;
+    private $resultPageFactory;
 
     /**
-     * @param Context $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
-        Context $context,
-        PageFactory $resultPageFactory
-    ) {
+    public function __construct(PageFactory $resultPageFactory)
+    {
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
     }
 
     /**
      * Default customer account page
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return ResultPage
      */
     public function execute()
     {
