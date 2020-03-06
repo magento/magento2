@@ -36,7 +36,7 @@ class SaveTest extends AbstractBackendController
      *
      * @var string
      */
-    private $_baseControllerUrl = 'http://localhost/index.php/backend/customer/index/';
+    private $baseControllerUrl = 'backend/customer/index/';
 
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
@@ -83,7 +83,7 @@ class SaveTest extends AbstractBackendController
             $this->equalTo([(string)__('You saved the customer.')]),
             MessageInterface::TYPE_SUCCESS
         );
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'index/key/'));
         $this->assertCustomerData(
             $postData['customer'][CustomerData::EMAIL],
             (int)$postData['customer'][CustomerData::WEBSITE_ID],
@@ -158,7 +158,7 @@ class SaveTest extends AbstractBackendController
         );
         $this->assertNotEmpty($this->session->getCustomerFormData());
         $this->assertArraySubset($expectedData, $this->session->getCustomerFormData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'new/key/'));
     }
 
     /**
@@ -251,8 +251,8 @@ class SaveTest extends AbstractBackendController
             $this->equalTo([(string)__('You saved the customer.')]),
             MessageInterface::TYPE_SUCCESS
         );
-        $this->assertRedirect($this->stringStartsWith(
-            $this->_baseControllerUrl . 'edit/id/' . $customerData->getId()
+        $this->assertRedirect($this->stringContains(
+            $this->baseControllerUrl . 'edit/id/' . $customerData->getId()
         ));
         $this->assertCustomerData($customerData->getEmail(), (int)$customerData->getWebsiteId(), $expectedData);
         $this->assertCustomerSubscription(
@@ -289,7 +289,7 @@ class SaveTest extends AbstractBackendController
             $this->equalTo([(string)__('You saved the customer.')]),
             MessageInterface::TYPE_SUCCESS
         );
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'index/key/'));
         $this->assertCustomerSubscription(
             (int)$customerData->getId(),
             (int)$customerData->getWebsiteId(),
@@ -344,7 +344,7 @@ class SaveTest extends AbstractBackendController
          * Check that no errors were generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'index/key/'));
     }
 
     /**
@@ -384,7 +384,7 @@ class SaveTest extends AbstractBackendController
             true,
             'Customer form data should be formatted'
         );
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'new/key/'));
     }
 
     /**
@@ -449,7 +449,7 @@ class SaveTest extends AbstractBackendController
         if (!empty($params)) {
             $this->getRequest()->setParams($params);
         }
-        $this->dispatch('backend/customer/index/save');
+        $this->dispatch($this->baseControllerUrl . 'save');
     }
 
     /**

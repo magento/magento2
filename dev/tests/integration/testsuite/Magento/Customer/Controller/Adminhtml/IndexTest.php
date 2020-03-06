@@ -7,8 +7,8 @@
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Backend\Model\Session;
+use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Helper\View;
 use Magento\Customer\Model\EmailNotification;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -25,13 +25,13 @@ class IndexTest extends AbstractBackendController
      *
      * @var string
      */
-    protected $_baseControllerUrl;
+    private $baseControllerUrl = 'backend/customer/index/';
 
     /** @var CustomerRepositoryInterface */
-    protected $customerRepository;
+    private $customerRepository;
 
-    /** @var View */
-    protected $customerViewHelper;
+    /** @var CustomerNameGenerationInterface */
+    private $customerViewHelper;
 
     /**
      * @inheritDoc
@@ -39,9 +39,8 @@ class IndexTest extends AbstractBackendController
     protected function setUp()
     {
         parent::setUp();
-        $this->_baseControllerUrl = 'http://localhost/index.php/backend/customer/index/';
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
-        $this->customerViewHelper = $this->_objectManager->get(View::class);
+        $this->customerViewHelper = $this->_objectManager->get(CustomerNameGenerationInterface::class);
     }
 
     /**
@@ -173,7 +172,7 @@ class IndexTest extends AbstractBackendController
         // No customer ID in post, will just get redirected to base
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
         $this->dispatch('backend/customer/index/resetPassword');
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl));
     }
 
     /**
@@ -185,7 +184,7 @@ class IndexTest extends AbstractBackendController
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
         $this->getRequest()->setPostValue(['customer_id' => '789']);
         $this->dispatch('backend/customer/index/resetPassword');
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl));
     }
 
     /**
@@ -200,7 +199,7 @@ class IndexTest extends AbstractBackendController
             $this->equalTo(['The customer will receive an email with a link to reset password.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'edit'));
+        $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'edit'));
     }
 
     /**
