@@ -3,21 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Controller\Plugin;
 
+namespace Magento\Customer\Plugin;
+
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\Controller\ResultInterface;
 
-class Account
+/**
+ * Plugin verifies whether current User is eligible to access the page that implements AccountInterface
+ */
+class AccountControllerPermissionsCheck
 {
     /**
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
 
     /**
      * @var array
@@ -26,31 +41,37 @@ class Account
 
     /**
      * @param Session $customerSession
+     * @param RequestInterface $request
+     * @param ActionFlag $actionFlag
      * @param array $allowedActions List of actions that are allowed for not authorized users
      */
     public function __construct(
         Session $customerSession,
+        RequestInterface $request,
+        ActionFlag $actionFlag,
         array $allowedActions = []
     ) {
         $this->session = $customerSession;
+        $this->request = $request;
+        $this->actionFlag = $actionFlag;
         $this->allowedActions = $allowedActions;
     }
 
     /**
      * Dispatch actions allowed for not authorized users
      *
-     * @param AbstractAction $subject
-     * @param RequestInterface $request
+     * @param AccountInterface $subject
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    public function beforeExecute(AccountInterface $subject)
     {
-        $action = strtolower($request->getActionName());
+        $action = strtolower($this->request->getActionName());
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
         if (!preg_match($pattern, $action)) {
             if (!$this->session->authenticate()) {
-                $subject->getActionFlag()->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+                $this->actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
             }
         } else {
             $this->session->setNoReferer(true);
@@ -60,13 +81,12 @@ class Account
     /**
      * Remove No-referer flag from customer session
      *
-     * @param AbstractAction $subject
+     * @param AccountInterface $subject
      * @param ResponseInterface|ResultInterface $result
-     * @param RequestInterface $request
      * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDispatch(AbstractAction $subject, $result, RequestInterface $request)
+    public function afterExecute(AccountInterface $subject, $result)
     {
         $this->session->unsNoReferer(false);
         return $result;
