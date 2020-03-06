@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Sales\Block\Adminhtml;
+namespace Magento\Sales\Block\Adminhtml\Order;
 
 use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Block\Adminhtml\Order\View;
