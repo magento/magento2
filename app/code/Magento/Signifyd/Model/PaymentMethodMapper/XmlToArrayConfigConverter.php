@@ -9,6 +9,9 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
 
 /**
  * Converts XML config file to payment methods mapping.
+ *
+ * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterInterface
 {

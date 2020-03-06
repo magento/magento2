@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCatalogPriceRuleAndCustomerGroupMembershipArePersistedUnderLongTermCookieTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Check the price"/>
+            <title value="Verify that Catalog Price Rule and Customer Group Membership are persisted under long-term cookie"/>
+            <description value="Verify that Catalog Price Rule and Customer Group Membership are persisted under long-term cookie"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13607"/>
+            <group value="persistent"/>
+        </annotations>
+        <before>
+            <createData entity="PersistentConfigSettings" stepKey="enablePersistent"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="productWithHTMLEntityOne" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!--Delete all Catalog Price Rule if exist-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+
+            <!--Create Catalog Rule-->
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+                <argument name="groups" value="'General'"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
+                <argument name="conditionValue" value="$createCategory.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="clickSaveAndApplyRule"/>
+
+            <!-- Perform reindex -->
+            <magentoCLI command="indexer:reindex" arguments="catalogrule_rule" stepKey="reindex"/>
+        </before>
+        <after>
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete the rule -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Go to category and check price-->
+        <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceInCategoryPage">
+            <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <!--Login to storefront from customer and check price-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomer">
+            <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
+        </actionGroup>
+
+        <!--Go to category and check special price-->
+        <actionGroup ref="AssertStorefrontProductSpecialPriceInCategoryPageActionGroup" stepKey="assertProductSpecialPriceInCategoryPage">
+            <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+
+        <!--Click *Sign Out*-->
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOut"/>
+        <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
+            <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
+        </actionGroup>
+
+        <!--Go to category and check special price-->
+        <actionGroup ref="AssertStorefrontProductSpecialPriceInCategoryPageActionGroup" stepKey="assertProductSpecialPriceInCategoryPageAfterLogout">
+            <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <!--Click the *Not you?* link and check the price for Simple Product-->
+        <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNotYouLink"/>
+        <actionGroup ref="AssertStorefrontDefaultWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomerAfterLogout"/>
+        <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceInCategoryPageAfterLogout">
+            <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($createProduct.name$)}}" stepKey="dontSeeSpecialPrice"/>
+    </test>
+</tests>

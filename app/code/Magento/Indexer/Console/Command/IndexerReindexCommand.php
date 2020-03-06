@@ -120,10 +120,12 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $relatedIndexers = [];
         $dependentIndexers = [];
         foreach ($indexers as $indexer) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $relatedIndexers = array_merge(
                 $relatedIndexers,
                 $this->getRelatedIndexerIds($indexer->getId())
             );
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $dependentIndexers = array_merge(
                 $dependentIndexers,
                 $this->getDependentIndexerIds($indexer->getId())
@@ -161,6 +163,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     {
         $relatedIndexerIds = [];
         foreach ($this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $relatedIndexerIds = array_merge(
                 $relatedIndexerIds,
                 [$relatedIndexerId],
@@ -183,6 +186,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
             $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
             if (array_search($indexerId, $dependencies) !== false) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $dependentIndexerIds = array_merge(
                     $dependentIndexerIds,
                     [$id],
@@ -252,6 +256,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
             $indexer = $this->getIndexerRegistry()->get($indexerId);
             /** @var \Magento\Indexer\Model\Indexer\State $state */
             $state = $indexer->getState();
+            $state->setStatus(StateInterface::STATUS_WORKING);
+            $state->save();
             $state->setStatus(StateInterface::STATUS_VALID);
             $state->save();
         }
