@@ -28,12 +28,12 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $objectManager;
 
     /**
-     * @var StoreManagerInterface $storeManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var ProductRepositoryInterface $productRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
@@ -372,7 +372,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_rewrite_multistore.php
-     * @magentoAppIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testChangeVisibilityGlobalScope()
@@ -414,6 +413,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         }
 
         //Set product to be not visible at global scope
+        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
         $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $this->productRepository->save($product);
         $expected = [];
@@ -425,6 +425,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         //Add product to websites corresponding to all 4 stores.
         //Rewrites should not be present as the product is hidden
         //at the global scope.
+        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
         $product->setWebsiteIds(
             array_unique(
                 [
@@ -443,6 +444,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         }
 
         //Set product to be visible at global scope
+        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
         $product->setVisibility(Visibility::VISIBILITY_BOTH);
         $this->productRepository->save($product);
         $expected = [
@@ -484,7 +486,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_rewrite_multistore.php
-     * @magentoAppIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testChangeVisibilityLocalScope()

@@ -18,12 +18,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class DeleteEntitiesFromStores
 {
     /**
-     * @var AdapterInterface $connection
+     * @var AdapterInterface
      */
     private $connection;
 
     /**
-     * @var Resource $resource
+     * @var Resource
      */
     private $resource;
 

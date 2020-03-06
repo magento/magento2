@@ -26,27 +26,27 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 class ProductProcessUrlRewriteRemovingPlugin
 {
     /**
-     * @var ProductRepositoryInterface $productRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     /**
-     * @var StoreWebsiteRelationInterface $storeWebsiteRelation
+     * @var StoreWebsiteRelationInterface
      */
     private $storeWebsiteRelation;
 
     /**
-     * @var UrlPersistInterface $urlPersist
+     * @var UrlPersistInterface
      */
     private $urlPersist;
 
     /**
-     * @var ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @var ProductUrlRewriteGenerator
      */
     private $productUrlRewriteGenerator;
 
     /**
-     * @var DeleteEntitiesFromStores $deleteEntitiesFromStores
+     * @var DeleteEntitiesFromStores
      */
     private $deleteEntitiesFromStores;
 
@@ -108,7 +108,8 @@ class ProductProcessUrlRewriteRemovingPlugin
         }
 
         $storeIdsToRemove = [];
-        // Remove the URLs from websites this product no longer belongs to
+        // Remove the URLs for products in $productIds array
+        // from all stores that belong to websites in $websiteIds array
         if ($type === "remove" && $websiteIds && $productIds) {
             foreach ($websiteIds as $webId) {
                 foreach ($this->storeWebsiteRelation->getStoreByWebsiteId($webId) as $storeid) {

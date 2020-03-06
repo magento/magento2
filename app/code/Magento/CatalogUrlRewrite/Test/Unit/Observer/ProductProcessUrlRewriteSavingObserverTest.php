@@ -6,12 +6,13 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
 use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\Storage\DeleteEntitiesFromStores;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Catalog\Model\Product;
@@ -56,21 +57,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $product;
 
     /**
-     * @var Product|MockObject
-     */
-    private $product1;
-
-    /**
-     * @var Product|MockObject
-     */
-    private $product2;
-
-    /**
-     * @var Product|MockObject
-     */
-    private $product5;
-
-    /**
      * @var ProductUrlRewriteGenerator|MockObject
      */
     private $productUrlRewriteGenerator;
@@ -96,14 +82,14 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $storeManager;
 
     /**
-     * @var Website|MockObject
+     * @var array
      */
-    private $website1;
+    private $websites;
 
     /**
-     * @var Website|MockObject
+     * @var array
      */
-    private $website2;
+    private $stores;
 
     /**
      * @var StoreWebsiteRelationInterface|MockObject
@@ -111,75 +97,59 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $storeWebsiteRelation;
 
     /**
-     * @var ProductRepository|MockObject
-     */
-    private $productRepository;
-
-    /**
      * @var DeleteEntitiesFromStores|MockObject
      */
     private $deleteEntitiesFromStores;
 
     /**
+     * @var Collection|MockObject
+     */
+    private $productCollection;
+
+    /**
      * Set up
+     * Website_ID = 0 -> Store_ID = 0
      * Website_ID = 1 -> Store_ID = 1
      * Website_ID = 2 -> Store_ID = 2 & 5
      */
     protected function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
+
         $this->urlPersist = $this->createMock(UrlPersistInterface::class);
-        $this->product = $this->createPartialMock(
-            Product::class,
-            [
-                'getId',
-                'dataHasChangedFor',
-                'isVisibleInSiteVisibility',
-                'getIsChangedWebsites',
-                'getIsChangedCategories',
-                'getStoreId',
-                'getWebsiteIds'
-            ]
+
+        $this->websites[0] = $this->initialiseWebsite(0);
+        $this->websites[1] = $this->initialiseWebsite(1);
+        $this->websites[2] = $this->initialiseWebsite(2);
+
+        $this->stores[0] = $this->initialiseStore(0, 0);
+        $this->stores[1] = $this->initialiseStore(1, 1);
+        $this->stores[2] = $this->initialiseStore(2, 2);
+        $this->stores[5] = $this->initialiseStore(5, 2);
+
+        $this->product = $this->initialiseProduct($this->stores[0], 0);
+
+        $this->productCollection = $this->createPartialMock(Collection::class,
+            ['getAllAttributeValues']
         );
-        $this->product1 = $this->createPartialMock(
-            Product::class,
-            ['getId', 'isVisibleInSiteVisibility']
-        );
-        $this->product2 = $this->createPartialMock(
-            Product::class,
-            ['getId', 'isVisibleInSiteVisibility']
-        );
-        $this->product5 = $this->createPartialMock(
-            Product::class,
-            ['getId', 'isVisibleInSiteVisibility']
-        );
-        $this->productRepository = $this->createPartialMock(ProductRepository::class, ['getById']);
-        $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->product1->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->product2->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->product5->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->productRepository->expects($this->any())
-            ->method('getById')
-            ->will($this->returnValueMap([
-                [1, false, 0, true, $this->product],
-                [1, false, 1, true, $this->product1],
-                [1, false, 2, true, $this->product2],
-                [1, false, 5, true, $this->product5]
-            ]));
+
         $this->deleteEntitiesFromStores = $this->createPartialMock(
             DeleteEntitiesFromStores::class,
             ['execute']
         );
+
         $this->event = $this->createPartialMock(Event::class, ['getProduct']);
-        $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
+        $this->event->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($this->product);
+
         $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
+
         $this->productUrlRewriteGenerator = $this->createPartialMock(
             ProductUrlRewriteGenerator::class,
             ['generate']
         );
-        $this->productUrlRewriteGenerator->expects($this->any())
-            ->method('generate')
-            ->will($this->returnValue([1 => 'rewrite']));
         $this->productScopeRewriteGenerator = $this->createPartialMock(
             ProductScopeRewriteGenerator::class,
             ['isGlobalScope']
@@ -193,15 +163,16 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 [2, false],
                 [5, false],
             ]));
-        $this->objectManager = new ObjectManager($this);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->website1 = $this->createPartialMock(Website::class, ['getWebsiteId']);
-        $this->website1->expects($this->any())->method('getWebsiteId')->willReturn(1);
-        $this->website2 = $this->createPartialMock(Website::class, ['getWebsiteId']);
-        $this->website2->expects($this->any())->method('getWebsiteId')->willReturn(2);
+
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->any())
             ->method('getWebsites')
-            ->will($this->returnValue([$this->website1, $this->website2]));
+            ->will($this->returnValue([$this->websites[1], $this->websites[2]]));
+        $this->storeManager->expects($this->any())
+            ->method('getStores')
+            ->will($this->returnValue([$this->stores[1], $this->stores[2], $this->stores[5]]));
 
         $this->storeWebsiteRelation = $this->createPartialMock(
             StoreWebsiteRelationInterface::class,
@@ -218,11 +189,64 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'urlPersist' => $this->urlPersist,
                 'storeManager' => $this->storeManager,
                 'storeWebsiteRelation' => $this->storeWebsiteRelation,
-                'productRepository' => $this->productRepository,
                 'deleteEntitiesFromStores' => $this->deleteEntitiesFromStores,
-                'productScopeRewriteGenerator' => $this->productScopeRewriteGenerator
+                'productScopeRewriteGenerator' => $this->productScopeRewriteGenerator,
+                'productCollection' => $this->productCollection
             ]
         );
+    }
+
+    /**
+     * Initialise product for test
+     *
+     * @param $store
+     * @param $storeId
+     * @return MockObject
+     */
+    public function initialiseProduct($store, $storeId)
+    {
+        $product = $this->createPartialMock(
+            Product::class,
+            [
+                'getId',
+                'dataHasChangedFor',
+                'isVisibleInSiteVisibility',
+                'getIsChangedWebsites',
+                'getIsChangedCategories',
+                'getStoreId',
+                'getWebsiteIds',
+                'getStore'
+            ]
+        );
+        $product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        return $product;
+    }
+
+    /**
+     * Initialise website for test
+     *
+     * @param $websiteId
+     * @return MockObject
+     */
+    public function initialiseWebsite($websiteId)
+    {
+        $website = $this->createPartialMock(Website::class, ['getWebsiteId']);
+        $website->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
+        return $website;
+    }
+
+    /**
+     * Initialise store for test
+     *
+     * @param $storeId
+     * @return mixed
+     */
+    public function initialiseStore($storeId, $websiteId)
+    {
+        $store = $this->createPartialMock(Store::class, ['getStoreId','getWebsiteId']);
+        $store->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $store->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
+        return $store;
     }
 
     /**
@@ -233,129 +257,244 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     public function urlKeyDataProvider()
     {
         return [
-            'url changed' => [
+            //url has changed, so we would expect to see a replace issued
+            //and the urls removed from the stores the product is not in
+            //i.e stores belonging to website 2
+            'global_scope_url_changed' => [
+                'productScope'          => 0,
                 'isChangedUrlKey'       => true,
                 'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => [
-                    '0' => true,
-                    '1' => true,
-                    '2' => true,
-                    '5' => true
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_BOTH,
+                        1 => Product\Visibility::VISIBILITY_BOTH,
+                        2 => Product\Visibility::VISIBILITY_BOTH,
+                        5 => Product\Visibility::VISIBILITY_BOTH,
+                    ],
                 ],
                 'productInWebsites'     => [1],
                 'expectedReplaceCount'  => 1,
                 'expectedRemoves'       => [2, 5],
 
             ],
-            'no changes' => [
+            //Nothing has changed, so no replaces or removes
+            'global_scope_no_changes' => [
+                'productScope'          => 0,
                 'isChangedUrlKey'       => false,
                 'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => [
-                    '0' => true,
-                    '1' => true,
-                    '2' => true,
-                    '5' => true
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_BOTH,
+                        1 => Product\Visibility::VISIBILITY_BOTH,
+                        2 => Product\Visibility::VISIBILITY_BOTH,
+                        5 => Product\Visibility::VISIBILITY_BOTH,
+                    ],
                 ],
-                'productInWebsites'     => [1, 2],
+                'productInWebsites'     => [1],
                 'expectedReplaceCount'  => 0,
                 'expectedRemoves'       => [],
             ],
-            'visibility changed' => [
+            //Product passed in had global scope set, but the visibility
+            //at local scope for store 2 is false. Expect to see refresh
+            //of urls and removal from store 2
+            'global_scope_visibility_changed_local' => [
+                'productScope'          => 0,
                 'isChangedUrlKey'       => false,
                 'isChangedVisibility'   => true,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => [
-                    '0' => true,
-                    '1' => true,
-                    '2' => true,
-                    '5' => true
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_BOTH,
+                        1 => Product\Visibility::VISIBILITY_BOTH,
+                        2 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        5 => Product\Visibility::VISIBILITY_BOTH,
+                    ],
                 ],
                 'productInWebsites'     => [1, 2],
                 'expectedReplaceCount'  => 1,
-                'expectedRemoves'       => [],
+                'expectedRemoves'       => [2],
             ],
-            'websites changed' => [
+            //Product passed in had global scope set, but the visibility
+            //for all stores is false. Expect to see removal from stores 1,2 and 5
+            'global_scope_visibility_changed_global' => [
+                'productScope'          => 0,
+                'isChangedUrlKey'       => false,
+                'isChangedVisibility'   => true,
+                'isChangedWebsites'     => false,
+                'isChangedCategories'   => false,
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        1 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        2 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        5 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                    ],
+                ],
+                'productInWebsites'     => [1, 2],
+                'expectedReplaceCount'  => 0,
+                'expectedRemoves'       => [1, 2, 5],
+            ],
+            //Product has changed websites. Now in websites 1 and 2
+            //We would expect to see a replace but no removals as the
+            //product is in all stores
+            'global_scope_websites_changed' => [
+                'productScope'          => 0,
                 'isChangedUrlKey'       => false,
                 'isChangedVisibility'   => false,
                 'isChangedWebsites'     => true,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => [
-                    '0' => true,
-                    '1' => true,
-                    '2' => true,
-                    '5' => true
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_BOTH,
+                        1 => Product\Visibility::VISIBILITY_BOTH,
+                        2 => Product\Visibility::VISIBILITY_BOTH,
+                        5 => Product\Visibility::VISIBILITY_BOTH,
+                    ],
                 ],
                 'productInWebsites'     => [1, 2],
                 'expectedReplaceCount'  => 1,
                 'expectedRemoves'       => [],
             ],
-            'categories changed' => [
+            //Global scope, all visible, categories changed.
+            //Expect to see replace and no removals.
+            'global_scope_categories_changed' => [
+                'productScope'          => 0,
                 'isChangedUrlKey'       => false,
                 'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => true,
-                'visibilityResult'      => [
-                    '0' => true,
-                    '1' => true,
-                    '2' => true,
-                    '5' => true
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_BOTH,
+                        1 => Product\Visibility::VISIBILITY_BOTH,
+                        2 => Product\Visibility::VISIBILITY_BOTH,
+                        5 => Product\Visibility::VISIBILITY_BOTH,
+                    ],
                 ],
                 'productInWebsites'     => [1, 2],
                 'expectedReplaceCount'  => 1,
                 'expectedRemoves'       => [],
             ],
-            'url changed invisible' => [
+            //Global scope, url key has changed but products are
+            //invisible in all stores, therefore remove any urls if
+            //they exist.
+            'global_scope_url_changed_invisible' => [
+                'productScope'          => 0,
                 'isChangedUrlKey'       => true,
                 'isChangedVisibility'   => false,
                 'isChangedWebsites'     => false,
                 'isChangedCategories'   => false,
-                'visibilityResult'      => [
-                    '0' => false,
-                    '1' => false,
-                    '2' => false,
-                    '5' => false
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        1 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        2 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        5 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                    ],
                 ],
                 'productInWebsites'     => [1, 2],
                 'expectedReplaceCount'  => 1,
-                'expectedRemoves'       => [1,2,5],
+                'expectedRemoves'       => [1, 2, 5],
+            ],
+            //local scope tests should only adjust URLs for local scope
+            //Even if there are changes to the same product in other stores
+            //they should be ignored. Here product in store 2 has been set
+            //visible. Do not expect to see any removals for the other stores.
+            'local_scope_visibility_changed_local_1' => [
+                'productScope'          => 2,
+                'isChangedUrlKey'       => false,
+                'isChangedVisibility'   => true,
+                'isChangedWebsites'     => false,
+                'isChangedCategories'   => false,
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        1 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        2 => Product\Visibility::VISIBILITY_BOTH,
+                        5 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                    ],
+                ],
+                'productInWebsites'     => [1, 2],
+                'expectedReplaceCount'  => 1,
+                'expectedRemoves'       => [],
+            ],
+            //Local scope, so only expecting to operate on store 2.
+            //Product has been set invisible, removal expected.
+            'local_scope_visibility_changed_local_2' => [
+                'productScope'          => 2,
+                'isChangedUrlKey'       => false,
+                'isChangedVisibility'   => true,
+                'isChangedWebsites'     => false,
+                'isChangedCategories'   => false,
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_BOTH,
+                        1 => Product\Visibility::VISIBILITY_BOTH,
+                        2 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        5 => Product\Visibility::VISIBILITY_BOTH,
+                    ],
+                ],
+                'productInWebsites'     => [1, 2],
+                'expectedReplaceCount'  => 0,
+                'expectedRemoves'       => [2],
+            ],
+            //Local scope, so only operate on store 5.
+            //Visibility is false, so see only removal from
+            //store 5.
+            'local_scope_visibility_changed_global' => [
+                'productScope'          => 5,
+                'isChangedUrlKey'       => false,
+                'isChangedVisibility'   => true,
+                'isChangedWebsites'     => false,
+                'isChangedCategories'   => false,
+                'visibility'            => [
+                    1 => [
+                        0 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        1 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        2 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                        5 => Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                    ],
+                ],
+                'productInWebsites'     => [1, 2],
+                'expectedReplaceCount'  => 0,
+                'expectedRemoves'       => [5],
             ],
         ];
     }
 
     /**
+     * @param int $productScope
      * @param bool $isChangedUrlKey
      * @param bool $isChangedVisibility
      * @param bool $isChangedWebsites
      * @param bool $isChangedCategories
-     * @param array $visibilityResult
+     * @param array $visibility
      * @param int $productInWebsites
      * @param int $expectedReplaceCount
      * @param array $expectedRemoves
      *
      * @dataProvider urlKeyDataProvider
+     * @throws UrlAlreadyExistsException
      */
     public function testExecuteUrlKey(
+        $productScope,
         $isChangedUrlKey,
         $isChangedVisibility,
         $isChangedWebsites,
         $isChangedCategories,
-        $visibilityResult,
+        $visibility,
         $productInWebsites,
         $expectedReplaceCount,
         $expectedRemoves
     ) {
-        $this->product->expects($this->any())->method('getStoreId')->will(
-            $this->returnValue(Store::DEFAULT_STORE_ID)
-        );
-        $this->product->expects($this->any())->method('getWebsiteIds')->will(
-            $this->returnValue($productInWebsites)
-        );
-
+        $this->product->expects($this->any())
+            ->method('getWebsiteIds')
+            ->will($this->returnValue($productInWebsites));
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
             ->will($this->returnValueMap(
@@ -364,7 +503,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                     ['url_key', $isChangedUrlKey]
                 ]
             ));
-
         $this->product->expects($this->any())
             ->method('getIsChangedWebsites')
             ->will($this->returnValue($isChangedWebsites));
@@ -372,23 +510,23 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->product->expects($this->any())
             ->method('getIsChangedCategories')
             ->will($this->returnValue($isChangedCategories));
-
         $this->product->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue($visibilityResult['0']));
-        $this->product1->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue($visibilityResult['1']));
-        $this->product2->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue($visibilityResult['2']));
-        $this->product5->expects($this->any())
-            ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue($visibilityResult['5']));
+            ->method('getStoreId')
+            ->willReturn($productScope);
+        $this->product->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->stores[$productScope]);
 
+        $this->productCollection->expects($this->any())
+            ->method('getAllAttributeValues')
+            ->will($this->returnValue($visibility));
+
+        $this->productUrlRewriteGenerator->expects($this->any())
+            ->method('generate')
+            ->will($this->returnValue($expectedReplaceCount > 0 ? ['test'] : []));
         $this->urlPersist->expects($this->exactly($expectedReplaceCount))
             ->method('replace')
-            ->with([1 => 'rewrite']);
+            ->with($expectedReplaceCount > 0 ? ['test'] : []);
 
         $this->deleteEntitiesFromStores->expects($this->any())
             ->method('execute')
