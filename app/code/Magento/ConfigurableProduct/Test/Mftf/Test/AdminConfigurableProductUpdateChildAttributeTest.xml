@@ -77,7 +77,7 @@
             </createData>
 
             <!-- login -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>

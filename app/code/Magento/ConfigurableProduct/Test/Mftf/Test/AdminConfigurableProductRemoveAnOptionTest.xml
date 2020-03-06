@@ -82,7 +82,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
 
         <!--check admin for both options-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
         <waitForPageLoad stepKey="wait2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="seeOption1Admin"/>
