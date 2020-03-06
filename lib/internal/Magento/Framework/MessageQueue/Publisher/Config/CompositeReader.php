@@ -58,7 +58,10 @@ class CompositeReader implements ReaderInterface
     {
         $result = [];
         foreach ($this->readers as $reader) {
-            $result = array_replace_recursive($result, $reader->read($scope));
+            $data = $reader->read($scope);
+            foreach ($data as $key => $value) {
+                $result[$key] = isset($result[$key]) ? array_replace($result[$key], $value) : $value;
+            }
         }
 
         $result = $this->addDefaultConnection($result);
