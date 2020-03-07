@@ -219,7 +219,7 @@
                 <argument name="taxClassName" value="TaxClasses2"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
          </after>
     </test>
 </tests>
