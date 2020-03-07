@@ -31,7 +31,7 @@
             <deleteData createDataKey="createCustomerGroup" stepKey="deleteCustomerGroup"/>
             <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>

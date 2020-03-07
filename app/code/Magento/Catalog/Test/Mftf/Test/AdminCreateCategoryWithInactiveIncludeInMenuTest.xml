@@ -22,7 +22,7 @@
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create Category with not included in menu Subcategory  -->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>

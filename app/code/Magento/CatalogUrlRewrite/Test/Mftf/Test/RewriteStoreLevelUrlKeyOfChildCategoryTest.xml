@@ -58,7 +58,7 @@
 
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>
