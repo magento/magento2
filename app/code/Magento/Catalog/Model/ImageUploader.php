@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\File\Uploader;
+use Magento\Framework\Storage\StorageProvider;
 
 /**
  * Catalog image uploader
@@ -74,6 +75,11 @@ class ImageUploader
     private $allowedMimeTypes;
 
     /**
+     * @var StorageProvider
+     */
+    private $storageProvider;
+
+    /**
      * ImageUploader constructor
      *
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -84,7 +90,9 @@ class ImageUploader
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string[] $allowedExtensions
+     * @param StorageProvider $storageProvider
      * @param string[] $allowedMimeTypes
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
@@ -95,6 +103,7 @@ class ImageUploader
         $baseTmpPath,
         $basePath,
         $allowedExtensions,
+        StorageProvider $storageProvider,
         $allowedMimeTypes = []
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
@@ -106,6 +115,7 @@ class ImageUploader
         $this->basePath = $basePath;
         $this->allowedExtensions = $allowedExtensions;
         $this->allowedMimeTypes = $allowedMimeTypes;
+        $this->storageProvider = $storageProvider;
     }
 
     /**
@@ -220,6 +230,11 @@ class ImageUploader
                 $baseTmpImagePath,
                 $baseImagePath
             );
+
+            $storage = $this->storageProvider->get('media');
+            $content = $this->mediaDirectory->readFile($baseImagePath);
+            $storage->put($baseImagePath, $content);
+
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while saving the file(s).')
