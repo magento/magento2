@@ -31,4 +31,11 @@
             <argument name="imageResizeScheduler" xsi:type="object">Magento\MediaStorage\Service\ImageResizeScheduler\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Storage\StorageProvider">
+        <arguments>
+            <argument name="storage" xsi:type="array">
+                <item name="media" xsi:type="string">pub/media</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
