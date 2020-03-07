@@ -7,6 +7,7 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -107,6 +108,11 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $productCollection;
 
     /**
+     * @var CollectionFactory|MockObject
+     */
+    private $collectionFactory;
+
+    /**
      * Set up
      * Website_ID = 0 -> Store_ID = 0
      * Website_ID = 1 -> Store_ID = 1
@@ -129,10 +135,17 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
 
         $this->product = $this->initialiseProduct();
 
+        $this->collectionFactory = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
         $this->productCollection = $this->createPartialMock(
             Collection::class,
             ['getAllAttributeValues']
         );
+        $this->collectionFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->productCollection);
 
         $this->deleteEntitiesFromStores = $this->createPartialMock(
             DeleteEntitiesFromStores::class,
@@ -192,7 +205,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'storeWebsiteRelation' => $this->storeWebsiteRelation,
                 'deleteEntitiesFromStores' => $this->deleteEntitiesFromStores,
                 'productScopeRewriteGenerator' => $this->productScopeRewriteGenerator,
-                'productCollection' => $this->productCollection
+                'collectionFactory' => $this->collectionFactory
             ]
         );
     }

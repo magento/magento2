@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -59,9 +59,9 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $deleteEntitiesFromStores;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $productCollection;
+    private $collectionFactory;
 
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
@@ -70,7 +70,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param StoreManagerInterface $storeManager
      * @param ProductScopeRewriteGenerator $productScopeRewriteGenerator
      * @param DeleteEntitiesFromStores $deleteEntitiesFromStores
-     * @param Collection $productCollection
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
@@ -79,7 +79,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         StoreManagerInterface $storeManager,
         ProductScopeRewriteGenerator $productScopeRewriteGenerator,
         DeleteEntitiesFromStores $deleteEntitiesFromStores,
-        Collection $productCollection
+        CollectionFactory $collectionFactory
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
@@ -87,7 +87,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator;
         $this->deleteEntitiesFromStores = $deleteEntitiesFromStores;
-        $this->productCollection = $productCollection;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -117,7 +117,8 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 
             $storeIdsToRemove = [];
             $productWebsiteMap = array_flip($product->getWebsiteIds());
-            $storeVisibilities = $this->productCollection->getAllAttributeValues(ProductInterface::VISIBILITY);
+            $storeVisibilities = $this->collectionFactory->create()
+                    ->getAllAttributeValues(ProductInterface::VISIBILITY);
             if ($this->productScopeRewriteGenerator->isGlobalScope($product->getStoreId())) {
                 //Remove any rewrite URLs for websites the product is not in, or is not visible in. Global Scope.
                 foreach ($this->storeManager->getStores() as $store) {
