@@ -7,27 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Validator\EmailAddress;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount implements HttpPostActionInterface
+class ForgotPasswordPost implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @var AccountManagementInterface
      */
     protected $customerAccountManagement;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
@@ -35,37 +40,48 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
      * @var Session
      */
     protected $session;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+    /**
+     * @var MessageManagerInterface
+     */
+    private $messageManager;
 
     /**
-     * @param Context $context
+     * @param RequestInterface $request
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
+     * @param MessageManagerInterface $messageManager
      * @param Escaper $escaper
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
         Session $customerSession,
         AccountManagementInterface $customerAccountManagement,
+        MessageManagerInterface $messageManager,
         Escaper $escaper
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->escaper = $escaper;
-        parent::__construct($context);
+        $this->request = $request;
+        $this->messageManager = $messageManager;
     }
 
     /**
      * Forgot customer password action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResultRedirect
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $email = (string)$this->getRequest()->getPost('email');
+        $email = (string)$this->request->getPost('email');
         if ($email) {
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!\Zend_Validate::is($email, EmailAddress::class)) {
                 $this->session->setForgottenEmail($email);
                 $this->messageManager->addErrorMessage(
                     __('The email address is incorrect. Verify the email address and try again.')
@@ -74,16 +90,13 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
             }
 
             try {
-                $this->customerAccountManagement->initiatePasswordReset(
-                    $email,
-                    AccountManagement::EMAIL_RESET
-                );
+                $this->customerAccountManagement->initiatePasswordReset($email, AccountManagement::EMAIL_RESET);
             } catch (NoSuchEntityException $exception) {
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
             } catch (SecurityViolationException $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
                 return $resultRedirect->setPath('*/*/forgotpassword');
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
                     __('We\'re unable to send the password reset email.')
@@ -102,7 +115,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
      * Retrieve success message
      *
      * @param string $email
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     protected function getSuccessMessage($email)
     {

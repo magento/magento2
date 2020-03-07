@@ -100,6 +100,7 @@ class LoginPost implements CsrfAwareActionInterface, HttpPostActionInterface, Ac
      * @param RedirectFactory $redirectFactory
      * @param ScopeConfigInterface $config
      * @param MessageManagerInterface $messageManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
      */
     public function __construct(
         RequestInterface $request,
@@ -110,7 +111,8 @@ class LoginPost implements CsrfAwareActionInterface, HttpPostActionInterface, Ac
         AccountRedirect $accountRedirect,
         RedirectFactory $redirectFactory,
         ScopeConfigInterface $config,
-        MessageManagerInterface $messageManager
+        MessageManagerInterface $messageManager,
+        CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
@@ -121,6 +123,7 @@ class LoginPost implements CsrfAwareActionInterface, HttpPostActionInterface, Ac
         $this->request = $request;
         $this->messageManager = $messageManager;
         $this->redirectFactory = $redirectFactory;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
     }
 
     /**

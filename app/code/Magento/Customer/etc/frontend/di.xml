@@ -33,7 +33,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Controller\Plugin\Account">
+    <type name="Magento\Customer\Plugin\AccountControllerPermissionsCheck">
         <arguments>
             <argument name="allowedActions" xsi:type="array">
                 <item name="create" xsi:type="string">create</item>

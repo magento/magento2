@@ -7,29 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\AddressRegistry;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
+use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\CustomerExtractor;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
@@ -92,9 +92,14 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @var AddressRegistry
      */
     private $addressRegistry;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
 
     /**
      * @param Context $context
+     * @param RequestInterface $request
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
@@ -105,6 +110,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      */
     public function __construct(
         Context $context,
+        RequestInterface $request,
         Session $customerSession,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
@@ -121,6 +127,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->customerExtractor = $customerExtractor;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->request = $request;
     }
 
     /**
@@ -190,9 +197,9 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $validFormKey = $this->formKeyValidator->validate($this->getRequest());
+        $validFormKey = $this->formKeyValidator->validate($this->request);
 
-        if ($validFormKey && $this->getRequest()->isPost()) {
+        if ($validFormKey && $this->request->isPost()) {
             $currentCustomerDataObject = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidateDataObject = $this->populateNewCustomerDataObject(
                 $this->_request,
@@ -240,7 +247,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
 
-            $this->session->setCustomerFormData($this->getRequest()->getPostValue());
+            $this->session->setCustomerFormData($this->request->getPostValue());
         }
 
         /** @var Redirect $resultRedirect */
@@ -313,10 +320,10 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     protected function changeCustomerPassword($email)
     {
         $isPasswordChanged = false;
-        if ($this->getRequest()->getParam('change_password')) {
-            $currPass = $this->getRequest()->getPost('current_password');
-            $newPass = $this->getRequest()->getPost('password');
-            $confPass = $this->getRequest()->getPost('password_confirmation');
+        if ($this->request->getParam('change_password')) {
+            $currPass = $this->request->getPost('current_password');
+            $newPass = $this->request->getPost('password');
+            $confPass = $this->request->getPost('password_confirmation');
             if ($newPass != $confPass) {
                 throw new InputException(__('Password confirmation doesn\'t match entered password.'));
             }
@@ -337,12 +344,12 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      */
     private function processChangeEmailRequest(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
     {
-        if ($this->getRequest()->getParam('change_email')) {
+        if ($this->request->getParam('change_email')) {
             // authenticate user for changing email
             try {
                 $this->getAuthentication()->authenticate(
                     $currentCustomerDataObject->getId(),
-                    $this->getRequest()->getPost('current_password')
+                    $this->request->getPost('current_password')
                 );
             } catch (InvalidEmailOrPasswordException $e) {
                 throw new InvalidEmailOrPasswordException(
