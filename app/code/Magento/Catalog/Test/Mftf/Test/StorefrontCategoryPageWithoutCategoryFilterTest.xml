@@ -44,7 +44,6 @@
             <!-- Set the category filter to NOT be present on the category page layered navigation -->
             <magentoCLI command="config:set {{DisableCategoryFilterOnCategoryPageConfigData.path}} {{DisableCategoryFilterOnCategoryPageConfigData.value}}" stepKey="hideCategoryFilterOnStorefront"/>
 
-            <!-- Flush cache -->
             <magentoCLI command="cache:flush" stepKey="clearCache"/>
         </before>
 
@@ -55,10 +54,10 @@
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategoryMainCategory"/>
         </after>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$defaultCategory$$"/>
+        </actionGroup>
 
-        <!-- Verify category filter item is NOT present -->
-        <dontSee selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="Category" stepKey="seeCategoryFilterInLayeredNav"/>
+        <actionGroup ref="StorefrontCheckCategoryFilterIsNotVisibleInLayeredNavigationActionGroup" stepKey="checkCategoryFilterIsPresent" />
     </test>
 </tests>
