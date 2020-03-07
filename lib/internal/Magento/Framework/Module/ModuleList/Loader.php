@@ -80,7 +80,7 @@ class Loader
         $result = [];
         $excludeSet = array_flip($exclude);
 
-        foreach ($this->getModuleConfigs() as [$file, $contents]) {
+        foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
                 $this->parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
