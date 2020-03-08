@@ -156,6 +156,21 @@ class Processor
     private $driver;
 
     /**
+     * @var string
+     */
+    private $indexDir;
+
+    /**
+     * @var string
+     */
+    private $errorDir;
+
+    /**
+     * @var string
+     */
+    private $reportDir;
+
+    /**
      * @param Http $response
      * @param Json $serializer
      * @param Escaper $escaper
@@ -170,9 +185,9 @@ class Processor
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->driver = $driver ?: ObjectManager::getInstance()->get(DriverInterface::class);
-        $this->_errorDir  = $this->driver->getRealPath(__DIR__) . '/';
-        $this->_reportDir = $this->driver->getParentDirectory(
-            $this->driver->getParentDirectory($this->_errorDir)
+        $this->errorDir  = $this->driver->getRealPath(__DIR__) . '/';
+        $this->reportDir = $this->driver->getParentDirectory(
+            $this->driver->getParentDirectory($this->errorDir)
         ) . '/var/report/';
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
@@ -183,8 +198,8 @@ class Processor
             }
         }
 
-        $this->_indexDir = $this->driver->getRealPath($this->_getIndexDir());
-        $this->_root  = is_dir($this->_indexDir . 'app');
+        $this->indexDir = $this->driver->getRealPath($this->_getIndexDir());
+        $this->_root  = is_dir($this->indexDir . 'app');
 
         $this->_prepareConfig();
         if (isset($_GET['skin'])) {
@@ -264,13 +279,14 @@ class Processor
      */
     public function getViewFileUrl()
     {
+        $indexDirectory = str_replace('\\', '/', $this->indexDir);
+        $errorDirectory = str_replace('\\', '/', $this->errorDirectory);
         //The url needs to be updated base on Document root path.
-        return $this->getBaseUrl() .
-        str_replace(
-            str_replace('\\', '/', $this->_indexDir),
-            '',
-            str_replace('\\', '/', $this->_errorDir)
-        ) . '/' . $this->_config->skin . '/';
+        return $this->getBaseUrl()
+            . trim(str_replace($indexDirectory, '', $errorDirectory), '/')
+            . '/'
+            . $this->_config->skin
+            . '/';
     }
 
     /**
@@ -450,7 +466,7 @@ class Processor
     protected function _getFilePath($file, $directories = null)
     {
         if ($directories === null) {
-            $directories[] = $this->_errorDir;
+            $directories[] = $this->errorDirectory;
         }
 
         foreach ($directories as $directory) {
@@ -468,10 +484,10 @@ class Processor
      */
     protected function _getTemplatePath($template)
     {
-        $directories[] = $this->_errorDir . $this->_config->skin . '/';
+        $directories[] = $this->errorDirectory . $this->_config->skin . '/';
 
         if ($this->_config->skin != self::DEFAULT_SKIN) {
-            $directories[] = $this->_errorDir . self::DEFAULT_SKIN . '/';
+            $directories[] = $this->errorDirectory . self::DEFAULT_SKIN . '/';
         }
 
         return $this->_getFilePath($template, $directories);
@@ -607,7 +623,7 @@ class Processor
      */
     private function getReportPath(int $reportDirNestingLevel, string $reportId): string
     {
-        $reportDirPath = $this->_reportDir;
+        $reportDirPath = $this->reportDir;
         for ($i = 0, $j = 0; $j < $reportDirNestingLevel; $i += 2, $j++) {
             $reportDirPath .= $reportId[$i] . $reportId[$i + 1] . '/';
         }
@@ -728,7 +744,7 @@ class Processor
      */
     protected function _setSkin($value, \stdClass $config = null)
     {
-        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
+        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->errorDirectory . $value)) {
             if (!$config) {
                 if ($this->_config) {
                     $config = $this->_config;
@@ -751,5 +767,13 @@ class Processor
             $this->reportUrl = "{$this->getBaseUrl(true)}pub/errors/report.php?"
                 . http_build_query(['id' => $this->reportId, 'skin' => $this->_config->skin]);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getReportDir()
+    {
+        return $this->reportDir;
     }
 }

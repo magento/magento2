@@ -30,7 +30,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown()
     {
-        $reportDir = $this->processor->_reportDir;
+        $reportDir = $this->processor->getReportDir();
         $this->removeDirRecursively($reportDir);
     }
 
