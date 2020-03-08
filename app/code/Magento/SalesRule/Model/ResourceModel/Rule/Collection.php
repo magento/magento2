@@ -178,7 +178,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $this->_select = $noCouponRules;
             }
 
-            $this->setOrder('sort_order', self::SORT_ORDER_ASC);
+            $this->setOrder('sort_order', self::SORT_ORDER_DESC);
             $this->setFlag('validation_filter', true);
         }
 
