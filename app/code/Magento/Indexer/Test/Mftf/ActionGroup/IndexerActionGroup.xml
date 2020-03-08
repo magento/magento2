@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="updateIndexerBySchedule">
+        <annotations>
+            <description>Goes to the Index Management page. Checks the provided Indexer Name. Selects 'Update by Schedule'. Clicks on Submit.</description>
+        </annotations>
+        <arguments>
+            <argument name="indexerName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/indexer/indexer/list/" stepKey="amOnIndexManagementPage"/>
+        <waitForPageLoad stepKey="waitForIndexManagementPageToLoad"/>
+        <click selector="{{AdminIndexManagementSection.indexerCheckbox(indexerName)}}" stepKey="selectIndexer1"/>
+        <selectOption selector="{{AdminIndexManagementSection.massActionSelect}}" userInput="change_mode_changelog" stepKey="selectUpdateBySchedule"/>
+        <click selector="{{AdminIndexManagementSection.massActionSubmit}}" stepKey="submitIndexerForm"/>
+        <!-- No re-indexing is done as part of this actionGroup since the test required no re-indexing -->
+        <waitForPageLoad stepKey="waitForSave"/>
+    </actionGroup>
+
+    <actionGroup name="updateIndexerOnSave">
+        <annotations>
+            <description>Goes to the Index Management page. Checks the provided Indexer Name. Selects 'Update on Save'. Clicks on Submit.</description>
+        </annotations>
+        <arguments>
+            <argument name="indexerName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/indexer/indexer/list/" stepKey="amOnIndexManagementPage2"/>
+        <waitForPageLoad stepKey="waitForIndexManagementPageToLoad2"/>
+        <click selector="{{AdminIndexManagementSection.indexerCheckbox(indexerName)}}" stepKey="selectIndexer2"/>
+        <selectOption selector="{{AdminIndexManagementSection.massActionSelect}}" userInput="change_mode_onthefly" stepKey="selectUpdateOnSave"/>
+        <click selector="{{AdminIndexManagementSection.massActionSubmit}}" stepKey="submitIndexerForm2"/>
+        <!-- No re-indexing is done as part of this actionGroup since the test required no re-indexing -->
+        <waitForPageLoad stepKey="waitForSave2"/>
+    </actionGroup>
+    <actionGroup name="AdminReindexAndFlushCache">
+        <annotations>
+            <description>Run reindex and flush cache.</description>
+        </annotations>
+
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+    </actionGroup>
+</actionGroups>

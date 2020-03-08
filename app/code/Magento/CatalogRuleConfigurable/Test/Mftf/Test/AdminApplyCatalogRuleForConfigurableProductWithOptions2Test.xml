@@ -105,7 +105,10 @@
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
 
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Create price rule for first configurable product option -->

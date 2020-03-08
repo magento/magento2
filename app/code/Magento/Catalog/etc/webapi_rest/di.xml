@@ -28,4 +28,16 @@
     <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
         <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
     </type>
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="object">Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor">
+        <arguments>
+            <argument name="deserializer" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Deserializer\Json</argument>
+        </arguments>
+    </type>
 </config>

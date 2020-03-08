@@ -63,7 +63,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">

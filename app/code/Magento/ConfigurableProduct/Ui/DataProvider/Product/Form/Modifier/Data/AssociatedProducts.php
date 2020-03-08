@@ -314,7 +314,8 @@ class AssociatedProducts
                         'canEdit' => 0,
                         'newProduct' => 0,
                         'attributes' => $this->getTextAttributes($variationOptions),
-                        'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl(),
+                        'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')
+                            ->getUrl(),
                         '__disableTmpl' => true
                     ];
                     $productIds[] = $product->getId();
