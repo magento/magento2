@@ -7,9 +7,9 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
 use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**

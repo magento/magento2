@@ -5,9 +5,9 @@
  */
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\Json\Json;
 use Magento\Framework\Validator\Url as UrlValidator;
 
 class UrlCheck extends AbstractActionController

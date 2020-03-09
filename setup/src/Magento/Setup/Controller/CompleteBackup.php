@@ -6,9 +6,9 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\MaintenanceMode;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 class CompleteBackup extends AbstractActionController
 {
@@ -19,7 +19,7 @@ class CompleteBackup extends AbstractActionController
     {
         $view = new ViewModel;
         $view->setTemplate('/error/404.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(\Laminas\Http\Response::STATUS_CODE_404);
         return $view;
     }
 

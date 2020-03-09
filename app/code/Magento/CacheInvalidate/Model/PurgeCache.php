@@ -110,8 +110,8 @@ class PurgeCache
     /**
      * Send curl purge request to servers to invalidate cache by tags pattern
      *
-     * @param \Zend\Http\Client\Adapter\Socket $socketAdapter
-     * @param \Zend\Uri\Uri[] $servers
+     * @param \Laminas\Http\Client\Adapter\Socket $socketAdapter
+     * @param \Laminas\Uri\Uri[] $servers
      * @param string $formattedTagsChunk
      * @return bool Return true if successful; otherwise return false
      */

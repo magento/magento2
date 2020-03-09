@@ -34,7 +34,7 @@ class RequestQuantityProcessor
      */
     public function process(array $cartData): array
     {
-        $filter = new \Zend\I18n\Filter\NumberParse($this->localeResolver->getLocale());
+        $filter = new \Laminas\I18n\Filter\NumberParse($this->localeResolver->getLocale());
 
         foreach ($cartData as $index => $data) {
             if (isset($data['qty'])) {
