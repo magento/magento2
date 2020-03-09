@@ -22,7 +22,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 COPY --chown=www-data . /var/www/magento
 USER www-data
 RUN mv /var/www/magento/release.sh /tmp \ 
-&& /tmp/release.sh \
+&& chmod u+x /tmp/release.sh \
 && cd /var/www/magento \
 && composer install \
 && composer config repositories.magento composer https://repo.magento.com/ \
