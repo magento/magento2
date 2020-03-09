@@ -66,6 +66,7 @@ class OrderSenderTest extends AbstractSenderTest
         $customerName = 'test customer';
         $frontendStatusLabel = 'Processing';
         $isNotVirtual = true;
+        $orderId = 20501;
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -122,6 +123,10 @@ class OrderSenderTest extends AbstractSenderTest
                     ->method('getFrontendStatusLabel')
                     ->willReturn($frontendStatusLabel);
 
+                $this->orderMock->expects($this->once())
+                    ->method('getId')
+                    ->willReturn($orderId);
+
                 $this->templateContainerMock->expects($this->once())
                     ->method('setTemplateVars')
                     ->with(
@@ -137,9 +142,9 @@ class OrderSenderTest extends AbstractSenderTest
                                 'customer_name' => $customerName,
                                 'is_not_virtual' => $isNotVirtual,
                                 'email_customer_note' => '',
-                                'frontend_status_label' => $frontendStatusLabel
+                                'frontend_status_label' => $frontendStatusLabel,
+                                'id' => $orderId
                             ]
-
                         ]
                     );
 
@@ -242,6 +247,7 @@ class OrderSenderTest extends AbstractSenderTest
         $customerName = 'test customer';
         $frontendStatusLabel = 'Complete';
         $isNotVirtual = false;
+        $orderId = 20500;
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -290,6 +296,10 @@ class OrderSenderTest extends AbstractSenderTest
             ->method('getFrontendStatusLabel')
             ->willReturn($frontendStatusLabel);
 
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -305,7 +315,8 @@ class OrderSenderTest extends AbstractSenderTest
                         'customer_name' => $customerName,
                         'is_not_virtual' => $isNotVirtual,
                         'email_customer_note' => '',
-                        'frontend_status_label' => $frontendStatusLabel
+                        'frontend_status_label' => $frontendStatusLabel,
+                        'id' => $orderId
                     ]
                 ]
             );
