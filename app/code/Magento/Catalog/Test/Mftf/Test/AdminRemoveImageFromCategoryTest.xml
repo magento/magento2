@@ -25,7 +25,7 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="DeleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to create a new category with image -->

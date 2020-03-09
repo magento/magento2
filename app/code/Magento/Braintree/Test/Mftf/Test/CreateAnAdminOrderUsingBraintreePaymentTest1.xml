@@ -53,7 +53,7 @@
         </actionGroup>
 
         <!--SignOut-->
-        <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="signOutFromAdmin"/>
 
         <!--Log in as new user-->
         <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
