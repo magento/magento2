@@ -16,7 +16,8 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class OrderSender
+ * Email notification sender for Orders.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender
