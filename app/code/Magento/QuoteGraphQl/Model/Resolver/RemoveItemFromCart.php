@@ -67,7 +67,7 @@ class RemoveItemFromCart implements ResolverInterface
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('The  Cart doesn\'t contain the item.'));
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
         return [
