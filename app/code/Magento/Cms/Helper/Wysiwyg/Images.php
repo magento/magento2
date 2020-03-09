@@ -253,6 +253,12 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_currentPath;
     }
 
+    /**
+     * Create subdirectory if doesn't exist
+     *
+     * @param string $absPath Path of subdirectory to create
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function createSubDirIfNotExist(string $absPath)
     {
         $relPath = $this->_directory->getRelativePath($absPath);
