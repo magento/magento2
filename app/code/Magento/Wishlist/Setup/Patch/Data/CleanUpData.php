@@ -58,7 +58,8 @@ class CleanUpData implements DataPatchInterface
         $this->moduleDataSetup = $moduleDataSetup;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(Generator::class);
-        $this->queryModifierFactory = $queryModifierFactory ?: ObjectManager::getInstance()->get(QueryModifierFactory::class);
+        $this->queryModifierFactory = $queryModifierFactory
+            ?: ObjectManager::getInstance()->get(QueryModifierFactory::class);
     }
 
     /**
@@ -75,7 +76,7 @@ class CleanUpData implements DataPatchInterface
                 ['option_id', 'value']
             );
         $iterator = $this->queryGenerator->generate('option_id', $select, self::BATCH_SIZE);
-        foreach ($iterator as $key=>$selectByRange) {
+        foreach ($iterator as $selectByRange) {
             $optionRows = $this->moduleDataSetup->getConnection()->fetchAll($selectByRange);
             foreach ($optionRows as $optionRow) {
                 $rowValue = $this->json->unserialize($optionRow['value']);
