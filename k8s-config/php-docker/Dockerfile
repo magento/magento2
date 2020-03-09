@@ -15,6 +15,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \ 
 && mkdir -p /var/www/magento \
+&& mkdir -p /var/www/html/magento \
 && chown www-data.www-data /var/www/magento \
 && curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer \
