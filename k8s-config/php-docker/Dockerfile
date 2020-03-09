@@ -2,9 +2,7 @@ ARG PHP_VERSION="7.2.1"
 FROM php:${PHP_VERSION:+${PHP_VERSION}-}fpm-alpine
 LABEL maintainer="Cristian Pini"
 ENV TZ=Europe/London
-RUN curl -sS https://getcomposer.org/installer | php \
-&& mv composer.phar /usr/local/bin/composer \
-apk update; \
+RUN apk update; \
 apk upgrade; \
 apk add --no-cache tzdata freetype freetype-dev libxslt-dev libpng libjpeg libxml2-dev zlib libwebp-dev libpng-dev jpeg-dev icu-dev zlib-dev libzip-dev; \
 apk add --no-cache $PHPIZE_DEPS; \
@@ -22,6 +20,8 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 COPY --chown=www-data . /var/www/magento
 USER www-data
 RUN cd /var/www/magento \
+&& curl -sS https://getcomposer.org/installer | php \
+&& mv composer.phar /usr/local/bin/composer \
 && composer install \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod u+x bin/magento
