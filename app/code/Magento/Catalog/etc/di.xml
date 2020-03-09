@@ -74,6 +74,7 @@
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
     <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
+    <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>

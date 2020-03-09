@@ -167,6 +167,7 @@
     <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
     <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
     <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
+    <preference for="Magento\Framework\DataObject\IdentityValidatorInterface" type="Magento\Framework\DataObject\IdentityValidator" />
     <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
     <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Framework\App\Scope\Validator"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Framework\App\ScopeResolver" />
@@ -1803,4 +1804,23 @@
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
     <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
+    <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">block_html</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\Context">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_block_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Storage\StorageAdapterProvider">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="local" xsi:type="string">Magento\Framework\Storage\AdapterFactory\LocalFactory</item>
+                <item name="aws_s3" xsi:type="string">Magento\Framework\Storage\AdapterFactory\AwsS3Factory</item>
+                <item name="ms_azure" xsi:type="string">Magento\Framework\Storage\AdapterFactory\AzureFactory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

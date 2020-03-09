@@ -46,7 +46,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront -->
