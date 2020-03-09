@@ -9,7 +9,12 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Sales\Block\Order\Email;
+
+use Magento\Framework\View\Element\Template;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * @api
@@ -17,4 +22,26 @@ namespace Magento\Sales\Block\Order\Email;
  */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    public function __construct(
+        Template\Context $context,
+        OrderRepositoryInterface $orderRepository,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->orderRepository = $orderRepository;
+    }
+
+    public function getOrder(): ?OrderInterface
+    {
+        if ($order = $this->getData('order')) {
+            return $order;
+        }
+
+        return $this->orderRepository->get($this->getOrderId());
+    }
 }

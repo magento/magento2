@@ -135,7 +135,8 @@ class OrderSender extends Sender
                 'customer_name' => $order->getCustomerName(),
                 'is_not_virtual' => $order->getIsNotVirtual(),
                 'email_customer_note' => $order->getEmailCustomerNote(),
-                'frontend_status_label' => $order->getFrontendStatusLabel()
+                'frontend_status_label' => $order->getFrontendStatusLabel(),
+                'id' => $order->getId(),
             ]
         ];
         $transportObject = new DataObject($transport);
