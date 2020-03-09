@@ -17,6 +17,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
+ * Block which renders order items in emails
+ *
  * @api
  * @since 100.0.2
  */
