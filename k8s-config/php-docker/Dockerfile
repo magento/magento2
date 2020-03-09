@@ -17,7 +17,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \ 
 && mkdir -p /var/www/magento \
 && chown www-data.www-data /var/www/magento \
-curl -sS https://getcomposer.org/installer | php \
+&& curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer 
 COPY --chown=www-data . /var/www/magento
 USER www-data
