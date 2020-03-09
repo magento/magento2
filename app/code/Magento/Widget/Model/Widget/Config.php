@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\Widget;
 
 /**
@@ -120,6 +123,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 
     /**
      * Return url to error image
+     *
      * @return string
      */
     public function getErrorImageUrl()
@@ -129,6 +133,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 
     /**
      * Return url to wysiwyg plugin
+     *
      * @return string
      */
     public function getWysiwygJsPluginSrc()
@@ -157,7 +162,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
             }
         }
 
-        if (count($skipped) > 0) {
+        if (!empty($skipped)) {
             $params['skip_widgets'] = $this->encodeWidgetsToQuery($skipped);
         }
         return $this->_backendUrl->getUrl('adminhtml/widget/index', $params);
@@ -189,20 +194,23 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     }
 
     /**
+     * Get available widgets.
+     *
      * @param \Magento\Framework\DataObject $config Editor element config
      * @return array
      */
     public function getAvailableWidgets($config)
     {
+        $result = [];
+
         if (!$config->hasData('widget_types')) {
-            $result = [];
             $allWidgets = $this->_widgetFactory->create()->getWidgetsArray();
             $skipped = $this->_getSkippedWidgets();
             foreach ($allWidgets as $widget) {
                 if (is_array($skipped) && in_array($widget['type'], $skipped)) {
                     continue;
                 }
-                $result[] = $widget['name']->getText();
+                $result[$widget['type']] = $widget['name']->getText();
             }
         }
 

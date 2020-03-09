@@ -59,4 +59,16 @@ class PriceBox extends \Magento\Catalog\Pricing\Render\PriceBox
     {
         return $this->msrpPriceCalculator;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCacheKey()
+    {
+        return sprintf(
+            '%s-%s',
+            parent::getCacheKey(),
+            $this->getZone()
+        );
+    }
 }

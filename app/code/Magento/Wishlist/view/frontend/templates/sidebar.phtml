@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Sidebar $block */
 ?>
 <?php
-$wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
+$wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
 ?>
 <?php if ($wishlistHelper->isAllow()) : ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
@@ -61,7 +59,7 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                 <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
-                           href="<?= $block->escapeUrl($this->helper('Magento\Wishlist\Helper\Data')->getListUrl()) ?>"
+                           href="<?= $block->escapeUrl($this->helper(\Magento\Wishlist\Helper\Data::class)->getListUrl()) ?>"
                            title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>"><span><?= $block->escapeHtml(__('Go to Wish List')) ?></span></a>
                     </div>
                 </div>

@@ -9,7 +9,9 @@ namespace Magento\Eav\Setup;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -81,23 +83,43 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
+     * @var AddOptionToAttribute
+     */
+    private $addAttributeOption;
+
+    /**
+     * @var Code
+     */
+    private $attributeCodeValidator;
+
+    /**
      * Init
      *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
+     * @param Code|null $attributeCodeValidator
+     * @param AddOptionToAttribute|null $addAttributeOption
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
+        CollectionFactory $attrGroupCollectionFactory,
+        Code $attributeCodeValidator = null,
+        AddOptionToAttribute $addAttributeOption = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
         $this->attributeMapper = $context->getAttributeMapper();
         $this->setup = $setup;
+        $this->addAttributeOption = $addAttributeOption
+            ?? ObjectManager::getInstance()->get(AddOptionToAttribute::class);
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            Code::class
+        );
     }
 
     /**
@@ -555,6 +577,7 @@ class EavSetup
             if (empty($data['attribute_group_code'])) {
                 if (empty($attributeGroupCode)) {
                     // in the following code md5 is not used for security purposes
+                    // phpcs:disable Magento2.Security.InsecureFunction
                     $attributeGroupCode = md5($name);
                 }
                 $data['attribute_group_code'] = $attributeGroupCode;
@@ -778,38 +801,6 @@ class EavSetup
     }
 
     /**
-     * Validate attribute data before insert into table
-     *
-     * @param  array $data
-     * @return true
-     * @throws LocalizedException
-     */
-    private function _validateAttributeData($data)
-    {
-        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
-        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
-        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
-
-        $isAllowedLength = \Zend_Validate::is(
-            trim($attributeCode),
-            'StringLength',
-            ['min' => $minLength, 'max' => $maxLength]
-        );
-
-        if (!$isAllowedLength) {
-            $errorMessage = __(
-                'An attribute code must not be less than %1 and more than %2 characters.',
-                $minLength,
-                $maxLength
-            );
-
-            throw new LocalizedException($errorMessage);
-        }
-
-        return true;
-    }
-
-    /**
      * Add attribute to an entity type
      *
      * If attribute is system will add to all existing attribute sets
@@ -818,6 +809,8 @@ class EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -828,7 +821,7 @@ class EavSetup
             $this->attributeMapper->map($attr, $entityTypeId)
         );
 
-        $this->_validateAttributeData($data);
+        $this->validateAttributeCode($data);
 
         $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
         $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');
@@ -886,62 +879,7 @@ class EavSetup
      */
     public function addAttributeOption($option)
     {
-        $optionTable = $this->setup->getTable('eav_attribute_option');
-        $optionValueTable = $this->setup->getTable('eav_attribute_option_value');
-
-        if (isset($option['value'])) {
-            foreach ($option['value'] as $optionId => $values) {
-                $intOptionId = (int)$optionId;
-                if (!empty($option['delete'][$optionId])) {
-                    if ($intOptionId) {
-                        $condition = ['option_id =?' => $intOptionId];
-                        $this->setup->getConnection()->delete($optionTable, $condition);
-                    }
-                    continue;
-                }
-
-                if (!$intOptionId) {
-                    $data = [
-                        'attribute_id' => $option['attribute_id'],
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
-                    ];
-                    $this->setup->getConnection()->insert($optionTable, $data);
-                    $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
-                } else {
-                    $data = [
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
-                    ];
-                    $this->setup->getConnection()->update(
-                        $optionTable,
-                        $data,
-                        ['option_id=?' => $intOptionId]
-                    );
-                }
-
-                // Default value
-                if (!isset($values[0])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __("The default option isn't defined. Set the option and try again.")
-                    );
-                }
-                $condition = ['option_id =?' => $intOptionId];
-                $this->setup->getConnection()->delete($optionValueTable, $condition);
-                foreach ($values as $storeId => $value) {
-                    $data = ['option_id' => $intOptionId, 'store_id' => $storeId, 'value' => $value];
-                    $this->setup->getConnection()->insert($optionValueTable, $data);
-                }
-            }
-        } elseif (isset($option['values'])) {
-            foreach ($option['values'] as $sortOrder => $label) {
-                // add option
-                $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
-                $this->setup->getConnection()->insert($optionTable, $data);
-                $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
-
-                $data = ['option_id' => $intOptionId, 'store_id' => 0, 'value' => $label];
-                $this->setup->getConnection()->insert($optionValueTable, $data);
-            }
-        }
+        $this->addAttributeOption->execute($option);
     }
 
     /**
@@ -1548,5 +1486,22 @@ class EavSetup
         }
 
         return $this;
+    }
+
+    /**
+     * Validate attribute code.
+     *
+     * @param array $data
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
+     */
+    private function validateAttributeCode(array $data): void
+    {
+        $attributeCode = $data['attribute_code'] ?? '';
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $errorMessage = implode('\n', $this->attributeCodeValidator->getMessages());
+
+            throw new LocalizedException(__($errorMessage));
+        }
     }
 }

@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataStorageMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
@@ -224,7 +224,6 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('title="my &quot;widget&quot;"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
         $this->assertContains('page_var_name="pasdf"', $result);
-        $this->assertContains('type_name=""}}', $result);
     }
 
     /**
@@ -275,7 +274,6 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('page_var_name="pasdf"', $result);
-        $this->assertContains('type_name=""}}', $result);
         $this->assertContains('products_count=""', $result);
     }
 }

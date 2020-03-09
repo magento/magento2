@@ -5,10 +5,14 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 
-class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Controller class Delete. Represents adminhtml request flow for a sitemap deletion
+ */
+class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Filesystem

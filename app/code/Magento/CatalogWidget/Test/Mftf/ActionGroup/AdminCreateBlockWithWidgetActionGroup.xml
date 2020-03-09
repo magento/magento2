@@ -7,8 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateBlockWithWidget">
+        <annotations>
+            <description>Inserts a Widget into a Block on the Block creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="addCondition" type="string"/>
             <argument name="isCondition" type="string"/>

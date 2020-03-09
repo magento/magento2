@@ -48,7 +48,7 @@ class TopToolbar extends Block
     public function getSortType()
     {
         $content = $this->_rootElement->find($this->sorter)->getText();
-        return explode("\n", $content);
+        return array_values(array_filter(array_map('trim', explode("\n", $content))));
     }
 
     /**

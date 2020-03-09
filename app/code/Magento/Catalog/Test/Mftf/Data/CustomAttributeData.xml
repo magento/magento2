@@ -35,4 +35,40 @@
         <data key="attribute_code">news_from_date</data>
         <data key="value">2018-05-17 00:00:00</data>
     </entity>
+    <entity name="CustomDynamicProductDescription" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">Dynamicscription testing 321</data>
+    </entity>
+    <entity name="CustomDynamicProductShortDescription" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">Short dynamictest 555</data>
+    </entity>
+    <entity name="CustomFixedProductDescription" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">Fixedscription testing 321</data>
+    </entity>
+    <entity name="CustomFixedProductShortDescription" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">Short Fixedtest 555</data>
+    </entity>
+    <entity name="CustomAttributeCategoryNonAnchor" type="custom_attribute">
+        <data key="attribute_code">is_anchor</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="ProductDescriptionAdvancedSearchABC" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">&lt;p&gt;adc_Full&lt;/p&gt;</data>
+    </entity>
+    <entity name="ProductShortDescriptionAdvancedSearch" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">&lt;p&gt;abc_short&lt;/p&gt;</data>
+    </entity>
+    <entity name="ProductDescriptionAdvancedSearchADC123" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">&lt;p&gt;dfj_full&lt;/p&gt;</data>
+    </entity>
+    <entity name="ProductShortDescriptionAdvancedSearchADC123" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">&lt;p&gt;dfj_short&lt;/p&gt;</data>
+    </entity>
 </entities>

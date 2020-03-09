@@ -51,15 +51,7 @@ define([
         placeOrder: function () {
             var self = this;
 
-            /**
-             * Define onReady callback
-             */
-            Braintree.onReady = function () {
-                self.getPaymentMethodNonce();
-            };
-            self.hostedFields(function (formComponent) {
-                formComponent.initBraintree();
-            });
+            self.getPaymentMethodNonce();
         },
 
         /**
@@ -75,7 +67,7 @@ define([
                 .done(function (response) {
                     fullScreenLoader.stopLoader();
                     self.hostedFields(function (formComponent) {
-                        formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
+                        formComponent.paymentPayload.nonce = response.paymentMethodNonce;
                         formComponent.additionalData['public_hash'] = self.publicHash;
                         formComponent.code = self.code;
                         formComponent.messageContainer = self.messageContainer;

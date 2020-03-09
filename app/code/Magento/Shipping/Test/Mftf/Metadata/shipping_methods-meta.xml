@@ -66,6 +66,9 @@
                     <object key="free_shipping_subtotal" dataType="free_shipping_subtotal">
                         <field key="value">string</field>
                     </object>
+                    <object key="tax_including" dataType="tax_including">
+                        <field key="value">boolean</field>
+                    </object>
                     <object key="specificerrmsg" dataType="specificerrmsg">
                         <field key="value">string</field>
                     </object>

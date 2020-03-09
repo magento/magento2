@@ -19,9 +19,23 @@ class Secure3d extends Form
     /**
      * 3D Secure iFrame locator.
      *
-     * @var array
+     * @var string
      */
-    protected $braintree3dSecure = "//iframe[contains(@src, 'braintreegateway.com/3ds')]";
+    protected $braintree3dSecure = "//iframe[contains(@id, 'braintreethreedsecurelanding')]";
+
+    /**
+     * AuthWindow locator.
+     *
+     * @var string
+     */
+    private $authWindow3dSecure = "//iframe[contains(@id, 'authWindow')]";
+
+    /**
+     * Password field locator.
+     *
+     * @var string
+     */
+    private $passwordField = "//*[@name='external.field.password']";
 
     /**
      * Submit button button css selector.
@@ -33,12 +47,12 @@ class Secure3d extends Form
     /**
      * Switch to 3D Secure iFrame.
      *
-     * @param array $locator
+     * @param string $locator
      */
     public function switchToFrame($locator)
     {
-         $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
-         $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
+        $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
+        $this->browser->switchToFrame(new Locator($this->authWindow3dSecure, Locator::SELECTOR_XPATH));
     }
 
     /**
@@ -56,6 +70,7 @@ class Secure3d extends Form
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
+     *
      * @return $this|void
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
@@ -63,6 +78,12 @@ class Secure3d extends Form
         $mapping = $this->dataMapping($fixture->getData());
         $this->switchToFrame($this->braintree3dSecure);
         $element = $this->browser->find('body');
+        $this->browser->waitUntil(
+            function () use ($element) {
+                $fieldElement = $element->find($this->passwordField, Locator::SELECTOR_XPATH);
+                return $fieldElement->isVisible() ? true : null;
+            }
+        );
         $this->_fill([$mapping['secure3d_password']], $element);
         $this->submit();
         $this->browser->switchToFrame();

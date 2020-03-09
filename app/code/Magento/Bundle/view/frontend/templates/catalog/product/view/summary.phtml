@@ -3,40 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
     $_product = $block->getProduct();
 ?>
-<?php if ($_product->isSaleable() && $block->hasOptions()): ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()) : ?>
 <div id="bundleSummary"
      class="block-bundle-summary"
      data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
     <div class="title">
-        <strong><?= /* @escapeNotVerified */ __('Your Customization') ?></strong>
+        <strong><?= $block->escapeHtml(__('Your Customization')) ?></strong>
     </div>
     <div class="content">
         <div class="bundle-info">
             <?= $block->getImage($_product, 'bundled_product_customization_page')->toHtml() ?>
             <div class="product-details">
                 <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
-                <?php if ($_product->getIsSalable()): ?>
-                    <p class="available stock" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-                        <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+                <?php if ($_product->getIsSalable()) : ?>
+                    <p class="available stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $block->escapeHtml(__('In stock')) ?></span>
                     </p>
-                <?php else: ?>
-                    <p class="unavailable stock" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-                        <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+                <?php else : ?>
+                    <p class="unavailable stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
                     </p>
                 <?php endif; ?>
                 <?= $block->getChildHtml('', true) ?>
             </div>
         </div>
         <div class="bundle-summary">
-            <strong class="subtitle"><?= /* @escapeNotVerified */ __('Summary') ?></strong>
+            <strong class="subtitle"><?= $block->escapeHtml(__('Summary')) ?></strong>
             <div id="bundle-summary" data-container="product-summary">
                 <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
                 <script data-template="bundle-summary" type="text/x-magento-template">
@@ -46,7 +43,7 @@
                     </li>
                 </script>
                 <script data-template="bundle-option" type="text/x-magento-template">
-                    <div><?= /* @escapeNotVerified */ __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
+                    <div><?= /* @noEscape */ __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
                 </script>
             </div>
         </div>
@@ -61,7 +58,7 @@
                 "slideBackSelector": ".action.customization.back",
                 "bundleProductSelector": "#bundleProduct",
                 "bundleOptionsContainer": ".product-add-form"
-                <?php if ($block->isStartCustomization()): ?>
+                <?php if ($block->isStartCustomization()) : ?>
                 ,"autostart": true
                 <?php endif;?>
             }

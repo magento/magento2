@@ -1,0 +1,912 @@
+{
+  "HighestSeverity": "NOTE",
+  "Notifications": [
+    {
+      "Severity": "NOTE",
+      "Source": "crs",
+      "Code": "886",
+      "Message": "Money Back Guarantee is not eligible for this pick up\/delivery postal\/zip code. FDXG",
+      "LocalizedMessage": "Money Back Guarantee is not eligible for this pick up\/delivery postal\/zip code. FDXG",
+      "MessageParameters": {
+        "Id": "OPERATING_COMPANY",
+        "Value": "FDXG"
+      }
+    },
+    {
+      "Severity": "NOTE",
+      "Source": "crs",
+      "Code": "819",
+      "Message": "The origin state\/province code has been changed.  ",
+      "LocalizedMessage": "The origin state\/province code has been changed.  "
+    },
+    {
+      "Severity": "NOTE",
+      "Source": "crs",
+      "Code": "820",
+      "Message": "The destination state\/province code has been changed.  ",
+      "LocalizedMessage": "The destination state\/province code has been changed.  "
+    }
+  ],
+  "Version": {
+    "ServiceId": "crs",
+    "Major": 10,
+    "Intermediate": 0,
+    "Minor": 0
+  },
+  "RateReplyDetails": [
+    {
+      "ServiceType": "INTERNATIONAL_PRIORITY",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "YYZ",
+      "IneligibleForMoneyBackGuarantee": false,
+      "OriginServiceArea": "A1",
+      "DestinationServiceArea": "AM",
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_SHIPMENT",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.65"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.65"
+              }
+            }
+          }
+        },
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "RATED_ACCOUNT_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.65"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.65"
+              }
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.65"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.65"
+              }
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "RATED_LIST_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "92.99"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.65"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "97.64"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.65"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ServiceType": "INTERNATIONAL_ECONOMY",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "YYZ",
+      "IneligibleForMoneyBackGuarantee": false,
+      "OriginServiceArea": "A1",
+      "DestinationServiceArea": "AM",
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_SHIPMENT",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.16"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.16"
+              }
+            }
+          }
+        },
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "RATED_ACCOUNT_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.16"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.16"
+              }
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.16"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.16"
+              }
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "RATED_LIST_SHIPMENT",
+            "RateScale": "0000000",
+            "RateZone": "US001O",
+            "PricingCode": "ACTUAL",
+            "RatedWeightMethod": "ACTUAL",
+            "CurrencyExchangeRate": {
+              "FromCurrency": "USD",
+              "IntoCurrency": "USD",
+              "Rate": "1.0"
+            },
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "5.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "83.18"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.16"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "87.34"
+            },
+            "Surcharges": {
+              "SurchargeType": "FUEL",
+              "Description": "Fuel",
+              "Amount": {
+                "Currency": "USD",
+                "Amount": "4.16"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ServiceType": "FEDEX_GROUND",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "YYZ",
+      "IneligibleForMoneyBackGuarantee": true,
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_PACKAGE",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_PACKAGE",
+            "RateZone": "51",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "7.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "22.73"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "22.73"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "1.59"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "24.32"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "24.32"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "24.32"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Level": "PACKAGE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Level": "PACKAGE",
+                "Description": "FedEx Ground Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.59"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "PAYOR_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "22.73"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "22.73"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "1.59"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "24.32"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "24.32"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Level": "PACKAGE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Level": "PACKAGE",
+                  "Description": "FedEx Ground Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.59"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_PACKAGE",
+            "RateZone": "51",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "7.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "22.73"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "22.73"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "1.59"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "24.32"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "24.32"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "24.32"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Level": "PACKAGE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Level": "PACKAGE",
+                "Description": "FedEx Ground Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.59"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "PAYOR_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "22.73"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "22.73"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "1.59"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "24.32"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "24.32"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Level": "PACKAGE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Level": "PACKAGE",
+                  "Description": "FedEx Ground Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.59"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

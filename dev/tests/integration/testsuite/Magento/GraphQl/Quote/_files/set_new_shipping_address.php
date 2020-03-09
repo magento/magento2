@@ -26,7 +26,7 @@ $shippingAddressManagement = Bootstrap::getObjectManager()->get(ShippingAddressM
 
 $quoteAddressData = [
     AddressInterface::KEY_TELEPHONE => 3468676,
-    AddressInterface::KEY_POSTCODE => 75477,
+    AddressInterface::KEY_POSTCODE => '75477',
     AddressInterface::KEY_COUNTRY_ID => 'US',
     AddressInterface::KEY_CITY => 'CityM',
     AddressInterface::KEY_COMPANY => 'CompanyName',

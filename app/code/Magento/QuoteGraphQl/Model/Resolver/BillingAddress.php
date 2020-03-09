@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\QuoteGraphQl\Model\Cart\ExtractQuoteAddressData;
+use Magento\QuoteGraphQl\Model\Cart\ValidateAddressFromSchema;
 
 /**
  * @inheritdoc
@@ -25,11 +26,20 @@ class BillingAddress implements ResolverInterface
     private $extractQuoteAddressData;
 
     /**
-     * @param ExtractQuoteAddressData $extractQuoteAddressData
+     * @var ValidateAddressFromSchema
      */
-    public function __construct(ExtractQuoteAddressData $extractQuoteAddressData)
-    {
+    private $validateAddressFromSchema;
+
+    /**
+     * @param ExtractQuoteAddressData $extractQuoteAddressData
+     * @param ValidateAddressFromSchema $validateAddressFromSchema
+     */
+    public function __construct(
+        ExtractQuoteAddressData $extractQuoteAddressData,
+        ValidateAddressFromSchema $validateAddressFromSchema
+    ) {
         $this->extractQuoteAddressData = $extractQuoteAddressData;
+        $this->validateAddressFromSchema = $validateAddressFromSchema;
     }
 
     /**
@@ -44,11 +54,10 @@ class BillingAddress implements ResolverInterface
         $cart = $value['model'];
 
         $billingAddress = $cart->getBillingAddress();
-        if (null === $billingAddress) {
+        $addressData = $this->extractQuoteAddressData->execute($billingAddress);
+        if (!$this->validateAddressFromSchema->execute($addressData)) {
             return null;
         }
-
-        $addressData = $this->extractQuoteAddressData->execute($billingAddress);
         return $addressData;
     }
 }

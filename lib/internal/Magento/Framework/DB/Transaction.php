@@ -1,13 +1,13 @@
 <?php
 /**
- * DB transaction model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
 
 /**
+ * DB transaction model
+ *
  * @todo need collect connection by name
  */
 class Transaction
@@ -104,7 +104,7 @@ class Transaction
     /**
      * Add callback function which will be called before commit transactions
      *
-     * @param callback $callback
+     * @param callable $callback
      * @return $this
      */
     public function addCommitCallback($callback)

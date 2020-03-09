@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<form action="<?= /* @escapeNotVerified */ $block->getUrl('*/*/saverole') ?>" method="post" id="role-edit-form">
+<form action="<?= $block->escapeUrl($block->getUrl('*/*/saverole')) ?>" method="post" id="role-edit-form">
     <?= $block->getBlockHtml('formkey') ?>
 </form>
 <script>

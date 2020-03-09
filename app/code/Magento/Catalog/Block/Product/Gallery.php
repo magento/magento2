@@ -11,11 +11,17 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Framework\Storage\FileNotFoundException;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Registry;
+use Magento\Framework\Storage\StorageProvider;
 
 /**
+ * Product gallery block
+ *
  * @api
  * @since 100.0.2
  */
@@ -24,25 +30,42 @@ class Gallery extends \Magento\Framework\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * @var StorageProvider
+     */
+    private $storageProvider;
+    /**
+     * @var Config
+     */
+    private $mediaConfig;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param array $data
+     * @param StorageProvider $storageProvider
+     * @param Config $mediaConfig
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        array $data = []
+        Registry $registry,
+        array $data = [],
+        StorageProvider $storageProvider = null,
+        Config $mediaConfig = null
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+        $this->storageProvider = $storageProvider ?? ObjectManager::getInstance()->get(StorageProvider::class);
+        $this->mediaConfig = $mediaConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -52,6 +75,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get product
+     *
      * @return Product
      */
     public function getProduct()
@@ -60,6 +85,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get gallery collection
+     *
      * @return Collection
      */
     public function getGalleryCollection()
@@ -68,6 +95,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current image
+     *
      * @return Image|null
      */
     public function getCurrentImage()
@@ -85,6 +114,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get image url
+     *
      * @return string
      */
     public function getImageUrl()
@@ -93,6 +124,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get image file
+     *
      * @return mixed
      */
     public function getImageFile()
@@ -107,16 +140,24 @@ class Gallery extends \Magento\Framework\View\Element\Template
      */
     public function getImageWidth()
     {
-        $file = $this->getCurrentImage()->getPath();
+        $file = $this->getCurrentImage()->getFile();
+        if (!$file) {
+            return false;
+        }
+        $productMediaFile = $this->mediaConfig->getMediaPath($file);
 
-        if ($this->_filesystem->getDirectoryRead(DirectoryList::MEDIA)->isFile($file)) {
-            $size = getimagesize($file);
-            if (isset($size[0])) {
-                if ($size[0] > 600) {
+        $mediaStorage = $this->storageProvider->get('media');
+        if ($mediaStorage->has($productMediaFile)) {
+            try {
+                $meta = $mediaStorage->getMetadata($productMediaFile);
+                $size = $meta['size'];
+                if ($size > 600) {
                     return 600;
                 } else {
-                    return $size[0];
+                    return (int) $size;
                 }
+            } catch (FileNotFoundException $e) {
+                return false;
             }
         }
 
@@ -124,6 +165,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get previous image
+     *
      * @return Image|false
      */
     public function getPreviousImage()
@@ -143,6 +186,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get next image
+     *
      * @return Image|false
      */
     public function getNextImage()
@@ -166,6 +211,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get previous image url
+     *
      * @return false|string
      */
     public function getPreviousImageUrl()
@@ -178,6 +225,8 @@ class Gallery extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get next image url
+     *
      * @return false|string
      */
     public function getNextImageUrl()

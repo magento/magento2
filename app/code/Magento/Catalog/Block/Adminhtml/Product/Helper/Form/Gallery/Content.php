@@ -13,15 +13,20 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Backend\Block\Media\Uploader;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
+use Magento\Backend\Block\Media\Uploader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Storage\FileNotFoundException;
+use Magento\Framework\Storage\StorageProvider;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Block for gallery content.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -51,24 +56,46 @@ class Content extends \Magento\Backend\Block\Widget
     private $imageUploadConfigDataProvider;
 
     /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+    /**
+     * @var StorageProvider
+     */
+    private $storageProvider;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    private $mediaDirectory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     * @param StorageProvider $storageProvider
      * @param array $data
      * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
+     * @param Database $fileStorageDatabase
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
+        StorageProvider $storageProvider,
         array $data = [],
-        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null
+        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null,
+        Database $fileStorageDatabase = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
         parent::__construct($context, $data);
+        $this->mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
             ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
+        $this->fileStorageDatabase = $fileStorageDatabase
+            ?: ObjectManager::getInstance()->get(Database::class);
+        $this->storageProvider = $storageProvider;
     }
 
     /**
@@ -85,7 +112,7 @@ class Content extends \Magento\Backend\Block\Widget
         );
 
         $this->getUploader()->getConfig()->setUrl(
-            $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
+            $this->_urlBuilder->getUrl('catalog/product_gallery/upload')
         )->setFileField(
             'image'
         )->setFilters(
@@ -148,9 +175,48 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Sync images to database
+     *
+     * @param string $fileName
+     */
+    private function syncImageToDatabase(string $fileName): void
+    {
+        if ($this->fileStorageDatabase->checkDbUsage() &&
+            !$this->mediaDirectory->isFile($this->_mediaConfig->getMediaPath($fileName))
+        ) {
+            $this->fileStorageDatabase->saveFileToFilesystem(
+                $this->_mediaConfig->getMediaPath($fileName)
+            );
+        }
+    }
+
+    /**
+     * Returns file metadata as an associative array
+     *
+     * @param string $fileName
+     * @return array
+     * @throws FileNotFoundException
+     */
+    private function getFileMetadata(string $fileName): array
+    {
+        $metadata = [];
+        try {
+            $info = $this->storageProvider->get('media')
+                ->getMetadata($this->_mediaConfig->getMediaPath($fileName));
+            $metadata['size'] = $info['size'];
+        } catch (FileSystemException $e) {
+            $metadata['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
+            $metadata['size'] = 0;
+            $this->_logger->warning($e);
+        }
+        return $metadata;
+    }
+
+    /**
      * Returns image json
      *
      * @return string
+     * @throws FileNotFoundException
      */
     public function getImagesJson()
     {
@@ -160,17 +226,14 @@ class Content extends \Magento\Backend\Block\Widget
             is_array($value['images']) &&
             count($value['images'])
         ) {
-            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
-                try {
-                    $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
-                    $image['size'] = $fileHandler['size'];
-                } catch (FileSystemException $e) {
-                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
-                    $image['size'] = 0;
-                    $this->_logger->warning($e);
+                $this->syncImageToDatabase($image['file']);
+                if (isset($image['image_metadata']) && is_array($image['image_metadata'])) {
+                    $image = array_replace_recursive($image, $image['image_metadata']);
+                } else {
+                    $image = array_replace_recursive($image, $this->getFileMetadata($image['file']));
                 }
             }
             return $this->_jsonEncoder->encode($images);
@@ -187,9 +250,12 @@ class Content extends \Magento\Backend\Block\Widget
     private function sortImagesByPosition($images)
     {
         if (is_array($images)) {
-            usort($images, function ($imageA, $imageB) {
-                return ($imageA['position'] < $imageB['position']) ? -1 : 1;
-            });
+            usort(
+                $images,
+                function ($imageA, $imageB) {
+                    return ($imageA['position'] < $imageB['position']) ? -1 : 1;
+                }
+            );
         }
         return $images;
     }

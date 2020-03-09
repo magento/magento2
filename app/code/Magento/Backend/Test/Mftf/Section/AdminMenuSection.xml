@@ -21,5 +21,8 @@
         <element name="marketing" type="button" selector="//li[@id='menu-magento-backend-marketing']"/>
         <element name="system" type="button" selector="//li[@id='menu-magento-backend-system']"/>
         <element name="findPartners" type="button" selector="//li[@id='menu-magento-marketplace-partners']"/>
+
+        <!-- Navigate menu selectors -->
+        <element name="menuItem" type="button" selector="li[data-ui-id='menu-{{dataUiId}}']" parameterized="true" timeout="30"/>
     </section>
 </sections>

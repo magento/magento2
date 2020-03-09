@@ -5,10 +5,11 @@
  */
 namespace Magento\Deploy\Service;
 
-use Magento\Deploy\Strategy\DeployStrategyFactory;
-use Magento\Deploy\Process\QueueFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Deploy\Process\QueueFactory;
+use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -16,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * Main service for static content deployment
  *
  * Aggregates services to deploy static files, static files bundles, translations and minified templates
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContent
 {
@@ -71,7 +73,11 @@ class DeployStaticContent
      * Run deploy procedure
      *
      * @param array $options
+     * @throws LocalizedException
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function deploy(array $options)
     {
@@ -103,27 +109,35 @@ class DeployStaticContent
 
         $deployStrategy = $this->deployStrategyFactory->create(
             $options[Options::STRATEGY],
-            [
-                'queue' => $this->queueFactory->create($queueOptions)
-            ]
+            ['queue' => $this->queueFactory->create($queueOptions)]
         );
 
         $packages = $deployStrategy->deploy($options);
 
         if ($options[Options::NO_JAVASCRIPT] !== true) {
-            $deployRjsConfig = $this->objectManager->create(DeployRequireJsConfig::class, [
-                'logger' => $this->logger
-            ]);
-            $deployI18n = $this->objectManager->create(DeployTranslationsDictionary::class, [
-                'logger' => $this->logger
-            ]);
-            $deployBundle = $this->objectManager->create(Bundle::class, [
-                'logger' => $this->logger
-            ]);
+            $deployRjsConfig = $this->objectManager->create(
+                DeployRequireJsConfig::class,
+                ['logger' => $this->logger]
+            );
+            $deployI18n      = $this->objectManager->create(
+                DeployTranslationsDictionary::class,
+                ['logger' => $this->logger]
+            );
             foreach ($packages as $package) {
                 if (!$package->isVirtual()) {
                     $deployRjsConfig->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                     $deployI18n->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
+                }
+            }
+        }
+
+        if ($options[Options::NO_JAVASCRIPT] !== true && $options[Options::NO_JS_BUNDLE] !== true) {
+            $deployBundle = $this->objectManager->create(
+                Bundle::class,
+                ['logger' => $this->logger]
+            );
+            foreach ($packages as $package) {
+                if (!$package->isVirtual()) {
                     $deployBundle->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                 }
             }
@@ -142,7 +156,7 @@ class DeployStaticContent
      */
     private function getProcessesAmount(array $options)
     {
-        return isset($options[Options::JOBS_AMOUNT]) ? (int)$options[Options::JOBS_AMOUNT] : 0;
+        return (int)($options[Options::JOBS_AMOUNT] ?? 0);
     }
 
     /**

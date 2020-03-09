@@ -17,6 +17,7 @@ class ProductRepositoryMultiCurrencyTest extends WebapiAbstract
     const WEBSITES_RESOURCE_PATH = '/V1/store/websites';
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_second_currency.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */

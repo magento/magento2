@@ -24,7 +24,7 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
     private $wishlistSettings;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
@@ -46,7 +46,7 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterGetData()
     {
-        /** @var DataProvider|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var DataProvider|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->createMock(DataProvider::class);
         $result = [];
         $isAllow = true;

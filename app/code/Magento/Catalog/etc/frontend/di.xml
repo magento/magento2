@@ -120,5 +120,4 @@
         <plugin name="catalog_app_action_dispatch_controller_context_plugin"
                 type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin" />
     </type>
-    <preference for="Magento\Catalog\Model\Product\Type\Price" type="Magento\Catalog\Model\Product\Type\FrontSpecialPrice" />
 </config>
