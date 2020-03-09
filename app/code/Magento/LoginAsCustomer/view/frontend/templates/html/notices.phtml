@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<?php if ($block->getConfig()->isEnabled()) : ?>
+    <div  data-bind="scope: 'loginAsCustomer'" >
+        <div class="message global demo" data-bind="visible: isVisible" style="display: none">
+            <div class="content">
+                <p data-bind="text: new String('Attention! You are logged in as the customer.')"></p>
+            </div>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "loginAsCustomer": {
+                        "component": "Magento_LoginAsCustomer/js/view/loginAsCustomer"
+                    }
+                }
+            }
+        }
+    }
+    </script>
+<?php endif; ?>
