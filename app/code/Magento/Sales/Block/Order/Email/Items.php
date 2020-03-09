@@ -23,10 +23,19 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
+     * OrderRepository
+     *
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
 
+    /**
+     * Constructor
+     *
+     * @param Template\Context $context
+     * @param OrderRepositoryInterface $orderRepository
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         OrderRepositoryInterface $orderRepository,
@@ -36,6 +45,11 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $this->orderRepository = $orderRepository;
     }
 
+    /**
+     * Retrieve order
+     *
+     * @return OrderInterface|null
+     */
     public function getOrder(): ?OrderInterface
     {
         if ($order = $this->getData('order')) {
