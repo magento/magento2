@@ -9,9 +9,9 @@ namespace Magento\Customer\Controller;
 use Magento\Framework\App\Action\Action;
 
 /**
- * Class AbstractAccount
- * @package Magento\Customer\Controller
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @deprecated 2.4.0
+ * @see \Magento\Customer\Controller\AccountInterface
  */
 abstract class AbstractAccount extends Action implements AccountInterface
 {

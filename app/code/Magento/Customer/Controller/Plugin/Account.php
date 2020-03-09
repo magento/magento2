@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Plugin;
 
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\Controller\ResultInterface;
 
 class Account
@@ -23,29 +25,35 @@ class Account
      * @var array
      */
     private $allowedActions = [];
+    /**
+     * @var RequestInterface
+     */
+    private $request;
 
     /**
+     * @param RequestInterface $request
      * @param Session $customerSession
      * @param array $allowedActions List of actions that are allowed for not authorized users
      */
     public function __construct(
+        RequestInterface $request,
         Session $customerSession,
         array $allowedActions = []
     ) {
         $this->session = $customerSession;
         $this->allowedActions = $allowedActions;
+        $this->request = $request;
     }
 
     /**
      * Dispatch actions allowed for not authorized users
      *
-     * @param AbstractAction $subject
-     * @param RequestInterface $request
+     * @param AccountInterface $subject
      * @return void
      */
-    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    public function beforeExecute(AccountInterface $subject)
     {
-        $action = strtolower($request->getActionName());
+        $action = strtolower($this->request->getActionName());
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
         if (!preg_match($pattern, $action)) {
@@ -60,13 +68,12 @@ class Account
     /**
      * Remove No-referer flag from customer session
      *
-     * @param AbstractAction $subject
+     * @param AccountInterface $subject
      * @param ResponseInterface|ResultInterface $result
-     * @param RequestInterface $request
      * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDispatch(AbstractAction $subject, $result, RequestInterface $request)
+    public function afterExecute(AccountInterface $subject, $result)
     {
         $this->session->unsNoReferer(false);
         return $result;
