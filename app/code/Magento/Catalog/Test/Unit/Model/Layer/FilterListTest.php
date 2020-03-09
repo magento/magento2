@@ -71,8 +71,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
         $this->model = new FilterList(
             $this->objectManagerMock,
             $this->attributeListMock,
-            $filters,
-            $this->layerCategoryConfigMock
+            $this->layerCategoryConfigMock,
+            $filters
         );
     }
 
@@ -112,7 +112,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue([$this->attributeMock]));
 
         $this->layerCategoryConfigMock->expects($this->once())
-            ->method('isCategoryVisibleInLayer')
+            ->method('isCategoryFilterVisibleInLayerNavigation')
             ->willReturn(true);
 
         $this->assertEquals(['filter', 'filter'], $this->model->getFilters($this->layerMock));
@@ -156,7 +156,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue([$this->attributeMock]));
 
         $this->layerCategoryConfigMock->expects($this->once())
-            ->method('isCategoryVisibleInLayer')
+            ->method('isCategoryFilterVisibleInLayerNavigation')
             ->willReturn(false);
 
         $this->assertEquals($expectedResult, $this->model->getFilters($this->layerMock));
