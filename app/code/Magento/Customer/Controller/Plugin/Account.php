@@ -14,6 +14,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * Plugin verifies permissions using Action Name against injected (`fontend/di.xml`) rules
+ */
 class Account
 {
     /**
@@ -22,13 +25,14 @@ class Account
     protected $session;
 
     /**
-     * @var array
-     */
-    private $allowedActions = [];
-    /**
      * @var RequestInterface
      */
     private $request;
+
+    /**
+     * @var array
+     */
+    private $allowedActions = [];
 
     /**
      * @param RequestInterface $request
