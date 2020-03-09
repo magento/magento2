@@ -22,6 +22,6 @@ RUN curl -sS https://getcomposer.org/installer | php \
 && cd /var/www/magento \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
-&& chmod u+x bin/magento \
+&& chmod u+x bin/magento /var/www/magento/release.sh \
 && chown www-data.www-data /var/www/magento
 USER www-data
