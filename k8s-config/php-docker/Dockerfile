@@ -19,10 +19,11 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \ 
 && mkdir -p /var/www/magento \
 && chown www-data.www-data /var/www/magento
+COPY ./release.sh /tmp
 COPY --chown=www-data . /var/www/magento
-COPY /var/www/magento/release.sh /tmp
 USER www-data
 RUN cd /var/www/magento \
+&& rm -f /var/www/magento/release.sh \
 && composer install \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod u+x bin/magento /tmp/release.sh
