@@ -63,7 +63,9 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
             // Second case with inheritance of package with the same language code
             'a case with inheritance similar language code' => $this->getDataInheritanceWitSimilarCode(),
             // Third case with circular inheritance, when two packages depend on each other
-            'a case with circular inheritance' => $this->getDataCircularInheritance()
+            'a case with circular inheritance' => $this->getDataCircularInheritance(),
+            // Fourth case with multiple inheritance from dev docs
+            'a case with multiple inheritance from dev docs' => $this->getDataMultipleInheritanceFromDevDocs()
         ];
     }
 
@@ -113,13 +115,57 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_US',
+            'language_code' => 'en_AZ',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
                 'two' => '2',
                 'three' => '3',
                 'four' => '4',
+            ]
+        ];
+    }
+
+    /**
+     * If a language package inherits from two packages:
+     * ...
+     *  <code>en_AK</code>
+     * ...
+     *  <use vendor="parent-package-one" package="language_package_one"/>
+     *  <use vendor= "parent-package-two" package="language_package_two"/>
+     * ...
+     *
+     * In the preceding example:
+     *  language_package_one inherits from en_au_package and en_au_package inherits from en_ie_package
+     *  language_package_two inherits from en_ca_package and en_ca_package inherits from en_us_package
+     *
+     * If the Magento application cannot find word or phrase in the en_AK package,
+     * it looks in other packages in following sequence:
+     *  parent-package-one/language_package_one
+     *  <vendorname>/en_au_package
+     *  <vendorname>/en_ie_package
+     *  parent-package-two/language_package_two
+     *  <vendorname>/en_ca_package
+     *  <vendorname>/en_us_package
+     *
+     * @return array
+     */
+    private function getDataMultipleInheritanceFromDevDocs()
+    {
+        return [
+            // Dictionary that will be requested
+            'language_code' => 'en_AK',
+            // Expected merged dictionary data
+            'expectation' => [
+                'one' => 'en_us_package_one',
+                'two' => 'en_ca_package_two',
+                'three' => 'language_package_two_three',
+                'four' => 'en_ie_package_four',
+                'five' => 'en_au_package_five',
+                'six' => 'language_package_one_six',
+                'seven' => 'en_ak_seven',
+                'eight' => 'en_ak_eight',
+                'nine' => 'en_ak_nine',
             ]
         ];
     }

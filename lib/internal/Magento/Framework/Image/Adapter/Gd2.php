@@ -75,16 +75,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_getCallback('create', null, sprintf('Unsupported image format. File: %s', $this->_fileName)),
             $this->_fileName
         );
-        $fileType = $this->getImageType();
-        if (in_array($fileType, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
-            $this->_keepTransparency = true;
-            if ($this->_imageHandler) {
-                $isAlpha = $this->checkAlpha($this->_fileName);
-                if ($isAlpha) {
-                    $this->_fillBackgroundColor($this->_imageHandler);
-                }
-            }
-        }
     }
 
     /**
@@ -411,6 +401,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
+     * @deprecated unused
      */
     public function rotate($angle)
     {

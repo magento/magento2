@@ -23,7 +23,7 @@
        </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->

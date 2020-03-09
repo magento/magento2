@@ -101,7 +101,7 @@
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="product" stepKey="delete"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>

@@ -24,7 +24,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
@@ -101,7 +101,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
