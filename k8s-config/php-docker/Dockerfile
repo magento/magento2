@@ -21,7 +21,8 @@ COPY --chown=www-data . /var/www/magento
 RUN curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer \
 && cd /var/www/magento \
-&& composer install \
+&& mv release.sh /tmp \
+&& composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod u+x bin/magento
 USER www-data
