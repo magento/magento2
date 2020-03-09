@@ -296,9 +296,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->method('getFrontendStatusLabel')
             ->willReturn($frontendStatusLabel);
 
-        $this->orderMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($orderId);
+        $this->orderMock->expects($this->once())->method('getId')->willReturn($orderId);
 
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
