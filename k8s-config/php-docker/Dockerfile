@@ -25,4 +25,4 @@ RUN cd /var/www/magento \
 && mv /var/www/magento/release.sh /tmp/ \
 && composer install \
 && composer config repositories.magento composer https://repo.magento.com/ \
-&& chmod u+x bin/magento start.sh
+&& chmod u+x bin/magento /tmp/release.sh
