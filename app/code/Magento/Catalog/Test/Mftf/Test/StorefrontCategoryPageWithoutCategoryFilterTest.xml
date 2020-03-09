@@ -58,6 +58,6 @@
             <argument name="category" value="$$defaultCategory$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCheckCategoryFilterIsNotVisibleInLayeredNavigationActionGroup" stepKey="checkCategoryFilterIsPresent" />
+        <actionGroup ref="AssertStorefrontLayeredNavigationCategoryFilterNotVisibleActionGroup" stepKey="checkCategoryFilterIsNotPresent" />
     </test>
 </tests>
