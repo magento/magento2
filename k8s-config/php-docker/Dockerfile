@@ -24,4 +24,4 @@ USER www-data
 RUN cd /var/www/magento \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
-&& chmod u+x bin/magento release.sh 
+&& chmod u+x bin/magento
