@@ -61,8 +61,8 @@ class Download extends ExportController implements HttpGetActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
-        if (empty($fileName) || \preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
-            $this->messageManager->addErrorMessage(\__('Please provide valid export file name'));
+        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;
         }
@@ -76,7 +76,7 @@ class Download extends ExportController implements HttpGetActionInterface
                     DirectoryList::VAR_DIR
                 );
             }
-            $this->messageManager->addErrorMessage(\__('%1 is not a valid file', $fileName));
+            $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
         } catch (\Exception $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         }

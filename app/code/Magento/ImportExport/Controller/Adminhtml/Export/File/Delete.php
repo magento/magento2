@@ -63,7 +63,7 @@ class Delete extends ExportController implements HttpPostActionInterface
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
         if (empty($fileName)) {
-            $this->messageManager->addErrorMessage(\__('Please provide valid export file name'));
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;
         }
@@ -73,9 +73,9 @@ class Delete extends ExportController implements HttpPostActionInterface
 
             if ($directory->isFile($path)) {
                 $this->file->deleteFile($path);
-                $this->messageManager->addSuccessMessage(\__('File %1 deleted', $fileName));
+                $this->messageManager->addSuccessMessage(__('File %1 deleted', $fileName));
             } else {
-                $this->messageManager->addErrorMessage(\__('%1 is not a valid file', $fileName));
+                $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
             }
         } catch (FileSystemException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
