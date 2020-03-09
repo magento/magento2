@@ -41,37 +41,53 @@ class AsyncCssPlugin
     {
         $content = $subject->getContent();
 
-        if (\is_string($content) && strpos($content, '</body') !== false && $this->scopeConfig->isSetFlag(
+        $headClose = '</head';
+
+        if (is_string($content) && strpos($content, $headClose) !== false && $this->scopeConfig->isSetFlag(
             self::XML_PATH_USE_CSS_CRITICAL_PATH,
             ScopeInterface::SCOPE_STORE
         )) {
-            $cssMatches = [];
-            // add link rel preload to style sheets
-            $content = preg_replace_callback(
-                '@<link\b.*?rel=("|\')stylesheet\1.*?/>@',
-                function ($matches) use (&$cssMatches) {
-                    $cssMatches[] = $matches[0];
-                    preg_match('@href=("|\')(.*?)\1@', $matches[0], $hrefAttribute);
-                    $href = $hrefAttribute[2];
-                    if (preg_match('@media=("|\')(.*?)\1@', $matches[0], $mediaAttribute)) {
-                        $media = $mediaAttribute[2];
-                    }
-                    $media = $media ?? 'all';
-                    $loadCssAsync = sprintf(
-                        '<link rel="preload" as="style" media="%s" .
-                         onload="this.onload=null;this.rel=\'stylesheet\'"' .
-                        'href="%s">',
-                        $media,
-                        $href
-                    );
+            $styles = '';
 
-                    return $loadCssAsync;
-                },
-                $content
-            );
+            $styleOpen = '<link';
+            $styleClose = '>';
 
-            if (!empty($cssMatches)) {
-                $content = str_replace('</body', implode("\n", $cssMatches) . "\n</body", $content);
+            $styleOpenPos = strpos($content, $styleOpen);
+
+            while ($styleOpenPos !== false) {
+                $styleClosePos = strpos($content, $styleClose, $styleOpenPos);
+                $style = substr($content, $styleOpenPos, $styleClosePos - $styleOpenPos + strlen($styleClose));
+
+                if (!preg_match('@rel=["\']stylesheet["\']@', $style)) {
+                    // Link is not a stylesheet, search for another one after it.
+                    $styleOpenPos = strpos($content, $styleOpen, $styleClosePos);
+                    continue;
+                }
+                // Remove the link from HTML to add it before </head> tag later.
+                $content = str_replace($style, '', $content);
+
+                preg_match('@href=("|\')(.*?)\1@', $style, $hrefAttribute);
+                $href = $hrefAttribute[2];
+
+                if (preg_match('@media=("|\')(.*?)\1@', $style, $mediaAttribute)) {
+                    $media = $mediaAttribute[2];
+                }
+                $media = $media ?? 'all';
+
+                $style = sprintf(
+                    '<link rel="stylesheet" media="print"' .
+                    ' onload="this.onload=null;this.media=\'%s\'"' .
+                    ' href="%s">',
+                    $media,
+                    $href
+                );
+                $styles .= "\n" . $style;
+                // Link was cut out, search for the next one at its former position.
+                $styleOpenPos = strpos($content, $styleOpen, $styleOpenPos);
+            }
+
+            if ($styles) {
+                $content = str_replace($headClose, $styles . "\n" . $headClose, $content);
                 $subject->setContent($content);
             }
         }
