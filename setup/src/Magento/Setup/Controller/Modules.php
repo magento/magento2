@@ -11,6 +11,9 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\Json\Json;
 
+/**
+ * Modules controller
+ */
 class Modules extends AbstractActionController
 {
     /**

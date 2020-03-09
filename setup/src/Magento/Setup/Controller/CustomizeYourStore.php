@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -13,6 +12,9 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
 
+/**
+ * CustomizeYourStore controller
+ */
 class CustomizeYourStore extends AbstractActionController
 {
     /**
@@ -43,7 +45,10 @@ class CustomizeYourStore extends AbstractActionController
     }
 
     /**
+     * Index action
+     *
      * @return ViewModel
+     * @throws \Magento\Setup\Exception
      */
     public function indexAction()
     {
@@ -76,6 +81,7 @@ class CustomizeYourStore extends AbstractActionController
      */
     public function defaultTimeZoneAction()
     {
+        // phpcs:ignore Generic.PHP.NoSilencedErrors
         $defaultTimeZone = trim(@date_default_timezone_get());
         if (empty($defaultTimeZone)) {
             return new JsonModel(['defaultTimeZone' => 'UTC']);

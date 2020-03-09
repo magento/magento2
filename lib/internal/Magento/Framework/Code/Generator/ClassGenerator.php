@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Code\Generator;
 
 use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Generator\PropertyGenerator;
 
+/**
+ * Class code generator
+ */
 class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
-    \Magento\Framework\Code\Generator\CodeGeneratorInterface
+    CodeGeneratorInterface
 {
     /**
      * Possible doc block options
@@ -64,6 +68,8 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
     ];
 
     /**
+     * Set data to object
+     *
      * @param object $object
      * @param array $data
      * @param array $map
@@ -94,7 +100,7 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
     }
 
     /**
-     * addMethods()
+     * Add methods
      *
      * @param array $methods
      * @return $this
@@ -157,7 +163,7 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
     }
 
     /**
-     * addProperties()
+     * Add properties
      *
      * @param array $properties
      * @return $this
@@ -212,6 +218,8 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
     }
 
     /**
+     * Get namespace name
+     *
      * @return string|null
      */
     public function getNamespaceName()

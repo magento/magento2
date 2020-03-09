@@ -53,6 +53,8 @@ class BuiltinPlugin
     }
 
     /**
+     * Add PageCache functionality to Dispatch method
+     *
      * @param \Magento\Framework\App\FrontControllerInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request

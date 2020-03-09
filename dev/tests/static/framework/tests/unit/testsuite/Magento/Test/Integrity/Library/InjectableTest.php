@@ -8,6 +8,7 @@ namespace Magento\Test\Integrity\Library;
 use Magento\TestFramework\Integrity\Library\Injectable;
 
 /**
+ * Test for Magento\TestFramework\Integrity\Library\Injectable
  */
 class InjectableTest extends \PHPUnit\Framework\TestCase
 {
@@ -106,7 +107,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getName'
         )->will(
-            $this->returnValue(\Magento\Core\Model\Object::class)
+            $this->returnValue(\Magento\Framework\DataObject::class)
         );
 
         $this->parameterReflection->expects(
@@ -118,7 +119,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            [\Magento\Core\Model\Object::class],
+            [\Magento\Framework\DataObject::class],
             $this->injectable->getDependencies($this->fileReflection)
         );
     }
@@ -133,13 +134,14 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
         $this->parameterReflection->expects($this->once())->method('getClass')->will(
             $this->returnCallback(
                 function () {
-                    throw new \ReflectionException('Class Magento\Core\Model\Object does not exist');
+                    throw new \ReflectionException('Class Magento\Framework\DataObject does not exist');
                 }
             )
         );
 
         $this->assertEquals(
-            [\Magento\Core\Model\Object::class],
+
+            [\Magento\Framework\DataObject::class],
             $this->injectable->getDependencies($this->fileReflection)
         );
     }

@@ -14,12 +14,12 @@ use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 class Wsdl extends \Laminas\Soap\Wsdl
 {
     /**
-     * Constructor.
      * Save URI for targetNamespace generation.
      *
      * @param string $name
      * @param string|\Laminas\Uri\Uri $uri
      * @param ComplexTypeStrategy $strategy
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct($name, $uri, ComplexTypeStrategy $strategy)
     {

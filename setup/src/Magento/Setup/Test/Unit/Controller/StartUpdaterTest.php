@@ -6,11 +6,10 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Setup\Model\Navigation;
 use Magento\Setup\Controller\StartUpdater;
 
 /**
- * Class StartUpdaterTest
+ * Test for \Magento\Setup\Controller\StartUpdater
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StartUpdaterTest extends \PHPUnit\Framework\TestCase

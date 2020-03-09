@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Controller;
 
 /**
@@ -65,6 +66,7 @@ class Session extends \Laminas\Mvc\Controller\AbstractActionController
                     $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
                     /** @var \Magento\Backend\Model\Url $backendUrl */
                     $backendUrl = $objectManager->get(\Magento\Backend\Model\Url::class);
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $urlPath = parse_url($backendUrl->getBaseUrl(), PHP_URL_PATH);
                     $cookiePath = $urlPath . 'setup';
                     $sessionConfig->setCookiePath($cookiePath);
@@ -80,6 +82,7 @@ class Session extends \Laminas\Mvc\Controller\AbstractActionController
                 $session->prolong();
                 return new \Laminas\View\Model\JsonModel(['success' => true]);
             }
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Exception $e) {
         }
         return new \Laminas\View\Model\JsonModel(['success' => false]);

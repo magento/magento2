@@ -42,6 +42,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
             $baseDir,
             static::BASE_URL
         );
+        // phpcs:ignore
         exec($command, $return);
         static::$serverPid = (int) $return[0];
     }

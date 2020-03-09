@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem;
 
 use Laminas\Stdlib\Glob as LaminasGlob;
@@ -16,9 +17,9 @@ class Glob extends LaminasGlob
     /**
      * Find pathnames matching a pattern.
      *
-     * @param  string  $pattern
-     * @param  int $flags
-     * @param  bool $forceFallback
+     * @param string $pattern
+     * @param int $flags
+     * @param bool $forceFallback
      * @return array
      */
     public static function glob($pattern, $flags = 0, $forceFallback = false)

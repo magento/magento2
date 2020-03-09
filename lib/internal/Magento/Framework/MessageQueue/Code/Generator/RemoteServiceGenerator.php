@@ -74,7 +74,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -97,7 +97,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getClassProperties()
     {
@@ -119,7 +119,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getClassMethods()
     {
@@ -166,7 +166,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _validateData()
     {
@@ -175,7 +175,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _generateCode()
     {

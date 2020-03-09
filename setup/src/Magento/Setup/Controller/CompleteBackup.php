@@ -5,14 +5,17 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\App\MaintenanceMode;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 
+/**
+ * CompleteBackup controller
+ */
 class CompleteBackup extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return array|ViewModel
      */
     public function indexAction()
@@ -24,6 +27,8 @@ class CompleteBackup extends AbstractActionController
     }
 
     /**
+     * Progress action
+     *
      * @return array|ViewModel
      */
     public function progressAction()

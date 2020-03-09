@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
@@ -31,7 +32,7 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function create(array $connectionConfig)
     {

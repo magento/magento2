@@ -7,7 +7,8 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Laminas\View\Model\JsonModel;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Class PackagesAuth, checks, saves and removes auth details related to packages.
@@ -70,19 +71,23 @@ class PackagesAuth
         $this->serviceLocator = $serviceLocator;
         $this->curlClient = $curl;
         $this->filesystem = $filesystem;
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
+     * Get packages json URL
+     *
      * @return string
      */
     private function getPackagesJsonUrl()
     {
-        return $this->urlPrefix .  $this->getCredentialBaseUrl() .  '/packages.json';
+        return $this->urlPrefix . $this->getCredentialBaseUrl() . '/packages.json';
     }
 
     /**
+     * Get credentials base URL
+     *
      * @return string
      */
     public function getCredentialBaseUrl()
@@ -92,6 +97,8 @@ class PackagesAuth
     }
 
     /**
+     * Check credentials
+     *
      * @param string $token
      * @param string $secretKey
      * @return string
@@ -148,7 +155,7 @@ class PackagesAuth
                 $data = $directory->readFile(self::PATH_TO_AUTH_FILE);
                 return json_decode($data, true);
             } catch (\Exception $e) {
-                throw new \Exception('Error in reading Auth file');
+                throw new LocalizedException(new Phrase('Error in reading Auth file'));
             }
         }
         return false;

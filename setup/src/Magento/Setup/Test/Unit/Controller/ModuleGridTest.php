@@ -10,7 +10,7 @@ use Magento\Setup\Controller\ModuleGrid;
 use Magento\Setup\Model\Grid\Module;
 
 /**
- * Class ModuleGridTest
+ * Test for \Magento\Setup\Controller\ModuleGrid
  */
 class ModuleGridTest extends \PHPUnit\Framework\TestCase
 {

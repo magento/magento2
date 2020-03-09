@@ -13,7 +13,7 @@ namespace Magento\Captcha\Model\ResourceModel;
 class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Type Remote Address
+     * Remote Address log type
      */
     const TYPE_REMOTE_ADDRESS = 1;
 

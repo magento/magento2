@@ -13,11 +13,15 @@ use Magento\Ui\Model\UiComponentTypeResolver;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Render a component.
  *
  * @SuppressWarnings(PHPMD.AllPurposeAction)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Render extends AbstractAction
 {
@@ -68,7 +72,9 @@ class Render extends AbstractAction
     }
 
     /**
-     * @inheritdoc
+     * Render a component
+     *
+     * @return ResponseInterface|Json|ResultInterface|void
      */
     public function execute()
     {

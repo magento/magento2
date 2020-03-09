@@ -9,6 +9,9 @@ namespace Magento\Setup\Mvc\View\Http;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Mvc\View\Http\InjectTemplateListener as LaminasInjectTemplateListener;
 
+/**
+ * InjectTemplateListener for HTTP request
+ */
 class InjectTemplateListener extends LaminasInjectTemplateListener
 {
     /**
@@ -30,6 +33,8 @@ class InjectTemplateListener extends LaminasInjectTemplateListener
     }
 
     /**
+     * Get controller sub-namespace
+     *
      * @param string $namespace
      * @return string
      */

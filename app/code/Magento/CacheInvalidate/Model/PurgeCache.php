@@ -8,7 +8,7 @@ namespace Magento\CacheInvalidate\Model;
 use Magento\Framework\Cache\InvalidateLogger;
 
 /**
- * Class PurgeCache
+ * PurgeCache model
  */
 class PurgeCache
 {

@@ -15,6 +15,8 @@ use Laminas\View\Model\ViewModel;
 class Home extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()

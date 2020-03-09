@@ -11,7 +11,7 @@ use Laminas\Mime\Part;
 /**
  * Class Message for email transportation
  *
- * @deprecated
+ * @deprecated a new message implementation was added
  * @see \Magento\Framework\Mail\EmailMessage
  */
 class Message implements MailMessageInterface

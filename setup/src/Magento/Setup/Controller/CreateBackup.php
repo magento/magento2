@@ -8,9 +8,14 @@ namespace Magento\Setup\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
+/**
+ * CreateBackup controller
+ */
 class CreateBackup extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return array|ViewModel
      */
     public function indexAction()

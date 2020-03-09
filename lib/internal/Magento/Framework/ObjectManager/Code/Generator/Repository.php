@@ -23,7 +23,7 @@ use Laminas\Code\Reflection\ParameterReflection;
 class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
-     * Entity type
+     * Entity type repository
      */
     const ENTITY_TYPE = 'repository';
 
@@ -130,6 +130,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * Returns source collection factory property name
+     *
      * @return string
      */
     protected function _getSourceCollectionFactoryPropertyName()
@@ -620,7 +621,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _validateData()
     {

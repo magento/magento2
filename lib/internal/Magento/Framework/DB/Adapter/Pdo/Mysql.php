@@ -1827,6 +1827,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _getColumnTypeByDdl($column)
     {
+        // phpstan:ignore
         switch ($column['DATA_TYPE']) {
             case 'bool':
                 return Table::TYPE_BOOLEAN;
@@ -2732,6 +2733,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             } catch (\Exception $e) {
                 if (in_array(strtolower($indexType), ['primary', 'unique'])) {
                     $match = [];
+                    // phpstan:ignore
                     if (preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\']+\'([\d-\.]+)\'#', $e->getMessage(), $match)) {
                         $ids = explode('-', $match[1]);
                         $this->_removeDuplicateEntry($tableName, $fields, $ids);

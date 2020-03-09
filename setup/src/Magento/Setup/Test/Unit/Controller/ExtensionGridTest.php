@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Setup\Controller\ExtensionGrid;
@@ -12,7 +13,7 @@ use Magento\Setup\Model\PackagesData;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class ExtensionGridTest
+ * Test for \Magento\Setup\Controller\ExtensionGrid
  */
 class ExtensionGridTest extends \PHPUnit\Framework\TestCase
 {

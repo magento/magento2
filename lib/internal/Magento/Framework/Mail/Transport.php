@@ -10,6 +10,9 @@ use Magento\Framework\Phrase;
 use Laminas\Mail\Message as LaminasMessage;
 use Laminas\Mail\Transport\Sendmail;
 
+/**
+ * Mail transport
+ */
 class Transport implements \Magento\Framework\Mail\TransportInterface
 {
     /**

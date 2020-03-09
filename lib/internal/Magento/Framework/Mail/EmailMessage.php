@@ -13,7 +13,7 @@ use Laminas\Mail\AddressList;
 use Laminas\Mime\Message as LaminasMimeMessage;
 
 /**
- * Email message
+ * Magento Framework Email message
  */
 class EmailMessage extends Message implements EmailMessageInterface
 {
@@ -28,8 +28,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     private $addressFactory;
 
     /**
-     * EmailMessage constructor
-     *
      * @param MimeMessageInterface $body
      * @param array $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory

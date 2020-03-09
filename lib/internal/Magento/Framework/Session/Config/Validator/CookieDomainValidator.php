@@ -6,10 +6,13 @@
 
 namespace Magento\Framework\Session\Config\Validator;
 
+/**
+ * Session cookie domain validator
+ */
 class CookieDomainValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isValid($value)
     {

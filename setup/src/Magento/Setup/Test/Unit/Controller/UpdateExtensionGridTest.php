@@ -12,7 +12,7 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 
 /**
- * Class UpdateExtensionGridTest
+ * CTest for \Magento\Setup\Controller\UpdateExtensionGrid
  */
 class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
 {

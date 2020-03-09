@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\App\MaintenanceMode;
+use Laminas\Json\Json;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
-use Laminas\Json\Json;
+use Magento\Framework\App\MaintenanceMode;
 
+/**
+ * Maintenance controller
+ */
 class Maintenance extends AbstractActionController
 {
     /**

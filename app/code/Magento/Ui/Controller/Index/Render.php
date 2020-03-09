@@ -14,6 +14,9 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Is responsible for providing ui components information on store front.
@@ -87,7 +90,9 @@ class Render extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @inheritdoc
+     * Provides ui component
+     *
+     * @return ResponseInterface|Json|ResultInterface|void
      */
     public function execute()
     {

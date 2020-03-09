@@ -76,9 +76,11 @@ class ConfigOptionsListCollector
 
     /**
      * Auto discover ConfigOptionsList class and collect them.
+     *
      * These classes should reside in <module>/Setup directories.
      *
-     * @return \Magento\Framework\Setup\ConfigOptionsListInterface[]
+     * @return ConfigOptionsListInterface[]
+     * @throws \Magento\Setup\Exception
      */
     public function collectOptionsLists()
     {

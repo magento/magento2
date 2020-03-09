@@ -9,6 +9,9 @@ namespace Magento\Checkout\Model\Cart;
 
 use Magento\Framework\Locale\ResolverInterface;
 
+/**
+ * Cart request quantity processor
+ */
 class RequestQuantityProcessor
 {
     /**

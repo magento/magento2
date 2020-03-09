@@ -8,14 +8,19 @@ namespace Magento\Setup\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
+/**
+ * MarketplaceCredentials controller
+ */
 class MarketplaceCredentials extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }

@@ -8,9 +8,14 @@ namespace Magento\Setup\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
+/**
+ * CreateAdminAccount controller
+ */
 class CreateAdminAccount extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return ViewModel
      */
     public function indexAction()

@@ -6,11 +6,10 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Composer\InfoCommand;
-use Magento\Setup\Model\SystemPackage;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Magento\Setup\Model\SystemPackage;
 
 /**
  * Controller for selecting version
@@ -32,11 +31,13 @@ class SelectVersion extends AbstractActionController
     }
 
     /**
+     * Index action
+     *
      * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/select-version.phtml');
         return $view;

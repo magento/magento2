@@ -10,7 +10,9 @@ use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
 
 /**
- * This class is wrapper on \Laminas\Mvc\Application and allows to do more customization like services loading, which
+ * This class is wrapper on \Laminas\Mvc\Application
+ *
+ * It allows to do more customization like services loading, which
  * cannot be loaded via configuration.
  */
 class Application

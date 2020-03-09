@@ -10,6 +10,9 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
+/**
+ * Success controller
+ */
 class Success extends AbstractActionController
 {
     /**
@@ -33,7 +36,10 @@ class Success extends AbstractActionController
     }
 
     /**
+     * Index action
+     *
      * @return ViewModel
+     * @throws \Magento\Setup\Exception
      */
     public function indexAction()
     {

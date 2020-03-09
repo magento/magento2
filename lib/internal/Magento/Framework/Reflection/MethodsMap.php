@@ -14,6 +14,7 @@ use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MethodsMap
 {
@@ -50,6 +51,11 @@ class MethodsMap
      * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
+
+    /**
+     * @var \Magento\Framework\Api\AttributeTypeResolverInterface
+     */
+    private $attributeTypeResolver;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -99,6 +105,7 @@ class MethodsMap
      */
     public function getMethodsMap($interfaceName)
     {
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $key = self::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . "-" . md5($interfaceName);
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);

@@ -152,6 +152,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
      */
     public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
     {
+        // phpstan:ignore
     }
 
     /**
@@ -164,5 +165,6 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
      */
     public function publicWithSelf($arg = false): self
     {
+        // phpstan:ignore
     }
 }

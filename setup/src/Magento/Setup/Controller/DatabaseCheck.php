@@ -12,7 +12,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 
 /**
- * Class DatabaseCheck
+ * DatabaseCheck controller
  */
 class DatabaseCheck extends AbstractActionController
 {

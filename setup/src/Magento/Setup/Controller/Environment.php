@@ -44,6 +44,11 @@ class Environment extends AbstractActionController
     protected $phpReadinessCheck;
 
     /**
+     * @var \Magento\Framework\Setup\FilePermissions
+     */
+    private $permissions;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Setup\FilePermissions $permissions

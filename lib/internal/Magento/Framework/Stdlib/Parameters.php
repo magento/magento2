@@ -10,7 +10,7 @@ namespace Magento\Framework\Stdlib;
 use Laminas\Stdlib\Parameters as LaminasParameters;
 
 /**
- * Class Parameters
+ * Stdlib parameters
  */
 class Parameters
 {

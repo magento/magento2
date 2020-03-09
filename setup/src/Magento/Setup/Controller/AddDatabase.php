@@ -8,9 +8,14 @@ namespace Magento\Setup\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
+/**
+ * AddDatabase controller
+ */
 class AddDatabase extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return array|ViewModel
      */
     public function indexAction()

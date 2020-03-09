@@ -10,7 +10,7 @@ namespace Magento\Framework\Mail;
 use Laminas\Mime\Message as LaminasMimeMessage;
 
 /**
- * Class MimeMessage
+ * Magento Framework Mime message
  */
 class MimeMessage implements MimeMessageInterface
 {

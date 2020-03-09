@@ -5,24 +5,24 @@
  */
 namespace Magento\Webapi\Model\Config;
 
+use Laminas\Code\Reflection\ClassReflection;
 use Laminas\Code\Reflection\MethodReflection;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
- * Class reflector.
+ * Config class reflector
  */
 class ClassReflector
 {
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $_typeProcessor;
 
     /**
-     * Construct reflector.
-     *
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param TypeProcessor $typeProcessor
      */
-    public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
+    public function __construct(TypeProcessor $typeProcessor)
     {
         $this->_typeProcessor = $typeProcessor;
     }
@@ -60,12 +60,13 @@ class ClassReflector
      *     ),
      *     ...
      * )</pre>
+     * @throws \ReflectionException
      */
     public function reflectClassMethods($className, $methods)
     {
         $data = [];
-        $classReflection = new \Laminas\Code\Reflection\ClassReflection($className);
-        /** @var \Laminas\Code\Reflection\MethodReflection $methodReflection */
+        $classReflection = new ClassReflection($className);
+        /** @var MethodReflection $methodReflection */
         foreach ($classReflection->getMethods() as $methodReflection) {
             $methodName = $methodReflection->getName();
             if (in_array($methodName, $methods) || array_key_exists($methodName, $methods)) {
@@ -78,11 +79,12 @@ class ClassReflector
     /**
      * Retrieve method interface and documentation description.
      *
-     * @param \Laminas\Code\Reflection\MethodReflection $method
+     * @param MethodReflection $method
      * @return array
      * @throws \InvalidArgumentException
+     * @throws \ReflectionException
      */
-    public function extractMethodData(\Laminas\Code\Reflection\MethodReflection $method)
+    public function extractMethodData(MethodReflection $method)
     {
         $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
         /** @var \Laminas\Code\Reflection\ParameterReflection $parameter */
@@ -116,10 +118,11 @@ class ClassReflector
     /**
      * Retrieve method full documentation description.
      *
-     * @param \Laminas\Code\Reflection\MethodReflection $method
+     * @param MethodReflection $method
      * @return string
+     * @throws \ReflectionException
      */
-    protected function extractMethodDescription(\Laminas\Code\Reflection\MethodReflection $method)
+    protected function extractMethodDescription(MethodReflection $method)
     {
         $methodReflection = new MethodReflection(
             $method->getDeclaringClass()->getName(),
@@ -141,10 +144,11 @@ class ClassReflector
      *
      * @param string $className
      * @return string
+     * @throws \ReflectionException
      */
     public function extractClassDescription($className)
     {
-        $classReflection = new \Laminas\Code\Reflection\ClassReflection($className);
+        $classReflection = new ClassReflection($className);
         $docBlock = $classReflection->getDocBlock();
         if (!$docBlock) {
             return '';

@@ -23,6 +23,9 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface */
     protected $urlBuilderMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject| \Magento\Framework\Cache\InvalidateLogger */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->configMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

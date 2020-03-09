@@ -6,27 +6,32 @@
 
 namespace Magento\Setup;
 
-use Magento\Framework\App\Response\HeaderProvider\XssProtection;
-use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
 use Laminas\EventManager\EventInterface;
+use Laminas\EventManager\EventManager;
 use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
+use Laminas\Stdlib\DispatchableInterface;
+use Magento\Framework\App\Response\HeaderProvider\XssProtection;
+use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
 
+/**
+ * Laminas module declaration
+ */
 class Module implements
     BootstrapListenerInterface,
     ConfigProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function onBootstrap(EventInterface $e)
     {
-        /** @var \Laminas\Mvc\MvcEvent $e */
+        /** @var MvcEvent $e */
         /** @var \Laminas\Mvc\Application $application */
         $application = $e->getApplication();
-        /** @var \Laminas\EventManager\EventManager $events */
+        /** @var EventManager $events */
         $events = $application->getEventManager();
         /** @var \Laminas\EventManager\SharedEventManager $sharedEvents */
         $sharedEvents = $events->getSharedManager();
@@ -38,7 +43,7 @@ class Module implements
         // to process templates by Vendor/Module
         $injectTemplateListener = new InjectTemplateListener();
         $sharedEvents->attach(
-            \Laminas\Stdlib\DispatchableInterface::class,
+            DispatchableInterface::class,
             MvcEvent::EVENT_DISPATCH,
             [$injectTemplateListener, 'injectTemplate'],
             -89
@@ -63,10 +68,11 @@ class Module implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getConfig()
     {
+        // phpcs:disable
         $result = array_merge_recursive(
             include __DIR__ . '/../../../config/module.config.php',
             include __DIR__ . '/../../../config/router.config.php',
@@ -82,6 +88,7 @@ class Module implements
             include __DIR__ . '/../../../config/languages.config.php',
             include __DIR__ . '/../../../config/marketplace.config.php'
         );
+        // phpcs:enable
         return $result;
     }
 }

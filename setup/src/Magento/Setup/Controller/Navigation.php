@@ -5,15 +5,14 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\Navigation as NavModel;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Magento\Setup\Model\Cron\Status;
+use Magento\Setup\Model\Navigation as NavModel;
 
 /**
- * Class Navigation
- *
+ * Navigation controller
  */
 class Navigation extends AbstractActionController
 {
@@ -40,17 +39,19 @@ class Navigation extends AbstractActionController
     {
         $this->navigation = $navigation;
         $this->status = $status;
-        $this->view = new ViewModel;
+        $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
 
     /**
+     * Index action
+     *
      * @return JsonModel
      */
     public function indexAction()
     {
-        $json = new JsonModel;
+        $json = new JsonModel();
         $json->setVariable('nav', $this->navigation->getData());
         $json->setVariable('menu', $this->navigation->getMenuItems());
         $json->setVariable('main', $this->navigation->getMainItems());
@@ -59,6 +60,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Menu action
+     *
      * @return array|ViewModel
      */
     public function menuAction()
@@ -71,6 +74,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Side menu action
+     *
      * @return array|ViewModel
      */
     public function sideMenuAction()
@@ -82,6 +87,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Head bar action
+     *
      * @return array|ViewModel
      */
     public function headerBarAction()

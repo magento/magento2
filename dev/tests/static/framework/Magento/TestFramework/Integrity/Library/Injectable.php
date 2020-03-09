@@ -10,6 +10,7 @@ use Laminas\Code\Reflection\FileReflection;
 use Laminas\Code\Reflection\ParameterReflection;
 
 /**
+ * Provide dependencies for the file
  */
 class Injectable
 {
@@ -19,6 +20,8 @@ class Injectable
     protected $dependencies = [];
 
     /**
+     * Get dependencies
+     *
      * @param FileReflection $fileReflection
      * @return \ReflectionException[]
      * @throws \ReflectionException

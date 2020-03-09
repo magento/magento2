@@ -29,7 +29,7 @@ class Feed implements FeedInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFormattedContent() : string
     {
