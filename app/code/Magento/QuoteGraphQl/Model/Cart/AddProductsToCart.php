@@ -13,7 +13,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Add products to cart
+ * Adding products to cart using GraphQL
  */
 class AddProductsToCart
 {
@@ -44,27 +44,14 @@ class AddProductsToCart
      *
      * @param Quote $cart
      * @param array $cartItems
-     * @return \Magento\Framework\GraphQl\Exception\GraphQlCartInputException
      * @throws GraphQlInputException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
-    public function execute(Quote $cart, array $cartItems): \Magento\Framework\GraphQl\Exception\GraphQlCartInputException
+    public function execute(Quote $cart, array $cartItems): void
     {
         foreach ($cartItems as $cartItemData) {
             $this->addProductToCart->execute($cart, $cartItemData);
-        }
-
-        if ($cart->getData('has_error')) {
-            $e = new \Magento\Framework\GraphQl\Exception\GraphQlCartInputException(__('Shopping cart errors'));
-            $errors = $cart->getErrors();
-            foreach ($errors as $error) {
-                /** @var MessageInterface $error */
-                $e->addError(new GraphQlInputException(__($error->getText())));
-            }
-            $e->addData($cartItems);
-
-            throw $e;
         }
 
         $this->cartRepository->save($cart);

@@ -160,8 +160,6 @@ class GraphQl implements FrontControllerInterface
         } catch (\Exception $error) {
             $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);
-            // here we should have data from GraphQlCartInputException
-            $result['data'] = $error->getData();
             $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
 
