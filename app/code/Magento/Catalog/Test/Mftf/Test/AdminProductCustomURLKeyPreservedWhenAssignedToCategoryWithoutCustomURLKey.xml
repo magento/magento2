@@ -47,7 +47,7 @@
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open product -->

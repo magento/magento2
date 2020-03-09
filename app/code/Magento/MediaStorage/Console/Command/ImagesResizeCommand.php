@@ -84,7 +84,10 @@ class ImagesResizeCommand extends Command
     protected function configure()
     {
         $this->setName('catalog:images:resize')
-            ->setDescription('Creates resized product images')
+            ->setDescription(
+                'Creates resized product images ' .
+                '(Deprecated: see https://docs.magento.com/m2/ee/user_guide/configuration/general/web.html#url-options'
+            )
             ->setDefinition($this->getOptionsList());
     }
 

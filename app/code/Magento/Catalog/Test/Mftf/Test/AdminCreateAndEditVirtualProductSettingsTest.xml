@@ -48,7 +48,7 @@
             <deleteData createDataKey="createThirdRelatedProduct" stepKey="deleteThirdRelatedProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <comment userInput="remove me" stepKey="disableWYSIWYG"/>

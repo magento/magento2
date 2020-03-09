@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetStoreInformationConfigurationActionGroup">
+        <annotations>
+            <description>Set Store Information configurations</description>
+        </annotations>
+        <arguments>
+            <argument name="storeName" type="string" defaultValue="{{AdminGeneralSetStoreNameConfigData.value}}"/>
+            <argument name="storeHoursOfOperation" type="string" defaultValue="{{AdminGeneralSetStoreHoursConfigData.value}}"/>
+            <argument name="vatNumber" type="string" defaultValue="{{AdminGeneralSetVatNumberConfigData.value}}"/>
+            <argument name="telephone" type="string" defaultValue="{{US_Address_TX.telephone}}"/>
+            <argument name="country" type="string" defaultValue="{{US_Address_TX.country_id}}"/>
+            <argument name="state" type="string" defaultValue="{{US_Address_TX.state}}"/>
+            <argument name="city" type="string" defaultValue="{{US_Address_TX.city}}"/>
+            <argument name="postcode" type="string" defaultValue="{{US_Address_TX.postcode}}"/>
+            <argument name="street" type="string" defaultValue="{{US_Address_TX.street[0]}}"/>
+        </arguments>
+        <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{storeName}}'" stepKey="setStoreInformationName"/>
+        <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} '{{telephone}}'" stepKey="setStoreInformationPhone"/>
+        <magentoCLI command="config:set {{AdminGeneralSetStoreHoursConfigData.path}} '{{storeHoursOfOperation}}'" stepKey="setStoreHoursInformation"/>
+        <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} '{{country}}'" stepKey="setStoreInformationCountry"/>
+        <magentoCLI command="config:set {{AdminGeneralSetStateConfigData.path}} '{{state}}'" stepKey="setStoreInformationState"/>
+        <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} '{{city}}'" stepKey="setStoreInformationCity"/>
+        <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} '{{postcode}}'" stepKey="setStoreInformationPostcode"/>
+        <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} '{{street}}'" stepKey="setStoreInformationStreetAddress"/>
+        <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} '{{vatNumber}}'" stepKey="setStoreInformationVatNumber"/>
+    </actionGroup>
+</actionGroups>

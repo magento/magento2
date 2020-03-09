@@ -138,6 +138,26 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                     ['first_container', Container::CONTAINER_OPT_HTML_ID, 'dd_id'],
                 ],
                 'setAttributeCalls' => 3,
+            ],
+            'Article as allowed container tag' => [
+                'structureElements' => [
+                    'first_container' => [
+                        'container',
+                        [
+                            'attributes' => [
+                                Container::CONTAINER_OPT_HTML_TAG   => 'article',
+                                Container::CONTAINER_OPT_HTML_CLASS => 'article_class',
+                                Container::CONTAINER_OPT_HTML_ID    => 'article_id',
+                            ]
+                        ],
+                    ],
+                ],
+                'setAttributeData' => [
+                    ['first_container', Container::CONTAINER_OPT_HTML_TAG, 'article'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_CLASS, 'article_class'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_ID, 'article_id'],
+                ],
+                'setAttributeCalls' => 3,
             ]
         ];
     }

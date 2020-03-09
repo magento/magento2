@@ -9,7 +9,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCardinalCommerceSettingsHiddenTest">
         <annotations>
+            <stories value="Cardinal Commerce Settings"/>
             <features value="CardinalCommerce"/>
+            <stories value="Configure CardinalCommerce"/>
             <title value="CardinalCommerce settings hidden" />
             <description value="CardinalCommerce config shouldn't be visible if the 3D secure is disabled for Authorize.Net."/>
             <severity value="MINOR"/>
@@ -20,7 +22,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set three_d_secure/cardinal/enabled_authorizenet 0" stepKey="disableCardinalCommerce"/>
         </after>
 
