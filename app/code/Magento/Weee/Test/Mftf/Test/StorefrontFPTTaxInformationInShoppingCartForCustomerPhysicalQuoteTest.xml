@@ -56,7 +56,7 @@
                 <argument name="valueForFPT" value="20"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
 
         <after>
@@ -71,7 +71,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </after>
 
         <!--  Test Steps  -->
