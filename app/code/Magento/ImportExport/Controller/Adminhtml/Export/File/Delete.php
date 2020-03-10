@@ -62,7 +62,7 @@ class Delete extends ExportController implements HttpPostActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
-        if (empty($fileName)) {
+        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
             $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;
