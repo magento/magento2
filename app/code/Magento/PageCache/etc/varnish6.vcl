@@ -110,7 +110,7 @@ sub vcl_recv {
     }
 
     if (req.method == "GET" && req.url ~ "/graphql" && req.url ~ "query=") {
-        # Authentificated customers should not be cached by default
+        # Authenticated customers should not be cached by default
         if (req.http.Authorization ~ "^Bearer") {
             return (pass);
         }
