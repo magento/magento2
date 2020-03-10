@@ -84,7 +84,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $parentIds[] = $product->getData($metadata->getLinkField());
         }
 
-        $this->getSelect()->where('link_table.parent_id in (?)', $parentIds,\Zend_Db::BIGINT_TYPE);
+        $this->getSelect()->where('link_table.parent_id in (?)', $parentIds, \Zend_Db::BIGINT_TYPE);
 
         return $this;
     }
