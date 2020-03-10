@@ -42,7 +42,9 @@ class UpdateCartId
         GuestCartItemRepositoryInterface $guestCartItemRepository,
         CartItemInterface $cartItem
     ): void {
-        if ($cartId = $this->request->getParam('cartId')) {
+        $cartId = $this->request->getParam('cartId');
+
+        if ($cartId) {
             $cartItem->setQuoteId($cartId);
         }
     }
