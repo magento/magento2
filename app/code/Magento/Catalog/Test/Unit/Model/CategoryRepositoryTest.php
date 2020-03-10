@@ -141,6 +141,17 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\SerializationException
+     * @expectedExceptionMessage The "default" value's type is invalid. The "int" type was expected. Verify and try again.
+     */
+    public function testGetWithStoreCodeException()
+    {
+        $categoryId = 5;
+        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $this->assertEquals($categoryMock, $this->model->get($categoryId, 'default'));
+    }
+
+    /**
      * @return array
      */
     public function filterExtraFieldsOnUpdateCategoryDataProvider()

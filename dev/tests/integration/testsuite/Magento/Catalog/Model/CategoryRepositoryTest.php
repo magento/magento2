@@ -12,6 +12,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Store\Model\StoreFactory;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -169,5 +170,16 @@ class CategoryRepositoryTest extends TestCase
         );
 
         $this->assertSame('category-fixturestore', $categorySecondStore->getUrlKey());
+
+        $caughtException = false;
+        try {
+            $categoryRepository->get(
+                self::FIXTURE_TWO_STORES_CATEGORY_ID,
+                self::FIXTURE_FIRST_STORE_CODE
+            );
+        } catch (SerializationException $exception) {
+            $caughtException = true;
+        }
+        $this->assertTrue($caughtException);
     }
 }
