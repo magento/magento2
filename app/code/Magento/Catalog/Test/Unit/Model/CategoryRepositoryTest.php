@@ -142,7 +142,8 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\SerializationException
-     * @expectedExceptionMessage The "default" value's type is invalid. The "int" type was expected. Verify and try again.
+     * @expectedExceptionMessage The "default" value's type is invalid. The "int" type was expected. Verify and
+     * try again.
      */
     public function testGetWithStoreCodeException()
     {
