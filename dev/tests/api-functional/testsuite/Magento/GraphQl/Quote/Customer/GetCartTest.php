@@ -162,7 +162,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage This cart isn't active.
+     * @expectedExceptionMessage The cart isn't active.
      */
     public function testGetInactiveCart()
     {
