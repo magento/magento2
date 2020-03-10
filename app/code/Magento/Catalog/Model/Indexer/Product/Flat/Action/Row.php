@@ -63,9 +63,9 @@ class Row extends AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      * @param Indexer $flatItemWriter
      * @param Eraser $flatItemEraser
-     * @param Link $productWebsiteLink
-     * @param CollectionFactory $storeCollectionFactory
      * @param MetadataPool|null $metadataPool
+     * @param Link|null $productWebsiteLink
+     * @param CollectionFactory|null $storeCollectionFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -78,9 +78,9 @@ class Row extends AbstractAction
         FlatTableBuilder $flatTableBuilder,
         Indexer $flatItemWriter,
         Eraser $flatItemEraser,
-        Link $productWebsiteLink,
-        CollectionFactory $storeCollectionFactory,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        Link $productWebsiteLink = null,
+        CollectionFactory $storeCollectionFactory = null
     ) {
         parent::__construct(
             $resource,
@@ -92,9 +92,10 @@ class Row extends AbstractAction
         );
         $this->flatItemWriter = $flatItemWriter;
         $this->flatItemEraser = $flatItemEraser;
-        $this->productWebsiteLink = $productWebsiteLink;
-        $this->storeCollectionFactory = $storeCollectionFactory;
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->productWebsiteLink = $productWebsiteLink ?: ObjectManager::getInstance()->get(Link::class);
+        $this->storeCollectionFactory = $storeCollectionFactory ?:
+            ObjectManager::getInstance()->get(CollectionFactory::class);
     }
 
     /**
