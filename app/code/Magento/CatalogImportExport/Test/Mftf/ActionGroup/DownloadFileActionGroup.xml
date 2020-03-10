@@ -8,17 +8,17 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="DownloadFileByRowIndexActionGroup">
+    <actionGroup name="DownloadFileActionGroup">
         <annotations>
-            <description>Downloads the provided Grid Index on the Exports grid page.</description>
+            <description>Downloads the provided fileName on the Exports grid page.</description>
         </annotations>
         <arguments>
-            <argument name="rowIndex" type="string"/>
+            <argument name="fileName" type="string"/>
         </arguments>
 
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormReload"/>
-        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
-        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.download(rowIndex)}}" after="clickSelectBtn"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByFileName(fileName)}}"/>
+        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.downloadByFileName(fileName)}}" after="clickSelectBtn"/>
     </actionGroup>
 </actionGroups>

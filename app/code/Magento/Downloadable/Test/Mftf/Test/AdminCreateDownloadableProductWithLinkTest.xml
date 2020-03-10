@@ -69,6 +69,7 @@
 
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
 
         <!-- Assert product in storefront category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
