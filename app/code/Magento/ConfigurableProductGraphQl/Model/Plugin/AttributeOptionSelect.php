@@ -11,19 +11,14 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DB\Select;
 
 /**
- * Class AttributeOptionSelect
- *
  * This plugin makes limit select with disabled child products
  */
 class AttributeOptionSelect
 {
-    /**
-     * const STATUS_CODE
-     */
-    const STATUS_CODE = "'status'";
-
     /**
      * Configurable Attribute Resource Model.
      *
@@ -41,13 +36,13 @@ class AttributeOptionSelect
 
     /**
      * @param OptionSelectBuilder $subject
-     * @param $select
+     * @param Select $select
      * @param AbstractAttribute $superAttribute
-     * @return mixed
+     * @return Select
      */
     public function afterGetSelect(
         OptionSelectBuilder $subject,
-        $select,
+        Select $select,
         AbstractAttribute $superAttribute
     ) {
         $select->joinInner(
@@ -66,7 +61,7 @@ class AttributeOptionSelect
             implode(
                 ' AND ',
                 [
-                    'attribute_status.attribute_code = ' . self::STATUS_CODE,
+                    "attribute_status.attribute_code = '" . ProductInterface::STATUS . "'",
                     'entity_attr_value.attribute_id = attribute_status.attribute_id'
                 ]
             ),

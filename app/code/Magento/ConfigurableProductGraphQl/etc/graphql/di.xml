@@ -37,6 +37,6 @@
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder">
-        <plugin name="configurable_product_graphql_option_select" type="Magento\ConfigurableProductGraphQl\Model\Plugin\AttributeOptionSelect" />
+        <plugin name="configurable_product_graphql_limit_disabled_options" type="Magento\ConfigurableProductGraphQl\Model\Plugin\AttributeOptionSelect" sortOrder="10" />
     </type>
 </config>
