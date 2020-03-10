@@ -30,7 +30,7 @@
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
             <waitForPageLoad stepKey="WaitForPageToLoad"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
          <!--Flush Magento Cache-->
         <magentoCLI stepKey="flushCache" command="cache:flush"/>

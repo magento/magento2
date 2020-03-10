@@ -52,7 +52,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
@@ -97,7 +97,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
 
         $collection = $this->_getCollection($select);
 
-        /** @var $resource \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $resource \PHPUnit\Framework\MockObject\MockObject */
         $resource = $collection->getResource();
         $resource->expects(
             $this->once()

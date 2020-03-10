@@ -29,10 +29,10 @@
 
         <!-- Create a grouped product -->
         <!-- Replacing steps in base AdminRemoveDefaultVideoSimpleProductTest -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillMainProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
@@ -41,18 +41,18 @@
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductSection" after="scrollToSection"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup" after="openGroupedProductSection"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForFilter" after="clickAddProductsToGroup"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku1" after="waitForFilter">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku1" after="waitForFilter">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption1" after="filterProductGridBySku1"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2" after="checkOption1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2" after="checkOption1">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption2" after="filterProductGridBySku2"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSelectedProducts" before="saveProductForm"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
     </test>

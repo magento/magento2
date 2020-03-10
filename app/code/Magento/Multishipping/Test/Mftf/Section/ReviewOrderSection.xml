@@ -9,19 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <section name="ReviewOrderSection">
-        <element name="shippingMethodBasePrice" type="text" selector="//div[@class='block block-shipping'][position()=1]//div[@class='block-content'][position()=1]//div[@class='box box-shipping-method']//div[@class='box-content']//span[@class='price']"/>
-        <element name="shippingMethodSubtotalPrice" type="text" selector="//div[@class='block-content'][position()=1]//table[position()=1]//tr[position()=2]//td[@class='amount']//span[@class='price']"/>
-        <element name="firstShippingMethodBasePrice" type="text" selector="//div[@class='block block-shipping'][position()=1]//div[@class='block-content'][position()=1]//div[@class='box box-shipping-method']//div[@class='box-content']//span[@class='price']"/>
-        <element name="secondShippingMethodBasePrice" type="text" selector="//div[@class='block block-shipping'][position()=1]//div[@class='block-content'][position()=2]//div[@class='box box-shipping-method']//div[@class='box-content']//span[@class='price']"/>
-        <element name="firstShippingMethodSubtotalPrice" type="text" selector="//div[@class='block-content'][position()=1]//table[position()=1]//tr[position()=2]//td//span[@class='price']"/>
-        <element name="secondShippingMethodSubtotalPrice" type="text" selector="//div[@class='block-content'][position()=2]//table[position()=1]//tr[position()=2]//td//span[@class='price']"/>
-        <element name="firstOrderSubtotalPrice" type="text" selector="//div[@class='block-content'][position()=1]//table[position()=1]//tr[@class='totals sub'][position()=1]//td[@data-th='Subtotal']//span[@class='price']"/>
-        <element name="secondOrderSubtotalPrice" type="text" selector="//div[@class='block-content'][position()=2]//table[position()=1]//tr[@class='totals sub'][position()=1]//td[@data-th='Subtotal']//span[@class='price']"/>
-        <element name="firstOrderTaxPrice" type="text" selector="//div[@class='block-content'][position()=1]//table[position()=1]//tr[@class='totals-tax'][position()=1]//td[@data-th='Tax']//span[@class='price']"/>
-        <element name="secondOrderTaxPrice" type="text" selector="//div[@class='block-content'][position()=2]//table[position()=1]//tr[@class='totals-tax'][position()=1]//td[@data-th='Tax']//span[@class='price']"/>
-        <element name="firstOrderTotalPrice" type="text" selector="//div[@class='block-content'][position()=1]//table[position()=1]//tr[@class='grand totals'][position()=1]//td//span[@class='price']"/>
-        <element name="secondOrderTotalPrice" type="text" selector="//div[@class='block-content'][position()=2]//table[position()=1]//tr[@class='grand totals'][position()=1]//td//span[@class='price']"/>
-        <element name="grandTotalPrice" type="text" selector="//div[@class='checkout-review']//div[@class='grand totals']//span[@class='price']"/>
+        <element name="shippingMethodBasePrice" type="text" selector="//div[@class='block-content'][position()={{shippingMethodPosition}}]//div[@class='box box-shipping-method'][position()=1]//span[@class='price']" parameterized="true"/>
+        <element name="shippingMethodSubtotalPrice" type="text" selector="//div[@class='block-content'][position()={{shippingMethodPosition}}]//td[@class='amount'][contains(@data-th,'{{priceType}}')]//span[@class='price']" parameterized="true"/>
     </section>
 </sections>
-

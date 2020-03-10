@@ -18,7 +18,7 @@ class Reviews extends Tab
      *
      * @var string
      */
-    protected $reviews = '#reviwGrid';
+    protected $reviews = '#reviewGrid';
 
     /**
      * Returns product reviews grid.

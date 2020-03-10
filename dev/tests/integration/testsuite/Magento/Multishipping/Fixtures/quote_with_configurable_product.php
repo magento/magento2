@@ -118,7 +118,7 @@ foreach ($quote->getAllShippingAddresses() as $address) {
         $item->setQty(1);
         $address->setTotalQty(1);
         $address->addItem($item);
-    };
+    }
 }
 
 $billingAddressData = [

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
+        <!--Assert configuration are disabled in USPS section-->
+        <comment userInput="Assert configuration are disabled in USPS section" stepKey="commentSeeDisabledUSPSConfigs"/>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <conditionalClick selector="{{AdminShippingMethodUSPSSection.carriersUSPSTab}}" dependentSelector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" visible="false" stepKey="expandUSPSTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" stepKey="waitUSPSTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" userInput="disabled" stepKey="grabUSPSActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSActiveDisabled" stepKey="assertUSPSActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUSPSGatewayXMLUrlDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSGatewayXMLUrlDisabled" stepKey="assertUSPSGatewayXMLUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSGatewaySecureUrl}}" userInput="disabled" stepKey="grabUSPSGatewaySecureUrlDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSGatewaySecureUrlDisabled" stepKey="assertUSPSGatewaySecureUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSTitle}}" userInput="disabled" stepKey="grabUSPSTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSTitleDisabled" stepKey="assertUSPSTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSUserId}}" userInput="disabled" stepKey="grabUSPSUserIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSUserIdDisabled" stepKey="assertUSPSUserIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSPassword}}" userInput="disabled" stepKey="grabUSPSPasswordDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSPasswordDisabled" stepKey="assertUSPSPasswordDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSShipmentRequestType}}" userInput="disabled" stepKey="grabUSPSShipmentRequestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSShipmentRequestTypeDisabled" stepKey="assertUSPSShipmentRequestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSContainer}}" userInput="disabled" stepKey="grabUSPSContainerDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSContainerDisabled" stepKey="assertUSPSContainerDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSSize}}" userInput="disabled" stepKey="grabUSPSSizeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSSizeDisabled" stepKey="assertUSPSSizeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSDestType}}" userInput="disabled" stepKey="grabUSPSDestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSDestTypeDisabled" stepKey="assertUSPSDestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSMachinable}}" userInput="disabled" stepKey="grabUSPSMachinableDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSMachinableDisabled" stepKey="assertUSPSMachinableDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSMaxPackageWeight}}" userInput="disabled" stepKey="grabUSPSMaxPackageWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSMaxPackageWeightDisabled" stepKey="assertUSPSMaxPackageWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSHandlingType}}" userInput="disabled" stepKey="grabUSPSHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSHandlingTypeDisabled" stepKey="assertUSPSHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSHandlingAction}}" userInput="disabled" stepKey="grabUSPSHandlingActionDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSHandlingActionDisabled" stepKey="assertUSPSHandlingActionDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSAllowedMethods}}" userInput="disabled" stepKey="grabUSPSAllowedMethodsDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSAllowedMethodsDisabled" stepKey="assertUSPSAllowedMethodsDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSFreeMethod}}" userInput="disabled" stepKey="grabUSPSFreeMethodDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSFreeMethodDisabled" stepKey="assertUSPSFreeMethodDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSSpecificErrMsg}}" userInput="disabled" stepKey="grabUSPSSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSSpecificErrMsgDisabled" stepKey="assertUSPSSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSAllowSpecific}}" userInput="disabled" stepKey="grabUSPSAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSAllowSpecificDisabled" stepKey="assertUSPSAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSSpecificCountry}}" userInput="disabled" stepKey="grabUSPSSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSSpecificCountryDisabled" stepKey="assertUSPSSpecificCountryDisabled"/>
+    </test>
+</tests>

@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormBillingAddressSection">
+        <element name="selectAddress" type="select" selector="//select[@id='order-billing_address_customer_address_id']"/>
         <element name="NamePrefix" type="input" selector="#order-billing_address_prefix" timeout="30"/>
         <element name="FirstName" type="input" selector="#order-billing_address_firstname" timeout="30"/>
         <element name="MiddleName" type="input" selector="#order-billing_address_middlename" timeout="30"/>

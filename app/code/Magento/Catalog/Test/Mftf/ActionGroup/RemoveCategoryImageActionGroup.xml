@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="RemoveCategoryImageActionGroup">
+        <annotations>
+            <description>Requires navigation to the Category creation/edit page. Removes the current Category image. Validates that the Image does not exist.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <click selector="{{AdminCategoryContentSection.removeImageButton}}" stepKey="clickRemoveImage"/>
+        <waitForAjaxLoad time="30" stepKey="waitForAjaxUpload"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <dontSee selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="dontSeeImage"/>
+    </actionGroup>
+</actionGroups>

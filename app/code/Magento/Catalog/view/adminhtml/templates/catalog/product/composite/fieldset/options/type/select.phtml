@@ -6,7 +6,7 @@
 ?>
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Select */ ?>
 <?php $_option = $block->getOption(); ?>
-<div class="admin__field field<?= $_option->getIsRequire() ? ' required _required' : '' ?>">
+<div class="admin__field field<?= $_option->getIsRequire() ? ' _required' : '' ?>">
     <label class="label admin__field-label">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
