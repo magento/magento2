@@ -66,7 +66,6 @@ class CleanUpData implements DataPatchInterface
      */
     public function apply()
     {
-        $this->adapter->startSetup();
         $wishListItemOptionTable = $this->adapter->getTableName('wishlist_item_option');
         $select = $this->adapter
             ->select()
@@ -88,7 +87,6 @@ class CleanUpData implements DataPatchInterface
                 );
             }
         }
-        $this->adapter->endSetup();
 
         return $this;
     }
