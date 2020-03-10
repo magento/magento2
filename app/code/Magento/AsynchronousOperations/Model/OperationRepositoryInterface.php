@@ -27,5 +27,5 @@ interface OperationRepositoryInterface
      * @param int|null $operationId
      * @return OperationInterface
      */
-    public function create($topicName, $entityParams, $groupId, $operationId = null): OperationInterface;
+    public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface;
 }

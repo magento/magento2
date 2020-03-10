@@ -104,7 +104,7 @@ class OperationRepository implements OperationRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function create($topicName, $entityParams, $groupId, $operationId = null): OperationInterface
+    public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {
         return $this->createByTopic($topicName, $entityParams, $groupId);
     }
