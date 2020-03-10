@@ -3,119 +3,132 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeleteTest extends \PHPUnit\Framework\TestCase
+class DeleteTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
-    protected $context;
+    private $contextMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
-    protected $request;
+    private $requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit_Framework_MockObject_MockObject
+     * @var Raw|MockObject
      */
-    protected $redirect;
+    private $redirectMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
-    protected $resultRedirectFactory;
+    private $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
-    protected $fileSystem;
+    private $fileSystemMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DriverInterface|MockObject
      */
-    protected $file;
+    private $fileMock;
 
     /**
-     * @var \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete|\PHPUnit_Framework_MockObject_MockObject
+     * @var Delete|MockObject
      */
-    protected $deleteController;
+    private $deleteControllerMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
-    protected $messageManager;
+    private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|MockObject
      */
-    protected $directory;
+    private $directoryMock;
 
     /**
      * Set up
      */
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileSystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $this->directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->file = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
+        $this->fileMock = $this->getMockBuilder(DriverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->createPartialMock(
-            \Magento\Backend\App\Action\Context::class,
+        $this->contextMock = $this->createPartialMock(
+            Context::class,
             ['getRequest', 'getResultRedirectFactory', 'getMessageManager']
         );
 
-        $this->redirect = $this->createPartialMock(\Magento\Backend\Model\View\Result\Redirect::class, ['setPath']);
+        $this->redirectMock = $this->createPartialMock(Redirect::class, ['setPath']);
 
-        $this->resultRedirectFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\RedirectFactory::class,
+        $this->resultRedirectFactoryMock = $this->createPartialMock(
+            RedirectFactory::class,
             ['create']
         );
-        $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->redirect);
-        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
-        $this->context->expects($this->any())
+        $this->resultRedirectFactoryMock->expects($this->any())->method('create')->willReturn($this->redirectMock);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->willReturn($this->resultRedirectFactory);
+            ->willReturn($this->resultRedirectFactoryMock);
 
-        $this->context->expects($this->any())
+        $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->willReturn($this->messageManager);
+            ->willReturn($this->messageManagerMock);
 
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->deleteController = $this->objectManagerHelper->getObject(
+        $this->deleteControllerMock = $this->objectManagerHelper->getObject(
             Delete::class,
             [
-                'context' => $this->context,
-                'filesystem' => $this->fileSystem,
-                'file' => $this->file
+                'context' => $this->contextMock,
+                'filesystem' => $this->fileSystemMock,
+                'file' => $this->fileMock
             ]
         );
     }
@@ -125,52 +138,52 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteSuccess()
     {
-        $this->request->method('getParam')
+        $this->requestMock->method('getParam')
             ->with('filename')
             ->willReturn('sampleFile');
 
-        $this->fileSystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
-        $this->directory->expects($this->once())->method('isFile')->willReturn(true);
-        $this->file->expects($this->once())->method('deleteFile')->willReturn(true);
-        $this->messageManager->expects($this->once())->method('addSuccessMessage');
+        $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directoryMock));
+        $this->directoryMock->expects($this->once())->method('isFile')->willReturn(true);
+        $this->fileMock->expects($this->once())->method('deleteFile')->willReturn(true);
+        $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
 
-        $this->deleteController->execute();
+        $this->deleteControllerMock->execute();
     }
 
     /**
      * Tests download controller with different file names in request.
-
      */
     public function testExecuteFileDoesntExists()
     {
-        $this->request->method('getParam')
+        $this->requestMock->method('getParam')
             ->with('filename')
             ->willReturn('sampleFile');
 
-        $this->fileSystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
-        $this->directory->expects($this->once())->method('isFile')->willReturn(false);
-        $this->messageManager->expects($this->once())->method('addErrorMessage');
+        $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directoryMock));
+        $this->directoryMock->expects($this->once())->method('isFile')->willReturn(false);
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
 
-        $this->deleteController->execute();
+        $this->deleteControllerMock->execute();
     }
 
     /**
      * Test execute() with invalid file name
      * @param string $requestFilename
-     * @dataProvider executeDataProvider
+     * @dataProvider invalidFileDataProvider
      */
     public function testExecuteInvalidFileName($requestFilename)
     {
-        $this->request->method('getParam')->with('filename')->willReturn($requestFilename);
-        $this->messageManager->expects($this->once())->method('addErrorMessage');
+        $this->requestMock->method('getParam')->with('filename')->willReturn($requestFilename);
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
 
-        $this->deleteController->execute();
+        $this->deleteControllerMock->execute();
     }
 
     /**
+     * Data provider to test possible invalid filenames
      * @return array
      */
-    public function executeDataProvider()
+    public function invalidFileDataProvider()
     {
         return [
             'Relative file name' => ['../.htaccess'],
