@@ -42,6 +42,11 @@ class Transparent extends Payflowpro implements TransparentInterface
     private const RESULT_CODE = 'result_code';
 
     /**
+     * Fraud Management Filters config setting.
+     */
+    private const CONFIG_FMF = 'fmf';
+
+    /**
      * @var string
      */
     protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
@@ -419,8 +424,8 @@ class Transparent extends Payflowpro implements TransparentInterface
     private function isFraudDetected(InfoInterface $payment): bool
     {
         $resultCode = $payment->getAdditionalInformation(self::RESULT_CODE);
-
-        return $this->getZeroAmountAuthorizationId($payment) && in_array(
+        $isFmfEnabled = (bool)$this->getConfig()->getValue(self::CONFIG_FMF);
+        return $isFmfEnabled && $this->getZeroAmountAuthorizationId($payment) && in_array(
             $resultCode,
             [self::RESPONSE_CODE_DECLINED_BY_FILTER, self::RESPONSE_CODE_FRAUDSERVICE_FILTER]
         );
