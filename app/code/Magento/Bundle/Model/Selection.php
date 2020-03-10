@@ -20,6 +20,8 @@ namespace Magento\Bundle\Model;
  * @method \Magento\Bundle\Model\Selection setPosition(int $value)
  * @method int getIsDefault()
  * @method \Magento\Bundle\Model\Selection setIsDefault(int $value)
+ * @method int getWebsiteId()
+ * @method \Magento\Bundle\Model\Selection setWebsiteId(int $value)
  * @method int getSelectionPriceType()
  * @method \Magento\Bundle\Model\Selection setSelectionPriceType(int $value)
  * @method float getSelectionPriceValue()
@@ -71,6 +73,15 @@ class Selection extends \Magento\Framework\Model\AbstractModel
         parent::_construct();
     }
 
+    public function beforeSave()
+    {
+        if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
+            $this->setData('website_selection_price_value', $this->getSelectionPriceValue());
+            $this->setSelectionPriceValue($this->getOrigData('selection_price_value'));
+        }
+        parent::beforeSave();
+    }
+
     /**
      * Processing object before save data
      *
@@ -79,6 +90,9 @@ class Selection extends \Magento\Framework\Model\AbstractModel
     public function afterSave()
     {
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
+            if (null !== $this->getData('website_selection_price_value')) {
+                $this->setSelectionPriceValue($this->getData('website_selection_price_value'));
+            }
             $this->getResource()->saveSelectionPrice($this);
 
             if (!$this->getDefaultPriceScope()) {

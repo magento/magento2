@@ -14,6 +14,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Encapsulates logic for saving a bundle option, including coalescing the parent product's data.
@@ -41,16 +42,23 @@ class SaveAction
     private $linkManagement;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Option $optionResource
      * @param MetadataPool $metadataPool
      * @param Type $type
      * @param ProductLinkManagementInterface $linkManagement
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Option $optionResource,
         MetadataPool $metadataPool,
         Type $type,
-        ProductLinkManagementInterface $linkManagement
+        ProductLinkManagementInterface $linkManagement,
+        StoreManagerInterface $storeManager
     ) {
         $this->optionResource = $optionResource;
         $this->metadataPool = $metadataPool;
@@ -135,6 +143,7 @@ class SaveAction
         if (is_array($option->getProductLinks())) {
             $productLinks = $option->getProductLinks();
             foreach ($productLinks as $productLink) {
+                $productLink->setWebsiteId($this->storeManager->getStore($product->getStoreId())->getWebsiteId());
                 if (!$productLink->getId() && !$productLink->getSelectionId()) {
                     $linksToAdd[] = $productLink;
                 } else {

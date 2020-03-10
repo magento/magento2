@@ -209,6 +209,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         if ($productLink->getIsDefault() !== null) {
             $selectionModel->setIsDefault($productLink->getIsDefault());
         }
+        if ($productLink->getWebsiteId() !== null) {
+            $selectionModel->setWebsiteId($productLink->getWebsiteId());
+        }
 
         return $selectionModel;
     }
