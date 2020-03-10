@@ -39,8 +39,8 @@ class SendFriendConfiguration implements ResolverInterface
         $storeId = $store->getId();
 
         return [
-            'enabled' => $this->sendFriendHelper->isEnabled($storeId),
-            'allow_guest' => $this->sendFriendHelper->isAllowForGuest($storeId)
+            'enabled_for_customers' => $this->sendFriendHelper->isEnabled($storeId),
+            'enabled_for_guests' => $this->sendFriendHelper->isAllowForGuest($storeId)
         ];
     }
 }

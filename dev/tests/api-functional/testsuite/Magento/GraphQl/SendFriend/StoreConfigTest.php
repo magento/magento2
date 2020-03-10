@@ -16,15 +16,15 @@ class StoreConfigTest extends GraphQlAbstract
 {
     public function testSendFriendFieldsAreReturnedWithoutError()
     {
-        $query = $this->getQuery();
+        $query = $this->getStoreConfigQuery();
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('sendFriend', $response['storeConfig']);
-        $this->assertArrayHasKey('enabled', $response['storeConfig']['sendFriend']);
-        $this->assertArrayHasKey('allow_guest', $response['storeConfig']['sendFriend']);
-        $this->assertNotNull($response['storeConfig']['sendFriend']['enabled']);
-        $this->assertNotNull($response['storeConfig']['sendFriend']['allow_guest']);
+        $this->assertArrayHasKey('enabled_for_customers', $response['storeConfig']['sendFriend']);
+        $this->assertArrayHasKey('enabled_for_guests', $response['storeConfig']['sendFriend']);
+        $this->assertNotNull($response['storeConfig']['sendFriend']['enabled_for_customers']);
+        $this->assertNotNull($response['storeConfig']['sendFriend']['enabled_for_guests']);
     }
 
     /**
@@ -32,10 +32,10 @@ class StoreConfigTest extends GraphQlAbstract
      */
     public function testSendFriendDisabled()
     {
-        $response = $this->graphQlQuery($this->getQuery());
+        $response = $this->graphQlQuery($this->getStoreConfigQuery());
 
         $this->assertResponse(
-            ['enabled' => false, 'allow_guest' => false],
+            ['enabled_for_customers' => false, 'enabled_for_guests' => false],
             $response
         );
     }
@@ -46,10 +46,10 @@ class StoreConfigTest extends GraphQlAbstract
      */
     public function testSendFriendEnabledGuestDisabled()
     {
-        $response = $this->graphQlQuery($this->getQuery());
+        $response = $this->graphQlQuery($this->getStoreConfigQuery());
 
         $this->assertResponse(
-            ['enabled' => true, 'allow_guest' => false],
+            ['enabled_for_customers' => true, 'enabled_for_guests' => false],
             $response
         );
     }
@@ -60,10 +60,10 @@ class StoreConfigTest extends GraphQlAbstract
      */
     public function testSendFriendEnabledGuestEnabled()
     {
-        $response = $this->graphQlQuery($this->getQuery());
+        $response = $this->graphQlQuery($this->getStoreConfigQuery());
 
         $this->assertResponse(
-            ['enabled' => true, 'allow_guest' => true],
+            ['enabled_for_customers' => true, 'enabled_for_guests' => true],
             $response
         );
     }
@@ -78,10 +78,10 @@ class StoreConfigTest extends GraphQlAbstract
     {
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('sendFriend', $response['storeConfig']);
-        $this->assertArrayHasKey('enabled', $response['storeConfig']['sendFriend']);
-        $this->assertArrayHasKey('allow_guest', $response['storeConfig']['sendFriend']);
-        $this->assertEquals($expectedValues['enabled'], $response['storeConfig']['sendFriend']['enabled']);
-        $this->assertEquals($expectedValues['allow_guest'], $response['storeConfig']['sendFriend']['allow_guest']);
+        $this->assertArrayHasKey('enabled_for_customers', $response['storeConfig']['sendFriend']);
+        $this->assertArrayHasKey('enabled_for_guests', $response['storeConfig']['sendFriend']);
+        $this->assertEquals($expectedValues['enabled_for_customers'], $response['storeConfig']['sendFriend']['enabled_for_customers']);
+        $this->assertEquals($expectedValues['enabled_for_guests'], $response['storeConfig']['sendFriend']['enabled_for_guests']);
     }
 
     /**
@@ -89,15 +89,15 @@ class StoreConfigTest extends GraphQlAbstract
      *
      * @return string
      */
-    private function getQuery()
+    private function getStoreConfigQuery()
     {
         return <<<QUERY
 {
     storeConfig{
         id
         sendFriend {
-            enabled
-            allow_guest
+            enabled_for_customers
+            enabled_for_guests
         }
     }
 }
