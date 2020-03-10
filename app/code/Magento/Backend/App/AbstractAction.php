@@ -10,6 +10,8 @@ use Magento\Framework\Encryption\Helper\Security;
 /**
  * Generic backend controller
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
