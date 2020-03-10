@@ -37,3 +37,12 @@ type SendEmailToFriendRecipient {
     name: String!
     email: String!
 }
+
+type StoreConfig {
+    sendFriend: SendFriendConfiguration @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendFriendConfiguration") @doc(description: "Config for 'Email to a Friend' feature")
+}
+
+type SendFriendConfiguration {
+    enabled: Boolean! @doc(description: "Indicates whether or not the feature is enabled.")
+    allow_guest: Boolean! @doc(description: "Indicates whether or not the feature is allowed for guest customers.")
+}
