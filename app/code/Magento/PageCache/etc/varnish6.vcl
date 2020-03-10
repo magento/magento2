@@ -109,6 +109,11 @@ sub vcl_recv {
         #unset req.http.Cookie;
     }
 
+    if (req.method == "GET" && req.url ~ "/graphql" && req.url ~ "query=" && req.http.Authorization ~ "^Bearer") {
+        # Authentificated customers should not be cached by default
+        return (pass);
+    }
+
     return (hash);
 }
 
@@ -130,7 +135,7 @@ sub vcl_hash {
     }
     /* {{ design_exceptions_code }} */
 
-    if (req.url ~ "/graphql") {
+    if (req.method == "GET" && req.url ~ "/graphql" && req.url ~ "query=") {
         call process_graphql_headers;
     }
 }
