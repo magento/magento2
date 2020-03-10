@@ -8,10 +8,10 @@ namespace Magento\Wishlist\Setup\Patch\Data;
 
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Class Clean Up Data Removes unused data
@@ -24,9 +24,9 @@ class CleanUpData implements DataPatchInterface
     private const BATCH_SIZE = 1000;
 
     /**
-     * @var ModuleDataSetupInterface
+     * @var AdapterInterface
      */
-    private $moduleDataSetup;
+    private $adapter;
 
     /**
      * @var Generator
@@ -44,22 +44,21 @@ class CleanUpData implements DataPatchInterface
 
     /**
      * RemoveData constructor.
-     * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param Json|null $json
-     * @param Generator|null $queryGenerator
-     * @param QueryModifierFactory|null $queryModifierFactory
+     * @param Json $json
+     * @param Generator $queryGenerator
+     * @param QueryModifierFactory $queryModifierFactory
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup,
-        Json $json = null,
-        Generator $queryGenerator = null,
-        QueryModifierFactory $queryModifierFactory = null
+        Json $json,
+        Generator $queryGenerator,
+        QueryModifierFactory $queryModifierFactory,
+        ResourceConnection $resourceConnection
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
-        $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(Generator::class);
-        $this->queryModifierFactory = $queryModifierFactory
-            ?: ObjectManager::getInstance()->get(QueryModifierFactory::class);
+        $this->json = $json;
+        $this->queryGenerator = $queryGenerator;
+        $this->queryModifierFactory = $queryModifierFactory;
+        $this->adapter = $resourceConnection->getConnection();
     }
 
     /**
@@ -67,9 +66,9 @@ class CleanUpData implements DataPatchInterface
      */
     public function apply()
     {
-        $this->moduleDataSetup->getConnection()->startSetup();
-        $wishListItemOptionTable = $this->moduleDataSetup->getTable('wishlist_item_option');
-        $select = $this->moduleDataSetup->getConnection()
+        $this->adapter->startSetup();
+        $wishListItemOptionTable = $this->adapter->getTableName('wishlist_item_option');
+        $select = $this->adapter
             ->select()
             ->from(
                 $wishListItemOptionTable,
@@ -77,19 +76,19 @@ class CleanUpData implements DataPatchInterface
             );
         $iterator = $this->queryGenerator->generate('option_id', $select, self::BATCH_SIZE);
         foreach ($iterator as $selectByRange) {
-            $optionRows = $this->moduleDataSetup->getConnection()->fetchAll($selectByRange);
+            $optionRows = $this->adapter->fetchAll($selectByRange);
             foreach ($optionRows as $optionRow) {
                 $rowValue = $this->json->unserialize($optionRow['value']);
                 unset($rowValue['login']);
                 $rowValue = $this->json->serialize($rowValue);
-                $this->moduleDataSetup->getConnection()->update(
+                $this->adapter->update(
                     $wishListItemOptionTable,
                     ['value' => $rowValue],
                     ['option_id = ?' => $optionRow['option_id']]
                 );
             }
         }
-        $this->moduleDataSetup->getConnection()->endSetup();
+        $this->adapter->endSetup();
 
         return $this;
     }
