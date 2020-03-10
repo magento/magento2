@@ -59,7 +59,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @return bool
      * @codeCoverageIgnore
      */
-    protected function isCityActive()
+    public function isCityActive()
     {
         return false;
     }
@@ -70,7 +70,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @return bool
      * @codeCoverageIgnore
      */
-    protected function isStateActive()
+    public function isStateActive()
     {
         return false;
     }
