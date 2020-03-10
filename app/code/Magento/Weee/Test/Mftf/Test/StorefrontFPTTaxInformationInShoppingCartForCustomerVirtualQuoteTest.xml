@@ -41,7 +41,7 @@
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
 
         <after>
@@ -53,7 +53,7 @@
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </after>
 
         <!--  Test Steps  -->
