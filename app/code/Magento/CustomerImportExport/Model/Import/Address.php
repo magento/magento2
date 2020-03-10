@@ -480,7 +480,7 @@ class Address extends AbstractCustomer
 
         $ids = [];
         foreach ($customersPresent as $customerData) {
-            $id = $this->getCustomerStorage()->getCustomerId(
+            $id = $this->getCustomerStorage()->getLoadedCustomerId(
                 $customerData['email'],
                 $customerData['website_id']
             );
@@ -606,9 +606,10 @@ class Address extends AbstractCustomer
         $newAddress = true;
         // get address id
         if ($rowData[self::COLUMN_ADDRESS_ID]
+            && $customerId
             && $this->addressStorage->doesExist(
-                $rowData[self::COLUMN_ADDRESS_ID],
-                (string)$customerId
+                (int) $rowData[self::COLUMN_ADDRESS_ID],
+                $customerId
             )
         ) {
             $newAddress = false;
@@ -856,7 +857,7 @@ class Address extends AbstractCustomer
         if ($this->_checkUniqueKey($rowData, $rowNumber)) {
             $email = strtolower($rowData[self::COLUMN_EMAIL]);
             $website = $rowData[self::COLUMN_WEBSITE];
-            $addressId = $rowData[self::COLUMN_ADDRESS_ID];
+            $addressId = (int) $rowData[self::COLUMN_ADDRESS_ID];
             $customerId = $this->_getCustomerId($email, $website);
 
             if ($customerId === false) {
@@ -925,16 +926,16 @@ class Address extends AbstractCustomer
         if ($this->_checkUniqueKey($rowData, $rowNumber)) {
             $email = strtolower($rowData[self::COLUMN_EMAIL]);
             $website = $rowData[self::COLUMN_WEBSITE];
-            $addressId = $rowData[self::COLUMN_ADDRESS_ID];
+            $addressId = (int) $rowData[self::COLUMN_ADDRESS_ID];
 
             $customerId = $this->_getCustomerId($email, $website);
             if ($customerId === false) {
                 $this->addRowError(self::ERROR_CUSTOMER_NOT_FOUND, $rowNumber);
-            } elseif (!strlen($addressId)) {
+            } elseif (!$addressId) {
                 $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
             } elseif (!$this->addressStorage->doesExist(
-                (string)$addressId,
-                (string)$customerId
+                $addressId,
+                $customerId
             )) {
                 $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);
             }
@@ -948,11 +949,11 @@ class Address extends AbstractCustomer
      * @param int $addressId
      * @return bool
      */
-    protected function _checkRowDuplicate($customerId, $addressId)
+    protected function _checkRowDuplicate(int $customerId, int $addressId)
     {
         $isAddressExists = $this->addressStorage->doesExist(
-            (string)$addressId,
-            (string)$customerId
+            $addressId,
+            $customerId
         );
 
         $isPkRowSet = isset($this->_importedRowPks[$customerId][$addressId]);

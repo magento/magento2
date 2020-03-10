@@ -40,7 +40,7 @@
             <!-- Delete product attribute set -->
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
