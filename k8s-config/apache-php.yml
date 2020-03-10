@@ -52,6 +52,12 @@ spec:
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
+          - mountPath: /var/www/html/magento/var
+            name: magento-persistent-storage
+            subPath: var
+          - mountPath: /var/www/html/magento/media
+            name: magento-persistent-storage
+            subPath: media
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache

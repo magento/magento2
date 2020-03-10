@@ -25,4 +25,5 @@ RUN cd /var/www/magento \
 && mv /var/www/magento/start.sh /tmp \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
-&& chmod u+x bin/magento /tmp/start.sh pub/get.php pub/static.php
+&& chmod +x pub/get.php pub/static.php \
+&& chmod u+x bin/magento /tmp/start.sh
