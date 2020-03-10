@@ -7,15 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
-use Magento\TestFramework\Indexer\TestCase as IndexerTestCase;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
-use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Helper\Product\Flat\Indexer as FlatIndexerHelper;
+use Magento\TestFramework\Indexer\TestCase as IndexerTestCase;
 
 /**
- * Class RowTest
+ * Test for \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RowTest extends IndexerTestCase
 {
@@ -25,7 +32,7 @@ class RowTest extends IndexerTestCase
     private $processor;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -40,6 +47,16 @@ class RowTest extends IndexerTestCase
     private $categoryRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var FlatIndexerHelper
+     */
+    private $flatIndexerHelper;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -48,6 +65,8 @@ class RowTest extends IndexerTestCase
         $this->processor = $this->objectManager->get(Processor::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->flatIndexerHelper = $this->objectManager->get(FlatIndexerHelper::class);
     }
 
     /**
@@ -113,5 +132,37 @@ class RowTest extends IndexerTestCase
                 );
             }
         }
+    }
+
+    /**
+     * Assign product to one website
+     *
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute_in_flat.php
+     *
+     * @return void
+     */
+    public function testProductToWebsiteAssign(): void
+    {
+        $secondWebsite = $this->storeManager->getWebsite('test');
+        $secondStoreId = current($secondWebsite->getStoreIds());
+
+        $product = $this->productRepository->get('simple-1');
+        $this->productRepository->save($product->setWebsiteIds([$secondWebsite->getId()]));
+
+        $secondFlatTable = $this->flatIndexerHelper->getFlatTableName($secondStoreId);
+
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        /** @var AdapterInterface $connection */
+        $connection = $resource->getConnection();
+
+        $skus = $connection->fetchCol($connection->select()->from($secondFlatTable, ['sku']));
+
+        $this->assertCount(1, $skus);
+        $this->assertEquals(current($skus), 'simple-1');
     }
 }

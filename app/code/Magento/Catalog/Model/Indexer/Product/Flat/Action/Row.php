@@ -6,16 +6,28 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Product\Flat\Indexer as FlatIndexer;
+use Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction;
 use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\ResourceModel\Store\Collection;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Row reindex action.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+class Row extends AbstractAction
 {
     /**
      * @var Indexer
@@ -33,25 +45,41 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
     private $metadataPool;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
-     * @param \Magento\Catalog\Model\Product\Type $productType
+     * @var Link
+     */
+    private $productWebsiteLink;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $storeCollectionFactory;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param StoreManagerInterface $storeManager
+     * @param FlatIndexer $productHelper
+     * @param Type $productType
      * @param TableBuilder $tableBuilder
      * @param FlatTableBuilder $flatTableBuilder
      * @param Indexer $flatItemWriter
      * @param Eraser $flatItemEraser
+     * @param Link $productWebsiteLink
+     * @param CollectionFactory $storeCollectionFactory
      * @param MetadataPool|null $metadataPool
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
-        \Magento\Catalog\Model\Product\Type $productType,
+        ResourceConnection $resource,
+        StoreManagerInterface $storeManager,
+        FlatIndexer $productHelper,
+        Type $productType,
         TableBuilder $tableBuilder,
         FlatTableBuilder $flatTableBuilder,
         Indexer $flatItemWriter,
         Eraser $flatItemEraser,
+        Link $productWebsiteLink,
+        CollectionFactory $storeCollectionFactory,
         MetadataPool $metadataPool = null
     ) {
         parent::__construct(
@@ -64,36 +92,35 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         );
         $this->flatItemWriter = $flatItemWriter;
         $this->flatItemEraser = $flatItemEraser;
-        $this->metadataPool = $metadataPool ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->productWebsiteLink = $productWebsiteLink;
+        $this->storeCollectionFactory = $storeCollectionFactory;
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
      * Execute row reindex action
      *
      * @param int|null $id
-     * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Row
+     * @throws LocalizedException
      */
     public function execute($id = null)
     {
-        if (!isset($id) || empty($id)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We can\'t rebuild the index for an undefined product.')
-            );
+        if (!isset($id) || $id === null) {
+            throw new LocalizedException(__('We can\'t rebuild the index for an undefined product.'));
         }
         $ids = [$id];
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productWebsites = $this->productWebsiteLink->getWebsiteIdsByProductId($id);
 
-        $stores = $this->_storeManager->getStores();
-        foreach ($stores as $store) {
+        foreach ($this->getStoresByWebsiteIds($productWebsites) as $store) {
             $tableExists = $this->_isFlatTableExists($store->getId());
             if ($tableExists) {
                 $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
                 $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
             }
 
-            /* @var $status \Magento\Eav\Model\Entity\Attribute */
+            /* @var $status Attribute */
             $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
             $statusTable = $status->getBackend()->getTable();
             $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');
@@ -111,7 +138,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             $result = $this->_connection->query($select);
             $status = $result->fetchColumn(0);
 
-            if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
+            if ((int) $status === Status::STATUS_ENABLED) {
                 if (!$tableExists) {
                     $this->_flatTableBuilder->build(
                         $store->getId(),
@@ -128,5 +155,17 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * Stores collection by website id's
+     *
+     * @param array $websiteIds
+     * @return Collection
+     */
+    private function getStoresByWebsiteIds(array $websiteIds): Collection
+    {
+        return $this->storeCollectionFactory->create()
+            ->addWebsiteFilter($websiteIds);
     }
 }
