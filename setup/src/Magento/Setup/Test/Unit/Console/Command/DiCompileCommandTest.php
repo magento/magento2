@@ -143,7 +143,7 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
             ->with(\Symfony\Component\Console\Helper\ProgressBar::class)
             ->willReturn($progressBar);
 
-        $this->managerMock->expects($this->exactly(7))->method('addOperation')
+        $this->managerMock->expects($this->exactly(8))->method('addOperation')
             ->withConsecutive(
                 [OperationFactory::PROXY_GENERATOR, []],
                 [OperationFactory::REPOSITORY_GENERATOR, $this->anything()],
@@ -160,7 +160,8 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
                 })],
                 [OperationFactory::INTERCEPTION, $this->anything()],
                 [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
-                [OperationFactory::INTERCEPTION_CACHE, $this->anything()]
+                [OperationFactory::INTERCEPTION_CACHE, $this->anything()],
+                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()]
             )
         ;
 
