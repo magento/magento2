@@ -7498,12 +7498,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "b43323e51d27b75292ee62f357c7a6b98a7ccb03"
+                "reference": "5ecf5becf631dc5e7cb4534574434d8fffbc2317"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b43323e51d27b75292ee62f357c7a6b98a7ccb03",
-                "reference": "b43323e51d27b75292ee62f357c7a6b98a7ccb03",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/5ecf5becf631dc5e7cb4534574434d8fffbc2317",
+                "reference": "5ecf5becf631dc5e7cb4534574434d8fffbc2317",
                 "shasum": ""
             },
             "require": {
@@ -7515,13 +7515,14 @@
                 "csharpru/vault-php": "~3.5.3",
                 "csharpru/vault-php-guzzle6-transport": "^2.0",
                 "ext-curl": "*",
+                "ext-dom": "*",
                 "ext-json": "*",
                 "ext-openssl": "*",
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
                 "monolog/monolog": "^1.0",
                 "mustache/mustache": "~2.5",
-                "php": "7.0.2||7.0.4||~7.0.6||~7.1.0||~7.2.0||~7.3.0",
+                "php": "~7.2.0||~7.3.0",
                 "php-webdriver/webdriver": "^1.8.0",
                 "symfony/process": "^2.8 || ^3.1 || ^4.0",
                 "vlucas/phpdotenv": "^2.4"
@@ -7575,7 +7576,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-03-06T19:37:11+00:00"
+            "time": "2020-03-10T17:35:25+00:00"
         },
         {
             "name": "mikey179/vfsstream",
