@@ -209,4 +209,14 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="configured_eav_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">eav</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_eav_cache</argument>
+        </arguments>
+    </type>
 </config>

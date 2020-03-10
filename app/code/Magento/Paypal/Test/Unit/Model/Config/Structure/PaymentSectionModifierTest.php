@@ -15,6 +15,7 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
         'recommended_solutions',
         'other_paypal_payment_solutions',
         'other_payment_methods',
+        'deprecated_payment_methods',
     ];
 
     /**
@@ -145,6 +146,7 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
+                'deprecated_payment_methods' => [],
             ],
             $modifiedStructure,
             'Some group is not moved correctly'
