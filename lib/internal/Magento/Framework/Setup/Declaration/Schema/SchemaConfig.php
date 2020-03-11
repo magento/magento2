@@ -72,10 +72,18 @@ class SchemaConfig implements SchemaConfigInterface
      */
     public function getDeclarationConfig()
     {
-        $schema = $this->schemaFactory->create();
-        $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
-        $this->declarativeSchemaBuilder->addTablesData($data['table']);
-        $schema = $this->declarativeSchemaBuilder->build($schema);
-        return $schema;
+        try{
+            $schema = $this->schemaFactory->create();
+            $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
+            $this->declarativeSchemaBuilder->addTablesData($data['table']);
+            $schema = $this->declarativeSchemaBuilder->build($schema);
+            return $schema;
+        }catch (\Exception $e) {
+            $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/schema.log');
+            $logger = new \Zend\Log\Logger();
+            $logger->addWriter($writer);
+            $logger->info($e->getMessage());
+            throw new \Exception($e->getMessage());
+        }
     }
 }
