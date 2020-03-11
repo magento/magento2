@@ -83,9 +83,9 @@ class Validator implements ValidatorInterface
             throw new LocalizedException(new Phrase('A scope code is missing. Enter a code and try again.'));
         }
 
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $scopeCode)) {
+        if (!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]*$/', $scopeCode)) {
             throw new LocalizedException(new Phrase(
-                'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). '
+                'The scope code can include only letters (a-z) and (A-Z), numbers (0-9) and underscores (_). '
                 . 'Also, the first character must be a letter.'
             ));
         }
