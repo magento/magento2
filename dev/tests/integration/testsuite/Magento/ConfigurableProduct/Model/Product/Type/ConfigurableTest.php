@@ -555,7 +555,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         self::assertNotEmpty($oldChildrenIds);
         self::assertNotEmpty($oneChildId);
 
-        $product = $this->productRepository->getById($this->product->getId());
+        $product = $this->productRepository->getById(1);
 
         $extensionAttributes = $product->getExtensionAttributes();
         $extensionAttributes->setConfigurableProductLinks([$oneChildId]);
@@ -563,13 +563,17 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository->save($product);
 
-        self::assertEquals(
-            [
-                [
-                    $oneChildId => $oneChildId
-                ]
-            ],
-            $this->model->getChildrenIds($this->product->getId())
+        // Check alternative format for backward compatibility
+        $expectedArray[0] = [
+            $oneChildId => $oneChildId
+        ];
+        //Check grouped array, ex
+        //array(group => array(ids))
+        $expectedArray[$product->getId()][] = $oneChildId;
+
+        self::assertSame(
+            $expectedArray,
+            $this->model->getChildrenIds($product->getId())
         );
     }
 

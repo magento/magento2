@@ -17,7 +17,6 @@ use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Configurable product resource model.
@@ -160,9 +159,11 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $select = $this->getConnection()->select()->from(
+        $connection = $this->getConnection();
+
+        $select = $connection->select()->from(
             ['l' => $this->getMainTable()],
-            ['product_id', 'parent_id']
+            ['product_id', 'p.entity_id as parent_id']
         )->join(
             ['p' => $this->getTable('catalog_product_entity')],
             'p.' . $this->optionProvider->getProductEntityLinkField() . ' = l.parent_id',
@@ -176,13 +177,12 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $parentId
         );
 
-        $childrenIds = [
-            0 => array_column(
-                $this->getConnection()->fetchAll($select),
-                'product_id',
-                'product_id'
-            )
-        ];
+        $childrenIds = [0 => []];
+        foreach ($connection->fetchAll($select) as $row) {
+            $childrenIds[$row['parent_id']][] = $row['product_id'];
+            // Alternative format for backward compatibility
+            $childrenIds[0][$row['product_id']] = $row['product_id'];
+        }
 
         return $childrenIds;
     }
