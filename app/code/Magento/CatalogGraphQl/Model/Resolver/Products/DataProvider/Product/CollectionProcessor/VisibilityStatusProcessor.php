@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -19,6 +20,20 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class VisibilityStatusProcessor implements CollectionProcessorInterface
 {
     /**
+     * @var Visibility
+     */
+    private $visibility;
+
+    /**
+     * @param Visibility $visibility
+     */
+    public function __construct(Visibility $visibility)
+    {
+        $this->visibility = $visibility;
+
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function process(
@@ -28,6 +43,7 @@ class VisibilityStatusProcessor implements CollectionProcessorInterface
     ): Collection {
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $collection->setVisibility($this->visibility->getVisibleInSiteIds());
 
         return $collection;
     }
