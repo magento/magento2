@@ -86,7 +86,7 @@ class ProductSearch
         $collection = $this->collectionFactory->create();
 
         //Join search results
-        $this->getSearchResultsApplier($searchResult, $collection, $this->getSortOrderArray($searchCriteria))->apply();
+        //$this->getSearchResultsApplier($searchResult, $collection, $this->getSortOrderArray($searchCriteria))->apply();
 
         //Additional applier to keep sorting from search
         if (!empty($searchResult->getItems())) {
