@@ -341,7 +341,10 @@ class Storage
     {
         $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
         $pathCmp = rtrim($path, '/');
-        $absolutePath = $this->filesystemDriver->getRealPathSafety($this->mediaWriteDirectory->getAbsolutePath($path));
+        $absolutePath = rtrim(
+            $this->filesystemDriver->getRealPathSafety($this->mediaWriteDirectory->getAbsolutePath($path)),
+            '/'
+        );
 
         if ($rootCmp == $pathCmp || $rootCmp === $absolutePath) {
             throw new \Magento\Framework\Exception\LocalizedException(
