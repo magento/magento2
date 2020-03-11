@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Plugin;
 
+use Closure;
 use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -33,53 +35,61 @@ class Account
      * @var array
      */
     private $allowedActions = [];
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
 
     /**
      * @param RequestInterface $request
      * @param Session $customerSession
+     * @param ActionFlag $actionFlag
      * @param array $allowedActions List of actions that are allowed for not authorized users
      */
     public function __construct(
         RequestInterface $request,
         Session $customerSession,
+        ActionFlag $actionFlag,
         array $allowedActions = []
     ) {
         $this->session = $customerSession;
         $this->allowedActions = $allowedActions;
         $this->request = $request;
+        $this->actionFlag = $actionFlag;
     }
 
     /**
-     * Dispatch actions allowed for not authorized users
+     * Executes original method if allowed, otherwise - redirects to log in
      *
-     * @param AccountInterface $subject
-     * @return void
+     * @param AccountInterface $controllerAction
+     * @param Closure $proceed
+     * @return ResultInterface|ResponseInterface|void
      */
-    public function beforeExecute(AccountInterface $subject)
+    public function aroundExecute(AccountInterface $controllerAction, Closure $proceed)
     {
-        $action = strtolower($this->request->getActionName());
-        $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
-
-        if (!preg_match($pattern, $action)) {
-            if (!$this->session->authenticate()) {
-                $subject->getActionFlag()->set('', ActionInterface::FLAG_NO_DISPATCH, true);
-            }
-        } else {
+        if ($this->isActionAllowed()) {
             $this->session->setNoReferer(true);
+            $response = $proceed();
+            $this->session->unsNoReferer(false);
+
+            return $response;
+        }
+
+        if (!$this->session->authenticate()) {
+            $this->actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
         }
     }
 
     /**
-     * Remove No-referer flag from customer session
+     * Validates whether currently requested action is one of the allowed
      *
-     * @param AccountInterface $subject
-     * @param ResponseInterface|ResultInterface $result
-     * @return ResponseInterface|ResultInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return bool
      */
-    public function afterExecute(AccountInterface $subject, $result)
+    private function isActionAllowed(): bool
     {
-        $this->session->unsNoReferer(false);
-        return $result;
+        $action = strtolower($this->request->getActionName());
+        $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
+
+        return (bool)preg_match($pattern, $action);
     }
 }
