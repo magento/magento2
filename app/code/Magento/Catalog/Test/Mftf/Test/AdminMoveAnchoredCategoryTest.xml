@@ -44,7 +44,7 @@
             <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>
             <deleteData createDataKey="simpleSubCategoryOne" stepKey="deleteSubcategoryOne"/>
             <deleteData createDataKey="simpleSubCategoryTwo" stepKey="deleteSubcategoryTwo"/>
-            <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdminUserAfterTest"/>
         </after>
 
         <!--Move category one to category two-->

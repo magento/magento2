@@ -45,7 +45,7 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnDoeCustomer">
                 <argument name="customerEmail" value="Simple_Customer_Without_Address.email"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Go to storefront and click the Create an Account link-->

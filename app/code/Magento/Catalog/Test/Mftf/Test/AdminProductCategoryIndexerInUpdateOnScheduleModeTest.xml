@@ -69,7 +69,7 @@
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
             <deleteData createDataKey="createCategoryC" stepKey="deleteCategoryC"/>
             <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Case: change product category from product page -->
