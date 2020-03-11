@@ -97,6 +97,11 @@ class Cart extends DataObject implements CartInterface
     protected $productRepository;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $_url;
+
+    /**
      * @var \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
      */
     private $requestInfoFilter;
@@ -113,6 +118,7 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\UrlInterface $url
      * @param array $data
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -129,6 +135,7 @@ class Cart extends DataObject implements CartInterface
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         ProductRepositoryInterface $productRepository,
+        \Magento\Framework\UrlInterface $url,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -143,6 +150,7 @@ class Cart extends DataObject implements CartInterface
         $this->quoteRepository = $quoteRepository;
         parent::__construct($data);
         $this->productRepository = $productRepository;
+        $this->_url = $url;
     }
 
     /**
@@ -420,6 +428,7 @@ class Cart extends DataObject implements CartInterface
     {
         $allAvailable = true;
         $allAdded = true;
+        $successProducts = [];
 
         if (!empty($productIds)) {
             foreach ($productIds as $productId) {
@@ -432,11 +441,32 @@ class Cart extends DataObject implements CartInterface
                     $request = $this->getQtyRequest($product);
                     try {
                         $this->getQuote()->addProduct($product, $request);
+                        $successProducts[] = $product->getName();
                     } catch (\Exception $e) {
                         $allAdded = false;
                     }
                 } else {
                     $allAvailable = false;
+                }
+            }
+
+            if (count($successProducts) > 0) {
+                foreach ($successProducts as $product) {
+                    if ($this->shouldRedirectToCart()) {
+                        $message = __(
+                            'You added %1 to your shopping cart.',
+                            $product
+                        );
+                        $this->messageManager->addSuccessMessage($message);
+                    } else {
+                        $this->messageManager->addComplexSuccessMessage(
+                            'addCartSuccessMessage',
+                            [
+                                'product_name' => $product,
+                                'cart_url' => $this->getCartUrl(),
+                            ]
+                        );
+                    }
                 }
             }
 
@@ -776,5 +806,28 @@ class Cart extends DataObject implements CartInterface
         }
 
         return $request;
+    }
+
+    /**
+     * Returns cart url
+     *
+     * @return string
+     */
+    private function getCartUrl()
+    {
+        return $this->_url->getUrl('checkout/cart', ['_secure' => true]);
+    }
+
+    /**
+     * Is redirect should be performed after the product was added to cart.
+     *
+     * @return bool
+     */
+    private function shouldRedirectToCart()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
