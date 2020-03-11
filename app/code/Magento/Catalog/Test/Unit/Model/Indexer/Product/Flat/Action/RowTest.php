@@ -4,61 +4,89 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Product\Flat\Indexer as FlatIndexerHelper;
+use Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser;
+use Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer;
+use Magento\Catalog\Model\Indexer\Product\Flat\Action\Row;
+use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Store\Model\ResourceModel\Store\Collection;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RowTest extends \PHPUnit\Framework\TestCase
+class RowTest extends TestCase
 {
-    /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
-     */
-    protected $model;
+    private const STUB_ATTRIBUTE_TABLE = 'catalog_product_entity_int';
+    private const STUB_STATUS_ID = 22;
 
     /**
-     * @var MockObject
+     * @var Row
      */
-    protected $storeManager;
+    private $model;
 
     /**
-     * @var MockObject
+     * @var Store|MockObject
      */
-    protected $store;
+    private $storeMock;
 
     /**
-     * @var MockObject
+     * @var FlatIndexerHelper|MockObject
      */
-    protected $productIndexerHelper;
+    private $productIndexerHelperMock;
 
     /**
-     * @var MockObject
+     * @var ResourceConnection|MockObject
      */
-    protected $resource;
+    private $resourceMock;
 
     /**
-     * @var MockObject
+     * @var AdapterInterface|MockObject
      */
-    protected $connection;
+    private $connectionMock;
 
     /**
-     * @var MockObject
+     * @var Indexer|MockObject
      */
-    protected $flatItemWriter;
+    private $flatItemWriterMock;
 
     /**
-     * @var MockObject
+     * @var Eraser|MockObject
      */
-    protected $flatItemEraser;
+    private $flatItemEraserMock;
 
     /**
-     * @var MockObject
+     * @var FlatTableBuilder|MockObject
      */
-    protected $flatTableBuilder;
+    private $flatTableBuilderMock;
+
+    /**
+     * @var Collection|MockObject
+     */
+    private $storeCollectionMock;
+
+    /**
+     * @var Link|MockObject
+     */
+    private $productWebsiteLinkMock;
 
     /**
      * @inheritdoc
@@ -67,66 +95,80 @@ class RowTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $attributeTable = 'catalog_product_entity_int';
-        $statusId = 22;
-        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->resource->expects($this->any())->method('getConnection')
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->resourceMock->method('getConnection')
             ->with('default')
-            ->willReturn($this->connection);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->store->expects($this->any())->method('getId')->willReturn('store_id_1');
-        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$this->store]);
-        $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
-        $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
-        $this->flatTableBuilder = $this->createMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
-        );
-        $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
-        $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->willReturn($this->connectionMock);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->storeMock->method('getId')
+            ->willReturn('store_id_1');
+        $this->flatItemEraserMock = $this->createMock(Eraser::class);
+        $this->flatItemWriterMock = $this->createMock(Indexer::class);
+        $this->flatTableBuilderMock = $this->createMock(FlatTableBuilder::class);
+        $this->productIndexerHelperMock = $this->createMock(FlatIndexerHelper::class);
+        $statusAttributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productIndexerHelper->expects($this->any())->method('getAttribute')
+        $this->productIndexerHelperMock->method('getAttribute')
             ->with('status')
             ->willReturn($statusAttributeMock);
-        $backendMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class)
+        $this->productWebsiteLinkMock = $this->createMock(Link::class);
+        $this->storeCollectionMock = $this->createMock(Collection::class);
+        $this->storeCollectionMock->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->storeMock]));
+        $storesCollectionFactory = $this->createMock(CollectionFactory::class);
+        $storesCollectionFactory->method('create')
+            ->willReturn($this->storeCollectionMock);
+        $backendMock = $this->getMockBuilder(AbstractBackend::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $backendMock->expects($this->any())->method('getTable')->willReturn($attributeTable);
-        $statusAttributeMock->expects($this->any())->method('getBackend')->willReturn($backendMock);
-        $statusAttributeMock->expects($this->any())->method('getId')->willReturn($statusId);
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $backendMock->method('getTable')
+            ->willReturn(self::STUB_ATTRIBUTE_TABLE);
+        $statusAttributeMock->method('getBackend')
+            ->willReturn($backendMock);
+        $statusAttributeMock->method('getId')
+            ->willReturn(self::STUB_STATUS_ID);
+
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
+        $this->connectionMock->method('select')
+            ->willReturn($selectMock);
         $selectMock->method('from')
             ->willReturnSelf();
         $selectMock->method('joinLeft')
             ->willReturnSelf();
-        $selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $selectMock->expects($this->any())->method('order')->willReturnSelf();
-        $selectMock->expects($this->any())->method('limit')->willReturnSelf();
+        $selectMock->method('where')
+            ->willReturnSelf();
+        $selectMock->method('order')
+            ->willReturnSelf();
+        $selectMock->method('limit')
+            ->willReturnSelf();
         $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
-        $this->connection->expects($this->any())->method('query')->with($selectMock)->willReturn($pdoMock);
-        $pdoMock->expects($this->any())->method('fetchColumn')->willReturn('1');
+        $this->connectionMock->method('query')
+            ->with($selectMock)
+            ->willReturn($pdoMock);
+        $pdoMock->method('fetchColumn')
+            ->willReturn('1');
 
-        $metadataPool = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $productMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+        $metadataPool = $this->createMock(MetadataPool::class);
+        $productMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->getMockForAbstractClass();
-        $metadataPool->expects($this->any())->method('getMetadata')->with(ProductInterface::class)
+        $metadataPool->method('getMetadata')->with(ProductInterface::class)
             ->willReturn($productMetadata);
-        $productMetadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $productMetadata->method('getLinkField')->willReturn('entity_id');
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            Row::class,
             [
-                'resource'         => $this->resource,
-                'storeManager'     => $this->storeManager,
-                'productHelper'    => $this->productIndexerHelper,
-                'flatItemEraser'   => $this->flatItemEraser,
-                'flatItemWriter'   => $this->flatItemWriter,
-                'flatTableBuilder' => $this->flatTableBuilder,
+                'resource'         => $this->resourceMock,
+                'productHelper'    => $this->productIndexerHelperMock,
+                'flatItemEraser'   => $this->flatItemEraserMock,
+                'flatItemWriter'   => $this->flatItemWriterMock,
+                'flatTableBuilder' => $this->flatTableBuilderMock,
+                'productWebsiteLink' => $this->productWebsiteLinkMock,
+                'storeCollectionFactory' => $storesCollectionFactory,
             ]
         );
 
@@ -134,34 +176,75 @@ class RowTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't rebuild the index for an undefined product.
+     * Execute with id null
+     *
+     * @return void
      */
-    public function testExecuteWithEmptyId()
+    public function testExecuteWithEmptyId(): void
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t rebuild the index for an undefined product.');
+
         $this->model->execute(null);
     }
 
-    public function testExecuteWithNonExistingFlatTablesCreatesTables()
+    /**
+     * Execute flat table not exist
+     *
+     * @return void
+     */
+    public function testExecuteWithNonExistingFlatTablesCreatesTables(): void
     {
-        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
+        $this->productIndexerHelperMock->expects($this->once())->method('getFlatTableName')
             ->willReturn('store_flat_table');
-        $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
+        $this->connectionMock->expects($this->once())
+            ->method('isTableExists')
+            ->with('store_flat_table')
             ->willReturn(false);
-        $this->flatItemEraser->expects($this->never())->method('removeDeletedProducts');
-        $this->flatTableBuilder->expects($this->once())->method('build')->with('store_id_1', ['product_id_1']);
-        $this->flatItemWriter->expects($this->once())->method('write')->with('store_id_1', 'product_id_1');
+        $this->flatItemEraserMock->expects($this->never())
+            ->method('removeDeletedProducts');
+        $this->flatTableBuilderMock->expects($this->once())
+            ->method('build')
+            ->with('store_id_1', ['product_id_1']);
+        $this->flatItemWriterMock->expects($this->once())
+            ->method('write')
+            ->with('store_id_1', 'product_id_1');
+        $this->productWebsiteLinkMock->expects($this->once())
+            ->method('getWebsiteIdsByProductId')
+            ->willReturn([]);
+        $this->storeCollectionMock->expects($this->once())
+            ->method('addWebsiteFilter')
+            ->willReturnSelf();
+
         $this->model->execute('product_id_1');
     }
 
-    public function testExecuteWithExistingFlatTablesCreatesTables()
+    /**
+     * Execute flat table exist
+     *
+     * @return void
+     */
+    public function testExecuteWithExistingFlatTablesCreatesTables(): void
     {
-        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
+        $this->productIndexerHelperMock->expects($this->once())
+            ->method('getFlatTableName')
             ->willReturn('store_flat_table');
-        $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
+        $this->connectionMock->expects($this->once())
+            ->method('isTableExists')
+            ->with('store_flat_table')
             ->willReturn(true);
-        $this->flatItemEraser->expects($this->once())->method('removeDeletedProducts');
-        $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', ['product_id_1']);
+        $this->flatItemEraserMock->expects($this->once())
+            ->method('removeDeletedProducts');
+        $this->flatTableBuilderMock->expects($this->never())
+            ->method('build')
+            ->with('store_id_1', ['product_id_1']);
+        $this->productWebsiteLinkMock->expects($this->once())
+            ->method('getWebsiteIdsByProductId')
+            ->willReturn([]);
+        $this->storeCollectionMock->expects($this->once())
+            ->method('addWebsiteFilter')
+            ->willReturnSelf();
+
         $this->model->execute('product_id_1');
     }
 }
