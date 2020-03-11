@@ -447,4 +447,36 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
     }
+
+    /**
+     * Test method to allow a user to enter zero as custom price
+     */
+    public function testPrepareWithACustomPriceOfZero(): void
+    {
+        $customPrice = 0.0;
+        $qty = 1;
+
+        $this->objectMock->expects($this->once())
+            ->method('getResetCount')
+            ->willReturn(false);
+
+        $this->productMock
+            ->method("getCartQty")
+            ->willReturn($qty);
+
+        $this->itemMock->expects($this->once())
+            ->method('addQty')
+            ->with($qty);
+
+        $this->objectMock
+            ->expects($this->once())
+            ->method("getCustomPrice")
+            ->willReturn($customPrice);
+
+        $this->itemMock->expects($this->once())
+            ->method("setCustomPrice")
+            ->with($customPrice);
+
+        $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
+    }
 }

@@ -98,7 +98,7 @@ class Processor
 
         $customPrice = $request->getCustomPrice();
         $item->setPrice($candidate->getFinalPrice());
-        if (!empty($customPrice)) {
+        if (is_numeric($customPrice)) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }
