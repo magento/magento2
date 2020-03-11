@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Eav\Model\Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -463,7 +464,7 @@ QUERY;
     }
 
     /**
-     * Full text search for Products and then filter the results by custom attribute ( sort is by defaulty by relevance)
+     * Full text search for Products and then filter the results by custom attribute (default sort is relevance)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -555,7 +556,7 @@ QUERY;
             );
         }
 
-       // Validate the price layer of aggregations from the response
+        // Validate the price layer of aggregations from the response
         $this->assertResponseFields(
             $response['products']['aggregations'][0],
             [
@@ -695,7 +696,7 @@ QUERY;
         //Validate the number of categories/sub-categories that contain the products with the custom attribute
         $this->assertCount(6, $actualCategoriesFromResponse);
 
-        $expectedCategoryInAggregrations =
+        $expectedCategoryInAggregations =
             [
                 [
                   'count' =>  2,
@@ -732,9 +733,9 @@ QUERY;
                 ],
             ];
         // presort expected and actual results as different search engines have different orders
-        usort($expectedCategoryInAggregrations, [$this, 'compareLabels']);
+        usort($expectedCategoryInAggregations, [$this, 'compareLabels']);
         usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
-        $categoryInAggregations = array_map(null, $expectedCategoryInAggregrations, $actualCategoriesFromResponse);
+        $categoryInAggregations = array_map(null, $expectedCategoryInAggregations, $actualCategoriesFromResponse);
 
         //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
@@ -1116,6 +1117,52 @@ QUERY;
         $this->assertArrayHasKey('total_count', $response['products']);
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     */
+    public function testSortByPosition()
+    {
+        // Get category ID for filtering
+        /** @var Collection $categoryCollection */
+        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $categoryId = $category->getId();
+
+        $queryAsc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultAsc['products']['items'], 'sku');
+        $expectedProductsDesc = array_reverse($expectedProductsAsc);
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
     }
 
     /**
