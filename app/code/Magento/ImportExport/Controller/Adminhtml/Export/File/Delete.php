@@ -16,10 +16,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\App\Filesystem\DirectoryResolver;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 
@@ -39,16 +37,6 @@ class Delete extends ExportController implements HttpPostActionInterface
     private $filesystem;
 
     /**
-     * @var DriverInterface
-     */
-    private $file;
-
-    /**
-     * @var DirectoryResolver
-     */
-    private $directoryResolver;
-
-    /**
      * @var WriteFactory
      */
     private $writeFactory;
@@ -58,20 +46,14 @@ class Delete extends ExportController implements HttpPostActionInterface
      *
      * @param Action\Context $context
      * @param Filesystem $filesystem
-     * @param DriverInterface $file
-     * @param DirectoryResolver $directoryResolver
      * @param WriteFactory $writeFactory
      */
     public function __construct(
         Action\Context $context,
         Filesystem $filesystem,
-        DriverInterface $file,
-        DirectoryResolver $directoryResolver,
         WriteFactory $writeFactory
     ) {
         $this->filesystem = $filesystem;
-        $this->file = $file;
-        $this->directoryResolver = $directoryResolver;
         $this->writeFactory = $writeFactory;
         parent::__construct($context);
     }
@@ -88,9 +70,7 @@ class Delete extends ExportController implements HttpPostActionInterface
             if (empty($fileName = $this->getRequest()->getParam('filename'))) {
                 throw new LocalizedException(__('Please provide export file name'));
             }
-            $directoryWrite = $this->writeFactory->create(
-                $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT)->getAbsolutePath()
-            );
+            $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_EXPORT);
             try {
                 $directoryWrite->delete($directoryWrite->getAbsolutePath($fileName));
             } catch (ValidatorException $exception) {
