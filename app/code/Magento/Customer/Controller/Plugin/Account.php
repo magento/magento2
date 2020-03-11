@@ -10,8 +10,6 @@ namespace Magento\Customer\Controller\Plugin;
 use Closure;
 use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\ActionFlag;
-use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;

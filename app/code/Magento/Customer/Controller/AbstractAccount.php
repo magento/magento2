@@ -12,7 +12,7 @@ use Magento\Framework\App\Action\Action;
  * AbstractAccount class is deprecated, in favour of Composition approach to build Controllers
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @deprecated 2.4.0
+ * @deprecated
  * @see \Magento\Customer\Controller\AccountInterface
  */
 abstract class AbstractAccount extends Action implements AccountInterface
