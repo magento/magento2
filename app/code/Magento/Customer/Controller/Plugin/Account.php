@@ -22,7 +22,7 @@ class Account
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var RequestInterface
@@ -55,6 +55,7 @@ class Account
      * @param AccountInterface $controllerAction
      * @param Closure $proceed
      * @return ResultInterface|ResponseInterface|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(AccountInterface $controllerAction, Closure $proceed)
     {
