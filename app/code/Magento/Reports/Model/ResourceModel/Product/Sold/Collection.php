@@ -84,7 +84,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
         )->columns(
             'SUM(order_items.qty_ordered) as ordered_qty'
         )->group(
-            'order_items.product_id'
+            'order_items.sku'
         );
         return $this;
     }

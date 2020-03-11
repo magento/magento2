@@ -185,11 +185,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBaseUrlInPub()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
-            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
-            ],
-        ]);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            [
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
+                    DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+                ],
+            ]
+        );
 
         $this->model = $this->_getStoreModel();
         $this->model->load('default');
@@ -285,14 +287,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoAppIsolation enabled
      */
     public function testGetCurrentUrl()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
-        ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
+            ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
 
         $this->model->load('admin');
         $this->model
@@ -332,9 +334,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testGetCurrentUrlWithUseStoreInUrlFalse()
     {
@@ -343,34 +346,34 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->setValue('web/url/use_store', false, ScopeInterface::SCOPE_STORE, 'default');
 
         /** @var \Magento\Store\Model\Store $secondStore */
-        $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('fixture_second_store');
+        $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');
 
         /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
         $productRepository = $objectManager->create(ProductRepository::class);
-        $product = $productRepository->get('simple333');
+        $product = $productRepository->get('simple');
 
         $product->setStoreId($secondStore->getId());
         $url = $product->getUrlInStore();
 
         /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
         $categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
-        $category = $categoryRepository->get(333, $secondStore->getStoreId());
+        $category = $categoryRepository->get(2, $secondStore->getStoreId());
 
         $this->assertEquals(
-            $secondStore->getBaseUrl() . 'catalog/category/view/s/category-1/id/333/',
+            $secondStore->getBaseUrl() . 'catalog/category/view/s/default-category/id/2/',
             $category->getUrl()
         );
         $this->assertEquals(
             $secondStore->getBaseUrl() .
-            'catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store',
+            'catalog/product/view/id/1/s/simple-product/?___store=secondstore',
             $url
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl() . '?___store=fixture_second_store&___from_store=default',
+            $secondStore->getBaseUrl() . '?___store=secondstore&___from_store=default',
             $secondStore->getCurrentUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl() . '?___store=fixture_second_store',
+            $secondStore->getBaseUrl() . '?___store=secondstore',
             $secondStore->getCurrentUrl(false)
         );
     }
@@ -382,14 +385,16 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testCRUD()
     {
-        $this->model->setData([
-            'code' => 'test',
-            'website_id' => 1,
-            'group_id' => 1,
-            'name' => 'test name',
-            'sort_order' => 0,
-            'is_active' => 1,
-        ]);
+        $this->model->setData(
+            [
+                'code' => 'test',
+                'website_id' => 1,
+                'group_id' => 1,
+                'name' => 'test name',
+                'sort_order' => 0,
+                'is_active' => 1,
+            ]
+        );
         $crud = new \Magento\TestFramework\Entity(
             $this->model,
             ['name' => 'new name'],
@@ -462,8 +467,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @see self::testIsUseStoreInUrl;
      * @return array
+     * @see self::testIsUseStoreInUrl;
      */
     public function isUseStoreInUrlDataProvider()
     {
