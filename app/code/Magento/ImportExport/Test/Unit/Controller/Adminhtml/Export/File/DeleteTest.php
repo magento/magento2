@@ -122,7 +122,6 @@ class DeleteTest extends TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
 
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->deleteControllerMock = $this->objectManagerHelper->getObject(
             Delete::class,
@@ -143,7 +142,9 @@ class DeleteTest extends TestCase
             ->with('filename')
             ->willReturn('sampleFile');
 
-        $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directoryMock));
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->directoryMock));
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(true);
         $this->fileMock->expects($this->once())->method('deleteFile')->willReturn(true);
         $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
@@ -160,7 +161,9 @@ class DeleteTest extends TestCase
             ->with('filename')
             ->willReturn('sampleFile');
 
-        $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directoryMock));
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->directoryMock));
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(false);
         $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
 
