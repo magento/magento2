@@ -70,7 +70,7 @@ class OperationRepository implements OperationRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function create($topicName, $entityParams, $groupId, $operationId = null): OperationInterface
+    public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {
         $this->messageValidator->validate($topicName, $entityParams);
         $requestData = $this->inputParamsResolver->getInputData();
