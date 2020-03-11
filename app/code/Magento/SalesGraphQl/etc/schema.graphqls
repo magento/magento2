@@ -17,3 +17,17 @@ type CustomerOrder @doc(description: "Order mapping fields") {
 type CustomerOrders {
     items: [CustomerOrder] @doc(description: "Array of orders")
 }
+
+type Mutation {
+    addAllOrderItemsToCart(orderNumber: String!): ReOrderOutput @doc(description:"Add all the products from Customer order to the Cart") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
+}
+
+type ReOrderOutput @doc(description: "ReOrder output") {
+    cart: Cart!
+    errors:[ReOrderError]
+}
+
+type ReOrderError @doc(description: "Cart line item error") {
+    sku: String!
+    message: String!
+}
