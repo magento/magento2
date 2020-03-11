@@ -39,7 +39,7 @@ type SendEmailToFriendRecipient {
 }
 
 type StoreConfig {
-    sendFriend: SendFriendConfiguration @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendFriendConfiguration") @doc(description: "Email to a Friend configuration.")
+    send_friend: SendFriendConfiguration @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendFriendConfiguration") @doc(description: "Email to a Friend configuration.")
 }
 
 type SendFriendConfiguration {
