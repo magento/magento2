@@ -10,6 +10,8 @@ namespace Magento\ProductAlert\Block\Email;
 
 /**
  * Email Block used to render the form with Back In Stock product id subject to unsubscription
+ *
+ * @api
  */
 class Email extends \Magento\ProductAlert\Block\Email\AbstractEmail
 {

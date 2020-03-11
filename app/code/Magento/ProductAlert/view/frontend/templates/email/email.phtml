@@ -9,14 +9,13 @@
 
 <form action="<?= $block->escapeUrl($block->getProductUnsubscribeUrl()) ?>" method="post" id="unsubscription_form">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
-    <input type="text" id="productId" name="product" value="<?= $block->getProductId() ?>" />
+    <input type="hidden" id="productId" name="product" value="<?= $block->getProductId() ?>" />
 </form>
-<script>
-    require([
-        "jquery"
-    ], function($){
-        $(document).ready(function() {
-            $('#unsubscription_form').submit();
-        });
-    });
+
+<script type="text/x-magento-init">
+    {
+        "#unsubscription_form": {
+            "Magento_ProductAlert/js/form-submitter": {}
+        }
+    }
 </script>
