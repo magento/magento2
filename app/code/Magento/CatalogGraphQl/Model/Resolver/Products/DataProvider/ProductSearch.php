@@ -89,12 +89,14 @@ class ProductSearch
         $this->getSearchResultsApplier($searchResult, $collection, $this->getSortOrderArray($searchCriteria))->apply();
 
         //Additional applier to keep sorting from search
-        $items = [];
-        foreach ($searchResult->getItems() as $item) {
-            $items[] = $item->getId();
+        if (!empty($searchResult->getItems())) {
+            $items = [];
+            foreach ($searchResult->getItems() as $item) {
+                $items[] = $item->getId();
+            }
+            $orderList = join(',', $items);
+            $collection->getSelect()->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
         }
-        $orderList = join(',', $items);
-        $collection->getSelect()->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
 
         $this->collectionPreProcessor->process($collection, $searchCriteria, $attributes);
         $collection->load();
