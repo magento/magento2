@@ -60,12 +60,10 @@ class Account
      */
     public function aroundExecute(AccountInterface $controllerAction, Closure $proceed)
     {
-        if ($this->isActionAllowed()) {
+        /** @FIXME Move Authentication and redirect out of Session model */
+        if ($this->isActionAllowed() || $this->session->authenticate()) {
             return $proceed();
         }
-
-        /** @FIXME Move Authentication and redirect out of Session model */
-        $this->session->authenticate();
     }
 
     /**
