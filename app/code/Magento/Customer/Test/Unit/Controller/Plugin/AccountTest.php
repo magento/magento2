@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Plugin;
 
+use Closure;
 use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Controller\Plugin\Account;
 use Magento\Customer\Model\Session;
@@ -83,40 +84,38 @@ class AccountTest extends TestCase
     /**
      * @param string $action
      * @param array $allowedActions
-     * @param boolean $isActionAllowed
+     * @param boolean $isAllowed
      * @param boolean $isAuthenticated
      *
      * @dataProvider beforeExecuteDataProvider
      */
-    public function testBeforeExecute($action, $allowedActions, $isActionAllowed, $isAuthenticated)
+    public function testAroundExecuteInterruptsOriginalCallWhenNotAllowed(string $action, array $allowedActions, bool $isAllowed, bool $isAuthenticated)
     {
+        /** @var callable|MockObject $proceedMock */
+        $proceedMock = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['__invoke'])
+            ->getMock();
+
+        $closureMock = Closure::fromCallable($proceedMock);
+
         $this->requestMock->expects($this->once())
             ->method('getActionName')
             ->willReturn($action);
 
-        if ($isActionAllowed) {
-            $this->sessionMock->expects($this->once())
-                ->method('setNoReferer')
-                ->with(true)
-                ->willReturnSelf();
+        if ($isAllowed) {
+            $proceedMock->expects($this->once())->method('__invoke')->willReturn($this->resultMock);
         } else {
-            $this->sessionMock->expects($this->once())
-                ->method('authenticate')
-                ->willReturn($isAuthenticated);
-            if (!$isAuthenticated) {
-                $this->actionMock->expects($this->once())
-                    ->method('getActionFlag')
-                    ->willReturn($this->actionFlagMock);
-
-                $this->actionFlagMock->expects($this->once())
-                    ->method('set')
-                    ->with('', ActionInterface::FLAG_NO_DISPATCH, true)
-                    ->willReturnSelf();
-            }
+            $proceedMock->expects($this->never())->method('__invoke');
         }
 
         $plugin = new Account($this->requestMock, $this->sessionMock, $allowedActions);
-        $plugin->beforeExecute($this->actionMock);
+        $result = $plugin->aroundExecute($this->actionMock, $closureMock);
+
+        if ($isAllowed) {
+            $this->assertSame($this->resultMock, $result);
+        } else {
+            $this->assertNull($result);
+        }
     }
 
     /**
@@ -156,25 +155,5 @@ class AccountTest extends TestCase
                 'is_authenticated' => 1,
             ],
         ];
-    }
-
-    public function testAfterExecute()
-    {
-        $this->sessionMock->expects($this->once())
-            ->method('unsNoReferer')
-            ->with(false)
-            ->willReturnSelf();
-
-        $plugin = (new ObjectManager($this))->getObject(
-            Account::class,
-            [
-                'session' => $this->sessionMock,
-                'allowedActions' => ['testaction']
-            ]
-        );
-        $this->assertSame(
-            $this->resultMock,
-            $plugin->afterExecute($this->actionMock, $this->resultMock, $this->requestMock)
-        );
     }
 }

@@ -35,27 +35,20 @@ class Account
      * @var array
      */
     private $allowedActions = [];
-    /**
-     * @var ActionFlag
-     */
-    private $actionFlag;
 
     /**
      * @param RequestInterface $request
      * @param Session $customerSession
-     * @param ActionFlag $actionFlag
      * @param array $allowedActions List of actions that are allowed for not authorized users
      */
     public function __construct(
         RequestInterface $request,
         Session $customerSession,
-        ActionFlag $actionFlag,
         array $allowedActions = []
     ) {
+        $this->request = $request;
         $this->session = $customerSession;
         $this->allowedActions = $allowedActions;
-        $this->request = $request;
-        $this->actionFlag = $actionFlag;
     }
 
     /**
@@ -68,16 +61,11 @@ class Account
     public function aroundExecute(AccountInterface $controllerAction, Closure $proceed)
     {
         if ($this->isActionAllowed()) {
-            $this->session->setNoReferer(true);
-            $response = $proceed();
-            $this->session->unsNoReferer(false);
-
-            return $response;
+            return $proceed();
         }
 
-        if (!$this->session->authenticate()) {
-            $this->actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
-        }
+        /** @FIXME Move Authentication and redirect out of Session model */
+        $this->session->authenticate();
     }
 
     /**
