@@ -171,7 +171,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 [
                     ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70],
                 ],
-                ['qty' => 2, 'price' => 3.00, 'percent' => 70],
+                ['qty' => 2, 'price' => 3.00, 'percent' => 50],
             ],
             'fixed_tier_price_with_qty_1_is_lower_than_special' => [
                 5,
@@ -313,7 +313,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
                 [
                     ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70],
                 ],
-                ['qty' => 2, 'price' => 3.00, 'percent' => 70],
+                ['qty' => 2, 'price' => 3.00, 'percent' => 25],
             ],
             'fixed_catalog_rule_price_lower_than_tier_price' => [
                 2,

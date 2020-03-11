@@ -37,7 +37,7 @@
             <createData entity="PaypalConfig" stepKey="createPaypalExpressConfig"/>
 
             <!-- Login -->
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Cleanup Paypal configurations -->
@@ -55,7 +55,7 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Login to storefront as previously created customer-->

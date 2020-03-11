@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataStorageMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 

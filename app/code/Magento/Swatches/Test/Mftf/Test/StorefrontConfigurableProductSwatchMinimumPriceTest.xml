@@ -40,7 +40,7 @@
                 <argument name="ProductAttribute" value="ProductSizeAttribute"/>
             </actionGroup>
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create text swatch attribute with 3 options:  Black, White and Blue-->
         <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
