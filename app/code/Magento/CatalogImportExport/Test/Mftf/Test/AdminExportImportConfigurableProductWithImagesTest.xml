@@ -134,7 +134,6 @@
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
 
             <!-- Delete created data -->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFisrtSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
@@ -147,6 +146,7 @@
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
             <deleteData createDataKey="createConfigProductAttr" stepKey="deleteConfigProductAttr"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <!-- Admin logout-->
