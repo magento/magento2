@@ -9,12 +9,12 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
-use Magento\Search\Api\SearchInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
@@ -107,13 +107,9 @@ class Search implements ProductQueryInterface
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
 
-        //Create copy of search criteria without conditions (conditions will be applied by joining search result)
-        $searchCriteriaCopy = $this->searchCriteriaFactory->create()
-            ->setSortOrders($searchCriteria->getSortOrders())
-            ->setPageSize($realPageSize)
-            ->setCurrentPage($realCurrentPage);
+        $searchCriteria->setPageSize($realPageSize)->setCurrentPage($realCurrentPage);
 
-        $searchResults = $this->productsProvider->getList($searchCriteriaCopy, $itemsResults, $queryFields);
+        $searchResults = $this->productsProvider->getList($searchCriteria, $itemsResults, $queryFields);
 
         //possible division by 0
         if ($realPageSize) {
@@ -121,8 +117,6 @@ class Search implements ProductQueryInterface
         } else {
             $maxPages = 0;
         }
-        $searchCriteria->setPageSize($realPageSize);
-        $searchCriteria->setCurrentPage($realCurrentPage);
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
