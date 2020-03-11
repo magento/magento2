@@ -85,12 +85,14 @@ class AccountTest extends TestCase
      * @param string $action
      * @param array $allowedActions
      * @param boolean $isAllowed
-     * @param boolean $isAuthenticated
      *
      * @dataProvider beforeExecuteDataProvider
      */
-    public function testAroundExecuteInterruptsOriginalCallWhenNotAllowed(string $action, array $allowedActions, bool $isAllowed, bool $isAuthenticated)
-    {
+    public function testAroundExecuteInterruptsOriginalCallWhenNotAllowed(
+        string $action,
+        array $allowedActions,
+        bool $isAllowed
+    ) {
         /** @var callable|MockObject $proceedMock */
         $proceedMock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['__invoke'])
