@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -87,6 +87,14 @@ class ProductSearch
 
         //Join search results
         $this->getSearchResultsApplier($searchResult, $collection, $this->getSortOrderArray($searchCriteria))->apply();
+
+        //Additional applier to keep sorting from search
+        $items = [];
+        foreach ($searchResult->getItems() as $item) {
+            $items[] = $item->getId();
+        }
+        $orderList = join(',', $items);
+        $collection->getSelect()->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
 
         $this->collectionPreProcessor->process($collection, $searchCriteria, $attributes);
         $collection->load();
