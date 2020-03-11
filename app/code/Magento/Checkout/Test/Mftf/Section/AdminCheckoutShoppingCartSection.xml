@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCheckoutShoppingCartSection">
+        <element name="header" type="button" selector="#checkout_cart-head" />
+        <element name="content" type="button" selector="#checkout_cart" />
+        <element name="itemsPerPageAllowedValues" type="input" selector="#row_checkout_cart_number_items_to_display_pager_values #checkout_cart_number_items_to_display_pager_values"/>
+        <element name="itemsPerPageAllowedValuesLabel" type="text" selector="#row_checkout_cart_number_items_to_display_pager_values label span"/>
+        <element name="itemsPerPageDefaultValue" type="input" selector="#row_checkout_cart_number_items_to_display_pager #checkout_cart_number_items_to_display_pager"/>
+        <element name="itemsPerPageDefaultValueLabel" type="text" selector="#row_checkout_cart_number_items_to_display_pager label span"/>
+    </section>
+</sections>

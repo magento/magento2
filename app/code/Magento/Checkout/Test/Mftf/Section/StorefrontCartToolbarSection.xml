@@ -11,6 +11,9 @@
     <section name="StorefrontCartToolbarSection">
         <element name="toolbarNumber" type="text" selector="div.toolbar > .pager > .toolbar-amount > .toolbar-number" />
         <element name="toolbarPager" type="text" selector="div.toolbar > .pager > .pages" />
+        <element name="toolbarLimiter" type="text" selector="div.toolbar > .pager > .limiter" />
+        <element name="toolbarLimiterSelect" type="text" selector="div.toolbar > .pager > .limiter #limiter" />
+        <element name="toolbarLimiterFirstSelect" type="text" selector="div.toolbar:first-child > .pager > .limiter #limiter" />
         <element name="toolbarNextPage" type="text" selector="div.toolbar > .pager > .pages > .pages-item-next" />
         <element name="toolbarPreviousPage" type="text" selector="div.toolbar > .pager > .pages > .pages-item-previous" />
     </section>

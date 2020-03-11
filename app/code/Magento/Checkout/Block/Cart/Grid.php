@@ -7,10 +7,8 @@
 namespace Magento\Checkout\Block\Cart;
 
 /**
- * Block on checkout/cart/index page to display a pager on the  cart items grid
- * The pager will be displayed if items quantity in the shopping cart > than number from
- * Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager and
- * custom_items weren't set to cart block
+ * Block on checkout/cart/index page to display a pager on the cart items grid
+ * The pager will not be displayed if custom_items are set to cart block
  *
  * @api
  * @since 100.2.0
@@ -18,9 +16,14 @@ namespace Magento\Checkout\Block\Cart;
 class Grid extends \Magento\Checkout\Block\Cart
 {
     /**
-     * Config settings path to determine when pager on checkout/cart/index will be visible
+     * Config settings path to determine the page size on the shopping cart page
      */
     const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER = 'checkout/cart/number_items_to_display_pager';
+
+    /**
+     * Config settings path to determine the page size limiter on the shopping cart page
+     */
+    const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER_VALUES = 'checkout/cart/number_items_to_display_pager_values';
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
@@ -44,6 +47,20 @@ class Grid extends \Magento\Checkout\Block\Cart
      * @var bool
      */
     private $isPagerDisplayed;
+
+    /**
+     * The limit to apply for the Pager
+     *
+     * @var int
+     */
+    private $limit;
+
+    /**
+     * Limit variable name in the request parameters
+     *
+     * @var string
+     */
+    private $limitVarName = 'limit';
 
     /**
      * Grid constructor.
@@ -86,7 +103,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      * Prepare Quote Item Product URLs
      * When we don't have custom_items, items URLs will be collected for Collection limited by pager
      * Pager limit on checkout/cart/index is determined by configuration
-     * Configuration path is Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager
+     * Configuration path is Store->Configuration->Sales->Checkout->Shopping Cart->Items per Page Default Value
      *
      * @return void
      * @since 100.2.0
@@ -102,21 +119,25 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
-     * {@inheritdoc}
+     * Preparing global layout
+     *
      * @since 100.2.0
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
         if ($this->isPagerDisplayedOnPage()) {
-            $availableLimit = (int)$this->_scopeConfig->getValue(
-                self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+            $defaultLimit = $this->getLimit();
+            $availableLimit = $this->getAvailableLimit();
             $itemsCollection = $this->getItemsForGrid();
+
             /** @var  \Magento\Theme\Block\Html\Pager $pager */
             $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class);
-            $pager->setAvailableLimit([$availableLimit => $availableLimit])->setCollection($itemsCollection);
+            $pager->setLimitVarName($this->limitVarName);
+            $pager->setLimit($defaultLimit);
+            $pager->setAvailableLimit($availableLimit);
+            $pager->setCollection($itemsCollection);
+
             $this->setChild('pager', $pager);
             $itemsCollection->load();
             $this->prepareItemUrls();
@@ -146,7 +167,8 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
-     * {@inheritdoc}
+     * Return customer quote items
+     *
      * @since 100.2.0
      */
     public function getItems()
@@ -159,6 +181,7 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * Verify if display pager on shopping cart
+     *
      * If cart block has custom_items and items qty in the shopping cart<limit from stores configuration
      *
      * @return bool
@@ -166,12 +189,57 @@ class Grid extends \Magento\Checkout\Block\Cart
     private function isPagerDisplayedOnPage()
     {
         if (!$this->isPagerDisplayed) {
-            $availableLimit = (int)$this->_scopeConfig->getValue(
+            $this->isPagerDisplayed = !$this->getCustomItems();
+        }
+        return $this->isPagerDisplayed;
+    }
+
+    /**
+     * Get the page limit to apply
+     *
+     * @return int
+     */
+    private function getLimit(): int
+    {
+        if (!$this->limit) {
+            $appliedLimit = $this->getRequest()->getParam($this->limitVarName, null);
+
+            if ($appliedLimit) {
+                $this->limit =  (int)$appliedLimit;
+
+                return $this->limit;
+            }
+
+            $this->limit = (int)$this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            $this->isPagerDisplayed = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
         }
-        return $this->isPagerDisplayed;
+
+        return $this->limit;
+    }
+
+    /**
+     * Get the limiter options available for the customers
+     *
+     * @return array
+     */
+    private function getAvailableLimit(): array
+    {
+        $availableLimit = $this->_scopeConfig->getValue(
+            self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER_VALUES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        if (!$availableLimit) {
+            return [
+                $this->getLimit() => $this->getLimit()
+            ];
+        }
+
+        $availableLimit = explode(',', $availableLimit);
+        $availableLimit = array_combine($availableLimit, $availableLimit);
+
+        return $availableLimit;
     }
 }

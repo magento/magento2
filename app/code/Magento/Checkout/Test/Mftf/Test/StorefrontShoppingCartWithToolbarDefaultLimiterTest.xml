@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShoppingCartWithToolbarDefaultLimiterTest">
+        <annotations>
+            <features value="Shopping Cart"/>
+            <stories value="Check if the cart toolbar contains the default pager limiter"/>
+            <title value="Check if the cart toolbar contains the default pager limiter"/>
+            <description value="Check if the cart toolbar contains the default pager limiter"/>
+            <severity value="MINOR"/>
+            <group value="shoppingCart"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct1"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteProduct1"/>
+        </after>
+        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="AssertShoppingCartToolbarLimiterIsVisibleInCartActionGroup" stepKey="VerifyLimiterPresenceAndDefaultValue">
+            <argument name="defaultLimit" value="{{ShoppingCartItemsPerPageDefaultValueConfigData.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

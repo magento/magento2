@@ -86,13 +86,10 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())->method('getAllVisibleItems')->willReturn([]);
-        $this->scopeConfigMock->expects($this->at(0))
-            ->method('getValue')
-            ->with(
-                \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null
-            )->willReturn(20);
+        $this->itemCollectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($this->itemCollectionMock);
         $this->block = $objectManagerHelper->getObject(
             \Magento\Checkout\Block\Cart\Grid::class,
             [
@@ -122,17 +119,26 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetLayout()
     {
-        $itemsCount = 150;
-        $availableLimit = 20;
+        $defaultLimit = 20;
+        $availableLimits = '10,20,30';
+        $availableLimitsArray = explode(',', $availableLimits);
+        $availableLimitsArray = array_combine($availableLimitsArray, $availableLimitsArray);
+
         $this->getMockItemsForGrid();
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn($itemsCount);
-        $this->scopeConfigMock->expects($this->at(1))
+        $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with(
                 \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
-            )->willReturn($availableLimit);
+            )->willReturn($defaultLimit);
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(
+                \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER_VALUES,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )->willReturn($availableLimits);
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')
@@ -140,8 +146,18 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->pagerBlockMock);
         $this->pagerBlockMock
             ->expects($this->once())
+            ->method('setLimit')
+            ->with($defaultLimit)
+            ->willReturnSelf();
+        $this->pagerBlockMock
+            ->expects($this->once())
+            ->method('setLimitVarName')
+            ->with('limit')
+            ->willReturnSelf();
+        $this->pagerBlockMock
+            ->expects($this->once())
             ->method('setAvailableLimit')
-            ->with([$availableLimit => $availableLimit])
+            ->with($availableLimitsArray)
             ->willReturnSelf();
         $this->pagerBlockMock
             ->expects($this->once())
@@ -158,7 +174,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function testGetItems()
     {
         $this->getMockItemsForGrid();
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(20);
         $this->itemCollectionMock->expects($this->once())->method('getItems')->willReturn(['expected']);
         $this->assertEquals(['expected'], $this->block->getItems());
     }
@@ -210,6 +225,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     public function testGetItemsWhenPagerNotVisible()
     {
+        $this->itemCollectionMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->assertEquals([], $this->block->getItems());
     }
 }

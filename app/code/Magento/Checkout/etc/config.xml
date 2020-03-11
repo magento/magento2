@@ -17,6 +17,7 @@
             <cart>
                 <delete_quote_after>30</delete_quote_after>
                 <redirect_to_cart>0</redirect_to_cart>
+                <number_items_to_display_pager_values>10,20,30</number_items_to_display_pager_values>
                 <number_items_to_display_pager>20</number_items_to_display_pager>
                 <crosssell_enabled>1</crosssell_enabled>
             </cart>

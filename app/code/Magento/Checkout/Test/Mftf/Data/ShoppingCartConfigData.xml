@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ShoppingCartItemsPerPageDefaultValueConfigData">
+        <data key="path">checkout/cart/number_items_to_display_pager</data>
+        <data key="scope_id">0</data>
+        <data key="label">Items per Page Default Value</data>
+        <data key="value">20</data>
+    </entity>
+    <entity name="ShoppingCartItemsPerPageAllowedValuesConfigData">
+        <data key="path">checkout/cart/number_items_to_display_pager_values</data>
+        <data key="scope_id">0</data>
+        <data key="label">Items per Page Allowed Values</data>
+        <data key="value">10,20,30</data>
+    </entity>
+</entities>

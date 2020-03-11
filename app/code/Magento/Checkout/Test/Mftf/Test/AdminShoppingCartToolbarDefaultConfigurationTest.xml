@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminShoppingCartToolbarDefaultConfigurationTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check default settings for shopping cart toolbar"/>
+            <title value="Check default settings for shopping cart toolbar"/>
+            <description value="Check default settings for shopping cart toolbar"/>
+            <severity value="MINOR"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="AssertAdminShoppingCartHasDefaultToolbarConfigurationActionGroup" stepKey="checkShoppingCartDefaultConfig"/>
+    </test>
+</tests>

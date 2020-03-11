@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminShoppingCartHasDefaultToolbarConfigurationActionGroup">
+        <!-- Go to the Shopping Cart System Configuration -->
+        <amOnPage url="{{AdminCheckoutShoppingCartConfigurationPage.url}}" stepKey="amOnAdminConfig"/>
+        <waitForPageLoad stepKey="waitForShoppingCartConfigPage"/>
+
+        <!-- Open the "Shopping Cart" section -->
+        <conditionalClick selector="{{AdminCheckoutShoppingCartSection.header}}" dependentSelector="{{AdminCheckoutShoppingCartSection.content}}" visible="false" stepKey="openShoppingCartSection"/>
+
+        <!-- Wait for the labels to be visible -->
+        <waitForElementVisible selector="{{AdminCheckoutShoppingCartSection.content}}" stepKey="waitForShoppingCartOptions"/>
+        <waitForText userInput="{{ShoppingCartItemsPerPageAllowedValuesConfigData.label}}" stepKey="waitForDefaultAllowedItemsPerPageLabel"/>
+        <waitForText userInput="{{ShoppingCartItemsPerPageDefaultValueConfigData.label}}" stepKey="waitForDefaultItemsPerPageValue"/>
+
+        <!-- Check the default values -->
+        <seeInField selector="{{AdminCheckoutShoppingCartSection.itemsPerPageAllowedValues}}" userInput="{{ShoppingCartItemsPerPageAllowedValuesConfigData.value}}" stepKey="seeDefaultAllowedItemsPerPageValue"/>
+        <seeInField selector="{{AdminCheckoutShoppingCartSection.itemsPerPageDefaultValue}}" userInput="{{ShoppingCartItemsPerPageDefaultValueConfigData.value}}" stepKey="seeDefaultAllowedItemsPerPageLabel"/>
+    </actionGroup>
+</actionGroups>
