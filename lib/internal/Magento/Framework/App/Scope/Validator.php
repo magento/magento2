@@ -32,7 +32,7 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($scope, $scopeCode = null)
     {
@@ -71,6 +71,7 @@ class Validator implements ValidatorInterface
 
     /**
      * Validate scope code
+     *
      * Throw exception if not valid.
      *
      * @param string $scopeCode

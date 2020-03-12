@@ -15,6 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**
+ * Class Validator validates scope and scope code.
+ *
  * @deprecated 100.2.0 Added in order to avoid backward incompatibility because class was moved to another directory.
  * @see \Magento\Framework\App\Scope\Validator
  */
@@ -34,7 +36,7 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($scope, $scopeCode = null)
     {
@@ -73,6 +75,7 @@ class Validator implements ValidatorInterface
 
     /**
      * Validate scope code
+     *
      * Throw exception if not valid.
      *
      * @param string $scopeCode
