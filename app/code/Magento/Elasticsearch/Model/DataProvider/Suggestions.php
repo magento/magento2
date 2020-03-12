@@ -3,37 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Model\DataProvider;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Search\Model\QueryResultFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Search\Model\QueryInterface;
+use Magento\Search\Model\QueryResultFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
- * Class Suggestions
+ * Elasticsearch Suggestions Data Provider
  */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
-     * @deprecated
+     * @deprecated this constant is no longer used
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT
      */
     const CONFIG_SUGGESTION_COUNT = 'catalog/search/search_suggestion_count';
 
     /**
-     * @deprecated
+     * @deprecated this constant is no longer used
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT_RESULTS_ENABLED
      */
     const CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED = 'catalog/search/search_suggestion_count_results_enabled';
 
     /**
-     * @deprecated
+     * @deprecated this constant is no longer used
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_ENABLED
      */
     const CONFIG_SUGGESTION_ENABLED = 'catalog/search/search_suggestion_enabled';
@@ -126,7 +128,7 @@ class Suggestions implements SuggestedQueriesInterface
     public function isResultsCountEnabled()
     {
         return $this->scopeConfig->isSetFlag(
-            self::CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED,
+            self::SEARCH_SUGGESTION_COUNT_RESULTS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -203,7 +205,7 @@ class Suggestions implements SuggestedQueriesInterface
     private function getSearchSuggestionsCount()
     {
         return (int)$this->scopeConfig->getValue(
-            self::CONFIG_SUGGESTION_COUNT,
+            self::SEARCH_SUGGESTION_COUNT,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -216,7 +218,7 @@ class Suggestions implements SuggestedQueriesInterface
     private function isSuggestionsAllowed()
     {
         $isSuggestionsEnabled = $this->scopeConfig->isSetFlag(
-            self::CONFIG_SUGGESTION_ENABLED,
+            self::SEARCH_SUGGESTION_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
         $isEnabled = $this->config->isElasticsearchEnabled();

@@ -27,6 +27,44 @@ define([
             value: '',
             validation: false,
             validationRules: [],
+            keyEventHandlers: {
+
+                /**
+                 * Enter key press handler,
+                 * submit result and close modal window
+                 * @param {Object} event - event
+                 */
+                enterKey: function (event) {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this.closeModal(true);
+                        event.preventDefault();
+                    }
+                },
+
+                /**
+                 * Tab key press handler,
+                 * set focus to elements
+                 */
+                tabKey: function () {
+                    if (document.activeElement === this.modal[0]) {
+                        this._setFocus('start');
+                    }
+                },
+
+                /**
+                 * Escape key press handler,
+                 * cancel and close modal window
+                 * @param {Object} event - event
+                 */
+                escapeKey: function (event) {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this.closeModal();
+                        event.preventDefault();
+                    }
+                }
+            },
             actions: {
 
                 /**
