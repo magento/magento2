@@ -85,7 +85,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchConfigurableBySkuTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
@@ -165,7 +165,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchConfigurableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
@@ -245,7 +245,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchConfigurableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
@@ -325,7 +325,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
 </tests>
