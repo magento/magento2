@@ -98,6 +98,9 @@
     <!-- Verify that the Layered navigation price step field has the required indicator -->
     <comment userInput="Check if Layered navigation price field has required indicator icon" stepKey="comment" />
     <executeJS function="{{CategoryDisplaySettingsSection.RequiredFieldIndicator('filter_price_range')}}" stepKey="getRequiredFieldIndicator"/>
-    <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="getRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator1"/>
+    <assertEquals message="pass" stepKey="assertRequiredFieldIndicator1">
+			<actualResult type="variable">getRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
     </test>
 </tests>
