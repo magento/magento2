@@ -4250,7 +4250,6 @@ return [
     ['Magento\Elasticsearch\Model\Client\Elasticsearch'],
     ['Magento\Elasticsearch\SearchAdapter\Aggregation\Interval'],
     ['Magento\Elasticsearch\SearchAdapter\Mapper'],
-    ['Magento\Elasticsearch6\Model\DataProvider\Suggestions'],
     ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType'],
     ['Magento\Elasticsearch\Model\Adapter\DataMapperInterface'],
     ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy'],

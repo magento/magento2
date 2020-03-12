@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+
 /**
  * Class ProductFieldMapper provides field name by attribute code and retrieve all attribute types
  */
