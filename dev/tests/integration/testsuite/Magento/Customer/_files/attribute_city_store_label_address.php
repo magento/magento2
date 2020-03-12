@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Customer\Model\Attribute $model */
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
+/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+$storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
+$model->loadByCode('customer_address', 'city');
+$storeLabels = $model->getStoreLabels();
+$websites = $storeManager->getWebsites();
+/** @var \Magento\Store\Api\Data\WebsiteInterface $website */
+foreach ($websites as $website) {
+    $storeLabels[$website->getId()] = 'Suburb';
+}
+$model->setStoreLabels($storeLabels);
+$model->save();

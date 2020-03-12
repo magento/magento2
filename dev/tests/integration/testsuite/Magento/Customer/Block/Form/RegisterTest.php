@@ -139,29 +139,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
-     * @return void
+     * @magentoDataFixture Magento/Customer/_files/attribute_city_store_label_address.php
      */
-    public function testTelephoneWithStoreLabel(): void
+    public function testCityWithStoreLabel(): void
     {
-        /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->create(
-            \Magento\Store\Model\StoreManagerInterface::class
-        );
-        $stores = $storeManager->getStores();
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = Bootstrap::getObjectManager()->create(
-            \Magento\Eav\Model\Config::class
-        );
-        $model = $eavConfig->getAttribute('customer_address', 'telephone');
-        $storeLabels = $model->getStoreLabels();
-        foreach ($stores as $store) {
-            $storeLabels[$store->getId()] = 'Phone NumberX';
-        }
-        $model->setStoreLabels([$storeLabels]);
-        $model->save();
-
         /** @var \Magento\Customer\Block\Form\Register $block */
         $block = Bootstrap::getObjectManager()->create(
             Register::class
@@ -169,8 +150,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
 
-        $this->assertNotContains('title="Phone&#x20;Number"', $block->toHtml());
-        $this->assertContains('title="Phone&#x20;NumberX"', $block->toHtml());
+        $this->assertNotContains('title="City"', $block->toHtml());
+        $this->assertContains('title="Suburb"', $block->toHtml());
     }
 
     /**
