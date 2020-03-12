@@ -65,7 +65,10 @@ class FilterProcessor implements CollectionProcessorInterface
     ) {
         $fields = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            if ($filter->getField() != 'search_term' && $filter->getField() != 'price_dynamic_algorithm') {
+            if ($filter->getField() != 'search_term'
+                && $filter->getField() != 'price_dynamic_algorithm'
+                && $filter->getField() != 'price.to'
+                && $filter->getField() != 'price.from') {
                 $isApplied = false;
                 $customFilter = $this->getCustomFilterForField($filter->getField());
                 if ($customFilter) {
