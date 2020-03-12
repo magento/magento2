@@ -93,6 +93,6 @@ class OperationRepository
 
         /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
         $operation = $this->operationFactory->create($data);
-        return $this->entityManager->save($operation);
+        return $operation;
     }
 }

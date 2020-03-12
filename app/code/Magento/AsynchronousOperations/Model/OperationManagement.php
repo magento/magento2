@@ -45,7 +45,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
         $this->operationFactory = $operationFactory;
         $this->logger = $logger;
     }
-    
+
     /**
      * @inheritDoc
      */
