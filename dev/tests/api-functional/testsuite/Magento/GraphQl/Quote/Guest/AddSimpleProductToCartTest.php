@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Quote\Guest;
 use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -77,6 +78,30 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         self::assertEquals(20, $rowTotalIncludingTax['value']);
         self::assertArrayHasKey('currency', $rowTotalIncludingTax);
         self::assertEquals('USD', $rowTotalIncludingTax['currency']);
+    }
+
+    /**
+     * Add out of stock product to cart
+     *
+     * @@magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @return void
+     */
+    public function testAddProductToCartWithError(): void
+    {
+        $disabledProductSku = 'simple3';
+        $quantity = 2;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $disabledProductSku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU simple3 to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
+        );
+
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -191,7 +216,7 @@ QUERY;
     private function getQuery(string $maskedQuoteId, string $sku, float $quantity): string
     {
         return <<<QUERY
-mutation {  
+mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}"
