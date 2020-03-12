@@ -67,26 +67,52 @@ class AsyncCssPluginTest extends TestCase
     {
         return [
             [
-                "content" => "<body><h1>Test Title</h1>" .
-                    "<link rel=\"stylesheet\" href=\"css/critical.css\" />" .
-                    "<p>Test Content</p></body>",
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<style>.critical-css{}</style>" .
+                    "</head>",
                 "flag" => true,
-                "result" => "<body><h1>Test Title</h1>" .
-                    "<link rel=\"preload\" as=\"style\" media=\"all\"" .
-                    " onload=\"this.onload=null;this.rel='stylesheet'\" href=\"css/critical.css\" />" .
-                    "<p>Test Content</p>" .
-                    "<link rel=\"stylesheet\" href=\"css/critical.css\" />" .
-                    "\n</body>"
+                "result" => "<head><style>.critical-css{}</style>\n" .
+                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/async.css\">\n" .
+                    "</head>",
             ],
             [
-                "content" => "<body><p>Test Content</p></body>",
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<link rel=\"preload\" href=\"other-file.html\">" .
+                    "</head>",
+                "flag" => true,
+                "result" => "<head><link rel=\"preload\" href=\"other-file.html\">\n" .
+                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/async.css\">\n" .
+                    "</head>",
+            ],
+            [
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<link rel=\"preload\" href=\"other-file.html\">" .
+                    "</head>",
                 "flag" => false,
-                "result" => "<body><p>Test Content</p></body>"
+                "result" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
+                    "<link rel=\"preload\" href=\"other-file.html\">" .
+                    "</head>",
             ],
             [
-                "content" => "<body><p>Test Content</p></body>",
+                "content" => "<head><link rel=\"stylesheet\" href=\"css/first.css\">" .
+                    "<link rel=\"stylesheet\" href=\"css/second.css\">" .
+                    "<style>.critical-css{}</style>" .
+                    "</head>",
                 "flag" => true,
-                "result" => "<body><p>Test Content</p></body>"
+                "result" => "<head><style>.critical-css{}</style>\n" .
+                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/first.css\">\n" .
+                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/second.css\">\n" .
+                    "</head>",
+            ],
+            [
+                "content" => "<head><style>.critical-css{}</style></head>",
+                "flag" => false,
+                "result" => "<head><style>.critical-css{}</style></head>"
+            ],
+            [
+                "content" => "<head><style>.critical-css{}</style></head>",
+                "flag" => true,
+                "result" => "<head><style>.critical-css{}</style></head>"
             ]
         ];
     }
