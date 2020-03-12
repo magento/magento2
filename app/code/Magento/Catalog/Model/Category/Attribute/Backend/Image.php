@@ -81,9 +81,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
         $this->storeManager = $storeManager ??
-            ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->imageUploader = $imageUploader ??
-            ObjectManager::getInstance()->get(ImageUploader::class);
+        ObjectManager::getInstance()->get(ImageUploader::class);
     }
 
     /**
@@ -196,9 +196,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if (!$baseMediaDir) {
             return false;
         }
-        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
 
-        return $usingPathRelativeToBase;
+        return strpos($fileUrl, $baseMediaDir) === 0;
     }
 
     /**
