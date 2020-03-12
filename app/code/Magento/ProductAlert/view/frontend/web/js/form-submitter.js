@@ -11,5 +11,5 @@ define([
     return function (data, element) {
 
         $(element).submit();
-    }
+    };
 });
