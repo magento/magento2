@@ -85,14 +85,8 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         );
 
         $collection = $this->searchByCategoryId((int) $categoryA->getId());
-        $collection->_loadEntities();
-        $productIds = [];
 
-        foreach ($collection->getItems() as $product) {
-            $productIds[] = $product->getId();
-        }
-
-        $this->assertProductsArePresentInCollection($productIds);
+        $this->assertProductsArePresentInCollection($collection->getAllIds());
     }
 
     /**
