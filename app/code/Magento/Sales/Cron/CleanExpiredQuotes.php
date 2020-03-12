@@ -5,12 +5,12 @@
  */
 namespace Magento\Sales\Cron;
 
-use Magento\Quote\Model\ResourceModel\Quote\Collection;
+use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class CleanExpiredQuotes
+ * Cron job for cleaning expired Quotes
  */
 class CleanExpiredQuotes
 {
@@ -45,9 +45,20 @@ class CleanExpiredQuotes
     {
         $stores = $this->storeManager->getStores(true);
         foreach ($stores as $store) {
-            /** @var $quotes Collection */
-            $quotes = $this->expiredQuotesCollection->getExpiredQuotes($store);
-            $quotes->walk('delete');
+            /** @var $quoteCollection QuoteCollection */
+            $quoteCollection = $this->expiredQuotesCollection->getExpiredQuotes($store);
+            $quoteCollection->setPageSize(50);
+
+            // Last page returns 1 even when we don't have any results
+            $lastPage = $quoteCollection->getSize() ? $quoteCollection->getLastPageNumber() : 0;
+
+            for ($currentPage = 1; $currentPage <= $lastPage; $currentPage++) {
+                $quoteCollection->setCurPage($currentPage);
+
+                $quoteCollection->walk('delete');
+
+                $quoteCollection->clear();
+            }
         }
     }
 }
