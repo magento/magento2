@@ -117,8 +117,8 @@
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
             <assertNotEmpty stepKey="assertNotEmpty">
-			<actualResult type="const">$grabAttribute</actualResult>
-        </assertNotEmpty>
+    			<actualResult type="const">$grabAttribute</actualResult>
+            </assertNotEmpty>
 
             <!-- Create bundle Product -->
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
@@ -152,8 +152,8 @@
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
             <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
-			<actualResult type="const">$grabBundleOption</actualResult>
-        </assertNotEmpty>
+        		<actualResult type="const">$grabBundleOption</actualResult>
+            </assertNotEmpty>
 
             <!-- Create sales rule -->
             <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
