@@ -10,15 +10,15 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
-    as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ResolverInterface
     as FieldIndexResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
+    as FieldTypeResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**

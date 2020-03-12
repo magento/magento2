@@ -9,13 +9,13 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 

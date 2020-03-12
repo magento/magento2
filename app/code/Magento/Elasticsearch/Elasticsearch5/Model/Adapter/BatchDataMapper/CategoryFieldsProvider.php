@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper;
 
-use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
+use Magento\Elasticsearch\Model\ResourceModel\Index;
 
 /**
  * Provide data mapping for categories fields

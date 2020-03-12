@@ -5,14 +5,14 @@
  */
 namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter;
 
+use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
+use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
+use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Response\QueryResponse;
-use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
 
 /**
  * Elasticsearch Search Adapter
@@ -54,19 +54,15 @@ class Adapter implements AdapterInterface
      * @var array
      */
     private static $emptyRawResponse = [
-        "hits" =>
-            [
-                "hits" => []
-            ],
-        "aggregations" =>
-            [
-                "price_bucket" => [],
-                "category_bucket" =>
-                    [
-                        "buckets" => []
-
-                    ]
+        'hits' => [
+            'hits' => []
+        ],
+        'aggregations' => [
+            'price_bucket' => [],
+            'category_bucket' => [
+                'buckets' => []
             ]
+        ]
     ];
 
     /**

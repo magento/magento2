@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
 
+use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
-use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 
 /**
- * Builder class for Elasticsearch
+ * Elasticsearch aggregation builder
  */
 class Builder
 {
@@ -34,7 +35,7 @@ class Builder
     /**
      * @var QueryContainer
      */
-    private $query = null;
+    private $query;
 
     /**
      * @param  DataProviderInterface[] $dataProviderContainer
@@ -47,13 +48,13 @@ class Builder
         DataProviderFactory $dataProviderFactory
     ) {
         $this->dataProviderContainer = array_map(
-            function (DataProviderInterface $dataProvider) {
+            static function (DataProviderInterface $dataProvider) {
                 return $dataProvider;
             },
             $dataProviderContainer
         );
         $this->aggregationContainer = array_map(
-            function (BucketBuilderInterface $bucketBuilder) {
+            static function (BucketBuilderInterface $bucketBuilder) {
                 return $bucketBuilder;
             },
             $aggregationContainer

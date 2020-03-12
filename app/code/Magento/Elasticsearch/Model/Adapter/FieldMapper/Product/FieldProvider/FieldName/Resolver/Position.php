@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 
 /**
  * Resolver field name for position attribute.

@@ -83,6 +83,51 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     }
 
     /**
+     * Test case: get available shipping methods from current customer quote with configurable product
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/configurable_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_configurable_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetAvailableShippingMethodsWithConfigurableProduct()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $response = $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
+        self::assertCount(1, $response['cart']['shipping_addresses']);
+        self::assertArrayHasKey('available_shipping_methods', $response['cart']['shipping_addresses'][0]);
+        self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
+
+        $expectedAddressData = [
+            'amount' => [
+                'value' => 5,
+                'currency' => 'USD',
+            ],
+            'carrier_code' => 'flatrate',
+            'carrier_title' => 'Flat Rate',
+            'error_message' => '',
+            'method_code' => 'flatrate',
+            'method_title' => 'Fixed',
+            'price_incl_tax' => [
+                'value' => 5,
+                'currency' => 'USD',
+            ],
+            'price_excl_tax' => [
+                'value' => 5,
+                'currency' => 'USD',
+            ],
+        ];
+        self::assertEquals(
+            $expectedAddressData,
+            $response['cart']['shipping_addresses'][0]['available_shipping_methods'][0]
+        );
+    }
+
+    /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
