@@ -72,7 +72,9 @@ class AsyncCssPluginTest extends TestCase
                     "</head>",
                 "flag" => true,
                 "result" => "<head><style>.critical-css{}</style>\n" .
-                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/async.css\">\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/async.css\">\n" .
                     "</head>",
             ],
             [
@@ -81,7 +83,9 @@ class AsyncCssPluginTest extends TestCase
                     "</head>",
                 "flag" => true,
                 "result" => "<head><link rel=\"preload\" href=\"other-file.html\">\n" .
-                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/async.css\">\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/async.css\">\n" .
                     "</head>",
             ],
             [
@@ -100,8 +104,12 @@ class AsyncCssPluginTest extends TestCase
                     "</head>",
                 "flag" => true,
                 "result" => "<head><style>.critical-css{}</style>\n" .
-                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/first.css\">\n" .
-                    "<link rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" href=\"css/second.css\">\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/first.css\">\n" .
+                    "<link " .
+                        "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
+                        "href=\"css/second.css\">\n" .
                     "</head>",
             ],
             [
