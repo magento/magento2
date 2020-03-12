@@ -73,7 +73,7 @@ class GetCustomerByToken
         }
         if ($found->getTotalCount() === 0) {
             //Customer with such token not found.
-            new NoSuchEntityException(
+           throw new NoSuchEntityException(
                 new Phrase(
                     'No such entity with rp_token = %value',
                     [
