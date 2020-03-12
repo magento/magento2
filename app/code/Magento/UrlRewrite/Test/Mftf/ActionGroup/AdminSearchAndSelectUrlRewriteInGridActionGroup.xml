@@ -18,12 +18,14 @@
 
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
         <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
-        <click selector="{{AdminUrlRewriteIndexSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{requestPath}}" stepKey="fillRedirectPathFilter"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{requestPath}}" stepKey="fillRequestPathFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminUrlRewriteIndexSection.editButton('1')}}" stepKey="clickOnEditButton"/>
+        <click selector="{{AdminUrlRewriteIndexSection.rowSelectAction('1')}}" stepKey="clickOnRowSelectButton"/>
+        <click selector="{{AdminUrlRewriteIndexSection.rowEditAction('1')}}" stepKey="clickOnEditButton"/>
         <waitForPageLoad stepKey="waitForEditPageToLoad"/>
     </actionGroup>
 </actionGroups>
