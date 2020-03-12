@@ -12,6 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test class for \Magento\Customer\Block\Form\Register
  *
+ * @codingStandardsIgnoreFile
  * @magentoAppArea frontend
  */
 class RegisterTest extends \PHPUnit\Framework\TestCase
