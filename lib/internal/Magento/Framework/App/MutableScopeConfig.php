@@ -29,6 +29,10 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
         $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
+        if ($scopeCode !== null) {
+            $scopeCode = $this->normalizeScopeCode($scope, $scopeCode);
+        }
+
         if (isset($this->data[$scope][$scopeCode][$path])) {
             return $this->data[$scope][$scopeCode][$path];
         }
@@ -42,7 +46,7 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
      * @param string $path
      * @param mixed $value
      * @param string $scope
-     * @param null|string $scopeCode
+     * @param null|int|string|\Magento\Framework\App\ScopeInterface $scopeCode
      * @return void
      */
     public function setValue(
@@ -51,6 +55,10 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
         $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
+        if ($scopeCode !== null) {
+            $scopeCode = $this->normalizeScopeCode($scope, $scopeCode);
+        }
+
         $this->data[$scope][$scopeCode][$path] = $value;
     }
 

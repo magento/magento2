@@ -50,7 +50,7 @@ class Config implements ScopeConfigInterface
      *
      * @param string $path
      * @param string $scope
-     * @param null|int|string $scopeCode
+     * @param null|int|string|\Magento\Framework\App\ScopeInterface $scopeCode
      * @return mixed
      */
     public function getValue(
@@ -65,11 +65,7 @@ class Config implements ScopeConfigInterface
         }
         $configPath = $scope;
         if ($scope !== 'default') {
-            if (is_numeric($scopeCode) || $scopeCode === null) {
-                $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
-            } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
-                $scopeCode = $scopeCode->getCode();
-            }
+            $scopeCode = $this->normalizeScopeCode($scope, $scopeCode);
             if ($scopeCode) {
                 $configPath .= '/' . $scopeCode;
             }
@@ -78,6 +74,26 @@ class Config implements ScopeConfigInterface
             $configPath .= '/' . $path;
         }
         return $this->get('system', $configPath);
+    }
+
+    /**
+     * @param string $scope
+     * @param null|int|string|\Magento\Framework\App\ScopeInterface $scopeCode
+     * @return string
+     */
+    protected function normalizeScopeCode($scope, $scopeCode)
+    {
+        if (is_string($scopeCode)) {
+            return $scopeCode;
+        }
+
+        if (is_numeric($scopeCode) || $scopeCode === null) {
+            $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
+        } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+            $scopeCode = $scopeCode->getCode();
+        }
+
+        return $scopeCode;
     }
 
     /**
