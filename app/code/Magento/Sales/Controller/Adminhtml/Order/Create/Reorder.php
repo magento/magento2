@@ -20,6 +20,7 @@ use Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
+use Psr\Log\LoggerInterface;
 
 /**
  * Controller create order.
@@ -42,6 +43,11 @@ class Reorder extends Create implements HttpGetActionInterface
     private $reorderHelper;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Action\Context $context
      * @param Product $productHelper
      * @param Escaper $escaper
@@ -50,6 +56,7 @@ class Reorder extends Create implements HttpGetActionInterface
      * @param UnavailableProductsProvider $unavailableProductsProvider
      * @param OrderRepositoryInterface $orderRepository
      * @param ReorderHelper $reorderHelper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
@@ -59,11 +66,13 @@ class Reorder extends Create implements HttpGetActionInterface
         ForwardFactory $resultForwardFactory,
         UnavailableProductsProvider $unavailableProductsProvider,
         OrderRepositoryInterface $orderRepository,
-        ReorderHelper $reorderHelper
+        ReorderHelper $reorderHelper,
+        LoggerInterface $logger
     ) {
         $this->unavailableProductsProvider = $unavailableProductsProvider;
         $this->orderRepository = $orderRepository;
         $this->reorderHelper = $reorderHelper;
+        $this->logger = $logger;
         parent::__construct(
             $context,
             $productHelper,
@@ -110,9 +119,11 @@ class Reorder extends Create implements HttpGetActionInterface
                 $this->_getOrderCreateModel()->initFromOrder($order);
                 $resultRedirect->setPath('sales/*');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->logger->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('sales/*');
             } catch (\Exception $e) {
+                $this->logger->critical($e);
                 $this->messageManager->addException($e, __('Error while processing order.'));
                 return $resultRedirect->setPath('sales/*');
             }
