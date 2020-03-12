@@ -40,25 +40,32 @@ class JsFooterPlugin
     public function beforeSendResponse(Http $subject)
     {
         $content = $subject->getContent();
-        $script = [];
-        if (is_string($content) && strpos($content, '</body') !== false) {
-            if ($this->scopeConfig->isSetFlag(
-                self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-                ScopeInterface::SCOPE_STORE
-            )
-            ) {
-                $pattern = '#<script[^>]*+(?<!text/x-magento-template.)>.*?</script>#is';
-                $content = preg_replace_callback(
-                    $pattern,
-                    function ($matchPart) use (&$script) {
-                        $script[] = $matchPart[0];
-                        return '';
-                    },
-                    $content
-                );
-                $subject->setContent(
-                    str_replace('</body', implode("\n", $script) . "\n</body", $content)
-                );
+
+        $bodyClose = '</body';
+
+        if (is_string($content) && strpos($content, $bodyClose) !== false && $this->scopeConfig->isSetFlag(
+            self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
+            ScopeInterface::SCOPE_STORE
+        )) {
+            $scripts = '';
+
+            $scriptOpen = '<script';
+            $scriptClose = '</script>';
+
+            $scriptOpenPos = strpos($content, $scriptOpen);
+            while ($scriptOpenPos !== false) {
+                $scriptClosePos = strpos($content, $scriptClose, $scriptOpenPos);
+                $script = substr($content, $scriptOpenPos, $scriptClosePos - $scriptOpenPos + strlen($scriptClose));
+
+                $scripts .= "\n" . $script;
+                $content = str_replace($script, '', $content);
+                // Script cut out, continue search from its position.
+                $scriptOpenPos = strpos($content, $scriptOpen, $scriptOpenPos);
+            }
+
+            if ($scripts) {
+                $content = str_replace($bodyClose, $scripts . "\n" . $bodyClose, $content);
+                $subject->setContent($content);
             }
         }
     }
