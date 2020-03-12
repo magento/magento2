@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\SearchAdapter;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Response\QueryResponse;
-use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 
 /**
  * Elasticsearch Search Adapter
@@ -57,14 +57,13 @@ class Adapter implements AdapterInterface
         Mapper $mapper,
         ResponseFactory $responseFactory,
         AggregationBuilder $aggregationBuilder,
-        QueryContainerFactory $queryContainerFactory = null
+        QueryContainerFactory $queryContainerFactory
     ) {
         $this->connectionManager = $connectionManager;
         $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
         $this->aggregationBuilder = $aggregationBuilder;
-        $this->queryContainerFactory = $queryContainerFactory
-            ?: ObjectManager::getInstance()->get(QueryContainerFactory::class);
+        $this->queryContainerFactory = $queryContainerFactory;
     }
 
     /**
