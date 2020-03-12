@@ -10,7 +10,7 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
- * Class OperationManagement
+ * Class for managing Bulk Operations
  */
 class OperationManagement implements \Magento\Framework\Bulk\OperationManagementInterface
 {

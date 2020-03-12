@@ -7,7 +7,7 @@
 namespace Magento\AsynchronousOperations\Model\ResourceModel;
 
 /**
- * Class Operation
+ * Resource class for Bulk Operations
  */
 class Operation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -50,5 +50,4 @@ class SaveMultipleOperations implements SaveMultipleOperationsInterface
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
     }
-
 }

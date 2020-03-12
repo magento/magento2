@@ -67,9 +67,11 @@ class OperationRepository
     }
 
     /**
-     * @param $topicName
-     * @param $entityParams
-     * @param $groupId
+     * Creating topic for publishing
+     *
+     * @param string $topicName
+     * @param mixed $entityParams
+     * @param string $groupId
      * @return mixed
      */
     public function createByTopic($topicName, $entityParams, $groupId)
