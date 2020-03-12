@@ -139,7 +139,10 @@
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad2"/>
         <grabTextFrom stepKey="getCurrentOption" selector="{{StorefrontProductInfoMainSection.nthAttributeOnPage('1')}}"/>
-        <assertNotEquals expected="{$getBeforeOption}" expectedType="string" actual="{$getCurrentOption}" actualType="string"  stepKey="assertNotEquals"/>
+        <assertNotEquals stepKey="assertNotEquals">
+			<actualResult type="string">{$getCurrentOption}</actualResult>
+			<expectedResult type="string">{$getBeforeOption}</expectedResult>
+        </assertNotEquals>
 
     </test>
 

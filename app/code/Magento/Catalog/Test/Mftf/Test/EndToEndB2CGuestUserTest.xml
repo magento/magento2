@@ -81,7 +81,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct1ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct1ImageSrc" stepKey="browseAssertSimpleProduct1ImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct1ImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <!-- Check simple product 2 in category -->
         <comment userInput="Check simple product 2 in category" stepKey="commentCheckSimpleProduct2InCategory" />
         <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct2">
@@ -89,7 +92,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct2ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct2ImageSrc" stepKey="browseAssertSimpleProduct2ImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct2ImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="browseAssertSimpleProduct2ImageNotDefault"/>
@@ -100,7 +106,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabSimpleProduct1PageImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct1PageImageSrc" stepKey="browseAssertSimpleProduct1PageImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct1PageImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct1PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- View Simple Product 2 -->
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" />
@@ -112,7 +121,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabSimpleProduct2PageImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct2PageImageSrc" stepKey="browseAssertSimpleProduct2PageImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct2PageImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct2PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <comment userInput="End of browsing catalog" stepKey="endOfBrowsingCatalog" after="browseAssertSimpleProduct2PageImageNotDefault"/>
 
         <!-- Step 4: User compares products -->
@@ -130,7 +142,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrc" stepKey="compareAssertSimpleProduct1ImageNotDefault"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct1ImageNotDefault">
+			<actualResult type="const">$compareGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareClickSimpleProduct1"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCompareSimpleProduct1loaded" />
         <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="compareAssertProduct1Page">
@@ -138,7 +153,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="compareGrabSimpleProduct1PageImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$compareGrabSimpleProduct1PageImageSrc" stepKey="compareAssertSimpleProduct2PageImageNotDefault"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct2PageImageNotDefault">
+			<actualResult type="const">$compareGrabSimpleProduct1PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -156,7 +174,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct2ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrc" stepKey="compareAssertSimpleProduct2ImageNotDefault"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct2ImageNotDefault">
+			<actualResult type="const">$compareGrabSimpleProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
@@ -182,7 +203,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrcInComparison"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrcInComparison" stepKey="compareAssertSimpleProduct1ImageNotDefaultInComparison"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct1ImageNotDefaultInComparison">
+			<actualResult type="const">$compareGrabSimpleProduct1ImageSrcInComparison</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <!-- Check simple product2 on comparison page -->
         <comment userInput="Check simple product 2 on comparison page" stepKey="commentCheckSimpleProduct2OnComparisonPage" />
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct2InComparison">
@@ -190,7 +214,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct2ImageSrcInComparison"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrcInComparison" stepKey="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct2ImageNotDefaultInComparison">
+			<actualResult type="const">$compareGrabSimpleProduct2ImageSrcInComparison</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Clear comparison sidebar -->
         <comment userInput="Clear comparison sidebar" stepKey="commentClearComparisonSidebar" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
@@ -274,7 +301,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct1ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct1ImageSrc" stepKey="browseAssertSimpleProduct1ImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct1ImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <!-- Check simple product 2 in category -->
         <comment userInput="Check simple product 2 in category" stepKey="commentCheckSimpleProduct2InCategory" />
         <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct2">
@@ -282,7 +312,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct2ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct2ImageSrc" stepKey="browseAssertSimpleProduct2ImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct2ImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="browseAssertSimpleProduct2ImageNotDefault"/>
@@ -293,7 +326,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabSimpleProduct1PageImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct1PageImageSrc" stepKey="browseAssertSimpleProduct1PageImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct1PageImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct1PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- View Simple Product 2 -->
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" />
@@ -305,7 +341,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabSimpleProduct2PageImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct2PageImageSrc" stepKey="browseAssertSimpleProduct2PageImageNotDefault"/>
+        <assertNotRegExp stepKey="browseAssertSimpleProduct2PageImageNotDefault">
+			<actualResult type="const">$browseGrabSimpleProduct2PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <comment userInput="End of browsing catalog" stepKey="endOfBrowsingCatalog" after="browseAssertSimpleProduct2PageImageNotDefault"/>
 
         <!-- Step 4: User compares products -->
@@ -323,7 +362,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrc" stepKey="compareAssertSimpleProduct1ImageNotDefault"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct1ImageNotDefault">
+			<actualResult type="const">$compareGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareClickSimpleProduct1"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCompareSimpleProduct1loaded" />
         <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="compareAssertProduct1Page">
@@ -331,7 +373,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="compareGrabSimpleProduct1PageImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$compareGrabSimpleProduct1PageImageSrc" stepKey="compareAssertSimpleProduct2PageImageNotDefault"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct2PageImageNotDefault">
+			<actualResult type="const">$compareGrabSimpleProduct1PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -349,7 +394,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct2ImageSrc"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrc" stepKey="compareAssertSimpleProduct2ImageNotDefault"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct2ImageNotDefault">
+			<actualResult type="const">$compareGrabSimpleProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
@@ -375,7 +423,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrcInComparison"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrcInComparison" stepKey="compareAssertSimpleProduct1ImageNotDefaultInComparison"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct1ImageNotDefaultInComparison">
+			<actualResult type="const">$compareGrabSimpleProduct1ImageSrcInComparison</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <!-- Check simple product2 on comparison page -->
         <comment userInput="Check simple product 2 on comparison page" stepKey="commentCheckSimpleProduct2OnComparisonPage" />
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct2InComparison">
@@ -383,7 +434,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct2ImageSrcInComparison"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrcInComparison" stepKey="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
+        <assertNotRegExp stepKey="compareAssertSimpleProduct2ImageNotDefaultInComparison">
+			<actualResult type="const">$compareGrabSimpleProduct2ImageSrcInComparison</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Clear comparison sidebar -->
         <comment userInput="Clear comparison sidebar" stepKey="commentClearComparisonSidebar" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>

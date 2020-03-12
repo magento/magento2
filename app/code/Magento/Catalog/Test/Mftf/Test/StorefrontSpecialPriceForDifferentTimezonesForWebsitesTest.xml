@@ -72,7 +72,10 @@
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="grabSpecialPrice"/>
-        <assertEquals expected='$15.00' expectedType="string" actual="$grabSpecialPrice" stepKey="assertSpecialPrice"/>
+        <assertEquals stepKey="assertSpecialPrice">
+			<actualResult type="const">$grabSpecialPrice</actualResult>
+			<expectedResult type="string">$15.00</expectedResult>
+        </assertEquals>
 
         <!--Reset timezone-->
         <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset"/>
