@@ -47,11 +47,10 @@ class Context implements ContextInterface
         $this->mediaConfig = $mediaConfig;
         $this->filesystem = $filesystem;
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->mediaDirectory->create($this->mediaConfig->getBaseMediaPath());
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -59,7 +58,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBaseUrl()
     {
