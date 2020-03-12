@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCartPriceRuleSubtotal">
+    <test name="StorefrontCartPriceRulePostcodeTest">
         <annotations>
             <features value="SalesRule"/>
             <stories value="Create cart price rule"/>
-            <title value="Customer should only see cart price rule discount if condition subtotal equals or greater than"/>
-            <description value="Customer should only see cart price rule discount if condition subtotal equals or greater than"/>
+            <title value="Customer should only see cart price rule discount if condition shipping postcode"/>
+            <description value="Customer should only see cart price rule discount if condition shipping postcode"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-235"/>
+            <testCaseId value="MC-238"/>
             <group value="SalesRule"/>
         </annotations>
 
@@ -24,7 +24,6 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
@@ -49,20 +48,25 @@
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
         <!-- Scroll down to fix some flaky behavior... -->
         <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
+        <waitForElementVisible selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="waitForNewRule"/>
         <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule"/>
-        <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Subtotal" stepKey="selectProductAttributes"/>
-        <waitForPageLoad stepKey="waitForConditions"/>
+        <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Shipping Postcode" stepKey="selectProductAttributes"/>
+        <waitForPageLoad stepKey="wait1"/>
         <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '1')}}" stepKey="startEditOperator"/>
-        <selectOption selector="{{PriceRuleConditionsSection.operatorByIndex('1', '1')}}" userInput="equals or greater than" stepKey="fillOperator"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <selectOption selector="{{PriceRuleConditionsSection.operatorByIndex('1', '1')}}" userInput="is one of" stepKey="fillOperator"/>
+        <waitForPageLoad stepKey="wait3"/>
         <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '2')}}" stepKey="startEditValue"/>
-        <fillField selector="{{PriceRuleConditionsSection.valueByIndex('1', '1')}}" userInput="200" stepKey="fillValue"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <fillField selector="{{PriceRuleConditionsSection.valueByIndex('1', '1')}}" userInput="78613" stepKey="fillValue"/>
+        <waitForPageLoad stepKey="wait5"/>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="0.01" stepKey="fillDiscountAmount"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="9.99" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
-        <!-- Add 1 product worth $123.00 to the cart -->
+        <!-- Add the product we created to our cart -->
         <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
@@ -70,25 +74,23 @@
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
-        <!-- Should not see the discount yet because we have not exceeded $200 -->
+        <!-- Should not see the discount yet because we have not filled in postcode -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
+        <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="openEstimateShippingSection"/>
+        <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShipping"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
-        <!-- Add the same product to the cart again ($246.00 subtotal) -->
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage2"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
-        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity2"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
-        <waitForPageLoad stepKey="waitForAddToCart2"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
-
-        <!-- Now we should see the discount because we exceeded $200 -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage2"/>
-        <waitForPageLoad stepKey="waitForCartPage2"/>
-        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$246.00" stepKey="seeSubtotal2"/>
+        <!-- See discount if we use valid postcode -->
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="78613" stepKey="fillPostcode"/>
+        <waitForPageLoad stepKey="waitForPostcode1"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$0.01" stepKey="seeDiscountTotal"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$9.99" stepKey="seeDiscountTotal"/>
+
+        <!-- Do not see discount with other postcode -->
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="90210" stepKey="fillPostcode2"/>
+        <waitForPageLoad stepKey="waitForPostcode2"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount2"/>
     </test>
 </tests>

@@ -83,7 +83,7 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories"/>
@@ -187,7 +187,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName7"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreView" extends="AdminUrlRewritesForProductInAnchorCategoriesTest">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewTest" extends="AdminUrlRewritesForProductInAnchorCategoriesTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories for all store views"/>
@@ -214,7 +214,7 @@
         <remove keyForRemoval="uncheckRedirect2"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewWithConfigurationTurnedOff" extends="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewWithConfigurationTurnedOffTest" extends="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories for all store views"/>
@@ -241,7 +241,7 @@
         <remove keyForRemoval="uncheckRedirect2"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductsWithConfigurationTurnedOff">
+    <test name="AdminUrlRewritesForProductsWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="No Url-rewrites for product if configuration to generate url rewrite for Generate 'category/product' URL Rewrites is enabled "/>
