@@ -4249,5 +4249,12 @@ return [
     ['Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper'],
     ['Magento\Elasticsearch\Model\Client\Elasticsearch'],
     ['Magento\Elasticsearch\SearchAdapter\Aggregation\Interval'],
-
+    ['Magento\Elasticsearch\SearchAdapter\Mapper'],
+    ['Magento\Elasticsearch6\Model\DataProvider\Suggestions'],
+    ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType'],
+    ['Magento\Elasticsearch\Model\Adapter\DataMapperInterface'],
+    ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy'],
+    ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper'],
+    ['Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver'],
+    ['Magento\Elasticsearch\Model\Adapter\Container\Attribute']
 ];

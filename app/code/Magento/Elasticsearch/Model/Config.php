@@ -67,7 +67,6 @@ class Config implements ClientOptionsInterface
     private $engineList;
 
     /**
-     * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param ClientResolver $clientResolver
      * @param EngineResolverInterface $engineResolver

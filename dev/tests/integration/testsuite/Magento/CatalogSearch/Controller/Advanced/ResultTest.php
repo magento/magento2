@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\AbstractController;
 use Zend\Stdlib\Parameters;
 
 /**
- * Test cases for catalog advanced search using mysql search engine.
+ * Test cases for catalog advanced search using search engine.
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
@@ -37,7 +37,6 @@ class ResultTest extends AbstractController
     /**
      * Advanced search test by difference product attributes.
      *
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php

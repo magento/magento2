@@ -136,7 +136,6 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Elasticsearch\Model\Adapter\DataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver" />
     <virtualType name="additionalFieldsProviderForElasticsearch" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
@@ -171,13 +170,6 @@
         <arguments>
             <argument name="categoryFieldsProviders" xsi:type="array">
                 <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy">
-        <arguments>
-            <argument name="dataMappers" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper</item>
             </argument>
         </arguments>
     </type>
@@ -364,12 +356,6 @@
             <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper">
-        <arguments>
-            <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
-        </arguments>
-    </type>
-<!--    todo check if we need this configuration-->
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">

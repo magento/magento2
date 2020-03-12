@@ -30,12 +30,6 @@ class Elasticsearch
     protected $connectionManager;
 
     /**
-     * @var DataMapperInterface
-     * @deprecated 100.2.0 Will be replaced with BatchDataMapperInterface
-     */
-    protected $documentDataMapper;
-
-    /**
      * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
      */
     protected $indexNameResolver;
@@ -76,10 +70,7 @@ class Elasticsearch
     private $batchDocumentDataMapper;
 
     /**
-     * Elasticsearch constructor.
-     *
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
-     * @param DataMapperInterface $documentDataMapper
      * @param FieldMapperInterface $fieldMapper
      * @param \Magento\Elasticsearch\Model\Config $clientConfig
      * @param Index\BuilderInterface $indexBuilder
@@ -91,7 +82,6 @@ class Elasticsearch
      */
     public function __construct(
         \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
-        DataMapperInterface $documentDataMapper,
         FieldMapperInterface $fieldMapper,
         \Magento\Elasticsearch\Model\Config $clientConfig,
         \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
@@ -101,7 +91,6 @@ class Elasticsearch
         $options = []
     ) {
         $this->connectionManager = $connectionManager;
-        $this->documentDataMapper = $documentDataMapper;
         $this->fieldMapper = $fieldMapper;
         $this->clientConfig = $clientConfig;
         $this->indexBuilder = $indexBuilder;

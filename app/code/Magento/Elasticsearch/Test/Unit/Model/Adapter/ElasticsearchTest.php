@@ -74,11 +74,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $indexNameResolver;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\DataMapperInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    private $documentDataMapper;
-
-    /**
      * Setup
      *
      * @return void
@@ -91,9 +86,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMock();
-        $this->documentDataMapper = $this->getMockBuilder(
-            \Magento\Elasticsearch\Model\Adapter\DataMapperInterface::class
-        )->disableOriginalConstructor()->getMock();
         $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

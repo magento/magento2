@@ -29,23 +29,6 @@
             </argument>
         </arguments>
     </type>
-
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy">
-        <arguments>
-            <argument name="dataMappers" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
-        <arguments>
-            <argument name="productFieldMappers" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper</item>
-            </argument>
-        </arguments>
-    </type>
-
     <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
             <argument name="clientFactories" xsi:type="array">

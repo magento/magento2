@@ -20,7 +20,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     private $adapter;
 
     /**
-     * @var \Magento\Elasticsearch6\Model\Client\Elasticsearch|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientMock;
 
@@ -43,7 +43,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $contentManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch6\Model\Client\Elasticsearch::class)
+        $this->clientMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
+            ->setMethods(['query', 'testConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $contentManager
