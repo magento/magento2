@@ -65,16 +65,18 @@ class FilterProcessor implements CollectionProcessorInterface
     ) {
         $fields = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $isApplied = false;
-            $customFilter = $this->getCustomFilterForField($filter->getField());
-            if ($customFilter) {
-                $isApplied = $customFilter->apply($filter, $collection);
-            }
+            if ($filter->getField() != 'search_term') {
+                $isApplied = false;
+                $customFilter = $this->getCustomFilterForField($filter->getField());
+                if ($customFilter) {
+                    $isApplied = $customFilter->apply($filter, $collection);
+                }
 
-            if (!$isApplied) {
-                $field = $this->getFieldMapping($filter->getField());
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $fields[] = ['attribute' => $field, $condition => $filter->getValue()];
+                if (!$isApplied) {
+                    $field = $this->getFieldMapping($filter->getField());
+                    $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+                    $fields[] = ['attribute' => $field, $condition => $filter->getValue()];
+                }
             }
         }
 
