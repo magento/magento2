@@ -31,9 +31,10 @@ class CategoryListTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @dataProvider filterSingleCategoryDataProvider
-     * @param $field
-     * @param $condition
-     * @param $value
+     * @param string $field
+     * @param string $condition
+     * @param string $value
+     * @param array $expectedResult
      */
     public function testFilterSingleCategoryByField($field, $condition, $value, $expectedResult)
     {

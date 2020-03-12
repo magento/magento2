@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Category;
 
+use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Filter;
+use Magento\Search\Model\Query;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Search\Model\Query;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 
 /**
  * Category filter allows to filter collection using 'id, url_key, name' from search criteria.
@@ -26,77 +28,85 @@ class CategoryFilter
     private $scopeConfig;
 
     /**
+     * @var CategoryListInterface
+     */
+    private $categoryList;
+
+    /**
+     * @var Builder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param CategoryListInterface $categoryList
+     * @param Builder $searchCriteriaBuilder
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        CategoryListInterface $categoryList,
+        Builder $searchCriteriaBuilder
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->categoryList = $categoryList;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Filter for filtering the requested categories id's based on url_key, ids, name in the result.
+     * Search for categories, return list of ids
      *
-     * @param array $args
-     * @param Collection $categoryCollection
+     * @param array $criteria
      * @param StoreInterface $store
-     * @throws InputException
+     * @return int[]
      */
-    public function applyFilters(array $args, Collection $categoryCollection, StoreInterface $store)
+    public function getCategoryIds(array $criteria, StoreInterface $store): array
     {
-        $categoryCollection->addAttributeToFilter(CategoryInterface::KEY_IS_ACTIVE, ['eq' => 1]);
-        foreach ($args['filters'] as $field => $cond) {
-            foreach ($cond as $condType => $value) {
-                if ($field === 'ids') {
-                    $categoryCollection->addIdFilter($value);
-                } else {
-                    $this->addAttributeFilter($categoryCollection, $field, $condType, $value, $store);
-                }
-            }
+        $categoryIds = [];
+        try {
+            $criteria[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($criteria['filters'], $store);
+        } catch (InputException $e) {
+            //Return empty set when match filter is too short. (matches search api behavior)
+            return $categoryIds;
         }
+        $criteria[Filter::ARGUMENT_NAME][CategoryInterface::KEY_IS_ACTIVE] = ['eq' => 1];
+
+        $searchCriteria = $this->searchCriteriaBuilder->build('categoryList', $criteria);
+        $categories = $this->categoryList->getList($searchCriteria);
+        foreach ($categories->getItems() as $category) {
+            $categoryIds[] = (int)$category->getId();
+        }
+        return $categoryIds;
     }
 
     /**
-     * Add filter to category collection
+     * Format match filters to behave like fuzzy match
      *
-     * @param Collection $categoryCollection
-     * @param string $field
-     * @param string $condType
-     * @param string|array $value
+     * @param array $filters
      * @param StoreInterface $store
+     * @return array
      * @throws InputException
      */
-    private function addAttributeFilter($categoryCollection, $field, $condType, $value, $store)
-    {
-        if ($condType === 'match') {
-            $this->addMatchFilter($categoryCollection, $field, $value, $store);
-            return;
-        }
-        $categoryCollection->addAttributeToFilter($field, [$condType => $value]);
-    }
-
-    /**
-     * Add match filter to collection
-     *
-     * @param Collection $categoryCollection
-     * @param string $field
-     * @param string $value
-     * @param StoreInterface $store
-     * @throws InputException
-     */
-    private function addMatchFilter($categoryCollection, $field, $value, $store)
+    private function formatMatchFilters(array $filters, StoreInterface $store): array
     {
         $minQueryLength = $this->scopeConfig->getValue(
             Query::XML_PATH_MIN_QUERY_LENGTH,
             ScopeInterface::SCOPE_STORE,
             $store
         );
-        $searchValue = str_replace('%', '', $value);
-        $matchLength = strlen($searchValue);
-        if ($matchLength < $minQueryLength) {
-            throw new InputException(__('Invalid match filter'));
-        }
 
-        $categoryCollection->addAttributeToFilter($field, ['like' => "%{$searchValue}%"]);
+        foreach ($filters as $filter => $condition) {
+            $conditionType = array_keys($condition)[0];
+            if ($conditionType === 'match') {
+                $searchValue = $condition[$conditionType];
+                $matchLength = strlen(trim($searchValue));
+                if ($matchLength < $minQueryLength) {
+                    throw new InputException(__('Invalid match filter'));
+                }
+                unset($filters[$filter]['match']);
+                $filters[$filter]['like'] = '%' . $searchValue . '%';
+
+            }
+        }
+        return $filters;
     }
 }
