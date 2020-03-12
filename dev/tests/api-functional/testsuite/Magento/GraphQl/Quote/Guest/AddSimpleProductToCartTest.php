@@ -81,23 +81,47 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * Add out of stock product to cart
+     * Add disabled product to cart
      *
-     * @@magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @return void
      */
-    public function testAddProductToCartWithError(): void
+    public function testAddDisabledProductToCart(): void
     {
-        $disabledProductSku = 'simple3';
+        $sku = 'simple3';
         $quantity = 2;
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId, $disabledProductSku, $quantity);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU simple3 to the shopping cart: ' .
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Add out of stock product to cart
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_out_of_stock.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @return void
+     */
+    public function testAddOutOfStockProductToCart(): void
+    {
+        $sku = 'virtual-product-out';
+        $quantity = 2;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
             'Product that you are trying to add is not available.'
         );
 
