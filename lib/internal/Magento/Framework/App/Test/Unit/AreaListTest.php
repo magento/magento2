@@ -100,6 +100,19 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('test', $model->getArea($code));
     }
 
+    public function testGetFrontNameWhenFrontNameIsInvalid() : void
+    {
+        $this->_model = new AreaList(
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            [
+                'testAreaCode' => []
+            ]
+        );
+
+        $this->assertNull($this->_model->getFrontName('0'));
+    }
+
     public function testGetCodes()
     {
         $areas = ['area1' => 'value1', 'area2' => 'value2'];

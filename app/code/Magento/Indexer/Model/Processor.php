@@ -10,6 +10,9 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
 
+/**
+ * Indexer processor
+ */
 class Processor
 {
     /**
@@ -70,6 +73,8 @@ class Processor
                 } else {
                     /** @var \Magento\Indexer\Model\Indexer\State $state */
                     $state = $indexer->getState();
+                    $state->setStatus(StateInterface::STATUS_WORKING);
+                    $state->save();
                     $state->setStatus(StateInterface::STATUS_VALID);
                     $state->save();
                 }
