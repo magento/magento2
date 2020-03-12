@@ -332,7 +332,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $this->rowNum = $rowNum;
         $error = false;
-        if (!$this->downloadableHelper->isRowDownloadableNoValid($rowData)) {
+        if (!$this->downloadableHelper->isRowDownloadableNoValid($rowData) && $isNewProduct) {
             $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
             $error = true;
         }
