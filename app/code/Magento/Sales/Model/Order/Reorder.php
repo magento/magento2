@@ -104,7 +104,7 @@ class Reorder implements ReorderInterface
         $items = $order->getItemsCollection();
         foreach ($items as $item) {
             try {
-                $cartModel->addOrderItem($item);
+                $this->addOrderItem($cartModel, $item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->addLineItemError($lineItemsErrors, $item, $e->getMessage());
             } catch (\Throwable $e) {
@@ -119,6 +119,27 @@ class Reorder implements ReorderInterface
         $cartModel->save();
 
         return new \Magento\Sales\Api\Data\Reorder\ReorderOutput($cart, $lineItemsErrors);
+    }
+
+
+    /**
+     * Convert order item to quote item
+     *
+     * @param \Magento\Checkout\Model\Cart $cartModel
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function addOrderItem($cartModel, $orderItem): void
+    {
+        /* @var $orderItem \Magento\Sales\Model\Order\Item */
+        if ($orderItem->getParentItem() === null) {
+            $info = $orderItem->getProductOptionByCode('info_buyRequest');
+            $info = new \Magento\Framework\DataObject($info);
+            $info->setQty($orderItem->getQtyOrdered());
+
+            $cartModel->addProduct($orderItem->getProductId(), $info);
+        }
     }
 
     /**
