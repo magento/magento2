@@ -135,6 +135,7 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-inventory-graph-ql": "*",
         "magento/module-catalog-rule": "*",
+        "magento/module-catalog-rule-graph-ql": "*",
         "magento/module-catalog-rule-configurable": "*",
         "magento/module-catalog-search": "*",
         "magento/module-catalog-url-rewrite": "*",
