@@ -16,6 +16,8 @@ use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -57,6 +59,12 @@ class Search implements ProductQueryInterface
      */
     private $searchCriteriaBuilder;
 
+    /** @var FilterBuilder */
+    private $filterBuilder;
+
+    /** @var FilterGroupBuilder */
+    private $filterGroupBuilder;
+
     /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
@@ -65,6 +73,8 @@ class Search implements ProductQueryInterface
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
      */
     public function __construct(
         SearchInterface $search,
@@ -73,7 +83,9 @@ class Search implements ProductQueryInterface
         SearchCriteriaInterfaceFactory $searchCriteriaFactory,
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
+        FilterGroupBuilder $filterGroupBuilder
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -82,6 +94,8 @@ class Search implements ProductQueryInterface
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
+        $this->filterGroupBuilder = $filterGroupBuilder;
     }
 
     /**
@@ -109,7 +123,33 @@ class Search implements ProductQueryInterface
 
         $searchCriteria->setPageSize($realPageSize)->setCurrentPage($realCurrentPage);
 
-        $searchResults = $this->productsProvider->getList($searchCriteria, $itemsResults, $queryFields);
+        //Create copy of search criteria without conditions (conditions will be applied by joining search result)
+        $searchCriteriaCopy = $this->searchCriteriaFactory->create()
+            ->setSortOrders($searchCriteria->getSortOrders())
+            ->setPageSize($realPageSize)
+            ->setCurrentPage($realCurrentPage);
+
+        $categoryGroup = null;
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() == 'category_id') {
+                    $categoryFilter = $this->filterBuilder
+                        ->setField($filter->getField())
+                        ->setValue($filter->getValue())
+                        ->setConditionType($filter->getConditionType())
+                        ->create();
+
+                    $this->filterGroupBuilder->addFilter($categoryFilter);
+                    $categoryGroup = $this->filterGroupBuilder->create();
+                }
+            }
+        }
+
+        if ($categoryGroup) {
+            $searchCriteriaCopy->setFilterGroups([$categoryGroup]);
+        }
+
+        $searchResults = $this->productsProvider->getList($searchCriteriaCopy, $itemsResults, $queryFields);
 
         //possible division by 0
         if ($realPageSize) {
@@ -117,6 +157,8 @@ class Search implements ProductQueryInterface
         } else {
             $maxPages = 0;
         }
+        $searchCriteria->setPageSize($realPageSize);
+        $searchCriteria->setCurrentPage($realCurrentPage);
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */

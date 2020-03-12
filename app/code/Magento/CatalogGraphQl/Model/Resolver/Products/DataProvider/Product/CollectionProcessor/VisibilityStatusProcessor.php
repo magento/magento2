@@ -27,7 +27,7 @@ class VisibilityStatusProcessor implements CollectionProcessorInterface
         array $attributeNames
     ): Collection {
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-        //$collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
         return $collection;
     }
