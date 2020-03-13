@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Catalog image helper.
+ * Catalog image helper
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -166,7 +166,8 @@ class Image extends AbstractHelper implements ArgumentInterface
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
         $this->viewAssetPlaceholderFactory = $placeholderFactory
-            ?: ObjectManager::getInstance()->get(PlaceholderFactory::class);
+            ?: ObjectManager::getInstance()
+                ->get(PlaceholderFactory::class);
         $this->mediaConfig = $mediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
     }
 
@@ -573,6 +574,9 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Return resized product image information
      *
      * @return array
+     * @deprecated Magento is not responsible for image resizing anymore. This method works with local filesystem only.
+     * Service that provides resized images should guarantee that the image sizes correspond to requested ones.
+     * Use `getWidth()` and `getHeight()` instead.
      */
     public function getResizedImageInfo()
     {
