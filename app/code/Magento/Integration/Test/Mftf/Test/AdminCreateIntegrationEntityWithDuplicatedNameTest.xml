@@ -46,5 +46,6 @@
             <argument name="message" value="The integration with name &quot;Integration1&quot; exists."/>
             <argument value="error" name="messageType"/>
         </actionGroup>
+        <seeInField stepKey="checkEnteredValueIsPreserved" selector="{{AdminNewIntegrationSection.name}}" userInput="Integration1"/>
     </test>
 </tests>
