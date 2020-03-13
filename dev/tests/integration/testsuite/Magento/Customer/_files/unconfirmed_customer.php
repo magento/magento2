@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
-use \Magento\Customer\Model\Data\CustomerFactory;
+use Magento\Customer\Model\Data\CustomerFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\Math\Random;
 use Magento\Store\Api\WebsiteRepositoryInterface;

@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete created custom url rewrite and verify AssertUrlRewriteDeletedMessage-->

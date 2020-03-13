@@ -23,7 +23,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminMenuSection.menuItem(AdminMenuDashboard.dataUiId)}}" stepKey="clickOnMenuItem"/>

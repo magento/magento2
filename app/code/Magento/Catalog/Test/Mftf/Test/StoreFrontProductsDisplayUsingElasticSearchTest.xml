@@ -171,7 +171,7 @@
            <actionGroup ref="ResetSearchEngineConfigurationActionGroup" stepKey="resetCatalogSearchConfiguration"/>
            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchDisable"/>
            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchDisable"/>
-           <actionGroup ref="logout" stepKey="logout"/>
+           <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
        </after>
 
         <!--Open Storefront on the myCategory page-->
