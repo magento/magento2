@@ -18,14 +18,34 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ReorderTest extends GraphQlAbstract
 {
+    /**
+     * Customer Id
+     */
     private const CUSTOMER_ID = 1;
+
+    /**
+     * Order Number
+     */
     private const ORDER_NUMBER = '100000001';
+
+    /**
+     * Incremented order number
+     */
+    private const INCREMENTED_ORDER_NUMBER = '100001001';
+
+    /**
+     * Customer email
+     */
+    private const CUSTOMER_EMAIL = 'customer@example.com';
 
     /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -46,17 +66,12 @@ class ReorderTest extends GraphQlAbstract
      */
     public function testReorderMutation()
     {
-        $query = $this->getQuery(self::ORDER_NUMBER);
-
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->makeReorderForDefaultCustomer();
         $this->assertResponseFields(
             $response['addAllOrderItemsToCart'] ?? [],
             [
                 'cart' => [
-                    'email' => $currentEmail,
+                    'email' => self::CUSTOMER_EMAIL,
                     'total_quantity' => 1,
                     'items' => [
                         [
@@ -70,9 +85,7 @@ class ReorderTest extends GraphQlAbstract
                 'errors' => []
             ]
         );
-
     }
-
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
@@ -86,6 +99,149 @@ class ReorderTest extends GraphQlAbstract
     }
 
     /**
+     * Test reorder when simple product is out of stock/disabled/deleted
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_product_out_of_stock.php
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSimpleProductOutOfStock()
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $repository */
+        $productRepository = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productSku = 'simple';
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get($productSku);
+
+        $this->assertProductNotAvailable();
+        $this->assertDisabledProduct($productRepository, $product);
+        $this->assertWithDeletedProduct($productRepository, $product);
+    }
+
+    /**
+     * Assert that simple product is not available.
+     */
+    private function assertProductNotAvailable()
+    {
+        $response = $this->makeReorderForDefaultCustomer();
+        $expectedResponse = [
+            'errors' => [
+                [
+                    'sku' => 'simple',
+                    'message' => 'Product that you are trying to add is not available.',
+                ],
+            ],
+            'cart' => [
+                'email' => 'customer@example.com',
+                'total_quantity' => 0,
+                'items' => [],
+            ],
+        ];
+        $this->assertResponseFields($response['addAllOrderItemsToCart'] ?? [], $expectedResponse);
+    }
+
+    /**
+     * Assert reorder with disabled product.
+     *
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
+     */
+    private function assertDisabledProduct(
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Api\Data\ProductInterface $product
+    ): void {
+        // make product available in stock but disable and make reorder
+        $product->setStockData(
+            [
+                'use_config_manage_stock'   => 1,
+                'qty'                       => 100,
+                'is_qty_decimal'            => 0,
+                'is_in_stock'               => 1,
+            ]
+        )
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+        $productRepository->save($product);
+        $this->assertProductNotAvailable();
+    }
+
+    /**
+     * Assert reorder with deleted product.
+     *
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
+     */
+    private function assertWithDeletedProduct(
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Api\Data\ProductInterface $product
+    ): void {
+        // delete a product and make reorder
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $productRepository->delete($product);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        $expectedResponse = [
+            'errors' => [
+                [
+                    'sku' => 'simple',
+                    'message' => 'The product wasn\'t found. Verify the product and try again.',
+                ],
+            ],
+            'cart' => [
+                'email' => 'customer@example.com',
+                'total_quantity' => 0,
+                'items' => [],
+            ],
+        ];
+        $response = $this->makeReorderForDefaultCustomer();
+        $this->assertResponseFields($response['addAllOrderItemsToCart'] ?? [], $expectedResponse);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_two_simple_products.php
+     */
+    public function notFinishedTestTwoProducts()
+    {
+        $response = $this->makeReorderForDefaultCustomer(self::INCREMENTED_ORDER_NUMBER);
+
+        $expectedResponse = [
+            'errors' => [
+                [
+                    'sku' => 'simple-1',
+                    'message' => 'We can\'t add this item to your shopping cart right now.',
+                ],
+            ],
+            'cart' => [
+                'email' => 'customer@example.com',
+                'total_quantity' => 1,
+                'items' => [
+                    [
+                        'quantity' => 1,
+                        'product' => [
+                            'sku' => 'configurable',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $this->assertResponseFields($response['addAllOrderItemsToCart'] ?? [], $expectedResponse);
+    }
+
+    /**
      * @param string $email
      * @param string $password
      * @return array
@@ -95,6 +251,25 @@ class ReorderTest extends GraphQlAbstract
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
+    }
+
+    /**
+     * Execute GraphQL Mutation for default customer (make reorder)
+     *
+     * @param string $orderId
+     * @return array|bool|float|int|string
+     * @throws \Exception
+     */
+    private function makeReorderForDefaultCustomer(string $orderId = self::ORDER_NUMBER)
+    {
+        $query = $this->getQuery($orderId);
+        $currentPassword = 'password';
+        return $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders(self::CUSTOMER_EMAIL, $currentPassword)
+        );
     }
 
     /**
