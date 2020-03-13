@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -107,22 +108,26 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * Add out of stock product to cart
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_out_of_stock.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      * @return void
+     * @throws NoSuchEntityException
      */
     public function testAddOutOfStockProductToCart(): void
     {
-        $sku = 'virtual-product-out';
-        $quantity = 2;
+        $sku = 'simple1';
+        $quantity = 1;
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
-            'Product that you are trying to add is not available.'
+            'Some of the products are out of stock.'
         );
 
         $this->graphQlMutation($query);
