@@ -9,12 +9,13 @@ namespace Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Abstract Type Class
  *
  * Abstract model for product type implementation
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -496,7 +497,8 @@ abstract class AbstractType
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
                         $uploader = isset($queueOptions['uploader']) ? $queueOptions['uploader'] : null;
 
-                        $path = DriverInterface::getParentDirectory($dst);
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        $path = dirname($dst);
 
                         try {
                             $rootDir = $this->_filesystem->getDirectoryWrite(
@@ -511,7 +513,9 @@ abstract class AbstractType
 
                         $uploader->setDestination($path);
 
-                        if ((empty($src) || empty($dst) || !$uploader->receive($src)) && isset($queueOptions['option'])) {
+                        if ((empty($src) || empty($dst) || !$uploader->receive($src)) &&
+                            isset($queueOptions['option'])
+                        ) {
                             $queueOptions['option']->setIsValid(false);
                         } else {
                             throw new \Magento\Framework\Exception\LocalizedException(
