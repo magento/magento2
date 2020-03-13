@@ -140,6 +140,10 @@ class CartTotalsTest extends GraphQlAbstract
         self::assertEquals(18, $cartItem['prices']['row_total_including_tax']['value']);
         self::assertEquals(9, $cartItem['prices']['total_item_discount']['value']);
 
+        $discount = $cartItem['prices']['discounts'][0];
+        self::assertEquals("50% Off for all orders", $discount['label']);
+        self::assertEquals(9, $discount['amount']['value']);
+
         self::assertArrayHasKey('prices', $response['cart']);
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(9, $pricesResponse['grand_total']['value']);
@@ -276,6 +280,12 @@ class CartTotalsTest extends GraphQlAbstract
         }
         total_item_discount {
             value
+        }
+        discounts {
+            label
+            amount {
+                value
+            }
         }
       }
     }
