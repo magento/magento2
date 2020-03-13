@@ -341,7 +341,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getCustomerId()
     {
         if ($this->storage->getData('customer_id')) {
-            return $this->storage->getData('customer_id') ? (int) $this->storage->getData('customer_id') : null;
+            return (int) $this->storage->getData('customer_id');
         }
         return null;
     }
@@ -391,7 +391,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getCustomerGroupId()
     {
         if ($this->storage->getData('customer_group_id')) {
-            return $this->storage->getData('customer_group_id') ? (int) $this->storage->getData('customer_group_id') : null;
+            return (int) $this->storage->getData('customer_group_id');
         }
         if ($this->getCustomerData()) {
             $customerGroupId = $this->getCustomerData()->getGroupId();
