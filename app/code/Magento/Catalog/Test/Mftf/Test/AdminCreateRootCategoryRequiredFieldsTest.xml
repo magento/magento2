@@ -20,7 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="LoginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">

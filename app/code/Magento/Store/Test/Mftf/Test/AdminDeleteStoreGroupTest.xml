@@ -20,7 +20,7 @@
 
         <before>
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create custom store group-->
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewCustomStoreGroup">
                 <argument name="website" value="{{_defaultWebsite.name}}"/>

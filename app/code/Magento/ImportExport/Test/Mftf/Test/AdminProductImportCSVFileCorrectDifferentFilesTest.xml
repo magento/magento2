@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!--Login as Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Logout from Admin-->

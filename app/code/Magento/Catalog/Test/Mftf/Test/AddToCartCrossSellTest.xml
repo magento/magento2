@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="category1"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

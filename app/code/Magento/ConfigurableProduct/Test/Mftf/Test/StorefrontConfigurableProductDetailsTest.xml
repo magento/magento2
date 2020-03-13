@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -66,7 +66,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -111,7 +111,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -153,7 +153,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -209,7 +209,7 @@
             <createData entity="productAttributeOption2" stepKey="createSecondAttributeSecondOption">
                 <requiredEntity createDataKey="createSecondAttribute"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

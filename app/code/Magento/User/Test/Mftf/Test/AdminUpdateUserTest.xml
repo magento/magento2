@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
 
             <!--Create New User-->
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
@@ -40,7 +40,7 @@
         <after>
             <!--Delete new User-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUser"/>
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
                 <argument name="user" value="AdminUserWithUpdatedUserRoleToSales"/>
             </actionGroup>
@@ -69,7 +69,7 @@
             <argument name="user" value="AdminUserWithUpdatedUserRoleToSales"/>
         </actionGroup>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdminPanel"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsSaleRoleUser">
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsSaleRoleUser">
             <argument name="adminUser" value="AdminUserWithUpdatedUserRoleToSales"/>
         </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>

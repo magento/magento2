@@ -31,7 +31,7 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="subCategory"/>
             </createData>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="subCategory"/>

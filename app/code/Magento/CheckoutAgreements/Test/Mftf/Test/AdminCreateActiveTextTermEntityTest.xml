@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
             <createData entity="SimpleTwo" stepKey="createdProduct"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>

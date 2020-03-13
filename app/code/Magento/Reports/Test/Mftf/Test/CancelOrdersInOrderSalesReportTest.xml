@@ -21,7 +21,7 @@
 
         <before>
             <!-- log in as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- create new product -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>

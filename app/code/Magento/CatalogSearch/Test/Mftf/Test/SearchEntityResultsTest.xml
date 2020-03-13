@@ -199,7 +199,7 @@
             <createData entity="productAlphabeticalB" stepKey="product2">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
 
             <!-- Create and Assign Attribute to product1-->
@@ -369,7 +369,7 @@
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
@@ -449,7 +449,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="simple1"/>
             <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
@@ -505,7 +505,7 @@
                 <field key="qty">10</field>
             </createData>
             <!--Finish bundle creation-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
@@ -572,7 +572,7 @@
             </createData>
 
             <!--Finish bundle creation-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 

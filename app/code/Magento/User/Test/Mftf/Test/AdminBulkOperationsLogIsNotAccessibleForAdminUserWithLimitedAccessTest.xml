@@ -20,11 +20,11 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
 
             <!-- Delete User -->
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteLimitedUser">
@@ -47,7 +47,7 @@
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
         <!-- Login as user2 -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsUser">
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsUser">
             <argument name="adminUser" value="NewAdminUser"/>
         </actionGroup>
 

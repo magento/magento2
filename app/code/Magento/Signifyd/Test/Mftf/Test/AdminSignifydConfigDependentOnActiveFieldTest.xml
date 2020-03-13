@@ -16,7 +16,7 @@
             <severity value="MINOR"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set fraud_protection/signifyd/active 1" stepKey="enableSignifyd"/>
         </before>
 

@@ -25,7 +25,7 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
@@ -51,7 +51,7 @@
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
@@ -80,7 +80,7 @@
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
         </annotations>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
@@ -101,7 +101,7 @@
             <testCaseId value="MAGETWO-89912"/>
             <group value="product"/>
         </annotations>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>

@@ -19,7 +19,7 @@
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

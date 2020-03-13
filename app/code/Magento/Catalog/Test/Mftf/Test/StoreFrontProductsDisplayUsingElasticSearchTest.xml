@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create Category and Simple Products-->
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
