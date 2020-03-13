@@ -423,6 +423,114 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathTopLevelCategory()
+    {
+        $urlPath = 'category-1';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {eq: "$urlPath"}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(1, $categoryList);
+        $this->assertEquals($urlPath, $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1', $categoryList[0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathNestedCategory()
+    {
+        $urlPath = 'category-1/category-1-1/category-1-1-1';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {eq: "$urlPath"}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(1, $categoryList);
+        $this->assertEquals($urlPath, $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1.1.1', $categoryList[0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathMultipleCategories()
+    {
+        $urlPaths = ['category-1/category-1-1', 'inactive', 'movable-position-2'];
+        $urlPathsString = '"' . implode('", "', $urlPaths) . '"';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {in: [$urlPathsString]}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(2, $categoryList);
+        $this->assertEquals($urlPaths[0], $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1.1', $categoryList[0]['name']);
+        $this->assertEquals($urlPaths[2], $categoryList[1]['url_path']);
+        $this->assertEquals('Movable Position 2', $categoryList[1]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathNoResults()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {in: ["not-a-category url path"]}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(0, $categoryList);
+    }
+
+    /**
      * @return array
      */
     public function filterSingleCategoryDataProvider(): array

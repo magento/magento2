@@ -307,8 +307,9 @@ input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput
 input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
 {
     ids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category.")
-    url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category")
+    url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category.")
     name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
+    url_path: FilterEqualTypeInput @doc(description: "Filter by the URL path for the category.")
 }
 
 input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, use @ProductAttributeFilterInput instead. ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
