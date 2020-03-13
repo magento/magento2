@@ -121,8 +121,6 @@ class Search implements ProductQueryInterface
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
 
-        $searchCriteria->setPageSize($realPageSize)->setCurrentPage($realCurrentPage);
-
         //Create copy of search criteria without conditions (conditions will be applied by joining search result)
         $searchCriteriaCopy = $this->searchCriteriaFactory->create()
             ->setSortOrders($searchCriteria->getSortOrders())
@@ -144,7 +142,7 @@ class Search implements ProductQueryInterface
                 }
             }
         }
-
+        //add root category or all root category children if category_id is not defined
         if ($categoryGroup) {
             $searchCriteriaCopy->setFilterGroups([$categoryGroup]);
         }
