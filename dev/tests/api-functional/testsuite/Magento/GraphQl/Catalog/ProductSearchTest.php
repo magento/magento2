@@ -1163,6 +1163,34 @@ QUERY;
         $productsDesc = array_column($resultDesc['products']['items'], 'sku');
         $expectedProductsDesc = array_reverse($expectedProductsAsc);
         $this->assertEquals($expectedProductsDesc, $productsDesc);
+
+        //revert position
+        $productPositions = $category->getProductsPosition();
+        $count = 3;
+        foreach ($productPositions as $productId => $position) {
+            $productPositions[$productId] = $count;
+            $count--;
+        }
+
+        $category->setPostedProducts($productPositions);
+        $category->save();
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        $expectedProductsDesc = $expectedProductsAsc;
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
     }
 
     /**
