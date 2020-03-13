@@ -13,6 +13,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -33,10 +35,22 @@ class CategoryTest extends GraphQlAbstract
      */
     private $categoryRepository;
 
+    /**
+     * @var Store
+     */
+    private $store;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
+        $this->store = $this->objectManager->get(Store::class);
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
     /**
@@ -211,7 +225,7 @@ QUERY;
         productImagePreview: products(pageSize: 1) {
             items {
                 id
-                } 
+                }
             }
       }
     }
@@ -557,16 +571,48 @@ QUERY;
     /**
      * Test category image is returned as full url (not relative path)
      *
+     * @param string $imagePrefix
      * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_image.php
+     * @dataProvider categoryImageDataProvider
      */
-    public function testCategoryImage()
+    public function testCategoryImage(?string $imagePrefix)
     {
+        /** @var CategoryCollection $categoryCollection */
         $categoryCollection = $this->objectManager->get(CategoryCollection::class);
         $categoryModel = $categoryCollection
             ->addAttributeToSelect('image')
             ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
             ->getFirstItem();
         $categoryId = $categoryModel->getId();
+
+        if ($imagePrefix !== null) {
+            // update image to account for different stored image formats
+            $connection = $categoryCollection->getConnection();
+            $productLinkField = $this->metadataPool
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+
+            $defaultStoreId = $this->store->getId();
+
+            $imageAttributeValue = $imagePrefix . basename($categoryModel->getImage());
+
+            if (!empty($imageAttributeValue)) {
+                $query = sprintf(
+                    'UPDATE %s SET `value` = "%s" ' .
+                    'WHERE `%s` = %d ' .
+                    'AND `store_id`= %d ' .
+                    'AND `attribute_id` = ' .
+                    '(SELECT `ea`.`attribute_id` FROM %s ea WHERE `ea`.`attribute_code` = "image" LIMIT 1)',
+                    $connection->getTableName('catalog_category_entity_varchar'),
+                    $imageAttributeValue,
+                    $productLinkField,
+                    $categoryModel->getData($productLinkField),
+                    $defaultStoreId,
+                    $connection->getTableName('eav_attribute')
+                );
+                $connection->query($query);
+            }
+        }
 
         $query = <<<QUERY
     {
@@ -591,15 +637,39 @@ QUERY;
         $this->assertNotEmpty($response['categoryList']);
         $categoryList = $response['categoryList'];
         $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl('media');
-        $expectedImageUrl = rtrim($storeBaseUrl, '/'). '/' . ltrim($categoryModel->getImage(), '/');
+        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . ltrim($categoryModel->getImage(), '/');
+        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
 
         $this->assertEquals($categoryId, $categoryList[0]['id']);
         $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
+        $categoryList[0]['image'] = str_replace('index.php/', '', $categoryList[0]['image']);
         $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
 
         $childCategory = $categoryList[0]['children'][0];
         $this->assertEquals('Child Image Category', $childCategory['name']);
+        $childCategory['image'] = str_replace('index.php/', '', $childCategory['image']);
         $this->assertEquals($expectedImageUrl, $childCategory['image']);
+    }
+
+    /**
+     * @return array
+     */
+    public function categoryImageDataProvider(): array
+    {
+        return [
+            'default_filename_strategy' => [
+                'image_prefix' => null
+            ],
+            'just_filename_strategy' => [
+                'image_prefix' => ''
+            ],
+            'with_pub_media_strategy' => [
+                'image_prefix' => '/pub/media/catalog/category/'
+            ],
+            'catalog_category_strategy' => [
+                'image_prefix' => 'catalog/category/'
+            ],
+        ];
     }
 
     /**
