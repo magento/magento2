@@ -5,27 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\Catalog\Model\Indexer\Category\Product\Action;
+namespace Magento\Elasticsearch\Catalog\Model\Indexer\Category\Product\Action;
 
 use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Model\Indexer\Category\Product\Action\Rows;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
-use Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
-use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Search\Request\Builder;
-use Magento\Framework\Search\Request\Config;
-use Magento\Framework\Search\Request\Config\Converter;
-use Magento\Framework\Search\SearchEngineInterface;
-use Magento\Framework\Search\SearchResponseBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use \Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * Test for Magento\Catalog\Model\Indexer\Category\Product\Action\Rows class.
+ * This test executable with any configuration of ES and should not be deleted with removal of ES2.
  *
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
@@ -33,6 +29,11 @@ use Magento\TestFramework\ObjectManager;
  */
 class RowsTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
+    private $searchEngine;
+
     /**
      * @var ObjectManager
      */
@@ -49,6 +50,11 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     private $defaultCategoryHelper;
 
     /**
+     * @var SearchCollectionFactory
+     */
+    private $fulltextSearchCollectionFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -56,6 +62,32 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->rowsIndexer = $this->objectManager->get(Rows::class);
         $this->defaultCategoryHelper = $this->objectManager->get(DefaultCategory::class);
+        $this->fulltextSearchCollectionFactory = $this->objectManager->get(SearchCollectionFactory::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function assertPreConditions()
+    {
+        $currentEngine = $this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
+    }
+
+    /**
+     * Returns installed on server search service.
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine(): string
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = $this->objectManager->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = 'elasticsearch' . $version;
+        }
+
+        return $this->searchEngine;
     }
 
     /**
@@ -66,7 +98,7 @@ class RowsTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
      * @return void
      */
-    public function testCategoryMoveWithElasticsearch(): void
+    public function testLoadWithFilterCatalogView()
     {
         $categoryA = $this->getCategory('Category A');
         $categoryB = $this->getCategory('Category B');
@@ -84,9 +116,10 @@ class RowsTest extends \PHPUnit\Framework\TestCase
             true
         );
 
-        $collection = $this->searchByCategoryId((int) $categoryA->getId());
+        $fulltextCollection = $this->fulltextSearchCollectionFactory->create()
+            ->addCategoryFilter($categoryA);
 
-        $this->assertProductsArePresentInCollection($collection->getAllIds());
+        $this->assertProductsArePresentInCollection($fulltextCollection->getAllIds());
     }
 
     /**
@@ -127,62 +160,5 @@ class RowsTest extends \PHPUnit\Framework\TestCase
             ->getItems();
 
         return array_pop($items);
-    }
-
-    /**
-     * Search docs in Elasticsearch by category id.
-     *
-     * @param int $categoryId
-     * @return Collection
-     */
-    private function searchByCategoryId(int $categoryId): Collection
-    {
-        /** @var Converter $converter */
-        $converter = $this->objectManager->get(Converter::class);
-        $document = new \DOMDocument();
-        $document->load($this->getRequestConfigPath());
-        $requestConfig = $converter->convert($document);
-        /** @var Config $config */
-        $config = $this->objectManager->get(Config::class);
-        $config->merge($requestConfig);
-
-        $requestBuilder = $this->objectManager->get(
-            Builder::class,
-            ['config' => $config]
-        );
-        $requestBuilder->bind('category_ids', $categoryId);
-        $requestBuilder->bind('visibility', [2,4]);
-        $requestBuilder->setRequestName('catalog_view_container');
-        $queryRequest = $requestBuilder->create();
-
-        $searchEngine = $this->objectManager->get(SearchEngineInterface::class);
-        $queryResult = $searchEngine->search($queryRequest);
-
-        $searchResponseBuilder = $this->objectManager->get(SearchResponseBuilder::class);
-        $searchResponse = $searchResponseBuilder->build($queryResult);
-
-        $searchResultApplierFactory = $this->objectManager->get(SearchResultApplierFactory::class);
-        $collection = $this->objectManager->get(Collection::class);
-        $searchResultApplierFactory->create(
-            [
-                'collection' => $collection,
-                'searchResult' => $searchResponse,
-                'orders' => [],
-                'size' => 12,
-                'currentPage' => 1,
-            ]
-        )->apply();
-
-        return $collection;
-    }
-
-    /**
-     * Get request config path.
-     *
-     * @return string
-     */
-    private function getRequestConfigPath()
-    {
-        return __DIR__ . '/../../../../../../../Elasticsearch/_files/requests.xml';
     }
 }
