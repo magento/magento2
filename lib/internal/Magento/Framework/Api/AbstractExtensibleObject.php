@@ -12,6 +12,7 @@ use \Magento\Framework\Api\AttributeValueFactory;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
+ * @codeCoverageIgnore
  * @deprecated
  * @see \Magento\Framework\Model\AbstractExtensibleModel
  */
