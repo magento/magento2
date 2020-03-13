@@ -99,7 +99,7 @@ class Save extends Action implements HttpPostActionInterface
      */
     public function execute(): Json
     {
-        $customerId = $this->getRequest()->getParam('parent_id', false);
+        $customerId = (int) $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('entity_id', false);
 
         $error = false;

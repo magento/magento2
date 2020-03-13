@@ -67,8 +67,8 @@ class Delete extends Action implements HttpPostActionInterface
      */
     public function execute(): Json
     {
-        $customerId = $this->getRequest()->getParam('parent_id', false);
-        $addressId = $this->getRequest()->getParam('id', false);
+        $customerId = (int)$this->getRequest()->getParam('parent_id', false);
+        $addressId = (int)$this->getRequest()->getParam('id', false);
         $error = false;
         $message = '';
         if ($addressId && $this->addressRepository->getById($addressId)->getCustomerId() === $customerId) {
