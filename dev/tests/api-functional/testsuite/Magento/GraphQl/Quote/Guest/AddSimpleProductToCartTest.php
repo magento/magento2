@@ -111,7 +111,6 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      * @return void
