@@ -1160,7 +1160,7 @@ QUERY;
 QUERY;
         $resultDesc = $this->graphQlQuery($queryDesc);
         $this->assertArrayNotHasKey('errors', $resultDesc);
-        $productsDesc = array_column($resultAsc['products']['items'], 'sku');
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
         $expectedProductsDesc = array_reverse($expectedProductsAsc);
         $this->assertEquals($expectedProductsDesc, $productsDesc);
     }
