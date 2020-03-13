@@ -5,7 +5,11 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\ReorderInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
@@ -23,12 +27,7 @@ class Reorder implements ReorderInterface
     private $orderFactory;
 
     /**
-     * @var \Magento\Checkout\Model\CartFactory
-     */
-    private $cartFactory;
-
-    /**
-     * @var \Magento\Quote\Api\CartManagementInterface
+     * @var CartManagementInterface
      */
     private $cartManagement;
 
@@ -48,27 +47,40 @@ class Reorder implements ReorderInterface
     private $createEmptyCartForCustomer;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param OrderFactory $orderFactory
-     * @param \Magento\Checkout\Model\CartFactory $cartFactory
-     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
+     * @param CartManagementInterface $cartManagement
      * @param ReorderHelper $reorderHelper
      * @param \Psr\Log\LoggerInterface $logger
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
+     * @param CartRepositoryInterface $cartRepository
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         OrderFactory $orderFactory,
-        \Magento\Checkout\Model\CartFactory $cartFactory,
-        \Magento\Quote\Api\CartManagementInterface $cartManagement,
+        CartManagementInterface $cartManagement,
+        CreateEmptyCartForCustomer $createEmptyCartForCustomer,
+        CartRepositoryInterface $cartRepository,
+        ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,
-        \Psr\Log\LoggerInterface $logger,
-        CreateEmptyCartForCustomer $createEmptyCartForCustomer
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->orderFactory = $orderFactory;
-        $this->cartFactory = $cartFactory;
         $this->cartManagement = $cartManagement;
+        $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
+        $this->cartRepository = $cartRepository;
+        $this->productRepository = $productRepository;
         $this->reorderHelper = $reorderHelper;
         $this->logger = $logger;
-        $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
     }
 
     /**
@@ -92,19 +104,18 @@ class Reorder implements ReorderInterface
         $customerId = $order->getCustomerId();
 
         try {
+            /** @var \Magento\Quote\Model\Quote $cart */
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         } catch (NoSuchEntityException $e) {
             $this->createEmptyCartForCustomer->execute($customerId);
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         }
-        $cartModel = $this->cartFactory->create();
-        $cartModel->setQuote($cart);
 
         $lineItemsErrors = [];
         $items = $order->getItemsCollection();
         foreach ($items as $item) {
             try {
-                $this->addOrderItem($cartModel, $item);
+                $this->addOrderItem($cart, $item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->addLineItemError($lineItemsErrors, $item, $e->getMessage());
             } catch (\Throwable $e) {
@@ -116,7 +127,8 @@ class Reorder implements ReorderInterface
                 );
             }
         }
-        $cartModel->save();
+
+        $this->cartRepository->save($cart);
 
         return new \Magento\Sales\Api\Data\Reorder\ReorderOutput($cart, $lineItemsErrors);
     }
@@ -125,12 +137,12 @@ class Reorder implements ReorderInterface
     /**
      * Convert order item to quote item
      *
-     * @param \Magento\Checkout\Model\Cart $cartModel
+     * @param \Magento\Quote\Model\Quote $cart
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function addOrderItem($cartModel, $orderItem): void
+    private function addOrderItem(\Magento\Quote\Model\Quote $cart, $orderItem): void
     {
         /* @var $orderItem \Magento\Sales\Model\Order\Item */
         if ($orderItem->getParentItem() === null) {
@@ -138,7 +150,12 @@ class Reorder implements ReorderInterface
             $info = new \Magento\Framework\DataObject($info);
             $info->setQty($orderItem->getQtyOrdered());
 
-            $cartModel->addProduct($orderItem->getProductId(), $info);
+            try {
+                $product = $this->productRepository->getById($orderItem->getProductId(), false, null, true);
+            } catch (NoSuchEntityException $e) {
+                throw new LocalizedException(__('Could not find a product with ID "%1"', $orderItem->getProductId()));
+            }
+            $cart->addProduct($product, $info);
         }
     }
 

@@ -189,6 +189,7 @@ class ReorderTest extends GraphQlAbstract
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
+        $productId = $product->getId();
         $productRepository->delete($product);
 
         $registry->unregister('isSecureArea');
@@ -198,7 +199,7 @@ class ReorderTest extends GraphQlAbstract
             'errors' => [
                 [
                     'sku' => 'simple',
-                    'message' => 'The product wasn\'t found. Verify the product and try again.',
+                    'message' => 'Could not find a product with ID "' . $productId . '"',
                 ],
             ],
             'cart' => [
