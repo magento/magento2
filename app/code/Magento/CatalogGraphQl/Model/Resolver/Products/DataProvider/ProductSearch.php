@@ -98,7 +98,7 @@ class ProductSearch
         $collection = $this->collectionFactory->create();
 
         //Create a copy of search criteria without filters to preserve the results from search
-        $searchCriteriaForCollection = $this->searchCriteriaBuilder->process($searchCriteria);
+        $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
         //Apply CatalogSearch results from search and join table
         $this->getSearchResultsApplier(
             $searchResult,
