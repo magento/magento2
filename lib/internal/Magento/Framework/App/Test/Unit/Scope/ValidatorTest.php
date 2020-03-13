@@ -95,7 +95,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores
+     * @expectedExceptionMessage The scope code can include only letters (a-z) and (A-Z),
+     * numbers (0-9) and underscores (_). Also, the first character must be a letter.
      */
     public function testWrongScopeCodeFormat()
     {
