@@ -2,18 +2,67 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @doc(description: "List of customer orders") @cache(cacheable: false)
+    customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use orders from customer instead") @cache(cacheable: false)
 }
 
-type CustomerOrder @doc(description: "Order mapping fields") {
-    id: Int
-    increment_id: String @deprecated(reason: "Use the order_number instead.")
-    order_number: String! @doc(description: "The order number")
-    created_at: String
-    grand_total: Float
-    status: String
+type Customer {
+    orders (
+        filter: CustomerOrdersFilterInput @doc(description: "Identifies which order filter input to search for and return"),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. TThe default value is 20"),
+    ): CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders") @cache(cacheable: false)
 }
 
-type CustomerOrders {
-    items: [CustomerOrder] @doc(description: "Array of orders")
+input CustomerOrdersFilterInput @doc(description: "Identifies which order filter input to search for and return") {
+    number: FilterTypeInput @doc(description: "Filter orders by order number") #FilterTypeInput or FilterMatchTypeInput ??
+}
+
+type CustomerOrders @doc(description: "The Collection of customer orders") {
+    items: [CustomerOrder]! @doc(description: "The collection of customer orders that contains individual order details.")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the current_page page_info and page_size values specified in the query.")
+    total_count: Int @doc(description: "The total count of customer orders")
+}
+
+type CustomerOrder @doc(description:"Customer order details") {
+    increment_id: String @deprecated(reason: "Use id from customer order instead")
+    order_number: String! @deprecated(reason: "Use number from customer order instead")
+    created_at: String @deprecated(reason: "Use the order date from customer order instead")
+    grand_total: Float  @deprecated(reason: "Use the totals from customer order instead")
+    status: String  @deprecated(reason: "Use the orders from customer order instead")
+    id: ID! @doc(description: "Order unique identifier")
+    order_date: String! @doc(description: "Date when the order was placed")
+    status: String! @doc(description: "Current status of the order")
+    number: String! @doc(description: "The Order number")
+    items: [OrderItem]! @doc(description: "Collection of all the items purchased for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
+    totals: OrderTotals! @doc(description: "Total amount details for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotals")
+}
+
+type OrderItem implements SalesItemInterface {
+    quantity_ordered: Float @doc(description: "Number of items ordered")
+}
+
+interface SalesItemInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesItemTypeResolver") {
+    product_name: String @doc(description: "Name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_url: String @doc(description: "URL of the base product")
+    product_sale_price: Money! @doc(description: "Sale price for the base product including selected options")
+    parent_product_sku: String @doc(description: "SKU of parent product like configurable or bundle")
+    selected_options: [SalesItemOption] @doc(description: "Selected options for the base product. for e.g color, size etc")
+    entered_options: [SalesItemOption] @doc(description: "Entered option for the base product. for e.g logo image etc")
+}
+
+type SalesItemOption @doc(description: "Represents sales item id and value for selected or entered options") {
+    id: String! @doc(description: "Name of the option")
+    value: String! @doc(description: "Value of the option")
+}
+
+interface SalesTotalsInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalsTypeResolver") {
+    subtotal: Money! @doc(description: "Subtotal amount excluding, shipping, discounts and tax")
+    tax: Money! @doc(description: "Applied taxes on order")
+    grand_total: Money! @doc(description: "The final total amount including shipping and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in base currency")
+}
+​
+type OrderTotals implements SalesTotalsInterface @doc(description: "Order totals amounts details") {
+    shipping_handling: Money! @doc(description: "The shipping and handling costs for the order")
 }

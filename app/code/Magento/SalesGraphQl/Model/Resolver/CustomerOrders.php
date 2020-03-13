@@ -16,9 +16,9 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
- * Orders data reslover
+ * Orders data resolver
  */
-class Orders implements ResolverInterface
+class CustomerOrders implements ResolverInterface
 {
     /**
      * @var CollectionFactoryInterface
@@ -54,15 +54,15 @@ class Orders implements ResolverInterface
 
         /** @var Order $order */
         foreach ($orders as $order) {
-            $items[] = [
-                'id' => $order->getId(),
-                'increment_id' => $order->getIncrementId(),
-                'order_number' => $order->getIncrementId(),
-                'created_at' => $order->getCreatedAt(),
-                'grand_total' => $order->getGrandTotal(),
+            return [
+               'id' => $order->getId(),
+               'number' => $order->getIncrementId(),
+               'order_date' => $order->getCreatedAt(),
                 'status' => $order->getStatus(),
-            ];
+                'totals' => $order->getGrandTotal(), // TODO
+            $items[] = [
+           //TODO
+            ]];
         }
-        return ['items' => $items];
     }
 }

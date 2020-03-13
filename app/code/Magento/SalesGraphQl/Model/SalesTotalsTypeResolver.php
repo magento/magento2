@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\SalesGraphQl\Model;
+
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
+
+class SalesTotalsTypeResolver implements TypeResolverInterface
+{
+    /**
+     * @inheritDoc
+     */
+    public function resolveType(array $data): string
+    {
+        // TODO: Implement resolveType() method.
+    }
+}
