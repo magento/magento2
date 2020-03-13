@@ -17,6 +17,9 @@
                 </field>
                 <field id="button_text" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Button Text</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

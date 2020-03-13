@@ -24,7 +24,7 @@
             </before>
             <after>
                 <!-- Delete the bundled product -->
-                <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+                <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                     <argument name="product" value="BundleProduct"/>
                 </actionGroup>
                 <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
@@ -46,9 +46,9 @@
             <!--Go to bundle product creation page-->
             <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
             <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
-            <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
+            <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
             <!-- Add Option, a "Radio Buttons" type option -->
-            <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts2">
+            <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
                 <argument name="x" value="0"/>
                 <argument name="n" value="1"/>
                 <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -58,7 +58,7 @@
             </actionGroup>
             <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantitiyOptionProduct0"/>
             <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOptionProduct1"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
             <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
             <waitForPageLoad stepKey="waitForConfigCurrencySetupPage"/>
             <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.allowCurrencies}}" visible="false" stepKey="openOptions"/>

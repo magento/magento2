@@ -164,6 +164,48 @@ class MergeCartsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameter "source_cart_id" is missing
+     */
+    public function testMergeCartsWithEmptySourceCartId()
+    {
+        $customerQuote = $this->quoteFactory->create();
+        $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
+
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$customerQuote->getId());
+        $guestQuoteMaskedId = "";
+
+        $query = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameter "destination_cart_id" is missing
+     */
+    public function testMergeCartsWithEmptyDestinationCartId()
+    {
+        $guestQuote = $this->quoteFactory->create();
+        $this->quoteResource->load(
+            $guestQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
+
+        $customerQuoteMaskedId = "";
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestQuote->getId());
+
+        $query = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * Add simple product to cart
      *
      * @param string $maskedId

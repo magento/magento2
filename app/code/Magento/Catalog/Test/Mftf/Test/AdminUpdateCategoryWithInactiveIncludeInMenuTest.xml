@@ -24,7 +24,7 @@
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Category Page-->
@@ -39,6 +39,7 @@
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIncludeInMenu"/>
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
+        <scrollTo selector="{{AdminCategoryContentSection.description}}" x="0" y="-80" stepKey="scrollToDescription"/>
         <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization"/>
@@ -53,10 +54,11 @@
         <waitForPageLoad stepKey="waitForUrlRewritePage"/>
 
         <!--Verify Updated Category UrlKey-->
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
+        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
         <!--Verify Updated Category UrlKey directs to category Store Front-->
         <amOnPage url="{{SimpleRootSubCategory.url_key}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>

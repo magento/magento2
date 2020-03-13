@@ -67,8 +67,7 @@ class Processor
         try {
             $this->deleteMediaAssetByPath->execute($file);
         } catch (\Exception $exception) {
-            $message = __('An error occurred during media asset delete at media processor: %1', $exception->getMessage());
-            $this->logger->critical($message->render());
+            $this->logger->critical($exception);
         }
 
         return $result;
