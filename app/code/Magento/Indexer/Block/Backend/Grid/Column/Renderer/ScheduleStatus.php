@@ -11,9 +11,8 @@ use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
-use Magento\Framework\Mview\View;
-use Magento\Framework\Mview\ViewInterface;
 use Magento\Framework\Phrase;
+use Magento\Indexer\Model\IndexerFactory;
 
 /**
  * Renderer for 'Schedule Status' column in indexer grid
@@ -26,25 +25,25 @@ class ScheduleStatus extends AbstractRenderer
     private $escaper;
 
     /**
-     * @var ViewInterface
+     * @var IndexerFactory
      */
-    private $viewModel;
+    private $indexerFactory;
 
     /**
      * @param Context $context
      * @param Escaper $escaper
-     * @param ViewInterface $viewModel
+     * @param IndexerFactory $indexerFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
         Escaper $escaper,
-        View $viewModel,
+        IndexerFactory $indexerFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->escaper = $escaper;
-        $this->viewModel = $viewModel;
+        $this->indexerFactory = $indexerFactory;
     }
 
     /**
@@ -61,7 +60,9 @@ class ScheduleStatus extends AbstractRenderer
             }
 
             try {
-                $view = $this->viewModel->load($row->getIndexerId());
+                $indexer = $this->indexerFactory->create();
+                $indexer->load($row->getIndexerId());
+                $view = $indexer->getView();
             } catch (\InvalidArgumentException $exception) {
                 // No view for this index.
                 return '';
