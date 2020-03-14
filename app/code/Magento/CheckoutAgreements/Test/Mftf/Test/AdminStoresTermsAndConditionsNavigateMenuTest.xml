@@ -20,7 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -29,7 +29,7 @@
             <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminMenuStoresSettingsTermsAndConditions.dataUiId}}"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuStoresSettingsTermsAndConditions.pageTitle}}"/>
         </actionGroup>
     </test>

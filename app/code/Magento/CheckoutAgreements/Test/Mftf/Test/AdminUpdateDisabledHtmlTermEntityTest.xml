@@ -21,34 +21,53 @@
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
-            <createData entity="SimpleTwo" stepKey="createdProduct"/>
+
+            <createData entity="SimpleTwo" stepKey="createProduct"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
-            <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
-            <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
-                <argument name="term" value="activeTextTerm"/>
+            <deleteData createDataKey="createProduct" stepKey="deletedProduct"/>
+
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+                <argument name="termName" value="{{activeTextTerm.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
+        <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="disabledHtmlTerm"/>
         </actionGroup>
-        <actionGroup ref="UpdateTermActionGroup" stepKey="updateTerm">
-            <argument name="term" value="disabledHtmlTerm"/>
-            <argument name="updateTermData" value="activeTextTerm"/>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
+
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGrid"/>
+        <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openUpdateTerm">
+            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertTermInGridActionGroup" stepKey="assertTermInGrid">
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillUpdateTerm">
+            <argument name="term" value="activeTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveUpdateTerm"/>
+
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openNewTermsGrid"/>
+        <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
             <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToTheCart">
-            <argument name="product" value="$$createdProduct$$"/>
+
+        <openNewTab stepKey="openStorefrontTab"/>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToTheCart">
+            <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
-        <actionGroup ref="StorefrontAssertTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+        <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
             <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
         </actionGroup>
+        <closeTab stepKey="closeStorefrontTab"/>
     </test>
 </tests>
