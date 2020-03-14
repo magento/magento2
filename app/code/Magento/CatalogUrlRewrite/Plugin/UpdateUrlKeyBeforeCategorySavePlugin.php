@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\CategoryUrlPathUpdateService;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 
@@ -55,8 +56,10 @@ class UpdateUrlKeyBeforeCategorySavePlugin
         $this->invalidValues = $invalidValues;
     }
 
-    public function beforeSave(CategoryResourceModel $resourceModel, Category $category)
+    public function beforeSave(CategoryResourceModel $resourceModel, DataObject $category)
     {
+        /** @var Category $category */
+
         $generatedUrlKey = $this->urlPathGenerator->getUrlKey($category);
 
         if ($this->isUseDefaultUrlKey($category)) {
@@ -79,11 +82,7 @@ class UpdateUrlKeyBeforeCategorySavePlugin
     private function isUseDefaultUrlKey(Category $category): bool
     {
         $useDefaultAttributes = $category->getData('use_default');
-        if (isset($useDefaultAttributes['url_key']) && $useDefaultAttributes['url_key']) {
-            return true;
-        }
-
-        return false;
+        return isset($useDefaultAttributes['url_key']) && $useDefaultAttributes['url_key'];
     }
 
     private function isCategoryGlobal(Category $category): bool
