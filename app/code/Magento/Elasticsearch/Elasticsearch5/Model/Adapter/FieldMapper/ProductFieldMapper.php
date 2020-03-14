@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper;
 
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Eav\Model\Config;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use \Magento\Customer\Model\Session as CustomerSession;
 
 /**
- * Class ProductFieldMapper
+ * Elasticsearch5 Product Field Mapper Adapter
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ProductFieldMapper implements FieldMapperInterface
 {
@@ -73,9 +74,9 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param CustomerSession $customerSession
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
-     * @param ResolverInterface|null $fieldNameResolver
-     * @param AttributeProvider|null $attributeAdapterProvider
-     * @param FieldProviderInterface|null $fieldProvider
+     * @param ResolverInterface $fieldNameResolver
+     * @param AttributeProvider $attributeAdapterProvider
+     * @param FieldProviderInterface $fieldProvider
      */
     public function __construct(
         Config $eavConfig,
@@ -83,21 +84,18 @@ class ProductFieldMapper implements FieldMapperInterface
         CustomerSession $customerSession,
         StoreManager $storeManager,
         Registry $coreRegistry,
-        ResolverInterface $fieldNameResolver = null,
-        AttributeProvider $attributeAdapterProvider = null,
-        FieldProviderInterface $fieldProvider = null
+        ResolverInterface $fieldNameResolver,
+        AttributeProvider $attributeAdapterProvider,
+        FieldProviderInterface $fieldProvider
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldType = $fieldType;
         $this->customerSession = $customerSession;
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
-        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(ResolverInterface::class);
-        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
-            ->get(AttributeProvider::class);
-        $this->fieldProvider = $fieldProvider ?: ObjectManager::getInstance()
-            ->get(FieldProviderInterface::class);
+        $this->fieldNameResolver = $fieldNameResolver;
+        $this->attributeAdapterProvider = $attributeAdapterProvider;
+        $this->fieldProvider = $fieldProvider;
     }
 
     /**
