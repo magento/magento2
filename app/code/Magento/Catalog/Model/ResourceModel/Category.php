@@ -28,6 +28,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  */
 class Category extends AbstractResource
 {
+    const SCOPE_GLOBAL = 0;
     /**
      * Category tree object
      *
@@ -137,7 +138,7 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->connectionName  = 'catalog';
+        $this->connectionName = 'catalog';
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -289,7 +290,7 @@ class Category extends AbstractResource
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
             $path = explode('/', (string)$object->getPath());
-            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $level = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
             if (!$object->hasPosition()) {
@@ -695,7 +696,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return (int) $counts;
+        return (int)$counts;
     }
 
     /**
@@ -1112,7 +1113,7 @@ class Category extends AbstractResource
     /**
      * Save entity's attributes into the object's resource
      *
-     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
      */
@@ -1120,6 +1121,15 @@ class Category extends AbstractResource
     {
         $this->getEntityManager()->save($object);
         return $this;
+    }
+
+    protected function getAttributeRow($entity, $object, $attribute)
+    {
+        $data = parent::getAttributeRow($entity, $object, $attribute);
+
+        $data['store_id'] = $object->getData('store_id') ?? self::SCOPE_GLOBAL;
+
+        return $data;
     }
 
     /**
