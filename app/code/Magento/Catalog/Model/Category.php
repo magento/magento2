@@ -25,8 +25,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method int getMovedCategoryId()
  * @method Category setAffectedCategoryIds(array $categoryIds)
  * @method array getAffectedCategoryIds()
- * @method Category setUrlKey(string $urlKey)
- * @method Category setUrlPath(string $urlPath)
+ * @method Category setUrlKey(?string $urlKey = null)
+ * @method Category setUrlPath(?string $urlPath = null)
  * @method Category getSkipDeleteChildren()
  * @method Category setSkipDeleteChildren(boolean $value)
  * @method Category setChangedProductIds(array $categoryIds) Set products ids that inserted or deleted for category
