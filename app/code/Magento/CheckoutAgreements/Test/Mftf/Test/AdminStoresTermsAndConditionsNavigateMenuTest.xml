@@ -29,7 +29,7 @@
             <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminMenuStoresSettingsTermsAndConditions.dataUiId}}"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seePageTitle">
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuStoresSettingsTermsAndConditions.pageTitle}}"/>
         </actionGroup>
     </test>
