@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SaveAssetLinks
@@ -29,14 +30,22 @@ class SaveAssetLinks
     private $resourceConnection;
 
     /**
-     * SaveAssetKeywords constructor.
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * SaveAssetLinks constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->logger = $logger;
     }
 
     /**
@@ -66,6 +75,7 @@ class SaveAssetLinks
                 );
             }
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during save asset keyword links: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }

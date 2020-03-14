@@ -6,7 +6,9 @@
 namespace Magento\User\Block\Role\Tab;
 
 /**
- * implementing now
+ * Info
+ *
+ * User role tab info
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
@@ -18,6 +20,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
 
     /**
+     * Get tab label
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
@@ -26,6 +30,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
+     * Get tab title
+     *
      * @return string
      */
     public function getTabTitle()
@@ -34,6 +40,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
+     * Can show tab
+     *
      * @return bool
      */
     public function canShowTab()
@@ -42,6 +50,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
+     * Is tab hidden
+     *
      * @return bool
      */
     public function isHidden()
@@ -50,6 +60,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
+     * Before html rendering
+     *
      * @return $this
      */
     public function _beforeToHtml()
@@ -60,6 +72,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
+     * Form initializatiion
+     *
      * @return void
      */
     protected function _initForm()
@@ -99,7 +113,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Your Password'),
                 'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
                 'title' => __('Your Password'),
-                'class' => 'input-text validate-current-password required-entry',
+                'class' => 'validate-current-password required-entry',
                 'required' => true
             ]
         );

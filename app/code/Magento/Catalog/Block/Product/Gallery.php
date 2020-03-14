@@ -11,9 +11,13 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Framework\Storage\FileNotFoundException;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Registry;
+use Magento\Framework\Storage\StorageProvider;
 
 /**
  * Product gallery block
@@ -26,22 +30,37 @@ class Gallery extends \Magento\Framework\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * @var StorageProvider
+     */
+    private $storageProvider;
+    /**
+     * @var Config
+     */
+    private $mediaConfig;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param array $data
+     * @param StorageProvider $storageProvider
+     * @param Config $mediaConfig
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        array $data = []
+        Registry $registry,
+        array $data = [],
+        StorageProvider $storageProvider = null,
+        Config $mediaConfig = null
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+        $this->storageProvider = $storageProvider ?? ObjectManager::getInstance()->get(StorageProvider::class);
+        $this->mediaConfig = $mediaConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -121,16 +140,24 @@ class Gallery extends \Magento\Framework\View\Element\Template
      */
     public function getImageWidth()
     {
-        $file = $this->getCurrentImage()->getPath();
+        $file = $this->getCurrentImage()->getFile();
+        if (!$file) {
+            return false;
+        }
+        $productMediaFile = $this->mediaConfig->getMediaPath($file);
 
-        if ($this->_filesystem->getDirectoryRead(DirectoryList::MEDIA)->isFile($file)) {
-            $size = getimagesize($file);
-            if (isset($size[0])) {
-                if ($size[0] > 600) {
+        $mediaStorage = $this->storageProvider->get('media');
+        if ($mediaStorage->has($productMediaFile)) {
+            try {
+                $meta = $mediaStorage->getMetadata($productMediaFile);
+                $size = $meta['size'];
+                if ($size > 600) {
                     return 600;
                 } else {
-                    return (int) $size[0];
+                    return (int) $size;
                 }
+            } catch (FileNotFoundException $e) {
+                return false;
             }
         }
 

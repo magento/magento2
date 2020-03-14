@@ -315,7 +315,8 @@
             .toggle {
                 &:extend(.abs-toggling-title all);
                 border: 0;
-                padding: 0 @indent__m @indent__xs 0;
+                padding: 0 0 @indent__xs 0;
+                white-space: nowrap;
 
                 &:after {
                     .lib-css(color, @color-gray56);
@@ -375,6 +376,7 @@
 
         .update-cart-item {
             .lib-font-size(11);
+            margin-left: 5px;
             vertical-align: top;
         }
 
@@ -427,6 +429,7 @@
         }
         .update-cart-item {
             float: right;
+            margin-left: 0;
         }
     }
 }

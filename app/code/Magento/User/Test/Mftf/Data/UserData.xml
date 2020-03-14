@@ -114,6 +114,16 @@
             <item>1</item>
         </array>
     </entity>
+
+    <entity name="activeAdmin" type="user" extends="NewAdminUser">
+        <data key="name" unique="suffix">admin</data>
+        <data key="is_active">1</data>
+    </entity>
+    <entity name="inactiveAdmin" type="user" extends="NewAdminUser">
+        <data key="name" unique="suffix">admin</data>
+        <data key="is_active">0</data>
+    </entity>
+
     <entity name="adminUserCorrectPassword" type="user">
         <data key="username">admin_user_with_correct_password</data>
         <data key="firstname">John</data>
