@@ -20,7 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="adminLogin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
                 <argument name="user" value="activeAdmin"/>
             </actionGroup>
@@ -28,8 +28,8 @@
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
-        <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
-            <argument name="User" value="activeAdmin"/>
+        <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createAdminUser">
+            <argument name="user" value="activeAdmin"/>
             <argument name="role" value="roleDefaultAdministrator"/>
         </actionGroup>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>

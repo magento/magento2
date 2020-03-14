@@ -156,6 +156,7 @@
         <data key="interface_local_label">English (United States)</data>
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
         <data key="role">Administrators</data>
+        <data key="is_active">1</data>
         <array key="roles">
             <item>1</item>
         </array>
@@ -171,6 +172,7 @@
         <data key="interface_local_label">English (United States)</data>
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
         <data key="role">Administrators</data>
+        <data key="is_active">0</data>
         <array key="roles">
             <item>1</item>
         </array>
