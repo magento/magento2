@@ -13,7 +13,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Sales\Api\ReorderInterface;
+use Magento\Quote\Api\ReorderInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 /**
@@ -32,7 +32,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Sales\Api\ReorderInterface
+     * @var ReorderInterface
      */
     private $reorder;
 
@@ -49,7 +49,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         OrderLoaderInterface $orderLoader,
         Registry $registry,
         ReorderHelper $reorderHelper = null,
-        \Magento\Sales\Api\ReorderInterface $reOrder = null
+        ReorderInterface $reOrder = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;

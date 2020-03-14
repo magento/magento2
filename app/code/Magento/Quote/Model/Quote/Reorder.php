@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order;
+namespace Magento\Quote\Model\Quote;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Sales\Api\ReorderInterface;
+use Magento\Quote\Api\ReorderInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\Sales\Model\OrderFactory;
@@ -88,7 +88,7 @@ class Reorder implements ReorderInterface
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function execute(string $incrementOrderId, string $storeId): \Magento\Sales\Api\Data\Reorder\ReorderOutput
+    public function execute(string $incrementOrderId, string $storeId): \Magento\Quote\Api\Data\Reorder\ReorderOutput
     {
         $order = $this->orderFactory->create()->loadByIncrementIdAndStoreId($incrementOrderId, $storeId);
 
@@ -130,7 +130,7 @@ class Reorder implements ReorderInterface
 
         $this->cartRepository->save($cart);
 
-        return new \Magento\Sales\Api\Data\Reorder\ReorderOutput($cart, $lineItemsErrors);
+        return new \Magento\Quote\Api\Data\Reorder\ReorderOutput($cart, $lineItemsErrors);
     }
 
 
@@ -169,7 +169,7 @@ class Reorder implements ReorderInterface
      */
     private function addLineItemError(&$errors, \Magento\Sales\Model\Order\Item $item, $message): void
     {
-        $errors[] = new \Magento\Sales\Api\Data\Reorder\LineItemError(
+        $errors[] = new \Magento\Quote\Api\Data\Reorder\LineItemError(
             $item->getProduct() ? $item->getProduct()->getSku() : $item->getSku() ?? '',
             $message
         );

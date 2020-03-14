@@ -12,7 +12,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Sales\Api\Data\Reorder\LineItemError;
+use Magento\Quote\Api\Data\Reorder\LineItemError;
+use Magento\Quote\Api\ReorderInterface;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
@@ -27,16 +28,16 @@ class Reorder implements ResolverInterface
     private $orderFactory;
 
     /**
-     * @var \Magento\Sales\Api\ReorderInterface
+     * @var ReorderInterface
      */
     private $reorder;
 
     /**
-     * @param \Magento\Sales\Api\ReorderInterface $reorder
+     * @param ReorderInterface $reorder
      * @param OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\Sales\Api\ReorderInterface $reorder,
+        ReorderInterface $reorder,
         OrderFactory $orderFactory
     ) {
         $this->orderFactory = $orderFactory;

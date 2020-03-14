@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Api\Data\Reorder;
+namespace Magento\Quote\Api\Data\Reorder;
 
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
- * DTO represent output for \Magento\Sales\Api\ReorderInterface
+ * DTO represent output for \Magento\Quote\Api\ReorderInterface
  */
 class ReorderOutput
 {

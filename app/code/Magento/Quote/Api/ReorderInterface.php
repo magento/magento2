@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Api;
+namespace Magento\Quote\Api;
 
-use Magento\Sales\Api\Data\Reorder\ReorderOutput;
+use Magento\Quote\Api\Data\Reorder\ReorderOutput;
 
 /**
  * Allows customer to quickly reorder previously added products and put them to the Cart
