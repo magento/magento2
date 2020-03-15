@@ -1,9 +1,10 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -15,15 +16,15 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Catalog\Model\Session;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
@@ -37,7 +38,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class View implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
@@ -113,9 +114,21 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     private $logger;
 
     /**
-     * Constructor
-     *
-     * @param Context $context
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var RedirectFactory
+     */
+    private $redirectFactory;
+
+    /**
      * @param Design $catalogDesign
      * @param Session $catalogSession
      * @param Registry $coreRegistry
@@ -125,14 +138,17 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param ForwardFactory $resultForwardFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param ToolbarMemorizer|null $toolbarMemorizer
-     * @param LayoutUpdateManager|null $layoutUpdateManager
+     * @param ToolbarMemorizer $toolbarMemorizer
+     * @param LayoutUpdateManager $layoutUpdateManager
      * @param CategoryHelper $categoryHelper
      * @param LoggerInterface $logger
+     * @param RequestInterface $request
+     * @param ManagerInterface $eventManager
+     * @param RedirectFactory $redirectFactory
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Context $context,
         Design $catalogDesign,
         Session $catalogSession,
         Registry $coreRegistry,
@@ -142,12 +158,14 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        ToolbarMemorizer $toolbarMemorizer = null,
-        ?LayoutUpdateManager $layoutUpdateManager = null,
-        CategoryHelper $categoryHelper = null,
-        LoggerInterface $logger = null
+        ToolbarMemorizer $toolbarMemorizer,
+        LayoutUpdateManager $layoutUpdateManager,
+        CategoryHelper $categoryHelper,
+        LoggerInterface $logger,
+        RequestInterface $request,
+        ManagerInterface $eventManager,
+        RedirectFactory $redirectFactory
     ) {
-        parent::__construct($context);
         $this->_storeManager = $storeManager;
         $this->_catalogDesign = $catalogDesign;
         $this->_catalogSession = $catalogSession;
@@ -157,13 +175,13 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->resultForwardFactory = $resultForwardFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
-        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()->get(ToolbarMemorizer::class);
-        $this->customLayoutManager = $layoutUpdateManager
-            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
-        $this->categoryHelper = $categoryHelper ?: ObjectManager::getInstance()
-            ->get(CategoryHelper::class);
-        $this->logger = $logger ?: ObjectManager::getInstance()
-            ->get(LoggerInterface::class);
+        $this->toolbarMemorizer = $toolbarMemorizer;
+        $this->customLayoutManager = $layoutUpdateManager;
+        $this->categoryHelper = $categoryHelper;
+        $this->logger = $logger;
+        $this->request = $request;
+        $this->eventManager = $eventManager;
+        $this->redirectFactory = $redirectFactory;
     }
 
     /**
@@ -173,7 +191,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      */
     protected function _initCategory()
     {
-        $categoryId = (int)$this->getRequest()->getParam('id', false);
+        $categoryId = (int)$this->request->getParam('id', false);
         if (!$categoryId) {
             return false;
         }
@@ -190,7 +208,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->_coreRegistry->register('current_category', $category);
         $this->toolbarMemorizer->memorizeParams();
         try {
-            $this->_eventManager->dispatch(
+            $this->eventManager->dispatch(
                 'catalog_controller_category_init_after',
                 ['category' => $category, 'controller_action' => $this]
             );
@@ -212,9 +230,10 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     {
         $result = null;
 
-        if ($this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
-            return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
+        if ($this->request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
+            return $this->redirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
+
         $category = $this->_initCategory();
         if ($category) {
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
@@ -264,11 +283,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param Category $category
      * @return string
      */
-    private function getPageType(Category $category) : string
+    private function getPageType(Category $category): string
     {
         $hasChildren = $category->hasChildren();
         if ($category->getIsAnchor()) {
-            return  $hasChildren ? 'layered' : 'layered_without_children';
+            return $hasChildren ? 'layered' : 'layered_without_children';
         }
 
         return $hasChildren ? 'default' : 'default_without_children';
@@ -281,10 +300,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param DataObject $settings
      * @return void
      */
-    private function applyLayoutUpdates(
-        Page $page,
-        DataObject $settings
-    ) {
+    private function applyLayoutUpdates(Page $page, DataObject $settings): void
+    {
         $layoutUpdates = $settings->getLayoutUpdates();
         if ($layoutUpdates && is_array($layoutUpdates)) {
             foreach ($layoutUpdates as $layoutUpdate) {
@@ -293,7 +310,6 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             }
         }
 
-        //Selected files
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
