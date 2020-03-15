@@ -80,6 +80,9 @@ class CategoryRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
+        $this->storeMock->method('getId')
+            ->willReturn(self::STUB_STORE_ID);
+
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder(ExtensibleDataObjectConverter::class)

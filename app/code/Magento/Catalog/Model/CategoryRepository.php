@@ -215,16 +215,11 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @return int
      *
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function getCategoryStoreId(CategoryInterface $category): int
     {
         return $this->storeManager->getStore()->getId();
-//  I really want to implement that, too :-)
-//        if (method_exists($category, 'getStoreId') && $category->getStoreId() !== null) {
-//            $categoryStoreId = (int)$category->getStoreId();
-//        }
-//
-//        return $categoryStoreId ?? $this->storeManager->getStore()->getId();
     }
 
     /**
