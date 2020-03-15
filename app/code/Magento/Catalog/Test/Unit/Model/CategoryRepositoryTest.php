@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 class CategoryRepositoryTest extends TestCase
 {
     private const STUB_CATEGORY_ID = 5;
-    const STUB_STORE_ID = 1;
+    private const STUB_STORE_ID = 1;
 
     /**
      * @var CategoryRepository
@@ -160,7 +160,7 @@ class CategoryRepositoryTest extends TestCase
                 3,
                 ['level' => '1', 'path' => '1/2', 'parent_id' => 1, 'name' => 'category'],
                 [
-                    'store_id' => 1,
+                    'store_id' => self::STUB_STORE_ID,
                     'name' => 'category',
                     'entity_id' => null
                 ]
@@ -169,7 +169,7 @@ class CategoryRepositoryTest extends TestCase
                 4,
                 ['level' => '1', 'path' => '1/2', 'image' => ['categoryImage'], 'name' => 'category'],
                 [
-                    'store_id' => 1,
+                    'store_id' => self::STUB_STORE_ID,
                     'name' => 'category',
                     'entity_id' => null
                 ]
@@ -214,12 +214,12 @@ class CategoryRepositoryTest extends TestCase
     {
         $this->storeMock->expects($this->any())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn(self::STUB_STORE_ID);
         $categoryId = null;
         $parentCategoryId = 15;
         $newCategoryId = 25;
         $categoryData = ['level' => '1', 'path' => '1/2', 'parent_id' => 1, 'name' => 'category'];
-        $dataForSave = ['store_id' => 1, 'name' => 'category', 'path' => 'path', 'parent_id' => 15];
+        $dataForSave = ['store_id' => self::STUB_STORE_ID, 'name' => 'category', 'path' => 'path', 'parent_id' => 15];
 
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
@@ -317,12 +317,12 @@ class CategoryRepositoryTest extends TestCase
         return [
             [
                 true,
-                \Magento\Framework\Exception\CouldNotSaveException::class,
+                CouldNotSaveException::class,
                 'Could not save category: The "ValidateCategoryTest" attribute is required. Enter and try again.'
             ],
             [
                 'Something went wrong',
-                \Magento\Framework\Exception\CouldNotSaveException::class,
+                CouldNotSaveException::class,
                 'Could not save category: Something went wrong'
             ]
         ];
