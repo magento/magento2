@@ -49,17 +49,17 @@
         <!-- Log in to Admin Panel with incorrect password specified number of times-->
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultUser"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserFirstAttempt">
-            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+            <argument name="username" value="adminUserIncorrectPassword"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorFirstAttempt"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserSecondAttempt">
-            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+            <argument name="username" value="adminUserIncorrectPassword"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorSecondAttempt"/>
 
         <!-- Log in to Admin Panel with correct password-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserThirdAttempt">
-            <argument name="adminUser" value="adminUserCorrectPassword"/>
+            <argument name="username" value="adminUserCorrectPassword"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorThirdAttempt"/>
 

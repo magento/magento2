@@ -32,17 +32,17 @@
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+            <argument name="username" value="AdminUserWrongCredentials" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeFirstLoginErrorMessage" />
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+            <argument name="username" value="AdminUserWrongCredentials" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeSecondLoginErrorMessage" />
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+            <argument name="username" value="AdminUserWrongCredentials" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeThirdLoginErrorMessage" />
 
@@ -51,7 +51,7 @@
 
         <!-- Submit form with incorrect captcha -->
         <actionGroup ref="AdminLoginWithCaptchaActionGroup" stepKey="loginAsAdminWithIncorrectCaptcha">
-            <argument name="adminUser" value="DefaultAdminUser" />
+            <argument name="username" value="DefaultAdminUser" />
             <argument name="captcha" value="{{WrongCaptcha.value}}" />
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeIncorrectCaptchaErrorMessage">
@@ -60,7 +60,7 @@
         <actionGroup ref="AssertCaptchaVisibleOnAdminLoginFormActionGroup" stepKey="assertCaptchaVisibleAfterIncorrectCaptcha" />
 
         <actionGroup ref="AdminLoginWithCaptchaActionGroup" stepKey="loginAsAdminWithCorrectCaptcha">
-            <argument name="adminUser" value="DefaultAdminUser" />
+            <argument name="username" value="DefaultAdminUser" />
             <argument name="captcha" value="{{PreconfiguredCaptcha.value}}" />
         </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="verifyAdminLoggedIn" />

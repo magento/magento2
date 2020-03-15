@@ -70,7 +70,7 @@
         </actionGroup>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdminPanel"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsSaleRoleUser">
-            <argument name="adminUser" value="AdminUserWithUpdatedUserRoleToSales"/>
+            <argument name="username" value="AdminUserWithUpdatedUserRoleToSales"/>
         </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>
         <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="navigateToAdminUsersPage"/>
