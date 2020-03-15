@@ -218,12 +218,13 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     private function getCategoryStoreId(CategoryInterface $category): int
     {
-//        return $this->storeManager->getStore()->getId();
-        if (method_exists($category, 'getStoreId') && $category->getStoreId() !== null) {
-            $categoryStoreId = (int)$category->getStoreId();
-        }
-
-        return $categoryStoreId ?? $this->storeManager->getStore()->getId();
+        return $this->storeManager->getStore()->getId();
+//  I really want to implement that, too :-)
+//        if (method_exists($category, 'getStoreId') && $category->getStoreId() !== null) {
+//            $categoryStoreId = (int)$category->getStoreId();
+//        }
+//
+//        return $categoryStoreId ?? $this->storeManager->getStore()->getId();
     }
 
     /**
