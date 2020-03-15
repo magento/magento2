@@ -55,7 +55,7 @@ class Load implements HttpGetActionInterface
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sectionPool = $sectionPool;
-        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
+        $this->escaper = $escaper;
         $this->request = $request;
     }
 
