@@ -444,7 +444,7 @@ abstract class AbstractResource extends AbstractEntity
      * Retrieve Object instance with original data
      *
      * @param DataObject $object
-     * @return DataObject
+     * @return \Magento\Framework\DataObject
      */
     protected function _getOrigObject($object)
     {
