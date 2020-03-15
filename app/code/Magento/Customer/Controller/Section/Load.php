@@ -3,59 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Section;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Escaper;
+use Zend\Http\AbstractMessage;
+use Zend\Http\Response;
 
-/**
- * Customer section controller
- */
-class Load extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+class Load implements HttpGetActionInterface
 {
     /**
      * @var JsonFactory
      */
-    protected $resultJsonFactory;
-
-    /**
-     * @var Identifier
-     * @deprecated 100.2.0
-     */
-    protected $sectionIdentifier;
+    private $resultJsonFactory;
 
     /**
      * @var SectionPoolInterface
      */
-    protected $sectionPool;
+    private $sectionPool;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
 
     /**
-     * @param Context $context
+     * @param RequestInterface $request
      * @param JsonFactory $resultJsonFactory
-     * @param Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
      * @param Escaper $escaper
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
         JsonFactory $resultJsonFactory,
-        Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper
     ) {
-        parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->sectionIdentifier = $sectionIdentifier;
         $this->sectionPool = $sectionPool;
-        $this->escaper = $escaper ?: $this->_objectManager->get(\Magento\Framework\Escaper::class);
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
+        $this->request = $request;
     }
 
     /**
@@ -63,25 +61,22 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var JsonResult $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setHeader('Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store', true);
         $resultJson->setHeader('Pragma', 'no-cache', true);
+
         try {
-            $sectionNames = $this->getRequest()->getParam('sections');
+            $sectionNames = $this->request->getParam('sections');
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
-            $forceNewSectionTimestamp = $this->getRequest()->getParam('force_new_section_timestamp');
+            $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp');
             if ('false' === $forceNewSectionTimestamp) {
                 $forceNewSectionTimestamp = false;
             }
             $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$forceNewSectionTimestamp);
         } catch (\Exception $e) {
-            $resultJson->setStatusHeader(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
-                'Bad Request'
-            );
+            $resultJson->setStatusHeader(Response::STATUS_CODE_400, AbstractMessage::VERSION_11, 'Bad Request');
             $response = ['message' => $this->escaper->escapeHtml($e->getMessage())];
         }
 

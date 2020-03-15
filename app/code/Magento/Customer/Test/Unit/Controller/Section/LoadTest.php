@@ -8,16 +8,17 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Controller\Section;
 
 use Magento\Customer\Controller\Section\Load;
-use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Zend\Http\AbstractMessage;
+use Zend\Http\Response;
 
-class LoadTest extends \PHPUnit\Framework\TestCase
+class LoadTest extends TestCase
 {
     /**
      * @var Load
@@ -25,19 +26,9 @@ class LoadTest extends \PHPUnit\Framework\TestCase
     private $loadAction;
 
     /**
-     * @var Context|MockObject
-     */
-    private $contextMock;
-
-    /**
      * @var JsonFactory|MockObject
      */
     private $resultJsonFactoryMock;
-
-    /**
-     * @var Identifier|MockObject
-     */
-    private $sectionIdentifierMock;
 
     /**
      * @var SectionPoolInterface|MockObject
@@ -45,7 +36,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
     private $sectionPoolMock;
 
     /**
-     * @var \Magento\Framework\Escaper|MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
@@ -55,28 +46,21 @@ class LoadTest extends \PHPUnit\Framework\TestCase
     private $resultJsonMock;
 
     /**
-     * @var HttpRequest|MockObject
+     * @var RequestInterface|MockObject
      */
-    private $httpRequestMock;
+    private $requestMock;
 
     protected function setUp()
     {
-        $this->contextMock = $this->createMock(Context::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
-        $this->sectionIdentifierMock = $this->createMock(Identifier::class);
         $this->sectionPoolMock = $this->getMockForAbstractClass(SectionPoolInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->httpRequestMock = $this->createMock(HttpRequest::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultJsonMock = $this->createMock(Json::class);
 
-        $this->contextMock->expects($this->once())
-            ->method('getRequest')
-            ->willReturn($this->httpRequestMock);
-
         $this->loadAction = new Load(
-            $this->contextMock,
+            $this->requestMock,
             $this->resultJsonFactoryMock,
-            $this->sectionIdentifierMock,
             $this->sectionPoolMock,
             $this->escaperMock
         );
@@ -101,7 +85,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
                 ['Pragma', 'no-cache']
             );
 
-        $this->httpRequestMock->expects($this->exactly(2))
+        $this->requestMock->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(['sections'], ['force_new_section_timestamp'])
             ->willReturnOnConsecutiveCalls($sectionNames, $forceNewSectionTimestamp);
@@ -151,6 +135,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJsonMock);
+
         $this->resultJsonMock->expects($this->exactly(2))
             ->method('setHeader')
             ->withConsecutive(
@@ -158,18 +143,14 @@ class LoadTest extends \PHPUnit\Framework\TestCase
                 ['Pragma', 'no-cache']
             );
 
-        $this->httpRequestMock->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('sections')
             ->willThrowException(new \Exception('Some Message'));
 
         $this->resultJsonMock->expects($this->once())
             ->method('setStatusHeader')
-            ->with(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
-                'Bad Request'
-            );
+            ->with(Response::STATUS_CODE_400, AbstractMessage::VERSION_11, 'Bad Request');
 
         $this->escaperMock->expects($this->once())
             ->method('escapeHtml')
