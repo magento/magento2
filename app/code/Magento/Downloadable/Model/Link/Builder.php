@@ -116,7 +116,7 @@ class Builder
             $link->setLinkFile($linkFileName);
             $link->setLinkUrl(null);
         }
-        
+
         if (isset($this->data['sample'])) {
             $link = $this->buildSample($link, $this->data['sample']);
         }
@@ -131,6 +131,10 @@ class Builder
 
         if (isset($this->data['is_unlimited']) && $this->data['is_unlimited']) {
             $link->setNumberOfDownloads(0);
+        }
+
+        if (isset($this->data['use_default_title']) && $this->data['use_default_title'] == '1') {
+            $link->setTitle(null);
         }
         $this->resetData();
 

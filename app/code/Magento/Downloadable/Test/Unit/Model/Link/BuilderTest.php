@@ -68,7 +68,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->linkMock = $this->getMockBuilder(LinkInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $this->service = $objectManagerHelper->getObject(
             Builder::class,
             [
@@ -159,6 +159,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         }
         if (isset($data['is_unlimited'])) {
             $this->linkMock->expects($this->once())->method('setNumberOfDownloads')->with(0);
+        }
+        if (isset($data['use_default_title']) && $data['use_default_title'] == '1') {
+            $this->linkMock->expects($this->once())->method('getTitle')->with(null);
         }
         if (isset($data['price'])) {
             $this->linkMock->expects($this->once())->method('getPrice')->willReturn($data['price']);
