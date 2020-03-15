@@ -17,6 +17,9 @@ use Magento\Framework\Escaper;
 use Zend\Http\AbstractMessage;
 use Zend\Http\Response;
 
+/**
+ * Endpoint `customer/section/load` responsible for reloading sections of Customer's Local Storage
+ */
 class Load implements HttpGetActionInterface
 {
     /**
