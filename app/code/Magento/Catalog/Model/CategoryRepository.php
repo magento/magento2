@@ -131,6 +131,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function get($categoryId, $storeId = null)
     {
         $cacheKey = $storeId ?? self::CACHE_TAG_ALL_STORES;
+
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
