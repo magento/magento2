@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Catalog\Setup\CategorySetup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Catalog\Setup\CategorySetup;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Resource model for category entity
@@ -104,7 +104,6 @@ class Category extends AbstractResource
     private $metadataPool;
 
     /**
-     * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -1079,7 +1078,6 @@ class Category extends AbstractResource
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->_attributes = [];
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 
@@ -1123,6 +1121,9 @@ class Category extends AbstractResource
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function getAttributeRow($entity, $object, $attribute)
     {
         $data = parent::getAttributeRow($entity, $object, $attribute);

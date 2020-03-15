@@ -79,12 +79,24 @@ class UpdateUrlKeyBeforeCategorySavePlugin
         }
     }
 
+    /**
+     * Determines whether `use_default` contains `url_key` key
+     *
+     * @param Category $category
+     * @return bool
+     */
     private function isUseDefaultUrlKey(Category $category): bool
     {
         $useDefaultAttributes = $category->getData('use_default');
         return isset($useDefaultAttributes['url_key']) && $useDefaultAttributes['url_key'];
     }
 
+    /**
+     * Determines whether Category should be saved in Global scope
+     *
+     * @param Category $category
+     * @return bool
+     */
     private function isCategoryGlobal(Category $category): bool
     {
         $storeId = $category->getStoreId();
@@ -93,6 +105,14 @@ class UpdateUrlKeyBeforeCategorySavePlugin
         return null === $storeId || (string)Store::DEFAULT_STORE_ID === (string)$storeId;
     }
 
+    /**
+     * Updates `url_key` and as a result `url_path` for Category
+     *
+     * @param Category $category
+     * @param string $urlKey
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function setUrlKey(Category $category, string $urlKey): void
     {
         $this->validateUrlKey($urlKey);
@@ -101,6 +121,13 @@ class UpdateUrlKeyBeforeCategorySavePlugin
         $category->setUrlPath($this->urlPathGenerator->getUrlPath($category));
     }
 
+    /**
+     * Performs DB call to update `url_path` value
+     *
+     * @param CategoryResourceModel $resourceModel
+     * @param Category $category
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function updateUrlKey(CategoryResourceModel $resourceModel, Category $category): void
     {
         if ($category->isObjectNew()) {
@@ -113,6 +140,12 @@ class UpdateUrlKeyBeforeCategorySavePlugin
         }
     }
 
+    /**
+     * Verifies `url_key` agains several conditions
+     *
+     * @param string $urlKey
+     * @throws LocalizedException
+     */
     private function validateUrlKey(string $urlKey)
     {
         if (empty($urlKey)) {
@@ -123,11 +156,16 @@ class UpdateUrlKeyBeforeCategorySavePlugin
             throw new LocalizedException(__(
                 'URL key "%1" matches a reserved endpoint name (%2). Use another URL key.',
                 $urlKey,
-                implode(', ', $this->getInvalidValues())
+                implode(', ', $this->getReservedKeys())
             ));
         }
     }
 
+    /**
+     * Returns list of reserved keys that are injected via DI
+     *
+     * @return string[]
+     */
     private function getReservedKeys()
     {
         $reservedKeys = array_merge($this->invalidValues, [$this->frontNameResolver->getFrontName()]);

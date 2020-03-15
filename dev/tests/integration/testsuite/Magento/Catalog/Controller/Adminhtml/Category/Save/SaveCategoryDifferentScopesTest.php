@@ -35,6 +35,9 @@ class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
     /** @var StoreManagerInterface */
     private $storeManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -42,6 +45,9 @@ class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         $this->categoryRepository = null;
@@ -163,6 +169,13 @@ class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
         $this->assertSame('category-1/category-1-1/category-1-1-1', $categoryWithDefaultUrlKey->getData('url_path'));
     }
 
+    /**
+     * Returns StoreID by Code
+     *
+     * @param string $code
+     * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getStoreId(string $code): int
     {
         return (int)$this->storeManager->getStore($code)->getId();

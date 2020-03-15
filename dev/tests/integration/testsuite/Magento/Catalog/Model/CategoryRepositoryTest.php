@@ -53,8 +53,6 @@ class CategoryRepositoryTest extends TestCase
     private $storeManager;
 
     /**
-     * Sets up common objects.
-     *
      * @inheritDoc
      */
     protected function setUp()
@@ -65,6 +63,11 @@ class CategoryRepositoryTest extends TestCase
         $this->storeManager = Bootstrap::getObjectManager()->create(StoreManagerInterface::class);
     }
 
+    /**
+     * Returns already instantiated Repository
+     *
+     * @return CategoryRepositoryInterface
+     */
     private function getRepository(): CategoryRepositoryInterface
     {
         return ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
@@ -268,6 +271,16 @@ class CategoryRepositoryTest extends TestCase
         $this->assertSame($newGlobalUrlKey, $categoryStoreScope->getUrlKey());
     }
 
+    /**
+     * Updates single Category attribute
+     *
+     * @param int $categoryId
+     * @param string $attributeCode
+     * @param $attributeValue
+     * @param null $storeCode
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function updateCategoryAttribute(
         int $categoryId,
         string $attributeCode,
@@ -291,11 +304,27 @@ class CategoryRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * Returns Store object by Store Code
+     *
+     * @param string|null $storeCode
+     * @return StoreInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getStore(?string $storeCode = null): StoreInterface
     {
         return $this->storeManager->getStore($storeCode);
     }
 
+    /**
+     * Verifies if Category attribute value equals expected one
+     *
+     * @param int $categoryId
+     * @param string $attributeCode
+     * @param string|null $attributeValue
+     * @param string|null $storeCode
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function assertCategoryAttributeValue(
         int $categoryId,
         string $attributeCode,
