@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Helper\Category as CategoryHelper;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
@@ -20,11 +21,13 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
@@ -37,6 +40,7 @@ use Psr\Log\LoggerInterface;
  * View a category on storefront. Needs to be accessible by POST because of the store switching.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class View implements HttpGetActionInterface, HttpPostActionInterface
 {
@@ -119,7 +123,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
     private $request;
 
     /**
-     * @var ManagerInterface
+     * @var EventManagerInterface
      */
     private $eventManager;
 
@@ -127,10 +131,22 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
      * @var RedirectFactory
      */
     private $redirectFactory;
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
+    /**
+     * @var RedirectInterface
+     */
+    private $redirect;
 
     /**
-     * @param Design $catalogDesign
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @param Session $catalogSession
+     * @param Design $catalogDesign
      * @param Registry $coreRegistry
      * @param StoreManagerInterface $storeManager
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
@@ -142,15 +158,15 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
      * @param LayoutUpdateManager $layoutUpdateManager
      * @param CategoryHelper $categoryHelper
      * @param LoggerInterface $logger
-     * @param RequestInterface $request
-     * @param ManagerInterface $eventManager
+     * @param EventManagerInterface $eventManager
      * @param RedirectFactory $redirectFactory
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param RedirectInterface $redirect
      */
     public function __construct(
-        Design $catalogDesign,
+        RequestInterface $request,
+        ResponseInterface $response,
         Session $catalogSession,
+        Design $catalogDesign,
         Registry $coreRegistry,
         StoreManagerInterface $storeManager,
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
@@ -162,14 +178,16 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         LayoutUpdateManager $layoutUpdateManager,
         CategoryHelper $categoryHelper,
         LoggerInterface $logger,
-        RequestInterface $request,
-        ManagerInterface $eventManager,
-        RedirectFactory $redirectFactory
+        EventManagerInterface $eventManager,
+        RedirectFactory $redirectFactory,
+        RedirectInterface $redirect
     ) {
-        $this->_storeManager = $storeManager;
-        $this->_catalogDesign = $catalogDesign;
+        $this->request = $request;
+        $this->response = $response;
         $this->_catalogSession = $catalogSession;
+        $this->_catalogDesign = $catalogDesign;
         $this->_coreRegistry = $coreRegistry;
+        $this->_storeManager = $storeManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
@@ -179,9 +197,9 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         $this->customLayoutManager = $layoutUpdateManager;
         $this->categoryHelper = $categoryHelper;
         $this->logger = $logger;
-        $this->request = $request;
         $this->eventManager = $eventManager;
         $this->redirectFactory = $redirectFactory;
+        $this->redirect = $redirect;
     }
 
     /**
@@ -197,6 +215,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         }
 
         try {
+            /** @var CategoryInterface|Category $category */
             $category = $this->categoryRepository->get($categoryId, $this->_storeManager->getStore()->getId());
         } catch (NoSuchEntityException $e) {
             return false;
@@ -231,7 +250,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         $result = null;
 
         if ($this->request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
-            return $this->redirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
+            return $this->redirectFactory->create()->setUrl($this->redirect->getRedirectUrl());
         }
 
         $category = $this->_initCategory();
@@ -271,7 +290,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
                 ->addBodyClass('category-' . $category->getUrlKey());
 
             return $page;
-        } elseif (!$this->getResponse()->isRedirect()) {
+        } elseif (!$this->response->isRedirect()) {
             $result = $this->resultForwardFactory->create()->forward('noroute');
         }
         return $result;

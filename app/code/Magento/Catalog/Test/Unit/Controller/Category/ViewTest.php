@@ -200,7 +200,10 @@ class ViewTest extends TestCase
         $this->categoryRepositoryMock->expects($this->any())->method('get')->with($categoryId)
             ->will($this->returnValue($this->categoryMock));
 
-        $this->categoryHelperMock->expects($this->once())->method('canShow')->with($this->categoryMock)->willReturn(true);
+        $this->categoryHelperMock->expects($this->once())
+            ->method('canShow')
+            ->with($this->categoryMock)
+            ->willReturn(true);
 
         $settings = $this->createPartialMock(
             DataObject::class,
@@ -216,9 +219,15 @@ class ViewTest extends TestCase
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);
-        $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
-        $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
-        $this->catalogDesignMock->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
+        $settings->expects($this->atLeastOnce())
+            ->method('getPageLayout')
+            ->will($this->returnValue($pageLayout));
+        $settings->expects($this->once())
+            ->method('getLayoutUpdates')
+            ->willReturn(['update1', 'update2']);
+        $this->catalogDesignMock->expects($this->any())
+            ->method('getDesignSettings')
+            ->will($this->returnValue($settings));
 
         $this->action->execute();
     }
