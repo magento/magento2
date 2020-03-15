@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Category\Save;
@@ -15,7 +14,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @magentoAppArea adminhtml
- * @magentoDbIsolation disabled
  */
 class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
 {
@@ -30,7 +28,6 @@ class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
     private const FIXTURE_CATEGORY_LEAF = 402;
 
     private const FIXTURE_SECOND_STORE_CODE = 'fixturestore';
-    private const FIXTURE_FIRST_STORE_CODE = 'default';
 
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
@@ -47,43 +44,58 @@ class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
 
     protected function tearDown()
     {
+        $this->categoryRepository = null;
+        $this->storeManager = null;
         parent::tearDown();
     }
 
     /**
+     * Change of `url_key` for specific store should not affect global value of `url_path`
+     *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category.php
      */
-    public function testUpdateUrlKeyForStoreExpectNoChangeOfGlobalUrlPath()
+    public function testChangeUrlKeyForSpecificStoreShouldNotChangeGlobalUrlPath()
     {
-        $storeScopeUrlKey = 'url-key-store-1';
+        $expectedStoreScopeUrlKey = 'url-key-store-1';
+        $expectedGlobalScopeUrlKey = self::FIXTURE_URL_KEY;
 
         $postData = [
             'entity_id' => self::FIXTURE_CATEGORY_ID,
             'store_id' => self::DEFAULT_STORE_ID,
-            'url_key' => $storeScopeUrlKey
+            'url_key' => $expectedStoreScopeUrlKey
         ];
-
-        $this->performSaveCategoryRequest($postData);
+        $responseData = $this->performSaveCategoryRequest($postData);
+        $this->assertRequestIsSuccessfullyPerformed($responseData);
 
         /** @var CategoryInterface|Category $storeScopeCategory */
         $storeScopeCategory = $this->categoryRepository->get(self::FIXTURE_CATEGORY_ID, self::DEFAULT_STORE_ID);
-        $this->assertSame($storeScopeUrlKey, $storeScopeCategory->getData('url_path'));
+        $this->assertSame($expectedStoreScopeUrlKey, $storeScopeCategory->getData('url_path'));
 
         $globalScopeCategory = $this->categoryRepository->get(self::FIXTURE_CATEGORY_ID, self::GLOBAL_SCOPE_ID);
-        $this->assertSame(self::FIXTURE_URL_KEY, $globalScopeCategory->getData('url_path'));
+        $this->assertSame($expectedGlobalScopeUrlKey, $globalScopeCategory->getData('url_path'));
     }
 
     /**
+     * Change of `url_key` for root category in specific store should change all the children `url_path`
+     *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
-    public function testUpdateParentCategoryUrlKeyForStoreScopeAffectsOnlyChildCategoryForStoreScope()
+    public function testChangeUrlKeyAffectsAllChildrenUrlPath()
     {
+        $secondStoreId = $this->getStoreId(self::FIXTURE_SECOND_STORE_CODE);
+
+        $urlKeys = [
+            1 => 'category-1',
+            2 => 'category-1-1',
+            3 => 'category-1-1-1'
+        ];
+
         /** @var CategoryInterface|Category $leafOriginal */
         $leafOriginal = $this->categoryRepository->get(self::FIXTURE_CATEGORY_LEAF);
-        $this->assertSame('category-1/category-1-1/category-1-1-1', $leafOriginal->getData('url_path'));
-
-        $secondStoreId = $this->getStoreId(self::FIXTURE_SECOND_STORE_CODE);
+        $this->assertSame(implode('/', $urlKeys), $leafOriginal->getData('url_path'));
 
         $updateRootData = [
             'entity_id' => self::FIXTURE_CATEGORY_ROOT,
@@ -93,16 +105,62 @@ class SaveCategoryDifferentScopesTest extends AbstractSaveCategoryTest
                 'available_sort_by' => 1,
             ]
         ];
+        $responseData = $this->performSaveCategoryRequest($updateRootData);
+        $this->assertRequestIsSuccessfullyPerformed($responseData);
 
-        $this->performSaveCategoryRequest($updateRootData);
+        $newUrlKeys = $urlKeys;
+        $newUrlKeys[1] = 'store-root';
 
         /** @var CategoryInterface|Category $leafStoreScope */
         $leafStoreScope = $this->categoryRepository->get(self::FIXTURE_CATEGORY_LEAF, $secondStoreId);
-        $this->assertSame('store-root/category-1-1/category-1-1-1', $leafStoreScope->getData('url_path'));
+        $this->assertSame(implode('/', $newUrlKeys), $leafStoreScope->getData('url_path'));
 
         /** @var CategoryInterface|Category $leafGlobalScope */
         $leafGlobalScope = $this->categoryRepository->get(self::FIXTURE_CATEGORY_LEAF);
-        $this->assertSame('category-1/category-1-1/category-1-1-1', $leafGlobalScope->getData('url_path'));
+        $this->assertSame(implode('/', $urlKeys), $leafGlobalScope->getData('url_path'));
+    }
+
+    /**
+     * After setting `use_default[url_key]` to `1` for Store, we expect that `url_path` will use Global `url_key`s
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     */
+    public function testCategoryUrlPathUsesGlobalUrlKey()
+    {
+        $secondStoreId = $this->getStoreId(self::FIXTURE_SECOND_STORE_CODE);
+
+        $setSecondStoreCategoryUrlKey = [
+            'entity_id' => self::FIXTURE_CATEGORY_CHILD,
+            'url_key' => 'second-store-child',
+            'store_id' => $secondStoreId,
+            'use_config' => [
+                'available_sort_by' => 1,
+            ]
+        ];
+        $responseData = $this->performSaveCategoryRequest($setSecondStoreCategoryUrlKey);
+        $this->assertRequestIsSuccessfullyPerformed($responseData);
+
+        /** @var CategoryInterface|Category $categoryWithCustomUrlKey */
+        $categoryWithCustomUrlKey = $this->categoryRepository->get(self::FIXTURE_CATEGORY_CHILD, $secondStoreId);
+        $this->assertSame('category-1/second-store-child', $categoryWithCustomUrlKey->getData('url_path'));
+
+        $useDefaultUrlKey = [
+            'entity_id' => self::FIXTURE_CATEGORY_CHILD,
+            'use_default' => [
+                'url_key' => 1
+            ],
+            'store_id' => $secondStoreId,
+            'use_config' => [
+                'available_sort_by' => 1,
+            ]
+        ];
+        $responseData = $this->performSaveCategoryRequest($useDefaultUrlKey);
+        $this->assertRequestIsSuccessfullyPerformed($responseData);
+
+        $categoryWithDefaultUrlKey = $this->categoryRepository->get(self::FIXTURE_CATEGORY_LEAF, $secondStoreId);
+        $this->assertSame('category-1/category-1-1/category-1-1-1', $categoryWithDefaultUrlKey->getData('url_path'));
     }
 
     private function getStoreId(string $code): int

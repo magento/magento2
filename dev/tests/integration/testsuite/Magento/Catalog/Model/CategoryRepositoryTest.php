@@ -30,6 +30,7 @@ class CategoryRepositoryTest extends TestCase
 
     private const STUB_EXISTING_FILE = 'test';
     private const STUB_NOT_EXISTING_FILE = 'does not exist';
+    const SCOPE_GLOBAL = 0;
 
     /**
      * @var CategoryLayoutUpdateManager
@@ -168,12 +169,10 @@ class CategoryRepositoryTest extends TestCase
         $this->assertSame('category-fixturestore', $categorySecondStore->getUrlKey());
     }
 
-
-
     /**
      * There are 2 ways to remove custom value of attribute for custom `store_id`:
      * - using `[use_default => ['attribute_code' = true]]` syntax
-     * - by assigning `null` value to attribute
+     * - by assigning `null` value to attribute - @TODO to be explained and introduced
      *
      * @return array
      */
