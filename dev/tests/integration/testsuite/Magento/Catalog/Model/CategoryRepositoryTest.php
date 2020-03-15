@@ -11,7 +11,9 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
@@ -20,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Provide tests for CategoryRepository model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryRepositoryTest extends TestCase
 {
@@ -30,7 +33,6 @@ class CategoryRepositoryTest extends TestCase
 
     private const STUB_EXISTING_FILE = 'test';
     private const STUB_NOT_EXISTING_FILE = 'does not exist';
-    const SCOPE_GLOBAL = 0;
 
     /**
      * @var CategoryLayoutUpdateManager
@@ -202,7 +204,7 @@ class CategoryRepositoryTest extends TestCase
      *
      * @param string $attributeCode
      * @param array|null $attributeValue
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testCategoryAttributeShouldFollowDefaultAttributeValue(
         string $attributeCode,
@@ -278,8 +280,8 @@ class CategoryRepositoryTest extends TestCase
      * @param string $attributeCode
      * @param $attributeValue
      * @param null $storeCode
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
      */
     private function updateCategoryAttribute(
         int $categoryId,
@@ -309,7 +311,7 @@ class CategoryRepositoryTest extends TestCase
      *
      * @param string|null $storeCode
      * @return StoreInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function getStore(?string $storeCode = null): StoreInterface
     {
@@ -323,7 +325,7 @@ class CategoryRepositoryTest extends TestCase
      * @param string $attributeCode
      * @param string|null $attributeValue
      * @param string|null $storeCode
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function assertCategoryAttributeValue(
         int $categoryId,

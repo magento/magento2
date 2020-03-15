@@ -14,8 +14,12 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\CategoryUrlPathUpdateService;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 
+/**
+ * Plugin handles `url_key` and `url_path` before saving Category
+ */
 class UpdateUrlKeyBeforeCategorySavePlugin
 {
     /**
@@ -56,6 +60,14 @@ class UpdateUrlKeyBeforeCategorySavePlugin
         $this->invalidValues = $invalidValues;
     }
 
+    /**
+     * Executed before `save` on ResourceModel to update `url_key` and `url_path`
+     *
+     * @param CategoryResourceModel $resourceModel
+     * @param DataObject $category
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function beforeSave(CategoryResourceModel $resourceModel, DataObject $category)
     {
         /** @var Category $category */
@@ -111,7 +123,7 @@ class UpdateUrlKeyBeforeCategorySavePlugin
      * @param Category $category
      * @param string $urlKey
      * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function setUrlKey(Category $category, string $urlKey): void
     {
@@ -126,7 +138,7 @@ class UpdateUrlKeyBeforeCategorySavePlugin
      *
      * @param CategoryResourceModel $resourceModel
      * @param Category $category
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function updateUrlKey(CategoryResourceModel $resourceModel, Category $category): void
     {
