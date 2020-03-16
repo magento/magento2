@@ -160,7 +160,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         if (isset($data['is_unlimited'])) {
             $this->linkMock->expects($this->once())->method('setNumberOfDownloads')->with(0);
         }
-        if (isset($data['use_default_title']) && $data['use_default_title'] == '1') {
+        $useDefaultTitle = $data['use_default_title'] ?? false;
+        if ($useDefaultTitle) {
             $this->linkMock->expects($this->once())->method('setTitle')->with(null);
         }
         if (isset($data['price'])) {
