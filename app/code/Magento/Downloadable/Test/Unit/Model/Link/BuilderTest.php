@@ -161,7 +161,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             $this->linkMock->expects($this->once())->method('setNumberOfDownloads')->with(0);
         }
         if (isset($data['use_default_title']) && $data['use_default_title'] == '1') {
-            $this->linkMock->expects($this->once())->method('getTitle')->with(null);
+            $this->linkMock->expects($this->once())->method('setTitle')->with(null);
         }
         if (isset($data['price'])) {
             $this->linkMock->expects($this->once())->method('getPrice')->willReturn($data['price']);
@@ -222,6 +222,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                 [
                     'file' => 'cXVlIHRhbA==',
                     'type' => 'file',
+                    'use_default_title' => '1',
                     'sample' => [
                         'file' => 'cXVlIHRhbA==',
                         'type' => 'file'

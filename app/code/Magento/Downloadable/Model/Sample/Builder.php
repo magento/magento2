@@ -24,7 +24,7 @@ class Builder
      * @var Sample
      */
     private $component;
-    
+
     /**
      * @var File
      */
