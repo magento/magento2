@@ -18,9 +18,6 @@
             <testCaseId value="MAGETWO-58718"/>
             <group value="product"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MC-13841"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login Admin -->
@@ -57,7 +54,7 @@
             <!-- Clear Filter Product -->
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search Product and Open Edit -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">

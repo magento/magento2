@@ -60,7 +60,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login to the Storefront as created customer -->
         <comment userInput="Login to the Storefront as created customer" stepKey="commentLoginAsCustomer"/>

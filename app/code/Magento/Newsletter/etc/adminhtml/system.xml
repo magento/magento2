@@ -20,6 +20,9 @@
             </group>
             <group id="subscription" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Subscription Options</label>
+                <depends>
+                    <field id="*/general/active">1</field>
+                </depends>
                 <field id="allow_guest_subscribe" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow Guest Subscription</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

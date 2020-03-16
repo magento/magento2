@@ -128,6 +128,18 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
                 true, // include time
                 1495170060 // expected timestamp
             ],
+            'Parse greek d/m/y date without time' => [
+                '30/10/2021', // datetime
+                'el_GR', // locale
+                false, // include time
+                1635570000 // expected timestamp
+            ],
+            'Parse greek d/m/y date with time' => [
+                '30/10/2021, 12:01 π.μ.', // datetime
+                'el_GR', // locale
+                true, // include time
+                1635570060 // expected timestamp
+            ],
         ];
     }
 
@@ -302,14 +314,15 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
 
         return [
             ['2018-10-20 00:00:00', 'UTC', 'en_US', '2018-10-20 00:00:00'],
-            ['2018-10-20 00:00:00', 'America/Los_Angeles', 'en_US', '2018-10-20 00:00:00'],
-            ['2018-10-20 00:00:00', 'Asia/Qatar', 'en_US', '2018-10-20 00:00:00'],
+            ['2018-10-20 00:00:00', 'America/Los_Angeles', 'en_US', '2018-10-19 17:00:00'],
+            ['2018-10-20 00:00:00', 'Asia/Qatar', 'en_US', '2018-10-20 03:00:00'],
+            ['2018-10-20 00:00:00', 'America/Los_Angeles', 'en_GB', '2018-10-19 17:00:00'],
             ['10/20/18 00:00', 'UTC', 'en_US', '2018-10-20 00:00:00'],
-            ['10/20/18 00:00', 'America/Los_Angeles', 'en_US', '2018-10-20 00:00:00'],
-            ['10/20/18 00:00', 'Asia/Qatar', 'en_US', '2018-10-20 00:00:00'],
-            ['20/10/18 00:00', 'UTC', 'fr_FR', '2018-10-20 00:00:00'],
-            ['20/10/18 00:00', 'America/Los_Angeles', 'fr_FR', '2018-10-20 00:00:00'],
-            ['20/10/18 00:00', 'Asia/Qatar', 'fr_FR', '2018-10-20 00:00:00'],
+            ['10/20/18 00:00', 'America/Los_Angeles', 'en_US', '2018-10-19 17:00:00'],
+            ['10/20/18 00:00', 'Asia/Qatar', 'en_US', '2018-10-20 03:00:00'],
+            ['10/20/18 00:00', 'UTC', 'fr_FR', '2018-10-20 00:00:00'],
+            ['10/20/18 00:00', 'America/Los_Angeles', 'fr_FR', '2018-10-19 17:00:00'],
+            ['10/20/18 00:00', 'Asia/Qatar', 'fr_FR', '2018-10-20 03:00:00'],
             [1539993600, 'UTC', 'en_US', '2018-10-20 00:00:00'],
             [1539993600, 'America/Los_Angeles', 'en_US', '2018-10-19 17:00:00'],
             [1539993600, 'Asia/Qatar', 'en_US', '2018-10-20 03:00:00'],

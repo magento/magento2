@@ -24,7 +24,7 @@ use Magento\Framework\Exception\LocalizedException;
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
-     * Attribute table alias prefix
+     * Define default prefix for attribute table alias
      */
     const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
 
@@ -495,7 +495,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $entity = clone $this->getEntity();
             $attributes = $entity->loadAllAttributes()->getAttributesByCode();
             foreach ($attributes as $attrCode => $attr) {
-                $this->_selectAttributes[$attrCode] = $attr->getId();
+                $this->_selectAttributes[$attrCode] = (int) $attr->getId();
             }
         } else {
             if (isset($this->_joinAttributes[$attribute])) {
@@ -511,7 +511,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     )
                 );
             }
-            $this->_selectAttributes[$attrInstance->getAttributeCode()] = $attrInstance->getId();
+            $this->_selectAttributes[$attrInstance->getAttributeCode()] = (int) $attrInstance->getId();
         }
         return $this;
     }
@@ -1173,7 +1173,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             }
             $attribute = $this->_eavConfig->getAttribute($entity->getType(), $attributeCode);
             if ($attribute && !$attribute->isStatic()) {
-                $tableAttributes[$attribute->getBackendTable()][] = $attributeId;
+                $tableAttributes[$attribute->getBackendTable()][] = (int) $attributeId;
                 if (!isset($attributeTypes[$attribute->getBackendTable()])) {
                     $attributeTypes[$attribute->getBackendTable()] = $attribute->getBackendType();
                 }
