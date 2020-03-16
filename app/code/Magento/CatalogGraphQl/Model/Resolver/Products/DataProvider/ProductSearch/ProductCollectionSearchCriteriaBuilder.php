@@ -14,11 +14,15 @@ use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Builds a search criteria intended for the product collection based on search criteria used on SearchAPI
+ */
 class ProductCollectionSearchCriteriaBuilder
 {
-    /**
-     * @var SearchCriteriaInterfaceFactory
-     */
+    /** @var CollectionFactory */
+    private $collectionFactory;
+
+    /** @var SearchCriteriaInterfaceFactory */
     private $searchCriteriaFactory;
 
     /** @var FilterBuilder */

@@ -1121,6 +1121,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testSortByPosition()
     {
