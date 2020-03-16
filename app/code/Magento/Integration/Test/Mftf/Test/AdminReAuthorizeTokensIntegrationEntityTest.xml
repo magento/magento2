@@ -18,21 +18,16 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <!-- Login As Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <!-- Navigate To Integrations Page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
                 <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
                 <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
             </actionGroup>
-            <!-- Click the "Add New Integration" button -->
             <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButton"/>
-            <!-- Create New Integration -->
             <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="createIntegration">
                 <argument name="integration" value="defaultIntegrationData"/>
                 <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
-            <!-- Click Save And Activate Button -->
             <actionGroup ref="AdminIntegrationSaveAndActivateActionGroup" stepKey="clickSaveAndActivateButton"/>
             <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="allowAccess"/>
         </before>
@@ -45,35 +40,34 @@
                 <argument name="name" value="{{defaultIntegrationData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteIntegrationEntityActionGroup" stepKey="deleteCreatedIntegration"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-            <!-- TEST BODY -->
-            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabConsumerKey"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabConsumerSecret"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabAccessToken"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabAccessTokenSecret"/>
-            <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickDoneButton"/>
-            <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findCreatedIntegration">
-                <argument name="name" value="{{defaultIntegrationData.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminIntegrationClickReauthoriseLinkOnGridActionGroup" stepKey="clickReauthoriseLink"/>
-            <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickReauthoriseButton"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabAfterReauthorizeConsumerKey"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabAfterReauthorizeConsumerSecret"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabReauthorizedAccessToken"/>
-            <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabReauthorizedAccessTokenSecret"/>
-            <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="finishTheProcess"/>
-            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
-                <argument name="message" value="The integration '{{defaultIntegrationData.name}}' has been re-authorized."/>
-            </actionGroup>
-            <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findReAuthorizedIntegration">
-                <argument name="name" value="{{defaultIntegrationData.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminIntegrationOpenExistingEntityActionGroup" stepKey="openIntegrationEntity"/>
-            <!-- Compare Tokens After Reauthorizing -->
-            <assertEquals stepKey="assertConsumerKey" expected="($grabConsumerKey)" actual="$grabAfterReauthorizeConsumerKey" actualType="string"/>
-            <assertEquals stepKey="assertConsumerSecret" expected="($grabConsumerSecret)" actual="$grabAfterReauthorizeConsumerSecret" actualType="string"/>
-            <assertNotEquals stepKey="assertNotEqualsToken" expected="($grabAccessToken)" actual="$grabReauthorizedAccessToken" actualType="string"/>
-            <assertNotEquals stepKey="assertNotEqualsTokenSecret" expected="($grabAccessTokenSecret)" actual="$grabReauthorizedAccessTokenSecret" actualType="string"/>
+
+        <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabConsumerKey"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabConsumerSecret"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabAccessToken"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabAccessTokenSecret"/>
+        <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findCreatedIntegration">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminIntegrationClickReauthoriseLinkOnGridActionGroup" stepKey="clickReauthoriseLink"/>
+        <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="clickReauthoriseButton"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.consumerKey}}" stepKey="grabAfterReauthorizeConsumerKey"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.consumerSecret}}" stepKey="grabAfterReauthorizeConsumerSecret"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.accessToken}}" stepKey="grabReauthorizedAccessToken"/>
+        <grabValueFrom selector="{{AdminNewIntegrationSection.accessTokenSecret}}" stepKey="grabReauthorizedAccessTokenSecret"/>
+        <actionGroup ref="AdminAllowResourcesAccessIntegrationActionGroup" stepKey="finishTheProcess"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="The integration '{{defaultIntegrationData.name}}' has been re-authorized."/>
+        </actionGroup>
+        <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findReAuthorizedIntegration">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminIntegrationOpenExistingEntityActionGroup" stepKey="openIntegrationEntity"/>
+        <assertEquals stepKey="assertConsumerKey" expected="($grabConsumerKey)" actual="$grabAfterReauthorizeConsumerKey" actualType="string"/>
+        <assertEquals stepKey="assertConsumerSecret" expected="($grabConsumerSecret)" actual="$grabAfterReauthorizeConsumerSecret" actualType="string"/>
+        <assertNotEquals stepKey="assertNotEqualsToken" expected="($grabAccessToken)" actual="$grabReauthorizedAccessToken" actualType="string"/>
+        <assertNotEquals stepKey="assertNotEqualsTokenSecret" expected="($grabAccessTokenSecret)" actual="$grabReauthorizedAccessTokenSecret" actualType="string"/>
     </test>
 </tests>
