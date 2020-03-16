@@ -11,6 +11,9 @@
     <test name="AdminAddDefaultVideoSimpleProductTest">
         <annotations>
             <group value="ProductVideo"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
         <before>
             <!-- Set product video Youtube api key configuration -->

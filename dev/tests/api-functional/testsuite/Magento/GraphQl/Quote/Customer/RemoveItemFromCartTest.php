@@ -156,6 +156,40 @@ class RemoveItemFromCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testRemoveItemWithEmptyCartId()
+    {
+        $cartId = "";
+        $cartItemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
+
+        $this->expectExceptionMessage("Required parameter \"cart_id\" is missing.");
+
+        $query = $this->getQuery($cartId, $cartItemId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testRemoveItemWithZeroCartItemId()
+    {
+        $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $cartItemId = 0;
+
+        $this->expectExceptionMessage("Required parameter \"cart_item_id\" is missing.");
+
+        $query = $this->getQuery($cartId, $cartItemId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param int $itemId
      * @return string

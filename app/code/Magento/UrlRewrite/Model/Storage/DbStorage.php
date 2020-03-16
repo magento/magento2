@@ -138,17 +138,22 @@ class DbStorage extends AbstractStorage
     {
         $prioritizedUrlRewrites = [];
         foreach ($urlRewrites as $urlRewrite) {
+            $urlRewriteRequestPath = $urlRewrite[UrlRewrite::REQUEST_PATH];
+            $urlRewriteTargetPath = $urlRewrite[UrlRewrite::TARGET_PATH];
             switch (true) {
-                case $urlRewrite[UrlRewrite::REQUEST_PATH] === $requestPath:
+                case rtrim($urlRewriteRequestPath, '/') === rtrim($urlRewriteTargetPath, '/'):
+                    $priority = 99;
+                    break;
+                case $urlRewriteRequestPath === $requestPath:
                     $priority = 1;
                     break;
-                case $urlRewrite[UrlRewrite::REQUEST_PATH] === urldecode($requestPath):
+                case $urlRewriteRequestPath === urldecode($requestPath):
                     $priority = 2;
                     break;
-                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim($requestPath, '/'):
+                case rtrim($urlRewriteRequestPath, '/') === rtrim($requestPath, '/'):
                     $priority = 3;
                     break;
-                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim(urldecode($requestPath), '/'):
+                case rtrim($urlRewriteRequestPath, '/') === rtrim(urldecode($requestPath), '/'):
                     $priority = 4;
                     break;
                 default:
