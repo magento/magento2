@@ -133,7 +133,9 @@ class Builder
             $link->setNumberOfDownloads(0);
         }
 
-        if (isset($this->data['use_default_title']) && $this->data['use_default_title'] == '1') {
+        $useDefaultTitle = $this->data['use_default_title'] ?? false;
+        
+        if ($useDefaultTitle) {
             $link->setTitle(null);
         }
         $this->resetData();
