@@ -20,11 +20,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     protected $isRedirect = false;
 
     /**
-     * @var bool
-     */
-    private $headersSent;
-
-    /**
      * @inheritdoc
      */
     public function getHeader($name)

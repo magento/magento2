@@ -76,12 +76,30 @@ class StoreConfigTest extends GraphQlAbstract
      */
     private function assertResponse(array $expectedValues, array $response)
     {
-        $this->assertArrayNotHasKey('errors', $response);
-        $this->assertArrayHasKey('send_friend', $response['storeConfig']);
-        $this->assertArrayHasKey('enabled_for_customers', $response['storeConfig']['send_friend']);
-        $this->assertArrayHasKey('enabled_for_guests', $response['storeConfig']['send_friend']);
-        $this->assertEquals($expectedValues['enabled_for_customers'], $response['storeConfig']['send_friend']['enabled_for_customers']);
-        $this->assertEquals($expectedValues['enabled_for_guests'], $response['storeConfig']['send_friend']['enabled_for_guests']);
+        $this->assertArrayNotHasKey(
+            'errors',
+            $response
+        );
+        $this->assertArrayHasKey(
+            'send_friend',
+            $response['storeConfig']
+        );
+        $this->assertArrayHasKey(
+            'enabled_for_customers',
+            $response['storeConfig']['send_friend']
+        );
+        $this->assertArrayHasKey(
+            'enabled_for_guests',
+            $response['storeConfig']['send_friend']
+        );
+        $this->assertEquals(
+            $expectedValues['enabled_for_customers'],
+            $response['storeConfig']['send_friend']['enabled_for_customers']
+        );
+        $this->assertEquals(
+            $expectedValues['enabled_for_guests'],
+            $response['storeConfig']['send_friend']['enabled_for_guests']
+        );
     }
 
     /**
