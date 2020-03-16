@@ -95,6 +95,23 @@ class Tax extends AbstractTotal
                 $totalTax += $shippingTaxAmount;
                 $baseTotalTax += $baseShippingTaxAmount;
             }
+            
+            
+            $taxRefunded = 0;
+            $baseTaxRefunded = 0;
+            if ($order->hasCreditmemos()) {
+                
+                $invoiceCreditmemos = $order->getCreditmemosCollection()->addFieldToFilter('invoice_id', $invoice->getId());
+                
+                foreach ($invoiceCreditmemos as $invoiceCreditmemo) {
+                    $taxRefunded += $invoiceCreditmemo->getTaxAmount();
+                    $baseTaxRefunded += $invoiceCreditmemo->getBaseTaxAmount();
+                }
+            }
+            
+            $allowedTax = $invoice->getTaxAmount() - $taxRefunded - $creditmemo->getTaxAmount();
+            $allowedBaseTax = $invoice->getBaseTaxInvoiced() - $baseTaxRefunded - $creditmemo->getBaseTaxAmount();
+            
         } else {
             $orderShippingAmount = $order->getShippingAmount();
 
@@ -136,6 +153,9 @@ class Tax extends AbstractTotal
             $baseTotalTax += $baseShippingTaxAmount;
             $totalDiscountTaxCompensation += $shippingDiscountTaxCompensationAmount;
             $baseTotalDiscountTaxCompensation += $baseShippingDiscountTaxCompensationAmount;
+            
+            $allowedTax = $order->getTaxInvoiced() - $order->getTaxRefunded() - $creditmemo->getTaxAmount();
+            $allowedBaseTax = $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded() - $creditmemo->getBaseTaxAmount();
         }
 
         $allowedTax = $order->getTaxInvoiced() - $order->getTaxRefunded() - $creditmemo->getTaxAmount();
