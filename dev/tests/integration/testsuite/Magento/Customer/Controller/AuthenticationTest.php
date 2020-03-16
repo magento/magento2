@@ -55,8 +55,8 @@ class AuthenticationTest extends AbstractController
     private function overrideAllowedActions(array $allowedActions): void
     {
         $allowedActions = array_combine($allowedActions, $allowedActions);
-        $pluginMock = $this->_objectManager->create(AccountPlugin::class, ['allowedActions' => $allowedActions]);
-        $this->_objectManager->addSharedInstance($pluginMock, AccountPlugin::class);
+        $pluginFake = $this->_objectManager->create(AccountPlugin::class, ['allowedActions' => $allowedActions]);
+        $this->_objectManager->addSharedInstance($pluginFake, AccountPlugin::class);
     }
 
     /**
