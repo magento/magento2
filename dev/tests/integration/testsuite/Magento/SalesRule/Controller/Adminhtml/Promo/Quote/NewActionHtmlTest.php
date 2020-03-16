@@ -34,7 +34,7 @@ class NewActionHtmlTest extends AbstractBackendController
     /**
      * @var string
      */
-    private $jsFromObject = 'form';
+    private $jsFormObject = 'form';
 
     /**
      * Test verifies that execute method has the proper data-form-part value in html response
@@ -48,7 +48,7 @@ class NewActionHtmlTest extends AbstractBackendController
         $html = $this->getResponse()
             ->getBody();
         $this->assertContains($this->formName, $html);
-        $this->assertContains($this->jsFromObject, $html);
+        $this->assertContains($this->jsFormObject, $html);
     }
 
     /**
@@ -80,7 +80,7 @@ class NewActionHtmlTest extends AbstractBackendController
             [
                 'id' => 1,
                 'form_namespace' => $this->formName,
-                'form' => $this->jsFromObject,
+                'form' => $this->jsFormObject,
                 'type' => 'Magento\SalesRule\Model\Rule\Condition\Product|quote_item_price',
             ]
         )->setMethod('POST');
