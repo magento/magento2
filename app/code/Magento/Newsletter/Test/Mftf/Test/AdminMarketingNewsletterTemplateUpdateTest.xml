@@ -19,15 +19,12 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <!-- Navigate To MARKETING > Newsletter Template -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterTemplatePage">
                 <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
                 <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
             </actionGroup>
-            <!-- Navigate To Create Newsletter Template Page -->
             <actionGroup ref="AdminNavigateToCreateNewsletterTemplatePageActionGroup" stepKey="navigateTiCreateNewsletterTemplatePage"/>
-            <!-- Create Newsletter Template -->
             <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="createNewsletterTemplate">
                 <argument name="name" value="{{_defaultNewsletter.name}}"/>
                 <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
@@ -35,16 +32,13 @@
                 <argument name="senderEmail" value="{{_defaultNewsletter.senderEmail}}"/>
                 <argument name="templateContent" value="{{_defaultNewsletter.textAreaContent}}"/>
             </actionGroup>
-            <!-- Search Created Newsletter Template on Grid -->
             <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
                 <argument name="name" value="{{_defaultNewsletter.name}}"/>
                 <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
             </actionGroup>
-            <!-- Open Created Newsletter Template -->
             <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openCreatedNewsletterTemplate"/>
         </before>
         <after>
-            <!-- Delete Updated Newsletter Template -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterGridPage">
                 <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
                 <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
@@ -55,10 +49,9 @@
             </actionGroup>
             <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
             <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- TEST BODY -->
-        <!-- Update Created Newsletter Template -->
+
         <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="updateNewsletterTemplate">
             <argument name="name" value="{{updatedNewsletter.name}}"/>
             <argument name="subject" value="{{updatedNewsletter.subject}}"/>
@@ -66,22 +59,18 @@
             <argument name="senderEmail" value="{{updatedNewsletter.senderEmail}}"/>
             <argument name="templateContent" value="{{updatedNewsletter.textAreaContent}}"/>
         </actionGroup>
-        <!-- Assert Success Message -->
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
             <argument name="message" value="The newsletter template has been saved."/>
             <argument name="messageType" value="success"/>
         </actionGroup>
-        <!-- Find Created Newsletter on Grid -->
         <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
             <argument name="name" value="{{updatedNewsletter.name}}"/>
             <argument name="subject" value="{{updatedNewsletter.subject}}"/>
         </actionGroup>
-        <!-- Assert Created Newsletter on Grid -->
         <actionGroup ref="AssertAdminCreatedNewsletterTemplateInGridActionGroup" stepKey="assertNewsletterInGrid">
             <argument name="name" value="{{updatedNewsletter.name}}"/>
             <argument name="subject" value="{{updatedNewsletter.subject}}"/>
         </actionGroup>
-        <!-- Assert Newsletter Form -->
         <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findUpdatedNewsletterTemplate">
             <argument name="name" value="Updated Newsletter Template"/>
             <argument name="subject" value="Updated Newsletter Subject"/>
@@ -94,6 +83,5 @@
             <argument name="senderEmail" value="{{updatedNewsletter.senderEmail}}"/>
             <argument name="templateContent" value="{{updatedNewsletter.textAreaContent}}"/>
         </actionGroup>
-        <!-- END TEST BODY -->
     </test>
 </tests>
