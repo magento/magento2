@@ -36,9 +36,9 @@ class AuthenticationTest extends AbstractController
     }
 
     /**
-     * Allowed actions should be displayed
+     * Allowed actions should be rendered normally
      */
-    public function testExpectPageDispatchWhenAllowedAction()
+    public function testExpectPageResponseWhenAllowedAction()
     {
         $this->overrideAllowedActions(['create']);
 
