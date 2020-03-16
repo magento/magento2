@@ -7,21 +7,25 @@
 /**
  * Abstract class for the controller tests
  */
+
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\Response\Http as HttpResponse;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Set of methods useful for performing requests to Controllers.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractController extends \PHPUnit\Framework\TestCase
+abstract class AbstractController extends TestCase
 {
     protected $_runCode = '';
 
@@ -30,12 +34,12 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     protected $_runOptions = [];
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $_response;
 
@@ -103,8 +107,9 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
      */
     public function dispatch($uri)
     {
-        /** @var HttpRequest $request */
         $request = $this->getRequest();
+
+        $request->setDispatched(false);
         $request->setRequestUri($uri);
         if ($request->isPost()
             && !array_key_exists('form_key', $request->getPost())
@@ -119,25 +124,36 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Request getter
      *
-     * @return \Magento\Framework\App\RequestInterface|HttpRequest
+     * @return RequestInterface
      */
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
+            $this->_request = $this->_objectManager->get(RequestInterface::class);
         }
         return $this->_request;
     }
 
     /**
+     * Reset Request parameters
+     *
+     * @return void
+     */
+    protected function resetRequest(): void
+    {
+        $this->_objectManager->removeSharedInstance(RequestInterface::class);
+        $this->_request = null;
+    }
+
+    /**
      * Response getter
      *
-     * @return \Magento\Framework\App\ResponseInterface|HttpResponse
+     * @return ResponseInterface
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
+            $this->_response = $this->_objectManager->get(ResponseInterface::class);
         }
         return $this->_response;
     }
