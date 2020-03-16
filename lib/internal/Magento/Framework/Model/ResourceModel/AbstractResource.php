@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Abstract resource model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */
 abstract class AbstractResource
@@ -93,13 +94,14 @@ abstract class AbstractResource
         if ($this->getConnection()->getTransactionLevel() === 0) {
             $callbacks = CallbackPool::get(spl_object_hash($this->getConnection()));
             foreach ($callbacks as $callback) {
-              try {
-                call_user_func($callback);
-              } catch (\Exception $e) {
-                $this->getLogger()->critical($e);
-              }
+                try {
+                    call_user_func($callback);
+                } catch (\Exception $e) {
+                    $this->getLogger()->critical($e);
+                }
             }
         }
+
         return $this;
     }
 
