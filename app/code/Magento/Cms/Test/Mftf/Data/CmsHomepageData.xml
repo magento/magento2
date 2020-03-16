@@ -8,12 +8,9 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="simpleProductReview">
-        <data key="nickname" unique="suffix">user</data>
-        <data key="title">Review title</data>
-        <data key="detail">Simple product review</data>
-        <array key="select_stores">
-            <item>Default Store View</item>
-        </array>
+    <entity name="CmsHomePageContent">
+        <data key="content">CMS homepage content goes here</data>
+        <data key="page_id">2</data>
     </entity>
+
 </entities>
