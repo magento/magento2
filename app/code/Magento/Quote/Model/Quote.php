@@ -45,7 +45,6 @@ use Magento\Framework\App\ObjectManager;
  * @method Quote setGrandTotal(float $value)
  * @method float getBaseGrandTotal()
  * @method Quote setBaseGrandTotal(float $value)
- * @method int getCustomerId()
  * @method Quote setCustomerId(int $value)
  * @method Quote setCustomerGroupId(int $value)
  * @method string getCustomerEmail()
@@ -113,6 +112,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
 
+    const QUOTE_CUSTOMER_ID = 'customer_id';
     /**
      * @var string
      */
@@ -544,7 +544,19 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         return $this->setData(self::KEY_CURRENCY, $currency);
     }
-
+    
+    /**
+     * Return Customer id from quote
+     *
+     * @return int|null
+     */
+    public function getCustomerId(): ?int
+    {
+        $customerId = $this->getData(self::QUOTE_CUSTOMER_ID);
+        $customerId = $customerId || $customerId == '0' ? (int) $customerId : null;
+        return $customerId;
+    }
+    
     /**
      * @inheritdoc
      */
@@ -864,7 +876,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->setUpdatedAt(null);
         }
 
-        parent::beforeSave();
+        return parent::beforeSave();
     }
 
     /**
@@ -945,9 +957,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             } else {
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
+                    //phpcs:disable
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     //
                 }
+                //phpcs:enable
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
                     $billingAddress = $this->_quoteAddressFactory->create();
@@ -959,9 +973,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if (null === $shippingAddress) {
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
+                    //phpcs:disable
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     //
                 }
+                //phpcs:enable
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
                     $shippingAddress = $this->_quoteAddressFactory->create();
@@ -1082,9 +1098,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function getCustomerGroupId()
     {
         if ($this->hasData('customer_group_id')) {
-            return $this->getData('customer_group_id');
+            return (int) $this->getData('customer_group_id');
         } elseif ($this->getCustomerId()) {
-            return $this->getCustomer()->getGroupId();
+            return (int) $this->getCustomer()->getGroupId();
         } else {
             return GroupInterface::NOT_LOGGED_IN_ID;
         }

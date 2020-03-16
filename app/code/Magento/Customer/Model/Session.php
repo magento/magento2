@@ -375,6 +375,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function setCustomerGroupId($id)
     {
+        $id = (int) $id ? $id : null;
         $this->storage->setData('customer_group_id', $id);
         return $this;
     }
@@ -394,7 +395,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             return (int) $this->storage->getData('customer_group_id');
         }
         if ($this->getCustomerData()) {
-            $customerGroupId = $this->getCustomerData()->getGroupId();
+            $customerGroupId = (int) $this->getCustomerData()->getGroupId();
             $this->setCustomerGroupId($customerGroupId);
             return $customerGroupId;
         }

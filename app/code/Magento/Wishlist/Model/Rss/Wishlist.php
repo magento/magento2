@@ -118,8 +118,10 @@ class Wishlist implements DataProviderInterface
      */
     public function isAllowed()
     {
+        $id1 = $this->getWishlist()->getCustomerId();
+        $id2 = $this->wishlistHelper->getCustomer()->getId();
         return $this->scopeConfig->isSetFlag('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
-            && $this->getWishlist()->getCustomerId() === $this->wishlistHelper->getCustomer()->getId();
+            && (int)$this->getWishlist()->getCustomerId() === (int)$this->wishlistHelper->getCustomer()->getId();
     }
 
     /**
@@ -220,7 +222,7 @@ class Wishlist implements DataProviderInterface
      */
     public function getHeader()
     {
-        $customerId = $this->getWishlist()->getCustomerId();
+        $customerId = (int) $this->getWishlist()->getCustomerId();
         $customer = $this->customerFactory->create()->load($customerId);
         $title = __('%1\'s Wishlist', $customer->getName())->render();
         $newUrl = $this->urlBuilder->getUrl(

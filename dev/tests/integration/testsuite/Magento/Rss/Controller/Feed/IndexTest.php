@@ -44,6 +44,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * Check Rss response.
      *
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
      * @magentoConfigFixture current_store rss/wishlist/active 1
      * @magentoConfigFixture current_store rss/config/active 1
@@ -83,7 +84,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
     private function getLink($customerId, $customerEmail, $wishlistId)
     {
-
         return 'rss/feed/index/type/wishlist/data/'
             . base64_encode($customerId . ',' . $customerEmail)
             . '/wishlist_id/' . $wishlistId;

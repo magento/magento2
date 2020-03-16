@@ -545,7 +545,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
      */
     public function getCustomerId()
     {
-        return $this->getData($this->_getResource()->getCustomerIdFieldName());
+        $customerId = $this->getData($this->_getResource()->getCustomerIdFieldName());
+        return $customerId || $customerId == '0' ? (int)$customerId : null;
     }
 
     /**
@@ -676,6 +677,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      */
     public function isOwner($customerId)
     {
+        $customerId = $customerId || $customerId == '0' ? (int) $customerId : null;
         return $customerId == $this->getCustomerId();
     }
 

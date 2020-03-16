@@ -193,7 +193,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function getCustomerId()
     {
-        return $this->_getData('customer_id') ? (int) $this->_getData('customer_id') : (int) $this->getParentId();
+        $id = $this->getParentId();
+        $parentId = $id || $id == '0' ? (int) $id : null;
+        return $this->_getData('customer_id') ? (int) $this->_getData('customer_id') : $parentId;
     }
 
     /**
@@ -204,8 +206,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function setCustomerId($id)
     {
-        $this->setParentId($id);
-        $this->setData('customer_id', $id);
+        $customerId = $id || $id == '0' ? (int) $id : null;
+        $this->setParentId($customerId);
+        $this->setData('customer_id', $customerId);
         return $this;
     }
 
@@ -399,6 +402,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function getAttributeSetId()
     {
-        return parent::getAttributeSetId() ?: AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS;
+        return $this->getData('attribute_set_id') ?: AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS;
     }
 }
