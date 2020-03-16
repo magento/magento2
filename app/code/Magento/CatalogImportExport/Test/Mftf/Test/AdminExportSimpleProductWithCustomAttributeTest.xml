@@ -34,7 +34,6 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
         </before>
         <after>
             <!-- Delete product creations -->
@@ -42,12 +41,8 @@
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <!-- Delete exported file -->
-            <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to export page -->
@@ -61,9 +56,17 @@
         <magentoCLI command="cron:run" stepKey="runCron3"/>
         <magentoCLI command="cron:run" stepKey="runCron4"/>
 
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+
         <!-- Download product -->
-        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="rowIndex" value="0"/>
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
+
+        <!-- Delete exported file -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$grabNameFile}"/>
+        </actionGroup>
+
     </test>
 </tests>

@@ -38,7 +38,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new bundle product -->
@@ -126,7 +126,7 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiBundleProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiBundleProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->
@@ -180,7 +180,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new bundle product -->

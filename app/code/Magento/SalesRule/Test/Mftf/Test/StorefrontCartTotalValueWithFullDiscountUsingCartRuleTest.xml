@@ -92,7 +92,7 @@
             <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="unsetSubtotal"/>
             <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Add testing products to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductFirst.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

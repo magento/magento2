@@ -3,25 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ResourceConnection;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\Framework\MessageQueue\BulkPublisherInterface;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Bulk\BulkManagementInterface;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\MessageQueue\BulkPublisherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class BulkManagement
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Asynchronous Bulk Management
  */
-class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
+class BulkManagement implements BulkManagementInterface
 {
     /**
      * @var EntityManager
@@ -54,12 +55,12 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     private $resourceConnection;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
+     * @var UserContextInterface
      */
     private $userContext;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -71,7 +72,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      * @param BulkPublisherInterface $publisher
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param UserContextInterface $userContext
      */
     public function __construct(
@@ -81,8 +82,8 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         BulkPublisherInterface $publisher,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        \Psr\Log\LoggerInterface $logger,
-        UserContextInterface $userContext = null
+        LoggerInterface $logger,
+        UserContextInterface $userContext
     ) {
         $this->entityManager = $entityManager;
         $this->bulkSummaryFactory= $bulkSummaryFactory;
@@ -91,7 +92,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $this->resourceConnection = $resourceConnection;
         $this->publisher = $publisher;
         $this->logger = $logger;
-        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->userContext = $userContext;
     }
 
     /**
