@@ -86,7 +86,7 @@ class Delete extends ExportController implements HttpPostActionInterface
             try {
                 $directoryWrite->delete($directoryWrite->getAbsolutePath($fileName));
             } catch (ValidatorException $exception) {
-                throw new LocalizedException(__('Filename has not permitted symbols in it'));
+                throw new LocalizedException(__('Sorry, but the data is invalid or the file is not uploaded.'));
             } catch (FileSystemException $exception) {
                 throw new LocalizedException(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
