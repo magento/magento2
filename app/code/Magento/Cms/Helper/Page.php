@@ -158,7 +158,7 @@ class Page extends AbstractHelper
     public function prepareResultPage(ActionInterface $action, $pageId = null)
     {
         if ($pageId !== null && $pageId !== $this->_page->getId()) {
-            $delimiterPosition = strrpos($pageId, '|');
+            $delimiterPosition = strrpos((string)$pageId, '|');
             if ($delimiterPosition) {
                 $pageId = substr($pageId, 0, $delimiterPosition);
             }
