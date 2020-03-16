@@ -28,7 +28,7 @@
                 <argument name="sku" value="{{virtualProductCustomImportOptions.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetOrderFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>

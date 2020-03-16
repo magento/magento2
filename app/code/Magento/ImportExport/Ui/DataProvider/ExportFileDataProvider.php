@@ -100,7 +100,7 @@ class ExportFileDataProvider extends DataProvider
         }
         $result = [];
         foreach ($files as $file) {
-            $result['items'][]['file_name'] = $this->fileIO->getPathInfo($file)['basename'];
+            $result['items'][]['file_name'] = $this->getPathToExportFile($this->fileIO->getPathInfo($file));
         }
 
         $pageSize = (int) $this->request->getParam('paging')['pageSize'];
@@ -110,6 +110,31 @@ class ExportFileDataProvider extends DataProvider
         $result['items'] = array_slice($result['items'], $pageOffset, $pageSize);
 
         return $result;
+    }
+
+    /**
+     * Return relative export file path after "var/export"
+     *
+     * @param mixed $file
+     * @return string
+     */
+    private function getPathToExportFile($file): string
+    {
+        $directory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $delimiter = '/';
+        $cutPath = explode(
+            $delimiter,
+            $directory->getAbsolutePath() . 'export'
+        );
+        $filePath = explode(
+            $delimiter,
+            $file['dirname']
+        );
+
+        return ltrim(
+            implode($delimiter, array_diff($filePath, $cutPath)) . $delimiter . $file['basename'],
+            $delimiter
+        );
     }
 
     /**
@@ -127,8 +152,10 @@ class ExportFileDataProvider extends DataProvider
             return [];
         }
         foreach ($files as $filePath) {
-            //phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $sortedFiles[filemtime($filePath)] = $filePath;
+            if ($this->file->isFile($filePath)) {
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $sortedFiles[filemtime($filePath)] = $filePath;
+            }
         }
         //sort array elements using key value
         krsort($sortedFiles);
