@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Store\Model\Store;
 
 /**
@@ -33,9 +35,12 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadata;
 
     /**
+     * Gallery constructor.
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
+     * @throws \Exception
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -45,7 +50,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->metadata = $metadataPool->getMetadata(
             \Magento\Catalog\Api\Data\ProductInterface::class
         );
-
         parent::__construct($context, $connectionName);
     }
 
@@ -122,19 +126,14 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return array
      * @since 101.0.0
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
-    public function loadProductGalleryByAttributeId($product, $attributeId)
+    public function loadProductGalleryByAttributeId($product, $attributeId = null)
     {
-        $select = $this->createBaseLoadSelect(
-            $product->getData($this->metadata->getLinkField()),
-            $product->getStoreId(),
-            $attributeId
-        );
-
-        $result = $this->getConnection()->fetchAll($select);
-
+        $result = $this->getMediaRecords($product->getStoreId(), [$product->getId()], true);
         $this->removeDuplicates($result);
-
         return $result;
     }
 
@@ -144,6 +143,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $entityId
      * @param int $storeId
      * @param int $attributeId
+     * @deprecated Misleading method, methods relies on autoincrement field instead of entity ID
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @since 101.0.0
@@ -160,15 +160,45 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Returns media entries from database
+     *
+     * @param int $storeId
+     * @param array $entityIds
+     * @param bool $preserveSortOrder
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function getMediaRecords(int $storeId, array $entityIds, bool $preserveSortOrder = false) : array
+    {
+        $output = [];
+        $select = $this->createBatchBaseSelect($storeId)
+            ->where('cpe.entity_id IN (?)', $entityIds);
+        if (!$preserveSortOrder) {
+            //  due to performance consideration it is better to do not use sorting for this query
+            $select->reset(Select::ORDER);
+        }
+        $cursor = $this->getConnection()->query($select);
+        while ($row = $cursor->fetch()) {
+            if (!empty($row['image_metadata'])) {
+                $row['image_metadata'] = $this->getSerializer()->unserialize($row['image_metadata']);
+            }
+            $output[] = $row;
+        }
+        return $output;
+    }
+
+    /**
      * Create batch base select
      *
      * @param int $storeId
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) Media gallery doesn't support other attributes  than media_galley
      * @since 101.0.1
      */
-    public function createBatchBaseSelect($storeId, $attributeId)
+    public function createBatchBaseSelect($storeId, $attributeId = null)
     {
         $linkField = $this->metadata->getLinkField();
 
@@ -191,6 +221,10 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
             $mainTableAlias . '.value_id = entity.value_id',
             [$linkField]
+        )->joinInner(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf('cpe.%1$s = entity.%1$s', $linkField),
+            ['entity_id' => 'cpe.entity_id']
         )->joinLeft(
             ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             implode(
@@ -219,16 +253,15 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'disabled' => $this->getConnection()->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
             'label_default' => 'default_value.label',
             'position_default' => 'default_value.position',
-            'disabled_default' => 'default_value.disabled'
+            'disabled_default' => 'default_value.disabled',
+            'image_metadata' => new ColumnValueExpression(
+                'JSON_MERGE_PATCH(default_value.image_metadata, value.image_metadata)'
+            )
         ])->where(
-            $mainTableAlias . '.attribute_id = ?',
-            $attributeId
-        )->where(
             $mainTableAlias . '.disabled = 0'
         )->order(
             $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
         );
-
         return $select;
     }
 
@@ -357,6 +390,9 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getTable(self::GALLERY_VALUE_TABLE)
         );
 
+        if (!empty($data['image_metadata'])) {
+            $data['image_metadata'] = $this->getSerializer()->serialize($data['image_metadata']);
+        }
         $this->getConnection()->insert(
             $this->getTable(self::GALLERY_VALUE_TABLE),
             $data

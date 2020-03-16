@@ -28,6 +28,7 @@ define([
                     id: optionId
                 }]
             };
+
             widget.options = {
                 classes: {
                     optionClass: 'swatch-option'
@@ -50,6 +51,7 @@ define([
                     }
                 }
             };
+
             optionConfig = widget.options.jsonSwatchConfig[attribute.id];
             html = $(widget._RenderSwatchOptions(attribute, 'option-label-control-id-1'))[0];
         });
@@ -75,6 +77,58 @@ define([
         it('check swatch image styles', function () {
             expect(html.style.height).toEqual(swathImageHeight + 'px');
             expect(html.style.width).toEqual(swathImageWidth + 'px');
+        });
+
+        it('check udate price method', function () {
+            var productPriceMock = {
+                find: jasmine.createSpy().and.returnValue({
+                    hide: jasmine.createSpy(),
+                    priceBox: jasmine.createSpy().and.returnValue(''),
+                    trigger: jasmine.createSpy(),
+                    find: jasmine.createSpy().and.returnValue({
+                        toggleClass: jasmine.createSpy()
+                    })
+                })
+            };
+
+            widget.element =  {
+                parents: jasmine.createSpy().and.returnValue(productPriceMock)
+            };
+            widget._getNewPrices  = jasmine.createSpy().and.returnValue(undefined);
+            widget._UpdatePrice();
+            expect(productPriceMock.find().find.calls.count()).toBe(1);
+        });
+
+        it('check getSelectedOptionPriceIndex', function () {
+            var optionMock = '<div class="swatch-attribute" attribute-id="2" option-selected="4"></div>',
+                element = $('<div class="' + widget.options.tooltipClass +
+                    '"><div class="image"></div><div class="title"></div><div class="corner"></div>' +
+                    optionMock + '</div>'
+                ),
+                optionPricesMock = {
+                    optionPrices: {
+                        p: {
+                            finalPrice: {
+                                amount: 12
+                            }
+                        }
+                    }
+                };
+
+            widget.element = element;
+            widget.options.classes.attributeClass = 'swatch-attribute';
+            widget.options.jsonConfig = optionPricesMock;
+            widget.optionsMap = {
+                2: {
+                    4: {
+                        products: 'p'
+                    },
+                    hasOwnProperty: jasmine.createSpy().and.returnValue(true)
+                },
+                hasOwnProperty: jasmine.createSpy().and.returnValue(true)
+            };
+
+            expect(widget._getSelectedOptionPriceIndex()).toBe('p');
         });
     });
 });

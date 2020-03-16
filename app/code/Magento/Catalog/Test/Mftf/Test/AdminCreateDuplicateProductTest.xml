@@ -22,13 +22,14 @@
             <createData entity="Two_nested_categories" stepKey="subCategory">
                 <requiredEntity createDataKey="category"/>
             </createData>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
 
         <after>
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to new simple product page -->

@@ -723,7 +723,9 @@ define([
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput),
-                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']),
+                $priceBox = $widget.element.parents($widget.options.selectorProduct)
+                    .find(this.options.selectorProductPrice);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -751,16 +753,15 @@ define([
 
             $widget._Rebuild();
 
-            if ($widget.element.parents($widget.options.selectorProduct)
-                    .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
-            ) {
+            if ($priceBox.is(':data(mage-priceBox)')) {
                 $widget._UpdatePrice();
             }
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
-                    $widget.options.jsonConfig.optionPrices
+                    this._getSelectedOptionPriceIndex(),
+                    $widget.options.jsonConfig.optionPrices,
+                    $priceBox
                 ]);
 
             if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
@@ -768,6 +769,22 @@ define([
             }
 
             $input.trigger('change');
+        },
+
+        /**
+         * Get selected option price index
+         *
+         * @return {String|undefined}
+         * @private
+         */
+        _getSelectedOptionPriceIndex: function () {
+            var allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+
+            if (_.isEmpty(allowedProduct)) {
+                return undefined;
+            }
+
+            return allowedProduct;
         },
 
         /**
@@ -951,6 +968,8 @@ define([
             );
 
             isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
+
+            $productPrice.find('span:first').toggleClass('special-price', isShow);
 
             $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 

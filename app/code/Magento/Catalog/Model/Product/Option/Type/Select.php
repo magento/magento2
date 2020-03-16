@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -38,12 +42,18 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     private $singleSelectionTypes;
 
     /**
+     * @var CalculateCustomOptionCatalogRule
+     */
+    private $calculateCustomOptionCatalogRule;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      * @param array $singleSelectionTypes
+     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -51,7 +61,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Escaper $escaper,
         array $data = [],
-        array $singleSelectionTypes = []
+        array $singleSelectionTypes = [],
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->string = $string;
         $this->_escaper = $escaper;
@@ -61,6 +72,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             'drop_down' => \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
             'radio' => \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
         ];
+        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule ?? ObjectManager::getInstance()
+                ->get(CalculateCustomOptionCatalogRule::class);
     }
 
     /**
@@ -248,10 +261,10 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->_getChargeableOptionPrice(
-                        $_result->getPrice(),
-                        $_result->getPriceType() == 'percent',
-                        $basePrice
+                    $result += $this->calculateCustomOptionCatalogRule->execute(
+                        $option->getProduct(),
+                        (float)$_result->getPrice(),
+                        $_result->getPriceType() === Value::TYPE_PERCENT
                     );
                 } else {
                     if ($this->getListener()) {
@@ -263,10 +276,10 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->_getChargeableOptionPrice(
-                    $_result->getPrice(),
-                    $_result->getPriceType() == 'percent',
-                    $basePrice
+                $result = $this->calculateCustomOptionCatalogRule->execute(
+                    $option->getProduct(),
+                    (float)$_result->getPrice(),
+                    $_result->getPriceType() === Value::TYPE_PERCENT
                 );
             } else {
                 if ($this->getListener()) {

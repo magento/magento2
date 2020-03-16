@@ -24,10 +24,10 @@
                 <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Generate the datetime default value -->
-        <generateDate date="now" format="m/j/y g:i A" stepKey="generateDefaultValue"/>
+        <generateDate date="now" format="n/j/y g:i A" stepKey="generateDefaultValue"/>
         <!-- Create new datetime product attribute -->
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
         <waitForPageLoad stepKey="waitForPageLoadAttributes"/>

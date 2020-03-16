@@ -6,8 +6,7 @@
  */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ProductsListWidgetTest">
         <annotations>
             <features value="Widget"/>
@@ -28,7 +27,7 @@
         </before>
         <after>
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
@@ -61,8 +60,10 @@
         <click selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="clickSelect" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit(_newDefaultCmsPage.title)}}" stepKey="waitForEditLink" />
         <click selector="{{CmsPagesPageActionsSection.preview(_newDefaultCmsPage.title)}}" stepKey="clickEdit" />
+        <switchToNextTab stepKey="switchToNextTab"/>
         <waitForPageLoad stepKey="waitForCMSPage"/>
         <seeInTitle userInput="{{_newDefaultCmsPage.title}}" stepKey="seePageTitle"/>
         <see userInput="{{_newDefaultCmsPage.title}}" stepKey="seeProduct"/>
+        <closeTab stepKey="closeCurrentTab"/>
     </test>
 </tests>
