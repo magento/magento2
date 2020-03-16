@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * New action html test
+ * Tests for NewActionHtml controller
  *
  * @magentoAppArea adminhtml
  */
