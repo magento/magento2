@@ -38,6 +38,7 @@ CREATE TABLE `test_table` (
 `longtext` longtext NULL , 
 `mediumtext` mediumtext NULL , 
 `varchar` varchar(254) NULL  , 
+`char` char(255) NULL  , 
 `mediumblob` mediumblob NULL , 
 `blob` blob NULL , 
 `boolean` BOOLEAN NULL  , 

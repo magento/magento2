@@ -157,7 +157,7 @@ QUERY;
         CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
-        /** @var \Magento\Eav\Model\Config $eavConfig */
+        /** @var Config $eavConfig */
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -263,15 +263,13 @@ QUERY;
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
 {
-  products(filter:{
-                   $attributeCode: {eq: "{$optionValue}"}
-                   }
-
-                   pageSize: 3
-                   currentPage: 1
-       )
+  products(
+      filter:{ $attributeCode: {eq: "{$optionValue}"} }
+      pageSize: 3
+      currentPage: 1
+  )
   {
-  total_count
+    total_count
     items
      {
       name
@@ -292,7 +290,6 @@ QUERY;
         value_string
         __typename
       }
-
     }
      aggregations{
         attribute_code
@@ -336,7 +333,7 @@ QUERY;
             );
         }
 
-        /** @var \Magento\Eav\Model\Config $eavConfig */
+        /** @var Config $eavConfig */
         $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'second_test_configurable');
         // Validate custom attribute filter layer data from aggregations
@@ -381,8 +378,8 @@ QUERY;
         $objectManager = Bootstrap::getObjectManager();
         $this->reIndexAndCleanCache();
         $attributeCode = 'multiselect_attribute';
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -440,6 +437,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response, 'Response has errors.');
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
@@ -453,8 +451,8 @@ QUERY;
      */
     private function getDefaultAttributeOptionValue(string $attributeCode) : string
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -520,9 +518,7 @@ QUERY;
           value
         }
     }
-
-    }
-
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -972,8 +968,8 @@ QUERY;
      */
     private function getExpectedFiltersDataSet()
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
         /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
