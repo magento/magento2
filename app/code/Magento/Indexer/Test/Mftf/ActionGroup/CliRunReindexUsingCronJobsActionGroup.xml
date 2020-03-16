@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CliRunReindexUsingCronJobsActionGroup">
+    <actionGroup name="CliRunReindexUsingCronJobsActionGroup" deprecated="Use magentoCron instead">
         <annotations>
             <description>Run cron 'index' group which reindex all invalidated indices.</description>
         </annotations>
