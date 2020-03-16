@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Navigate to Marketing->Sitemap Page -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
                 <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
@@ -32,18 +32,18 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-            <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteCreatedSitemap">
-                <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
-            </actionGroup>
-            <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertSuccessMessage"/>
-            <actionGroup ref="AdminMarketingSitemapSearchActionGroup" stepKey="searchDeletedSitemap">
-                <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
-            </actionGroup>
-            <actionGroup ref="AssertAdminSitemapIsNotInGridActionGroup" stepKey="dontSeeEntity">
-                <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
-            </actionGroup>
+        <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteCreatedSitemap">
+            <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AdminMarketingSitemapSearchActionGroup" stepKey="searchDeletedSitemap">
+            <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSitemapIsNotInGridActionGroup" stepKey="dontSeeEntity">
+            <argument name="filename" value="{{UniqueSitemapName.filename}}"/>
+        </actionGroup>
     </test>
 </tests>
