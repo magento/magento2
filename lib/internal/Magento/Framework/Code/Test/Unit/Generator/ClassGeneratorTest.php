@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
+/**
+ * Test for Magento\Framework\Code\Generator\ClassGenerator
+ */
 class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
@@ -333,9 +336,9 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
     public function providerNamespaces()
     {
         return [
-            ['Zend', 'Zend'],
-            ['\Zend', 'Zend'],
-            ['\Zend\SomeClass', 'Zend\SomeClass'],
+            ['Laminas', 'Laminas'],
+            ['\Laminas', 'Laminas'],
+            ['\Laminas\SomeClass', 'Laminas\SomeClass'],
             ['', null],
         ];
     }

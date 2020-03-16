@@ -142,6 +142,8 @@ class AddDownloadableHostsConfig implements DataPatchInterface
         }
 
         $this->domainManager->addDomains($this->whitelist);
+
+        return $this;
     }
 
     /**
