@@ -210,4 +210,41 @@ class StringUtils
     {
         return mb_strpos($haystack, $needle, $offset, self::ICONV_CHARSET);
     }
+
+    /**
+     * Detect if a word are consists of RTL characters (Used in PDF Invoices)
+     *
+     * @param string $string
+     * @return int|float
+     */
+    public function isRTLWord($string)
+    {
+        $rtl_chars_pattern = '/[\x{0590}-\x{083F}]|[\x{08A0}-\x{08FF}]|[\x{FB1D}-\x{FDFF}]|[\x{FE70}-\x{FEFF}]/u';
+        // $rtl_chars_pattern = '/[\x{0590}-\x{05ff}\x{0600}-\x{06ff}]/u';
+        preg_match_all($rtl_chars_pattern, $string, $matches);
+        $rtl_chars_count = count($matches[0]);
+
+        return  $rtl_chars_count==0? 0:
+            $rtl_chars_count/$this->strlen($string);
+    }
+
+    /**
+     * Reverse characters of word with RTL characters only
+     *
+     * @param string $string
+     * @return string
+     */
+    public function revRTLSentense($string)
+    {
+        $words = $this->split($string);
+        for ($i=0; $i<strlen($words); $i++) {
+            // for better results, it may changes to find non-RTL character parts in a word
+            if($this->isRTLWord($words[$i]) > 0.8)
+            {
+                $words[$i] = $this->strrev($words[$i]);
+            }
+        }
+        return implode(" ", $words);
+    }
+
 }

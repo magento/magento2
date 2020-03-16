@@ -308,6 +308,56 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
+     * Is RTL Characters
+     *
+     * @param string $locale
+     * @return bool
+     */
+    protected function isRTLLocale($locale)
+    {
+        var $rtlLocales = array(
+            'ar_DZ', /*Arabic (Algeria)*/
+            'ar_EG', /*Arabic (Egypt)*/
+            'ar_KW', /*Arabic (Kuwait)*/
+            'ar_MA', /*Arabic (Morocco)*/
+            'ar_SA', /*Arabic (Saudi Arabia)*/
+            'fa_IR', /*Persian (Iran)*/
+            'he_IL', /*Hebrew (Israel)*/
+        );
+
+        if (in_array($locale, $rtlLocales)) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
+     * Reverse Characters on RTL Language
+     *
+     * @param string $sentense
+     * @return string $sentense
+     */
+    protected function reverseRTLCharacters($sentense, $store = null)
+    {
+        if($store == null)
+        {
+            $locale = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Locale\Resolver')
+                ->getLocale();
+        }
+        else
+        {
+            $locale = $store->getLocaleCode();
+        }
+
+        if($this->isRTLLocale($locale))
+        {
+            $sentense = $this->string->revRTLSentense($sentense);
+        }
+        return $sentense;
+    }
+
+    /**
      * Insert address to pdf page
      *
      * @param \Zend_Pdf_Page $page
@@ -329,10 +379,13 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $store
             )
         );
+
         foreach ($values as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
+                    // Reverse Characters
+                    $_value = $this->reverseRTLCharacters($_value, $store);
                     $page->drawText(
                         trim(strip_tags($_value)),
                         $this->getAlignRight($_value, 130, 440, $font, 10),
@@ -504,6 +557,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                     $text[] = $_value;
                 }
                 foreach ($text as $part) {
+                    // Reverse Characters
+                    $part = $this->reverseRTLCharacters($part, $store);
                     $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
                     $this->y -= 15;
                 }
@@ -521,6 +576,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                         $text[] = $_value;
                     }
                     foreach ($text as $part) {
+                        // Reverse Characters
+                        $part = $this->reverseRTLCharacters($part, $store);
                         $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
                         $this->y -= 15;
                     }
@@ -559,6 +616,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 //Printing "Payment Method" lines
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
+                    // Reverse Characters
+                    $_value = $this->reverseRTLCharacters($_value, $store);
                     $page->drawText(strip_tags(trim($_value)), $paymentLeft, $yPayments, 'UTF-8');
                     $yPayments -= 15;
                 }
@@ -579,6 +638,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $this->y -= 15;
 
             foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
+                // Reverse Characters
+                $_value = $this->reverseRTLCharacters($_value, $store);
                 $page->drawText(strip_tags(trim($_value)), 285, $this->y, 'UTF-8');
                 $this->y -= 15;
             }
