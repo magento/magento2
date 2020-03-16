@@ -19,8 +19,11 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\Framework\App\Area;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
+ * The class resize original images
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Media implements AppInterface
@@ -61,7 +64,12 @@ class Media implements AppInterface
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    private $directory;
+    private $directoryPub;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $directoryMedia;
 
     /**
      * @var ConfigFactory
@@ -89,6 +97,11 @@ class Media implements AppInterface
     private $imageResize;
 
     /**
+     * @var DriverInterface
+     */
+    private $driver;
+
+    /**
      * @param ConfigFactory $configFactory
      * @param SynchronizationFactory $syncFactory
      * @param Response $response
@@ -100,6 +113,7 @@ class Media implements AppInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param State $state
      * @param ImageResize $imageResize
+     * @param DriverInterface $driver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,14 +127,16 @@ class Media implements AppInterface
         Filesystem $filesystem,
         PlaceholderFactory $placeholderFactory,
         State $state,
-        ImageResize $imageResize
+        ImageResize $imageResize,
+        DriverInterface $driver
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->directoryPub = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->directoryMedia = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
-            $this->mediaDirectoryPath = str_replace('\\', '/', realpath($mediaDirectory));
+            $this->mediaDirectoryPath = str_replace('\\', '/', $this->driver->getRealPath($mediaDirectory));
         }
         $this->configCacheFile = $configCacheFile;
         $this->relativeFileName = $relativeFileName;
@@ -129,6 +145,7 @@ class Media implements AppInterface
         $this->placeholderFactory = $placeholderFactory;
         $this->appState = $state;
         $this->imageResize = $imageResize;
+        $this->driver = $driver;
     }
 
     /**
@@ -141,7 +158,7 @@ class Media implements AppInterface
     {
         $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
-        if ($this->mediaDirectoryPath !== $this->directory->getAbsolutePath()) {
+        if ($this->checkMediaDirectoryChanged()) {
             // Path to media directory changed or absent - update the config
             /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
@@ -156,11 +173,11 @@ class Media implements AppInterface
 
         try {
             /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
-            $sync = $this->syncFactory->create(['directory' => $this->directory]);
+            $sync = $this->syncFactory->create(['directory' => $this->directoryPub]);
             $sync->synchronize($this->relativeFileName);
             $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
-            if ($this->directory->isReadable($this->relativeFileName)) {
-                $this->response->setFilePath($this->directory->getAbsolutePath($this->relativeFileName));
+            if ($this->directoryPub->isReadable($this->relativeFileName)) {
+                $this->response->setFilePath($this->directoryPub->getAbsolutePath($this->relativeFileName));
             } else {
                 $this->setPlaceholderImage();
             }
@@ -171,6 +188,22 @@ class Media implements AppInterface
         return $this->response;
     }
 
+    /**
+     * Check if media directory changed
+     *
+     * @return bool
+     */
+    private function checkMediaDirectoryChanged()
+    {
+        if (rtrim($this->mediaDirectoryPath, '/') == rtrim($this->directoryMedia->getAbsolutePath(), '/')) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *  Set placeholder image into response
+     */
     private function setPlaceholderImage()
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
@@ -189,7 +222,7 @@ class Media implements AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {
