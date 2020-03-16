@@ -28,7 +28,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProductWithOptions"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!-- Edit Simple Product -->
@@ -84,7 +84,15 @@
             <argument name="option" value="ProductOptionFieldSecond"/>
         </actionGroup>
         <!-- Delete All options and See no more options present on the page -->
-        <actionGroup ref="AdminDeleteAllProductCustomOptionsActionGroup" stepKey="deleteAllCustomOptions"/>
+        <actionGroup ref="AdminDeleteProductCustomOptionActionGroup" stepKey="deleteCustomOptionField">
+            <argument name="option" value="ProductOptionField"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteProductCustomOptionActionGroup" stepKey="deleteCustomOptionFile2">
+            <argument name="option" value="ProductOptionFileSecond"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteProductCustomOptionActionGroup" stepKey="deleteCustomOptionFieldSecond">
+            <argument name="option" value="ProductOptionFieldSecond"/>
+        </actionGroup>
         <!-- Product successfully saved and it has no options -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithoutCustomOptions"/>
         <actionGroup ref="AdminAssertProductHasNoCustomOptionsActionGroup" stepKey="assertNoCustomOptions"/>

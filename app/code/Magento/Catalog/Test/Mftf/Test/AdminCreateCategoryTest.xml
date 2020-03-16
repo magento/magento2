@@ -19,7 +19,7 @@
             <group value="category"/>
         </annotations>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
@@ -52,7 +52,7 @@
         </before>
         <after>
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -83,7 +83,7 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
     </before>
     <after>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
     </after>
     <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
     <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>

@@ -26,14 +26,14 @@
             <!--Create block-->
             <comment userInput="Create block" stepKey="commentCreateBlock"/>
             <createData entity="Sales25offBlock" stepKey="createBlock"/>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!--Disable WYSIWYG options-->
             <comment userInput="Disable WYSIWYG options" stepKey="commentDisableWYSIWYG"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createBlock" stepKey="deleteBlock" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created block page and add image-->
         <comment userInput="Open create block page and add image" stepKey="commentOpenBlockPage"/>

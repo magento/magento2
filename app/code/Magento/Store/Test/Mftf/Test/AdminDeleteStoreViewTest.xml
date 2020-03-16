@@ -28,7 +28,7 @@
         </before>
         <after>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete custom store view and verify AssertStoreSuccessDeleteMessage And BackupMessage-->
