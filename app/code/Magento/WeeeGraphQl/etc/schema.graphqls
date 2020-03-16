@@ -2,6 +2,29 @@
 # See COPYING.txt for license details.
 
 enum PriceAdjustmentCodesEnum {
-    WEE
-    WEETAX
+    WEEE @deprecated(reason: "WEEE code is deprecated, use fixed_product_taxes.label")
+    WEEE_TAX @deprecated(reason: "Use fixed_product_taxes. PriceAdjustmentCodesEnum is deprecated. Tax is included or excluded in price. Tax is not shown separtely in Catalog")
+}
+
+type ProductPrice {
+    fixed_product_taxes: [FixedProductTax] @doc(description: "The multiple FPTs that can be applied to a product price.") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\FixedProductTax")
+}
+
+type FixedProductTax @doc(description: "A single FPT that can be applied to a product price.") {
+    amount: Money @doc(description: "Amount of the FPT as a money object.")
+    label: String @doc(description: "The label assigned to the FPT to be displayed on the frontend.")
+}
+
+type StoreConfig {
+    product_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "Corresponds to the 'Display Prices On Product View Page' field. It indicates how FPT information is displayed on product pages") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    category_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "Corresponds to the 'Display Prices In Product Lists' field. It indicates how FPT information is displayed on category pages") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    sales_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "Corresponds to the 'Display Prices In Sales Modules' field. It indicates how FPT information is displayed on cart, checkout, and order pages") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+}
+
+enum FixedProductTaxDisplaySettings @doc(description: "This enumeration display settings for the fixed product tax") {
+    INCLUDE_FPT_WITHOUT_DETAILS @doc(description: "The displayed price includes the FPT amount without displaying the ProductPrice.fixed_product_taxes values. This value corresponds to 'Including FPT only'")
+    INCLUDE_FPT_WITH_DETAILS @doc(description: "The displayed price includes the FPT amount while displaying the values of ProductPrice.fixed_product_taxes separately. This value corresponds to 'Including FPT and FPT description'")
+    EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS @doc(description: "The displayed price does not include the FPT amount. The values of ProductPrice.fixed_product_taxes and the price including the FPT are displayed separately. This value corresponds to 'Excluding FPT, Including FPT description and final price'")
+    EXCLUDE_FPT_WITHOUT_DETAILS @doc(description: "The displayed price does not include the FPT amount. The values from ProductPrice.fixed_product_taxes are not displayed. This value corresponds to 'Excluding FPT'")
+    FPT_DISABLED @doc(description: "The FPT feature is not enabled. You can omit  ProductPrice.fixed_product_taxes from your query")
 }

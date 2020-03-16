@@ -23,10 +23,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        
-        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="openNewOrder"/>
+
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="openNewOrder"/>
         <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <grabValueFrom selector="{{AdminOrderFormAccountSection.group}}" stepKey="grabGroupValue"/>

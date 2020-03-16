@@ -144,6 +144,6 @@ QUERY;
         curl_exec($connection);
         $responseStatus = curl_getinfo($connection, CURLINFO_HTTP_CODE);
 
-        return $responseStatus === 200 ? true : false;
+        return $responseStatus === 200;
     }
 }

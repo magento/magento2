@@ -19,6 +19,7 @@ use Magento\Framework\Image;
 use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Storage\StorageProvider;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
 use \Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Store\Model\StoreManagerInterface;
@@ -100,6 +101,11 @@ class ImageResize
     private $storeManager;
 
     /**
+     * @var StorageProvider
+     */
+    private $storageProvider;
+
+    /**
      * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
@@ -112,6 +118,7 @@ class ImageResize
      * @param Filesystem $filesystem
      * @param Database $fileStorageDatabase
      * @param StoreManagerInterface $storeManager
+     * @param StorageProvider $storageProvider
      * @throws \Magento\Framework\Exception\FileSystemException
      * @internal param ProductImage $gallery
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -128,7 +135,8 @@ class ImageResize
         Collection $themeCollection,
         Filesystem $filesystem,
         Database $fileStorageDatabase = null,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        StorageProvider $storageProvider = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -144,6 +152,7 @@ class ImageResize
         $this->fileStorageDatabase = $fileStorageDatabase ?:
             ObjectManager::getInstance()->get(Database::class);
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->storageProvider = $storageProvider ?? ObjectManager::getInstance()->get(StorageProvider::class);
     }
 
     /**
@@ -311,6 +320,10 @@ class ImageResize
             ]
         );
 
+        if ($imageParams['image_width'] !== null && $imageParams['image_height'] !== null) {
+            $image->resize($imageParams['image_width'], $imageParams['image_height']);
+        }
+
         if (isset($imageParams['watermark_file'])) {
             if ($imageParams['watermark_height'] !== null) {
                 $image->setWatermarkHeight($imageParams['watermark_height']);
@@ -331,15 +344,17 @@ class ImageResize
             $image->watermark($this->getWatermarkFilePath($imageParams['watermark_file']));
         }
 
-        if ($imageParams['image_width'] !== null && $imageParams['image_height'] !== null) {
-            $image->resize($imageParams['image_width'], $imageParams['image_height']);
-        }
         $image->save($imageAsset->getPath());
 
+        $mediastoragefilename = $this->mediaDirectory->getRelativePath($imageAsset->getPath());
         if ($this->fileStorageDatabase->checkDbUsage()) {
-            $mediastoragefilename = $this->mediaDirectory->getRelativePath($imageAsset->getPath());
             $this->fileStorageDatabase->saveFile($mediastoragefilename);
         }
+
+        $this->storageProvider->get('media')->put(
+            $mediastoragefilename,
+            $this->mediaDirectory->readFile($mediastoragefilename)
+        );
     }
 
     /**
