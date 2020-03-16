@@ -58,6 +58,7 @@ type SalesItemOption @doc(description: "Contains the ID and value for for the se
 
 interface SalesTotalsInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalsTypeResolver") {
     subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc("The applied discounts to the order")
     tax: Money! @doc(description: "The amount of tax applied to the order")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
