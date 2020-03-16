@@ -13,7 +13,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Quote\Api\ReorderInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 /**
@@ -32,7 +31,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     protected $_coreRegistry;
 
     /**
-     * @var ReorderInterface
+     * @var \Magento\Sales\Model\Reorder\Reorder
      */
     private $reorder;
 
@@ -43,18 +42,19 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * @param OrderLoaderInterface $orderLoader
      * @param Registry $registry
      * @param ReorderHelper|null $reorderHelper
+     * @param \Magento\Sales\Model\Reorder\Reorder|null $reorder
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
         ReorderHelper $reorderHelper = null,
-        ReorderInterface $reOrder = null
+        \Magento\Sales\Model\Reorder\Reorder $reorder = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
         parent::__construct($context);
-        $this->reorder = $reOrder ?: ObjectManager::getInstance()->get(ReorderInterface::class);
+        $this->reorder = $reorder ?: ObjectManager::getInstance()->get(\Magento\Sales\Model\Reorder\Reorder::class);
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
             return $resultRedirect->setPath('checkout/cart');
         }
 
-        $errors = $reorderOutput->getLineItemErrors();
+        $errors = $reorderOutput->getErrors();
         if (!empty($errors)) {
             $useNotice = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true);
             foreach ($errors as $error) {

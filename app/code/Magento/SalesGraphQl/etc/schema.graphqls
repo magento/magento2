@@ -19,15 +19,24 @@ type CustomerOrders {
 }
 
 type Mutation {
-    addAllOrderItemsToCart(orderNumber: String!): ReOrderOutput @doc(description:"Add all the products from Customer order to the Cart") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
+    reorderItems(orderNumber: String!): ReorderItemsOutput @doc(description:"Add all the products from Customer order to the Cart") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
 }
 
-type ReOrderOutput @doc(description: "ReOrder output") {
+type ReorderItemsOutput {
     cart: Cart!
-    errors:[ReOrderError]
+    userInputErrors:[CheckoutUserInputError]!
 }
 
-type ReOrderError @doc(description: "Cart line item error") {
-    sku: String!
-    message: String!
+type CheckoutUserInputError {
+    message: String! @doc(description: "Localized error message")
+    path: [String]! @doc(description: "Path to the input field which caused an error. Similar to how GraphQL specification defines path for errors in query: http://spec.graphql.org/draft/#sec-Errors")
+    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+}
+
+enum CheckoutUserInputErrorCodes {
+    REORDER_NOT_AVAILABLE
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
 }

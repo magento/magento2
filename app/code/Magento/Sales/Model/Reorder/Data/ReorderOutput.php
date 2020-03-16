@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Api\Data\Reorder;
+namespace Magento\Sales\Model\Reorder\Data;
 
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
- * DTO represent output for \Magento\Quote\Api\ReorderInterface
+ * DTO represent output for \Magento\Sales\Model\Reorder\Reorder
  */
 class ReorderOutput
 {
@@ -20,16 +20,16 @@ class ReorderOutput
     /**
      * @var array
      */
-    private $lineItemErrors;
+    private $errors;
 
     /**
      * @param CartInterface $cart
-     * @param array $lineItemErrors
+     * @param Error[] $errors
      */
-    public function __construct(CartInterface $cart, array $lineItemErrors)
+    public function __construct(CartInterface $cart, array $errors)
     {
         $this->cart = $cart;
-        $this->lineItemErrors = $lineItemErrors;
+        $this->errors = $errors;
     }
 
     /**
@@ -41,10 +41,10 @@ class ReorderOutput
     }
 
     /**
-     * @return LineItemError[]
+     * @return Error[]
      */
-    public function getLineItemErrors(): array
+    public function getErrors(): array
     {
-        return $this->lineItemErrors;
+        return $this->errors;
     }
 }

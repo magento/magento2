@@ -12,8 +12,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Quote\Api\Data\Reorder\LineItemError;
-use Magento\Quote\Api\ReorderInterface;
+use Magento\Sales\Model\Reorder\Data\Error;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
@@ -23,21 +22,26 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 class Reorder implements ResolverInterface
 {
     /**
+     * Order number
+     */
+    private const ARGUMENT_ORDER_NUMBER = 'orderNumber';
+
+    /**
      * @var OrderFactory
      */
     private $orderFactory;
 
     /**
-     * @var ReorderInterface
+     * @var \Magento\Sales\Model\Reorder\Reorder
      */
     private $reorder;
 
     /**
-     * @param ReorderInterface $reorder
+     * @param \Magento\Sales\Model\Reorder\Reorder $reorder
      * @param OrderFactory $orderFactory
      */
     public function __construct(
-        ReorderInterface $reorder,
+        \Magento\Sales\Model\Reorder\Reorder $reorder,
         OrderFactory $orderFactory
     ) {
         $this->orderFactory = $orderFactory;
@@ -76,14 +80,15 @@ class Reorder implements ResolverInterface
             'cart' => [
                 'model' => $reorderOutput->getCart(),
             ],
-            'errors' => \array_map(
-                function(LineItemError $error) {
+            'userInputErrors' => \array_map(
+                function(Error $error) {
                     return [
-                        'sku' => $error->getSku(),
+                        'path' => [self::ARGUMENT_ORDER_NUMBER],
+                        'code' => $error->getCode(),
                         'message' => $error->getMessage(),
                     ];
                 },
-                $reorderOutput->getLineItemErrors()
+                $reorderOutput->getErrors()
             )
         ];
     }

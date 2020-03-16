@@ -68,7 +68,7 @@ class ReorderTest extends GraphQlAbstract
     {
         $response = $this->makeReorderForDefaultCustomer();
         $this->assertResponseFields(
-            $response['addAllOrderItemsToCart'] ?? [],
+            $response['reorderItems'] ?? [],
             [
                 'cart' => [
                     'email' => self::CUSTOMER_EMAIL,
@@ -82,7 +82,7 @@ class ReorderTest extends GraphQlAbstract
                         ]
                     ],
                 ],
-                'errors' => []
+                'userInputErrors' => []
             ]
         );
     }
@@ -127,9 +127,10 @@ class ReorderTest extends GraphQlAbstract
     {
         $response = $this->makeReorderForDefaultCustomer();
         $expectedResponse = [
-            'errors' => [
+            'userInputErrors' => [
                 [
-                    'sku' => 'simple',
+                    'path' => ['orderNumber'],
+                    'code' => 'NOT_SALABLE',
                     'message' => 'Product that you are trying to add is not available.',
                 ],
             ],
@@ -139,7 +140,7 @@ class ReorderTest extends GraphQlAbstract
                 'items' => [],
             ],
         ];
-        $this->assertResponseFields($response['addAllOrderItemsToCart'] ?? [], $expectedResponse);
+        $this->assertResponseFields($response['reorderItems'] ?? [], $expectedResponse);
     }
 
     /**
@@ -196,9 +197,10 @@ class ReorderTest extends GraphQlAbstract
         $registry->register('isSecureArea', false);
 
         $expectedResponse = [
-            'errors' => [
+            'userInputErrors' => [
                 [
-                    'sku' => 'simple',
+                    'path' => ['orderNumber'],
+                    'code' => 'PRODUCT_NOT_FOUND',
                     'message' => 'Could not find a product with ID "' . $productId . '"',
                 ],
             ],
@@ -209,7 +211,7 @@ class ReorderTest extends GraphQlAbstract
             ],
         ];
         $response = $this->makeReorderForDefaultCustomer();
-        $this->assertResponseFields($response['addAllOrderItemsToCart'] ?? [], $expectedResponse);
+        $this->assertResponseFields($response['reorderItems'] ?? [], $expectedResponse);
     }
 
     /**
@@ -220,9 +222,10 @@ class ReorderTest extends GraphQlAbstract
         $response = $this->makeReorderForDefaultCustomer(self::INCREMENTED_ORDER_NUMBER);
 
         $expectedResponse = [
-            'errors' => [
+            'userInputErrors' => [
                 [
-                    'sku' => 'simple-1',
+                    'path' => ['orderNumber'],
+                    'code' => 'UNDEFINED',
                     'message' => 'We can\'t add this item to your shopping cart right now.',
                 ],
             ],
@@ -239,7 +242,7 @@ class ReorderTest extends GraphQlAbstract
                 ],
             ],
         ];
-        $this->assertResponseFields($response['addAllOrderItemsToCart'] ?? [], $expectedResponse);
+        $this->assertResponseFields($response['reorderItems'] ?? [], $expectedResponse);
     }
 
     /**
@@ -282,9 +285,10 @@ class ReorderTest extends GraphQlAbstract
         $query =
             <<<MUTATION
 mutation {
-  addAllOrderItemsToCart(orderNumber: "{$orderNumber}") {
-    errors {
-      sku
+  reorderItems(orderNumber: "{$orderNumber}") {
+    userInputErrors {
+      path
+      code
       message
     }
     cart {

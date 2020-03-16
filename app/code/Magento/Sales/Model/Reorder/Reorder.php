@@ -3,24 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Model\Quote;
+namespace Magento\Sales\Model\Reorder;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\ReorderInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
-use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\OrderFactory;
 
 /**
- * @inheritdoc
+ * Allows customer to quickly reorder previously added products and put them to the Cart
  */
-class Reorder implements ReorderInterface
+class Reorder
 {
+
+    /**#@+
+     * Error message codes
+     */
+    private const ERROR_PRODUCT_NOT_FOUND = 'PRODUCT_NOT_FOUND';
+    private const ERROR_INSUFFICIENT_STOCK = 'INSUFFICIENT_STOCK';
+    private const ERROR_NOT_SALABLE = 'NOT_SALABLE';
+    private const ERROR_REORDER_NOT_AVAILABLE = 'REORDER_NOT_AVAILABLE';
+    private const ERROR_UNDEFINED = 'UNDEFINED';
+    /**#@-*/
+
     /**
      * @var OrderFactory
      */
@@ -57,6 +68,11 @@ class Reorder implements ReorderInterface
     private $productRepository;
 
     /**
+     * @var Data\Error[]
+     */
+    private $errors = [];
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CartManagementInterface $cartManagement
      * @param ReorderHelper $reorderHelper
@@ -84,24 +100,25 @@ class Reorder implements ReorderInterface
     }
 
     /**
-     * @inheritdoc
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * Allows customer to quickly reorder previously added products and put them to the Cart
+     *
+     * @param string $orderNumber
+     * @param string $storeId
+     * @return Data\ReorderOutput
+     * @throws InputException Order is not found
+     * @throws NoSuchEntityException The specified customer does not exist.
      */
-    public function execute(string $incrementOrderId, string $storeId): \Magento\Quote\Api\Data\Reorder\ReorderOutput
+    public function execute(string $orderNumber, string $storeId): Data\ReorderOutput
     {
-        $order = $this->orderFactory->create()->loadByIncrementIdAndStoreId($incrementOrderId, $storeId);
+        $order = $this->orderFactory->create()->loadByIncrementIdAndStoreId($orderNumber, $storeId);
 
         if (!$order->getId()) {
-            throw new NoSuchEntityException(
-                __('Cannot find order with number "%1" in store "%2"', $incrementOrderId, $storeId)
+            throw new InputException(
+                __('Cannot find order with number "%1" in store "%2"', $orderNumber, $storeId)
             );
         }
-        if (!$this->reorderHelper->canReorder($order->getId())) {
-            throw new InputException(__('Reorder is not available.'));
-        }
-
         $customerId = $order->getCustomerId();
+        $this->errors = [];
 
         try {
             /** @var \Magento\Quote\Model\Quote $cart */
@@ -110,41 +127,46 @@ class Reorder implements ReorderInterface
             $this->createEmptyCartForCustomer->execute($customerId);
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         }
+        if (!$this->reorderHelper->canReorder($order->getId())) {
+            $this->addError(__('Reorder is not available.'), self::ERROR_REORDER_NOT_AVAILABLE);
+            return $this->prepareOutput($cart);
+        }
 
-        $lineItemsErrors = [];
         $items = $order->getItemsCollection();
         foreach ($items as $item) {
             try {
                 $this->addOrderItem($cart, $item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->addLineItemError($lineItemsErrors, $item, $e->getMessage());
+                $this->addError($e->getMessage());
             } catch (\Throwable $e) {
                 $this->logger->critical($e);
-                $this->addLineItemError(
-                    $lineItemsErrors,
-                    $item,
-                    __('We can\'t add this item to your shopping cart right now.')
+                $this->addError(
+                    __('We can\'t add this item to your shopping cart right now.'),
+                    self::ERROR_UNDEFINED
                 );
             }
         }
 
-        $this->cartRepository->save($cart);
+        try {
+            $this->cartRepository->save($cart);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->addError($e->getMessage());
+        }
 
-        return new \Magento\Quote\Api\Data\Reorder\ReorderOutput($cart, $lineItemsErrors);
+        return $this->prepareOutput($cart);
     }
-
 
     /**
      * Convert order item to quote item
      *
      * @param \Magento\Quote\Model\Quote $cart
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param Item $orderItem
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addOrderItem(\Magento\Quote\Model\Quote $cart, $orderItem): void
     {
-        /* @var $orderItem \Magento\Sales\Model\Order\Item */
+        /* @var $orderItem Item */
         if ($orderItem->getParentItem() === null) {
             $info = $orderItem->getProductOptionByCode('info_buyRequest');
             $info = new \Magento\Framework\DataObject($info);
@@ -153,7 +175,11 @@ class Reorder implements ReorderInterface
             try {
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, null, true);
             } catch (NoSuchEntityException $e) {
-                throw new LocalizedException(__('Could not find a product with ID "%1"', $orderItem->getProductId()));
+                $this->addError(
+                    __('Could not find a product with ID "%1"', $orderItem->getProductId()),
+                    self::ERROR_PRODUCT_NOT_FOUND
+                );
+                return;
             }
             $cart->addProduct($product, $info);
         }
@@ -162,16 +188,51 @@ class Reorder implements ReorderInterface
     /**
      * Add order line item error
      *
-     * @param array $errors
-     * @param \Magento\Sales\Model\Order\Item $item
      * @param string $message
+     * @param string|null $code
      * @return void
      */
-    private function addLineItemError(&$errors, \Magento\Sales\Model\Order\Item $item, $message): void
+    private function addError($message, string $code = null): void
     {
-        $errors[] = new \Magento\Quote\Api\Data\Reorder\LineItemError(
-            $item->getProduct() ? $item->getProduct()->getSku() : $item->getSku() ?? '',
-            $message
+        $this->errors[] = new Data\Error(
+            $message,
+            $code ?? $this->getErrorCode((string)$message)
         );
+    }
+
+    /**
+     * Get message error code. Ad-hoc solution based on message parsing.
+     *
+     * @param string $message
+     * @return string
+     */
+    private function getErrorCode(string $message): string
+    {
+        $code = self::ERROR_UNDEFINED;
+        switch ($message) {
+            case false !== strpos($message, 'Product that you are trying to add is not available.'):
+                $code = self::ERROR_NOT_SALABLE;
+                break;
+            case false !== strpos($message, 'The fewest you may purchase is'):
+            case false !== strpos($message, 'The most you may purchase is'):
+            case false !== strpos($message, 'The requested qty is not available'):
+                $code = self::ERROR_INSUFFICIENT_STOCK;
+                break;
+        }
+
+        return $code;
+    }
+
+    /**
+     * Prepare output
+     *
+     * @param CartInterface $cart
+     * @return Data\ReorderOutput
+     */
+    protected function prepareOutput(CartInterface $cart): Data\ReorderOutput
+    {
+        $output = new Data\ReorderOutput($cart, $this->errors);
+        $this->errors = [];
+        return $output;
     }
 }
