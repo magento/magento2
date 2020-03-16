@@ -7,7 +7,7 @@
 namespace Magento\Elasticsearch6\Test\Unit\Model\Client;
 
 use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
-use Magento\Elasticsearch6\Model\Adapter\FieldMapper\AddDefaultSearchField;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 

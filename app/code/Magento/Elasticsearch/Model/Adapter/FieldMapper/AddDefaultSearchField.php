@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\Model\Adapter\FieldMapper;
+namespace Magento\Elasticsearch\Model\Adapter\FieldMapper;
 
 use Magento\Elasticsearch\Model\Adapter\FieldsMappingPreprocessorInterface;
 

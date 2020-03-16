@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch7\Model\Client;
 
+use Magento\Elasticsearch\Model\Adapter\FieldsMappingPreprocessorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
@@ -33,15 +34,22 @@ class Elasticsearch implements ClientInterface
     private $pingResult;
 
     /**
+     * @var FieldsMappingPreprocessorInterface[]
+     */
+    private $fieldsMappingPreprocessors;
+
+    /**
      * Initialize Elasticsearch 7 Client
      *
      * @param array $options
      * @param \Elasticsearch\Client|null $elasticsearchClient
+     * @param array $fieldsMappingPreprocessors
      * @throws LocalizedException
      */
     public function __construct(
         $options = [],
-        $elasticsearchClient = null
+        $elasticsearchClient = null,
+        $fieldsMappingPreprocessors = []
     ) {
         if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
                     ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
@@ -54,6 +62,7 @@ class Elasticsearch implements ClientInterface
             $this->client[getmypid()] = $elasticsearchClient;
         }
         $this->clientOptions = $options;
+        $this->fieldsMappingPreprocessors = $fieldsMappingPreprocessors;
     }
 
     /**
@@ -273,11 +282,7 @@ class Elasticsearch implements ClientInterface
             'include_type_name' => true,
             'body' => [
                 $entityType => [
-                    'properties' => [
-                        '_search' => [
-                            'type' => 'text'
-                        ],
-                    ],
+                    'properties' => [],
                     'dynamic_templates' => [
                         [
                             'price_mapping' => [
@@ -315,7 +320,7 @@ class Elasticsearch implements ClientInterface
             ],
         ];
 
-        foreach ($fields as $field => $fieldInfo) {
+        foreach ($this->applyFieldsMappingPreprocessors($fields) as $field => $fieldInfo) {
             $params['body'][$entityType]['properties'][$field] = $fieldInfo;
         }
 
@@ -348,5 +353,19 @@ class Elasticsearch implements ClientInterface
                 'type' => $entityType,
             ]
         );
+    }
+
+    /**
+     * Apply fields mapping preprocessors
+     *
+     * @param array $properties
+     * @return array
+     */
+    private function applyFieldsMappingPreprocessors(array $properties): array
+    {
+        foreach ($this->fieldsMappingPreprocessors as $preprocessor) {
+            $properties = $preprocessor->process($properties);
+        }
+        return $properties;
     }
 }

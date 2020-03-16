@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper;
+namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 
-use Magento\Elasticsearch6\Model\Adapter\FieldMapper\AddDefaultSearchField;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
