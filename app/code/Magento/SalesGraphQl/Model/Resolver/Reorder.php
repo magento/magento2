@@ -70,7 +70,7 @@ class Reorder implements ResolverInterface
         $order = $this->orderFactory->create()->loadByIncrementIdAndStoreId($orderNumber, $storeId);
         if ((int)$order->getCustomerId() !== $currentUserId) {
             throw new GraphQlInputException(
-                __('Order with number "%1" doesn\'t belong current customer', $orderNumber)
+                __('Order number "%1" doesn\'t belong to the current customer', $orderNumber)
             );
         }
 
