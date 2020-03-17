@@ -131,9 +131,6 @@ define([
                     shiftedValue = moment(value, this.inputDateFormat);
                 }
 
-                if (!shiftedValue.isValid()) {
-                    shiftedValue = moment(value, this.inputDateFormat);
-                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';
