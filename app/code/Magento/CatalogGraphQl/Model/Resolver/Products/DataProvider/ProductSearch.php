@@ -18,7 +18,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -69,7 +68,7 @@ class ProductSearch
         CollectionProcessorInterface $collectionPreProcessor,
         CollectionPostProcessor $collectionPostProcessor,
         SearchResultApplierFactory $searchResultsApplierFactory,
-        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder = null
+        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -77,8 +76,6 @@ class ProductSearch
         $this->collectionPostProcessor = $collectionPostProcessor;
         $this->searchResultApplierFactory = $searchResultsApplierFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder
-            ?: ObjectManager::getInstance()->get(ProductCollectionSearchCriteriaBuilder::class);
     }
 
     /**
