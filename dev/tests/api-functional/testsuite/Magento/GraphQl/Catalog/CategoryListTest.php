@@ -360,6 +360,8 @@ QUERY;
      * Filtering with match value less than minimum query should return empty result
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Invalid match filter. Minimum length is 3.
      */
     public function testMinimumMatchQueryLength()
     {
@@ -376,10 +378,7 @@ QUERY;
     }
 }
 QUERY;
-        $result = $this->graphQlQuery($query);
-        $this->assertArrayNotHasKey('errors', $result);
-        $this->assertArrayHasKey('categoryList', $result);
-        $this->assertEquals([], $result['categoryList']);
+        $this->graphQlQuery($query);
     }
 
     /**

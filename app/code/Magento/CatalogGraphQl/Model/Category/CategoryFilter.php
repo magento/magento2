@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Filter;
+use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Search\Model\Query;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -58,18 +59,14 @@ class CategoryFilter
      * @param array $criteria
      * @param StoreInterface $store
      * @return int[]
+     * @throws InputException
      */
-    public function getCategoryIds(array $criteria, StoreInterface $store): array
+    public function getResult(array $criteria, StoreInterface $store): array
     {
         $categoryIds = [];
-        try {
-            $criteria[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($criteria['filters'], $store);
-        } catch (InputException $e) {
-            //Return empty set when match filter is too short. (matches search api behavior)
-            return $categoryIds;
-        }
-        $criteria[Filter::ARGUMENT_NAME][CategoryInterface::KEY_IS_ACTIVE] = ['eq' => 1];
 
+        $criteria[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($criteria['filters'], $store);
+        $criteria[Filter::ARGUMENT_NAME][CategoryInterface::KEY_IS_ACTIVE] = ['eq' => 1];
         $searchCriteria = $this->searchCriteriaBuilder->build('categoryList', $criteria);
         $categories = $this->categoryList->getList($searchCriteria);
         foreach ($categories->getItems() as $category) {
@@ -95,16 +92,15 @@ class CategoryFilter
         );
 
         foreach ($filters as $filter => $condition) {
-            $conditionType = array_keys($condition)[0];
+            $conditionType = current(array_keys($condition));
             if ($conditionType === 'match') {
-                $searchValue = $condition[$conditionType];
-                $matchLength = strlen(trim($searchValue));
+                $searchValue = trim(str_replace(Match::SPECIAL_CHARACTERS, '', $condition[$conditionType]));
+                $matchLength = strlen($searchValue);
                 if ($matchLength < $minQueryLength) {
-                    throw new InputException(__('Invalid match filter'));
+                    throw new InputException(__('Invalid match filter. Minimum length is %1.', $minQueryLength));
                 }
                 unset($filters[$filter]['match']);
                 $filters[$filter]['like'] = '%' . $searchValue . '%';
-
             }
         }
         return $filters;

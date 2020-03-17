@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesInterface;
 
 /**
- * Retrieves attributes for a field for the ast converter
+ * Retrieve filterable attributes for Category queries
  */
 class CategoryFilterAttributesForAst implements FieldEntityAttributesInterface
 {
