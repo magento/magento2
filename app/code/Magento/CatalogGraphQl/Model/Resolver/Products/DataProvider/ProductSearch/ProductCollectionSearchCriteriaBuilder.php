@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 
 use Magento\Catalog\Model\CategoryProductLink;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
@@ -19,9 +18,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
  */
 class ProductCollectionSearchCriteriaBuilder
 {
-    /** @var CollectionFactory */
-    private $collectionFactory;
-
     /** @var SearchCriteriaInterfaceFactory */
     private $searchCriteriaFactory;
 
@@ -32,18 +28,15 @@ class ProductCollectionSearchCriteriaBuilder
     private $filterGroupBuilder;
 
     /**
-     * @param CollectionFactory $collectionFactory
      * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         SearchCriteriaInterfaceFactory $searchCriteriaFactory,
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder
     ) {
-        $this->collectionFactory = $collectionFactory;
         $this->searchCriteriaFactory = $searchCriteriaFactory;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
@@ -53,6 +46,7 @@ class ProductCollectionSearchCriteriaBuilder
      * Build searchCriteria from search for product collection
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchCriteriaInterface
      */
     public function build(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
