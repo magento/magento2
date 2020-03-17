@@ -111,7 +111,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $collectionMock->expects($this->once())->method('walk')->with($walkMethod, $walkArgs);
         $this->cartRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
-        $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
+        $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $email,
@@ -134,7 +134,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
-        $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
+        $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $email,
@@ -155,7 +155,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
 
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
 
-        $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
+        $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $email,
@@ -177,7 +177,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
 
-        $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
+        $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $email,
@@ -201,7 +201,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->quoteManagerMock->expects($this->once())->method('isPersistent')->willReturn(false);
 
-        $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
+        $this->plugin->beforeSavePaymentInformation(
             $this->subjectMock,
             $cartId,
             $email,
