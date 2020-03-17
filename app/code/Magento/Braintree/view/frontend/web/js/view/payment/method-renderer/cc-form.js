@@ -18,7 +18,6 @@ define(
         'Magento_Vault/js/view/payment/vault-enabler',
         'Magento_Braintree/js/view/payment/kount',
         'mage/translate',
-        'prototype',
         'domReady!'
     ],
     function (
