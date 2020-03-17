@@ -123,6 +123,9 @@ class Shipment extends AbstractPdf
             }
             $page = $this->newPage();
             $order = $shipment->getOrder();
+            /* Check Ship Country for RTL */
+            $shiptoCountry = $order->getShippingAddress()->getCountryId();
+            $this->isRTLCountry = $this->isRTLCountry($shiptoCountry);
             /* Add image */
             $this->insertLogo($page, $shipment->getStore());
             /* Add address */

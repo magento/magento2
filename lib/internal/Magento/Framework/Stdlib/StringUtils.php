@@ -236,9 +236,9 @@ class StringUtils
      */
     public function revRTLSentense($string)
     {
-        $words = $this->split($string);
-        for ($i=0; $i<strlen($words); $i++) {
-            // for better results, it may changes to find non-RTL character parts in a word
+        $words = explode(' ', $string);
+        for ($i=0; $i<count($words); $i++) {
+            // for better results, it changes to find non-RTL character parts in a word
             if($this->isRTLWord($words[$i]) > 0.8)
             {
                 $words[$i] = $this->strrev($words[$i]);

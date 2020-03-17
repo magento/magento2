@@ -29,6 +29,13 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     public $y;
 
     /**
+     * Is RTL Country Order
+     *
+     * @var bool;
+     */
+    public $isRTLCountry = FALSE;
+
+    /**
      * Item renderers with render type key
      * model    => the model name
      * renderer => the renderer model
@@ -315,17 +322,100 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      */
     protected function isRTLLocale($locale)
     {
-        var $rtlLocales = array(
+        // from magento List of allowed locales
+        $rtlLocales = array(
             'ar_DZ', /*Arabic (Algeria)*/
             'ar_EG', /*Arabic (Egypt)*/
             'ar_KW', /*Arabic (Kuwait)*/
             'ar_MA', /*Arabic (Morocco)*/
             'ar_SA', /*Arabic (Saudi Arabia)*/
             'fa_IR', /*Persian (Iran)*/
-            'he_IL', /*Hebrew (Israel)*/
+            'he_IL' /*Hebrew (Israel)*/
         );
 
         if (in_array($locale, $rtlLocales)) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
+     * Is RTL Currencies
+     *
+     * @param string $currency
+     * @return bool
+     */
+    protected function isRTLCurrency($currency)
+    {
+        // from magento List of allowed currencies
+        $rtlCurrencies = array(
+            'AFN', /*Afghani*/
+            'DZD', /*Algerian Dinar*/
+            'BHD', /*Bahraini Dinar*/
+            'DJF', /*Djibouti Franc*/
+            'EGP', /*Egyptian Pound*/
+            'IQD', /*Iraqi Dinar*/
+            'ILS', /*Israeli New Sheqel*/
+            'JOD', /*Jordanian Dinar*/
+            'KWD', /*Kuwaiti Dinar*/
+            'LBP', /*Lebanese Pound*/
+            'LYD', /*Libyan Dinar*/
+            'MRO', /*Mauritania Ouguiya*/
+            'MAD', /*Moroccan Dirham*/
+            'OMR', /*Oman Rial*/
+            'PKR', /*Pakistan Rupee*/
+            'QAR', /*Qatari Rial*/
+            'SOS', /*Somali Shilling*/
+            'SDG', /*Sudanese Pound*/
+            'SYP', /*Syrian Pound*/
+            'TND', /*Tunisian Dinar*/
+            'AED', /*United Arab Emirates Dirham*/
+            'YER' /*Yemeni Rial*/
+        );
+
+        if (in_array($currency, $rtlCurrencies)) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
+     * Is Shipping Country uses RTL language
+     *
+     * @param string $country
+     * @return bool
+     */
+    protected function isRTLCountry($country)
+    {
+        // from magento USPS countries
+        $rtlCountries = array(
+            'AE' => 'United Arab Emirates',
+            'AF' => 'Afghanistan',
+            'BH' => 'Bahrain',
+            'DJ' => 'Djibouti',
+            'EG' => 'Egypt',
+            'IL' => 'Israel',
+            'IQ' => 'Iraq',
+            'JO' => 'Jordan',
+            'KM' => 'Comoros',
+            'KW' => 'Kuwait',
+            'LB' => 'Lebanon',
+            'LY' => 'Libya',
+            'MA' => 'Morocco',
+            'MR' => 'Mauritania',
+            'OM' => 'Oman',
+            'PK' => 'Pakistan',
+            'QA' => 'Qatar',
+            'SA' => 'Saudi Arabia',
+            'SD' => 'Sudan',
+            'SO' => 'Somalia',
+            'SY' => 'Syrian Arab Republic',
+            'TD' => 'Chad',
+            'TN' => 'Tunisia',
+            'YE' => 'Yemen'
+        );
+
+        if (array_key_exists($country, $rtlCountries)) {
             return TRUE;
         }
         return FALSE;
@@ -339,21 +429,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      */
     protected function reverseRTLCharacters($sentense, $store = null)
     {
-        if($store == null)
-        {
-            $locale = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Locale\Resolver')
-                ->getLocale();
-        }
-        else
-        {
-            $locale = $store->getLocaleCode();
-        }
-
-        if($this->isRTLLocale($locale))
-        {
-            $sentense = $this->string->revRTLSentense($sentense);
-        }
+        
+        $sentense = $this->string->revRTLSentense($sentense);
         return $sentense;
     }
 
@@ -383,9 +460,13 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         foreach ($values as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
+                // Reverse Characters on ship to RTL Countries
+                /* is RTL Country */
+                if($this->isRTLCountry)
+                {
+                    $value = $this->reverseRTLCharacters($value, $store);
+                }
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    // Reverse Characters
-                    $_value = $this->reverseRTLCharacters($_value, $store);
                     $page->drawText(
                         trim(strip_tags($_value)),
                         $this->getAlignRight($_value, 130, 440, $font, 10),
@@ -552,13 +633,17 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         foreach ($billingAddress as $value) {
             if ($value !== '') {
+                if($this->isRTLCountry)
+                {
+                    // Reverse Characters
+                    $value = $this->reverseRTLCharacters($value);
+                }
                 $text = [];
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
                     $text[] = $_value;
                 }
                 foreach ($text as $part) {
-                    // Reverse Characters
-                    $part = $this->reverseRTLCharacters($part, $store);
+                    
                     $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
                     $this->y -= 15;
                 }
@@ -571,13 +656,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $this->y = $addressesStartY;
             foreach ($shippingAddress as $value) {
                 if ($value !== '') {
+                    if($this->isRTLCountry)
+                    {
+                        // Reverse Characters
+                        $value = $this->reverseRTLCharacters($value);
+                    }
                     $text = [];
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
                         $text[] = $_value;
                     }
                     foreach ($text as $part) {
-                        // Reverse Characters
-                        $part = $this->reverseRTLCharacters($part, $store);
                         $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
                         $this->y -= 15;
                     }
@@ -615,9 +703,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if (trim($value) != '') {
                 //Printing "Payment Method" lines
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
-                foreach ($this->string->split($value, 45, true, true) as $_value) {
+                if($this->isRTLCountry)
+                {
                     // Reverse Characters
-                    $_value = $this->reverseRTLCharacters($_value, $store);
+                    $value = $this->reverseRTLCharacters($value);
+                }
+                foreach ($this->string->split($value, 45, true, true) as $_value) {
                     $page->drawText(strip_tags(trim($_value)), $paymentLeft, $yPayments, 'UTF-8');
                     $yPayments -= 15;
                 }
@@ -636,10 +727,14 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $topMargin = 15;
             $methodStartY = $this->y;
             $this->y -= 15;
+            
+            if($this->isRTLCountry)
+            {
+                // Reverse Characters
+                $shippingMethod = $this->reverseRTLCharacters($shippingMethod);
+            }
 
             foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
-                // Reverse Characters
-                $_value = $this->reverseRTLCharacters($_value, $store);
                 $page->drawText(strip_tags(trim($_value)), 285, $this->y, 'UTF-8');
                 $this->y -= 15;
             }
@@ -677,6 +772,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                     $maxTitleLen = 45;
                     $endOfTitle = strlen($track->getTitle()) > $maxTitleLen ? '...' : '';
                     $truncatedTitle = substr($track->getTitle(), 0, $maxTitleLen) . $endOfTitle;
+
+                    if($this->isRTLCountry)
+                    {
+                        // Reverse Characters
+                        $truncatedTitle = $this->reverseRTLCharacters($truncatedTitle);
+                    }
                     $page->drawText($truncatedTitle, 292, $yShipments, 'UTF-8');
                     $page->drawText($track->getNumber(), 410, $yShipments, 'UTF-8');
                     $yShipments -= $topMargin - 5;
