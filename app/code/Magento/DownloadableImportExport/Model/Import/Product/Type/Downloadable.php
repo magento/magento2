@@ -888,8 +888,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         try {
             $uploader = $this->uploaderHelper->getUploader($type, $this->parameters);
             if (!$this->uploaderHelper->isFileExist($fileName)) {
-                $uploader->move($fileName, $renameFileOff);
-                $fileName = $uploader->getUploadedFileName();
+                $res = $uploader->move($fileName, $renameFileOff);
+                $fileName = $res['file'];
             }
         } catch (\Exception $e) {
             $this->_entityModel->addRowError(self::ERROR_MOVE_FILE, $this->rowNum);
