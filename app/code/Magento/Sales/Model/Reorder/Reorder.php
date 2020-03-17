@@ -125,7 +125,7 @@ class Reorder
 
         if (!$order->getId()) {
             throw new InputException(
-                __('Cannot find order with number "%1" in store "%2"', $orderNumber, $storeId)
+                __('Cannot find order number "%1" in store "%2"', $orderNumber, $storeId)
             );
         }
         $customerId = $order->getCustomerId();
