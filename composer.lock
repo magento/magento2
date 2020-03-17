@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a25d06e6a86adbba9b2f2dfe202d69e",
+    "content-hash": "509c6d7015d1fdbe2f2807ba81ef94e4",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -7494,16 +7494,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-develop",
+            "version": "dev-MFTF3.0.0-RC1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "24c7dfeb1387b9a46d14dbf169b23c3c0b2f9bac"
+                "reference": "dc324c150312177db4ca2858a2998825462f6aea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/24c7dfeb1387b9a46d14dbf169b23c3c0b2f9bac",
-                "reference": "24c7dfeb1387b9a46d14dbf169b23c3c0b2f9bac",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/dc324c150312177db4ca2858a2998825462f6aea",
+                "reference": "dc324c150312177db4ca2858a2998825462f6aea",
                 "shasum": ""
             },
             "require": {
@@ -7562,7 +7562,7 @@
                 ],
                 "psr-4": {
                     "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework",
-                    "MFTF\\": "dev/tests/functional/MFTF"
+                    "MFTF\\": "dev/tests/functional/tests/MFTF"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -7576,7 +7576,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-03-13T16:06:57+00:00"
+            "time": "2020-03-17T17:03:26+00:00"
         },
         {
             "name": "mikey179/vfsstream",
