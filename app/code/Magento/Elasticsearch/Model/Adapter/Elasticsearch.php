@@ -3,10 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
+use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch adapter
@@ -38,17 +44,12 @@ class Elasticsearch
     protected $documentDataMapper;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
-     */
-    protected $indexNameResolver;
-
-    /**
      * @var FieldMapperInterface
      */
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Config
+     * @var Config
      */
     protected $clientConfig;
 
@@ -58,14 +59,19 @@ class Elasticsearch
     protected $client;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface
+     * @var BuilderInterface
      */
     protected $indexBuilder;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
+
+    /**
+     * @var IndexNameResolver
+     */
+    protected $indexNameResolver;
 
     /**
      * @var array
@@ -80,27 +86,27 @@ class Elasticsearch
     /**
      * Constructor for Elasticsearch adapter.
      *
-     * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
+     * @param ConnectionManager $connectionManager
      * @param DataMapperInterface $documentDataMapper
      * @param FieldMapperInterface $fieldMapper
-     * @param \Magento\Elasticsearch\Model\Config $clientConfig
-     * @param \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver
-     * @param array $options
+     * @param Config $clientConfig
+     * @param BuilderInterface $indexBuilder
+     * @param LoggerInterface $logger
+     * @param IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $options
+     * @throws LocalizedException
      */
     public function __construct(
-        \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
+        ConnectionManager $connectionManager,
         DataMapperInterface $documentDataMapper,
         FieldMapperInterface $fieldMapper,
-        \Magento\Elasticsearch\Model\Config $clientConfig,
-        \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
-        $options = [],
-        BatchDataMapperInterface $batchDocumentDataMapper = null
+        Config $clientConfig,
+        BuilderInterface $indexBuilder,
+        LoggerInterface $logger,
+        IndexNameResolver $indexNameResolver,
+        BatchDataMapperInterface $batchDocumentDataMapper,
+        $options = []
     ) {
         $this->connectionManager = $connectionManager;
         $this->documentDataMapper = $documentDataMapper;
@@ -109,14 +115,13 @@ class Elasticsearch
         $this->indexBuilder = $indexBuilder;
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
-        $this->batchDocumentDataMapper = $batchDocumentDataMapper ?:
-            ObjectManager::getInstance()->get(BatchDataMapperInterface::class);
+        $this->batchDocumentDataMapper = $batchDocumentDataMapper;
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
             );
         }
@@ -126,14 +131,14 @@ class Elasticsearch
      * Retrieve Elasticsearch server status
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function ping()
     {
         try {
             $response = $this->client->ping();
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
         }
