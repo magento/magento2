@@ -76,7 +76,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
-            $this->setData('website_selection_price_value', $this->getSelectionPriceValue());
+            $this->setData('tmp_selection_price_value', $this->getSelectionPriceValue());
             $this->setSelectionPriceValue($this->getOrigData('selection_price_value'));
         }
         parent::beforeSave();
@@ -90,8 +90,8 @@ class Selection extends \Magento\Framework\Model\AbstractModel
     public function afterSave()
     {
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
-            if (null !== $this->getData('website_selection_price_value')) {
-                $this->setSelectionPriceValue($this->getData('website_selection_price_value'));
+            if (null !== $this->getData('tmp_selection_price_value')) {
+                $this->setSelectionPriceValue($this->getData('tmp_selection_price_value'));
             }
             $this->getResource()->saveSelectionPrice($this);
 

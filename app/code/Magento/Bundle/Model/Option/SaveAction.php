@@ -64,6 +64,7 @@ class SaveAction
         $this->metadataPool = $metadataPool;
         $this->type = $type;
         $this->linkManagement = $linkManagement;
+        $this->storeManager = $storeManager;
     }
 
     /**
