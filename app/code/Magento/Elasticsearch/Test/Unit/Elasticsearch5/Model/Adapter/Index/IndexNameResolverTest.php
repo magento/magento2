@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index;
+namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Psr\Log\LoggerInterface;
