@@ -73,6 +73,11 @@ class Selection extends \Magento\Framework\Model\AbstractModel
         parent::_construct();
     }
 
+    /**
+     * Processin object before save data
+     *
+     * @return void
+     */
     public function beforeSave()
     {
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
@@ -83,7 +88,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Processing object before save data
+     * Processing object after save data
      *
      * @return $this
      */
