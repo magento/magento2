@@ -86,7 +86,11 @@ class CliTest extends \PHPUnit\Framework\TestCase
     public function testDocumentRootIsPublic($isPub, $params)
     {
         $config = include __DIR__ . '/_files/env.php';
-        $config['directories']['document_root_is_pub'] = $isPub;
+        if ($isPub === null) {
+            unset($config['directories']['document_root_is_pub']);
+        } else {
+            $config['directories']['document_root_is_pub'] = $isPub;
+        }
         $this->writer->saveConfig([ConfigFilePool::APP_ENV => $config], true);
 
         $cli = new Cli();
@@ -123,7 +127,15 @@ class CliTest extends \PHPUnit\Framework\TestCase
                     'upload' => ['uri' => 'media/upload']
                 ]
             ]],
-            [false, []]
+            [false, []],
+            [null, [
+                'MAGE_DIRS' => [
+                    'pub' => ['uri' => ''],
+                    'media' => ['uri' => 'media'],
+                    'static' => ['uri' => 'static'],
+                    'upload' => ['uri' => 'media/upload']
+                ]
+            ]]
         ];
     }
 }
