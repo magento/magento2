@@ -15,6 +15,9 @@
             <description value="Testing for a required video url when getting video information"/>
             <severity value="CRITICAL"/>
             <group value="ProductVideo"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -22,7 +25,7 @@
         </before>
         <after>
             <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
