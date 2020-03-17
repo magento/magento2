@@ -12,9 +12,7 @@ use Magento\Downloadable\Model\Link\Builder;
 use Magento\Downloadable\Helper\Download;
 
 /**
- * Class BuilderTest
- *
- * @package Magento\Downloadable\Test\Unit\Model\Link
+ * Unit test for downloadable products' builder link class
  */
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {

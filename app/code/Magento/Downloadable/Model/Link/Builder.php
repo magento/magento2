@@ -13,9 +13,8 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject\Copy;
 
 /**
- * Class Builder
+ * Builder download link model for downloadable product
  *
- * @package Magento\Downloadable\Model\Link
  * @api
  * @since 100.1.0
  */

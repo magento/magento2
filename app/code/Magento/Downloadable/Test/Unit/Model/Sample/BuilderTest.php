@@ -12,9 +12,7 @@ use Magento\Downloadable\Model\Sample;
 use Magento\Downloadable\Model\Sample\Builder;
 
 /**
- * Class BuilderTest
- *
- * @package Magento\Downloadable\Test\Unit\Model\Sample
+ * Unit test for downloadable products' builder sample class
  */
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
