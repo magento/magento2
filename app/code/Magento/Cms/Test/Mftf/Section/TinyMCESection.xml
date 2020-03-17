@@ -51,6 +51,7 @@
         <element name="insertBtn" type="button" selector="#insert"/>
         <element name="InsertFile" type="text" selector="#insert_files"/>
         <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteFolder" type="button" selector="#delete_folder" />
         <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
         <element name="CancelBtn" type="button" selector="#cancel" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
