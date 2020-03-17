@@ -114,20 +114,20 @@ define([
             return this.shiftedValue();
         },
 
+
         /**
          * Prepares and sets date/time value that will be displayed
          * in the input field.
-         *
-         * @param {String} value
          */
-        onValueChange: function (value) {
-            var shiftedValue;
+        setInitialValue: function () {
+            const value = this.getInitialValue();
+            let shiftedValue;
 
             if (value) {
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    shiftedValue = moment(value, this.outputDateFormat);
+                    shiftedValue = moment(value, this.inputDateFormat);
                 }
 
                 if (!shiftedValue.isValid()) {
@@ -141,6 +141,8 @@ define([
             if (shiftedValue !== this.shiftedValue()) {
                 this.shiftedValue(shiftedValue);
             }
+
+            return this._super();
         },
 
         /**
