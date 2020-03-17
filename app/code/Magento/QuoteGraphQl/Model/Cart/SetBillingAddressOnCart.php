@@ -118,9 +118,9 @@ class SetBillingAddressOnCart
 
             $customerId = $context->getUserId();
             // need to save address only for registered user and if save_in_address_book = true
-            if ((0 !== $customerId
+            if (0 !== $customerId
                 && isset($addressInput['save_in_address_book'])
-                && (bool)$addressInput['save_in_address_book'] && $sameAsShipping !== true) === true
+                && (bool)$addressInput['save_in_address_book'] && !$sameAsShipping
             ) {
                 $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
             }
