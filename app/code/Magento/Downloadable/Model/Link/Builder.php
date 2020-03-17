@@ -13,6 +13,8 @@ use Magento\Framework\DataObject\Copy;
 
 /**
  * Class Builder
+ *
+ * @package Magento\Downloadable\Model\Link
  * @api
  * @since 100.1.0
  */
@@ -134,7 +136,7 @@ class Builder
         }
 
         $useDefaultTitle = $this->data['use_default_title'] ?? false;
-        
+
         if ($useDefaultTitle) {
             $link->setTitle(null);
         }

@@ -12,6 +12,8 @@ use Magento\Downloadable\Model\Sample\Builder;
 
 /**
  * Class BuilderTest
+ *
+ * @package Magento\Downloadable\Test\Unit\Model\Sample
  */
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {

@@ -15,6 +15,8 @@ use Magento\Framework\DataObject\Copy;
 
 /**
  * Class Builder
+ *
+ * @package Magento\Downloadable\Model\Sample
  * @api
  * @since 100.1.0
  */
@@ -71,6 +73,8 @@ class Builder
     }
 
     /**
+     * Init data for builder
+     *
      * @param array $data
      * @return $this;
      * @since 100.1.0
@@ -82,6 +86,8 @@ class Builder
     }
 
     /**
+     * Build sample link
+     *
      * @param SampleInterface $sample
      * @return SampleInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -122,6 +128,8 @@ class Builder
     }
 
     /**
+     * Reset data
+     *
      * @return void
      */
     private function resetData()
@@ -130,6 +138,8 @@ class Builder
     }
 
     /**
+     * Get component
+     *
      * @return Sample
      */
     private function getComponent()
