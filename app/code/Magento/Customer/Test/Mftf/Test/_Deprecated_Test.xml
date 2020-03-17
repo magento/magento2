@@ -7,5 +7,6 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddingProductWithExpiredSessionTest" extends="StorefrontAddProductToCartWithExpiredSessionTest" deprecated="Use StorefrontAddProductToCartWithExpiredSessionTest"/>
     <test name="StorefrontCustomerForgotPasswordTest" extends="StorefrontResetCustomerPasswordSuccessTest" deprecated="Use StorefrontResetCustomerPasswordSuccessTest"/>
 </tests>
