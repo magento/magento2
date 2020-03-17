@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Directory\Setup\Patch\Data;
@@ -51,12 +50,15 @@ class AddDataForItaly implements DataPatchInterface
             $this->moduleDataSetup->getConnection(),
             $this->getDataForItaly()
         );
+
+        return $this;
     }
 
     /**
      * Italy states data.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getDataForItaly()
     {
