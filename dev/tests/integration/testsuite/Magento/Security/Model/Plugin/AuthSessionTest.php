@@ -6,6 +6,7 @@
 namespace Magento\Security\Model\Plugin;
 
 /**
+ * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  */
 class AuthSessionTest extends \PHPUnit\Framework\TestCase
