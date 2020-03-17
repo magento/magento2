@@ -120,7 +120,7 @@ $formData = $block->getFormData();
                                            title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i)) ?>"
                                            id="street_<?= /* @noEscape */ $_i ?>"
                                            class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>"
-                                           autocomplete="address-line<?= $_i ?>">
+                                           autocomplete="address-line<?= /* @noEscape */ $_i ?>">
                                 </div>
                             </div>
                         <?php endfor; ?>

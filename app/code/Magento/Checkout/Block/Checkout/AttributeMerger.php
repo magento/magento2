@@ -284,8 +284,7 @@ class AttributeMerger
         $providerName,
         $dataScopePrefix,
         array $additionalConfig
-        )
-    {
+    ) {
         $lines = [];
         unset($attributeConfig['validation']['required-entry']);
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
