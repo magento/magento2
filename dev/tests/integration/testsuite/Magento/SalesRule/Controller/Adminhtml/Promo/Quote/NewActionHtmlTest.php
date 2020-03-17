@@ -12,6 +12,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 /**
  * Tests for NewActionHtml controller
  *
+ * Verify the request object contains the proper form object for action
  * @magentoAppArea adminhtml
  */
 class NewActionHtmlTest extends AbstractBackendController
@@ -35,6 +36,11 @@ class NewActionHtmlTest extends AbstractBackendController
      * @var string
      */
     private $jsFormObject = 'form';
+  
+    /**
+     * @var string
+     */
+    private $requestFormName = 'rule_actions_fieldset_';
 
     /**
      * Test verifies that execute method has the proper data-form-part value in html response
@@ -79,6 +85,7 @@ class NewActionHtmlTest extends AbstractBackendController
         $this->getRequest()->setParams(
             [
                 'id' => 1,
+                'form' => $this->requestFormName,
                 'form_namespace' => $this->formName,
                 'form' => $this->jsFormObject,
                 'type' => 'Magento\SalesRule\Model\Rule\Condition\Product|quote_item_price',
