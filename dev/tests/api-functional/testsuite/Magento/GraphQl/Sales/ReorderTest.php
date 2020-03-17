@@ -215,37 +215,6 @@ class ReorderTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Sales/_files/order_with_two_simple_products.php
-     */
-    public function notFinishedTestTwoProducts()
-    {
-        $response = $this->makeReorderForDefaultCustomer(self::INCREMENTED_ORDER_NUMBER);
-
-        $expectedResponse = [
-            'userInputErrors' => [
-                [
-                    'path' => ['orderNumber'],
-                    'code' => 'UNDEFINED',
-                    'message' => 'We can\'t add this item to your shopping cart right now.',
-                ],
-            ],
-            'cart' => [
-                'email' => 'customer@example.com',
-                'total_quantity' => 1,
-                'items' => [
-                    [
-                        'quantity' => 1,
-                        'product' => [
-                            'sku' => 'configurable',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $this->assertResponseFields($response['reorderItems'] ?? [], $expectedResponse);
-    }
-
-    /**
      * @param string $email
      * @param string $password
      * @return array

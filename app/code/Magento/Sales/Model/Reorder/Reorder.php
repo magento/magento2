@@ -33,6 +33,17 @@ class Reorder
     /**#@-*/
 
     /**
+     * List of error messages and codes.
+     */
+    private const MESSAGE_CODES = [
+        'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
+        'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
+        'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
+        'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
+    ];
+
+
+    /**
      * @var OrderFactory
      */
     private $orderFactory;
@@ -209,15 +220,17 @@ class Reorder
     private function getErrorCode(string $message): string
     {
         $code = self::ERROR_UNDEFINED;
-        switch ($message) {
-            case false !== strpos($message, 'Product that you are trying to add is not available.'):
-                $code = self::ERROR_NOT_SALABLE;
-                break;
-            case false !== strpos($message, 'The fewest you may purchase is'):
-            case false !== strpos($message, 'The most you may purchase is'):
-            case false !== strpos($message, 'The requested qty is not available'):
-                $code = self::ERROR_INSUFFICIENT_STOCK;
-                break;
+
+        $matchedCodes = array_filter(
+            self::MESSAGE_CODES,
+            function ($key) use ($message) {
+                return false !== strpos($message, $key);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        if (!empty($matchedCodes)) {
+            $code = current($matchedCodes);
         }
 
         return $code;

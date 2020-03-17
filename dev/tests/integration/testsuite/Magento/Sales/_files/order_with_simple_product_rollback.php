@@ -72,7 +72,7 @@ $orderItem2->setProductId($secondProduct->getId())
 
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create(\Magento\Sales\Model\Order::class);
-$order->setIncrementId('100000001');
+$order->setIncrementId('100001001');
 $order->setState(\Magento\Sales\Model\Order::STATE_NEW);
 $order->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_NEW));
 $order->setCustomerIsGuest(false);
