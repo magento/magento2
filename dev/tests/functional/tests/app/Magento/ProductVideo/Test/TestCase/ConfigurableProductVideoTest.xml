@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ProductVideo\Test\TestCase\ConfigurableProductVideoTest" summary="Video displaying for simple variation of configurable on product page" ticketId="MAGETWO-69381">
         <variation name="ConfigurableProductVideoTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">configurable_with_video</data>
             <data name="simpleProductVideo/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/16342611</data>
             <data name="variation" xsi:type="string">attribute_key_0:option_key_0 attribute_key_1:option_key_0</data>

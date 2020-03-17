@@ -27,7 +27,7 @@
             <!--Delete all imported products-->
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <!--Logout from Admin page-->
-            <actionGroup ref="logout" stepKey="logoutFromAdminPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPage"/>
         </after>
 
         <!--Import products with "Skip error entries"-->
