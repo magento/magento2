@@ -37,7 +37,7 @@
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 
             <!-- Delete category -->
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>

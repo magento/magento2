@@ -29,6 +29,7 @@ class CrosssellTest extends \PHPUnit\Framework\TestCase
         $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
             ->createBlock(\Magento\Catalog\Block\Product\ProductList\Crosssell::class);
         $block->setLayout($objectManager->get(\Magento\Framework\View\LayoutInterface::class));
+        $block->setViewModel($objectManager->get(\Magento\Catalog\ViewModel\Product\Listing\PreparePostData::class));
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('crosssell');
         $block->setItemCount(1);
@@ -36,7 +37,7 @@ class CrosssellTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($html);
         $this->assertContains('Simple Cross Sell', $html);
         /* name */
-        $this->assertContains('product\/' . $firstProduct->getId() . '\/', $html);
+        $this->assertContains('product/' . $firstProduct->getId() . '/', $html);
         /* part of url */
         $this->assertInstanceOf(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
