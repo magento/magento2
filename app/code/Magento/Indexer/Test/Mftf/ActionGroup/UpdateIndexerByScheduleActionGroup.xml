@@ -16,7 +16,7 @@
             <argument name="indexerName" type="string"/>
         </arguments>
 
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/indexer/indexer/list/" stepKey="amOnIndexManagementPage"/>
+        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="amOnIndexManagementPage"/>
         <waitForPageLoad stepKey="waitForIndexManagementPageToLoad"/>
         <click selector="{{AdminIndexManagementSection.indexerCheckbox(indexerName)}}" stepKey="selectIndexer1"/>
         <selectOption selector="{{AdminIndexManagementSection.massActionSelect}}" userInput="change_mode_changelog" stepKey="selectUpdateBySchedule"/>

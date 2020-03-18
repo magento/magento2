@@ -107,7 +107,10 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Create new customer order -->
         <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>

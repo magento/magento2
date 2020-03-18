@@ -104,7 +104,10 @@
             <!--Disable Minimum advertised Price-->
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->

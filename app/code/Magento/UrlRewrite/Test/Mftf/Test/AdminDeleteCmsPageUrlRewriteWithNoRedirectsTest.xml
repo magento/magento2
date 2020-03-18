@@ -13,6 +13,7 @@
             <stories value="Delete CMS Page URL rewrite with No Redirects"/>
             <title value="Delete CMS Page URL rewrite with No Redirects"/>
             <description value="Log in to admin and delete CMS Page URL rewrite with No Redirects"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-14648"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -22,7 +23,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminGoToAddNewUrlRewritePageActionGroup" stepKey="openUrlRewriteEditPage"/>

@@ -130,8 +130,6 @@ class ColumnFactory
      */
     protected function getDataType($frontendType)
     {
-        return isset($this->dataTypeMap[$frontendType])
-            ? $this->dataTypeMap[$frontendType]
-            : $this->dataTypeMap['default'];
+        return $this->dataTypeMap[$frontendType] ?? $this->dataTypeMap['default'];
     }
 }

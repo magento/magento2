@@ -13,7 +13,7 @@
             <description>Goes to the Admin Cache Management page. Clicks on 'Flush Magento Cache'.</description>
         </annotations>
 
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToNewCustomVarialePage"/>
+        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="goToCacheManagement"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminCacheManagementSection.FlushMagentoCache}}" stepKey="clickFlushMagentoCache"/>
         <waitForPageLoad stepKey="waitForCacheFlush"/>

@@ -41,13 +41,14 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
             <!-- Fill out form for a new user with address -->
             <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
@@ -165,7 +166,7 @@
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
@@ -275,6 +276,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -385,6 +388,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->

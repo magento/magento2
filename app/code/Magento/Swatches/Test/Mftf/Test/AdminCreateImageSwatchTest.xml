@@ -24,7 +24,14 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Begin creating a new product attribute of type "Image Swatch" -->
@@ -46,6 +53,7 @@
         <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('0')}}" stepKey="clicksWatchWindow1"/>
 
         <!-- Set swatch image #2 -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
@@ -55,6 +63,7 @@
         <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="adobe-small" stepKey="fillAdmin2"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('1')}}" stepKey="clicksWatchWindow2"/>
 
         <!-- Set swatch image #3 -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
@@ -96,15 +105,11 @@
         </assertContains>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
-            <argument name="product" value="BaseConfigurableProduct"/>
-        </actionGroup>
+        <amOnPage url="{{AdminProductCreatePage.url(BaseConfigurableProduct.attribute_set_id, BaseConfigurableProduct.type_id)}}" stepKey="goToCreateConfigurableProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$createCategory.name$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the Image Swatch we created earlier -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
@@ -144,7 +149,7 @@
         </assertContains>
 
         <!-- Go to the product listing page and see text swatch options -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPageStorefront"/>
+        <amOnPage url="$createCategory.custom_attributes[url_key]$.html" stepKey="goToCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForProductListingPage"/>
 
         <!-- Verify the storefront -->

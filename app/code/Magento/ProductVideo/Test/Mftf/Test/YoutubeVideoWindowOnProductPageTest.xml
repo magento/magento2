@@ -17,6 +17,9 @@
             <description value="Check Youtube video window on the product page"/>
             <severity value="MAJOR"/>
             <group value="ProductVideo"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
 
         <before>
@@ -85,7 +88,7 @@
             <!-- Set product video configuration to default -->
             <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig" before="logout"/>
             <!--Log Out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>
