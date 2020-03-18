@@ -168,7 +168,7 @@ class StaticProperties
 
         $objectManager = Bootstrap::getInstance()->getObjectManager();
         $cache = $objectManager->get(CacheInterface::class);
-        $serializer = $objectManager->get(SerializerInterface::class);
+        $serializer = $objectManager->get(\Magento\TestFramework\Serialize\Serializer::class);
         $cachedProperties = $cache->load(self::CACHE_NAME);
 
         if ($cachedProperties) {
