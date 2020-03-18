@@ -20,9 +20,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Bundle
+ * Import entity Bundle product type.
  *
- * @package Magento\BundleImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
@@ -723,6 +722,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
+
+        return $this;
     }
 
     /**
