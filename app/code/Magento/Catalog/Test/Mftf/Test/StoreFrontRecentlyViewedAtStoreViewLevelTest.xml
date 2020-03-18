@@ -89,7 +89,6 @@
             <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
 
-        <!-- Warm up cache -->
         <magentoCLI command="cache:flush" stepKey="flushCacheAfterWidgetCreated"/>
 
         <!-- Navigate to product 3 on store front -->
