@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLocalizedDateElementTest">
+        <annotations>
+            <stories value="Date element is localized"/>
+            <title value="Admin user should be able to create active admin user"/>
+            <description value="Admin date element should be localized."/>
+            <testCaseId value="GITHUB_27311"/>
+            <severity value="CRITICAL"/>
+            <group value="ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="dutchActiveAdmin"/>
+            </actionGroup>
+        </after>
+
+        <generateDate date="now" format="m/j/Y" timezone="America/Los_Angeles" stepKey="today"/>
+        <generateDate date="now" format="d-m-Y" timezone="America/Los_Angeles" stepKey="todayNL"/>
+        <generateDate date="+1 days" format="m/j/Y" timezone="America/Los_Angeles" stepKey="tomorrow"/>
+        <generateDate date="+1 days" format="d-m-Y" timezone="America/Los_Angeles" stepKey="tomorrowNL"/>
+
+        <!-- Step 1. Create cart price rule in en_US admin locale -->
+
+        <actionGroup ref="AdminCreateCartPriceRuleWithFromDateActionGroup" stepKey="createCartPriceRule">
+            <argument name="ruleName" value="TestSalesRule"/>
+            <argument name="fromDate" value="$today"/>
+        </actionGroup>
+
+        <!-- Step 2. Create the Dutch -->
+
+        <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="genericAdminRole"/>
+            <argument name="user" value="dutchActiveAdmin"/>
+        </actionGroup>
+
+        <!-- Step 3. Log in as the Dutch. -->
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDutchAdmin">
+            <argument name="username" value="{{dutchActiveAdmin.username}}"/>
+            <argument name="password" value="{{dutchActiveAdmin.password}}"/>
+        </actionGroup>
+
+        <!-- Step 4. Check the cart price rule from date, set it to tomorrow and check again. -->
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText(TestSalesRule.name)}}" stepKey="openCartPriceRule"/>
+        <waitForPageLoad stepKey="waitForPriceRuleLoad"/>
+
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="$todayNL" stepKey="checkFromDateBeforeSave"/>
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButton"/>
+
+        <waitForPageLoad stepKey="waitForPriceRuleSave"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="$todayNL" stepKey="checkFromDateAfterSave"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="$tomorrowNL" stepKey="fillStartDate"/>
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButtonAfterChangingFromDate"/>
+
+        <waitForPageLoad stepKey="waitForPriceRuleChangeSave"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="$tomorrowNL" stepKey="checkFromDateAfterChangeSaved"/>
+    </test>
+</tests>
