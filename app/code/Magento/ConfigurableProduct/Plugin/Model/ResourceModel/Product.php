@@ -6,9 +6,14 @@
  */
 namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Indexer\ActionInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 
+/**
+ * Plugin product resource model
+ */
 class Product
 {
     /**
@@ -41,6 +46,7 @@ class Product
      * @param \Magento\Catalog\Model\ResourceModel\Product $subject
      * @param \Magento\Framework\DataObject $object
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -51,6 +57,29 @@ class Product
         /** @var \Magento\Catalog\Model\Product $object */
         if ($object->getTypeId() == Configurable::TYPE_CODE) {
             $object->getTypeInstance()->getSetAttributes($object);
+            $this->resetConfigurableOptionsData($object);
+        }
+    }
+
+    /**
+     * Set null for configurable options attribute of configurable product
+     *
+     * @param \Magento\Catalog\Model\Product $object
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function resetConfigurableOptionsData($object)
+    {
+        $extensionAttribute = $object->getExtensionAttributes();
+        if ($extensionAttribute && $extensionAttribute->getConfigurableProductOptions()) {
+            /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
+            $productAttributeRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ProductAttributeRepositoryInterface::class);
+            /** @var OptionInterface $option */
+            foreach ($extensionAttribute->getConfigurableProductOptions() as $option) {
+                $eavAttribute = $productAttributeRepository->get($option->getAttributeId());
+                $object->setData($eavAttribute->getAttributeCode(), null);
+            }
         }
     }
 
