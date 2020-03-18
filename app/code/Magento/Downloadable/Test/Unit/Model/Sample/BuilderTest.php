@@ -85,6 +85,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $data = [
             'file' => 'cXVlIHRhbA==',
+            'use_default_title' => '1',
             'type' => 'file'
         ];
         $downloadableData = ['sort_order' => 1];
@@ -123,6 +124,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             )->willReturn($fileName);
         $this->sampleMock->expects($this->once())->method('setSampleFile')->with($fileName);
         $this->sampleMock->expects($this->once())->method('setSortOrder')->with(1);
+        $useDefaultTitle = $data['use_default_title'] ?? false;
+        if ($useDefaultTitle) {
+            $this->sampleMock->expects($this->once())->method('setTitle')->with(null);
+        }
         $this->service->setData($data);
 
         $this->service->build($this->sampleMock);

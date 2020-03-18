@@ -122,6 +122,12 @@ class Builder
         if (!$sample->getSortOrder()) {
             $sample->setSortOrder(1);
         }
+
+        $useDefaultTitle = $this->data['use_default_title'] ?? false;
+
+        if ($useDefaultTitle) {
+            $sample->setTitle(null);
+        }
         $this->resetData();
 
         return $sample;
