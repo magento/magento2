@@ -19,7 +19,7 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\Framework\App\Area;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * The class resize original images
@@ -97,11 +97,6 @@ class Media implements AppInterface
     private $imageResize;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
      * @param ConfigFactory $configFactory
      * @param SynchronizationFactory $syncFactory
      * @param Response $response
@@ -113,7 +108,7 @@ class Media implements AppInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param State $state
      * @param ImageResize $imageResize
-     * @param DriverInterface $driver
+     * @param File $file
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -128,7 +123,7 @@ class Media implements AppInterface
         PlaceholderFactory $placeholderFactory,
         State $state,
         ImageResize $imageResize,
-        DriverInterface $driver
+        File $file
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
@@ -136,7 +131,7 @@ class Media implements AppInterface
         $this->directoryMedia = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
-            $this->mediaDirectoryPath = str_replace('\\', '/', $this->driver->getRealPath($mediaDirectory));
+            $this->mediaDirectoryPath = str_replace('\\', '/', $file->getRealPath($mediaDirectory));
         }
         $this->configCacheFile = $configCacheFile;
         $this->relativeFileName = $relativeFileName;
@@ -145,7 +140,6 @@ class Media implements AppInterface
         $this->placeholderFactory = $placeholderFactory;
         $this->appState = $state;
         $this->imageResize = $imageResize;
-        $this->driver = $driver;
     }
 
     /**
