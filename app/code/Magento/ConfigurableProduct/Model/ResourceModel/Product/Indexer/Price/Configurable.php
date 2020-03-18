@@ -200,7 +200,7 @@ class Configurable implements DimensionalIndexerInterface
         );
 
         // Does not make sense to extend query if out of stock products won't appear in tables for indexing
-        if ($this->isConfigShowOutOfStock()) {
+        if (!$this->isConfigShowOutOfStock()) {
             $select->join(
                 ['si' => $this->getTable('cataloginventory_stock_item')],
                 'si.product_id = l.product_id',
