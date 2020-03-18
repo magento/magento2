@@ -156,17 +156,36 @@ class AsyncCssPluginTest extends TestCase
     }
 
     /**
+     * Data Provider for testBeforeSendResponseIfGetContentIsNotAString()
+     *
+     * @return array
+     */
+    public function ifGetContentIsNotAStringDataProvider(): array
+    {
+        return [
+            'empty_array' => [
+                'content' => []
+            ],
+            'null' => [
+                'content' => null
+            ]
+        ];
+    }
+
+    /**
      * Test BeforeSendResponse if content is not a string
      *
+     * @param string $content
      * @return void
+     * @dataProvider ifGetContentIsNotAStringDataProvider
      */
-    public function testIfGetContentIsNotAString(): void
+    public function testBeforeSendResponseIfGetContentIsNotAString($content): void
     {
         $this->httpMock->expects($this->once())
             ->method('getContent')
-            ->willReturn([]);
+            ->willReturn($content);
 
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfigMock->expects($this->never())
             ->method('isSetFlag')
             ->with(
                 self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH,
