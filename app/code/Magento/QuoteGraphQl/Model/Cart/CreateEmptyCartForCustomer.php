@@ -48,7 +48,7 @@ class CreateEmptyCartForCustomer
      */
     public function execute(int $customerId, string $predefinedMaskedQuoteId = null): string
     {
-        $cart = $this->cartResolver->provide($customerId, $predefinedMaskedQuoteId);
+        $cart = $this->cartResolver->resolve($customerId, $predefinedMaskedQuoteId);
         $quoteId = (int) $cart->getId();
 
         return $this->quoteIdToMaskedQuoteId->execute($quoteId);

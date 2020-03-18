@@ -59,7 +59,7 @@ class CustomerCartResolver
     }
 
     /**
-     * Get customer cart
+     * Get customer cart by customer id with predefined masked quote id
      *
      * @param int $customerId
      * @param string|null $predefinedMaskedQuoteId
@@ -67,7 +67,7 @@ class CustomerCartResolver
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function provide(int $customerId, string $predefinedMaskedQuoteId = null): Quote
+    public function resolve(int $customerId, string $predefinedMaskedQuoteId = null): Quote
     {
         try {
             /** @var Quote $cart */

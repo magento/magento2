@@ -123,7 +123,7 @@ class Reorder
         $customerId = (int)$order->getCustomerId();
         $this->errors = [];
 
-        $cart = $this->customerCartProvider->provide($customerId);
+        $cart = $this->customerCartProvider->resolve($customerId);
         if (!$this->reorderHelper->canReorder($order->getId())) {
             $this->addError(__('Reorder is not available.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
