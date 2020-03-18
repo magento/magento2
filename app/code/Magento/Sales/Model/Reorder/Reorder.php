@@ -192,7 +192,7 @@ class Reorder
     private function addError($message, string $code = null): void
     {
         $this->errors[] = new Data\Error(
-            $message,
+            (string)$message,
             $code ?? $this->getErrorCode((string)$message)
         );
     }
