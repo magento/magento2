@@ -28,6 +28,7 @@
                 <field key="firstname">John1</field>
                 <field key="lastname">Doe1</field>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Reset admin order filter -->
