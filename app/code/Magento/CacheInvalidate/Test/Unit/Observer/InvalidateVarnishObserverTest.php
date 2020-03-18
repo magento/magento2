@@ -3,49 +3,77 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
+use Magento\CacheInvalidate\Model\PurgeCache;
+use Magento\CacheInvalidate\Observer\InvalidateVarnishObserver;
+use Magento\Framework\App\Cache\Tag\Resolver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\Config;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InvalidateVarnishObserverTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test class for \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver
+ */
+class InvalidateVarnishObserverTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver */
-    protected $model;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer */
-    protected $observerMock;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Config */
-    protected $configMock;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
-    protected $purgeCache;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\ */
-    protected $observerObject;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Cache\Tag\Resolver */
-    private $tagResolver;
+    /**
+     * @var InvalidateVarnishObserver
+     */
+    private $model;
 
     /**
-     * Set up all mocks and data for test
+     * @var Config|MockObject
+     */
+    private $configMock;
+
+    /**
+     * @var PurgeCache|MockObject
+     */
+    private $purgeCacheMock;
+
+    /**
+     * @var Resolver|MockObject
+     */
+    private $tagResolverMock;
+
+    /**
+     * @var Observer|MockObject
+     */
+    private $observerMock;
+
+    /**
+     * @var Store|MockObject
+     */
+    private $observerObject;
+
+    /**
+     * @inheritDoc
      */
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
+        $this->purgeCacheMock = $this->createMock(PurgeCache::class);
+        $this->tagResolverMock = $this->createMock(Resolver::class);
 
-        $this->configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
-        $this->purgeCache = $this->createMock(\Magento\CacheInvalidate\Model\PurgeCache::class);
-        $this->model = new \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver(
-            $this->configMock,
-            $this->purgeCache
+        $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->observerObject = $this->createMock(Store::class);
+
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            InvalidateVarnishObserver::class,
+            [
+                'config' => $this->configMock,
+                'purgeCache' => $this->purgeCacheMock,
+                'tagResolver' => $this->tagResolverMock
+            ]
         );
-
-        $this->tagResolver = $this->createMock(\Magento\Framework\App\Cache\Tag\Resolver::class);
-        $helper->setBackwardCompatibleProperty($this->model, 'tagResolver', $this->tagResolver);
-
-        $this->observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
-        $this->observerObject = $this->createMock(\Magento\Store\Model\Store::class);
     }
 
     /**
@@ -56,21 +84,21 @@ class InvalidateVarnishObserverTest extends \PHPUnit\Framework\TestCase
         $tags = ['cache_1', 'cache_group'];
         $pattern = '((^|,)cache_1(,|$))|((^|,)cache_group(,|$))';
 
-        $this->configMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
+        )->willReturn(
+            Config::VARNISH
         );
 
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
-        $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($this->observerObject));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
-        $this->tagResolver->expects($this->once())->method('getTags')->with($this->observerObject)
-            ->will($this->returnValue($tags));
-        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with($pattern);
+        $eventMock = $this->createPartialMock(Event::class, ['getObject']);
+        $eventMock->expects($this->once())->method('getObject')->willReturn($this->observerObject);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $this->tagResolverMock->expects($this->once())->method('getTags')->with($this->observerObject)
+            ->willReturn($tags);
+        $this->purgeCacheMock->expects($this->once())->method('sendPurgeRequest')->with($pattern);
 
         $this->model->execute($this->observerMock);
     }
