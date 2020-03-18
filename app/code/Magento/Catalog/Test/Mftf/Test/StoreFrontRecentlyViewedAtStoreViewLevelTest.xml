@@ -17,8 +17,9 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-           <!--Create Simple Product and Category -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--Create Simple Product and Category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
                 <requiredEntity createDataKey="createCategory"/>
@@ -36,6 +37,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewOne">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store view-->
             <magentoCLI command="config:set {{RecentlyViewedProductScopeStore.path}} {{RecentlyViewedProductScopeStore.value}}" stepKey="RecentlyViewedProductScopeStore"/>
         </before>
@@ -62,28 +66,27 @@
             </actionGroup>
 
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeletion"/>
-
         </after>
 
-         <!--Create widget for recently viewed products-->
+        <!--Create widget for recently viewed products-->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContentBefore">
-              <argument name="content" value="{{CmsHomePageContent.content}}"/>
-              <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+            <argument name="content" value="{{CmsHomePageContent.content}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 
         <amOnPage url="{{AdminCmsPageEditPage.url(CmsHomePageContent.page_id)}}" stepKey="navigateToEditHomePagePage"/>
         <waitForPageLoad time="50" stepKey="waitForContentPageToLoad"/>
 
         <actionGroup ref="AdminInsertRecentlyViewedWidgetActionGroup" stepKey="insertRecentlyViewedWidget">
-            <argument name="attributeSelector1"  value="show_attributes"/>
-            <argument name="attributeSelector2"  value="show_buttons"/>
-            <argument name="productAttributeSection1"   value="1"/>
-            <argument name="productAttributeSection2"  value="4"/>
-            <argument name="buttonToShowSection1"   value="1"/>
-            <argument name="buttonToShowSection2"  value="3"/>
+            <argument name="attributeSelector1" value="show_attributes"/>
+            <argument name="attributeSelector2" value="show_buttons"/>
+            <argument name="productAttributeSection1" value="1"/>
+            <argument name="productAttributeSection2" value="4"/>
+            <argument name="buttonToShowSection1" value="1"/>
+            <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
 
         <!-- Warm up cache -->
@@ -96,7 +99,7 @@
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
         <waitForPageLoad time="30" stepKey="homeWaitForPageLoad"/>
 
-       <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
             <argument name="productPosition" value="2"/>
         </actionGroup>
@@ -105,7 +108,7 @@
             <argument name="productPosition" value="1"/>
         </actionGroup>
 
-       <!-- Switch store view -->
+        <!-- Switch store view -->
         <waitForPageLoad time="40" stepKey="waitForStorefrontPageLoad"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewActionGroup">
             <argument name="storeView" value="customStoreEN"/>
@@ -129,7 +132,7 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
-         <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertNotSeeProduct3"/>
+        <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertNotSeeProduct3"/>
 
         <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
 

@@ -10,10 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminEditCMSPageContentActionGroup">
         <arguments>
-            <argument name="content" type="string" />
-            <argument name="pageId" type="string" />
+            <argument name="content" type="string"/>
+            <argument name="pageId" type="string"/>
         </arguments>
-     <amOnPage url="{{AdminCmsPageEditPage.url(pageId)}}" stepKey="navigateToEditCMSPage"/>
+
+        <amOnPage url="{{AdminCmsPageEditPage.url(pageId)}}" stepKey="navigateToEditCMSPage"/>
         <waitForPageLoad stepKey="waitForCmsPageEditPage"/>
         <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickShowHideEditorIfVisible"/>
         <waitForElementVisible selector="{{CmsNewPagePageContentSection.content}}" stepKey="waitForContentField"/>
