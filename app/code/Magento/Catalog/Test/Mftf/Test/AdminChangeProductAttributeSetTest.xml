@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminChangeProductAttributeSet">
+    <test name="AdminChangeProductAttributeSetTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="The required product attribute is not displayed when change attribute set"/>
@@ -49,7 +49,7 @@
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
