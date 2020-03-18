@@ -39,9 +39,9 @@ class AsyncCssPlugin
      */
     public function beforeSendResponse(Http $subject): void
     {
-        $content = $subject->getContent();
+        $content = $subject->getContent() ?? '';
 
-        $headClose = '</head';
+        $headClose = '</head>';
 
         if (is_string($content) && strpos($content, $headClose) !== false && $this->scopeConfig->isSetFlag(
             self::XML_PATH_USE_CSS_CRITICAL_PATH,
