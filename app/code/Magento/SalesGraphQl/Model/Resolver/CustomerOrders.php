@@ -81,9 +81,11 @@ class CustomerOrders implements ResolverInterface
         $items = [];
 
         foreach (($searchResult->getItems() ?? []) as $order) {
-            if (!isset($order['model'])) {
+            if (!isset($order['model']) && !($order['model'] instanceof Order)) {
                 throw new LocalizedException(__('"model" value should be specified'));
             }
+            /** @var Order $orderModel */
+            $orderModel = $order['model'];
             $items[] = [
                 'created_at' => $order['created_at'],
                 'grand_total' => $order['grand_total'],
@@ -92,10 +94,9 @@ class CustomerOrders implements ResolverInterface
                 'number' => $order['increment_id'],
                 'order_date' => $order['created_at'],
                 'order_number' => $order['increment_id'],
-                'status' => $order['status'],
-                'model' => $order['model'],
-                'items' => ($order['model'] instanceof Order)
-                    ? $order['model']->getItems() : [],
+                'status' => $orderModel->getStatusLabel(),
+                'model' => $orderModel,
+                'items' => $orderModel->getItems(),
                 'totals' => [],
             ];
         }

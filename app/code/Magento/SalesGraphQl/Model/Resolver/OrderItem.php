@@ -28,14 +28,13 @@ class OrderItem implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-        if (!isset($value['model'])) {
+        if (!isset($value['model']) && !($value['model'] instanceof Order)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        $itemsFromOrder = $value['items'] ?? [];
         /** @var Order $order */
         $order = $value['model'];
         /** @var OrderItemInterface $item */
-        foreach ($itemsFromOrder as $key => $item) {
+        foreach ($value['items'] ?? [] as $key => $item) {
             $items[$key] = [
                 'parent_product_sku' => $item->getParentItem() ? $item->getParentItem()->getSku() : null,
                 'product_name' => $item->getName(),
