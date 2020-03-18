@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontTaxQuoteCheckoutGuestVirtual">
+    <test name="StorefrontTaxQuoteCheckoutGuestVirtualTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -41,6 +41,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -112,7 +114,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCheckoutLoggedInSimple">
+    <test name="StorefrontTaxQuoteCheckoutLoggedInSimpleTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -146,14 +148,7 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
-            <!-- Fill out form for a new user with address -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Simple_US_Customer_NY"/>
-            </actionGroup>
-
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
-                <argument name="Address" value="US_Address_NY"/>
-            </actionGroup>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -185,6 +180,15 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
         </after>
+
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+
+        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
         <amOnPage url="$$simpleProduct1.sku$$.html" stepKey="goToSimpleProductPage"/>
@@ -232,7 +236,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCheckoutGuestSimple">
+    <test name="StorefrontTaxQuoteCheckoutGuestSimpleTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -265,6 +269,8 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -347,7 +353,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCheckoutLoggedInVirtual">
+    <test name="StorefrontTaxQuoteCheckoutLoggedInVirtualTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -381,14 +387,7 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
-            <!-- Fill out form for a new user with address -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Simple_US_Customer_NY"/>
-            </actionGroup>
-
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
-                <argument name="Address" value="US_Address_NY"/>
-            </actionGroup>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -420,6 +419,15 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
         </after>
+
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+
+        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <argument name="Address" value="US_Address_NY"/>
+        </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
         <amOnPage url="$$virtualProduct1.sku$$.html" stepKey="goToVirtualProductPage"/>

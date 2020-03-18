@@ -28,7 +28,7 @@
             </createData>
             <!-- Create Customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Config PayPal Express Checkout-->
             <comment userInput="config PayPal Express Checkout" stepKey="commemtConfigPayPalExpressCheckout"/>
             <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
@@ -37,7 +37,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createPreReqCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createPreReqProduct"/>
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
