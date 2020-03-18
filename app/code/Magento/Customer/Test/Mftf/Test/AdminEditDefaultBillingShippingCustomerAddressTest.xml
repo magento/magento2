@@ -23,7 +23,7 @@
         </before>
         <after>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- -
         Step1. Login to admin and go to Customers > All Customers.

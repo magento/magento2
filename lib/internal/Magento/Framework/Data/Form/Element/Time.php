@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\Data\Form\Element;
+
+use Magento\Framework\Escaper;
+
 /**
  * Form time element
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Data\Form\Element;
-
-use Magento\Framework\Escaper;
-
 class Time extends AbstractElement
 {
     /**
@@ -32,7 +32,7 @@ class Time extends AbstractElement
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
     public function getName()
     {
@@ -44,7 +44,7 @@ class Time extends AbstractElement
     }
 
     /**
-     * @return string
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -76,7 +76,8 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
 
-        $html .= ':&nbsp;<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<span class="time-separator">:&nbsp;</span><select name="'
+            . $this->getName() . '" style="width:80px" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('minute') . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
@@ -86,7 +87,8 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
 
-        $html .= ':&nbsp;<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<span class="time-separator">:&nbsp;</span><select name="'
+            . $this->getName() . '" style="width:80px" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('second') . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {

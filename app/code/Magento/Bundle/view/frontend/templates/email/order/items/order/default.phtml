@@ -40,10 +40,10 @@
                 <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
             <td class="item-qty">
-                <?= $block->escapeHtml($_item->getQtyOrdered() * 1) ?>
+                <?= (float)$_item->getQtyOrdered() * 1 ?>
             </td>
             <td class="item-price">
-                <?= $block->escapeHtml($block->getItemPrice($_item)) ?>
+                <?= /* @noEscape */ $block->getItemPrice($_item) ?>
             </td>
         </tr>
     <?php else : ?>

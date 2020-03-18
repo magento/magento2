@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Exception;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -55,9 +56,63 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testAddVirtualProductToCartIfCartIdIsEmpty()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "",
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_items" is missing
+     */
+    public function testAddVirtualProductToCartIfCartItemsAreEmpty()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "cart_id",
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddVirtualToNonExistentCart()
@@ -74,7 +129,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a product with SKU "virtual_product"
      */
     public function testNonExistentProductToCart()

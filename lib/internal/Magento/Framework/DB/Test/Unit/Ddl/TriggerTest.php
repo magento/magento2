@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Ddl;
 
+/**
+ * Class TriggerTest
+ */
 class TriggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -47,7 +50,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNameWithSetName()
     {
-        $triggerName = 'TEST_TRIGGER_NAME' . mt_rand(100, 999);
+        $triggerName = 'TEST_TRIGGER_NAME' . random_int(100, 999);
 
         $this->_object->setName($triggerName);
         $this->assertEquals(strtolower($triggerName), $this->_object->getName());
@@ -101,7 +104,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNameWithException()
     {
-        $tableName = 'TEST_TABLE_NAME_' . mt_rand(100, 999);
+        $tableName = 'TEST_TABLE_NAME_' . random_int(100, 999);
         $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
 
         $this->_object->setTable($tableName)->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER)->setEvent($event);
@@ -117,7 +120,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTimeWithException()
     {
-        $tableName = 'TEST_TABLE_NAME_' . mt_rand(100, 999);
+        $tableName = 'TEST_TABLE_NAME_' . random_int(100, 999);
         $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
 
         $this->_object->setTable($tableName)->setEvent($event);
@@ -148,7 +151,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEventWithException()
     {
-        $tableName = 'TEST_TABLE_NAME_' . mt_rand(100, 999);
+        $tableName = 'TEST_TABLE_NAME_' . random_int(100, 999);
 
         $this->_object->setTable($tableName)->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER);
 

@@ -38,28 +38,28 @@ $prevOptionId = '';
         item-parent
     <?php endif; ?>"
     <?php if ($item->getParentItem()) : ?>
-        data-th="<?= $block->escapeHtml($attributes['option_label']); ?>"
+        data-th="<?= $block->escapeHtmlAttr($attributes['option_label']); ?>"
     <?php endif; ?>>
     <?php if (!$item->getParentItem()) : ?>
-        <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')); ?>">
+        <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
             <strong class="product name product-item-name"><?= $block->escapeHtml($item->getName()); ?></strong>
         </td>
     <?php else : ?>
-        <td class="col value" data-th="<?= $block->escapeHtml(__('Product Name')); ?>">
+        <td class="col value" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
             <?= $block->getValueHtml($item); ?>
         </td>
     <?php endif; ?>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')); ?>">
+    <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')); ?>">
         <?= /* @noEscape */ $block->prepareSku($item->getSku()); ?>
     </td>
-    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')); ?>">
+    <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')); ?>">
         <?php if (!$item->getParentItem()) : ?>
             <?= /* @noEscape */ $block->getItemPriceHtml(); ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Quantity')); ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Quantity')); ?>">
         <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
         (!$item->getParentItem() && !$block->isChildCalculated()) ||
         ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())) : ?>
@@ -105,7 +105,7 @@ $prevOptionId = '';
             </ul>
         <?php endif; ?>
     </td>
-    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+    <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
         <?php if (!$item->getParentItem()) : ?>
             <?= /* @noEscape */ $block->getItemRowTotalHtml(); ?>
         <?php else : ?>

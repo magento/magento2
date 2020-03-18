@@ -49,9 +49,9 @@ class DbStorage extends AbstractStorage
     private $logger;
 
     /**
-     * @param UrlRewriteFactory $urlRewriteFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param ResourceConnection $resource
+     * @param UrlRewriteFactory    $urlRewriteFactory
+     * @param DataObjectHelper     $dataObjectHelper
+     * @param ResourceConnection   $resource
      * @param LoggerInterface|null $logger
      */
     public function __construct(
@@ -71,7 +71,7 @@ class DbStorage extends AbstractStorage
     /**
      * Prepare select statement for specific filter
      *
-     * @param array $data
+     * @param  array $data
      * @return Select
      */
     protected function prepareSelect(array $data)
@@ -106,12 +106,14 @@ class DbStorage extends AbstractStorage
 
             $requestPath = $data[UrlRewrite::REQUEST_PATH];
             $decodedRequestPath = urldecode($requestPath);
-            $data[UrlRewrite::REQUEST_PATH] = array_unique([
+            $data[UrlRewrite::REQUEST_PATH] = array_unique(
+                [
                 rtrim($requestPath, '/'),
                 rtrim($requestPath, '/') . '/',
                 rtrim($decodedRequestPath, '/'),
                 rtrim($decodedRequestPath, '/') . '/',
-            ]);
+                ]
+            );
 
             $resultsFromDb = $this->connection->fetchAll($this->prepareSelect($data));
             if ($resultsFromDb) {
@@ -128,25 +130,30 @@ class DbStorage extends AbstractStorage
     /**
      * Extract most relevant url rewrite from url rewrites list
      *
-     * @param string $requestPath
-     * @param array $urlRewrites
+     * @param  string $requestPath
+     * @param  array  $urlRewrites
      * @return array|null
      */
     private function extractMostRelevantUrlRewrite(string $requestPath, array $urlRewrites): ?array
     {
         $prioritizedUrlRewrites = [];
         foreach ($urlRewrites as $urlRewrite) {
+            $urlRewriteRequestPath = $urlRewrite[UrlRewrite::REQUEST_PATH];
+            $urlRewriteTargetPath = $urlRewrite[UrlRewrite::TARGET_PATH];
             switch (true) {
-                case $urlRewrite[UrlRewrite::REQUEST_PATH] === $requestPath:
+                case rtrim($urlRewriteRequestPath, '/') === rtrim($urlRewriteTargetPath, '/'):
+                    $priority = 99;
+                    break;
+                case $urlRewriteRequestPath === $requestPath:
                     $priority = 1;
                     break;
-                case $urlRewrite[UrlRewrite::REQUEST_PATH] === urldecode($requestPath):
+                case $urlRewriteRequestPath === urldecode($requestPath):
                     $priority = 2;
                     break;
-                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim($requestPath, '/'):
+                case rtrim($urlRewriteRequestPath, '/') === rtrim($requestPath, '/'):
                     $priority = 3;
                     break;
-                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim(urldecode($requestPath), '/'):
+                case rtrim($urlRewriteRequestPath, '/') === rtrim(urldecode($requestPath), '/'):
                     $priority = 4;
                     break;
                 default:
@@ -166,8 +173,8 @@ class DbStorage extends AbstractStorage
      * If request path matches the DB value or it's redirect - we can return result from DB
      * Otherwise return 301 redirect to request path from DB results
      *
-     * @param string $requestPath
-     * @param array $urlRewrite
+     * @param  string $requestPath
+     * @param  array  $urlRewrite
      * @return array
      */
     private function prepareUrlRewrite(string $requestPath, array $urlRewrite): array
@@ -197,7 +204,7 @@ class DbStorage extends AbstractStorage
     /**
      * Delete old URLs from DB.
      *
-     * @param UrlRewrite[] $urls
+     * @param  UrlRewrite[] $urls
      * @return void
      */
     private function deleteOldUrls(array $urls): void
@@ -242,7 +249,7 @@ class DbStorage extends AbstractStorage
     /**
      * Prepare array with unique entities
      *
-     * @param UrlRewrite[] $urls
+     * @param  UrlRewrite[] $urls
      * @return array
      */
     private function prepareUniqueEntities(array $urls): array
@@ -258,23 +265,33 @@ class DbStorage extends AbstractStorage
             }
             $uniqueEntities[$url->getStoreId()][$url->getEntityType()] = $entityIds;
         }
+
         return $uniqueEntities;
     }
 
     /**
      * @inheritDoc
      */
-    protected function doReplace(array $urls)
+    protected function doReplace(array $urls): array
     {
-        $this->deleteOldUrls($urls);
+        $this->connection->beginTransaction();
 
-        $data = [];
-        foreach ($urls as $url) {
-            $data[] = $url->toArray();
-        }
         try {
+            $this->deleteOldUrls($urls);
+
+            $data = [];
+            foreach ($urls as $url) {
+                $data[] = $url->toArray();
+            }
+
             $this->insertMultiple($data);
+
+            $this->connection->commit();
+            // @codingStandardsIgnoreStart
         } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            // @codingStandardsIgnoreEnd
+            $this->connection->rollBack();
+
             /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
             $urlConflicted = [];
             foreach ($urls as $url) {
@@ -298,6 +315,9 @@ class DbStorage extends AbstractStorage
             } else {
                 throw $e->getPrevious() ?: $e;
             }
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
+            throw $e;
         }
 
         return $urls;
@@ -306,12 +326,12 @@ class DbStorage extends AbstractStorage
     /**
      * Insert multiple
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      * @throws \Exception
      */
-    protected function insertMultiple($data)
+    protected function insertMultiple($data): void
     {
         try {
             $this->connection->insertMultiple($this->resource->getTableName(self::TABLE_NAME), $data);
@@ -331,11 +351,11 @@ class DbStorage extends AbstractStorage
     /**
      * Get filter for url rows deletion due to provided urls
      *
-     * @param UrlRewrite[] $urls
-     * @return array
+     * @param      UrlRewrite[] $urls
+     * @return     array
      * @deprecated Not used anymore.
      */
-    protected function createFilterDataBasedOnUrls($urls)
+    protected function createFilterDataBasedOnUrls($urls): array
     {
         $data = [];
         foreach ($urls as $url) {

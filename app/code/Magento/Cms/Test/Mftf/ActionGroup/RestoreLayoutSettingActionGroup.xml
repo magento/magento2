@@ -7,9 +7,13 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="RestoreLayoutSetting">
-        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="waittForDefaultCMSLayout" after="expandDefaultLayouts" />
+        <annotations>
+            <description>Sets the 'Default Page Layout' to '1 column'. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="waittForDefaultCMSLayout" after="expandDefaultLayouts"/>
         <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="selectOneColumn" before="clickSaveConfig"/>
     </actionGroup>
 </actionGroups>

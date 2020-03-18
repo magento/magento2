@@ -11,6 +11,7 @@
     <entity name="ProductOptionField" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionField</data>
+        <data key="sku">OptionField</data>
         <data key="type">field</data>
         <data key="is_require">true</data>
         <data key="sort_order">1</data>
@@ -21,6 +22,7 @@
     <entity name="ProductOptionField2" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionField2</data>
+        <data key="sku">OptionField2</data>
         <data key="type">field</data>
         <data key="is_require">true</data>
         <data key="sort_order">1</data>
@@ -175,5 +177,11 @@
         <data key="sort_order">4</data>
         <data key="is_require">true</data>
         <requiredEntity type="product_option_value">ProductOptionPercentPriceValueDropdown</requiredEntity>
+    </entity>
+    <entity name="ProductOptionFieldSecond" extends="ProductOptionField">
+        <data key="title" unique="suffix">fifth option</data>
+    </entity>
+    <entity name="ProductOptionFileSecond" extends="ProductOptionFile">
+        <data key="title" unique="suffix">fourth option</data>
     </entity>
 </entities>

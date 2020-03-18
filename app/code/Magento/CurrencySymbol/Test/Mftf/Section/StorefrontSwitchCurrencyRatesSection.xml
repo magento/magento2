@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontSwitchCurrencyRatesSection">
+        <element name="currencyToggle" type="select" selector="#switcher-currency-trigger" timeout="30"/>
+        <element name="currency" type="button" selector="//div[@id='switcher-currency-trigger']/following-sibling::ul//a[contains(text(), '{{currency}}')]" parameterized="true" timeout="10"/>
+        <element name="selectedCurrency" type="text" selector="#switcher-currency-trigger span"/>
+    </section>
+</sections>

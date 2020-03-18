@@ -13,13 +13,29 @@ return [
                             'Magento_Customer::read',
                         ],
                         'secure' => false,
+                        'realMethod' => 'getById',
+                        'parameters' => []
                     ],
                     'save' => [
                         'resources' => [
-                            'Magento_Customer::customer_self',
                             'Magento_Customer::manage'
                         ],
+                        'secure' => false,
+                        'realMethod' => 'save',
+                        'parameters' => []
+                    ],
+                    'saveSelf' => [
+                        'resources' => [
+                            'Magento_Customer::customer_self'
+                        ],
                         'secure' => true,
+                        'realMethod' => 'save',
+                        'parameters' => [
+                            'id' => [
+                                'force' => false,
+                                'value' => null,
+                            ],
+                        ],
                     ],
                     'deleteById' => [
                         'resources' => [
@@ -27,6 +43,8 @@ return [
                             'Magento_Customer::delete',
                         ],
                         'secure' => false,
+                        'realMethod' => 'deleteById',
+                        'parameters' => []
                     ],
                 ],
             ],

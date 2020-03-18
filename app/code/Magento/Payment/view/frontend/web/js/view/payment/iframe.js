@@ -125,12 +125,7 @@ define([
                 this.isPlaceOrderActionAllowed(false);
 
                 $.when(
-                    setPaymentInformationAction(
-                        this.messageContainer,
-                        {
-                            method: this.getCode()
-                        }
-                    )
+                    this.setPaymentInformation()
                 ).done(
                     this.done.bind(this)
                 ).fail(
@@ -143,6 +138,18 @@ define([
 
                 this.initTimeoutHandler();
             }
+        },
+
+        /**
+         * {Function}
+         */
+        setPaymentInformation: function () {
+            return setPaymentInformationAction(
+                this.messageContainer,
+                {
+                    method: this.getCode()
+                }
+            );
         },
 
         /**

@@ -57,7 +57,4 @@
     <event name="customer_logout">
         <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
     </event>
-    <event name="maintenance_mode_changed">
-        <observer name="page_cache_switcher_for_maintenance" instance="Magento\PageCache\Observer\SwitchPageCacheOnMaintenance"/>
-    </event>
 </config>
