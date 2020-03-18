@@ -1,65 +1,43 @@
 <?php
-
 /**
- * Import entity of bundle product type
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Bundle\Model\Product\Price as BundlePrice;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as CatalogImportExportAbstractType;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Bundle
+ * Import entity of bundle product type
  *
- * @package Magento\BundleImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+class Bundle extends CatalogImportExportAbstractType
 {
-
-    /**
-     * Delimiter before product option value.
-     */
     const BEFORE_OPTION_VALUE_DELIMITER = ';';
 
-    /**
-     * Pair value separator.
-     */
     const PAIR_VALUE_SEPARATOR = '=';
 
-    /**
-     * Dynamic value.
-     */
     const VALUE_DYNAMIC = 'dynamic';
 
-    /**
-     * Fixed value.
-     */
     const VALUE_FIXED = 'fixed';
 
-    /**
-     * Not fixed dynamic attribute.
-     */
     const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
 
-    /**
-     * Selection price type fixed.
-     */
     const SELECTION_PRICE_TYPE_FIXED = 0;
 
-    /**
-     * Selection price type percent.
-     */
     const SELECTION_PRICE_TYPE_PERCENT = 1;
 
     /**
@@ -210,7 +188,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
                 $this->_cachedSkus[] = $option['sku'];
                 if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
-                    $this->_cachedOptions[$entityId][$option['name']] = [];
                     $this->_cachedOptions[$entityId][$option['name']] = $option;
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
@@ -363,7 +340,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Retrieve mapping between skus and products.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function retrieveProductsByCachedSkus()
     {
@@ -382,11 +359,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Save product type specific data.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     public function saveData()
     {
-        if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
+        if ($this->_entityModel->getBehavior() == Import::BEHAVIOR_DELETE) {
             $productIds = [];
             $newSku = $this->_entityModel->getNewSku();
             while ($bunch = $this->_entityModel->getNextBunch()) {
@@ -486,7 +463,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Populates existing options.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function populateExistingOptions()
     {
@@ -519,7 +496,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @param array $existingOptions
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function populateExistingSelections($existingOptions)
     {
@@ -560,7 +537,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Insert options.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function insertOptions()
     {
@@ -616,6 +593,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($assoc['position'] == $this->_cachedOptions[$entityId][$key]['index']
                         && $assoc['parent_id'] == $entityId) {
                         $option['parent_id'] = $entityId;
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                         $optionValues = array_merge(
                             $optionValues,
                             $this->populateOptionValueTemplate($option, $optionId)
@@ -633,7 +611,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Insert selections.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function insertSelections()
     {
@@ -667,7 +645,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Insert parent/child product relations
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     private function insertParentChildRelations()
     {
@@ -675,10 +653,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $childIds = [];
             foreach ($options as $option) {
                 foreach ($option['selections'] as $selection) {
-                    if (!isset($selection['parent_product_id'])) {
-                        if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
-                            continue;
-                        }
+                    if (isset($this->_cachedSkuToProducts[$selection['sku']])) {
                         $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
                     }
                 }
@@ -717,6 +692,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
+
+        return $this;
     }
 
     /**
@@ -724,7 +701,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @param array $productIds
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function deleteOptionsAndSelections($productIds)
     {
@@ -764,7 +741,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Clear cached values between bunches
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function clear()
     {
@@ -784,7 +761,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private function getStoreIdByCode(string $storeCode): int
     {
         if (!isset($this->storeCodeToId[$storeCode])) {
-            /** @var $store \Magento\Store\Model\Store */
+            /** @var $store Store */
             foreach ($this->storeManager->getStores() as $store) {
                 $this->storeCodeToId[$store->getCode()] = $store->getId();
             }
