@@ -19,35 +19,48 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
+                <argument name="role" value="genericAdminRole"/>
+                <argument name="user" value="dutchActiveAdmin"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
         </before>
         <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
                 <argument name="user" value="dutchActiveAdmin"/>
             </actionGroup>
+
+            <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="TestSalesRule"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
         </after>
+
+        <!-- Step 0. Generate dates, this cannot be done in before section. -->
 
         <generateDate date="now" format="m/j/Y" timezone="America/Los_Angeles" stepKey="today"/>
         <generateDate date="now" format="d-m-Y" timezone="America/Los_Angeles" stepKey="todayNL"/>
         <generateDate date="+1 days" format="m/j/Y" timezone="America/Los_Angeles" stepKey="tomorrow"/>
         <generateDate date="+1 days" format="d-m-Y" timezone="America/Los_Angeles" stepKey="tomorrowNL"/>
 
-        <!-- Step 1. Create cart price rule in en_US admin locale -->
+        <!-- Step 1. Log in as main admin -->
+
+        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
+        <!-- Step 2. Create cart price rule in en_US admin locale. -->
 
         <actionGroup ref="AdminCreateCartPriceRuleWithFromDateActionGroup" stepKey="createCartPriceRule">
             <argument name="ruleName" value="TestSalesRule"/>
             <argument name="fromDate" value="$today"/>
         </actionGroup>
 
-        <!-- Step 2. Create the Dutch -->
-
-        <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
-            <argument name="role" value="genericAdminRole"/>
-            <argument name="user" value="dutchActiveAdmin"/>
-        </actionGroup>
-
-        <!-- Step 3. Log in as the Dutch. -->
+        <!-- Step 3. Log in as Dutch admin. -->
 
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDutchAdmin">
