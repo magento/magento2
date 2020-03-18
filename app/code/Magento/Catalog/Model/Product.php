@@ -1528,7 +1528,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasData('media_gallery_images')) {
             $this->setData('media_gallery_images', $this->_collectionFactory->create());
         }
-        if (!$this->getData('media_gallery_images')->count() && is_array($this->getMediaGallery('images'))) {
+        if (!is_array($this->getData('media_gallery_images')) && is_array($this->getMediaGallery('images'))) {
             $images = $this->getData('media_gallery_images');
             foreach ($this->getMediaGallery('images') as $image) {
                 if (!empty($image['disabled'])
