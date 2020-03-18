@@ -25,7 +25,7 @@
             <createData entity="SimpleProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
-
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>

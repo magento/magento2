@@ -77,6 +77,7 @@
             <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
                 <field key="group_id">1</field>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
         <after>
