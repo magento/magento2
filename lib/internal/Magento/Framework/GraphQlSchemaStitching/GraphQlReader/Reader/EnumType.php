@@ -23,13 +23,14 @@ class EnumType implements TypeMetaReaderInterface
     /**
      * @param DocReader $docReader
      */
-    public function __construct(DocReader $docReader)
-    {
+    public function __construct(
+        DocReader $docReader
+    ) {
         $this->docReader = $docReader;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -42,7 +43,9 @@ class EnumType implements TypeMetaReaderInterface
             foreach ($typeMeta->getValues() as $enumValueMeta) {
                 $result['items'][$enumValueMeta->value] = [
                     'name' => strtolower($enumValueMeta->name),
-                    '_value' => $enumValueMeta->value
+                    '_value' => $enumValueMeta->value,
+                    'description' => $enumValueMeta->description,
+                    'deprecationReason' =>$enumValueMeta->deprecationReason
                 ];
 
                 if ($this->docReader->read($enumValueMeta->astNode->directives)) {
@@ -56,6 +59,7 @@ class EnumType implements TypeMetaReaderInterface
             }
 
             return $result;
+
         } else {
             return [];
         }

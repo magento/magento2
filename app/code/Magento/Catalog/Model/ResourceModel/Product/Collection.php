@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -11,6 +12,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -191,7 +193,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager = null;
 
@@ -303,6 +305,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $urlFinder;
 
     /**
+     * @var Category
+     */
+    private $categoryResourceModel;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -315,7 +322,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -330,6 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     * @param Category|null $categoryResourceModel
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -344,7 +352,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -358,7 +366,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null
+        DimensionFactory $dimensionFactory = null,
+        Category $categoryResourceModel = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -392,6 +401,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
+        $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()
+            ->get(Category::class);
     }
 
     /**
@@ -1584,6 +1595,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         } else {
             return parent::addAttributeToFilter($attribute, $condition, $joinType);
         }
+
+        return $this;
     }
 
     /**
@@ -1673,7 +1686,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function setVisibility($visibility)
     {
         $this->_productLimitationFilters['visibility'] = $visibility;
-        $this->_applyProductLimitations();
+        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
+            $this->addAttributeToFilter('visibility', $visibility);
+        } else {
+            $this->_applyProductLimitations();
+        }
 
         return $this;
     }
@@ -1887,6 +1904,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @param bool $joinLeft
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _productLimitationPrice($joinLeft = false)
     {
@@ -1905,14 +1923,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $connection = $this->getConnection();
         $select = $this->getSelect();
-        $joinCond = join(
-            ' AND ',
-            [
-                'price_index.entity_id = e.entity_id',
-                $connection->quoteInto('price_index.website_id = ?', $filters['website_id']),
-                $connection->quoteInto('price_index.customer_group_id = ?', $filters['customer_group_id'])
-            ]
-        );
+        $joinCondArray = [];
+        $joinCondArray[] = 'price_index.entity_id = e.entity_id';
+        $joinCondArray[] = $connection->quoteInto('price_index.customer_group_id = ?', $filters['customer_group_id']);
+        // Add website condition only if it's different from admin scope
+        if (((int) $filters['website_id']) !== Store::DEFAULT_STORE_ID) {
+            $joinCondArray[] = $connection->quoteInto('price_index.website_id = ?', $filters['website_id']);
+        }
+        $joinCond = join(' AND ', $joinCondArray);
 
         $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset($fromPart['price_index'])) {
@@ -2053,12 +2071,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _applyZeroStoreProductLimitations()
     {
         $filters = $this->_productLimitationFilters;
+        $categories = $this->getChildrenCategories((int)$filters['category_id']);
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
             $this->getConnection()->quoteInto(
-                'cat_pro.category_id=?',
-                $filters['category_id']
+                'cat_pro.category_id IN (?)',
+                $categories
             ),
         ];
         $joinCond = join(' AND ', $conditions);
@@ -2077,6 +2096,42 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'position'];
 
         return $this;
+    }
+
+    /**
+     * Get children categories.
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    private function getChildrenCategories(int $categoryId): array
+    {
+        $categoryIds[] = $categoryId;
+        $anchorCategory = [];
+
+        $categories = $this->categoryResourceModel->getCategoryWithChildren($categoryId);
+        if (empty($categories)) {
+            return $categoryIds;
+        }
+
+        $firstCategory = array_shift($categories);
+        if ($firstCategory['is_anchor'] == 1) {
+            $linkField = $this->getProductEntityMetadata()->getLinkField();
+            $anchorCategory[] = (int)$firstCategory[$linkField];
+            foreach ($categories as $category) {
+                if (in_array($category['parent_id'], $categoryIds)
+                    && in_array($category['parent_id'], $anchorCategory)) {
+                    $categoryIds[] = (int)$category[$linkField];
+                    // Storefront approach is to treat non-anchor children of anchor category as anchors.
+                    // Adding their's IDs to $anchorCategory for consistency.
+                    if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategory)) {
+                        $anchorCategory[] = (int)$category[$linkField];
+                    }
+                }
+            }
+        }
+
+        return $categoryIds;
     }
 
     /**
@@ -2282,49 +2337,35 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function addMediaGalleryData()
     {
         if ($this->getFlag('media_gallery_added')) {
             return $this;
         }
-
         if (!$this->getSize()) {
             return $this;
         }
-
-        $items = $this->getItems();
-        $linkField = $this->getProductEntityMetadata()->getLinkField();
-
-        $select = $this->getMediaGalleryResource()
-            ->createBatchBaseSelect(
-                $this->getStoreId(),
-                $this->getAttribute('media_gallery')->getAttributeId()
-            )->reset(
-                Select::ORDER // we don't care what order is in current scenario
-            )->where(
-                'entity.' . $linkField . ' IN (?)',
-                array_map(
-                    function ($item) use ($linkField) {
-                        return (int) $item->getOrigData($linkField);
-                    },
-                    $items
-                )
-            );
-
+        if (!$this->isLoaded()) {
+            $this->load();
+        }
+        $records = $this->getMediaGalleryResource()->getMediaRecords(
+            $this->getStoreId(),
+            $this->getLoadedIds()
+        );
         $mediaGalleries = [];
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $mediaGalleries[$row[$linkField]][] = $row;
+        foreach ($records as $record) {
+            $mediaGalleries[$record['entity_id']][] = $record;
         }
 
-        foreach ($items as $item) {
+        foreach ($this->getItems() as $item) {
             $this->getGalleryReadHandler()
                 ->addMediaDataToProduct(
                     $item,
-                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
+                    $mediaGalleries[$item->getId()] ?? []
                 );
         }
-
         $this->setFlag('media_gallery_added', true);
         return $this;
     }
@@ -2468,10 +2509,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add is_saleable attribute to filter
      *
-     * @param array|null $condition
+     * @param mixed $condition
      * @return $this
      */
-    private function addIsSaleableAttributeToFilter(?array $condition): self
+    private function addIsSaleableAttributeToFilter($condition): self
     {
         $columns = $this->getSelect()->getPart(Select::COLUMNS);
         foreach ($columns as $columnEntry) {
@@ -2499,10 +2540,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add tier price attribute to filter
      *
      * @param string $attribute
-     * @param array|null $condition
+     * @param mixed $condition
      * @return $this
      */
-    private function addTierPriceAttributeToFilter(string $attribute, ?array $condition): self
+    private function addTierPriceAttributeToFilter(string $attribute, $condition): self
     {
         $attrCode = $attribute;
         $connection = $this->getConnection();

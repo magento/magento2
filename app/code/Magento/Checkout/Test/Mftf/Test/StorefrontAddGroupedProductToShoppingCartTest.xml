@@ -15,9 +15,6 @@
             <testCaseId value="MC-14718"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
 
         <before>
@@ -67,7 +64,7 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Product1 items in cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSimpleProduct1ItemsInCheckOutCart">

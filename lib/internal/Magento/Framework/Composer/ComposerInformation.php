@@ -150,6 +150,7 @@ class ComposerInformation
             /** @var CompletePackageInterface $package */
             foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $allPlatformReqs = array_merge($allPlatformReqs, $requires);
             }
         }

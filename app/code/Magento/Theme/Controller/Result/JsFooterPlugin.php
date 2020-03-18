@@ -41,7 +41,7 @@ class JsFooterPlugin
     {
         $content = $subject->getContent();
         $script = [];
-        if (strpos($content, '</body') !== false) {
+        if (is_string($content) && strpos($content, '</body') !== false) {
             if ($this->scopeConfig->isSetFlag(
                 self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
                 ScopeInterface::SCOPE_STORE

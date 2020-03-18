@@ -29,7 +29,6 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('quoted-printable', $part->getEncoding());
         $this->assertEquals('utf-8', $part->getCharset());
         $this->assertEquals('body', $part->getContent());
-        $this->assertEquals('inline', $part->getDisposition());
     }
 
     public function testSetBodyText()
@@ -41,6 +40,5 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('quoted-printable', $part->getEncoding());
         $this->assertEquals('utf-8', $part->getCharset());
         $this->assertEquals('body', $part->getContent());
-        $this->assertEquals('inline', $part->getDisposition());
     }
 }

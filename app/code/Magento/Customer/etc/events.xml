@@ -15,4 +15,7 @@
     <event name="sales_quote_save_after">
         <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindQuoteCreateObserver" />
     </event>
+    <event name="customer_save_after_data_object">
+        <observer name="upgrade_quote_customer_email" instance="Magento\Customer\Observer\UpgradeQuoteCustomerEmailObserver"/>
+    </event>
 </config>

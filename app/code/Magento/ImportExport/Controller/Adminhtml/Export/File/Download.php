@@ -10,7 +10,6 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
@@ -55,12 +54,17 @@ class Download extends ExportController implements HttpGetActionInterface
      * Controller basic method implementation.
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws LocalizedException
      */
     public function execute()
     {
-        if (empty($fileName = $this->getRequest()->getParam('filename'))) {
-            throw new LocalizedException(__('Please provide export file name'));
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('adminhtml/export/index');
+        $fileName = $this->getRequest()->getParam('filename');
+        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+            return $resultRedirect;
         }
         try {
             $path = 'export/' . $fileName;
@@ -72,9 +76,11 @@ class Download extends ExportController implements HttpGetActionInterface
                     DirectoryList::VAR_DIR
                 );
             }
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
-        } catch (LocalizedException | \Exception $exception) {
-            throw new LocalizedException(__('There are no export file with such name %1', $fileName));
+            $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
+        } catch (\Exception $exception) {
+            $this->messageManager->addErrorMessage($exception->getMessage());
         }
+
+        return $resultRedirect;
     }
 }

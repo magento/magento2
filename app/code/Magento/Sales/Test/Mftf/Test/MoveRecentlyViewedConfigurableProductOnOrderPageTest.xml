@@ -57,10 +57,12 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct"/>
             </createData>
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
         </before>
         <after>
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Customer logout -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -75,6 +77,12 @@
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 0" stepKey="disableReportModule"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Login as customer -->

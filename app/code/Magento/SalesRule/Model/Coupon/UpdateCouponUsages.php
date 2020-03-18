@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon;
 
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
@@ -59,11 +59,11 @@ class UpdateCouponUsages
     /**
      * Executes the current command.
      *
-     * @param Order $subject
+     * @param OrderInterface $subject
      * @param bool $increment
-     * @return Order
+     * @return OrderInterface
      */
-    public function execute(Order $subject, bool $increment): Order
+    public function execute(OrderInterface $subject, bool $increment): OrderInterface
     {
         if (!$subject || !$subject->getAppliedRuleIds()) {
             return $subject;
@@ -133,11 +133,11 @@ class UpdateCouponUsages
     /**
      * Update the number of coupon usages.
      *
-     * @param Order $subject
+     * @param OrderInterface $subject
      * @param bool $increment
      * @param int $customerId
      */
-    private function updateCouponUsages(Order $subject, bool $increment, int $customerId): void
+    private function updateCouponUsages(OrderInterface $subject, bool $increment, int $customerId): void
     {
         $this->coupon->load($subject->getCouponCode(), 'code');
         if ($this->coupon->getId()) {

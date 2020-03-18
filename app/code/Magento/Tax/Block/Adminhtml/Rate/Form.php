@@ -9,6 +9,8 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -209,7 +211,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'zip_is_range',
             'checkbox',
-            ['name' => 'zip_is_range', 'label' => __('Zip/Post is Range'), 'value' => '1']
+            [
+                'name' => 'zip_is_range',
+                'label' => __('Zip/Post is Range'),
+                'value' => '1',
+                'class' => 'zip-is-range-checkbox'
+            ]
         );
 
         if (!isset($formData['tax_postcode'])) {
@@ -228,7 +235,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'note' => __(
                     "'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %1.",
                     $this->_taxData->getPostCodeSubStringLength()
-                )
+                ),
+                'class' => 'validate-length maximum-length-' . $this->_taxData->getPostCodeSubStringLength()
             ]
         );
 

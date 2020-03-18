@@ -21,7 +21,7 @@ namespace Magento\Framework\App\Helper;
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
@@ -79,7 +79,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\Cache\ConfigInterface $cacheConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -94,7 +94,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\App\RequestInterface $httpRequest,
         \Magento\Framework\Cache\ConfigInterface $cacheConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -119,7 +119,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     /**
      * Get module manager.
      *
-     * @return \Magento\Framework\Module\ModuleManagerInterface
+     * @return \Magento\Framework\Module\Manager
      */
     public function getModuleManager()
     {

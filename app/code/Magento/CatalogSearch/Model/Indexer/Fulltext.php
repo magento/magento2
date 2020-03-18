@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
+use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
@@ -79,6 +82,7 @@ class Fulltext implements
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
      * @param ProcessManager $processManager
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -95,11 +99,9 @@ class Fulltext implements
         $this->fulltextResource = $fulltextResource;
         $this->data = $data;
         $this->indexSwitcher = $indexSwitcher;
-        $this->indexScopeState = $indexScopeStateFactory->create();
+        $this->indexScopeState = ObjectManager::getInstance()->get(State::class);
         $this->dimensionProvider = $dimensionProvider;
-        $this->processManager = $processManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            ProcessManager::class
-        );
+        $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
     }
 
     /**
@@ -127,9 +129,11 @@ class Fulltext implements
             throw new \InvalidArgumentException('Indexer "' . self::INDEXER_ID . '" support only Store dimension');
         }
         $storeId = $dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
-        $saveHandler = $this->indexerHandlerFactory->create([
-            'data' => $this->data
-        ]);
+        $saveHandler = $this->indexerHandlerFactory->create(
+            [
+                'data' => $this->data,
+            ]
+        );
 
         if (null === $entityIds) {
             $this->indexScopeState->useTemporaryIndex();
