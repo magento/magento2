@@ -11,7 +11,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Cart\CustomerCartProvider;
+use Magento\Quote\Model\Cart\CustomerCartResolver;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
@@ -73,13 +73,13 @@ class Reorder
     private $errors = [];
 
     /**
-     * @var CustomerCartProvider
+     * @var CustomerCartResolver
      */
     private $customerCartProvider;
 
     /**
      * @param OrderFactory $orderFactory
-     * @param CustomerCartProvider $customerCartProvider
+     * @param CustomerCartResolver $customerCartProvider
      * @param CartRepositoryInterface $cartRepository
      * @param ProductRepositoryInterface $productRepository
      * @param ReorderHelper $reorderHelper
@@ -87,7 +87,7 @@ class Reorder
      */
     public function __construct(
         OrderFactory $orderFactory,
-        CustomerCartProvider $customerCartProvider,
+        CustomerCartResolver $customerCartProvider,
         CartRepositoryInterface $cartRepository,
         ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,

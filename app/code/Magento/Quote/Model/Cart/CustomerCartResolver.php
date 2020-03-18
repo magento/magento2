@@ -18,7 +18,7 @@ use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceMo
 /**
  * Get customer cart or create empty cart. Ensure mask_id is created
  */
-class CustomerCartProvider
+class CustomerCartResolver
 {
     /**
      * @var CartManagementInterface
@@ -62,11 +62,12 @@ class CustomerCartProvider
      * Get customer cart
      *
      * @param int $customerId
+     * @param string|null $predefinedMaskedQuoteId
      * @return Quote
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function provide(int $customerId): Quote
+    public function provide(int $customerId, string $predefinedMaskedQuoteId = null): Quote
     {
         try {
             /** @var Quote $cart */
@@ -76,7 +77,7 @@ class CustomerCartProvider
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         }
         try {
-            $this->ensureQuoteMaskIdExist((int)$cart->getId());
+            $this->ensureQuoteMaskIdExist((int)$cart->getId(), $predefinedMaskedQuoteId);
         } catch (AlreadyExistsException $e) {
             // do nothing, we already have masked id
         }
@@ -88,10 +89,11 @@ class CustomerCartProvider
      * Create masked id for customer's active quote if it's not exists
      *
      * @param int $quoteId
+     * @param string|null $predefinedMaskedQuoteId
      * @return void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
-    private function ensureQuoteMaskIdExist(int $quoteId): void
+    private function ensureQuoteMaskIdExist(int $quoteId, string $predefinedMaskedQuoteId = null): void
     {
         try {
             $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
@@ -101,6 +103,9 @@ class CustomerCartProvider
         if ($maskedId === '') {
             $quoteIdMask = $this->quoteIdMaskFactory->create();
             $quoteIdMask->setQuoteId($quoteId);
+            if (null !== $predefinedMaskedQuoteId) {
+                $quoteIdMask->setMaskedId($predefinedMaskedQuoteId);
+            }
             $this->quoteIdMaskResourceModel->save($quoteIdMask);
         }
     }
