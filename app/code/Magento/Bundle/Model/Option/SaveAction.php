@@ -102,7 +102,7 @@ class SaveAction
             }
         } else {
             if (!$existingOption->getOptionId()) {
-                throw new NoSuchEntityException(
+                throw new \Magento\Framework\Exception\NoSuchEntityException(
                     __("The option that was requested doesn't exist. Verify the entity and try again.")
                 );
             }

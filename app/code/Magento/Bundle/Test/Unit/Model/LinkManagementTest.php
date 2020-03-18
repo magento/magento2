@@ -11,7 +11,7 @@ use Magento\Bundle\Model\LinkManagement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class LinkManagementTest
+ * Unit Test for Link Management Model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -121,7 +121,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type\Interceptor::class)
+        $this->productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->setMethods(['getOptionsCollection', 'setStoreFilter', 'getSelectionsCollection', 'getOptionsIds'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -105,6 +105,6 @@ class Selection extends \Magento\Framework\Model\AbstractModel
                 $this->unsSelectionPriceType();
             }
         }
-        parent::afterSave();
+        return parent::afterSave();
     }
 }

@@ -55,6 +55,11 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     private $metadataPool;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
      * @param \Magento\Bundle\Model\SelectionFactory $bundleSelection
@@ -82,7 +87,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getChildren($productSku, $optionId = null)
     {
@@ -105,7 +110,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
@@ -115,7 +120,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -169,6 +175,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
+     * Map data from the product link object to the new selection model
+     *
      * @param \Magento\Bundle\Model\Selection $selectionModel
      * @param \Magento\Bundle\Api\Data\LinkInterface $productLink
      * @param string $linkedProductId
@@ -217,7 +225,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
@@ -297,7 +306,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function removeChild($sku, $optionId, $childSku)
     {
@@ -336,6 +345,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
+     * Build new Link object from the product and selection
+     *
      * @param \Magento\Catalog\Model\Product $selection
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Bundle\Api\Data\LinkInterface
@@ -367,6 +378,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     }
 
     /**
+     * Retrieve bundle options with selections
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      */
@@ -392,6 +405,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * Get MetadataPool instance
+     *
      * @return MetadataPool
      */
     private function getMetadataPool()
