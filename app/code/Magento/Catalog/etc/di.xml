@@ -1333,4 +1333,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Catalog\Cron\RefreshSpecialPrices">
+        <arguments>
+            <argument name="productIndexer" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
+        </arguments>
+    </type>
 </config>

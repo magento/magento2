@@ -3,26 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
-class ConfigurationPoolTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ConfigurationPoolTest extends TestCase
 {
-    /**
-     * @var array
-     */
-    protected $instancesType;
+    const INSTANCES_TYPE = ['simple' => 'simple', 'default' => 'default'];
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ConfigurationPool
+     * @var ConfigurationPool
      */
-    protected $model;
+    private $model;
 
     protected function setUp()
     {
-        $this->instancesType = ['simple' => 'simple', 'default' => 'default'];
+        $objectManager = new ObjectManager($this);
 
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->model = new \Magento\Catalog\Helper\Product\ConfigurationPool($objectManagerMock, $this->instancesType);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->model = $objectManager->getObject(
+            ConfigurationPool::class,
+            [
+                'objectManager' => $objectManagerMock,
+                'instancesByType' => static::INSTANCES_TYPE
+            ]
+        );
     }
 
     /**

@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\CustomerData;
 
+use Magento\Catalog\Helper\Output;
+use Magento\Catalog\Helper\Product\Compare;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Url;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog Product Compare Widget
@@ -16,51 +22,50 @@ use Magento\Framework\Exception\LocalizedException;
 class CompareProducts implements SectionSourceInterface
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\Compare
+     * @var Compare
      */
-    protected $helper;
+    private $helper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Url
+     * @var Url
      */
-    protected $productUrl;
+    private $productUrl;
 
     /**
-     * @var \Magento\Catalog\Helper\Output
+     * @var Output
      */
     private $outputHelper;
 
     /**
-     * Core store config
-     *
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Compare $helper
-     * @param \Magento\Catalog\Model\Product\Url $productUrl
-     * @param \Magento\Catalog\Helper\Output $outputHelper
-     * @param ScopeConfigInterface|null $scopeConfig
+     * @param Compare $helper
+     * @param Url $productUrl
+     * @param Output $outputHelper
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Compare $helper,
-        \Magento\Catalog\Model\Product\Url $productUrl,
-        \Magento\Catalog\Helper\Output $outputHelper,
-        ?ScopeConfigInterface $scopeConfig = null
+        Compare $helper,
+        Url $productUrl,
+        Output $outputHelper,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->helper = $helper;
         $this->productUrl = $productUrl;
         $this->outputHelper = $outputHelper;
-        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getSectionData()
     {
         $count = $this->helper->getItemCount();
+
         return [
             'count' => $count,
             'countCaption' => $count == 1 ? __('1 item') : __('%1 items', $count),
@@ -80,9 +85,9 @@ class CompareProducts implements SectionSourceInterface
         $items = [];
         $productsScope = $this->scopeConfig->getValue(
             'catalog/recently_products/scope',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+            ScopeInterface::SCOPE_WEBSITE
         );
-        /** @var \Magento\Catalog\Model\Product $item */
+        /** @var Product $item */
         foreach ($this->helper->getItemCollection() as $item) {
             $items[] = [
                 'id' => $item->getId(),

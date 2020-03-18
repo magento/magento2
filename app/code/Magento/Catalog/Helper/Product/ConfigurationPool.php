@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * @api
  * @since 100.0.2
@@ -12,25 +15,25 @@ namespace Magento\Catalog\Helper\Product;
 class ConfigurationPool
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface[]
-     */
-    private $_instances = [];
-
-    /**
      * @var array
      */
-    private $instancesByType = [];
+    private $instancesByType;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @var ConfigurationInterface[]
+     */
+    private $instances = [];
+
+    /**
+     * @param ObjectManagerInterface $objectManager
      * @param array $instancesByType
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $instancesByType)
+    public function __construct(ObjectManagerInterface $objectManager, array $instancesByType)
     {
         $this->_objectManager = $objectManager;
         $this->instancesByType = $instancesByType;
@@ -43,20 +46,20 @@ class ConfigurationPool
      */
     public function get($className)
     {
-        if (!isset($this->_instances[$className])) {
-            /** @var \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface $helperInstance */
+        if (!isset($this->instances[$className])) {
+            /** @var ConfigurationInterface $helperInstance */
             $helperInstance = $this->_objectManager->get($className);
             if (false ===
-                $helperInstance instanceof \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+                $helperInstance instanceof ConfigurationInterface
             ) {
                 throw new \LogicException(
                     "{$className} doesn't implement " .
-                    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface::class
+                    ConfigurationInterface::class
                 );
             }
-            $this->_instances[$className] = $helperInstance;
+            $this->instances[$className] = $helperInstance;
         }
-        return $this->_instances[$className];
+        return $this->instances[$className];
     }
 
     /**

@@ -3,49 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Cron;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Cron used to refresh special prices
+ */
 class RefreshSpecialPrices
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    private $storeManager;
 
     /**
      * @var Resource
      */
-    protected $_resource;
+    private $resource;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
-    protected $_dateTime;
+    private $dateTime;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
-    protected $_localeDate;
+    private $localeDate;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
-    protected $_eavConfig;
-
-    /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     */
-    protected $_processor;
-
-    /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $_connection;
+    private $eavConfig;
 
     /**
      * @var MetadataPool
@@ -53,40 +54,53 @@ class RefreshSpecialPrices
     private $metadataPool;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var ActionInterface
+     */
+    private $productIndexer;
+
+    /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @param StoreManagerInterface $storeManager
      * @param ResourceConnection $resource
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
+     * @param DateTime $dateTime
+     * @param TimezoneInterface $localeDate
+     * @param Config $eavConfig
+     * @param MetadataPool $metadataPool
+     * @param ActionInterface $productIndexer
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         ResourceConnection $resource,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
+        DateTime $dateTime,
+        TimezoneInterface $localeDate,
+        Config $eavConfig,
+        MetadataPool $metadataPool,
+        ActionInterface $productIndexer
     ) {
-        $this->_storeManager = $storeManager;
-        $this->_resource = $resource;
-        $this->_dateTime = $dateTime;
-        $this->_localeDate = $localeDate;
-        $this->_eavConfig = $eavConfig;
-        $this->_processor = $processor;
+        $this->storeManager = $storeManager;
+        $this->resource = $resource;
+        $this->dateTime = $dateTime;
+        $this->localeDate = $localeDate;
+        $this->eavConfig = $eavConfig;
+        $this->metadataPool = $metadataPool;
+        $this->productIndexer = $productIndexer;
     }
 
     /**
      * Retrieve write connection instance
      *
-     * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @return bool|AdapterInterface
      */
-    protected function _getConnection()
+    private function getConnection()
     {
-        if (null === $this->_connection) {
-            $this->_connection = $this->_resource->getConnection();
+        if (null === $this->connection) {
+            $this->connection = $this->resource->getConnection();
         }
-        return $this->_connection;
+        return $this->connection;
     }
 
     /**
@@ -96,11 +110,11 @@ class RefreshSpecialPrices
      */
     public function execute()
     {
-        $connection = $this->_getConnection();
+        $connection = $this->getConnection();
 
-        foreach ($this->_storeManager->getStores(true) as $store) {
-            $timestamp = $this->_localeDate->scopeTimeStamp($store);
-            $currDate = $this->_dateTime->formatDate($timestamp, false);
+        foreach ($this->storeManager->getStores(true) as $store) {
+            $timestamp = $this->localeDate->scopeTimeStamp($store);
+            $currDate = $this->dateTime->formatDate($timestamp, false);
             $currDateExpr = $connection->quote($currDate);
 
             // timestamp is locale based
@@ -115,7 +129,7 @@ class RefreshSpecialPrices
                 $dateTo = $connection->getDateAddSql(
                     $currDateExpr,
                     -1,
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_DAY
+                    AdapterInterface::INTERVAL_DAY
                 );
                 $this->_refreshSpecialPriceByStore(
                     $store->getId(),
@@ -132,25 +146,26 @@ class RefreshSpecialPrices
      * @param int $storeId
      * @param string $attrCode
      * @param \Zend_Db_Expr $attrConditionValue
+     *
      * @return void
      */
     protected function _refreshSpecialPriceByStore($storeId, $attrCode, $attrConditionValue)
     {
-        $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attrCode);
+        $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $attrCode);
         $attributeId = $attribute->getAttributeId();
 
-        $linkField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getLinkField();
-        $identifierField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getIdentifierField();
+        $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+        $identifierField = $this->metadataPool->getMetadata(CategoryInterface::class)->getIdentifierField();
 
-        $connection = $this->_getConnection();
+        $connection = $this->getConnection();
 
         $select = $connection->select()->from(
-            ['attr' => $this->_resource->getTableName(['catalog_product_entity', 'datetime'])],
+            ['attr' => $this->resource->getTableName(['catalog_product_entity', 'datetime'])],
             [
                 $identifierField => 'cat.' . $identifierField,
             ]
         )->joinLeft(
-            ['cat' => $this->_resource->getTableName('catalog_product_entity')],
+            ['cat' => $this->resource->getTableName('catalog_product_entity')],
             'cat.' . $linkField . '= attr.' . $linkField,
             ''
         )->where(
@@ -167,21 +182,7 @@ class RefreshSpecialPrices
         $selectData = $connection->fetchCol($select, $identifierField);
 
         if (!empty($selectData)) {
-            $this->_processor->getIndexer()->reindexList($selectData);
+            $this->productIndexer->executeList($selectData);
         }
-    }
-
-    /**
-     * Get MetadataPool instance
-     * @return MetadataPool
-     *
-     * @deprecated 101.0.0
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
     }
 }

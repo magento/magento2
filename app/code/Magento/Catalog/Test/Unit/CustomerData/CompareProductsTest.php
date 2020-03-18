@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\CustomerData;
 
+use ArrayIterator;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\CustomerData\CompareProducts;
 use Magento\Catalog\Helper\Output;
@@ -16,37 +16,39 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompareProductsTest extends \PHPUnit\Framework\TestCase
+class CompareProductsTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var CompareProducts
      */
     private $model;
 
     /**
-     * @var Compare|\PHPUnit_Framework_MockObject_MockObject
+     * @var Compare|MockObject
      */
     private $helperMock;
 
     /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|MockObject
      */
     private $productUrlMock;
 
     /**
-     * @var Output|\PHPUnit_Framework_MockObject_MockObject
+     * @var Output|MockObject
      */
     private $outputHelperMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    private $objectManagerHelper;
-
-    /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
@@ -75,9 +77,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->model = $this->objectManagerHelper->getObject(
+        $this->model = $this->objectManager->getObject(
             CompareProducts::class,
             [
                 'helper' => $this->helperMock,
@@ -92,17 +94,18 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare compare items collection.
      *
      * @param array $items
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @return MockObject
      */
-    private function getItemCollectionMock(array $items) : \PHPUnit_Framework_MockObject_MockObject
+    private function getItemCollectionMock(array $items): MockObject
     {
         $itemCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $itemCollectionMock->expects($this->any())
+        $itemCollectionMock
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($items));
+            ->willReturn(new ArrayIterator($items));
 
         return $itemCollectionMock;
     }
@@ -111,15 +114,15 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare product mocks objects and add corresponding method mocks for helpers.
      *
      * @param array $dataSet
+     *
      * @return array
      */
-    private function prepareProductsWithCorrespondingMocks(array $dataSet) : array
+    private function prepareProductsWithCorrespondingMocks(array $dataSet): array
     {
         $items = [];
         $urlMap = [];
         $outputMap = [];
         $helperMap = [];
-        $productScopeMap = [];
 
         $count = count($dataSet);
 
@@ -130,20 +133,19 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             $outputMap[] = [$item, $data['name'], 'name', 'productName#' . $data['id']];
             $helperMap[] = [$item, 'http://remove.url/' . $data['id']];
             $urlMap[] = [$item, [], 'http://product.url/' . $data['id']];
-            $productScopeMap[] = [$item, 'store-' . $data['id']];
         }
 
         $this->productUrlMock->expects($this->exactly($count))
             ->method('getUrl')
-            ->will($this->returnValueMap($urlMap));
+            ->willReturnMap($urlMap);
 
         $this->outputHelperMock->expects($this->exactly($count))
             ->method('productAttribute')
-            ->will($this->returnValueMap($outputMap));
+            ->willReturnMap($outputMap);
 
         $this->helperMock->expects($this->exactly($count))
             ->method('getPostDataRemove')
-            ->will($this->returnValueMap($helperMap));
+            ->willReturnMap($helperMap);
 
         return $items;
     }
@@ -152,9 +154,10 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare mock of product object.
      *
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @return MockObject
      */
-    private function getProductMock(array $data) : \PHPUnit_Framework_MockObject_MockObject
+    private function getProductMock(array $data): MockObject
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
