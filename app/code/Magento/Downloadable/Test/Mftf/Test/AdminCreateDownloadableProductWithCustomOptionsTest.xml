@@ -38,7 +38,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create Downloadable product -->
@@ -87,6 +87,8 @@
 
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
 
         <!-- Go to storefront category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>

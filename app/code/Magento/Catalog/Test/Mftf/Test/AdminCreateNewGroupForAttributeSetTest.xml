@@ -27,7 +27,11 @@
         </before>
         <after>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Navigate to Stores > Attributes > Attribute Set -->

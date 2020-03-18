@@ -11,6 +11,7 @@
             <options>
                 <onepage_checkout_enabled>1</onepage_checkout_enabled>
                 <guest_checkout>1</guest_checkout>
+                <display_billing_address_on>0</display_billing_address_on>
                 <max_items_display_count>10</max_items_display_count>
             </options>
             <cart>

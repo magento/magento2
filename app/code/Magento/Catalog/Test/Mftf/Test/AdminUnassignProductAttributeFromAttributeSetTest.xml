@@ -33,9 +33,13 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>

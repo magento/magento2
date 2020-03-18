@@ -87,7 +87,7 @@
             <deleteData createDataKey="simpleProduct28" stepKey="deleteSimpleProduct28"/>
             <deleteData createDataKey="simpleProduct29" stepKey="deleteSimpleProduct29"/>
             <deleteData createDataKey="simpleProduct30" stepKey="deleteSimpleProduct30"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
        <!--Verify default number of products displayed in the grid view-->
         <comment userInput="Verify default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
@@ -115,7 +115,7 @@
         <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <selectOption selector="{{AdminProductGridFilterSection.productPerPage}}" userInput="30" stepKey="selectPagePerView"/>
-        <wait stepKey="waitFroPageToLoad1" time="30"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProductPerPage" time="30"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="pagi"  stepKey="selectProduct1"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitFroPageToLoad2"/>
