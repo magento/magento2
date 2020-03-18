@@ -164,6 +164,8 @@
             <!-- Create second simple product for a bundle option -->
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
 
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>

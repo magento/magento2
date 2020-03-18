@@ -50,6 +50,7 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct2"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
