@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\Sales\Model\Reorder\Data;
 
 use Magento\Quote\Api\Data\CartInterface;
@@ -18,7 +19,7 @@ class ReorderOutput
     private $cart;
 
     /**
-     * @var array
+     * @var Error[]
      */
     private $errors;
 
@@ -33,6 +34,8 @@ class ReorderOutput
     }
 
     /**
+     * Get Shopping Cart
+     *
      * @return CartInterface
      */
     public function getCart(): CartInterface
@@ -41,6 +44,8 @@ class ReorderOutput
     }
 
     /**
+     * Get errors happened during reorder
+     *
      * @return Error[]
      */
     public function getErrors(): array

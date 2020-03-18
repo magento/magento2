@@ -81,7 +81,7 @@ class Reorder implements ResolverInterface
                 'model' => $reorderOutput->getCart(),
             ],
             'userInputErrors' => \array_map(
-                function(Error $error) {
+                function (Error $error) {
                     return [
                         'path' => [self::ARGUMENT_ORDER_NUMBER],
                         'code' => $error->getCode(),

@@ -3,25 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\Sales\Model\Reorder;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
 
 /**
- * Allows customer to quickly reorder previously added products and put them to the Cart
+ * Allows customer quickly to reorder previously added products and put them to the Cart
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Reorder
 {
-
     /**#@+
      * Error message codes
      */
@@ -42,16 +41,10 @@ class Reorder
         'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
     ];
 
-
     /**
      * @var OrderFactory
      */
     private $orderFactory;
-
-    /**
-     * @var CartManagementInterface
-     */
-    private $cartManagement;
 
     /**
      * @var ReorderHelper
@@ -62,11 +55,6 @@ class Reorder
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var CreateEmptyCartForCustomer
-     */
-    private $createEmptyCartForCustomer;
 
     /**
      * @var CartRepositoryInterface
@@ -84,40 +72,43 @@ class Reorder
     private $errors = [];
 
     /**
+     * @var CustomerCartProvider
+     */
+    private $customerCartProvider;
+
+    /**
      * @param OrderFactory $orderFactory
-     * @param CartManagementInterface $cartManagement
-     * @param ReorderHelper $reorderHelper
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
+     * @param CustomerCartProvider $customerCartProvider
      * @param CartRepositoryInterface $cartRepository
      * @param ProductRepositoryInterface $productRepository
+     * @param ReorderHelper $reorderHelper
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         OrderFactory $orderFactory,
-        CartManagementInterface $cartManagement,
-        CreateEmptyCartForCustomer $createEmptyCartForCustomer,
+        CustomerCartProvider $customerCartProvider,
         CartRepositoryInterface $cartRepository,
         ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->orderFactory = $orderFactory;
-        $this->cartManagement = $cartManagement;
-        $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->cartRepository = $cartRepository;
         $this->productRepository = $productRepository;
         $this->reorderHelper = $reorderHelper;
         $this->logger = $logger;
+        $this->customerCartProvider = $customerCartProvider;
     }
 
     /**
-     * Allows customer to quickly reorder previously added products and put them to the Cart
+     * Allows customer quickly to reorder previously added products and put them to the Cart
      *
      * @param string $orderNumber
      * @param string $storeId
      * @return Data\ReorderOutput
      * @throws InputException Order is not found
      * @throws NoSuchEntityException The specified customer does not exist.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException Could not create customer Cart
      */
     public function execute(string $orderNumber, string $storeId): Data\ReorderOutput
     {
@@ -128,16 +119,10 @@ class Reorder
                 __('Cannot find order number "%1" in store "%2"', $orderNumber, $storeId)
             );
         }
-        $customerId = $order->getCustomerId();
+        $customerId = (int)$order->getCustomerId();
         $this->errors = [];
 
-        try {
-            /** @var \Magento\Quote\Model\Quote $cart */
-            $cart = $this->cartManagement->getCartForCustomer($customerId);
-        } catch (NoSuchEntityException $e) {
-            $this->createEmptyCartForCustomer->execute($customerId);
-            $cart = $this->cartManagement->getCartForCustomer($customerId);
-        }
+        $cart = $this->customerCartProvider->provide($customerId);
         if (!$this->reorderHelper->canReorder($order->getId())) {
             $this->addError(__('Reorder is not available.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
@@ -161,6 +146,7 @@ class Reorder
         try {
             $this->cartRepository->save($cart);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            // handle exception from \Magento\Quote\Model\QuoteRepository\SaveHandler::save
             $this->addError($e->getMessage());
         }
 
@@ -242,7 +228,7 @@ class Reorder
      * @param CartInterface $cart
      * @return Data\ReorderOutput
      */
-    protected function prepareOutput(CartInterface $cart): Data\ReorderOutput
+    private function prepareOutput(CartInterface $cart): Data\ReorderOutput
     {
         $output = new Data\ReorderOutput($cart, $this->errors);
         $this->errors = [];

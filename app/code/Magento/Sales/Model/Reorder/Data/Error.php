@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Reorder\Data;
 
 /**
- * DTO represent error item
+ * DTO represents error item
  */
 class Error
 {
@@ -31,6 +33,8 @@ class Error
     }
 
     /**
+     * Get error message
+     *
      * @return string
      */
     public function getMessage(): string
@@ -39,6 +43,8 @@ class Error
     }
 
     /**
+     * Get error code
+     *
      * @return string
      */
     public function getCode(): string

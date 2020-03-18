@@ -43,6 +43,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * @param Registry $registry
      * @param ReorderHelper|null $reorderHelper
      * @param \Magento\Sales\Model\Reorder\Reorder|null $reorder
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Action\Context $context,
