@@ -35,6 +35,11 @@ use PHPUnit\Framework\MockObject\MockObject as MockObject;
 class BundleTest extends AbstractImportTestCase
 {
     /**
+     * @var array
+     */
+    private $params;
+
+    /**
      * @var Bundle
      */
     private $model;
@@ -42,26 +47,22 @@ class BundleTest extends AbstractImportTestCase
     /**
      * @var ResourceConnection|MockObject
      */
-    private $resource;
+    private $resourceMock;
 
     /**
      * @var Select|MockObject
      */
-    private $select;
+    private $selectMock;
 
     /**
      * @var Product|MockObject
      */
-    private $entityModel;
+    private $entityModelMock;
 
     /**
-     * @var array
+     * @var AdapterInterface|MockObject
      */
-    private $params;
-
-    /** @var AdapterInterface|MockObject
-     */
-    private $connection;
+    private $connectionMock;
 
     /**
      * @var CollectionFactory|MockObject
@@ -117,8 +118,8 @@ class BundleTest extends AbstractImportTestCase
             ],
         ];
 
-        $this->connection->method('fetchAll')
-            ->with($this->select)
+        $this->connectionMock->method('fetchAll')
+            ->with($this->selectMock)
             ->will(
                 $this->onConsecutiveCalls(
                     $fetchAllForInitAttributes,
@@ -145,7 +146,7 @@ class BundleTest extends AbstractImportTestCase
     {
         parent::setUp();
 
-        $this->entityModel = $this->createPartialMock(
+        $this->entityModelMock = $this->createPartialMock(
             Product::class,
             [
                 'getErrorAggregator',
@@ -157,50 +158,50 @@ class BundleTest extends AbstractImportTestCase
                 'getConnection'
             ]
         );
-        $this->entityModel->method('getErrorAggregator')
+        $this->entityModelMock->method('getErrorAggregator')
             ->willReturn($this->getErrorAggregatorObject());
 
-        $this->select = $this->createMock(Select::class);
-        $this->select->method('from')
+        $this->selectMock = $this->createMock(Select::class);
+        $this->selectMock->method('from')
             ->will($this->returnSelf());
-        $this->select->method('where')
+        $this->selectMock->method('where')
             ->will($this->returnSelf());
-        $this->select->method('joinLeft')
+        $this->selectMock->method('joinLeft')
             ->will($this->returnSelf());
-        $this->select->method('getConnection')
-            ->willReturn($this->connection);
+        $this->selectMock->method('getConnection')
+            ->willReturn($this->connectionMock);
 
-        $this->connection = $this->createPartialMock(
+        $this->connectionMock = $this->createPartialMock(
             Mysql::class,
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc']
         );
-        $this->select = $this->createMock(Select::class);
-        $this->select->method('from')
+        $this->selectMock = $this->createMock(Select::class);
+        $this->selectMock->method('from')
             ->will($this->returnSelf());
-        $this->select->method('where')
+        $this->selectMock->method('where')
             ->will($this->returnSelf());
-        $this->select->method('joinLeft')
+        $this->selectMock->method('joinLeft')
             ->will($this->returnSelf());
-        $this->select->method('getConnection')
-            ->willReturn($this->connection);
-        $this->connection->method('select')
-            ->willReturn($this->select);
-        $this->connection->method('insertOnDuplicate')
+        $this->selectMock->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->connectionMock->method('select')
+            ->willReturn($this->selectMock);
+        $this->connectionMock->method('insertOnDuplicate')
             ->willReturnSelf();
-        $this->connection->method('delete')
+        $this->connectionMock->method('delete')
             ->willReturnSelf();
-        $this->connection->method('quoteInto')
+        $this->connectionMock->method('quoteInto')
             ->willReturn('');
 
         $this->initFetchAllCalls();
 
-        $this->resource = $this->createPartialMock(
+        $this->resourceMock = $this->createPartialMock(
             ResourceConnection::class,
             ['getConnection', 'getTableName']
         );
-        $this->resource->method('getConnection')
-            ->willReturn($this->connection);
-        $this->resource->method('getTableName')
+        $this->resourceMock->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getTableName')
             ->willReturn('tableName');
 
         $this->attributeSetCollectionFactoryMock = $this->createPartialMock(
@@ -230,7 +231,7 @@ class BundleTest extends AbstractImportTestCase
             ->willReturn($attrCollection);
 
         $this->params = [
-            0 => $this->entityModel,
+            0 => $this->entityModelMock,
             1 => 'bundle',
         ];
 
@@ -246,7 +247,7 @@ class BundleTest extends AbstractImportTestCase
             [
                 'attrSetColFac' => $this->attributeSetCollectionFactoryMock,
                 'prodAttrColFac' => $this->productAttributeCollectionFactoryMock,
-                'resource' => $this->resource,
+                'resource' => $this->resourceMock,
                 'params' => $this->params,
                 'relationsDataSaver' =>  $this->relationsDataSaverMock,
                 'scopeResolver' => $this->scopeResolverMock,
@@ -292,18 +293,18 @@ class BundleTest extends AbstractImportTestCase
                 . 'parent_product_id=1,'
         ];
 
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('getNewSku')
             ->willReturn($data);
-        $this->entityModel->expects($this->at(2))
+        $this->entityModelMock->expects($this->at(2))
             ->method('getNextBunch')
             ->willReturn([$bunch]);
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('isRowAllowedToImport')
             ->willReturn(true);
-        $this->connection->expects($this->exactly(2))
+        $this->connectionMock->expects($this->exactly(2))
             ->method('fetchAssoc')
-            ->with($this->select)
+            ->with($this->selectMock)
             ->willReturn([
                 '1' => [
                     'option_id' => '1',
@@ -316,7 +317,7 @@ class BundleTest extends AbstractImportTestCase
                     'name' => 'bundle1',
                 ],
             ]);
-        $this->connection->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('fetchPairs')
             ->willReturn([1 => 2]);
         $this->relationsDataSaverMock->expects($this->once())
@@ -338,20 +339,20 @@ class BundleTest extends AbstractImportTestCase
      */
     public function testSaveData(array $skus, array $bunch, bool $allowImport): void
     {
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('getNewSku')
             ->willReturn($skus['newSku']);
-        $this->entityModel->expects($this->at(2))
+        $this->entityModelMock->expects($this->at(2))
             ->method('getNextBunch')
             ->willReturn([$bunch]);
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('isRowAllowedToImport')
             ->willReturn($allowImport);
-        $this->connection->method('fetchAssoc')
-            ->with($this->select)
+        $this->connectionMock->method('fetchAssoc')
+            ->with($this->selectMock)
             ->willReturn([
                 '1' => [
                     'option_id' => '1',
@@ -451,25 +452,25 @@ class BundleTest extends AbstractImportTestCase
                     'sku' => 'sku',
                     'name' => 'name',
                     'bundle_values' => 'name=Bundle1,'
-                         . 'type=dropdown,'
-                         . 'required=1,'
-                         . 'sku=1,'
-                         . 'price=10,'
-                         . 'price_type=fixed,'
-                         . 'shipment_type=separately,'
-                         . 'default_qty=1,'
-                         . 'is_default=1,'
-                         . 'position=1,'
-                         . 'option_id=1 | name=Bundle2,'
-                         . 'type=dropdown,'
-                         . 'required=1,'
-                         . 'sku=2,'
-                         . 'price=10,'
-                         . 'price_type=fixed,'
-                         . 'default_qty=1,'
-                         . 'is_default=1,'
-                         . 'position=2,'
-                         . 'option_id=2'
+                        . 'type=dropdown,'
+                        . 'required=1,'
+                        . 'sku=1,'
+                        . 'price=10,'
+                        . 'price_type=fixed,'
+                        . 'shipment_type=separately,'
+                        . 'default_qty=1,'
+                        . 'is_default=1,'
+                        . 'position=1,'
+                        . 'option_id=1 | name=Bundle2,'
+                        . 'type=dropdown,'
+                        . 'required=1,'
+                        . 'sku=2,'
+                        . 'price=10,'
+                        . 'price_type=fixed,'
+                        . 'default_qty=1,'
+                        . 'is_default=1,'
+                        . 'position=2,'
+                        . 'option_id=2'
                 ],
                 'allowImport' => true,
             ],
@@ -483,25 +484,25 @@ class BundleTest extends AbstractImportTestCase
      */
     public function testSaveDataDelete(): void
     {
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_DELETE);
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('getNewSku')
             ->willReturn([
                 'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'bundle']
             ]);
-        $this->entityModel->expects($this->at(2))
+        $this->entityModelMock->expects($this->at(2))
             ->method('getNextBunch')
             ->willReturn([
                 ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
             ]);
         $select = $this->createMock(Select::class);
-        $this->connection->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($select);
 
-        $this->connection->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('fetchAssoc')
             ->with($select)->willReturn([
                 ['id1', 'id2', 'id_3']
@@ -546,7 +547,7 @@ class BundleTest extends AbstractImportTestCase
      */
     public function testIsRowValid(): void
     {
-        $this->entityModel->expects($this->once())
+        $this->entityModelMock->expects($this->once())
             ->method('getRowScope')
             ->willReturn(-1);
         $rowData = [
