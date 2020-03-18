@@ -29,11 +29,6 @@ class ReorderTest extends GraphQlAbstract
     private const ORDER_NUMBER = '100000001';
 
     /**
-     * Incremented order number
-     */
-    private const INCREMENTED_ORDER_NUMBER = '100001001';
-
-    /**
      * Customer email
      */
     private const CUSTOMER_EMAIL = 'customer@example.com';

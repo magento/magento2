@@ -5,11 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Sales\Model\Reorder;
+namespace Magento\Quote\Model\Cart;
 
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
@@ -61,14 +62,14 @@ class CustomerCartProvider
      * Get customer cart
      *
      * @param int $customerId
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function provide(int $customerId): \Magento\Quote\Model\Quote
+    public function provide(int $customerId): Quote
     {
         try {
-            /** @var \Magento\Quote\Model\Quote $cart */
+            /** @var Quote $cart */
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         } catch (NoSuchEntityException $e) {
             $this->cartManagement->createEmptyCartForCustomer($customerId);

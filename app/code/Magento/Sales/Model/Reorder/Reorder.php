@@ -11,6 +11,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Cart\CustomerCartProvider;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
