@@ -74,9 +74,9 @@ class JsFooterPluginTest extends TestCase
                 "flag" => true,
                 "result" => "<body><h1>Test Title</h1>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
-                    "<p>Test Content</p>" .
-                    "<script type=\"text/x-magento-init\">test</script>" .
-                    "\n</body>"
+                    "<p>Test Content</p>\n" .
+                    "<script type=\"text/x-magento-init\">test</script>\n" .
+                    "</body>"
             ],
             'content_with_config_disable' => [
                 "content" => "<body><p>Test Content</p></body>",

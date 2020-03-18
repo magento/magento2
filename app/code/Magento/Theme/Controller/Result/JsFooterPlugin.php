@@ -39,7 +39,7 @@ class JsFooterPlugin
      */
     public function beforeSendResponse(Http $subject)
     {
-        $content = $subject->getContent();
+        $content = $subject->getContent() ?? '';
 
         $bodyClose = '</body';
 
@@ -56,6 +56,11 @@ class JsFooterPlugin
             while ($scriptOpenPos !== false) {
                 $scriptClosePos = strpos($content, $scriptClose, $scriptOpenPos);
                 $script = substr($content, $scriptOpenPos, $scriptClosePos - $scriptOpenPos + strlen($scriptClose));
+
+                if (strpos($script, 'text/x-magento-template') !== false) {
+                    $scriptOpenPos = strpos($content, $scriptOpen, $scriptClosePos);
+                    continue;
+                }
 
                 $scripts .= "\n" . $script;
                 $content = str_replace($script, '', $content);
