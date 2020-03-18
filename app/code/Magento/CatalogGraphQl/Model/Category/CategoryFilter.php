@@ -11,6 +11,7 @@ use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Filter;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Search\Model\Query;
@@ -19,7 +20,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 
 /**
- * Category filter allows to filter collection using 'id, url_key, name' from search criteria.
+ * Category filter allows filtering category results by attributes.
  */
 class CategoryFilter
 {
@@ -54,25 +55,50 @@ class CategoryFilter
     }
 
     /**
-     * Search for categories, return list of ids
+     * Search for categories
      *
      * @param array $criteria
      * @param StoreInterface $store
      * @return int[]
      * @throws InputException
      */
-    public function getResult(array $criteria, StoreInterface $store): array
+    public function getResult(array $criteria, StoreInterface $store)
     {
         $categoryIds = [];
-
         $criteria[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($criteria['filters'], $store);
         $criteria[Filter::ARGUMENT_NAME][CategoryInterface::KEY_IS_ACTIVE] = ['eq' => 1];
         $searchCriteria = $this->searchCriteriaBuilder->build('categoryList', $criteria);
+        $pageSize = $criteria['pageSize'] ?? 20;
+        $currentPage = $criteria['currentPage'] ?? 1;
+        $searchCriteria->setPageSize($pageSize)->setCurrentPage($currentPage);
+
         $categories = $this->categoryList->getList($searchCriteria);
         foreach ($categories->getItems() as $category) {
             $categoryIds[] = (int)$category->getId();
         }
-        return $categoryIds;
+
+        $totalPages = 0;
+        if ($categories->getTotalCount() > 0 && $searchCriteria->getPageSize() > 0) {
+            $totalPages = ceil($categories->getTotalCount() / $searchCriteria->getPageSize());
+        }
+        if ($searchCriteria->getCurrentPage() > $totalPages && $categories->getTotalCount() > 0) {
+            throw new GraphQlInputException(
+                __(
+                    'currentPage value %1 specified is greater than the %2 page(s) available.',
+                    [$searchCriteria->getCurrentPage(), $totalPages]
+                )
+            );
+        }
+
+        return [
+            'category_ids' => $categoryIds,
+            'total_count' => $categories->getTotalCount(),
+            'page_info' => [
+                'total_pages' => $totalPages,
+                'page_size' => $searchCriteria->getPageSize(),
+                'current_page' => $searchCriteria->getCurrentPage(),
+            ]
+        ];
     }
 
     /**
