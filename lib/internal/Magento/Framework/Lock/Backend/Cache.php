@@ -49,7 +49,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function unlock(string $name): bool
     {
-        return $this->cache->remove($this->getIdentifier($name));
+        return (bool)$this->cache->remove($this->getIdentifier($name));
     }
 
     /**
