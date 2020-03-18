@@ -9,11 +9,13 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\SearchQuery;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
  * Orders data resolver
@@ -21,17 +23,17 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 class CustomerOrders implements ResolverInterface
 {
     /**
-     * @var CollectionFactoryInterface
+     * @var SearchQuery
      */
-    private $collectionFactory;
+    private $searchQuery;
 
     /**
-     * @param CollectionFactoryInterface $collectionFactory
+     * @param SearchQuery $orderRepository
      */
     public function __construct(
-        CollectionFactoryInterface $collectionFactory
+        SearchQuery $searchQuery
     ) {
-        $this->collectionFactory = $collectionFactory;
+        $this->searchQuery = $searchQuery;
     }
 
     /**
@@ -48,21 +50,59 @@ class CustomerOrders implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
+        if ($args['currentPage'] < 1) {
+            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+        }
+        if ($args['pageSize'] < 1) {
+            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
+        }
+        $userId = $context->getUserId();
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        $searchResult = $this->searchQuery->getResult($args, $userId, $store);
+
+        if ($searchResult->getPageSize()) {
+            $maxPages = ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
+        } else {
+            $maxPages = 0;
+        }
+
+        $currentPage = $searchResult->getCurrentPage();
+        if ($searchResult->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
+            $currentPage = new GraphQlInputException(
+                __(
+                    'currentPage value %1 specified is greater than the number of pages available.',
+                    [$maxPages]
+                )
+            );
+        }
 
         $items = [];
-        $orders = $this->collectionFactory->create($context->getUserId());
 
-        /** @var Order $order */
-        foreach ($orders as $order) {
-            return [
-               'id' => $order->getId(),
-               'number' => $order->getIncrementId(),
-               'order_date' => $order->getCreatedAt(),
-                'status' => $order->getStatus(),
-                'totals' => $order->getGrandTotal(), // TODO
+        foreach (($searchResult->getItems() ?? []) as $order) {
             $items[] = [
-           //TODO
-            ]];
+                'created_at' => '1',
+                'grand_total' => '1',
+                'id' => $order['entity_id'],
+                'increment_id' => $order['increment_id'],
+                'number' => $order['increment_id'],
+                'order_date' => $order['created_at'],
+                'order_number' => $order['increment_id'],
+                'status' => $order['status'],
+                'items' => ($order['model'] && $order['model'] instanceof Order)
+                    ? $order['model']->getItems() : [],
+                'totals' => [],
+            ];
         }
+
+        return [
+            'total_count' => $searchResult->getTotalCount(),
+            'items' => $items,
+            'page_info'   => [
+                'page_size'    => $searchResult->getPageSize() ?? 20,
+                'current_page' => $currentPage ?? 1,
+                'total_pages' => $maxPages ?? 0
+            ]
+        ];
     }
 }
