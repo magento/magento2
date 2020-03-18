@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdom">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
@@ -73,7 +73,7 @@
             <argument name="countryCode" value="gb"/>
         </actionGroup>
     </test>
-    <test name="AdminConfigPaymentsConflictResolutionForPayPalInJapan" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdom">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInJapanTest" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
@@ -113,7 +113,7 @@
             <argument name="countryCode" value="jp"/>
         </actionGroup>
     </test>
-    <test name="AdminConfigPaymentsConflictResolutionForPayPalInFrance" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdom">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInFranceTest" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
@@ -153,7 +153,7 @@
             <argument name="countryCode" value="fr"/>
         </actionGroup>
     </test>
-    <test name="AdminConfigPaymentsConflictResolutionForPayPalInHongKong" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdom">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInHongKongTest" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
@@ -193,7 +193,7 @@
             <argument name="countryCode" value="hk"/>
         </actionGroup>
     </test>
-    <test name="AdminConfigPaymentsConflictResolutionForPayPalInItaly" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdom">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInItalyTest" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
@@ -233,7 +233,7 @@
             <argument name="countryCode" value="it"/>
         </actionGroup>
     </test>
-    <test name="AdminConfigPaymentsConflictResolutionForPayPalInSpain" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdom">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInSpainTest" extends="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>

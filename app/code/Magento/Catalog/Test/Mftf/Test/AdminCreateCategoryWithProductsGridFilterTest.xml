@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateCategoryWithProductsGridFilter">
+    <test name="AdminCreateCategoryWithProductsGridFilterTest">
         <annotations>
             <stories value="Create categories"/>
             <title value="Apply category products grid filter"/>
