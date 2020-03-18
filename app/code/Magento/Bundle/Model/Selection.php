@@ -74,7 +74,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Processin object before save data
+     * Processing object before save data
      *
      * @return void
      */
