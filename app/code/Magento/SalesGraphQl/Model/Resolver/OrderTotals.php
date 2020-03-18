@@ -44,20 +44,21 @@ class OrderTotals implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-
+        
         $orderTotals = [];
         $orders = $this->collectionFactory->create($context->getUserId());
 
+
         /** @var Order $order */
         foreach ($orders as $order) {
+            $currency = $order->getOrderCurrencyCode();
             $orderTotals[] = [
-                'base_grand_total' => $order->getBaseGrandTotal(),
-                'grand_total' => $order->getGrandTotal(),
-                'sub_total' => $order->getSubtotal(),
-                'tax' => $order->getSubtotal(),
-//               'discounts' =>
-            //    'shipping_handling' =>
-
+                'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
+                'grand_total' => ['value' =>  $order->getGrandTotal(), 'currency' => $currency],
+                'sub_total' => ['value' =>  $order->getSubtotal(), 'currency' => $currency],
+                'tax' => ['value' =>  $order->getTaxAmount(), 'currency' => $currency],
+                'discounts' =>['value' =>  $order->getDiscountAmount(), 'currency' => $currency],
+                'shipping_handling' => ['value' => $order->getShippingAmount(), 'currency' => $currency]
             ];
         }
         return ['orderTotals' => $orderTotals];
