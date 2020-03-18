@@ -18,6 +18,7 @@
         </arguments>
 
         <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisible"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadContentSection"/>
         <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickNextShowHideEditorIfVisible"/>
         <waitForElementVisible selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="waitForInsertWidgetElement"/>
         <click selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="clickInsertWidget"/>
