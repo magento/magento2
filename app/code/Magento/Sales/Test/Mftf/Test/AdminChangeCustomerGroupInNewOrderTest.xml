@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminChangeCustomerGroupInNewOrder">
+    <test name="AdminChangeCustomerGroupInNewOrderTest">
         <annotations>
             <title value="Customer account group cannot be selected while creating a new customer in order"/>
             <stories value="MC-15290: Customer account group cannot be selected while creating a new customer in order"/>

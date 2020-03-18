@@ -93,7 +93,7 @@
         <remove keyForRemoval="guestGoToCheckoutFromMinicart" />
         <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity" />
     </test>
-    <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPayment">
+    <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPaymentTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout flow if payment solutions are not available"/>
