@@ -47,7 +47,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
-    <test name="Verifydefaultcontrolsonproductshortdescription">
+    <test name="VerifydefaultcontrolsonproductshortdescriptionTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Default toolbar configuration in Magento-MAGETWO-70412"/>
