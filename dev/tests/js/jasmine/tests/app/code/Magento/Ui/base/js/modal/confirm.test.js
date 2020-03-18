@@ -10,8 +10,21 @@ define([
     'use strict';
 
     describe('ui/js/modal/confirm', function () {
-        var element = $('<div>some element</div>'),
+
+        var widget,
+            element,
+            confirm;
+
+        beforeEach(function () {
+            element = $('<div id="element">some element</div>');
             confirm = element.confirm({});
+            widget = element.confirm({}).data('mage-confirm');
+        });
+
+        afterEach(function () {
+            $('element').remove();
+
+        });
 
         it('Check for modal definition', function () {
             expect(confirm).toBeDefined();
@@ -22,6 +35,12 @@ define([
         });
         it('Integration: modal created on page', function () {
             expect(confirm.length).toEqual(1);
+        });
+        it('Check confirm class button', function () {
+            var expectedClassResult = 'action primary action-primary action-accept',
+                expectedClass = widget.options.buttons[1].class;
+
+            expect($(expectedClass).selector).toContain(expectedClassResult);
         });
     });
 });
