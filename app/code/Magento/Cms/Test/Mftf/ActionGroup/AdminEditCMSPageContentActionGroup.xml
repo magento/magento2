@@ -16,7 +16,9 @@
 
         <amOnPage url="{{AdminCmsPageEditPage.url(pageId)}}" stepKey="navigateToEditCMSPage"/>
         <waitForPageLoad stepKey="waitForCmsPageEditPage"/>
-        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickShowHideEditorIfVisible"/>
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisible"/>
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickNextShowHideEditorIfVisible"/>
+        <waitForElementVisible selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="waitForInsertWidgetElement"/>
         <waitForElementVisible selector="{{CmsNewPagePageContentSection.content}}" stepKey="waitForContentField"/>
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{content}}" stepKey="resetCMSPageToDefaultContent"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSave"/>

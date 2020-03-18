@@ -16,9 +16,9 @@
             <argument name="buttonToShowSection1" type="string"  defaultValue="1"/>
             <argument name="buttonToShowSection2" type="string" defaultValue="3" />
         </arguments>
-        <click selector="{{CmsNewPagePageActionsSection.contentSectionName}}" stepKey="expandContent"/>
-        <waitForPageLoad time="50" stepKey="waitForPageLoadContentSection"/>
-        <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="true" stepKey="clickNextShowHideEditorIfVisible"/>
+
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisible"/>
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickNextShowHideEditorIfVisible"/>
         <waitForElementVisible selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="waitForInsertWidgetElement"/>
         <click selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="clickInsertWidget"/>
         <waitForElementVisible selector="{{InsertWidgetSection.widgetTypeDropDown}}" time="30" stepKey="waitForWidgetTypeDropDownVisible"/>
