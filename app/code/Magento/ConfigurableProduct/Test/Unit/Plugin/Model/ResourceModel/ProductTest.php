@@ -61,6 +61,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Configurable::TYPE_CODE));
         $object->expects($this->once())->method('getTypeInstance')->will($this->returnValue($type));
+        $object->expects($this->once())->method('resetConfigurableOptionsData')->with($object);
 
         $this->model->beforeSave(
             $subject,
