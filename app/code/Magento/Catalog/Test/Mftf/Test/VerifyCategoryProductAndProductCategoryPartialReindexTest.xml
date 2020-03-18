@@ -55,8 +55,9 @@
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
+            <wait stepKey="waitBeforeRunCronIndex" time="30"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+            <wait stepKey="waitAfterRunCronIndex" time="60"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
@@ -72,7 +73,7 @@
             <deleteData createDataKey="categoryL" stepKey="deleteCategoryL"/>
             <deleteData createDataKey="categoryK" stepKey="deleteCategoryK"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open categories K, L, M, N on Storefront -->
@@ -138,9 +139,10 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryN"/>
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
-        <magentoCLI command="cron:run" stepKey="runCronAgain"/>
+        <!-- Run cron -->
+        <wait stepKey="waitBeforeRunMagentoCron" time="30"/>
+        <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
+        <wait stepKey="waitAfterRunMagentoCron" time="60"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -199,9 +201,10 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryN"/>
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="firstCronRun"/>
-        <magentoCLI command="cron:run" stepKey="secondCronRun"/>
+        <!-- Run Cron once to reindex product changes -->
+        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="30"/>
+        <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
+        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="60"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 

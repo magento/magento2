@@ -23,7 +23,7 @@
         </before>
         <after>
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

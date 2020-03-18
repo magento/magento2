@@ -59,7 +59,7 @@
             <!-- Delete Tax Class -->
             <deleteData createDataKey="createProductTaxClass" stepKey="deleteProductTaxClass"/>
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create new order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">

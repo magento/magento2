@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="QuickSearchProductBySku">
+    <test name="QuickSearchProductBySkuTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find products"/>
@@ -41,7 +41,7 @@
             <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchProductByName" extends="QuickSearchProductBySku">
+    <test name="QuickSearchProductByNameTest" extends="QuickSearchProductBySkuTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find products via Name"/>
@@ -56,7 +56,7 @@
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchProductByNameWithSpecialChars" extends="QuickSearchProductBySku">
+    <test name="QuickSearchProductByNameWithSpecialCharsTest" extends="QuickSearchProductBySkuTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="Quick Search can find products with names that contain special characters"/>
@@ -76,7 +76,7 @@
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchEmptyResults">
+    <test name="QuickSearchEmptyResultsTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
@@ -109,7 +109,7 @@
         <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmpty"/>
     </test>
 
-    <test name="QuickSearchWithTwoCharsEmptyResults" extends="QuickSearchEmptyResults">
+    <test name="QuickSearchWithTwoCharsEmptyResultsTest" extends="QuickSearchEmptyResultsTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
@@ -143,7 +143,7 @@
         </actionGroup>
     </test>
 
-    <test name="QuickSearchProductByNameWithThreeLetters" extends="QuickSearchProductBySku">
+    <test name="QuickSearchProductByNameWithThreeLettersTest" extends="QuickSearchProductBySkuTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find products by their first three letters"/>
@@ -159,7 +159,7 @@
             <argument name="phrase" value="{$getFirstThreeLetters}"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchProductBy128CharQuery" extends="QuickSearchProductBySku">
+    <test name="QuickSearchProductBy128CharQueryTest" extends="QuickSearchProductBySkuTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search product with long names, using first 128 letters"/>
@@ -180,7 +180,7 @@
         </actionGroup>
     </test>
 
-    <test name="QuickSearchTwoProductsWithSameWeight">
+    <test name="QuickSearchTwoProductsWithSameWeightTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="Quick Search should sort products with the same weight appropriately"/>
@@ -263,7 +263,7 @@
             <argument name="index" value="1"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchTwoProductsWithDifferentWeight" extends="QuickSearchTwoProductsWithSameWeight">
+    <test name="QuickSearchTwoProductsWithDifferentWeightTest" extends="QuickSearchTwoProductsWithSameWeightTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="Quick Search should sort products with the different weight appropriately"/>
@@ -293,7 +293,7 @@
         </actionGroup>
     </test>
 
-    <test name="QuickSearchAndAddToCart">
+    <test name="QuickSearchAndAddToCartTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a simple product and add it to cart"/>
@@ -325,7 +325,7 @@
             <argument name="productName" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchAndAddToCartVirtual">
+    <test name="QuickSearchAndAddToCartVirtualTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a virtual product and add it to cart"/>
@@ -357,7 +357,7 @@
             <argument name="productName" value="$createVirtualProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchAndAddToCartConfigurable">
+    <test name="QuickSearchAndAddToCartConfigurableTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a configurable product and add it to cart"/>
@@ -385,7 +385,7 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -401,7 +401,7 @@
             <argument name="optionName" value="{{colorProductAttribute1.name}}"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchAndAddToCartDownloadable">
+    <test name="QuickSearchAndAddToCartDownloadableTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a downloadable product and add it to cart"/>
@@ -438,7 +438,7 @@
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchAndAddToCartGrouped">
+    <test name="QuickSearchAndAddToCartGroupedTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a grouped product and add it to cart"/>
@@ -465,7 +465,7 @@
         <after>
             <deleteData stepKey="deleteGroupedProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simple1"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -475,7 +475,7 @@
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchAndAddToCartBundleDynamic">
+    <test name="QuickSearchAndAddToCartBundleDynamicTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a Bundle Dynamic product and add it to cart"/>
@@ -517,7 +517,7 @@
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -531,7 +531,7 @@
             <argument name="productName" value="$createBundleProduct.name$"/>
         </actionGroup>
     </test>
-    <test name="QuickSearchAndAddToCartBundleFixed">
+    <test name="QuickSearchAndAddToCartBundleFixedTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
             <title value="User should be able to use Quick Search to find a Bundle Fixed product and add it to cart"/>
@@ -586,7 +586,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>

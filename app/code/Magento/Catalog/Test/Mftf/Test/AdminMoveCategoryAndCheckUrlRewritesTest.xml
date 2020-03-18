@@ -22,10 +22,13 @@
             <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
                 <field key="is_active">true</field>
             </createData>
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open category page-->

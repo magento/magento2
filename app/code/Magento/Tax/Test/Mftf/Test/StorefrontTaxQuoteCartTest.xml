@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontTaxQuoteCartLoggedInSimple">
+    <test name="StorefrontTaxQuoteCartLoggedInSimpleTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in Shopping Cart"/>
@@ -48,7 +48,7 @@
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
@@ -127,7 +127,7 @@
     </test>
 
 
-    <test name="StorefrontTaxQuoteCartLoggedInVirtual">
+    <test name="StorefrontTaxQuoteCartLoggedInVirtualTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in Shopping Cart"/>
@@ -166,7 +166,7 @@
                 <argument name="Customer" value="Simple_US_Customer_NY"/>
             </actionGroup>
 
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
@@ -243,7 +243,7 @@
         <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCartGuestSimple">
+    <test name="StorefrontTaxQuoteCartGuestSimpleTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in Shopping Cart"/>
@@ -355,7 +355,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCartGuestVirtual">
+    <test name="StorefrontTaxQuoteCartGuestVirtualTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in Shopping Cart"/>

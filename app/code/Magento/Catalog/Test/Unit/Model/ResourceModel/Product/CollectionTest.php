@@ -230,46 +230,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addCategoriesFilter([$conditionType => $values]);
     }
 
-    public function testAddMediaGalleryData()
-    {
-        $attributeId = 42;
-        $rowId = 4;
-        $linkField = 'row_id';
-        $mediaGalleriesMock = [[$linkField => $rowId]];
-        $itemMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getOrigData'])
-            ->getMock();
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collection->addItem($itemMock);
-        $this->galleryResourceMock->expects($this->once())->method('createBatchBaseSelect')->willReturn($selectMock);
-        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->entityMock->expects($this->once())->method('getAttribute')->willReturn($attributeMock);
-        $itemMock->expects($this->atLeastOnce())->method('getOrigData')->willReturn($rowId);
-        $selectMock->expects($this->once())->method('reset')->with(Select::ORDER)->willReturnSelf();
-        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$rowId])
-            ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
-        $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkField);
-
-        $this->connectionMock->expects($this->once())->method('fetchOne')->with($selectMock)->willReturn(42);
-        $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
-            [['row_id' => $rowId]]
-        );
-        $this->galleryReadHandlerMock->expects($this->once())->method('addMediaDataToProduct')
-            ->with($itemMock, $mediaGalleriesMock);
-
-        $this->assertSame($this->collection, $this->collection->addMediaGalleryData());
-    }
-
     /**
      * Test addTierPriceDataByGroupId method.
      *
