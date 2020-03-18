@@ -175,6 +175,10 @@
         <data key="status">1</data>
         <data key="quantity">0</data>
     </entity>
+    <entity name="SimpleOutOfStockProductWithSpecialPriceAndCost" type="product" extends="SimpleOutOfStockProduct">
+        <requiredEntity type="custom_attribute_array">ApiProductSpecialPrice</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductCost</requiredEntity>
+    </entity>
     <entity name="SimpleProductInStockQuantityZero" type="product">
         <data key="name" unique="suffix">SimpleProductInStockQuantityZero</data>
         <data key="sku" unique="suffix">testSku</data>
