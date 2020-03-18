@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Model\Dashboard;
 
-use Magento\Backend\Model\Dashboard\Chart;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -62,7 +61,7 @@ class ChartTest extends TestCase
                 'quantity'
             ],
             [
-                6,
+                19,
                 '1m',
                 'quantity'
             ],
