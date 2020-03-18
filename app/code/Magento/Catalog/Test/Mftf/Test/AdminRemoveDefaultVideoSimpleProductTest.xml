@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-206"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>

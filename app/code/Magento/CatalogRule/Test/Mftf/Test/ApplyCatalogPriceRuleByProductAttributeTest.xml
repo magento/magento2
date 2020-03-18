@@ -104,7 +104,10 @@
             </actionGroup>
             <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Add values to your attribute ( ex: red , green) -->

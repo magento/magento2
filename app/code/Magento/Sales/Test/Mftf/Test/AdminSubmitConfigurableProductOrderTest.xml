@@ -122,7 +122,7 @@
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 
@@ -131,6 +131,9 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
 </tests>

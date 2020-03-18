@@ -32,7 +32,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>

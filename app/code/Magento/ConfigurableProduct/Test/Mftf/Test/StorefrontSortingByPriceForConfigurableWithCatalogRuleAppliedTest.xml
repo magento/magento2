@@ -98,9 +98,8 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes">
                 <argument name="option" value="Yes"/>
             </actionGroup>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
 
         <after>
@@ -120,11 +119,13 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
                 <argument name="option" value="No"/>
             </actionGroup>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Open category with products and Sort by price desc-->

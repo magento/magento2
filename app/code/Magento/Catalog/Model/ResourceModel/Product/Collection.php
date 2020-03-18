@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -23,7 +24,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Category;
 
 /**
  * Product collection
@@ -1904,6 +1904,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @param bool $joinLeft
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _productLimitationPrice($joinLeft = false)
     {
@@ -1922,14 +1923,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $connection = $this->getConnection();
         $select = $this->getSelect();
-        $joinCond = join(
-            ' AND ',
-            [
-                'price_index.entity_id = e.entity_id',
-                $connection->quoteInto('price_index.website_id = ?', $filters['website_id']),
-                $connection->quoteInto('price_index.customer_group_id = ?', $filters['customer_group_id'])
-            ]
-        );
+        $joinCondArray = [];
+        $joinCondArray[] = 'price_index.entity_id = e.entity_id';
+        $joinCondArray[] = $connection->quoteInto('price_index.customer_group_id = ?', $filters['customer_group_id']);
+        // Add website condition only if it's different from admin scope
+        if (((int) $filters['website_id']) !== Store::DEFAULT_STORE_ID) {
+            $joinCondArray[] = $connection->quoteInto('price_index.website_id = ?', $filters['website_id']);
+        }
+        $joinCond = join(' AND ', $joinCondArray);
 
         $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset($fromPart['price_index'])) {
@@ -2121,7 +2122,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 if (in_array($category['parent_id'], $categoryIds)
                     && in_array($category['parent_id'], $anchorCategory)) {
                     $categoryIds[] = (int)$category[$linkField];
-                    if ($category['is_anchor'] == 1) {
+                    // Storefront approach is to treat non-anchor children of anchor category as anchors.
+                    // Adding their's IDs to $anchorCategory for consistency.
+                    if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategory)) {
                         $anchorCategory[] = (int)$category[$linkField];
                     }
                 }
@@ -2334,49 +2337,35 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function addMediaGalleryData()
     {
         if ($this->getFlag('media_gallery_added')) {
             return $this;
         }
-
         if (!$this->getSize()) {
             return $this;
         }
-
-        $items = $this->getItems();
-        $linkField = $this->getProductEntityMetadata()->getLinkField();
-
-        $select = $this->getMediaGalleryResource()
-            ->createBatchBaseSelect(
-                $this->getStoreId(),
-                $this->getAttribute('media_gallery')->getAttributeId()
-            )->reset(
-                Select::ORDER // we don't care what order is in current scenario
-            )->where(
-                'entity.' . $linkField . ' IN (?)',
-                array_map(
-                    function ($item) use ($linkField) {
-                        return (int) $item->getOrigData($linkField);
-                    },
-                    $items
-                )
-            );
-
+        if (!$this->isLoaded()) {
+            $this->load();
+        }
+        $records = $this->getMediaGalleryResource()->getMediaRecords(
+            $this->getStoreId(),
+            $this->getLoadedIds()
+        );
         $mediaGalleries = [];
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $mediaGalleries[$row[$linkField]][] = $row;
+        foreach ($records as $record) {
+            $mediaGalleries[$record['entity_id']][] = $record;
         }
 
-        foreach ($items as $item) {
+        foreach ($this->getItems() as $item) {
             $this->getGalleryReadHandler()
                 ->addMediaDataToProduct(
                     $item,
-                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
+                    $mediaGalleries[$item->getId()] ?? []
                 );
         }
-
         $this->setFlag('media_gallery_added', true);
         return $this;
     }
