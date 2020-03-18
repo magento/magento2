@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerLoginFormSection">
+        <element name="emailField" type="input" selector=".fieldset.login #email.input-text"/>
+        <element name="passwordField" type="input" selector=".field.password.required #pass.input-text"/>
+        <element name="signInAccountButton" type="button" selector=".actions-toolbar #send2.action.login.primary" timeout="30"/>
+    </section>
+</sections>
