@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order;
+use Magento\Store\Api\Data\StoreInterface;
 
 class OrderItem implements ResolverInterface
 {
@@ -25,15 +28,20 @@ class OrderItem implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-        $items = [];
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+        $itemsFromOrder = $value['items'] ?? [];
+        /** @var Order $order */
+        $order = $value['model'];
         /** @var OrderItemInterface $item */
-        foreach ($value['items'] ?? [] as $item) {
-            $items[] = [
+        foreach ($itemsFromOrder as $key => $item) {
+            $items[$key] = [
                 'parent_product_sku' => $item->getParentItem() ? $item->getParentItem()->getSku() : null,
                 'product_name' => $item->getName(),
                 'product_sale_price' => [
-                    'currency' => 'USD',
-                    'value' => '343',
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'value' => $item->getPrice(),
                 ],
                 'product_sku' => $item->getSku(),
                 'product_url' => 'url',

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -80,16 +81,20 @@ class CustomerOrders implements ResolverInterface
         $items = [];
 
         foreach (($searchResult->getItems() ?? []) as $order) {
+            if (!isset($order['model'])) {
+                throw new LocalizedException(__('"model" value should be specified'));
+            }
             $items[] = [
-                'created_at' => '1',
-                'grand_total' => '1',
+                'created_at' => $order['created_at'],
+                'grand_total' => $order['grand_total'],
                 'id' => $order['entity_id'],
                 'increment_id' => $order['increment_id'],
                 'number' => $order['increment_id'],
                 'order_date' => $order['created_at'],
                 'order_number' => $order['increment_id'],
                 'status' => $order['status'],
-                'items' => ($order['model'] && $order['model'] instanceof Order)
+                'model' => $order['model'],
+                'items' => ($order['model'] instanceof Order)
                     ? $order['model']->getItems() : [],
                 'totals' => [],
             ];
