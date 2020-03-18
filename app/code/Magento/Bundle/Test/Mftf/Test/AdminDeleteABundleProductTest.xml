@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminFilterProductListByBundleProduct">
+    <test name="AdminDeleteABundleProductTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Admin list bundle products"/>
-            <title value="Admin should be able to filter product list by type = Bundle Product"/>
-            <description value="Admin should be able to filter product list by type = Bundle Product"/>
+            <title value="Admin should be able to delete a bundle product"/>
+            <description value="Admin should be able to delete a bundle product"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-214"/>
+            <testCaseId value="MC-216"/>
             <group value="Bundle"/>
         </annotations>
         <before>
@@ -59,15 +59,29 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!--Apply Bundle Product Filter-->
-        <!--Clear Filters-->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFilters"/>
+        <!--Go to catalog deletion page-->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogPage"/>
+        <waitForPageLoad stepKey="Loading"/>
 
-        <!--Setting filter-->
-        <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
+        <!--Apply Name Filter-->
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="SelectAllOnly1"/>
+        <waitForPageLoad stepKey="loading2"/>
 
-        <!--Testing application of filter-->
-        <see selector="{{AdminProductFiltersSection.productType('0')}}" userInput="Bundle Product" stepKey="correcType0"/>
-        <dontSeeElement selector="{{AdminProductFiltersSection.AllProductsNotOfBundleType}}" stepKey="checkingRowsForIncorrectType"/>
+        <!--Delete-->
+        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
+        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
+        <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
+        <waitForPageLoad stepKey="loading3"/>
+
+        <!--Locating delete message-->
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
+
+        <!--Testing deletion of product-->
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
+        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleProductName}}" stepKey="LookingForNameOfProductTwo"/>
     </test>
 </tests>

@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StoreFrontMobileViewValidation">
+    <test name="StoreFrontMobileViewValidationTest">
         <annotations>
             <features value="Cms"/>
             <stories value="Mobile view page footer should stick to the bottom of page on Store front"/>

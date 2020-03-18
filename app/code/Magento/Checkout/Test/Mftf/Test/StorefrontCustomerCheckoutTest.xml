@@ -82,7 +82,7 @@
         <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderGrid}}" stepKey="waitForOrdersGridVisible"/>
         <see selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$createCustomer.firstname$$ $$createCustomer.lastname$$" stepKey="verifyOrder"/>
     </test>
-    <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
+    <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRatesTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Customer checkout"/>
@@ -198,7 +198,7 @@
         <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="seeSuccessMessage2"/>
     </test>
-    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPayment">
+    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPaymentTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout flow if payment solutions are not available"/>
