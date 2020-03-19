@@ -20,11 +20,6 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento
     protected $isRedirect = false;
 
     /**
-     * @var bool
-     */
-    private $headersSent;
-
-    /**
      * @inheritdoc
      */
     public function getHeader($name)
@@ -191,28 +186,5 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento
     public function __sleep()
     {
         return ['content', 'isRedirect', 'statusCode'];
-    }
-
-    /**
-     * Sending provided headers.
-     *
-     * Had to be overridden because the original did not work correctly with multi-headers.
-     */
-    public function sendHeaders()
-    {
-        if ($this->headersSent()) {
-            return $this;
-        }
-
-        $status  = $this->renderStatusLine();
-        header($status);
-
-        /** @var \Laminas\Http\Header\HeaderInterface $header */
-        foreach ($this->getHeaders() as $header) {
-            header($header->toString(), false);
-        }
-
-        $this->headersSent = true;
-        return $this;
     }
 }
