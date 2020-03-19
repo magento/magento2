@@ -497,8 +497,7 @@ class CreateAccountTest extends TestCase
         $this->assertCustomerData($customer, $expectedCustomerData);
         $this->accountManagement->authenticate(
             $customer->getEmail(),
-            '_aPassword1',
-            true
+            '_aPassword1'
         );
     }
 
