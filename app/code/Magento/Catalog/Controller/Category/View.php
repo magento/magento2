@@ -242,10 +242,10 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
     /**
      * Category view action
      *
-     * @return ResultInterface
+     * @return ResultInterface|null
      * @throws NoSuchEntityException
      */
-    public function execute()
+    public function execute(): ?ResultInterface
     {
         if ($this->request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
             return $this->redirectFactory->create()->setUrl($this->redirect->getRedirectUrl());
