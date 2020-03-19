@@ -355,6 +355,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         }
 
         foreach ($this->_getProductCollection() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
 
