@@ -125,7 +125,7 @@ class Reorder
 
         $cart = $this->customerCartProvider->resolve($customerId);
         if (!$this->reorderHelper->canReorder($order->getId())) {
-            $this->addError(__('Reorder is not available.'), self::ERROR_REORDER_NOT_AVAILABLE);
+            $this->addError((string)__('Reorder is not available.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
         }
 
@@ -134,13 +134,10 @@ class Reorder
             try {
                 $this->addOrderItem($cart, $item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->addError($e->getMessage());
+                $this->addError($this->addCartItemError($item, $e->getMessage()));
             } catch (\Throwable $e) {
                 $this->logger->critical($e);
-                $this->addError(
-                    __('We can\'t add this item to your shopping cart right now.'),
-                    self::ERROR_UNDEFINED
-                );
+                $this->addError($this->addCartItemError($item, $e->getMessage()), self::ERROR_UNDEFINED);
             }
         }
 
@@ -174,7 +171,7 @@ class Reorder
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, null, true);
             } catch (NoSuchEntityException $e) {
                 $this->addError(
-                    __('Could not find a product with ID "%1"', $orderItem->getProductId()),
+                    (string)__('Could not find a product with ID "%1"', $orderItem->getProductId()),
                     self::ERROR_PRODUCT_NOT_FOUND
                 );
                 return;
@@ -190,11 +187,11 @@ class Reorder
      * @param string|null $code
      * @return void
      */
-    private function addError($message, string $code = null): void
+    private function addError(string $message, string $code = null): void
     {
         $this->errors[] = new Data\Error(
-            (string)$message,
-            $code ?? $this->getErrorCode((string)$message)
+            $message,
+            $code ?? $this->getErrorCode($message)
         );
     }
 
@@ -234,5 +231,20 @@ class Reorder
         $output = new Data\ReorderOutput($cart, $this->errors);
         $this->errors = [];
         return $output;
+    }
+
+    /**
+     * Add error message for a cart item
+     *
+     * @param Item $item
+     * @param string $message
+     * @return string
+     */
+    private function addCartItemError(Item $item, string $message): string
+    {
+        return (string) __(
+            'Could not add the product with SKU "%sku" to the shopping cart: %message',
+            ['sku' => $item->getSku() ?? '-', 'message' => $message]
+        );
     }
 }

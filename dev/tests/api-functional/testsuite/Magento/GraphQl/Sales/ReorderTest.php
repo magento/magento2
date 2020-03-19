@@ -126,7 +126,8 @@ class ReorderTest extends GraphQlAbstract
                 [
                     'path' => ['orderNumber'],
                     'code' => 'NOT_SALABLE',
-                    'message' => 'Product that you are trying to add is not available.',
+                    'message' => 'Could not add the product with SKU "simple" to the shopping cart: '
+                        . 'Product that you are trying to add is not available.',
                 ],
             ],
             'cart' => [
