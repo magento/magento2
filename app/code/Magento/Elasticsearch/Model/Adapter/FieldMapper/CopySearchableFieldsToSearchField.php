@@ -21,7 +21,7 @@ class CopySearchableFieldsToSearchField implements FieldsMappingPreprocessorInte
     /**
      * Add "copy_to" parameter for default search field to index fields.
      *
-     * Emulates catch all field (_all) for elasticsearch version 6.0+
+     * Emulates catch all field (_all) for elasticsearch
      *
      * @param array $mapping
      * @return array

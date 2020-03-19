@@ -79,7 +79,7 @@
                         <field id="engine">elasticsearch7</field>
                     </depends>
                 </field>
-                <field id="elasticsearch7_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1">
+                <field id="elasticsearch7_minimum_should_match" translate="label" type="text" sortOrder="89" showInDefault="1">
                     <label>Minimum Terms to Match</label>
                     <depends>
                         <field id="engine">elasticsearch7</field>

@@ -21,7 +21,7 @@ class AddDefaultSearchField implements FieldsMappingPreprocessorInterface
     /**
      * Add default search field (catch all field) to the fields.
      *
-     * Emulates catch all field (_all) for elasticsearch version 6.0+
+     * Emulates catch all field (_all) for elasticsearch
      *
      * @param array $mapping
      * @return array
