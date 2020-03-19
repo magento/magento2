@@ -1679,6 +1679,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
+                $this->deleteItem($item);
                 foreach ($item->getMessage(false) as $message) {
                     if (!in_array($message, $errors)) {
                         // filter duplicate messages

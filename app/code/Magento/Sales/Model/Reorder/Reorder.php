@@ -36,10 +36,10 @@ class Reorder
      * List of error messages and codes.
      */
     private const MESSAGE_CODES = [
-        'The product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
+        'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The requested quantity is not available' => self::ERROR_INSUFFICIENT_STOCK,
+        'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
     ];
 
     /**
@@ -131,14 +131,7 @@ class Reorder
 
         $items = $order->getItemsCollection();
         foreach ($items as $item) {
-            try {
-                $this->addOrderItem($cart, $item);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->addError($this->addCartItemError($item, $e->getMessage()));
-            } catch (\Throwable $e) {
-                $this->logger->critical($e);
-                $this->addError($this->addCartItemError($item, $e->getMessage()), self::ERROR_UNDEFINED);
-            }
+            $this->addOrderItem($cart, $item);
         }
 
         try {
@@ -157,7 +150,6 @@ class Reorder
      * @param \Magento\Quote\Model\Quote $cart
      * @param Item $orderItem
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addOrderItem(\Magento\Quote\Model\Quote $cart, $orderItem): void
     {
@@ -176,7 +168,14 @@ class Reorder
                 );
                 return;
             }
-            $cart->addProduct($product, $info);
+            try {
+                $cart->addProduct($product, $info);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->addError($this->addCartItemError($product->getSku(), $e->getMessage()));
+            } catch (\Throwable $e) {
+                $this->logger->critical($e);
+                $this->addError($this->addCartItemError($product->getSku()), self::ERROR_UNDEFINED);
+            }
         }
     }
 
@@ -236,15 +235,14 @@ class Reorder
     /**
      * Add error message for a cart item
      *
-     * @param Item $item
-     * @param string $message
+     * @param string $sku
+     * @param string|null $message
      * @return string
      */
-    private function addCartItemError(Item $item, string $message): string
+    private function addCartItemError(string $sku, string $message = null): string
     {
-        return (string) __(
-            'Could not add the product with SKU "%sku" to the shopping cart: %message',
-            ['sku' => $item->getSku() ?? '-', 'message' => $message]
-        );
+        return (string)($message
+            ? __('Could not add the product with SKU "%1" to the shopping cart: %2', $sku, $message)
+            : __('Could not add the product with SKU "%1" to the shopping cart', $sku));
     }
 }
