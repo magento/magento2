@@ -37,6 +37,7 @@ class Reorder
      */
     private const MESSAGE_CODES = [
         'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
+        'This product is out of stock' => self::ERROR_NOT_SALABLE,
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,

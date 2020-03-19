@@ -865,6 +865,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
 
         parent::beforeSave();
+
+        return $this;
     }
 
     /**
@@ -946,7 +948,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyStatement
                 }
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
@@ -960,7 +962,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyStatement
                 }
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
@@ -1686,6 +1688,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                         $errors[] = $message;
                     }
                 }
+                break;
             }
         }
         if (!empty($errors)) {

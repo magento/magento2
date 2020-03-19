@@ -15,6 +15,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test Reorder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReorderTest extends GraphQlAbstract
 {
