@@ -5,10 +5,31 @@
  */
 namespace Magento\Catalog\Block\Product\Widget;
 
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Block\Product\NewProduct;
+use Magento\Catalog\Block\Product\Widget\Html\Pager;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\RendererList;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\LayoutInterfaceFactory;
+use Magento\Widget\Block\BlockInterface;
+
 /**
  * New products widget
  */
-class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Magento\Widget\Block\BlockInterface
+class NewWidget extends NewProduct implements BlockInterface
 {
     /**
      * Display products type - all products
@@ -33,39 +54,58 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Name of request parameter for page number value
      *
-     * @deprecated
+     * @deprecated @see $this->getData('page_var_name')
      */
     const PAGE_VAR_NAME = 'np';
 
     /**
      * Instance of pager block
      *
-     * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
+     * @var Pager
      */
     protected $_pager;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
+     * @var LayoutInterface
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var EncoderInterface
+     */
+    protected $urlEncoder;
+
+    /**
+     * @var RendererList
+     */
+    protected $rendererListBlock;
+
+    /**
      * NewWidget constructor.
      *
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param Context $context
+     * @param CollectionFactory $productCollectionFactory
+     * @param Visibility $catalogProductVisibility
+     * @param HttpContext $httpContext
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
+     * @param LayoutInterfaceFactory $layoutFactory
+     * @param EncoderInterface $urlEncoder
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Framework\App\Http\Context $httpContext,
+        Context $context,
+        CollectionFactory $productCollectionFactory,
+        Visibility $catalogProductVisibility,
+        HttpContext $httpContext,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null,
+        LayoutInterfaceFactory $layoutFactory = null,
+        EncoderInterface $urlEncoder = null
     ) {
         parent::__construct(
             $context,
@@ -74,14 +114,15 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             $httpContext,
             $data
         );
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutInterfaceFactory::class);
+        $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
     }
 
     /**
      * Product collection initialize process
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return Collection|Object|\Magento\Framework\Data\Collection
      */
     protected function _getProductCollection()
     {
@@ -101,11 +142,11 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Prepare collection for recent product list
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return Collection|Object|\Magento\Framework\Data\Collection
      */
     protected function _getRecentlyAddedProductsCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var $collection Collection */
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 
@@ -211,13 +252,14 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * Render pagination HTML
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getPagerHtml()
     {
         if ($this->showPager()) {
             if (!$this->_pager) {
                 $this->_pager = $this->getLayout()->createBlock(
-                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
+                    Pager::class,
                     'widget.new.product.list.pager'
                 );
 
@@ -229,7 +271,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
                     ->setTotalLimit($this->getProductsCount())
                     ->setCollection($this->getProductCollection());
             }
-            if ($this->_pager instanceof \Magento\Framework\View\Element\AbstractBlock) {
+            if ($this->_pager instanceof AbstractBlock) {
                 return $this->_pager->toHtml();
             }
         }
@@ -239,17 +281,19 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Return HTML block with price
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param string $priceType
-     * @param string $renderZone
-     * @param array $arguments
+     * @param Product $product
+     * @param string  $priceType
+     * @param string  $renderZone
+     * @param array   $arguments
+     *
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function getProductPriceHtml(
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         $priceType = null,
-        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        $renderZone = Render::ZONE_ITEM_LIST,
         array $arguments = []
     ) {
         if (!isset($arguments['zone'])) {
@@ -268,17 +312,55 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                FinalPrice::PRICE_CODE,
                 $product,
                 $arguments
             );
         }
         return $price;
+    }
+
+    /**
+     * Get the renderer that will be used to render the details block
+     *
+     * @return bool|AbstractBlock
+     * @throws LocalizedException
+     */
+    protected function getDetailsRendererList()
+    {
+        if (empty($this->rendererListBlock)) {
+            /** @var $layout LayoutInterface */
+            $layout = $this->layoutFactory->create(['cacheable' => false]);
+            $layout->getUpdate()->addHandle('catalog_widget_new_product_list')->load();
+            $layout->generateXml();
+            $layout->generateElements();
+
+            $this->rendererListBlock = $layout->getBlock('category.new.product.type.widget.details.renderers');
+        }
+        return $this->rendererListBlock;
+    }
+
+    /**
+     * Get post parameters.
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getAddToCartPostParams(Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
+            ]
+        ];
     }
 }
