@@ -355,10 +355,8 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
         $customerDataMock->expects($this->exactly(2))->method('getStoreId')->willReturn($storeId);
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
-        $this->sendEmailCheck();
-        $this->customerAccountManagement->expects($this->never())->method('getConfirmationStatus');
-        $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->with()->willReturn(true);
-
+        $this->sendEmailCheck(Subscriber::STATUS_UNCONFIRMED);
+        $this->customerAccountManagement->expects($this->once())->method('getConfirmationStatus');
         $this->subscriber->updateSubscription($customerId);
         $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $this->subscriber->getStatus());
     }
@@ -421,14 +419,14 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
     /**
      * @return $this
      */
-    protected function sendEmailCheck()
+    protected function sendEmailCheck($scopeConfigReturn = true)
     {
         $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
-        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn(true);
+        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn($scopeConfigReturn);
         $this->transportBuilder->expects($this->once())->method('setTemplateIdentifier')->willReturnSelf();
         $this->transportBuilder->expects($this->once())->method('setTemplateOptions')->willReturnSelf();
         $this->transportBuilder->expects($this->once())->method('setTemplateVars')->willReturnSelf();
