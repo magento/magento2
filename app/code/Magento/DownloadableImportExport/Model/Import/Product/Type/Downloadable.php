@@ -17,6 +17,7 @@ use \Magento\Store\Model\Store;
  *
  * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
