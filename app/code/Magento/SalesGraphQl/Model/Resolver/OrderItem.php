@@ -15,7 +15,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
-use Magento\Store\Api\Data\StoreInterface;
 
 class OrderItem implements ResolverInterface
 {
@@ -35,6 +34,7 @@ class OrderItem implements ResolverInterface
         $order = $value['model'];
         /** @var OrderItemInterface $item */
         foreach ($value['items'] ?? [] as $key => $item) {
+            $options = $this->getItemOptions($item);
             $items[$key] = [
                 'parent_product_sku' => $item->getParentItem() ? $item->getParentItem()->getSku() : null,
                 'product_name' => $item->getName(),
@@ -45,20 +45,52 @@ class OrderItem implements ResolverInterface
                 'product_sku' => $item->getSku(),
                 'product_url' => 'url',
                 'quantity_ordered' => $item->getQtyOrdered(),
-                'selected_options' => [
-                    [
-                        'id' => '1',
-                        'value' => 4,
-                    ],
-                ],
-                'entered_options' => [
-                    [
-                        'id' => '3',
-                        'value' => 34,
-                    ]
-                ],
+                'selected_options' => $options['selected_options'] ?? [],
+                'entered_options' => $options['entered_options'] ?? [],
             ];
         }
         return $items;
+    }
+
+    /**
+     * Get Order item options.
+     *
+     * @param OrderItemInterface $orderItem
+     * @return array
+     */
+    public function getItemOptions(OrderItemInterface $orderItem): array
+    {
+        //build options arrays
+        $selectedOptions = [];
+        $enteredOptions = [];
+        $options = $orderItem->getProductOptions();
+        if ($options) {
+            if (isset($options['options'])) {
+                foreach ($options['options'] ?? [] as $option) {
+                    if (isset($option['option_type'])) {
+                        if (in_array($option['option_type'], ['field', 'area', 'file', 'date', 'date_time', 'time'])) {
+                            $selectedOptions[] = [
+                                'id' => $option['label'],
+                                'value' => $option['print_value'] ?? $option['value'],
+                            ];
+                        } elseif (in_array($option['option_type'], ['drop_down', 'radio', '"checkbox"', 'multiple'])) {
+                            $enteredOptions[] = [
+                                'id' => $option['label'],
+                                'value' => $option['print_value'] ?? $option['value'],
+                            ];
+                        }
+                    }
+                }
+            } elseif (isset($options['attributes_info'])) {
+                foreach ($options['attributes_info'] ?? [] as $option) {
+                    $selectedOptions[] = [
+                        'id' => $option['label'],
+                        'value' => $option['print_value'] ?? $option['value'],
+                    ];
+                }
+            }
+            // TODO $options['additional_options']
+        }
+        return ['selected_options' => $selectedOptions, 'entered_options' => $enteredOptions];
     }
 }
