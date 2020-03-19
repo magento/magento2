@@ -140,7 +140,6 @@ class MassSchedule
 
         $operations = [];
         $requestItems = [];
-        $singleOperationsData = [];
         $bulkException = new BulkException();
         foreach ($entitiesArray as $key => $entityParams) {
             /** @var \Magento\AsynchronousOperations\Api\Data\ItemStatusInterface $requestItem */
@@ -149,7 +148,6 @@ class MassSchedule
             try {
                 $operation = $this->operationRepository->createByTopic($topicName, $entityParams, $groupId);
                 $operations[] = $operation;
-                $singleOperationsData[] = $operation->getData();
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
                 $requestItem->setDataHash(
@@ -170,7 +168,7 @@ class MassSchedule
             }
         }
 
-        $this->saveMultipleOperations->execute($singleOperationsData);
+        $this->saveMultipleOperations->execute($operations);
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
             throw new LocalizedException(
                 __('Something went wrong while processing the request.')

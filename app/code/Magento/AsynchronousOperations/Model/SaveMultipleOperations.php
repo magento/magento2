@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation as OperationResource;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -41,10 +40,14 @@ class SaveMultipleOperations implements SaveMultipleOperationsInterface
     public function execute(array $operations): void
     {
         try {
+            $operationsToInsert = array_map(function ($operation) {
+                return $operation->getData();
+            }, $operations);
+
             $connection = $this->operationResource->getConnection();
             $connection->insertMultiple(
                 $this->operationResource->getTable(OperationResource::TABLE_NAME),
-                $operations
+                $operationsToInsert
             );
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
