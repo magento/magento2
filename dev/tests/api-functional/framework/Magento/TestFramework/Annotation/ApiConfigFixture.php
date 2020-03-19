@@ -10,6 +10,7 @@ namespace Magento\TestFramework\Annotation;
 use Magento\Config\Model\Config;
 use Magento\Config\Model\ResourceModel\Config as ConfigResource;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -155,5 +156,32 @@ class ApiConfigFixture extends ConfigFixture
         $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $store = $storeManager->getStore($storeCode);
         return (int)$store->getId();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _setConfigValue($configPath, $value, $storeCode = false)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        if ($storeCode === false) {
+            $objectManager->get(
+                \Magento\TestFramework\App\ApiMutableScopeConfig::class
+            )->setValue(
+                $configPath,
+                $value,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            );
+
+            return;
+        }
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\TestFramework\App\ApiMutableScopeConfig::class
+        )->setValue(
+            $configPath,
+            $value,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeCode
+        );
     }
 }

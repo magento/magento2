@@ -104,11 +104,10 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -217,11 +216,10 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -318,7 +316,7 @@ QUERY;
 mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

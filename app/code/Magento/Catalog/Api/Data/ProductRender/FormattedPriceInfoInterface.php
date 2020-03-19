@@ -29,6 +29,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
 
     /**
      * Set the final price: usually it calculated as minimal price of the product
+     *
      * Can be different depends on type of product
      *
      * @param string $finalPrice
@@ -39,6 +40,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
 
     /**
      * Retrieve max price of a product
+     *
      * E.g. for product with custom options is price with the most expensive custom option
      *
      * @return string
@@ -57,6 +59,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
 
     /**
      * Retrieve the minimal price of the product or variation
+     *
      * The minimal price is for example, the lowest price of all variations for complex product
      *
      * @return string
@@ -66,7 +69,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
 
     /**
      * Set max regular price
-     * Max regular price is the same, as maximum price, except of excluding calculating special price and catalogules
+     * Max regular price is the same, as maximum price, except of excluding calculating special price and catalog rules
      * in it
      *
      * @param string $maxRegularPrice
@@ -130,6 +133,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
 
     /**
      * Regular price - is price of product without discounts and special price with taxes and fixed product tax
+     *
      * Usually this price is corresponding to price in admin panel of product
      *
      * @return string

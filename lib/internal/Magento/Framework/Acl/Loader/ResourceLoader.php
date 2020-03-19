@@ -8,7 +8,7 @@
 namespace Magento\Framework\Acl\Loader;
 
 use Magento\Framework\Acl;
-use Magento\Framework\Acl\AclResource as AclResource;
+use Magento\Framework\Acl\AclResource;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\AclResourceFactory;
 
