@@ -44,7 +44,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * Check Rss response.
      *
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
      * @magentoConfigFixture current_store rss/wishlist/active 1
      * @magentoConfigFixture current_store rss/config/active 1
