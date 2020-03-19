@@ -13,7 +13,8 @@ define([
     'priceUtils',
     'priceBox',
     'jquery-ui-modules/widget',
-    'jquery/jquery.parsequery'
+    'jquery/jquery.parsequery',
+    'fotoramaVideoEvents'
 ], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
 
@@ -307,9 +308,13 @@ define([
         _changeProductImage: function () {
             var images,
                 initialImages = this.options.mediaGalleryInitial,
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+                gallery = $(this.options.mediaGallerySelector).data('gallery');
 
-            if (!galleryObject) {
+            if (_.isUndefined(gallery)) {
+                $(this.options.mediaGallerySelector).on('gallery:loaded', function () {
+                    this._changeProductImage();
+                }.bind(this));
+
                 return;
             }
 
@@ -325,17 +330,35 @@ define([
                 images = $.extend(true, [], images);
                 images = this._setImageIndex(images);
 
-                galleryObject.updateData(images);
-
-                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
-                    selectedOption: this.simpleProduct,
-                    dataMergeStrategy: this.options.gallerySwitchStrategy
-                });
+                gallery.updateData(images);
+                this._addFotoramaVideoEvents(false);
             } else {
-                galleryObject.updateData(initialImages);
-                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                gallery.updateData(initialImages);
+                this._addFotoramaVideoEvents(true);
+            }
+        },
+
+        /**
+         * Add video events
+         *
+         * @param {Boolean} isInitial
+         * @private
+         */
+        _addFotoramaVideoEvents: function (isInitial) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+                return;
             }
 
+            if (isInitial) {
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+
+                return;
+            }
+
+            $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                selectedOption: this.simpleProduct,
+                dataMergeStrategy: this.options.gallerySwitchStrategy
+            });
         },
 
         /**
