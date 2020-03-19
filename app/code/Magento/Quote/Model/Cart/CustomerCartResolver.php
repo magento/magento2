@@ -78,6 +78,7 @@ class CustomerCartResolver
         }
         try {
             $this->ensureQuoteMaskIdExist((int)$cart->getId(), $predefinedMaskedQuoteId);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (AlreadyExistsException $e) {
             // do nothing, we already have masked id
         }
