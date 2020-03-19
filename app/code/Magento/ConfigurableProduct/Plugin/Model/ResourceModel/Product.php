@@ -4,12 +4,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Plugin product resource model
@@ -27,17 +29,41 @@ class Product
     private $productIndexer;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * Initialize Product dependencies.
      *
      * @param Configurable $configurable
      * @param ActionInterface $productIndexer
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
         Configurable $configurable,
-        ActionInterface $productIndexer
+        ActionInterface $productIndexer,
+        ProductAttributeRepositoryInterface $productAttributeRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
+        $this->productAttributeRepository = $productAttributeRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -72,13 +98,23 @@ class Product
     {
         $extensionAttribute = $object->getExtensionAttributes();
         if ($extensionAttribute && $extensionAttribute->getConfigurableProductOptions()) {
-            /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
-            $productAttributeRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(ProductAttributeRepositoryInterface::class);
+            $attributeIds = [];
             /** @var OptionInterface $option */
             foreach ($extensionAttribute->getConfigurableProductOptions() as $option) {
-                $eavAttribute = $productAttributeRepository->get($option->getAttributeId());
-                $object->setData($eavAttribute->getAttributeCode(), null);
+                $attributeIds[] = $option->getAttributeId();
+            }
+
+            $filter = $this->filterBuilder
+                ->setField(ProductAttributeInterface::ATTRIBUTE_ID)
+                ->setConditionType('in')
+                ->setValue($attributeIds)
+                ->create();
+            $this->searchCriteriaBuilder->addFilters([$filter]);
+            $searchCriteria = $this->searchCriteriaBuilder->create();
+            $optionAttributes = $this->productAttributeRepository->getList($searchCriteria)->getItems();
+
+            foreach ($optionAttributes as $optionAttribute) {
+                $object->setData($optionAttribute->getAttributeCode(), null);
             }
         }
     }
