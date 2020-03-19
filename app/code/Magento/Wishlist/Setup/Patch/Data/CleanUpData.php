@@ -58,7 +58,7 @@ class CleanUpData implements DataPatchInterface
         $this->json = $json;
         $this->queryGenerator = $queryGenerator;
         $this->queryModifierFactory = $queryModifierFactory;
-        $this->adapter = $resourceConnection->getConnection();
+        $this->adapter = $resourceConnection;
     }
 
     /**
@@ -68,6 +68,7 @@ class CleanUpData implements DataPatchInterface
     {
         $wishListItemOptionTable = $this->adapter->getTableName('wishlist_item_option');
         $select = $this->adapter
+            ->getConnection()
             ->select()
             ->from(
                 $wishListItemOptionTable,
@@ -75,12 +76,12 @@ class CleanUpData implements DataPatchInterface
             );
         $iterator = $this->queryGenerator->generate('option_id', $select, self::BATCH_SIZE);
         foreach ($iterator as $selectByRange) {
-            $optionRows = $this->adapter->fetchAll($selectByRange);
+            $optionRows = $this->adapter->getConnection()->fetchAll($selectByRange);
             foreach ($optionRows as $optionRow) {
                 $rowValue = $this->json->unserialize($optionRow['value']);
                 unset($rowValue['login']);
                 $rowValue = $this->json->serialize($rowValue);
-                $this->adapter->update(
+                $this->adapter->getConnection()->update(
                     $wishListItemOptionTable,
                     ['value' => $rowValue],
                     ['option_id = ?' => $optionRow['option_id']]
