@@ -126,13 +126,18 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with(Storage::PARAM_CONTENT_TYPE)
             ->will($this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE));
 
-        $this->helper = new Storage(
-            $this->contextHelper,
-            $this->filesystem,
-            $this->session,
-            $this->themeFactory,
-            null,
-            $this->filesystemDriver
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->helper = $objectManager->getObject(
+            Storage::class,
+            [
+                'context' => $this->contextHelper,
+                'filesystem' => $this->filesystem,
+                'session' => $this->session,
+                'themeFactory' => $this->themeFactory,
+                'file' => null,
+                'filesystemDriver' => $this->filesystemDriver,
+            ]
         );
     }
 
@@ -520,7 +525,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'requested path "root" should short-circuit' => [$rootPath, Storage::NODE_ROOT],
             'non-existent directory should default to the base path' => [$rootPath, $rootPath . '/foo'],
             'requested path that resolves to a bad path should default to root' =>
-            [$rootPath, $rootPath . '/something', true, null, '/bar'],
+                [$rootPath, $rootPath . '/something', true, null, '/bar'],
             'real path should resolve to relative path' => ['foo/', $rootPath . '/foo', true, 'foo/'],
         ];
     }

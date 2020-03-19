@@ -112,15 +112,20 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWrite);
 
-        $this->_storageModel = new \Magento\Theme\Model\Wysiwyg\Storage(
-            $this->_filesystem,
-            $this->_helperStorage,
-            $this->_objectManager,
-            $this->_imageFactory,
-            $this->urlEncoder,
-            $this->urlDecoder,
-            null,
-            $this->filesystemDriver
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->_storageModel = $objectManager->getObject(
+            \Magento\Theme\Model\Wysiwyg\Storage::class,
+            [
+                'filesystem' => $this->_filesystem,
+                'helper' => $this->_helperStorage,
+                'objectManager' => $this->_objectManager,
+                'imageFactory' => $this->_imageFactory,
+                'urlEncoder' => $this->urlEncoder,
+                'urlDecoder' => $this->urlDecoder,
+                'file' => null,
+                'filesystemDriver' => $this->filesystemDriver,
+            ]
         );
 
         $this->_storageRoot = '/root';
@@ -579,6 +584,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
      * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We can't delete root directory fake/relative/path right now.
      */
     public function testDeleteRootDirectoryRelative()
     {
