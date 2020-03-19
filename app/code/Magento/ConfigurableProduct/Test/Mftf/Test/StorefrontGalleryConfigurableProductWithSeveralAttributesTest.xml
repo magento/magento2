@@ -169,6 +169,7 @@
         </actionGroup>
 
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase0"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase0"/>
         <assertRegExp expected="|{{Magento2Image.filename}}.*.jpg|" actual="$getListOfThumbnailsCase0[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case0"/>
@@ -186,6 +187,7 @@
 
         <!--CASE 1: Selected options = F2; Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase1"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase1"/>
         <assertRegExp expected="|{{Magento3Image.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase1[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case1"/>
@@ -209,6 +211,7 @@
 
         <!--CASE 2: Selected options = F1; Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase2"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase2"/>
         <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|"  actual="$getListOfThumbnailsCase2[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case2"/>
@@ -232,6 +235,7 @@
 
         <!--CASE 3: Selected options = B2,F1; Expected media : C1, C2, C3-->
         <selectOption userInput="$dropdownAttributeSecondOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB2Case3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase3"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase3"/>
         <assertRegExp expected="|{{Magento2Image.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase3[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case3"/>
@@ -249,6 +253,7 @@
 
         <!--CASE 4: Selected options = B2,F2, Expected media : G1, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase4"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase4"/>
         <assertRegExp expected="|{{ProductImage.filename}}.*.png|"  actual="$getListOfThumbnailsCase4[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case4"/>
@@ -268,6 +273,7 @@
 
         <!--CASE 5: Selected options = B2, Expected media : C1, C2, C3-->
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF2Case5"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase5"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase5"/>
         <assertRegExp expected="|{{Magento2Image.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase5[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case5"/>
@@ -285,6 +291,7 @@
 
         <!--CASE 6: Selected options = B1, Expected media : D1, D2, D3, C1, C2, C3-->
         <selectOption userInput="$dropdownAttributeFirstOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB1Case6"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase6"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase6"/>
         <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|"  actual="$getListOfThumbnailsCase6[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case6"/>
@@ -308,6 +315,7 @@
 
         <!--CASE 7: Selected options = B1,F2, Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case7"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase7"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase7"/>
         <assertRegExp expected="|{{Magento3Image.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase7[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case7"/>
@@ -331,6 +339,7 @@
 
         <!--CASE 8: Selected options = B1,F1, Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case8"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase8"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase8"/>
         <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|"  actual="$getListOfThumbnailsCase8[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case8"/>
@@ -355,6 +364,7 @@
         <!--CASE 9: Selected options = none, Expected media : C1, C2, C3-->
         <selectOption userInput="Choose an Option..." selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="unselectB1Case9"/>
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF1Case9"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase9"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase9"/>
         <assertRegExp expected="|{{Magento2Image.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase9[0]"
                       expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case9"/>
