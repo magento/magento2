@@ -5,9 +5,8 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Directory\Model\Country\Postcode\Config;
+namespace Magento\Directory\Model;
 
-use Magento\Directory\Model\Country;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
