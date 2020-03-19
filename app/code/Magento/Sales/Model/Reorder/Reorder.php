@@ -36,10 +36,10 @@ class Reorder
      * List of error messages and codes.
      */
     private const MESSAGE_CODES = [
-        'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
+        'The product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
+        'The requested quantity is not available' => self::ERROR_INSUFFICIENT_STOCK,
     ];
 
     /**
@@ -125,7 +125,7 @@ class Reorder
 
         $cart = $this->customerCartProvider->resolve($customerId);
         if (!$this->reorderHelper->canReorder($order->getId())) {
-            $this->addError((string)__('Reorder is not available.'), self::ERROR_REORDER_NOT_AVAILABLE);
+            $this->addError((string)__('Reorders are not allowed.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
         }
 
