@@ -65,10 +65,17 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $this->item = $this->createMock(\Magento\Quote\Model\Quote\Item\AbstractItem::class);
         $this->data = $this->createPartialMock(\Magento\SalesRule\Model\Rule\Action\Discount\Data::class, []);
 
-        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->quote = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            [
+                'getStore',
+                'getCartFixedRules',
+                'setCartFixedRules',
+            ]
+        );
         $this->address = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['getCartFixedRules', 'setCartFixedRules', '__wakeup']
+            ['__wakeup']
         );
         $this->item->expects($this->any())->method('getQuote')->will($this->returnValue($this->quote));
         $this->item->expects($this->any())->method('getAddress')->will($this->returnValue($this->address));
@@ -101,7 +108,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     {
         $this->rule->setData(['id' => 1, 'discount_amount' => 10.0]);
 
-        $this->address->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
+        $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->will($this->returnArgument(0));
         $this->priceCurrency->expects($this->atLeastOnce())->method('round')->will($this->returnArgument(0));
@@ -145,7 +152,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(100)
         );
 
-        $this->address->expects($this->once())->method('setCartFixedRules')->with([1 => 0.0]);
+        $this->quote->expects($this->once())->method('setCartFixedRules')->with([1 => 0.0]);
         $this->model->calculate($this->rule, $this->item, 1);
 
         $this->assertEquals($this->data->getAmount(), 10);
