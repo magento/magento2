@@ -330,7 +330,7 @@
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!--Do reindex and flush cache-->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>

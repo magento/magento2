@@ -13,6 +13,7 @@
         <element name="filterExpand" type="button" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//button[@data-action='grid-filter-expand']" />
         <element name="inputFieldByNameAttr" type="input" selector="//*[@data-part='filter-form']//input[@name='{{inputNameAttr}}']" parameterized="true" />
         <element name="inputFieldByNameAttrInGrid" type="input" selector="//*[@data-role='filter-form']//input[@name='{{inputNameAttr}}']" parameterized="true"/>
+        <element name="filterSelectFieldByName" type="select" selector="//*[@data-part='filter-form']//select[@name='{{fieldName}}']" parameterized="true"/>
         <element name="apply" type="button" selector="//*[@data-part='filter-form']//button[@data-action='grid-filter-apply']" />
         <element name="clear" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" />
     </section>
