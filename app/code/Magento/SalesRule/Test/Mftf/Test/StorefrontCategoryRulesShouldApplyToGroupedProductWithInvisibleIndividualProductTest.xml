@@ -14,7 +14,7 @@
             <title value="Category rules should apply to grouped product with invisible individual products"/>
             <description value="Category rules should apply to grouped product with invisible individual products"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-13608"/>
+            <testCaseId value="MC-31863"/>
             <group value="SalesRule"/>
         </annotations>
         <before>
@@ -77,7 +77,7 @@
                 <argument name="ruleName" value="TestSalesRule"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Start to create new cart price rule via Category conditions -->
         <actionGroup ref="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" stepKey="createCartPriceRuleWithCondition">

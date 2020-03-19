@@ -9,10 +9,10 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterfaceFactory;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +21,11 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryRepositoryTest extends TestCase
 {
+    private const FIXTURE_CATEGORY_ID = 333;
+    private const FIXTURE_TWO_STORES_CATEGORY_ID = 555;
+    private const FIXTURE_SECOND_STORE_CODE = 'fixturestore';
+    private const FIXTURE_FIRST_STORE_CODE = 'default';
+
     /**
      * @var CategoryLayoutUpdateManager
      */
@@ -77,13 +82,13 @@ class CategoryRepositoryTest extends TestCase
     {
         //New valid value
         $repo = $this->createRepo();
-        $category = $repo->get(333);
+        $category = $repo->get(self::FIXTURE_CATEGORY_ID);
         $newFile = 'test';
-        $this->layoutManager->setCategoryFakeFiles(333, [$newFile]);
+        $this->layoutManager->setCategoryFakeFiles(self::FIXTURE_CATEGORY_ID, [$newFile]);
         $category->setCustomAttribute('custom_layout_update_file', $newFile);
         $repo->save($category);
         $repo = $this->createRepo();
-        $category = $repo->get(333);
+        $category = $repo->get(self::FIXTURE_CATEGORY_ID);
         $this->assertEquals($newFile, $category->getCustomAttribute('custom_layout_update_file')->getValue());
 
         //Setting non-existent value
@@ -125,5 +130,37 @@ class CategoryRepositoryTest extends TestCase
             $difference,
             'Wrong categories was deleted'
         );
+    }
+
+    /**
+     * Verifies whether `get()` method `$storeId` attribute works as expected.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
+     */
+    public function testGetCategoryForProvidedStore()
+    {
+        $categoryRepository = $this->repositoryFactory->create();
+
+        $categoryDefault = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID
+        );
+
+        $this->assertSame('category-defaultstore', $categoryDefault->getUrlKey());
+
+        $categoryFirstStore = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID,
+            self::FIXTURE_FIRST_STORE_CODE
+        );
+
+        $this->assertSame('category-defaultstore', $categoryFirstStore->getUrlKey());
+
+        $categorySecondStore = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $this->assertSame('category-fixturestore', $categorySecondStore->getUrlKey());
     }
 }

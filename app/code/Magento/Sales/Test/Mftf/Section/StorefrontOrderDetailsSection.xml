@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontOrderDetailsSection">
+        <element name="orderDateTagElement" type="block" selector=".order-date date"/>
         <element name="orderDetailsBlock" type="block" selector=".block-order-details-view"/>
         <element name="billingAddressBlock" type="block" selector=".box-order-billing-address > .box-content > address"/>
         <element name="discountSalesRule" type="text" selector="tr.discount span.price"/>

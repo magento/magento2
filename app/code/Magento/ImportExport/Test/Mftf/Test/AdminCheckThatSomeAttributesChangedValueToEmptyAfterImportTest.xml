@@ -41,7 +41,10 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!--Delete attribute-->
             <deleteData createDataKey="productAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Create product-->
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm"/>
