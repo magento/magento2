@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontTaxQuoteCheckoutGuestVirtual">
+    <test name="StorefrontTaxQuoteCheckoutGuestVirtualTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -114,7 +114,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCheckoutLoggedInSimple">
+    <test name="StorefrontTaxQuoteCheckoutLoggedInSimpleTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -236,7 +236,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCheckoutGuestSimple">
+    <test name="StorefrontTaxQuoteCheckoutGuestSimpleTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
@@ -353,7 +353,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
     </test>
 
-    <test name="StorefrontTaxQuoteCheckoutLoggedInVirtual">
+    <test name="StorefrontTaxQuoteCheckoutLoggedInVirtualTest">
         <annotations>
             <features value="Tax"/>
             <stories value="Tax Calculation in One Page Checkout"/>
