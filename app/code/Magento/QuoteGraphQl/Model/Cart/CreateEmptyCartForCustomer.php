@@ -12,6 +12,7 @@ use Magento\Quote\Model\Cart\CustomerCartResolver;
 
 /**
  * Create empty cart for customer
+ * Masked quote ID will be returned as a result
  */
 class CreateEmptyCartForCustomer
 {
