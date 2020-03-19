@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -26,8 +25,6 @@ $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.ph
 $addressFactory = $objectManager->get(AddressFactory::class);
 $billingAddress = $addressFactory->create(['data' => $addressData]);
 $billingAddress->setAddressType(Address::TYPE_BILLING);
-/** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ItemFactory $orderItemFactory */
 $orderItemFactory = $objectManager->get(ItemFactory::class);
 /** @var PaymentFactory $orderPaymentFactory */

@@ -9,6 +9,7 @@ namespace Magento\Downloadable\Block\Account;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +35,7 @@ class LinkTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->page = $this->objectManager->create(Page::class);
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
     }
 
     /**

@@ -93,12 +93,11 @@ class ListProductsTest extends TestCase
     public function testPendingOrder(): void
     {
         $this->customerSession->loginById(1);
-        $block = $this->createBlock();
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(
                 sprintf($this->downloadLinkXpath, 'Downloadable Product Link'),
-                $block->toHtml()
+                $this->createBlock()->toHtml()
             ),
             'The download link displayed'
         );
@@ -114,8 +113,7 @@ class ListProductsTest extends TestCase
         $order = $this->getOrder('100000001');
         $this->invoiceOrder->execute($order->getId());
         $this->customerSession->loginById(1);
-        $block = $this->createBlock();
-        $html = $block->toHtml();
+        $html = $this->createBlock()->toHtml();
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(sprintf($this->downloadLinkXpath, 'Downloadable Product Link'), $html),
@@ -141,8 +139,7 @@ class ListProductsTest extends TestCase
         $refundOrder = $this->objectManager->create(RefundOrderInterface::class);
         $refundOrder->execute($order->getId());
         $this->customerSession->loginById(1);
-        $block = $this->createBlock();
-        $html = $block->toHtml();
+        $html = $this->createBlock()->toHtml();
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(sprintf($this->downloadLinkXpath, 'Downloadable Product Link'), $html),
