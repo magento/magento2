@@ -14,3 +14,5 @@ dev/tests/api-functional/testsuite/Magento/Customer/Api/AddressRepositoryTest.ph
 dev/tests/api-functional/testsuite/Magento/Framework/Model/Entity/HydratorTest.php
 dev/tests/api-functional/testsuite/Magento/Integration/Model/AdminTokenServiceTest.php
 dev/tests/api-functional/testsuite/Magento/Integration/Model/CustomerTokenServiceTest.php
+lib/internal/Magento/Framework/Storage/AdapterFactory/AwsS3Factory.php
+lib/internal/Magento/Framework/Storage/AdapterFactory/AzureFactory.php

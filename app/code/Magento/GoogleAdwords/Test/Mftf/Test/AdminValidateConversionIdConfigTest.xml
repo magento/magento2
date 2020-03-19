@@ -19,7 +19,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToGoogleAdwordsConfigurationActionGroup" stepKey="goToConfigPage"/>
         <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandingGoogleAdwordsSection">
