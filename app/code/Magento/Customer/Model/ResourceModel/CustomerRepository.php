@@ -11,6 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
 use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\Customer\Attribute\CompositeValidator;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
@@ -118,6 +119,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     private $delegatedStorage;
 
     /**
+     * @var CompositeValidator
+     */
+    private $compositeValidator;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
      * @param CustomerRegistry $customerRegistry
@@ -134,6 +140,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param NotificationStorage $notificationStorage
      * @param DelegatedStorage|null $delegatedStorage
+     * @param CompositeValidator|null $compositeValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -152,7 +159,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
-        DelegatedStorage $delegatedStorage = null
+        DelegatedStorage $delegatedStorage = null,
+        CompositeValidator $compositeValidator = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -170,6 +178,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
         $this->delegatedStorage = $delegatedStorage ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
+        $this->compositeValidator = $compositeValidator ?? ObjectManager::getInstance()->get(
+            CompositeValidator::class
+        );
     }
 
     /**
@@ -186,6 +197,9 @@ class CustomerRepository implements CustomerRepositoryInterface
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
+        foreach ($customer->getCustomAttributes() as $customAttribute) {
+            $this->compositeValidator->validate($customAttribute);
+        }
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = null;

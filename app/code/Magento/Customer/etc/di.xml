@@ -351,7 +351,6 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
-        <plugin name="validateCustomerCustomAttribute" type="\Magento\Customer\Model\Plugin\CustomerRepository\ValidateCustomerCustomAttribute"/>
     </type>
     <type name="Magento\Directory\Model\AllowedCountries">
         <plugin name="customerAllowedCountries" type="Magento\Customer\Model\Plugin\AllowedCountries"/>
