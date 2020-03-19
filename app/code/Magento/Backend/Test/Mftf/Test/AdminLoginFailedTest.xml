@@ -8,20 +8,21 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminLoginTest" deprecated="Replaced with AdminLoginSuccessfulTest">
+    <test name="AdminLoginFailedTest">
         <annotations>
             <features value="Backend"/>
             <stories value="Login on the Admin Login page"/>
-            <title value="Admin should be able to log into the Magento Admin backend"/>
-            <description value="Admin should be able to log into the Magento Admin backend"/>
+            <title value="Admin should not be able to log into the backend with invalid credentials"/>
+            <description value="Admin should not be able to log into the backend with invalid credentials"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-71572"/>
             <group value="example"/>
             <group value="login"/>
         </annotations>
 
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin">
+            <argument name="password" value="INVALID!{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="assertErrorMessage"/>
     </test>
 </tests>
