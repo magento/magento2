@@ -27,17 +27,10 @@ use Magento\Store\Model\StoreManagerInterface;
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
-     * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
-     */
-
-    /**
      * Delimiter before product option value.
      */
     const BEFORE_OPTION_VALUE_DELIMITER = ';';
 
-    /**
-     * Pair value separator.
-     */
     const PAIR_VALUE_SEPARATOR = '=';
 
     /**
@@ -50,24 +43,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     const VALUE_FIXED = 'fixed';
 
-    /**
-     * Not fixed dynamic attribute.
-     */
     const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
 
-    /**
-     * Selection price type fixed.
-     */
     const SELECTION_PRICE_TYPE_FIXED = 0;
 
-    /**
-     * Selection price type percent.
-     */
     const SELECTION_PRICE_TYPE_PERCENT = 1;
-
-    /**
-     * phpcs:enable Magento2.Commenting.ConstantsPHPDocFormatting
-     */
 
     /**
      * Array of cached options.
