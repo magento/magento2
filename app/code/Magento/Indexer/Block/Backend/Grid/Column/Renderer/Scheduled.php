@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Renderer for 'Scheduled' column in indexer grid
+ */
 class Scheduled extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
