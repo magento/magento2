@@ -22,9 +22,8 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
         </after>
 
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-        <actionGroup ref="StorefrontCustomerLoginActionGroup" stepKey="loginAsCustomer">
-            <argument name="customer" value="$$createCustomer$$"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
         <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
