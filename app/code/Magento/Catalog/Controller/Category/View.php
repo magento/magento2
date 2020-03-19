@@ -129,7 +129,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
      * @var RedirectFactory
      */
     private $redirectFactory;
-    
+
     /**
      * @var ResponseInterface
      */
@@ -245,10 +245,8 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
      * @return ResultInterface
      * @throws NoSuchEntityException
      */
-    public function execute(): ?ResultInterface
+    public function execute()
     {
-        $result = null;
-
         if ($this->request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
             return $this->redirectFactory->create()->setUrl($this->redirect->getRedirectUrl());
         }
@@ -291,9 +289,8 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
 
             return $page;
         } elseif (!$this->response->isRedirect()) {
-            $result = $this->resultForwardFactory->create()->forward('noroute');
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
-        return $result;
     }
 
     /**
