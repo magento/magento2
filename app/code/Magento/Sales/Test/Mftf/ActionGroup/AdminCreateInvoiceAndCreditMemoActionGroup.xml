@@ -13,7 +13,7 @@
         <waitForPageLoad stepKey="waitForLoadingCreditMemoPage" after="pushButtonCreditMemo"/>
         <scrollTo selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="scrollToBottom" after="waitForLoadingCreditMemoPage"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitRefund" after="scrollToBottom"/>
-        <waitForPageLoad stepKey="waitForMainOrderPageLoad" after="clickSubmitRefund"/>
+        <waitForPageLoad stepKey="waitForMainOrderPageLoad" after="clickSubmitRefund" time="60"/>
         <see userInput="You created the credit memo." stepKey="seeCreditMemoMessage" after="waitForMainOrderPageLoad"/>
     </actionGroup>
 </actionGroups>

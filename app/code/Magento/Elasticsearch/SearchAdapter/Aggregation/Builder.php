@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
 
-use Magento\Elasticsearch\SearchAdapter\QueryContainer;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
+use Magento\Framework\Search\Dynamic\DataProviderInterface;
+use Magento\Framework\Search\RequestInterface;
 
+/**
+ * Elasticsearch aggregation builder
+ */
 class Builder
 {
     /**
@@ -32,32 +35,31 @@ class Builder
     /**
      * @var QueryContainer
      */
-    private $query = null;
+    private $query;
 
     /**
      * @param  DataProviderInterface[] $dataProviderContainer
      * @param  BucketBuilderInterface[] $aggregationContainer
-     * @param DataProviderFactory|null $dataProviderFactory
+     * @param DataProviderFactory $dataProviderFactory
      */
     public function __construct(
         array $dataProviderContainer,
         array $aggregationContainer,
-        DataProviderFactory $dataProviderFactory = null
+        DataProviderFactory $dataProviderFactory
     ) {
         $this->dataProviderContainer = array_map(
-            function (DataProviderInterface $dataProvider) {
+            static function (DataProviderInterface $dataProvider) {
                 return $dataProvider;
             },
             $dataProviderContainer
         );
         $this->aggregationContainer = array_map(
-            function (BucketBuilderInterface $bucketBuilder) {
+            static function (BucketBuilderInterface $bucketBuilder) {
                 return $bucketBuilder;
             },
             $aggregationContainer
         );
-        $this->dataProviderFactory = $dataProviderFactory
-            ?: ObjectManager::getInstance()->get(DataProviderFactory::class);
+        $this->dataProviderFactory = $dataProviderFactory;
     }
 
     /**

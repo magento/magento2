@@ -34,7 +34,7 @@ $bundleProduct = $productFactory->create();
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsiteId])
-    ->setName('Bundle Product')
+    ->setName('Bundle Product Multiselect Options')
     ->setSku('bundle-product-multiselect-options')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
