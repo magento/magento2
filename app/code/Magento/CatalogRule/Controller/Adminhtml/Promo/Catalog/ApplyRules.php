@@ -9,6 +9,9 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 use Magento\CatalogRule\Model\Rule\Job;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class ApplyRules: Apply rule
+ */
 class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
@@ -22,7 +25,8 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         try {
             /** @var Job $ruleJob */
             $ruleJob = $this->_objectManager->get(\Magento\CatalogRule\Model\Rule\Job::class);
-            $ruleJob->applyAll();
+            $ruleId = $this->getRequest()->getParam('rule_id');
+            $ruleJob->applyRule($ruleId);
 
             if ($ruleJob->hasSuccess()) {
                 $this->messageManager->addSuccessMessage($ruleJob->getSuccess());

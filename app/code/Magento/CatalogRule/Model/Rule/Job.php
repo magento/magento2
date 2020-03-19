@@ -64,4 +64,26 @@ class Job extends \Magento\Framework\DataObject
         }
         return $this;
     }
+
+    /**
+     * Apply & update catalog rule value
+     *
+     * @param int $ruleId
+     * @return \Magento\CatalogRule\Model\Rule\Job
+     * @api
+     */
+    public function applyRule($ruleId)
+    {
+        try {
+            if ($ruleId) {
+                $this->ruleProcessor->reindexRow($ruleId);
+            } else {
+                $this->ruleProcessor->reindexAll();
+            }
+            $this->setSuccess(__('Updated rules applied.'));
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->setError($e->getMessage());
+        }
+        return $this;
+    }
 }
