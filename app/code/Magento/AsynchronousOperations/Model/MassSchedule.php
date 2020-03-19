@@ -54,7 +54,7 @@ class MassSchedule
     private $logger;
 
     /**
-     * @var OperationRepository
+     * @var OperationRepositoryInterface
      */
     private $operationRepository;
 
@@ -81,7 +81,7 @@ class MassSchedule
      * @param AsyncResponseInterfaceFactory $asyncResponseFactory
      * @param BulkManagementInterface $bulkManagement
      * @param LoggerInterface $logger
-     * @param OperationRepository $operationRepository
+     * @param OperationRepositoryInterface $operationRepository
      * @param UserContextInterface $userContext
      * @param Encryptor $encryptor
      * @param SaveMultipleOperationsInterface $saveMultipleOperations
@@ -92,7 +92,7 @@ class MassSchedule
         AsyncResponseInterfaceFactory $asyncResponseFactory,
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
-        OperationRepository $operationRepository,
+        OperationRepositoryInterface $operationRepository,
         UserContextInterface $userContext,
         Encryptor $encryptor,
         SaveMultipleOperationsInterface $saveMultipleOperations
@@ -146,7 +146,7 @@ class MassSchedule
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
-                $operation = $this->operationRepository->createByTopic($topicName, $entityParams, $groupId);
+                $operation = $this->operationRepository->create($topicName, $entityParams, $groupId, $key);
                 $operations[] = $operation;
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
