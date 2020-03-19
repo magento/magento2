@@ -1267,6 +1267,14 @@ define([
                 isInitial;
 
             if (isInProductView) {
+                if (_.isUndefined(gallery)) {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function () {
+                        this.updateBaseImage(images, context, isInProductView);
+                    }.bind(this));
+
+                    return;
+                }
+
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
                 isInitial = _.isEqual(imagesToUpdate, initialImages);
 
@@ -1276,30 +1284,34 @@ define([
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
 
-                if (!_.isUndefined(gallery)) {
-                    gallery.updateData(imagesToUpdate);
-                } else {
-                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
-                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
-                        loadedGallery.updateData(imagesToUpdate);
-                    }.bind(this));
-                }
-
-                if (isInitial) {
-                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
-                } else {
-                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
-                        selectedOption: this.getProduct(),
-                        dataMergeStrategy: this.options.gallerySwitchStrategy
-                    });
-                }
-
-                if (gallery) {
-                    gallery.first();
-                }
+                gallery.updateData(imagesToUpdate);
+                this._addFotoramaVideoEvents(isInitial);
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Add video events
+         *
+         * @param {Boolean} isInitial
+         * @private
+         */
+        _addFotoramaVideoEvents: function (isInitial) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+                return;
+            }
+
+            if (isInitial) {
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+
+                return;
+            }
+
+            $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                selectedOption: this.getProduct(),
+                dataMergeStrategy: this.options.gallerySwitchStrategy
+            });
         },
 
         /**
