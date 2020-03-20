@@ -9,19 +9,21 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page\IdentityMap;
+use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class PageRepository
+ * @inheritdoc
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageRepository implements PageRepositoryInterface
@@ -77,6 +79,11 @@ class PageRepository implements PageRepositoryInterface
     private $identityMap;
 
     /**
+     * @var HydratorInterface
+     */
+    private $hydrator;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -87,6 +94,7 @@ class PageRepository implements PageRepositoryInterface
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
      * @param IdentityMap|null $identityMap
+     * @param HydratorInterface|null $hydrator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +107,8 @@ class PageRepository implements PageRepositoryInterface
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
         CollectionProcessorInterface $collectionProcessor = null,
-        ?IdentityMap $identityMap = null
+        ?IdentityMap $identityMap = null,
+        ?HydratorInterface $hydrator = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -111,6 +120,7 @@ class PageRepository implements PageRepositoryInterface
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
+        $this->hydrator = $hydrator ?: ObjectManager::getInstance()->get(HydratorInterface::class);
     }
 
     /**
@@ -150,8 +160,13 @@ class PageRepository implements PageRepositoryInterface
             $storeId = $this->storeManager->getStore()->getId();
             $page->setStoreId($storeId);
         }
+        $pageId = $page->getId();
+
         try {
             $this->validateLayoutUpdate($page);
+            if ($pageId) {
+                $page = $this->hydrator->hydrate($this->getById($pageId), $this->hydrator->extract($page));
+            }
             $this->resource->save($page);
             $this->identityMap->add($page);
         } catch (\Exception $exception) {
@@ -248,6 +263,7 @@ class PageRepository implements PageRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                // phpstan:ignore "Class Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor not found."
                 \Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor::class
             );
         }
