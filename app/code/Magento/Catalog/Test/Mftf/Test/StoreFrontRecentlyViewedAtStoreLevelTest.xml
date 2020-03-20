@@ -12,9 +12,10 @@
             <stories value="Recently Viewed Product"/>
             <title value="Recently Viewed Product at store level"/>
             <description value="Recently Viewed Product should not be displayed on second store , if configured as, Per Store "/>
-            <testCaseId value="MC-32018"/>
+            <testCaseId value="MC-32226"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
