@@ -6,6 +6,7 @@
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 /**
@@ -38,6 +39,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColFacMock;
+
+    /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -498,7 +504,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     /**
      * @dataProvider isRowValidData
      */
-    public function testIsRowValid(array $rowData, $rowNum, $isNewProduct = true)
+    public function testIsRowValid(array $rowData, $rowNum, $isNewProduct, $isDomainValid, $expectedResult)
     {
         $this->connectionMock->expects($this->any())->method('fetchAll')->with(
             $this->select
@@ -514,6 +520,13 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 ],
             ]
         );
+
+        $this->domainValidator = $this->createMock(DomainValidator::class);
+        $this->domainValidator
+            ->expects($this->any())->method('isValid')
+            ->withAnyParameters()
+            ->willReturn($isDomainValid);
+
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
             \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
@@ -522,11 +535,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'resource' => $this->resourceMock,
                 'params' => $this->paramsArray,
                 'uploaderHelper' => $this->uploaderHelper,
-                'downloadableHelper' => $this->downloadableHelper
+                'downloadableHelper' => $this->downloadableHelper,
+                'domainValidator' => $this->domainValidator
             ]
         );
         $result = $this->downloadableModelMock->isRowValid($rowData, $rowNum, $isNewProduct);
-        $this->assertNotNull($result);
+        $this->assertEquals($expectedResult, $result);
     }
 
     /**
@@ -550,6 +564,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . 'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 0,
+                true,
+                true,
                 true
             ],
             [
@@ -564,15 +580,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 1,
-                true
-            ],
-            [
-                [
-                    'sku' => 'downloadablesku12',
-                    'product_type' => 'downloadable',
-                    'name' => 'Downloadable Product 2',
-                ],
-                2,
+                true,
+                true,
                 true
             ],
             [
@@ -587,6 +596,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . ' url=media/file2.mp4,sortorder=0',
                 ],
                 3,
+                true,
+                true,
                 true
             ],
             [
@@ -594,13 +605,15 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'file=media/file.mp4,sortorder=1|group_title=Group Title, '
-                        . 'url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2,' .
+                        ' group_title=Group Title, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
                         . 'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
                         . ' url=media/file2.mp4,sortorder=0',
                 ],
                 4,
+                true,
+                true,
                 true
             ],
             [ //empty group title samples
@@ -615,6 +628,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 5,
+                true,
+                true,
                 true
             ],
             [ //empty group title links
@@ -629,6 +644,19 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . 'downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 6,
+                true,
+                true,
+                true
+            ],
+            [
+                [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                ],
+                2,
+                false,
+                true,
                 true
             ],
             [
@@ -640,7 +668,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'downloadable_links' => '',
                 ],
                 7,
-                true
+                true,
+                true,
+                false
             ],
         ];
     }
