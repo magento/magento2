@@ -72,9 +72,7 @@ class GetCartForUser
         }
 
         if (false === (bool)$cart->getIsActive()) {
-            throw new GraphQlNoSuchEntityException(
-                __('Current user does not have an active cart.')
-            );
+            throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
         }
 
         if ((int)$cart->getStoreId() !== $storeId) {
