@@ -105,6 +105,73 @@ QUERY;
     }
 
     /**
+     * @param String $orderNumber
+     * @dataProvider dataProviderIncorrectOrder
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     */
+    public function testGetCustomerNonExistingOrderQuery(string $orderNumber)
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}){
+    items
+    {
+      number
+      order_items{
+        product_sku
+      }
+    }
+    page_info {
+        current_page
+        page_size
+        total_pages
+    }
+    total_count
+   }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->assertArrayHasKey('customer', $response);
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertCount(0, $response['customer']['orders']['items']);
+        $this->assertArrayHasKey('total_count', $response['customer']['orders']);
+        $this->assertEquals(0, $response['customer']['orders']['total_count']);
+        $this->assertArrayHasKey('page_info', $response['customer']['orders']);
+        $this->assertEquals(
+            ['current_page' => 1, 'page_size' => 20, 'total_pages' => 0],
+            $response['customer']['orders']['page_info']
+        );
+
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderIncorrectOrder(): array
+    {
+        return [
+            'correctFormatNonExistingOrder' => [
+                '200000009',
+            ],
+            'alphaFormatNonExistingOrder' => [
+                '200AA00B9',
+            ],
+            'longerFormatNonExistingOrder' => [
+                'X0000-0033331',
+            ],
+        ];
+    }
+
+    /**
      * @param string $email
      * @param string $password
      * @return array
