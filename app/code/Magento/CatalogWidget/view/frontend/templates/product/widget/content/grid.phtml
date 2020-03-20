@@ -110,3 +110,12 @@ use Magento\Framework\App\Action\Action;
         </div>
     </div>
 <?php endif;?>
+<?php if (!$block->isRedirectToCartEnabled()): ?>
+    <script type="text/x-magento-init">
+            {
+                "[data-role=tocart-form]": {
+                    "catalogAddToCart": {}
+                }
+            }
+    </script>
+<?php endif; ?>
