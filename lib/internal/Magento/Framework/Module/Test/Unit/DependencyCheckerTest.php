@@ -44,8 +44,6 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
             ->method('getRequire')
             ->will($this->returnValueMap($requireMap));
 
-
-
         $this->listMock = $this->createMock(\Magento\Framework\Module\ModuleList::class);
         $this->loaderMock = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $this->loaderMock

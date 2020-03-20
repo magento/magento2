@@ -15,12 +15,13 @@ class DependencyChecker
     /**
      * @var PackageInfo
      */
-    protected $packageInfo;
+    private $packageInfo;
 
     /**
      * @var ModuleList
      */
     private $list;
+
     /**
      * @var ModuleList\Loader
      */
@@ -46,6 +47,7 @@ class DependencyChecker
      * @param string[] $toBeDisabledModules
      * @param string[] $currentlyEnabledModules
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function checkDependenciesWhenDisableModules($toBeDisabledModules, $currentlyEnabledModules = null)
     {
@@ -61,8 +63,9 @@ class DependencyChecker
      * @param string[] $toBeEnabledModules
      * @param string[] $currentlyEnabledModules
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function checkDependenciesWhenEnableModules($toBeEnabledModules, $currentlyEnabledModules = null)
+    public function checkDependenciesWhenEnableModules(array $toBeEnabledModules, array $currentlyEnabledModules = null)
     {
         $masterList = $currentlyEnabledModules ?? $this->list->getNames();
         // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
@@ -79,19 +82,19 @@ class DependencyChecker
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function checkDependencyGraph($isEnable, $moduleNames, $enabledModules)
+    private function checkDependencyGraph(bool $isEnable, array $moduleNames, array $enabledModules)
     {
         $fullModuleList = $this->loader->load();
         $graph = $this->createGraph($fullModuleList);
         $dependenciesMissingAll = [];
         $graphMode = $isEnable ? Graph::DIRECTIONAL : Graph::INVERSE;
+        $modules = array_merge(
+            array_keys($fullModuleList),
+            $this->packageInfo->getNonExistingDependencies()
+        );
         foreach ($moduleNames as $moduleName) {
             $dependenciesMissing = [];
             $paths = $graph->findPathsToReachableNodes($moduleName, $graphMode);
-            $modules = array_merge(
-                array_keys($fullModuleList),
-                $this->packageInfo->getNonExistingDependencies()
-            );
             foreach ($modules as $module) {
                 if (isset($paths[$module])) {
                     if ($isEnable && !in_array($module, $enabledModules)) {
@@ -112,7 +115,7 @@ class DependencyChecker
      * @param array $fullModuleList
      * @return Graph
      */
-    private function createGraph($fullModuleList)
+    private function createGraph(array $fullModuleList): Graph
     {
         $nodes = [];
         $dependencies = [];

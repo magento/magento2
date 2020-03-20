@@ -77,6 +77,7 @@ class ConfigOptionsListCollector
 
     /**
      * Auto discover ConfigOptionsList class and collect them.
+     *
      * These classes should reside in <module>/Setup directories.
      *
      * @return \Magento\Framework\Setup\ConfigOptionsListInterface[]
@@ -86,7 +87,7 @@ class ConfigOptionsListCollector
         $optionsList = [];
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        foreach ($modulePaths as $moduleName => $modulePath) {
+        foreach (array_keys($modulePaths) as $moduleName) {
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptionsList';
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
