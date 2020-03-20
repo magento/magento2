@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Reorder;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -36,6 +37,7 @@ class Reorder
      * List of error messages and codes.
      */
     private const MESSAGE_CODES = [
+        'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
         'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
         'This product is out of stock' => self::ERROR_NOT_SALABLE,
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
@@ -161,6 +163,7 @@ class Reorder
             $info->setQty($orderItem->getQtyOrdered());
 
             try {
+                /** @var Product $product */
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, null, true);
             } catch (NoSuchEntityException $e) {
                 $this->addError(
@@ -169,13 +172,22 @@ class Reorder
                 );
                 return;
             }
+            $addProductResult = null;
             try {
-                $cart->addProduct($product, $info);
+                $addProductResult = $cart->addProduct($product, $info);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->addError($this->addCartItemError($product->getSku(), $e->getMessage()));
+                $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
             } catch (\Throwable $e) {
                 $this->logger->critical($e);
-                $this->addError($this->addCartItemError($product->getSku()), self::ERROR_UNDEFINED);
+                $this->addError($this->getCartItemErrorMessage($orderItem, $product), self::ERROR_UNDEFINED);
+            }
+
+            // error happens in case the result is string
+            if (is_string($addProductResult)) {
+                $errors = array_unique(explode("\n", $addProductResult));
+                foreach ($errors as $error) {
+                    $this->addError($this->getCartItemErrorMessage($orderItem, $product, $error));
+                }
             }
         }
     }
@@ -234,14 +246,18 @@ class Reorder
     }
 
     /**
-     * Add error message for a cart item
+     * Get error message for a cart item
      *
-     * @param string $sku
+     * @param Item $item
+     * @param Product $product
      * @param string|null $message
      * @return string
      */
-    private function addCartItemError(string $sku, string $message = null): string
+    private function getCartItemErrorMessage(Item $item, Product $product, string $message = null): string
     {
+        // try to get sku from line-item first.
+        // for complex product type: if custom option is not available it can cause error
+        $sku = $item->getSku() ?? $product->getData('sku');
         return (string)($message
             ? __('Could not add the product with SKU "%1" to the shopping cart: %2', $sku, $message)
             : __('Could not add the product with SKU "%1" to the shopping cart', $sku));
