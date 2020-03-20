@@ -114,5 +114,10 @@
                 <async_indexing>0</async_indexing>
             </grid>
         </dev>
+        <customer>
+          <create_account>
+              <email_required_create_order>1</email_required_create_order>
+          </create_account>
+        </customer>
     </default>
 </config>
