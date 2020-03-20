@@ -30,7 +30,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/order_new.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
      */
     public function testGetCustomerOrdersSimpleProductQuery()
     {
@@ -39,7 +39,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 {
   customer
   {
-   orders(filter:{number:{eq:"100000001"}}){
+   orders(filter:{number:{eq:"100000003"}}){
     total_count
     items
     {
@@ -47,7 +47,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
       number
       status
       order_date
-      items{
+      order_items{
         quantity_ordered
         product_sku
         product_url

@@ -96,7 +96,10 @@ foreach ($orders as $orderData) {
         ->setBasePrice($product->getPrice())
         ->setPrice($product->getPrice())
         ->setRowTotal($product->getPrice())
-        ->setProductType('simple');
+        ->setProductType('simple')
+        ->setName($product->getName())
+        ->setSku($product->getSku());
+
 
     $order
         ->setData($orderData)
