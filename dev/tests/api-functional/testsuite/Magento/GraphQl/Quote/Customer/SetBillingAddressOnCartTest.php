@@ -858,7 +858,7 @@ QUERY;
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
         $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
 
-        self::assertCount(1, $addresses);
+        self::assertCount(0, $addresses);
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
 
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
