@@ -7,15 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
-use Exception;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\OrderRepository;
-use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Class RetrieveOrdersTest
@@ -45,7 +42,6 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->orderItem = $objectManager->get(Order\Item::class);
-
     }
 
     /**
@@ -89,21 +85,20 @@ QUERY;
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         self::assertCount(1, $response['customer']['orders']['items']);
-        $this->assertArrayHasKey('order_items',$customerOrderItemsInResponse);
+        $this->assertArrayHasKey('order_items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000003')
             ->create();
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
         $items = $this->orderRepository->getList($searchCriteria)->getItems();
-        foreach($items as $item)
-        {
+        foreach ($items as $item) {
             $orderId =$item->getEntityId();
             $orderNumber = $item->getIncrementId();
             //$orderStatus = $item->getStatus();//getStatusFrontendLabel($this->getStatus()
             $this->assertEquals($orderId, $customerOrderItemsInResponse['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
-            $this->assertEquals('Processing', $customerOrderItemsInResponse['status'] );
+            $this->assertEquals('Processing', $customerOrderItemsInResponse['status']);
         }
         $expectedOrderItems =
             [ 'quantity_ordered'=> 2,
@@ -114,6 +109,81 @@ QUERY;
             ];
         $actualOrderItemsFromResponse = $customerOrderItemsInResponse['order_items'][0];
         $this->assertEquals($expectedOrderItems, $actualOrderItemsFromResponse);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
+     */
+    public function testGetCustomerOrdersUnauthorizedCustomer()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"100000001"}}){
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+    }
+   }
+ }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/two_orders_for_two_diff_customers.php
+     */
+    public function testGetCustomerOrdersWithWrongCustomer()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"100000001"}}){
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+    }
+   }
+ }
+}
+QUERY;
+        $currentEmail = 'customer_two@example.com';
+        $currentPassword = 'password';
+        $responseWithWrongCustomer = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['total_count']);
+        $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['items']);
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $responseWithCorrectCustomer = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['total_count']);
+        $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['items']);
     }
     
     /**
@@ -162,7 +232,6 @@ QUERY;
             ['current_page' => 1, 'page_size' => 20, 'total_pages' => 0],
             $response['customer']['orders']['page_info']
         );
-
     }
 
     /**
