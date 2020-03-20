@@ -125,7 +125,7 @@ class Reorder
         $this->errors = [];
 
         $cart = $this->customerCartProvider->resolve($customerId);
-        if (!$this->reorderHelper->canReorder($order->getId())) {
+        if (!$this->reorderHelper->isAllowed($order->getStore())) {
             $this->addError((string)__('Reorders are not allowed.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
         }
