@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
+use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -18,10 +19,10 @@ use Magento\Framework\EntityManager\EntityManager;
 /**
  * Create operation for list of bulk operations.
  */
-class OperationRepository
+class OperationRepository implements OperationRepositoryInterface
 {
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory
+     * @var OperationInterfaceFactory
      */
     private $operationFactory;
 
@@ -67,10 +68,14 @@ class OperationRepository
     }
 
     /**
-     * @param $topicName
-     * @param $entityParams
-     * @param $groupId
-     * @return mixed
+     * Create operation by topic, parameters and group ID
+     *
+     * @param string $topicName
+     * @param array $entityParams
+     * @param string $groupId
+     * @return OperationInterface
+     * @deprecated No longer used.
+     * @see create()
      */
     public function createByTopic($topicName, $entityParams, $groupId)
     {
@@ -91,8 +96,16 @@ class OperationRepository
             ],
         ];
 
-        /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
+        /** @var OperationInterface $operation */
         $operation = $this->operationFactory->create($data);
         return $this->entityManager->save($operation);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
+    {
+        return $this->createByTopic($topicName, $entityParams, $groupId);
     }
 }

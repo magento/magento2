@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCartItemsCountDisplayItemsQuantities">
+    <test name="StorefrontCartItemsCountDisplayItemsQuantitiesTest">
         <annotations>
             <stories value="Checkout order summary has wrong item count"/>
             <title value="Checkout order summary has wrong item count - display items quantities"/>
@@ -57,7 +57,7 @@
             <argument name="itemsText" value="3 Items in Cart"/>
         </actionGroup>
     </test>
-    <test name="StorefrontCartItemsCountDisplayUniqueItems" extends="StorefrontCartItemsCountDisplayItemsQuantities">
+    <test name="StorefrontCartItemsCountDisplayUniqueItemsTest" extends="StorefrontCartItemsCountDisplayItemsQuantitiesTest">
         <annotations>
             <stories value="Checkout order summary has wrong item count"/>
             <title value="Checkout order summary has wrong item count - display unique items"/>
