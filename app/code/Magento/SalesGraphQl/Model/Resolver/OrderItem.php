@@ -30,16 +30,17 @@ class OrderItem implements ResolverInterface
         if (!isset($value['model']) && !($value['model'] instanceof Order)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        /** @var Order $order */
-        $order = $value['model'];
+        /** @var Order $parentOrder */
+        $parentOrder = $value['model'];
         /** @var OrderItemInterface $item */
-        foreach ($value['items'] ?? [] as $key => $item) {
+        $orderItems= [];
+        foreach ($value['order_items'] ?? [] as $key => $item) {
             $options = $this->getItemOptions($item);
-            $items[$key] = [
+            $orderItems[$key] = [
                 'parent_product_sku' => $item->getParentItem() ? $item->getParentItem()->getSku() : null,
                 'product_name' => $item->getName(),
                 'product_sale_price' => [
-                    'currency' => $order->getOrderCurrencyCode(),
+                    'currency' => $parentOrder->getOrderCurrencyCode(),
                     'value' => $item->getPrice(),
                 ],
                 'product_sku' => $item->getSku(),
@@ -49,7 +50,7 @@ class OrderItem implements ResolverInterface
                 'entered_options' => $options['entered_options'] ?? [],
             ];
         }
-        return $items;
+        return $orderItems;
     }
 
     /**

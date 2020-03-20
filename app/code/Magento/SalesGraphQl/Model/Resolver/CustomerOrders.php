@@ -60,33 +60,25 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-        $searchResult = $this->searchQuery->getResult($args, $userId, $store);
+        $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
 
-        if ($searchResult->getPageSize()) {
-            $maxPages = ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
-        } else {
-            $maxPages = 0;
-        }
-
-        $currentPage = $searchResult->getCurrentPage();
-        if ($searchResult->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
-            $currentPage = new GraphQlInputException(
+        if ($searchResultDto->getCurrentPage() > $searchResultDto->getTotalPages() && $searchResultDto->getTotalCount() > 0) {
+            new GraphQlInputException(
                 __(
                     'currentPage value %1 specified is greater than the number of pages available.',
-                    [$maxPages]
+                    [$searchResultDto->getTotalPages() ?? 0]
                 )
             );
         }
 
-        $items = [];
-
-        foreach (($searchResult->getItems() ?? []) as $order) {
+        $orders = [];
+        foreach (($searchResultDto->getItems() ?? []) as $order) {
             if (!isset($order['model']) && !($order['model'] instanceof Order)) {
                 throw new LocalizedException(__('"model" value should be specified'));
             }
             /** @var Order $orderModel */
             $orderModel = $order['model'];
-            $items[] = [
+            $orders[] = [
                 'created_at' => $order['created_at'],
                 'grand_total' => $order['grand_total'],
                 'id' => $order['entity_id'],
@@ -96,18 +88,17 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $order['increment_id'],
                 'status' => $orderModel->getStatusLabel(),
                 'model' => $orderModel,
-                'items' => $args['order_items'] ? $orderModel->getItems() : [],
-                'totals' => [],
+                'order_items' => $orderModel->getItems() ?? [],
             ];
         }
 
         return [
-            'total_count' => $searchResult->getTotalCount(),
-            'items' => $items,
+            'total_count' => $searchResultDto->getTotalCount(),
+            'items' => $orders,
             'page_info'   => [
-                'page_size'    => $searchResult->getPageSize() ?? 20,
-                'current_page' => $currentPage ?? 1,
-                'total_pages' => $maxPages ?? 0
+                'page_size'    => $searchResultDto->getPageSize(),
+                'current_page' => $searchResultDto->getCurrentPage(),
+                'total_pages' => $searchResultDto->getTotalPages(),
             ]
         ];
     }
