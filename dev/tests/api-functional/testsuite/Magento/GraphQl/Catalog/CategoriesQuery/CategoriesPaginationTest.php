@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog\CategoriesQuery;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use function sprintf;
 
 /**
  * Test pagination for the categories query

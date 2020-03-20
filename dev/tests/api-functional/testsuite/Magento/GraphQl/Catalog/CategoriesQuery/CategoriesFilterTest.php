@@ -368,7 +368,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Invalid match filter. Minimum query length is 3.
+     * @expectedExceptionMessage Invalid match filter. Minimum length is 3.
      */
     public function testMinimumMatchQueryLength()
     {

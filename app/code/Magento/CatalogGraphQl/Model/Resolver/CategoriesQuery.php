@@ -14,7 +14,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Categories resolver, used for GraphQL category data request processing.
@@ -25,11 +24,6 @@ class CategoriesQuery implements ResolverInterface
      * @var CategoryTree
      */
     private $categoryTree;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
 
     /**
      * @var CategoryFilter
@@ -45,18 +39,15 @@ class CategoriesQuery implements ResolverInterface
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
-     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
-        CategoryFilter $categoryFilter,
-        CollectionFactory $collectionFactory
+        CategoryFilter $categoryFilter
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
