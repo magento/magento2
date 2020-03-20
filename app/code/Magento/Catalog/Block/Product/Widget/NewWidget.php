@@ -8,6 +8,8 @@ namespace Magento\Catalog\Block\Product\Widget;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\NewProduct;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
+use Magento\Catalog\Helper\Output;
+use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -25,9 +27,12 @@ use Magento\Framework\View\Element\RendererList;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\LayoutInterfaceFactory;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Wishlist\Helper\Data;
 
 /**
  * New products widget
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class NewWidget extends NewProduct implements BlockInterface
 {
@@ -85,6 +90,12 @@ class NewWidget extends NewProduct implements BlockInterface
      */
     protected $rendererListBlock;
 
+    protected $wishlistDataHelper;
+
+    protected $productCompareHelper;
+
+    protected $catalogOutputHelper;
+
     /**
      * NewWidget constructor.
      *
@@ -92,6 +103,9 @@ class NewWidget extends NewProduct implements BlockInterface
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
      * @param HttpContext $httpContext
+     * @param Data $wishlistDataHelper
+     * @param Compare $productCompareHelper
+     * @param Output $catalogOutputHelper
      * @param array $data
      * @param Json|null $serializer
      * @param LayoutInterfaceFactory $layoutFactory
@@ -102,6 +116,9 @@ class NewWidget extends NewProduct implements BlockInterface
         CollectionFactory $productCollectionFactory,
         Visibility $catalogProductVisibility,
         HttpContext $httpContext,
+        Data $wishlistDataHelper,
+        Compare $productCompareHelper,
+        Output $catalogOutputHelper,
         array $data = [],
         Json $serializer = null,
         LayoutInterfaceFactory $layoutFactory = null,
@@ -114,6 +131,9 @@ class NewWidget extends NewProduct implements BlockInterface
             $httpContext,
             $data
         );
+        $this->wishlistDataHelper = $wishlistDataHelper;
+        $this->productCompareHelper = $productCompareHelper;
+        $this->catalogOutputHelper =$catalogOutputHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutInterfaceFactory::class);
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
@@ -362,5 +382,42 @@ class NewWidget extends NewProduct implements BlockInterface
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
+    }
+
+    /**
+     * Check is allow wishlist module
+     *
+     * @return bool
+     */
+    public function isWishlistAllow()
+    {
+        return $this->wishlistDataHelper->isAllow();
+    }
+
+    /**
+     * Get parameters used for build add product to compare list urls
+     *
+     * @param $product
+     *
+     * @return string
+     */
+    public function getComparePostData($product)
+    {
+        return $this->productCompareHelper->getPostDataParams($product);
+    }
+
+    /**
+     * Prepare product attribute html output
+     *
+     * @param $product
+     * @param $attributeHtml
+     * @param $attributeName
+     *
+     * @return string
+     * @throws LocalizedException
+     */
+    public function getProductAttribute($product, $attributeHtml, $attributeName)
+    {
+        return $this->catalogOutputHelper->productAttribute($product, $attributeHtml, $attributeName);
     }
 }
