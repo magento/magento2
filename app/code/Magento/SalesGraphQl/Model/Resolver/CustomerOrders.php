@@ -14,9 +14,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\SearchQuery;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Sales\Model\Order;
 
 /**
  * Orders data resolver
@@ -96,8 +96,7 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $order['increment_id'],
                 'status' => $orderModel->getStatusLabel(),
                 'model' => $orderModel,
-                'items' => $orderModel->getItems(),
-                'totals' => [],
+                'items' => $orderModel->getItems()
             ];
         }
 
