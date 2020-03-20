@@ -33,6 +33,9 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
+    /** @var Order\Item */
+    private $orderItem;
+
     protected function setUp()
     {
         parent::setUp();
@@ -41,6 +44,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $this->orderItem = $objectManager->get(Order\Item::class);
 
     }
 
@@ -68,7 +72,6 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         product_sku
         product_url
         product_name
-        parent_product_sku
         product_sale_price{currency value}
       }
     }
@@ -102,8 +105,17 @@ QUERY;
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse['status'] );
         }
+        $expectedOrderItems =
+            [ 'quantity_ordered'=> 2,
+                'product_sku'=> 'simple',
+                "product_url"=> 'url',
+                'product_name'=> 'Simple Product',
+                'product_sale_price'=> ['currency'=> null, 'value'=> 10]
+            ];
+        $actualOrderItemsFromResponse = $customerOrderItemsInResponse['order_items'][0];
+        $this->assertEquals($expectedOrderItems, $actualOrderItemsFromResponse);
     }
-
+    
     /**
      * @param string $email
      * @param string $password
