@@ -85,15 +85,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         $ids = [$id];
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
-        $select = $this->_connection->select();
-        $select->from(['e' => $this->_productIndexerHelper->getTable('store')], ['e.store_id'])
-            ->where('c.product_id = ' . $id)
-            ->joinLeft(
-                ['c' => $this->_productIndexerHelper->getTable('catalog_product_website')],
-                'e.website_id = c.website_id',
-                []
-            );
-        $storeIds = $this->_connection->fetchCol($select);
+        $storeIds = $this->getProductAvailableStores($id);
 
         $stores = $this->_storeManager->getStores();
         foreach ($stores as $store) {
@@ -142,5 +134,24 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * Get list store id where product is enable
+     *
+     * @param int $productId
+     * @return array
+     */
+    private function getProductAvailableStores($productId)
+    {
+        $select = $this->_connection->select();
+        $select->from(['e' => $this->_productIndexerHelper->getTable('store')], ['e.store_id'])
+            ->where('c.product_id = ' . $productId)
+            ->joinLeft(
+                ['c' => $this->_productIndexerHelper->getTable('catalog_product_website')],
+                'e.website_id = c.website_id',
+                []
+            );
+        return $this->_connection->fetchCol($select);
     }
 }
