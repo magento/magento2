@@ -30,7 +30,7 @@ foreach ($productSkus as $sku) {
     }
 }
 
-include dirname(dirname(__DIR__)) . '/Catalog/_files/category_rollback.php';
+include __DIR__ . '/../../Catalog/_files/category_rollback.php';
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

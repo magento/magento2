@@ -12,63 +12,65 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 
+$categoryId = 333;
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
+$entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode('catalog_product');
+$defaultSetId = $objectManager->create(\Magento\Catalog\Model\Product::class)->getDefaultAttributeSetid();
+
 $products = [
     [
         'type' => 'simple',
-        'id' => 201,
         'name' => 'search product 1',
         'sku' => '24 MB06',
         'status' => Status::STATUS_ENABLED,
         'visibility' => Visibility::VISIBILITY_BOTH,
-        'attribute_set' => 4,
-        'website_ids' => [1],
+        'attribute_set' => $defaultSetId,
+        'website_ids' => [\Magento\Store\Model\Store::DISTRO_STORE_ID],
         'price' => 10,
-        'category_id' => 333,
+        'category_id' => $categoryId,
         'meta_title' => 'Key Title',
         'meta_keyword' => 'meta keyword',
         'meta_description' => 'meta description',
     ],
     [
         'type' => 'simple',
-        'id' => 202,
         'name' => 'search product 2',
         'sku' => '24 MB04',
         'status' => Status::STATUS_ENABLED,
         'visibility' => Visibility::VISIBILITY_BOTH,
-        'attribute_set' => 4,
-        'website_ids' => [1],
+        'attribute_set' => $defaultSetId,
+        'website_ids' => [\Magento\Store\Model\Store::DISTRO_STORE_ID],
         'price' => 10,
-        'category_id' => 333,
+        'category_id' => $categoryId,
         'meta_title' => 'Last Title',
         'meta_keyword' => 'meta keyword',
         'meta_description' => 'meta description',
     ],
     [
         'type' => 'simple',
-        'id' => 203,
         'name' => 'search product 3',
         'sku' => '24 MB02',
         'status' => Status::STATUS_ENABLED,
         'visibility' => Visibility::VISIBILITY_BOTH,
-        'attribute_set' => 4,
-        'website_ids' => [1],
+        'attribute_set' => $defaultSetId,
+        'website_ids' => [\Magento\Store\Model\Store::DISTRO_STORE_ID],
         'price' => 20,
-        'category_id' => 333,
+        'category_id' => $categoryId,
         'meta_title' => 'First Title',
         'meta_keyword' => 'meta keyword',
         'meta_description' => 'meta description',
     ],
     [
         'type' => 'simple',
-        'id' => 204,
         'name' => 'search product 4',
         'sku' => '24 MB01',
         'status' => Status::STATUS_ENABLED,
         'visibility' => Visibility::VISIBILITY_BOTH,
-        'attribute_set' => 4,
-        'website_ids' => [1],
+        'attribute_set' => $defaultSetId,
+        'website_ids' => [\Magento\Store\Model\Store::DISTRO_STORE_ID],
         'price' => 30,
-        'category_id' => 333,
+        'category_id' => $categoryId,
         'meta_title' => 'A title',
         'meta_keyword' => 'meta keyword',
         'meta_description' => 'meta description',
@@ -76,17 +78,15 @@ $products = [
 ];
 
 /** @var CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(CategoryLinkManagementInterface::class);
+$categoryLinkManagement =  $objectManager->create(CategoryLinkManagementInterface::class);
 
 $categoriesToAssign = [];
 
 foreach ($products as $data) {
     /** @var $product Product */
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Product::class);
+    $product = $objectManager->create(Product::class);
     $product
         ->setTypeId($data['type'])
-        ->setId($data['id'])
         ->setAttributeSetId($data['attribute_set'])
         ->setWebsiteIds($data['website_ids'])
         ->setName($data['name'])
