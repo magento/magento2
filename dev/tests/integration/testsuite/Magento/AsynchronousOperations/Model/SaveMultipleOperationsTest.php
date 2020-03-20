@@ -84,7 +84,8 @@ class SaveMultipleOperationsTest extends \PHPUnit\Framework\TestCase
         $this->entityManager->save($bulkSummary);
 
         $this->saveMultipleOperationsInterface->execute($operations);
-        $operationsCount =  $this->bulkStatusManagement->getOperationsCountByBulkIdAndStatus(self::BULK_UUID, OperationInterface::STATUS_TYPE_OPEN);
+        $operationsCount =  $this->bulkStatusManagement
+            ->getOperationsCountByBulkIdAndStatus(self::BULK_UUID, OperationInterface::STATUS_TYPE_OPEN);
         $this->assertEquals($operationsCount, 3);
     }
 
