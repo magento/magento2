@@ -130,7 +130,8 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Default Label'),
                 'title' => __('Default label'),
                 'required' => true,
-                'value' => is_array($labels) ? $labels[0] : $labels
+                'value' => is_array($labels) ? $labels[0] : $labels,
+                'class' => 'validate-no-html-tags',
             ]
         );
 
