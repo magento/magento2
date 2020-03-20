@@ -14,7 +14,6 @@ type Customer {
 }
 
 input CustomerOrdersFilterInput @doc(description: "Identifies which order filter input to search for and return") {
-    number_match: FilterMatchTypeInput @doc(description: "Filter orders by order number")
     number: FilterEqualTypeInput @doc(description: "Filter orders by order number")
 }
 
@@ -34,7 +33,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     order_date: String! @doc(description: "The date the order was placed")
     status: String! @doc(description: "The current status of the order")
     number: String! @doc(description: "The order number")
-    items: [OrderItem]! @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
+    order_items: [OrderItem]! @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
     totals: OrderTotals! @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotals")
 }
 
