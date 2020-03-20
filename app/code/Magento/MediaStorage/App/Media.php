@@ -28,7 +28,6 @@ use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
 
-
 /**
  * The class resize original images
  *
