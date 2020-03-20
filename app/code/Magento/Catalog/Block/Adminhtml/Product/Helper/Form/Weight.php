@@ -60,7 +60,7 @@ class Weight extends Text
         $this->localeFormat = $localeFormat;
         $this->weightSwitcher = $factoryElement->create('radios');
         $this->weightSwitcher->setValue(
-            WeightResolver::HAS_WEIGHT
+            WeightResolver::HAS_NO_WEIGHT
         )->setValues(
             [
                 ['value' => WeightResolver::HAS_WEIGHT, 'label' => __('Yes')],
@@ -84,10 +84,6 @@ class Weight extends Text
      */
     public function getElementHtml()
     {
-        if (!$this->getForm()->getDataObject()->getTypeInstance()->hasWeight()) {
-            $this->weightSwitcher->setValue(WeightResolver::HAS_NO_WEIGHT);
-        }
-
         if ($this->getDisabled()) {
             $this->weightSwitcher->setDisabled($this->getDisabled());
         }
