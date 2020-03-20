@@ -31,7 +31,6 @@ class OrderFilter
      */
     private $fieldTranslatorArray = [
         'number' => 'increment_id',
-        'number_match' => 'increment_id',
     ];
 
     /**
