@@ -82,7 +82,7 @@ class SearchQuery
             $orderArray[$order->getId()]['model'] = $order;
         }
 
-        if ($collection->getPageSize()) {
+        if (isset($args['total_pages']) && $collection->getPageSize()) {
             $maxPages = (int)ceil($collection->getTotalCount() / $collection->getPageSize());
         } else {
             $maxPages = 0;
@@ -91,10 +91,10 @@ class SearchQuery
         return $this->dataObjectFactory->create(
             [
                 'data' => [
-                        'total_count' => $collection->getTotalCount() ?? 0,
+                        'total_count' => $args['total_count'] ? ($collection->getTotalCount() ?? 0) : 0,
                         'items' => $orderArray ?? [],
-                        'page_size' => $collection->getPageSize() ?? 0,
-                        'current_page' => $collection->getCurPage() ?? 0,
+                        'page_size' => $args['page_size'] ? ($collection->getPageSize() ?? 0) : 0,
+                        'current_page' => $args['current_page'] ? ($collection->getCurPage() ?? 0) : 0,
                         'total_pages' => $maxPages ?? 0,
                     ]
             ]

@@ -96,7 +96,7 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $order['increment_id'],
                 'status' => $orderModel->getStatusLabel(),
                 'model' => $orderModel,
-                'items' => $orderModel->getItems(),
+                'items' => $args['order_items'] ? $orderModel->getItems() : [],
                 'totals' => [],
             ];
         }
