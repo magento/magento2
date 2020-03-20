@@ -1,0 +1,17 @@
+<?php
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+/** @var Magento\Catalog\Block\Product\AbstractProduct $block */
+?>
+<?php if (!$block->isRedirectToCartEnabled()) :?>
+    <script type="text/x-magento-init">
+            {
+                "[data-role=tocart-form]": {
+                    "catalogAddToCart": {}
+                }
+            }
+    </script>
+<?php endif; ?>

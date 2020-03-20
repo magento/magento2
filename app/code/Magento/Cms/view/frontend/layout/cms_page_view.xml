@@ -9,6 +9,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Magento\Cms\Block\Page" name="cms_page"/>
+            <block class="Magento\Catalog\Block\Product\AbstractProduct" name="widget.add.product.to.cart" template="Magento_Cms::widget/product/addToCart.phtml"/>
         </referenceContainer>
     </body>
 </page>
