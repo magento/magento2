@@ -10,12 +10,12 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * New action html test
+ * New condition html test
  *
- * Verify the request object contains the proper form object for action
+ * Verify the request object contains the proper form object for condition
  * @magentoAppArea adminhtml
  */
-class NewActionHtmlTest extends AbstractBackendController
+class NewConditionHtmlTest extends AbstractBackendController
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ class NewActionHtmlTest extends AbstractBackendController
     /**
      * @var string
      */
-    protected $uri = 'backend/sales_rule/promo_quote/newActionHtml';
+    protected $uri = 'backend/sales_rule/promo_quote/newConditionHtml';
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class NewActionHtmlTest extends AbstractBackendController
     /**
      * @var string
      */
-    private $requestFormName = 'rule_actions_fieldset_';
+    private $requestFormName = 'rule_conditions_fieldset_';
 
     /**
      * Test verifies that execute method has the proper data-form-part value in html response
@@ -81,7 +81,7 @@ class NewActionHtmlTest extends AbstractBackendController
                 'id' => 1,
                 'form' => $this->requestFormName,
                 'form_namespace' => $this->formName,
-                'type' => 'Magento\SalesRule\Model\Rule\Condition\Product|quote_item_price',
+                'type' => 'Magento\SalesRule\Model\Rule\Condition\Product|category_ids',
             ]
         )->setMethod('POST');
     }
