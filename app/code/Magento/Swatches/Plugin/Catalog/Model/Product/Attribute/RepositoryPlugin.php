@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin;
+namespace Magento\Swatches\Plugin\Catalog\Model\Product\Attribute;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
-use Magento\Framework\App\RequestInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Product\Attribute\Repository as ProductAttributeRepository;
 use Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput;
 
 /**
- * Plugin for product attribute save controller.
+ * Plugin for product attribute repository
  */
-class Save
+class RepositoryPlugin
 {
     /**
      * @var ConvertSwatchAttributeFrontendInput
@@ -33,17 +33,19 @@ class Save
     /**
      * Performs the conversion of the frontend input value.
      *
-     * @param Attribute\Save $subject
-     * @param RequestInterface $request
+     * @param ProductAttributeRepository $subject
+     * @param ProductAttributeInterface $attribute
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(Attribute\Save $subject, RequestInterface $request): array
-    {
-        $data = $request->getPostValue();
+    public function beforeSave(
+        ProductAttributeRepository $subject,
+        ProductAttributeInterface $attribute
+    ): array {
+        $data = $attribute->getData();
         $data = $this->convertSwatchAttributeFrontendInput->execute($data);
-        $request->setPostValue($data);
+        $attribute->setData($data);
 
-        return [$request];
+        return [$attribute];
     }
 }
