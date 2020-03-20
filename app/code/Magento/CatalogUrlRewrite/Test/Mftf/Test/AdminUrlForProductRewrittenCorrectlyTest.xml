@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-97224"/>
             <useCaseId value="MAGETWO-64191"/>
             <group value="CatalogUrlRewrite"/>
+            <group value="urlRewrite"/>
         </annotations>
 
         <before>
