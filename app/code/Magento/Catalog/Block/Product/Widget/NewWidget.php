@@ -90,10 +90,19 @@ class NewWidget extends NewProduct implements BlockInterface
      */
     protected $rendererListBlock;
 
+    /**
+     * @var Data
+     */
     protected $wishlistDataHelper;
 
+    /**
+     * @var Compare
+     */
     protected $productCompareHelper;
 
+    /**
+     * @var Output
+     */
     protected $catalogOutputHelper;
 
     /**
@@ -110,6 +119,8 @@ class NewWidget extends NewProduct implements BlockInterface
      * @param Json|null $serializer
      * @param LayoutInterfaceFactory $layoutFactory
      * @param EncoderInterface $urlEncoder
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -397,7 +408,7 @@ class NewWidget extends NewProduct implements BlockInterface
     /**
      * Get parameters used for build add product to compare list urls
      *
-     * @param $product
+     * @param Product $product
      *
      * @return string
      */
@@ -409,9 +420,9 @@ class NewWidget extends NewProduct implements BlockInterface
     /**
      * Prepare product attribute html output
      *
-     * @param $product
-     * @param $attributeHtml
-     * @param $attributeName
+     * @param Product $product
+     * @param string $attributeHtml
+     * @param string $attributeName
      *
      * @return string
      * @throws LocalizedException
