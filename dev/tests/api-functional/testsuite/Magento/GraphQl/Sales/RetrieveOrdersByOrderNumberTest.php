@@ -8,7 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Sales;
 
 use Exception;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\OrderRepository;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -22,10 +27,21 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
+
+    /** @var SearchCriteriaBuilder */
+    private $searchCriteriaBuilder;
+
     protected function setUp()
     {
         parent::setUp();
-        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+
+        $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+
     }
 
     /**
@@ -64,9 +80,28 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
-        $i =0;
 
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertNotEmpty($response['customer']['orders']['items']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
+        self::assertCount(1, $response['customer']['orders']['items']);
+        $this->assertArrayHasKey('order_items',$customerOrderItemsInResponse);
+        $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
 
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000003')
+            ->create();
+        /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
+        $items = $this->orderRepository->getList($searchCriteria)->getItems();
+        foreach($items as $item)
+        {
+            $orderId =$item->getEntityId();
+            $orderNumber = $item->getIncrementId();
+            //$orderStatus = $item->getStatus();//getStatusFrontendLabel($this->getStatus()
+            $this->assertEquals($orderId, $customerOrderItemsInResponse['id']);
+            $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
+            $this->assertEquals('Processing', $customerOrderItemsInResponse['status'] );
+        }
     }
 
     /**
