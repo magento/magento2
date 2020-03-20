@@ -44,8 +44,7 @@ class OrderTotals implements ResolverInterface
                 'grand_total' => ['value' =>  $orderModel->getGrandTotal(), 'currency' => $currency],
                 'subtotal' => ['value' =>  $orderModel->getSubtotal(), 'currency' => $currency],
                 'tax' => ['value' =>  $orderModel->getTaxAmount(), 'currency' => $currency],
-                'shipping_handling' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency,
-            ]
+                'shipping_handling' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency]
         ];
         return $totals;
     }
