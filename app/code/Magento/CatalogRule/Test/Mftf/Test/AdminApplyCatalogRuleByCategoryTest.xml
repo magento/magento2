@@ -74,7 +74,7 @@
         <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForApplied"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- 3. Save and apply the new catalog price rule -->
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>

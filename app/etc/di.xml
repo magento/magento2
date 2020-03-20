@@ -167,6 +167,7 @@
     <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
     <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
     <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
+    <preference for="Magento\Framework\DataObject\IdentityValidatorInterface" type="Magento\Framework\DataObject\IdentityValidator" />
     <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
     <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Framework\App\Scope\Validator"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Framework\App\ScopeResolver" />
@@ -1444,6 +1445,7 @@
                 <item name="mediumtext" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\MediumText</item>
                 <item name="text" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Text</item>
                 <item name="varchar" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
+                <item name="char" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
                 <item name="varbinary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
                 <item name="blob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Blob</item>
                 <item name="mediumblob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\MediumBlob</item>
@@ -1453,6 +1455,7 @@
                 <item name="primary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Primary</item>
                 <item name="foreign" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Foreign</item>
                 <item name="index" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Index</item>
+                <item name="json" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Json</item>
             </argument>
         </arguments>
     </type>
@@ -1480,6 +1483,7 @@
                 <item name="varchar" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
                 <item name="binary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
                 <item name="varbinary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
+                <item name="json" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Json</item>
                 <item name="index" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Index</item>
                 <item name="unique" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
                 <item name="primary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
@@ -1589,10 +1593,12 @@
                 <item name="longblog" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="varbinary" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="varchar" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="char" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\CharDefinition</item>
                 <item name="timestamp" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TimestampDefinition</item>
                 <item name="datetime" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TimestampDefinition</item>
                 <item name="date" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DateDefinition</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition</item>
+                <item name="json" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\JsonDefinition</item>
             </argument>
         </arguments>
     </type>
@@ -1800,4 +1806,23 @@
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
     <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
+    <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">block_html</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\Context">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_block_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Storage\StorageAdapterProvider">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="local" xsi:type="string">Magento\Framework\Storage\AdapterFactory\LocalFactory</item>
+                <item name="aws_s3" xsi:type="string">Magento\Framework\Storage\AdapterFactory\AwsS3Factory</item>
+                <item name="ms_azure" xsi:type="string">Magento\Framework\Storage\AdapterFactory\AzureFactory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

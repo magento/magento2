@@ -100,8 +100,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     created_at: String @doc(description: "Timestamp indicating when the product was created.")
     updated_at: String @doc(description: "Timestamp indicating when the product was updated.")
     country_of_manufacture: String @doc(description: "The product's country of origin.")
-    type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.")
-    websites: [Website] @doc(description: "An array of websites in which the product is available.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
+    type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.") @deprecated(reason: "Use __typename instead.")
+    websites: [Website] @doc(description: "An array of websites in which the product is available.") @deprecated(reason: "The field should not be used on the storefront.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
     product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\BatchProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
     price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
@@ -199,9 +199,15 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
 interface MediaGalleryInterface @doc(description: "Contains basic information about a product image or video.") @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
     url: String @doc(description: "The URL of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Url")
     label: String @doc(description: "The label of the product image or video.")
+    position: Int @doc(description: "The media item's position after it has been sorted.")
+    disabled: Boolean @doc(description: "Whether the image is hidden from view.")
 }
 
 type ProductImage implements MediaGalleryInterface @doc(description: "Product image information. Contains the image URL and label.") {
+}
+
+type ProductVideo implements MediaGalleryInterface @doc(description: "Contains information about a product video.") {
+    video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a ProductMediaGalleryEntriesVideoContent object.")
 }
 
 interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "The CustomizableOptionInterface contains basic information about a customizable option. It can be implemented by several types of configurable options.") {
@@ -403,7 +409,7 @@ type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characterist
     media_type: String @doc(description: "image or video.")
     label: String @doc(description: "The alt text displayed on the UI when the user points to the image.")
     position: Int @doc(description: "The media item's position after it has been sorted.")
-    disabled: Boolean @doc(description: "Whether the image is hidden from vie.")
+    disabled: Boolean @doc(description: "Whether the image is hidden from view.")
     types: [String] @doc(description: "Array of image types. It can have the following values: image, small_image, thumbnail.")
     file: String @doc(description: "The path of the image on the server.")
     content: ProductMediaGalleryEntriesContent @doc(description: "Contains a ProductMediaGalleryEntriesContent object.")
@@ -465,8 +471,4 @@ type StoreConfig @doc(description: "The type contains information about a store 
     list_per_page : Int @doc(description: "Products per Page on List Default Value.")
     catalog_default_sort_by : String @doc(description: "Default Sort By.")
     root_category_id: Int @doc(description: "The ID of the root category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\RootCategoryId")
-}
-
-type ProductVideo @doc(description: "Contains information about a product video.") implements MediaGalleryInterface {
-    video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a ProductMediaGalleryEntriesVideoContent object.")
 }

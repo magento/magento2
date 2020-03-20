@@ -65,21 +65,6 @@ class ModuleDBChangeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test changes for module.xml files
-     */
-    public function testModuleXmlFiles()
-    {
-        if (!self::$actualBranch) {
-            preg_match_all('|etc/module\.xml$|mi', self::$changedFileList, $matches);
-            $this->assertEmpty(
-                reset($matches),
-                'module.xml changes for patch releases in non-actual branches are not allowed:' . PHP_EOL .
-                implode(PHP_EOL, array_values(reset($matches)))
-            );
-        }
-    }
-
-    /**
      * Test changes for files in Module Setup dir
      */
     public function testModuleSetupFiles()

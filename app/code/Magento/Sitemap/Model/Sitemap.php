@@ -739,8 +739,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getDocumentRoot()
     {
-        return $this->filesystem->getDirectoryRead($this->documentRoot->getPath())
-            ->getAbsolutePath();
+        if (PHP_SAPI === 'cli') {
+            return $this->getDocumentRootFromBaseDir() ?? '';
+        }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return realpath($this->_request->getServer('DOCUMENT_ROOT'));
     }
 
     /**
@@ -754,10 +757,14 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $storeParsedUrl = parse_url($this->_getStoreBaseUrl());
         $url = $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host'];
 
-        $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');
-        $baseDir = trim(str_replace('\\', '/', $this->_getBaseDir()), '/');
+        // Set document root to false if we were unable to get it
+        $documentRoot = $this->_getDocumentRoot() ?: false;
+        if ($documentRoot) {
+            $documentRoot = trim(str_replace(DIRECTORY_SEPARATOR, '/', $documentRoot), '/');
+        }
+        $baseDir = trim(str_replace(DIRECTORY_SEPARATOR, '/', $this->_getBaseDir()), '/');
 
-        if (strpos($baseDir, (string) $documentRoot) === 0) {
+        if ($documentRoot !== false && strpos($baseDir, (string) $documentRoot) === 0) {
             //case when basedir is in document root
             $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
@@ -877,5 +884,31 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         return [
             Value::CACHE_TAG . '_' . $this->getStoreId(),
         ];
+    }
+
+    /**
+     * Get document root using base directory (root directory) and base path (base url path)
+     *
+     * Document root is determined using formula: BaseDir = DocumentRoot + BasePath.
+     * Returns <b>NULL</b> if BaseDir does not end with BasePath (e.g document root contains a symlink to BaseDir).
+     *
+     * @return string|null
+     */
+    private function getDocumentRootFromBaseDir(): ?string
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $basePath = rtrim(parse_url($this->_getStoreBaseUrl(UrlInterface::URL_TYPE_WEB), PHP_URL_PATH) ?: '', '/');
+        $basePath = str_replace('/', DIRECTORY_SEPARATOR, $basePath);
+        $basePath = rtrim($basePath, DIRECTORY_SEPARATOR);
+        $baseDir = rtrim($this->_getBaseDir(), DIRECTORY_SEPARATOR);
+        $length = strlen($basePath);
+        if (!$length) {
+            $documentRoot = $baseDir;
+        } elseif (substr($baseDir, -$length) === $basePath) {
+            $documentRoot = rtrim(substr($baseDir, 0, strlen($baseDir) - $length), DIRECTORY_SEPARATOR);
+        } else {
+            $documentRoot = null;
+        }
+        return $documentRoot;
     }
 }

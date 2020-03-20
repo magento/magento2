@@ -25,10 +25,10 @@
         </before>
         <after>
             <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="{{name}}"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
