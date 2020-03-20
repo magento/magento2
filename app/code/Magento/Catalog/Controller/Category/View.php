@@ -291,6 +291,8 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         } elseif (!$this->response->isRedirect()) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
+
+        return null;
     }
 
     /**
