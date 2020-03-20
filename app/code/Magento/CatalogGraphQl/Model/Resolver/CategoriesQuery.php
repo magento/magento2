@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -68,7 +69,11 @@ class CategoriesQuery implements ResolverInterface
             $args['filters']['ids'] = ['eq' => $store->getRootCategoryId()];
         }
 
-        $filterResult = $this->categoryFilter->getResult($args, $store);
+        try {
+            $filterResult = $this->categoryFilter->getResult($args, $store);
+        } catch (InputException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
 
         $rootCategoryIds = $filterResult['category_ids'];
         $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info);
