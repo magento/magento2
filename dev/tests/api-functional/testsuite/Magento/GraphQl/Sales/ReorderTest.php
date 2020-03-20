@@ -117,6 +117,41 @@ class ReorderTest extends GraphQlAbstract
     }
 
     /**
+     * Test reorder when simple product qty is 0, with allowed backorders configured to below 0
+     *
+     * @magentoConfigFixture admin_store cataloginventory/item_options/backorders 1
+     * @magentoConfigFixture admin_store cataloginventory/item_options/use_deferred_stock_update 0
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_zero_qty_product.php
+     * @throws \Exception
+     */
+    public function testBackorderWithOutOfStock()
+    {
+        $response = $this->makeReorderForDefaultCustomer();
+        $expectedResponse = [
+            'userInputErrors' => [],
+            'cart' => [
+                'email' => 'customer@example.com',
+                'total_quantity' => 2,
+                'items' => [
+                    [
+                        'quantity' => 1,
+                        'product' => [
+                            'sku' => 'simple'
+                        ]
+                    ],
+                    [
+                        'quantity' => 1,
+                        'product' => [
+                            'sku' => 'simple-2'
+                        ]
+                    ]
+                ],
+            ],
+        ];
+        $this->assertResponseFields($response['reorderItems'], $expectedResponse);
+    }
+
+    /**
      * Assert that simple product is not available.
      */
     private function assertProductNotAvailable()
