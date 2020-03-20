@@ -12,6 +12,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Plugin product resource model
@@ -55,15 +56,18 @@ class Product
     public function __construct(
         Configurable $configurable,
         ActionInterface $productIndexer,
-        ProductAttributeRepositoryInterface $productAttributeRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder
+        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
-        $this->productAttributeRepository = $productAttributeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
+        $this->productAttributeRepository = $productAttributeRepository ?: ObjectManager::getInstance()
+            ->get(ProductAttributeRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\FilterBuilder::class);
     }
 
     /**
