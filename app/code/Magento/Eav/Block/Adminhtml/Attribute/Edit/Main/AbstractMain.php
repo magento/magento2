@@ -283,6 +283,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Adding js block to the end of this block
      *
      * @param string $html
+     *
      * @return  string
      */
     protected function _afterToHtml($html)
