@@ -3,6 +3,7 @@ define([
     'moment',
     'mageUtils',
     'jquery/validate',
+    'validation',
     'mage/translate'
 ], function ($, moment, utils) {
     'use strict';
