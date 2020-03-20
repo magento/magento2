@@ -9,6 +9,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
+ * Filesystem directory instance for read operations
  * @api
  */
 class Read implements ReadInterface
@@ -40,8 +41,6 @@ class Read implements ReadInterface
     private $pathValidator;
 
     /**
-     * Constructor. Set properties.
-     *
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Framework\Filesystem\DriverInterface $driver
      * @param string $path
@@ -60,6 +59,8 @@ class Read implements ReadInterface
     }
 
     /**
+     * Validate the path is correct and within the directory
+     *
      * @param null|string $path
      * @param null|string $scheme
      * @param bool $absolutePath
@@ -96,8 +97,7 @@ class Read implements ReadInterface
     }
 
     /**
-     * Retrieves absolute path
-     * E.g.: /var/www/application/file.txt
+     * Retrieves absolute path i.e. /var/www/application/file.txt
      *
      * @param string $path
      * @param string $scheme
@@ -151,7 +151,7 @@ class Read implements ReadInterface
     /**
      * Read recursively
      *
-     * @param null $path
+     * @param string|null $path
      * @throws ValidatorException
      * @return string[]
      */
@@ -207,7 +207,9 @@ class Read implements ReadInterface
     {
         $this->validatePath($path);
 
-        return $this->driver->isExists($this->driver->getAbsolutePath($this->path, $path));
+        return $this->driver->isExists(
+            $this->driver->getRealPathSafety($this->driver->getAbsolutePath($this->path, $path))
+        );
     }
 
     /**
