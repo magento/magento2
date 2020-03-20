@@ -17,7 +17,7 @@
             <argument name="product"/>
             <argument name="optionProduct"/>
         </arguments>
-        
+
         <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
@@ -52,7 +52,7 @@
             <argument name="attributeCode" type="string"/>
             <argument name="optionName" type="string"/>
         </arguments>
-        
+
         <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID(attributeCode)}}" userInput="{{optionName}}" stepKey="selectAttribute"/>
         <click stepKey="addProduct" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
@@ -111,6 +111,7 @@
         </arguments>
 
         <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="waitForImage"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="seeImage"/>
         <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeProductPrice"/>
     </actionGroup>
