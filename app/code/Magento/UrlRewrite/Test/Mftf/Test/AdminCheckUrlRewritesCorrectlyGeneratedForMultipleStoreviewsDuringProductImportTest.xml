@@ -127,7 +127,7 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
     </test>
-    <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTestWithConfigurationTurnedOff">
+    <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTestWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url Rewrites for Multiple Storeviews"/>
