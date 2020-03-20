@@ -506,7 +506,9 @@
             </createData>
             <!--Finish bundle creation-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createBundleProduct.id$$"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
             <!-- Perform reindex and flush cache -->
@@ -573,7 +575,9 @@
 
             <!--Finish bundle creation-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createBundleProduct.id$$"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
             <!-- Perform reindex and flush cache -->
