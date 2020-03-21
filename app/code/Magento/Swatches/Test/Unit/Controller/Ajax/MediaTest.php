@@ -83,7 +83,6 @@ class MediaTest extends TestCase
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->responseMock->method('setPublicHeaders')->willReturnSelf();
 
-
         $this->mediaAction = new Media(
             $this->requestMock,
             $this->productRepositoryMock,
@@ -124,7 +123,9 @@ class MediaTest extends TestCase
             ->willReturn(self::STUB_PRODUCT_ID_NOT_EXIST);
         $this->productRepositoryMock->method('get')
             ->with(self::STUB_PRODUCT_ID_NOT_EXIST)
-            ->willThrowException(new NoSuchEntityException(__('')));
+            ->willThrowException(new NoSuchEntityException(
+                __("The product that was requested doesn't exist. Verify the product and try again.")
+            ));
 
         // Expect
         $this->swatchHelperMock->expects($this->never())
