@@ -14,6 +14,5 @@
         </arguments>
 
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
     </actionGroup>
 </actionGroups>
