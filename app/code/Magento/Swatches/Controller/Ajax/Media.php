@@ -6,75 +6,114 @@
  */
 namespace Magento\Swatches\Controller\Ajax;
 
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\PageCache\Model\Config as PageCacheConfig;
+use Magento\Swatches\Helper\Data as SwatchesHelper;
 
 /**
  * Class Media
  */
-class Media extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\Action\HttpGetActionInterface
+class Media implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Product Factory
-     */
-    protected $productModelFactory;
-
-    /**
-     * @var \Magento\Swatches\Helper\Data
+     * @var SwatchesHelper
      */
     private $swatchHelper;
 
     /**
-     * @var \Magento\PageCache\Model\Config
+     * @var PageCacheConfig
      */
     protected $config;
 
     /**
-     * @param Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productModelFactory
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @param \Magento\PageCache\Model\Config $config
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var JsonResultFactory
+     */
+    private $jsonResultFactory;
+
+    /**
+     * @var HttpResponse
+     */
+    private $response;
+
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     * @param RequestInterface $request
+     * @param HttpResponse $response
+     * @param JsonResultFactory $jsonResultFactory
+     * @param SwatchesHelper $swatchHelper
+     * @param PageCacheConfig $config
      */
     public function __construct(
-        Context $context,
-        \Magento\Catalog\Model\ProductFactory $productModelFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper,
-        \Magento\PageCache\Model\Config $config
+        ProductRepositoryInterface $productRepository,
+        RequestInterface $request,
+        HttpResponse $response,
+        JsonResultFactory $jsonResultFactory,
+        SwatchesHelper $swatchHelper,
+        PageCacheConfig $config
     ) {
-        $this->productModelFactory = $productModelFactory;
         $this->swatchHelper = $swatchHelper;
         $this->config = $config;
-
-        parent::__construct($context);
+        $this->productRepository = $productRepository;
+        $this->request = $request;
+        $this->jsonResultFactory = $jsonResultFactory;
+        $this->response = $response;
     }
 
     /**
      * Get product media for specified configurable product variation
      *
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function execute()
     {
-        $productMedia = [];
+        $resultJson = $this->jsonResultFactory->create();
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        try {
+            $product = $this->getCurrentProduct();
 
-        /** @var \Magento\Framework\App\ResponseInterface $response */
-        $response = $this->getResponse();
+            /** @TODO This header should be set by Plugin (bridge between PageCache and Swatches) */
+            $this->response->setPublicHeaders($this->config->getTtl());
 
-        if ($productId = (int)$this->getRequest()->getParam('product_id')) {
-            $product = $this->productModelFactory->create()->load($productId);
-            $productMedia = $this->swatchHelper->getProductMediaGallery(
-                $product
-            );
+            $resultJson->setData($this->swatchHelper->getProductMediaGallery($product));
             $resultJson->setHeader('X-Magento-Tags', implode(',', $product->getIdentities()));
-
-            $response->setPublicHeaders($this->config->getTtl());
+            return $resultJson;
+        } catch (NoSuchEntityException $e) {
+            $resultJson->setData([]);
         }
 
-        $resultJson->setData($productMedia);
         return $resultJson;
+    }
+
+    /**
+     * Returns requested Product
+     *
+     * @return ProductInterface|Product
+     * @throws NoSuchEntityException
+     */
+    private function getCurrentProduct(): ProductInterface
+    {
+        $productId = $this->request->getParam('product_id');
+        if (empty($productId)) {
+            throw new NoSuchEntityException(__('No "product_id" provided.'));
+        }
+
+        return $this->productRepository->get($productId);
     }
 }
