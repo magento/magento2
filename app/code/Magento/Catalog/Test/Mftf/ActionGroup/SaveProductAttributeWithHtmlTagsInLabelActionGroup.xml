@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveProductAttributeWithHtmlTagsInLabelActionGroup">
+        <annotations>
+            <description>Clicks on Save. Validates that the HTML tags issue is present.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+
+        <!-- See the error message on the "Manage Labels Tab" -->
+        <seeElement selector="#attribute-labels-table .mage-error" stepKey="seeHtmlTagsUsageErrorMessage1"/>
+
+        <!-- Click on "Properties" tab on left menu -->
+        <click selector="{{AttributePropertiesSection.propertiesTab}}" stepKey="clickPropertiesTab"/>
+
+        <!-- See the error message on the "Properties" Tab -->
+        <seeElement selector=".field-attribute_label .mage-error" stepKey="seeHtmlTagsUsageErrorMessage2"/>
+    </actionGroup>
+</actionGroups>
