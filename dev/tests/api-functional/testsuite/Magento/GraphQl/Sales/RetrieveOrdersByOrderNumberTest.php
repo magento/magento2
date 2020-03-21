@@ -172,6 +172,77 @@ QUERY;
     }
 
     /**
+     * @param String $orderNumber
+     * @param String $store
+     * @param String $expectedCount
+     * @dataProvider dataProviderMultiStores
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/two_orders_with_order_items_two_storeviews.php
+     */
+    public function testGetCustomerOrdersTwoStoreviewQuery(string $orderNumber, string $store, int $expectedCount)
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}){
+    items
+    {
+      number
+      order_items{
+        product_sku
+      }
+    }
+    page_info {
+        current_page
+        page_size
+        total_pages
+    }
+    total_count
+   }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            array_merge($this->getCustomerAuthHeaders($currentEmail, $currentPassword), ['Store' => $store])
+        );
+        $this->assertArrayHasKey('customer', $response);
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertCount($expectedCount, $response['customer']['orders']['items']);
+        $this->assertArrayHasKey('total_count', $response['customer']['orders']);
+        $this->assertEquals($expectedCount, (int)$response['customer']['orders']['total_count']);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderMultiStores(): array
+    {
+        return [
+            'firstStoreFirstOrder' => [
+                '100000001', 'default', 1
+            ],
+            'secondStoreSecondOrder' => [
+                '100000002', 'fixture_second_store', 1
+            ],
+            'firstStoreSecondOrder' => [
+                '100000002', 'default', 0
+            ],
+            'secondStoreFirstOrder' => [
+                '100000001', 'fixture_second_store', 0
+            ],
+        ];
+    }
+
+    /**
      * @param string $email
      * @param string $password
      * @return array
