@@ -7,34 +7,42 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class ProductUrlPathGeneratorTest
+ * Verify ProductUrlPathGenerator class
  */
-class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
+class ProductUrlPathGeneratorTest extends TestCase
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /** @var ProductUrlPathGenerator */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryUrlPathGenerator|MockObject */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|MockObject */
     protected $product;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductRepositoryInterface|MockObject */
     protected $productRepository;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Category|MockObject */
     protected $category;
 
     /**
@@ -42,7 +50,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $this->category = $this->createMock(Category::class);
         $productMethods = [
             '__wakeup',
             'getData',
@@ -54,17 +62,17 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
             'setStoreId',
         ];
 
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $productMethods);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->product = $this->createPartialMock(Product::class, $productMethods);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->categoryUrlPathGenerator = $this->createMock(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class
+            CategoryUrlPathGenerator::class
         );
-        $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->productRepository->expects($this->any())->method('getById')->willReturn($this->product);
 
         $this->productUrlPathGenerator = (new ObjectManager($this))->getObject(
-            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class,
+            ProductUrlPathGenerator::class,
             [
                 'storeManager' => $this->storeManager,
                 'scopeConfig' => $this->scopeConfig,
@@ -75,13 +83,15 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider for testGetUrlPath.
+     *
      * @return array
      */
     public function getUrlPathDataProvider(): array
     {
         return [
-            'path based on url key uppercase' => ['Url-Key', null, 0, 'url-key'],
-            'path based on url key' => ['url-key', null, 0, 'url-key'],
+            'path based on url key uppercase' => ['Url-Key', null, 1, 'url-key'],
+            'path based on url key' => ['url-key', null, 1, 'url-key'],
             'path based on product name 1' => ['', 'product-name', 1, 'product-name'],
             'path based on product name 2' => [null, 'product-name', 1, 'product-name'],
             'path based on product name 3' => [false, 'product-name', 1, 'product-name']
@@ -89,6 +99,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get url path.
+     *
      * @dataProvider getUrlPathDataProvider
      * @param string|null|bool $urlKey
      * @param string|null|bool $productName
@@ -109,6 +121,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get url key.
+     *
      * @param string|bool $productUrlKey
      * @param string|bool $expectedUrlKey
      * @return void
@@ -122,6 +136,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider for testGetUrlKey.
+     *
      * @return array
      */
     public function getUrlKeyDataProvider(): array
@@ -133,6 +149,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get url path with default utl key.
+     *
      * @param string|null|bool $storedUrlKey
      * @param string|null|bool $productName
      * @param string $expectedUrlKey
@@ -150,6 +168,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider for testGetUrlPathDefaultUrlKey.
+     *
      * @return array
      */
     public function getUrlPathDefaultUrlKeyDataProvider(): array
@@ -161,6 +181,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get url path with category.
+     *
      * @return void
      */
     public function testGetUrlPathWithCategory(): void
@@ -177,6 +199,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get url path with suffix.
+     *
      * @return void
      */
     public function testGetUrlPathWithSuffix(): void
@@ -198,6 +222,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get url path with suffix and category and store.
+     *
      * @return void
      */
     public function testGetUrlPathWithSuffixAndCategoryAndStore(): void
@@ -219,6 +245,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get canonical url path.
+     *
      * @return void
      */
     public function testGetCanonicalUrlPath(): void
@@ -232,6 +260,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify get canonical path with category.
+     *
      * @return void
      */
     public function testGetCanonicalUrlPathWithCategory(): void

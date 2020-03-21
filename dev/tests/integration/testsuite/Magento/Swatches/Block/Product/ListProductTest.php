@@ -166,7 +166,7 @@ class ListProductTest extends TestCase
         $this->updateProductImages($images);
         $productImage = $this->listingBlock->getImage($this->productRepository->get('configurable'), $area);
         $this->assertInstanceOf(Image::class, $productImage);
-        $this->assertEquals($productImage->getCustomAttributes(), '');
+        $this->assertEquals($productImage->getCustomAttributes(), []);
         $this->assertEquals($productImage->getClass(), 'product-image-photo');
         $this->assertEquals($productImage->getRatio(), 1.25);
         $this->assertEquals($productImage->getLabel(), $expectation['label']);
