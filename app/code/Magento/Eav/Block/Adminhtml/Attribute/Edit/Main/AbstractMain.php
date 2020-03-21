@@ -284,7 +284,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $html
      *
-     * @return  string
+     * @return string
      */
     protected function _afterToHtml($html)
     {
