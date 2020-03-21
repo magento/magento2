@@ -117,7 +117,6 @@ class IndexTest extends TestCase
 
         // When
         $this->refreshAction->execute();
-
     }
 
     /**

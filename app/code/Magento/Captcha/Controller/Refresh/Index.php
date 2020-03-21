@@ -65,7 +65,7 @@ class Index implements HttpPostActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
