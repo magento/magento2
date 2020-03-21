@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Section;
 
 use Magento\Customer\CustomerData\SectionPoolInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory;
