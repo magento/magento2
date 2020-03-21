@@ -21,10 +21,10 @@
             <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
-<!--            <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>-->
-<!--            <magentoCLI command="config:set customer/captcha/failed_attempts_login 3" stepKey="increaseLoginAttempt"/>-->
-<!--            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>-->
-<!--            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct1"/>-->
+            <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>
+            <magentoCLI command="config:set customer/captcha/failed_attempts_login 3" stepKey="increaseLoginAttempt"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct1"/>
         </after>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
