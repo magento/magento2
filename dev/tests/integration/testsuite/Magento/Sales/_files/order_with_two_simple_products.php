@@ -70,7 +70,6 @@ $orderItem2->setProductId($secondProduct->getId())
     ->setName($secondProduct->getName())
     ->setSku($secondProduct->getSku())
     ->setStoreId(0)
-    ->setProductId($secondProduct->getId())
     ->setSku($secondProductSku)
     ->setProductOptions(['info_buyRequest' => $requestInfo]);
 

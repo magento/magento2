@@ -242,6 +242,8 @@ class Reorder
     {
         $output = new Data\ReorderOutput($cart, $this->errors);
         $this->errors = [];
+        // we already show user errors, do not expose it to cart level
+        $cart->setHasError(false);
         return $output;
     }
 
