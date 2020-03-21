@@ -84,6 +84,7 @@ class Index implements HttpPostActionInterface
         $block = $this->layout->createBlock($captchaModel->getBlockName());
         $block->setFormId($formId)->setIsAjax(true)->toHtml();
 
-        return $this->jsonResultFactory->create(['imgSrc' => $captchaModel->getImgSrc()]);
+        $result = $this->jsonResultFactory->create();
+        return $result->setData(['imgSrc' => $captchaModel->getImgSrc()]);
     }
 }
