@@ -158,7 +158,9 @@
 
         <!--check admin for both options-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="seeOption1Admin"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct2.name$$" stepKey="seeOption2Admin"/>
@@ -254,7 +256,9 @@
 
         <!--go to admin and disable an option-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
         <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisable"/>
