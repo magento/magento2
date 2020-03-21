@@ -223,8 +223,7 @@ class CategoryRepositoryTest extends TestCase
         $parentCategoryId = 15;
         $newCategoryId = 25;
         $categoryData = ['level' => '1', 'path' => '1/2', 'parent_id' => 1, 'name' => 'category'];
-        $dataForSave = ['store_id' => self::STUB_STORE_ID, 'name' => 'category', 'path' => 'path', 'parent_id' => 15];
-
+        $dataForSave = ['store_id' => self::STUB_STORE_ID, 'name' => 'category', 'path' => 'path', 'parent_id' => 15, 'level' => null];
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')

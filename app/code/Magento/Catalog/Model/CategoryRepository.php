@@ -109,6 +109,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             $parentCategory = $this->get($parentId, $storeId);
             $existingData['path'] = $parentCategory->getPath();
             $existingData['parent_id'] = $parentId;
+            $existingData['level'] = null;
         }
         $category->addData($existingData);
 
