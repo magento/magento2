@@ -39,6 +39,7 @@ class AbstractSaveCategoryTest extends AbstractBackendController
     protected function performSaveCategoryRequest(array $data): array
     {
         $data['return_session_messages_only'] = true;
+        $this->getRequest()->setDispatched(false);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($data);
         $this->dispatch('backend/catalog/category/save');
