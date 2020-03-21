@@ -41,7 +41,7 @@ class Index implements HttpPostActionInterface
     /**
      * @var JsonResultFactory
      */
-    private $jsonFactory;
+    private $jsonResultFactory;
 
     /**
      * @param RequestInterface $request
@@ -58,7 +58,7 @@ class Index implements HttpPostActionInterface
         JsonSerializer $serializer
     ) {
         $this->request = $request;
-        $this->jsonFactory = $jsonFactory;
+        $this->jsonResultFactory = $jsonFactory;
         $this->captchaHelper = $captchaHelper;
         $this->layout = $layout;
         $this->serializer = $serializer;
@@ -84,6 +84,6 @@ class Index implements HttpPostActionInterface
         $block = $this->layout->createBlock($captchaModel->getBlockName());
         $block->setFormId($formId)->setIsAjax(true)->toHtml();
 
-        return $this->jsonFactory->create(['imgSrc' => $captchaModel->getImgSrc()]);
+        return $this->jsonResultFactory->create(['imgSrc' => $captchaModel->getImgSrc()]);
     }
 }
