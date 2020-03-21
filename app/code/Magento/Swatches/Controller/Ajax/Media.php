@@ -18,7 +18,7 @@ use Magento\PageCache\Model\Config as PageCacheConfig;
 use Magento\Swatches\Helper\Data as SwatchesHelper;
 
 /**
- * Class Media
+ * Get product media for specified configurable product variation
  */
 class Media implements HttpGetActionInterface
 {
@@ -53,32 +53,30 @@ class Media implements HttpGetActionInterface
     private $response;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
      * @param RequestInterface $request
+     * @param ProductRepositoryInterface $productRepository
      * @param HttpResponse $response
      * @param JsonResultFactory $jsonResultFactory
      * @param SwatchesHelper $swatchHelper
      * @param PageCacheConfig $config
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         RequestInterface $request,
+        ProductRepositoryInterface $productRepository,
         HttpResponse $response,
         JsonResultFactory $jsonResultFactory,
         SwatchesHelper $swatchHelper,
         PageCacheConfig $config
     ) {
+        $this->request = $request;
+        $this->productRepository = $productRepository;
+        $this->response = $response;
+        $this->jsonResultFactory = $jsonResultFactory;
         $this->swatchHelper = $swatchHelper;
         $this->config = $config;
-        $this->productRepository = $productRepository;
-        $this->request = $request;
-        $this->jsonResultFactory = $jsonResultFactory;
-        $this->response = $response;
     }
 
     /**
-     * Get product media for specified configurable product variation
-     *
      * @inheritdoc
      */
     public function execute()
