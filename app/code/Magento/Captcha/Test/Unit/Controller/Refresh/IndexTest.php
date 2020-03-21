@@ -9,6 +9,7 @@ use Magento\Captcha\Controller\Refresh\Index;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Model\CaptchaInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Framework\View\Element\BlockInterface;
@@ -26,6 +27,9 @@ class IndexTest extends TestCase
 
     /** @var MockObject|ResultJsonFactory */
     private $jsonResultFactoryMock;
+
+    /** @var MockObject|ResultJson */
+    private $jsonResultMock;
 
     /** @var MockObject|CaptchaHelper */
     private $captchaHelperMock;
@@ -54,6 +58,9 @@ class IndexTest extends TestCase
             ->setMethods(['setFormId', 'setIsAjax', 'toHtml'])
             ->getMockForAbstractClass();
         $this->jsonResultFactoryMock = $this->createMock(ResultJsonFactory::class);
+        $this->jsonResultMock = $this->createMock(ResultJson::class);
+        $this->jsonResultFactoryMock->method('create')
+            ->willReturn($this->jsonResultMock);
         $this->jsonSerializerMock = $this->createMock(JsonSerializer::class);
         $this->captchaHelperMock = $this->createMock(CaptchaHelper::class);
 

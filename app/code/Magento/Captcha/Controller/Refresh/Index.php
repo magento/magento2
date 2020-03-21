@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Controller\Refresh;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
@@ -69,15 +71,8 @@ class Index implements HttpPostActionInterface
      */
     public function execute()
     {
-        $formId = $this->request->getPost('formId');
-        if (null === $formId) {
-            $params = [];
-            $content = $this->request->getContent();
-            if ($content) {
-                $params = $this->serializer->unserialize($content);
-            }
-            $formId = isset($params['formId']) ? $params['formId'] : null;
-        }
+        $formId = $this->getRequestFormId();
+
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $captchaModel->generate();
 
@@ -85,6 +80,28 @@ class Index implements HttpPostActionInterface
         $block->setFormId($formId)->setIsAjax(true)->toHtml();
 
         $result = $this->jsonResultFactory->create();
+
         return $result->setData(['imgSrc' => $captchaModel->getImgSrc()]);
+    }
+
+    /**
+     * Returns requested Form ID
+     *
+     * @return string|null
+     */
+    private function getRequestFormId(): ?string
+    {
+        $formId = $this->request->getPost('formId');
+        if (null === $formId) {
+            $params = [];
+            $content = $this->request->getContent();
+            if ($content) {
+                $params = $this->serializer->unserialize($content);
+            }
+
+            $formId = $params['formId'] ?? null;
+        }
+
+        return $formId !== null ? (string)$formId : null;
     }
 }
