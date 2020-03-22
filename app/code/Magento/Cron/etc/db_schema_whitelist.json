@@ -12,7 +12,8 @@
         },
         "index": {
             "CRON_SCHEDULE_JOB_CODE": true,
-            "CRON_SCHEDULE_SCHEDULED_AT_STATUS": true
+            "CRON_SCHEDULE_SCHEDULED_AT_STATUS": true,
+            "CRON_SCHEDULE_SCHEDULE_ID_STATUS": true
         },
         "constraint": {
             "PRIMARY": true
