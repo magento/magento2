@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Observer;
@@ -107,10 +106,10 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
         $this->observer = $objectManager->getObject(
             CheckUserForgotPasswordBackendObserver::class,
             [
-                '_helper' => $this->helperMock,
+                'helper' => $this->helperMock,
                 'captchaStringResolver' => $this->captchaStringResolverMock,
-                '_session' => $this->sessionMock,
-                '_actionFlag' => $this->actionFlagMock,
+                'session' => $this->sessionMock,
+                'actionFlag' => $this->actionFlagMock,
                 'messageManager' => $this->messageManagerMock,
                 'request' => $this->requestMock
             ]
@@ -130,13 +129,11 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getUrl', 'getResponse'])
             ->getMockForAbstractClass();
-        $this->controllerMock->expects($this->any())
-            ->method('getResponse')
+        $this->controllerMock->method('getResponse')
             ->willReturn($this->httpResponseMock);
 
         $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getControllerAction']);
-        $this->eventObserverMock->expects($this->any())
-            ->method('getControllerAction')
+        $this->eventObserverMock->method('getControllerAction')
             ->willReturn($this->controllerMock);
     }
 
@@ -188,12 +185,10 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
      */
     public function testExecuteWhenEmailParamIsNotPresent()
     {
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->with('email')
             ->willReturn(null);
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
+        $this->requestMock->method('getParams')
             ->willReturn(self::STUB_REQUEST_PARAMS);
         $this->captchaMock->expects($this->never())->method('isRequired');
         $this->captchaMock->expects($this->never())->method('isCorrect');
@@ -206,12 +201,10 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
      */
     private function configureRequestMockWithStubValues()
     {
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->with('email')
             ->willReturn(self::STUB_EMAIL);
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
+        $this->requestMock->method('getParams')
             ->willReturn(self::STUB_REQUEST_PARAMS);
     }
 

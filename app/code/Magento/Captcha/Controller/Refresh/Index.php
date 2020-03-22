@@ -1,42 +1,46 @@
 <?php
 /**
- * Refreshes captcha and returns JSON encoded URL to image (AJAX action)
- * Example: {'imgSrc': 'http://example.com/media/captcha/67842gh187612ngf8s.png'}
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Controller\Refresh;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Captcha\Helper\Data;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Serialize\Serializer\Json;
 
-class Index extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
+/**
+ * Refreshes captcha and returns JSON encoded URL to image (AJAX action)
+ * Example: {'imgSrc': 'http://example.com/media/captcha/67842gh187612ngf8s.png'}
+ */
+class Index extends Action implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Captcha\Helper\Data
+     * @var Data
      */
-    protected $captchaHelper;
+    private $captchaHelper;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
-    protected $serializer;
+    private $serializer;
 
     /**
      * @param Context $context
-     * @param \Magento\Captcha\Helper\Data $captchaHelper
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param Data $captchaHelper
+     * @param Json|null $serializer
      */
     public function __construct(
         Context $context,
-        \Magento\Captcha\Helper\Data $captchaHelper,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Data $captchaHelper,
+        Json $serializer
     ) {
         $this->captchaHelper = $captchaHelper;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
         parent::__construct($context);
     }
 
@@ -52,7 +56,7 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpPostActi
             if ($content) {
                 $params = $this->serializer->unserialize($content);
             }
-            $formId = isset($params['formId']) ? $params['formId'] : null;
+            $formId = $params['formId'] ?? null;
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $captchaModel->generate();

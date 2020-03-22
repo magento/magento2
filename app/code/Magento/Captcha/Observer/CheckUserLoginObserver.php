@@ -3,13 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Captcha\Observer;
 
+use Magento\Captcha\Helper\Data;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AuthenticationInterface;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Check captcha on user login page observer.
@@ -20,142 +28,114 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class CheckUserLoginObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Captcha\Helper\Data
+     * @var Data
      */
-    protected $_helper;
+    private $helper;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag
+     * @var ActionFlag
      */
-    protected $_actionFlag;
+    private $actionFlag;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * @var SessionManagerInterface
      */
-    protected $_session;
+    private $session;
 
     /**
      * @var CaptchaStringResolver
      */
-    protected $captchaStringResolver;
+    private $captchaStringResolver;
 
     /**
      * Customer data
      *
-     * @var \Magento\Customer\Model\Url
+     * @var Url
      */
-    protected $_customerUrl;
+    private $customerUrl;
 
     /**
      * @var CustomerRepositoryInterface
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
-     * Authentication
-     *
      * @var AuthenticationInterface
      */
-    protected $authentication;
+    private $authentication;
 
     /**
-     * CheckUserLoginObserver constructor.
-     *
-     * @param \Magento\Captcha\Helper\Data $helper
-     * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Session\SessionManagerInterface $customerSession
+     * @param Data $helper
+     * @param ActionFlag $actionFlag
+     * @param ManagerInterface $messageManager
+     * @param SessionManagerInterface $customerSession
      * @param CaptchaStringResolver $captchaStringResolver
-     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param Url $customerUrl
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AuthenticationInterface $authentication
      */
     public function __construct(
-        \Magento\Captcha\Helper\Data $helper,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Session\SessionManagerInterface $customerSession,
+        Data $helper,
+        ActionFlag $actionFlag,
+        ManagerInterface $messageManager,
+        SessionManagerInterface $customerSession,
         CaptchaStringResolver $captchaStringResolver,
-        \Magento\Customer\Model\Url $customerUrl
+        Url $customerUrl,
+        CustomerRepositoryInterface $customerRepository,
+        AuthenticationInterface $authentication
     ) {
-        $this->_helper = $helper;
-        $this->_actionFlag = $actionFlag;
+        $this->helper = $helper;
+        $this->actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
-        $this->_session = $customerSession;
+        $this->session = $customerSession;
         $this->captchaStringResolver = $captchaStringResolver;
-        $this->_customerUrl = $customerUrl;
-    }
-
-    /**
-     * Get customer repository
-     *
-     * @return \Magento\Customer\Api\CustomerRepositoryInterface
-     */
-    private function getCustomerRepository()
-    {
-
-        if (!($this->customerRepository instanceof \Magento\Customer\Api\CustomerRepositoryInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Customer\Api\CustomerRepositoryInterface::class
-            );
-        } else {
-            return $this->customerRepository;
-        }
-    }
-
-    /**
-     * Get authentication
-     *
-     * @return AuthenticationInterface
-     */
-    private function getAuthentication()
-    {
-
-        if (!($this->authentication instanceof AuthenticationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                AuthenticationInterface::class
-            );
-        } else {
-            return $this->authentication;
-        }
+        $this->customerUrl = $customerUrl;
+        $this->customerRepository = $customerRepository;
+        $this->authentication = $authentication;
     }
 
     /**
      * Check captcha on user login page
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
+     *
      * @return $this|void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $formId = 'user_login';
-        $captchaModel = $this->_helper->getCaptcha($formId);
+        $captchaModel = $this->helper->getCaptcha($formId);
         $controller = $observer->getControllerAction();
         $loginParams = $controller->getRequest()->getPost('login');
         $login = (is_array($loginParams) && array_key_exists('username', $loginParams))
             ? $loginParams['username']
             : null;
+
         if ($captchaModel->isRequired($login)) {
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
+
             if (!$captchaModel->isCorrect($word)) {
                 try {
-                    $customer = $this->getCustomerRepository()->get($login);
-                    $this->getAuthentication()->processAuthenticationFailure($customer->getId());
+                    $customer = $this->customerRepository->get($login);
+                    $this->authentication->processAuthenticationFailure($customer->getId());
                     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (NoSuchEntityException $e) {
-                    //do nothing as customer existence is validated later in authenticate method
+                    // do nothing as customer existence is validated later in authenticate method
                 }
                 $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
-                $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->_session->setUsername($login);
-                $beforeUrl = $this->_session->getBeforeAuthUrl();
-                $url = $beforeUrl ? $beforeUrl : $this->_customerUrl->getLoginUrl();
+                $this->actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+                $this->session->setUsername($login);
+                $beforeUrl = $this->session->getBeforeAuthUrl();
+                $url = $beforeUrl ?: $this->customerUrl->getLoginUrl();
                 $controller->getResponse()->setRedirect($url);
             }
         }
+
         $captchaModel->logAttempt($login);
 
         return $this;
