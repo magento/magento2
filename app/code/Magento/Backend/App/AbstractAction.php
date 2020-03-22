@@ -20,7 +20,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * Generic backend controller
  *
- * @deprecated Use \Magento\Framework\App\ActionInterface
+ * @deprecated Use \Magento\Backend\App\ActionInterface
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
