@@ -11,6 +11,8 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class ApplyRules: Apply rule
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
