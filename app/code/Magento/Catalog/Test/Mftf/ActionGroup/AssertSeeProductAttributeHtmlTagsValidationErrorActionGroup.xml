@@ -8,14 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SaveProductAttributeWithHtmlTagsInLabelActionGroup">
+    <actionGroup name="AssertSeeProductAttributeValidationErrorActionGroup">
         <annotations>
-            <description>Clicks on Save. Validates that the HTML tags issue is present.</description>
+            <description>Validates that the HTML tags issue is present on the attribute page after save.</description>
         </annotations>
-
-        <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForAttributeToSave"/>
 
         <!-- See the error message on the "Manage Labels Tab" -->
         <seeElement selector="#attribute-labels-table .mage-error" stepKey="seeHtmlTagsUsageErrorMessage1"/>

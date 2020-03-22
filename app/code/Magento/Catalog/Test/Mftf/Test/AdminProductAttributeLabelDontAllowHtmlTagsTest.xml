@@ -18,33 +18,27 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <!-- Log out -->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
-        <!-- Go to Stores > Attributes > Product , click "Add New Attribute" -->
-        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
-        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="createNewAttribute"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
 
-        <!-- Input value for Default Label -->
         <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeDefaultLabel">
             <argument name="attributeName" value="{{productAttributeWithHtmlTagsInLabel.default_label}}"/>
             <argument name="attributeType" value="{{productAttributeWithHtmlTagsInLabel.frontend_input}}" />
         </actionGroup>
 
-        <!-- Click on "Manage Labels" tab on left menu -->
-        <click selector="{{ManageLabelsSection.ManageLabelsTab}}" stepKey="clickManageLabelsTab"/>
+        <click selector="{{AdminProductAttributeManageLabelsSection.ManageLabelsTab}}" stepKey="clickManageLabelsTab"/>
 
-        <!-- Input value for Default Store View -->
         <actionGroup ref="AdminFillProductAttributeDefaultStoreViewActionGroup" stepKey="fillAttributeDefaultStoreViewLabel">
             <argument name="value" value="{{productAttributeWithHtmlTagsInLabel.default_store_label}}"/>
         </actionGroup>
 
-        <!-- Save Product Attribute -->
-        <actionGroup ref="SaveProductAttributeWithHtmlTagsInLabelActionGroup" stepKey="saveAttribute"/>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttribute"/>
+
+        <actionGroup ref="AssertSeeProductAttributeValidationErrorActionGroup" stepKey="validateAttributeLabelsForHtmlTags"/>
     </test>
 </tests>

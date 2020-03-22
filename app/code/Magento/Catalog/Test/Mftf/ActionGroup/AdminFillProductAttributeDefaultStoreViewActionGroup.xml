@@ -11,6 +11,6 @@
         <arguments>
             <argument name="value" type="string"/>
         </arguments>
-        <fillField selector="{{ManageLabelsSection.DefaultStoreLabel}}" userInput="{{value}}" stepKey="fillDefaultStoreViewLabel"/>
+        <fillField selector="{{AdminProductAttributeManageLabelsSection.DefaultStoreLabel}}" userInput="{{value}}" stepKey="fillDefaultStoreViewLabel"/>
     </actionGroup>
 </actionGroups>
