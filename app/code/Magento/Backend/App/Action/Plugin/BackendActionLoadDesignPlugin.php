@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Backend\App\Action\Plugin;
 
-use Magento\Backend\App\ActionInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\View\DesignLoader;
 
 /**

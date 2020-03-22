@@ -5,12 +5,14 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
-use Magento\Backend\App\ActionInterface;
+use Closure;
 use Magento\Backend\App\BackendApp;
 use Magento\Backend\App\BackendAppList;
 use Magento\Backend\Model\Auth as BackendAuthModel;
 use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
@@ -137,15 +139,13 @@ class BackendActionAuthenticationPlugin
 
     /**
      * @param ActionInterface $subject
-     * @param \Closure $proceed
+     * @param Closure $proceed
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
-        ActionInterface $subject,
-        \Closure $proceed
-    ) {
+    public function aroundExecute(ActionInterface $subject, Closure $proceed)
+    {
         if ($this->isCurrentActionOpen()) {
             $this->_auth->getAuthStorage()->refreshAcl();
             return $proceed();
@@ -163,7 +163,7 @@ class BackendActionAuthenticationPlugin
 
         if ($backendApp) {
             $resultRedirect = $this->resultRedirectFactory->create();
-            $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($this->backendUrl->getBaseUrl());
+            $baseUrl = RequestHttp::getUrlNoScript($this->backendUrl->getBaseUrl());
             $baseUrl = $baseUrl . $backendApp->getStartupPage();
             return $resultRedirect->setUrl($baseUrl);
         }
@@ -186,32 +186,24 @@ class BackendActionAuthenticationPlugin
                     $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
                 }
             } else {
-                $this->_actionFlag->set('', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH, true);
+                $this->_actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
                 $this->_response->setRedirect($this->_url->getCurrentUrl());
                 $this->messageManager->addErrorMessage(__('Invalid Form Key. Please refresh the page.'));
                 $isRedirectNeeded = true;
             }
         }
         if (!$isRedirectNeeded && !$request->isForwarded()) {
-            if ($request->getParam('isIframe')) {
-                $request->setForwarded(true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('deniedIframe')
-                    ->setDispatched(false);
-            } elseif ($request->getParam('isAjax')) {
-                $request->setForwarded(true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('deniedJson')
-                    ->setDispatched(false);
-            } else {
-                $request->setForwarded(true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('login')
-                    ->setDispatched(false);
+            $request->setForwarded(true)
+                ->setRouteName('adminhtml')
+                ->setControllerName('auth')
+                ->setDispatched(false);
 
+            if ($request->getParam('isIframe')) {
+                $request->setActionName('deniedIframe');
+            } elseif ($request->getParam('isAjax')) {
+                $request->setActionName('deniedJson');
+            } else {
+                $request->setActionName('login');
             }
         }
     }
@@ -264,7 +256,7 @@ class BackendActionAuthenticationPlugin
         }
 
         $this->_response->setRedirect($requestUri);
-        $this->_actionFlag->set('', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH, true);
+        $this->_actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
         return true;
     }
 

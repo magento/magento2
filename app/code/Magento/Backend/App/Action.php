@@ -10,7 +10,8 @@
 namespace Magento\Backend\App;
 
 /**
- * @deprecated Use \Magento\Backend\App\ActionInterface
+ * @deprecated
+ * @see \Magento\Framework\App\ActionInterface
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
