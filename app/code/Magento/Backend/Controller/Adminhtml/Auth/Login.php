@@ -6,32 +6,62 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGet, HttpPost
+class Login implements HttpGet, HttpPost
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+    /**
+     * @var Auth
+     */
+    private $auth;
+    /**
+     * @var UrlInterface
+     */
+    private $backendUrl;
+    /**
+     * @var RedirectFactory
+     */
+    private $redirectFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param RequestInterface $request
+     * @param Auth $auth
+     * @param UrlInterface $backendUrl
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $redirectFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        RequestInterface $request,
+        Auth $auth,
+        UrlInterface $backendUrl,
+        PageFactory $resultPageFactory,
+        RedirectFactory $redirectFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
+        $this->request = $request;
+        $this->auth = $auth;
+        $this->backendUrl = $backendUrl;
+        $this->redirectFactory = $redirectFactory;
     }
 
     /**
@@ -41,15 +71,15 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
      */
     public function execute()
     {
-        if ($this->_auth->isLoggedIn()) {
-            if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
-                $this->_auth->getAuthStorage()->setIsFirstPageAfterLogin(true);
+        if ($this->auth->isLoggedIn()) {
+            if ($this->auth->getAuthStorage()->isFirstPageAfterLogin()) {
+                $this->auth->getAuthStorage()->setIsFirstPageAfterLogin(true);
             }
-            return $this->getRedirect($this->_backendUrl->getStartupPageUrl());
+            return $this->getRedirect($this->backendUrl->getStartupPageUrl());
         }
 
-        $requestUrl = $this->getRequest()->getUri();
-        $backendUrl = $this->getUrl('*');
+        $requestUrl = $this->request->getUri();
+        $backendUrl = $this->backendUrl->getUrl('*');
         // redirect according to rewrite rule
         if ($requestUrl != $backendUrl) {
             return $this->getRedirect($backendUrl);
@@ -66,7 +96,7 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
     private function getRedirect($path)
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->redirectFactory->create();
         $resultRedirect->setPath($path);
         return $resultRedirect;
     }
