@@ -76,9 +76,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCron stepKey="runCronReindex" groups="index"/>
 
         <!--Go to category page-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
