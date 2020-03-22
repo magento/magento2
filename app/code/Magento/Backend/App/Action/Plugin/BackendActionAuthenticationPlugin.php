@@ -98,6 +98,7 @@ class BackendActionAuthenticationPlugin
      * @param RedirectFactory $resultRedirectFactory
      * @param BackendAppList $backendAppList
      * @param Validator $formKeyValidator
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RequestInterface $request,

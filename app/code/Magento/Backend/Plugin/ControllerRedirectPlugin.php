@@ -7,14 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Plugin;
 
-use Magento\Backend\App\ActionInterface;
 use Magento\Backend\Model\Session as BackendSession;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\Redirect as RedirectResult;
 
+/**
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class ControllerRedirectPlugin
 {
     /**
@@ -67,6 +70,13 @@ class ControllerRedirectPlugin
         return $redirect->setUrl($redirectUrl);
     }
 
+    /**
+     * Sets Session URL notice
+     *
+     * @param RedirectResult $redirect
+     * @param HttpInterface $httpResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function beforeRender(RedirectResult $redirect, HttpInterface $httpResponse)
     {
         $this->session->setIsUrlNotice($this->actionFlag->get('', ActionInterface::FLAG_IS_URLS_CHECKED));
