@@ -64,6 +64,9 @@
         <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11"/>
         <plugin name="adminLoadDesign" type="Magento\Backend\App\Action\Plugin\LoadDesignPlugin" sortOrder="101"/>
     </type>
+    <type name="Magento\Framework\Controller\Result\Redirect">
+        <plugin name="admin_result_redirect_plugin" type="Magento\Backend\Plugin\ControllerRedirectPlugin" sortOrder="100"/>
+    </type>
     <type name="Magento\Store\App\Response\Redirect">
         <arguments>
             <argument name="canUseSessionIdInParam" xsi:type="boolean">false</argument>
