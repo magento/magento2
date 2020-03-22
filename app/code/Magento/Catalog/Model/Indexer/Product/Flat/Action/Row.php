@@ -85,7 +85,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         $ids = [$id];
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
-        $storeIds = $this->getProductAvailableStores($id);
+        $storeIds = $this->getAssignedStoreIdsOfProduct($id);
 
         $stores = $this->_storeManager->getStores();
         foreach ($stores as $store) {
@@ -137,12 +137,12 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
     }
 
     /**
-     * Get list store id where product is enable
+     * Get list store id where the product is enable
      *
      * @param int $productId
      * @return array
      */
-    private function getProductAvailableStores($productId)
+    private function getAssignedStoreIdsOfProduct($productId)
     {
         $select = $this->_connection->select();
         $select->from(['e' => $this->_productIndexerHelper->getTable('store')], ['e.store_id'])
