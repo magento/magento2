@@ -28,23 +28,8 @@ use Magento\Framework\View\Element\AbstractBlock;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractAction extends \Magento\Framework\App\Action\Action
+abstract class AbstractAction extends \Magento\Framework\App\Action\Action implements ActionInterface
 {
-    /**
-     * Name of "is URLs checked" flag
-     */
-    const FLAG_IS_URLS_CHECKED = 'check_url_settings';
-
-    /**
-     * Session namespace to refer in other places
-     */
-    const SESSION_NAMESPACE = 'adminhtml';
-
-    /**
-     * Authorization level of a basic admin session
-     */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
-
     /**
      * Array of actions which can be processed without secret key validation
      *
