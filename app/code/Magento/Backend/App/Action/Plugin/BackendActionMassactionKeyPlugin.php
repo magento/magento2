@@ -7,9 +7,8 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
-use Magento\Backend\App\ActionInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Backend\App\AbstractAction;
 
 class BackendActionMassactionKeyPlugin
 {
@@ -29,9 +28,7 @@ class BackendActionMassactionKeyPlugin
     /**
      * Process massaction key
      *
-     * @param AbstractAction $subject
-     * @param RequestInterface $request
-     *
+     * @param ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
