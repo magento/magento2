@@ -115,13 +115,13 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendAc
             return parent::aroundDispatch($subject, $proceed, $request);
         }
 
-        $session = $this->_auth->getAuthStorage();
+        $session = $this->auth->getAuthStorage();
 
         // Try to login using HTTP-authentication
         if (!$session->isLoggedIn()) {
             list($login, $password) = $this->httpAuthentication->getCredentials();
             try {
-                $this->_auth->login($login, $password);
+                $this->auth->login($login, $password);
             } catch (AuthenticationException $e) {
                 $this->logger->critical($e);
             }
@@ -131,7 +131,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendAc
         if (!$session->isLoggedIn() || !$this->authorization->isAllowed($resource)
             || !$this->authorization->isAllowed($resourceType)) {
             $this->httpAuthentication->setAuthenticationFailed('RSS Feeds');
-            return $this->_response;
+            return $this->response;
         }
 
         return parent::aroundDispatch($subject, $proceed, $request);

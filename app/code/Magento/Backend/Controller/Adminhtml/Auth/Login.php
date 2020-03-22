@@ -11,7 +11,9 @@ use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -72,7 +74,7 @@ class Login implements HttpGetActionInterface, HttpPostActionInterface
     /**
      * Administrator login action
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect|ResultPage
      */
     public function execute()
     {
@@ -80,6 +82,7 @@ class Login implements HttpGetActionInterface, HttpPostActionInterface
             if ($this->auth->getAuthStorage()->isFirstPageAfterLogin()) {
                 $this->auth->getAuthStorage()->setIsFirstPageAfterLogin(true);
             }
+
             return $this->getRedirect($this->backendUrl->getStartupPageUrl());
         }
 
@@ -89,20 +92,19 @@ class Login implements HttpGetActionInterface, HttpPostActionInterface
         if ($requestUrl != $backendUrl) {
             return $this->getRedirect($backendUrl);
         }
+
         return $this->resultPageFactory->create();
     }
 
     /**
-     * Get redirect response
+     * Returns Redirect response object
      *
      * @param string $path
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      */
-    private function getRedirect($path)
+    private function getRedirect(string $path): ResultRedirect
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->redirectFactory->create();
-        $resultRedirect->setPath($path);
-        return $resultRedirect;
+        return $resultRedirect->setPath($path);
     }
 }

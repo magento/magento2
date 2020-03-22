@@ -15,7 +15,6 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\AuthenticationException;
@@ -30,7 +29,7 @@ class BackendActionAuthenticationPlugin
     /**
      * @var BackendAuthModel
      */
-    protected $_auth;
+    protected $auth;
 
     /**
      * @var string[]
@@ -46,17 +45,17 @@ class BackendActionAuthenticationPlugin
     /**
      * @var BackendUrlInterface
      */
-    protected $_url;
+    protected $url;
 
     /**
      * @var ResponseInterface
      */
-    protected $_response;
+    protected $response;
 
     /**
      * @var ActionFlag
      */
-    protected $_actionFlag;
+    protected $actionFlag;
 
     /**
      * @var MessageManagerInterface
@@ -89,11 +88,6 @@ class BackendActionAuthenticationPlugin
     private $request;
 
     /**
-     * @var ForwardFactory
-     */
-    private $forwardFactory;
-
-    /**
      * @param RequestInterface $request
      * @param BackendAuthModel $auth
      * @param BackendUrlInterface $url
@@ -104,7 +98,6 @@ class BackendActionAuthenticationPlugin
      * @param RedirectFactory $resultRedirectFactory
      * @param BackendAppList $backendAppList
      * @param Validator $formKeyValidator
-     * @param ForwardFactory $forwardFactory
      */
     public function __construct(
         RequestInterface $request,
@@ -116,20 +109,18 @@ class BackendActionAuthenticationPlugin
         BackendUrlInterface $backendUrl,
         RedirectFactory $resultRedirectFactory,
         BackendAppList $backendAppList,
-        Validator $formKeyValidator,
-        ForwardFactory $forwardFactory
+        Validator $formKeyValidator
     ) {
-        $this->_auth = $auth;
-        $this->_url = $url;
-        $this->_response = $response;
-        $this->_actionFlag = $actionFlag;
+        $this->auth = $auth;
+        $this->url = $url;
+        $this->response = $response;
+        $this->actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
         $this->backendUrl = $backendUrl;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->backendAppList = $backendAppList;
         $this->formKeyValidator = $formKeyValidator;
         $this->request = $request;
-        $this->forwardFactory = $forwardFactory;
     }
 
     private function isCurrentActionOpen(): bool
@@ -147,17 +138,17 @@ class BackendActionAuthenticationPlugin
     public function aroundExecute(ActionInterface $subject, Closure $proceed)
     {
         if ($this->isCurrentActionOpen()) {
-            $this->_auth->getAuthStorage()->refreshAcl();
+            $this->auth->getAuthStorage()->refreshAcl();
             return $proceed();
         }
 
         $this->reloadUser();
-        if (!$this->_auth->isLoggedIn()) {
+        if (!$this->auth->isLoggedIn()) {
             $this->_processNotLoggedInUser($this->request);
             return $proceed();
         }
 
-        $this->_auth->getAuthStorage()->prolong();
+        $this->auth->getAuthStorage()->prolong();
 
         $backendApp = $this->getBackendApp();
 
@@ -168,7 +159,7 @@ class BackendActionAuthenticationPlugin
             return $resultRedirect->setUrl($baseUrl);
         }
 
-        $this->_auth->getAuthStorage()->refreshAcl();
+        $this->auth->getAuthStorage()->refreshAcl();
         return $proceed();
     }
 
@@ -186,8 +177,8 @@ class BackendActionAuthenticationPlugin
                     $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
                 }
             } else {
-                $this->_actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
-                $this->_response->setRedirect($this->_url->getCurrentUrl());
+                $this->actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+                $this->response->setRedirect($this->url->getCurrentUrl());
                 $this->messageManager->addErrorMessage(__('Invalid Form Key. Please refresh the page.'));
                 $isRedirectNeeded = true;
             }
@@ -223,7 +214,7 @@ class BackendActionAuthenticationPlugin
         $request->setPostValue('login', null);
 
         try {
-            $this->_auth->login($username, $password);
+            $this->auth->login($username, $password);
         } catch (AuthenticationException $e) {
             if (!$request->getParam('messageSent')) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -245,8 +236,8 @@ class BackendActionAuthenticationPlugin
         $requestUri = null;
 
         // Checks, whether secret key is required for admin access or request uri is explicitly set
-        if ($this->_url->useSecretKey()) {
-            $requestUri = $this->_url->getUrl('*/*/*', ['_current' => true]);
+        if ($this->url->useSecretKey()) {
+            $requestUri = $this->url->getUrl('*/*/*', ['_current' => true]);
         } elseif ($request) {
             $requestUri = $request->getRequestUri();
         }
@@ -255,15 +246,15 @@ class BackendActionAuthenticationPlugin
             return false;
         }
 
-        $this->_response->setRedirect($requestUri);
-        $this->_actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+        $this->response->setRedirect($requestUri);
+        $this->actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
         return true;
     }
 
     private function reloadUser(): void
     {
-        if ($this->_auth->getUser()) {
-            $this->_auth->getUser()->reload();
+        if ($this->auth->getUser()) {
+            $this->auth->getUser()->reload();
         }
     }
 
