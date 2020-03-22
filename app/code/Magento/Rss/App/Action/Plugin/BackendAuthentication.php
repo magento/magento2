@@ -13,11 +13,13 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
+ * @FIXME Plugins should never inherit after other plugins o.O
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentication
+class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendActionAuthenticationPlugin
 {
     /**
      * @var \Magento\Framework\HTTP\Authentication
