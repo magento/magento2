@@ -5,15 +5,28 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
+use Magento\Backend\App\ActionInterface;
+use Magento\Backend\App\BackendApp;
+use Magento\Backend\App\BackendAppList;
+use Magento\Backend\Model\Auth as BackendAuthModel;
+use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Authentication
+class BackendActionAuthenticationPlugin
 {
+    const PARAM_BACKEND_APP = 'app';
     /**
-     * @var \Magento\Backend\Model\Auth
+     * @var BackendAuthModel
      */
     protected $_auth;
 
@@ -29,66 +42,80 @@ class Authentication
     ];
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var BackendUrlInterface
      */
     protected $_url;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $_response;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag
+     * @var ActionFlag
      */
     protected $_actionFlag;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var MessageManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var BackendUrlInterface
      */
     protected $backendUrl;
 
     /**
-     * @var \Magento\Backend\App\BackendAppList
+     * @var BackendAppList
      */
     protected $backendAppList;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     * @var RedirectFactory
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     protected $formKeyValidator;
 
     /**
-     * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\Framework\App\ResponseInterface $response
-     * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\BackendAppList $backendAppList
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ForwardFactory
+     */
+    private $forwardFactory;
+
+    /**
+     * @param RequestInterface $request
+     * @param BackendAuthModel $auth
+     * @param BackendUrlInterface $url
+     * @param ResponseInterface $response
+     * @param ActionFlag $actionFlag
+     * @param MessageManagerInterface $messageManager
+     * @param BackendUrlInterface $backendUrl
+     * @param RedirectFactory $resultRedirectFactory
+     * @param BackendAppList $backendAppList
+     * @param Validator $formKeyValidator
+     * @param ForwardFactory $forwardFactory
      */
     public function __construct(
-        \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\UrlInterface $url,
-        \Magento\Framework\App\ResponseInterface $response,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Backend\App\BackendAppList $backendAppList,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+        RequestInterface $request,
+        BackendAuthModel $auth,
+        BackendUrlInterface $url,
+        ResponseInterface $response,
+        ActionFlag $actionFlag,
+        MessageManagerInterface $messageManager,
+        BackendUrlInterface $backendUrl,
+        RedirectFactory $resultRedirectFactory,
+        BackendAppList $backendAppList,
+        Validator $formKeyValidator,
+        ForwardFactory $forwardFactory
     ) {
         $this->_auth = $auth;
         $this->_url = $url;
@@ -99,57 +126,58 @@ class Authentication
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->backendAppList = $backendAppList;
         $this->formKeyValidator = $formKeyValidator;
+        $this->request = $request;
+        $this->forwardFactory = $forwardFactory;
+    }
+
+    private function isCurrentActionOpen(): bool
+    {
+        return in_array($this->request->getActionName(), $this->_openActions);
     }
 
     /**
-     * @param \Magento\Backend\App\AbstractAction $subject
+     * @param ActionInterface $subject
      * @param \Closure $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Backend\App\AbstractAction $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
+    public function aroundExecute(
+        ActionInterface $subject,
+        \Closure $proceed
     ) {
-        $requestedActionName = $request->getActionName();
-        if (in_array($requestedActionName, $this->_openActions)) {
-            $request->setDispatched(true);
-        } else {
-            if ($this->_auth->getUser()) {
-                $this->_auth->getUser()->reload();
-            }
-            if (!$this->_auth->isLoggedIn()) {
-                $this->_processNotLoggedInUser($request);
-            } else {
-                $this->_auth->getAuthStorage()->prolong();
-
-                $backendApp = null;
-                if ($request->getParam('app')) {
-                    $backendApp = $this->backendAppList->getCurrentApp();
-                }
-
-                if ($backendApp) {
-                    $resultRedirect = $this->resultRedirectFactory->create();
-                    $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($this->backendUrl->getBaseUrl());
-                    $baseUrl = $baseUrl . $backendApp->getStartupPage();
-                    return $resultRedirect->setUrl($baseUrl);
-                }
-            }
+        if ($this->isCurrentActionOpen()) {
+            $this->_auth->getAuthStorage()->refreshAcl();
+            return $proceed();
         }
+
+        $this->reloadUser();
+        if (!$this->_auth->isLoggedIn()) {
+            $this->_processNotLoggedInUser($this->request);
+            return $proceed();
+        }
+
+        $this->_auth->getAuthStorage()->prolong();
+
+        $backendApp = $this->getBackendApp();
+
+        if ($backendApp) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($this->backendUrl->getBaseUrl());
+            $baseUrl = $baseUrl . $backendApp->getStartupPage();
+            return $resultRedirect->setUrl($baseUrl);
+        }
+
         $this->_auth->getAuthStorage()->refreshAcl();
-        return $proceed($request);
+        return $proceed();
     }
 
     /**
      * Process not logged in user data
      *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return void
+     * @param RequestInterface $request
      */
-    protected function _processNotLoggedInUser(\Magento\Framework\App\RequestInterface $request)
+    protected function _processNotLoggedInUser(RequestInterface $request)
     {
         $isRedirectNeeded = false;
         if ($request->getPost('login')) {
@@ -183,6 +211,7 @@ class Authentication
                     ->setControllerName('auth')
                     ->setActionName('login')
                     ->setDispatched(false);
+
             }
         }
     }
@@ -190,10 +219,10 @@ class Authentication
     /**
      * Performs login, if user submitted login form
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return bool
      */
-    protected function _performLogin(\Magento\Framework\App\RequestInterface $request)
+    protected function _performLogin(RequestInterface $request)
     {
         $outputValue = true;
         $postLogin = $request->getPost('login');
@@ -216,10 +245,10 @@ class Authentication
     /**
      * Checks, whether Magento requires redirection after successful admin login, and redirects user, if needed
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return bool
      */
-    protected function _redirectIfNeededAfterLogin(\Magento\Framework\App\RequestInterface $request)
+    protected function _redirectIfNeededAfterLogin(RequestInterface $request)
     {
         $requestUri = null;
 
@@ -237,5 +266,24 @@ class Authentication
         $this->_response->setRedirect($requestUri);
         $this->_actionFlag->set('', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH, true);
         return true;
+    }
+
+    private function reloadUser(): void
+    {
+        if ($this->_auth->getUser()) {
+            $this->_auth->getUser()->reload();
+        }
+    }
+
+    /**
+     * @return BackendApp|null
+     */
+    private function getBackendApp(): ?BackendApp
+    {
+        $backendApp = null;
+        if ($this->request->getParam(self::PARAM_BACKEND_APP)) {
+            $backendApp = $this->backendAppList->getCurrentApp();
+        }
+        return $backendApp;
     }
 }
