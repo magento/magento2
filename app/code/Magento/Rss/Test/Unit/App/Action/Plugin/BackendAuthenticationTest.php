@@ -5,27 +5,35 @@
  */
 namespace Magento\Rss\Test\Unit\App\Action\Plugin;
 
-class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
-{
-    public function testAroundDispatch()
-    {
-        /** @var \Magento\Backend\App\AbstractAction|\PHPUnit_Framework_MockObject_MockObject $subject */
-        $subject = $this->createMock(\Magento\Backend\App\AbstractAction::class);
+use Magento\Framework\App\ActionInterface;
+use Magento\Rss\App\Action\Plugin\BackendAuthentication;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-        /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject $response */
+class BackendAuthenticationTest extends TestCase
+{
+    /**
+     * @TODO Cover plugin with real tests
+     */
+    public function testAroundExecute()
+    {
+        /** @var ActionInterface|MockObject $subject */
+        $subject = $this->createMock(ActionInterface::class);
+
+        /** @var \Magento\Framework\App\ResponseInterface|MockObject $response */
         $response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
         $proceed = function () use ($response) {
             return $response;
         };
 
-        /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var \Magento\Framework\App\Request\Http|MockObject $request */
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $request->expects($this->atLeastOnce())->method('getControllerName')->will($this->returnValue('feed'));
         $request->expects($this->atLeastOnce())->method('getActionName')->will($this->returnValue('index'));
         $request->expects($this->once())->method('getParam')->with('type')->will($this->returnValue('notifystock'));
 
-        /** @var \Magento\Backend\Model\Auth\StorageInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var \Magento\Backend\Model\Auth\StorageInterface|MockObject $session */
         $session = $this->createMock(\Magento\Backend\Model\Auth\StorageInterface::class);
         $session->expects($this->at(0))->method('isLoggedIn')->will($this->returnValue(false));
         $session->expects($this->at(1))->method('isLoggedIn')->will($this->returnValue(true));
@@ -36,7 +44,7 @@ class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
         $auth->expects($this->once())->method('getAuthStorage')->will($this->returnValue($session));
         $auth->expects($this->once())->method('login')->with($username, $password);
 
-        /** @var \Magento\Framework\HTTP\Authentication|\PHPUnit_Framework_MockObject_MockObject $httpAuthentication */
+        /** @var \Magento\Framework\HTTP\Authentication|MockObject $httpAuthentication */
         $httpAuthentication = $this->createMock(\Magento\Framework\HTTP\Authentication::class);
         $httpAuthentication->expects($this->once())->method('getCredentials')
             ->will($this->returnValue([$username, $password]));
@@ -55,11 +63,12 @@ class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
             'review' => 'Magento_Reports::review_product'
         ];
 
-        /** @var \Magento\Rss\App\Action\Plugin\BackendAuthentication $plugin */
+        /** @var BackendAuthentication $plugin */
         $plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
-                \Magento\Rss\App\Action\Plugin\BackendAuthentication::class,
+                BackendAuthentication::class,
                 [
+                    'request' => $request,
                     'auth' => $auth,
                     'httpAuthentication' => $httpAuthentication,
                     'response' => $response,
@@ -69,7 +78,7 @@ class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
             );
         $this->assertSame(
             $response,
-            $plugin->aroundDispatch($subject, $proceed, $request)
+            $plugin->aroundExecute($subject, $proceed)
         );
     }
 }

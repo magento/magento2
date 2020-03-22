@@ -7,10 +7,21 @@
  */
 namespace Magento\Rss\App\Action\Plugin;
 
-use Magento\Backend\App\AbstractAction;
+use Closure;
+use Magento\Backend\App\BackendAppList;
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\HTTP\Authentication;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @FIXME Plugins should never inherit after other plugins o.O
@@ -22,17 +33,17 @@ use Magento\Framework\Exception\AuthenticationException;
 class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendActionAuthenticationPlugin
 {
     /**
-     * @var \Magento\Framework\HTTP\Authentication
+     * @var Authentication
      */
     protected $httpAuthentication;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     protected $authorization;
 
@@ -40,36 +51,42 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendAc
      * @var array
      */
     protected $aclResources;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
 
     /**
-     * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\UrlInterface $url
+     * @param RequestInterface $request
+     * @param Auth $auth
+     * @param UrlInterface $url
      * @param ResponseInterface $response
-     * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\BackendAppList $backendAppList
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
-     * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param ActionFlag $actionFlag
+     * @param MessageManagerInterface $messageManager
+     * @param UrlInterface $backendUrl
+     * @param RedirectFactory $resultRedirectFactory
+     * @param BackendAppList $backendAppList
+     * @param FormKeyValidator $formKeyValidator
+     * @param Authentication $httpAuthentication
+     * @param LoggerInterface $logger
+     * @param AuthorizationInterface $authorization
      * @param array $aclResources
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\UrlInterface $url,
+        RequestInterface $request,
+        Auth $auth,
+        UrlInterface $url,
         ResponseInterface $response,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Backend\App\BackendAppList $backendAppList,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\Framework\HTTP\Authentication $httpAuthentication,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\AuthorizationInterface $authorization,
+        ActionFlag $actionFlag,
+        MessageManagerInterface $messageManager,
+        UrlInterface $backendUrl,
+        RedirectFactory $resultRedirectFactory,
+        BackendAppList $backendAppList,
+        FormKeyValidator $formKeyValidator,
+        Authentication $httpAuthentication,
+        LoggerInterface $logger,
+        AuthorizationInterface $authorization,
         array $aclResources
     ) {
         $this->httpAuthentication = $httpAuthentication;
@@ -77,6 +94,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendAc
         $this->authorization = $authorization;
         $this->aclResources = $aclResources;
         parent::__construct(
+            $request,
             $auth,
             $url,
             $response,
@@ -87,32 +105,32 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendAc
             $backendAppList,
             $formKeyValidator
         );
+        $this->request = $request;
     }
 
     /**
      * Replace standard admin login form with HTTP Basic authentication
      *
-     * @param AbstractAction $subject
-     * @param callable $proceed
-     * @param RequestInterface $request
+     * @param ActionInterface $subject
+     * @param Closure $proceed
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
+    public function aroundExecute(ActionInterface $subject, Closure $proceed)
     {
-        $resource = isset($this->aclResources[$request->getControllerName()])
-            ? isset($this->aclResources[$request->getControllerName()][$request->getActionName()])
-                ? $this->aclResources[$request->getControllerName()][$request->getActionName()]
-                : $this->aclResources[$request->getControllerName()]
+        $resource = isset($this->aclResources[$this->request->getControllerName()])
+            ? isset($this->aclResources[$this->request->getControllerName()][$this->request->getActionName()])
+                ? $this->aclResources[$this->request->getControllerName()][$this->request->getActionName()]
+                : $this->aclResources[$this->request->getControllerName()]
             : null;
 
-        $type = $request->getParam('type');
+        $type = $this->request->getParam('type');
         $resourceType = isset($this->aclResources[$type]) ? $this->aclResources[$type] : null;
 
         if (!$resource || !$resourceType) {
-            return parent::aroundDispatch($subject, $proceed, $request);
+            return parent::aroundExecute($subject, $proceed);
         }
 
         $session = $this->auth->getAuthStorage();
@@ -134,6 +152,6 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\BackendAc
             return $this->response;
         }
 
-        return parent::aroundDispatch($subject, $proceed, $request);
+        return parent::aroundExecute($subject, $proceed);
     }
 }
