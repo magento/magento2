@@ -39,7 +39,11 @@ class ChartTest extends TestCase
      */
     public function testGetByPeriodWithParam(int $expectedDataQty, string $period, string $chartParam): void
     {
-        $this->assertCount($expectedDataQty, $this->model->getByPeriod($period, $chartParam));
+        $ordersData = $this->model->getByPeriod($period, $chartParam);
+        $ordersCount = array_sum(array_map(function ($item) {
+            return $item['y'];
+        }, $ordersData));
+        $this->assertGreaterThanOrEqual($expectedDataQty, $ordersCount);
     }
 
     /**
@@ -51,27 +55,27 @@ class ChartTest extends TestCase
     {
         return [
             [
-                24,
+                2,
                 '24h',
                 'quantity'
             ],
             [
-                8,
+                3,
                 '7d',
                 'quantity'
             ],
             [
-                19,
+                4,
                 '1m',
                 'quantity'
             ],
             [
-                16,
+                5,
                 '1y',
                 'quantity'
             ],
             [
-                28,
+                6,
                 '2y',
                 'quantity'
             ]
