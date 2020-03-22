@@ -8,8 +8,8 @@ namespace Magento\Backend\Controller\Adminhtml\Auth;
 
 use Magento\Backend\Model\Auth;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
@@ -18,24 +18,29 @@ use Magento\Framework\View\Result\PageFactory;
  * @api
  * @since 100.0.2
  */
-class Login implements HttpGet, HttpPost
+class Login implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var PageFactory
      */
-    protected $resultPageFactory;
+    private $resultPageFactory;
+
     /**
      * @var RequestInterface
      */
+
     private $request;
+
     /**
      * @var Auth
      */
     private $auth;
+
     /**
      * @var UrlInterface
      */
     private $backendUrl;
+
     /**
      * @var RedirectFactory
      */
