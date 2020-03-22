@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Security\Model\Plugin;
+declare(strict_types=1);
 
-use Magento\Security\Model\AdminSessionsManager;
+namespace Magento\Security\Plugin;
+
 use Magento\Backend\Controller\Adminhtml\Auth\Login;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\SecurityCookie;
 
-/**
- * Magento\Backend\Controller\Adminhtml\Auth\Login decorator
- */
-class LoginController
+class BackendLoginControllerPlugin
 {
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var MessageManagerInterface
      */
     private $messageManager;
 
@@ -24,23 +27,39 @@ class LoginController
     private $sessionsManager;
 
     /**
-     * @var \Magento\Security\Model\SecurityCookie
+     * @var SecurityCookie
      */
     private $securityCookie;
 
     /**
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
+     * @param RequestInterface $request
+     * @param UrlInterface $urlBuilder
+     * @param MessageManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Security\Model\SecurityCookie $securityCookie
+     * @param SecurityCookie $securityCookie
      */
     public function __construct(
-        \Magento\Framework\Message\ManagerInterface $messageManager,
+        RequestInterface $request,
+        UrlInterface $urlBuilder,
+        MessageManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
-        \Magento\Security\Model\SecurityCookie $securityCookie
+        SecurityCookie $securityCookie
     ) {
         $this->messageManager = $messageManager;
         $this->sessionsManager = $sessionsManager;
         $this->securityCookie = $securityCookie;
+        $this->request = $request;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -68,6 +87,6 @@ class LoginController
      */
     private function isLoginForm(Login $login)
     {
-        return $login->getRequest()->getUri() == $login->getUrl('*');
+        return $this->request->getUri() == $this->urlBuilder->getUrl('*');
     }
 }

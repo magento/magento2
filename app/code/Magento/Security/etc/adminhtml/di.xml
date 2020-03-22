@@ -13,7 +13,7 @@
         <plugin name="security_admin_sessions_prolong" type="Magento\Security\Model\Plugin\AuthSession" />
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Auth\Login">
-        <plugin name="security_login_form" type="Magento\Security\Model\Plugin\LoginController" />
+        <plugin name="security_login_form_plugin" type="Magento\Security\Plugin\BackendLoginControllerPlugin" />
     </type>
     <type name="Magento\Security\Model\Plugin\AccountManagement">
         <arguments>
