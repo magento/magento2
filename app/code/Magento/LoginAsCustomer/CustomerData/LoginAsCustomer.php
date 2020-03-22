@@ -9,6 +9,7 @@ namespace Magento\LoginAsCustomer\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Customer data for the logged_as_customer section
@@ -21,13 +22,21 @@ class LoginAsCustomer implements SectionSourceInterface
     private $customerSession;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * LoginAsCustomer constructor.
      * @param Session $customerSession
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        Session $customerSession
+        Session $customerSession,
+        StoreManagerInterface $storeManager
     ) {
         $this->customerSession = $customerSession;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -42,6 +51,7 @@ class LoginAsCustomer implements SectionSourceInterface
 
         return [
             'admin_user_id' => $this->customerSession->getLoggedAsCustomerAdmindId(),
+            'website_name' => $this->storeManager->getWebsite()->getName()
         ];
     }
 }

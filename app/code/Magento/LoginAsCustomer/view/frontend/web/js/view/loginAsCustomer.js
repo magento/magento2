@@ -4,9 +4,11 @@
  */
 
 define([
+    'jquery',
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'mage/translate'
+], function ($, Component, customerData) {
     'use strict';
 
     return Component.extend({
@@ -22,6 +24,10 @@ define([
             this.customer = customerData.get('customer');
             this.loginAsCustomer = customerData.get('logged_as_customer');
             this.isVisible(this.loginAsCustomer().admin_user_id);
+
+            this.notificationText = $.mage.__('You are connected as <strong>%1</strong> on %2')
+                .replace('%1', this.customer().fullname)
+                .replace('%2', this.loginAsCustomer().website_name);
         },
 
         /** @inheritdoc */

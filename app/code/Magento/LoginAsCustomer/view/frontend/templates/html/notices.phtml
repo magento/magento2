@@ -4,13 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->getConfig()->isEnabled()) : ?>
     <div  data-bind="scope: 'loginAsCustomer'" >
-        <div class="message global demo" data-bind="visible: isVisible" style="display: none">
-            <div class="content">
-                <p data-bind="text: new String('Attention! You are logged in as the customer.')"></p>
+        <div class="lac-notification clearfix" data-bind="visible: isVisible" style="display: none">
+            <div class="top-container">
+                <div class="lac-notification-icon wrapper">
+                    <img class="logo-img" src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_LoginAsCustomer::images/magento-icon.svg')) ?>" alt="Magento" />
+                </div>
+                <div class="lac-notification-text wrapper">
+                    <span data-bind="html: notificationText"></span>
+                </div>
+                <div class="lac-notification-links wrapper">
+                   <?= $block->getChildHtml('login-as-customer-notice-links') ?>
+                </div>
             </div>
         </div>
     </div>
