@@ -7,7 +7,7 @@
 namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Code\Generator;
-use Magento\Framework\Logger\Monolog as MagentoMonologLogger;
+use Magento\Framework\Logger\LoggerProxy;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -34,7 +34,7 @@ class AutoloaderTest extends TestCase
     public function setupLoggerTestDouble(): void
     {
         $loggerTestDouble = $this->createMock(LoggerInterface::class);
-        $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, MagentoMonologLogger::class);
+        $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, LoggerProxy::class);
     }
 
     /**
@@ -42,7 +42,7 @@ class AutoloaderTest extends TestCase
      */
     public function removeLoggerTestDouble(): void
     {
-        $this->getTestFrameworkObjectManager()->removeSharedInstance(MagentoMonologLogger::class);
+        $this->getTestFrameworkObjectManager()->removeSharedInstance(LoggerProxy::class);
     }
 
     /**
@@ -63,6 +63,7 @@ class AutoloaderTest extends TestCase
         $exceptionMessage = 'Test exception thrown during generation';
         $testException = new \RuntimeException($exceptionMessage);
 
+        // this test assumes that preference for LoggerInterface is LoggerProxy, @see setupLoggerTestDouble
         $loggerMock = ObjectManager::getInstance()->get(LoggerInterface::class);
         $loggerMock->expects($this->once())->method('debug')->with($exceptionMessage, ['exception' => $testException]);
 
@@ -75,6 +76,7 @@ class AutoloaderTest extends TestCase
         $exceptionMessage = 'Test exception thrown during generation';
         $testException = new \RuntimeException($exceptionMessage);
 
+        // This test assumes that preference for LoggerInterface is LoggerProxy, @see setupLoggerTestDouble
         $loggerMock = ObjectManager::getInstance()->get(LoggerInterface::class);
         $loggerMock->expects($this->once())->method('debug')->with($exceptionMessage, ['exception' => $testException]);
 
