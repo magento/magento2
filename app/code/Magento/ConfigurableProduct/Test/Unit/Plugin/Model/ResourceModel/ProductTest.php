@@ -52,7 +52,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject $subject */
         $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $object */
-        $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
+        $object = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
+                'getTypeId',
+                'getTypeInstance',
+                'getExtensionAttributes',
+                'setData'
+            ]
+        );
         $type = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             ['getSetAttributes']
@@ -61,7 +69,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Configurable::TYPE_CODE));
         $object->expects($this->once())->method('getTypeInstance')->will($this->returnValue($type));
-        $object->expects($this->once())->method('resetConfigurableOptionsData')->with($object);
+        $object->expects($this->any())->method('getExtensionAttributes');
+        $object->expects($this->any())->method('setData');
 
         $this->model->beforeSave(
             $subject,
