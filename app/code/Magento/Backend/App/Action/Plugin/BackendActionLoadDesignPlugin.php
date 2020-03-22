@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Backend\App\Action\Plugin;
 
-use Magento\Backend\App\AbstractAction;
-use Magento\Framework\App\RequestInterface;
+use Magento\Backend\App\ActionInterface;
 use Magento\Framework\View\DesignLoader;
 
 /**
@@ -16,7 +15,7 @@ use Magento\Framework\View\DesignLoader;
  *
  * @FIXME Remove when \Magento\Backend\App\AbstractAction::dispatch refactored.
  */
-class LoadDesignPlugin
+class BackendActionLoadDesignPlugin
 {
     /**
      * @var DesignLoader
@@ -34,12 +33,11 @@ class LoadDesignPlugin
     /**
      * Initiates design before dispatching Backend Actions.
      *
-     * @param AbstractAction $backendAction
-     * @param RequestInterface $request
+     * @param ActionInterface $backendAction
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(AbstractAction $backendAction, RequestInterface $request)
+    public function beforeExecute(ActionInterface $backendAction)
     {
         $this->designLoader->load();
     }

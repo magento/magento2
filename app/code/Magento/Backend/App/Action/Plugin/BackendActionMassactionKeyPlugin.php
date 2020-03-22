@@ -7,11 +7,25 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
+use Magento\Backend\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Backend\App\AbstractAction;
 
-class MassactionKey
+class BackendActionMassactionKeyPlugin
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @param RequestInterface $request
+     */
+    public function __construct(RequestInterface $request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Process massaction key
      *
@@ -21,13 +35,13 @@ class MassactionKey
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    public function beforeExecute(ActionInterface $subject)
     {
-        $key = $request->getPost('massaction_prepare_key');
+        $key = $this->request->getPost('massaction_prepare_key');
         if ($key) {
-            $postData = $request->getPost($key);
+            $postData = $this->request->getPost($key);
             $value = is_array($postData) ? $postData : explode(',', $postData);
-            $request->setPostValue($key, $value ? $value : null);
+            $this->request->setPostValue($key, $value ? $value : null);
         }
     }
 }
