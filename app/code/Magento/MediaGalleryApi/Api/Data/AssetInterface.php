@@ -66,7 +66,7 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getWidth(): int;
 
     /**
-     * Retrieve full licensed asset's width
+     * Retrieve full licensed asset's size
      *
      * @return int
      */
