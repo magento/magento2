@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertSeeProductAttributeValidationErrorActionGroup">
+        <annotations>
+            <description>Check whenever the validation is present for the product attribute</description>
+        </annotations>
+
+        <arguments>
+            <argument name="selector" type="string"/>
+            <argument name="message" type="string"/>
+        </arguments>
+
+        <seeElement selector="{{selector}}" stepKey="seeValidationDomElement"/>
+        <see userInput="{{message}}" selector="{{selector}}" stepKey="seeValidationMessage"/>
+    </actionGroup>
+</actionGroups>

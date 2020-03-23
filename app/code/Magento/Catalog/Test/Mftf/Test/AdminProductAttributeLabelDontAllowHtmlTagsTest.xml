@@ -39,6 +39,16 @@
 
         <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttribute"/>
 
-        <actionGroup ref="AssertSeeProductAttributeValidationErrorActionGroup" stepKey="validateAttributeLabelsForHtmlTags"/>
+        <actionGroup ref="AssertSeeProductAttributeValidationErrorActionGroup" stepKey="validateAttributeStoreViewLabelForHtmlTags">
+            <argument name="selector" value="#attribute-labels-table .mage-error"/>
+            <argument name="message" value="HTML tags are not allowed"/>
+        </actionGroup>
+
+        <click selector="{{AttributePropertiesSection.propertiesTab}}" stepKey="clickPropertiesTab"/>
+
+        <actionGroup ref="AssertSeeProductAttributeValidationErrorActionGroup" stepKey="validateAttributeLabelForHtmlTags">
+            <argument name="selector" value=".field-attribute_label .mage-error"/>
+            <argument name="message" value="HTML tags are not allowed"/>
+        </actionGroup>
     </test>
 </tests>
