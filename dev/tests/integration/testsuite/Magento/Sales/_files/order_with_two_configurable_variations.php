@@ -7,8 +7,6 @@
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require 'default_rollback.php';
-
 $objectManager = Bootstrap::getObjectManager();
 
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
@@ -54,7 +52,9 @@ $orderConfigurableItem->setRowTotal($configurableProduct->getPrice());
 $orderConfigurableItem->setParentItemId(null);
 $orderConfigurableItem->setProductType('configurable');
 $configurableVariations = [];
-foreach (array_values($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks()) as $key => $variationId) {
+foreach (array_values($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks())
+         as $key => $variationId
+) {
     $simpleProductId = current($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
 
     /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */

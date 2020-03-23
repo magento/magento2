@@ -265,7 +265,6 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
         $this->assertResponseFields($response['reorderItems'] ?? [], $expectedResponse);
     }
 
-
     /**
      * @param string $email
      * @param string $password
