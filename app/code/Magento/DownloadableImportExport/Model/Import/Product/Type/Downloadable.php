@@ -365,11 +365,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         $sampleData = $this->prepareSampleData($rowData[static::COL_DOWNLOADABLE_SAMPLES]);
 
-        if ($this->sampleGroupTitle($rowData) == '') {
-            $result = true;
-            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
-        }
-
         $result = $result ?? $this->isTitle($sampleData);
 
         foreach ($sampleData as $link) {
@@ -405,11 +400,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
 
         $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
-
-        if ($this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '') {
-            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
-            $result = true;
-        }
 
         $result = $result ?? $this->isTitle($linkData);
 
@@ -896,12 +886,16 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
     {
         try {
-            $res = $this->uploaderHelper->getUploader($type, $this->parameters)->move($fileName, $renameFileOff);
-            return $res['file'];
+            $uploader = $this->uploaderHelper->getUploader($type, $this->parameters);
+            if (!$this->uploaderHelper->isFileExist($fileName)) {
+                $uploader->move($fileName, $renameFileOff);
+                $fileName = $uploader['file'];
+            }
         } catch (\Exception $e) {
             $this->_entityModel->addRowError(self::ERROR_MOVE_FILE, $this->rowNum);
-            return '';
+            $fileName = '';
         }
+        return $fileName;
     }
 
     /**

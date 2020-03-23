@@ -138,6 +138,12 @@
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 </field>
             </group>
+            <group id="layered_navigation">
+                <field id="display_category" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Display Category Filter</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
             <group id="navigation" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Category Top Navigation</label>
                 <field id="max_depth" translate="label" type="text" sortOrder="1" showInDefault="1" canRestore="1">

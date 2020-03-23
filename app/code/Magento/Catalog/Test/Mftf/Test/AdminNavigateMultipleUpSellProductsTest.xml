@@ -78,7 +78,7 @@
         </before>
         <after>
             <!--Logout as admin-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!--Delete created data-->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -90,6 +90,9 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deletecreateConfigChildProduct2"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deletecreateConfigChildProduct1"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Open Product Index Page-->

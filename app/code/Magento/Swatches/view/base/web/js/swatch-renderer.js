@@ -723,7 +723,9 @@ define([
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput),
-                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']),
+                $priceBox = $widget.element.parents($widget.options.selectorProduct)
+                    .find(this.options.selectorProductPrice);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -751,16 +753,15 @@ define([
 
             $widget._Rebuild();
 
-            if ($widget.element.parents($widget.options.selectorProduct)
-                    .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
-            ) {
+            if ($priceBox.is(':data(mage-priceBox)')) {
                 $widget._UpdatePrice();
             }
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
-                    $widget.options.jsonConfig.optionPrices
+                    this._getSelectedOptionPriceIndex(),
+                    $widget.options.jsonConfig.optionPrices,
+                    $priceBox
                 ]);
 
             if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
@@ -768,6 +769,22 @@ define([
             }
 
             $input.trigger('change');
+        },
+
+        /**
+         * Get selected option price index
+         *
+         * @return {String|undefined}
+         * @private
+         */
+        _getSelectedOptionPriceIndex: function () {
+            var allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+
+            if (_.isEmpty(allowedProduct)) {
+                return undefined;
+            }
+
+            return allowedProduct;
         },
 
         /**
@@ -1250,6 +1267,14 @@ define([
                 isInitial;
 
             if (isInProductView) {
+                if (_.isUndefined(gallery)) {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function () {
+                        this.updateBaseImage(images, context, isInProductView);
+                    }.bind(this));
+
+                    return;
+                }
+
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
                 isInitial = _.isEqual(imagesToUpdate, initialImages);
 
@@ -1259,30 +1284,34 @@ define([
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
 
-                if (!_.isUndefined(gallery)) {
-                    gallery.updateData(imagesToUpdate);
-                } else {
-                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
-                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
-                        loadedGallery.updateData(imagesToUpdate);
-                    }.bind(this));
-                }
-
-                if (isInitial) {
-                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
-                } else {
-                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
-                        selectedOption: this.getProduct(),
-                        dataMergeStrategy: this.options.gallerySwitchStrategy
-                    });
-                }
-
-                if (gallery) {
-                    gallery.first();
-                }
+                gallery.updateData(imagesToUpdate);
+                this._addFotoramaVideoEvents(isInitial);
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Add video events
+         *
+         * @param {Boolean} isInitial
+         * @private
+         */
+        _addFotoramaVideoEvents: function (isInitial) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+                return;
+            }
+
+            if (isInitial) {
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+
+                return;
+            }
+
+            $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                selectedOption: this.getProduct(),
+                dataMergeStrategy: this.options.gallerySwitchStrategy
+            });
         },
 
         /**

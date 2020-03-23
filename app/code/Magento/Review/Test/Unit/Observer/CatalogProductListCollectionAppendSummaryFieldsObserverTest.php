@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCase
 {
-    private const STORE_ID = '1';
+    private const STORE_ID = 1;
 
     /**
      * @var Event|MockObject
