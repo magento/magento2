@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Eav\Setup;
 
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Validator\Attribute\Options as AttributeOptionsValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -22,12 +24,22 @@ class AddOptionToAttribute
     private $setup;
 
     /**
+     * @var AttributeOptionsValidator
+     */
+    private $attributeOptionsValidator;
+
+    /**
      * @param ModuleDataSetupInterface $setup
+     * @param AttributeOptionsValidator $attributeOptionsValidator
      */
     public function __construct(
-        ModuleDataSetupInterface $setup
+        ModuleDataSetupInterface $setup,
+        AttributeOptionsValidator $attributeOptionsValidator = null
     ) {
         $this->setup = $setup;
+        $this->attributeOptionsValidator = $attributeOptionsValidator ?: ObjectManager::getInstance()->get(
+            AttributeOptionsValidator::class
+        );
     }
 
     /**
@@ -44,8 +56,10 @@ class AddOptionToAttribute
         $optionValueTable = $this->setup->getTable('eav_attribute_option_value');
 
         if (isset($option['value'])) {
+            $this->validateOptions($option['value']);
             $this->addValue($option, $optionTable, $optionValueTable);
         } elseif (isset($option['values'])) {
+            $this->validateOptions($option['values']);
             $this->addValues($option, $optionTable, $optionValueTable);
         }
     }
@@ -206,5 +220,20 @@ class AddOptionToAttribute
         }
 
         return null;
+    }
+
+    /**
+     * Validate options
+     *
+     * @param array $options
+     *
+     * @throws LocalizedException
+     */
+    private function validateOptions(array $options)
+    {
+        if (!$this->attributeOptionsValidator->isValid($options)) {
+            $errorMessages = implode("\n", $this->attributeOptionsValidator->getMessages());
+            throw new LocalizedException(__($errorMessages));
+        }
     }
 }

@@ -7,6 +7,8 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
+use Magento\Eav\Model\Validator\Attribute\Options as AttributeOptionsValidator;
+use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
@@ -73,6 +75,11 @@ class ValidateTest extends AttributeTest
      */
     private $attributeCodeValidatorMock;
 
+    /**
+     * @var AttributeOptionsValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeOptionsValidatorMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -104,6 +111,9 @@ class ValidateTest extends AttributeTest
         $this->attributeCodeValidatorMock = $this->getMockBuilder(AttributeCodeValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeOptionsValidatorMock = $this->getMockBuilder(AttributeOptionsValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
@@ -127,6 +137,7 @@ class ValidateTest extends AttributeTest
                 'multipleAttributeList' => ['select' => 'option'],
                 'formDataSerializer' => $this->formDataSerializerMock,
                 'attributeCodeValidator' => $this->attributeCodeValidatorMock,
+                'attributeOptionsValidator' => $this->attributeOptionsValidatorMock,
             ]
         );
     }
@@ -215,6 +226,10 @@ class ValidateTest extends AttributeTest
         $this->attributeCodeValidatorMock->expects($this->once())
             ->method('isValid')
             ->with('test_attribute_code')
+            ->willReturn(true);
+
+        $this->attributeOptionsValidatorMock->expects($this->atLeast(1))
+            ->method('isValid')
             ->willReturn(true);
 
         $this->objectManagerMock->expects($this->once())
@@ -367,6 +382,10 @@ class ValidateTest extends AttributeTest
             ->with('test_attribute_code')
             ->willReturn(true);
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -490,6 +509,10 @@ class ValidateTest extends AttributeTest
             ->with('test_attribute_code')
             ->willReturn(true);
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -609,6 +632,10 @@ class ValidateTest extends AttributeTest
             ->method('isValid')
             ->willReturn(true);
 
+        $this->attributeOptionsValidatorMock
+            ->method('isValid')
+            ->willReturn(true);
+
         $this->attributeMock
             ->method('loadByCode')
             ->willReturnSelf();
@@ -680,6 +707,13 @@ class ValidateTest extends AttributeTest
             ->method('getMessages')
             ->willReturn(['Invalid Attribute Code.']);
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $this->attributeOptionsValidatorMock->expects($this->never())
+            ->method('getMessages');
+
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -709,6 +743,150 @@ class ValidateTest extends AttributeTest
                     'message' => 'Invalid Attribute Code.',
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Check that option labels which contain HTML tags will trigger error.
+     *
+     * @dataProvider provideHtmlTagsOptionData
+     *
+     * @param string $inputType
+     * @param array $options
+     * @param DataObject $expectedResult
+     *
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testHtmlTagsOption(string $inputType, array $options, $expectedResult)
+    {
+        $serializedOptions = '{"key":"value"}';
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', $inputType],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
+            );
+
+        $this->formDataSerializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willReturn($options);
+
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->attributeMock);
+
+        $this->attributeMock->expects($this->once())
+            ->method('loadByCode')
+            ->willReturnSelf();
+
+        $this->attributeCodeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('test_attribute_code')
+            ->willReturn(true);
+
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(!$expectedResult->error);
+
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([$expectedResult->message]);
+
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->willReturnArgument(0);
+
+        $response = $this->getModel()->execute();
+        $responseObject = json_decode($response);
+        $this->assertEquals($responseObject, $expectedResult);
+    }
+
+    /**
+     * Data Provider for testHtmlTagsOption.
+     *
+     * @return array
+     */
+    public function provideHtmlTagsOptionData()
+    {
+        return [
+            'html tags in admin scope option for dropdown type' => [
+                'dropdown',
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => ['Option value <strong>'],
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'HTML tags are not allowed for the attribute options. '.
+                        'Those have been found in option "Option value <strong>"',
+                ],
+            ],
+            'html tags in default store view option for dropdown type' => [
+                'dropdown',
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => [
+                                'Option admin value',
+                                'Option store value </strong>'
+                            ],
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'HTML tags are not allowed for the attribute options. '.
+                        'Those have been found in option "Option store value </strong>"',
+                ],
+            ],
+            'html tags in admin scope option for multiple select type' => [
+                'multiselect',
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => ['Option value <strong>'],
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'HTML tags are not allowed for the attribute options. '.
+                        'Those have been found in option "Option value <strong>"',
+                ],
+            ],
+            'html tags in default store view option for multiple select type' => [
+                'multiselect',
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => [
+                                'Option admin value',
+                                'Option store value </strong>'
+                            ],
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'HTML tags are not allowed for the attribute options. '.
+                        'Those have been found in option "Option store value <strong>"',
+                ],
+            ],
         ];
     }
 }

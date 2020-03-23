@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
+use Magento\Eav\Model\Validator\Attribute\Options as AttributeOptionsValidator;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -55,6 +56,11 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private $escaper;
 
     /**
+     * @var AttributeOptionsValidator|null
+     */
+    private $attributeOptionsValidator;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -67,6 +73,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param FormData|null $formDataSerializer
      * @param AttributeCodeValidator|null $attributeCodeValidator
      * @param Escaper $escaper
+     * @param AttributeOptionsValidator|null $attributeOptionsValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -79,7 +86,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         array $multipleAttributeList = [],
         FormData $formDataSerializer = null,
         AttributeCodeValidator $attributeCodeValidator = null,
-        Escaper $escaper = null
+        Escaper $escaper = null,
+        AttributeOptionsValidator $attributeOptionsValidator = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -91,6 +99,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             ->get(AttributeCodeValidator::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()
             ->get(Escaper::class);
+        $this->attributeOptionsValidator = $attributeOptionsValidator ?: ObjectManager::getInstance()
+            ->get(AttributeOptionsValidator::class);
     }
 
     /**
@@ -175,6 +185,11 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
                 }
             }
             $this->checkEmptyOption($response, $valueOptions);
+
+            if (!$this->attributeOptionsValidator->isValid($valueOptions)) {
+                $this->setMessageToResponse($response, $this->attributeOptionsValidator->getMessages());
+                $response->setError(true);
+            }
         }
 
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());

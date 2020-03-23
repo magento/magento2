@@ -6,6 +6,7 @@
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
+use Magento\Eav\Model\Validator\Attribute\Options as AttributeOptionsValidator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -88,6 +89,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     private $attributeCodeValidator;
 
     /**
+     * @var AttributeOptionsValidator|null
+     */
+    private $attributeOptionsValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -108,7 +114,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param AttributeCodeValidator|null $attributeCodeValidator
+     * @param AttributeOptionsValidator|null $attributeOptionsValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     *
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -131,7 +139,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AttributeCodeValidator $attributeCodeValidator = null
+        AttributeCodeValidator $attributeCodeValidator = null,
+        AttributeOptionsValidator $attributeOptionsValidator = null
     ) {
         parent::__construct(
             $context,
@@ -156,6 +165,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
             AttributeCodeValidator::class
+        );
+        $this->attributeOptionsValidator = $attributeOptionsValidator ?: ObjectManager::getInstance()->get(
+            AttributeOptionsValidator::class
         );
     }
 
@@ -247,6 +259,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             && !$this->attributeCodeValidator->isValid($this->_data['attribute_code'])
         ) {
             $errorMessages = implode("\n", $this->attributeCodeValidator->getMessages());
+            throw new LocalizedException(__($errorMessages));
+        }
+
+        if (isset($this->_data['option']) &&
+            isset($this->_data['option']['value']) &&
+            !$this->attributeOptionsValidator->isValid($this->_data['option']['value'])
+        ) {
+            $errorMessages = implode("\n", $this->attributeOptionsValidator->getMessages());
             throw new LocalizedException(__($errorMessages));
         }
 
