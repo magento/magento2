@@ -16,7 +16,7 @@
             <description value="admin should be able to bulk update attributes of configurable products"/>
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
         </annotations>
 
         <before>
@@ -91,7 +91,7 @@
             <description value="Admin should be able to remove a product configuration"/>
             <testCaseId value="MC-63"/>
             <group value="ConfigurableProduct"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
         </annotations>
 
         <before>
@@ -187,7 +187,7 @@
             <description value="Admin should be able to disable a product configuration"/>
             <testCaseId value="MC-119"/>
             <group value="ConfigurableProduct"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
         </annotations>
 
         <before>
@@ -274,7 +274,7 @@
             <stories value="Edit a configurable product in admin"/>
             <title value="Admin should be able to remove a configuration from a Configurable Product"/>
             <description value="Admin should be able to remove a configuration from a Configurable Product"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-86"/>
             <group value="ConfigurableProduct"/>
         </annotations>
@@ -323,7 +323,7 @@
             <stories value="Edit a configurable product in admin"/>
             <title value="Admin should be able to edit configuration to add a value to an existing attribute"/>
             <description value="Admin should be able to edit configuration to add a value to an existing attribute"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-95"/>
             <group value="ConfigurableProduct"/>
         </annotations>
