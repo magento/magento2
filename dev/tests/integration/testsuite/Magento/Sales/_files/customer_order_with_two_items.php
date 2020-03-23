@@ -20,17 +20,18 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.ph
 require __DIR__ . '/../../../Magento/Catalog/_files/products_new.php';
 
 /** @var OrderInterfaceFactory $orderFactory */
-$orderFactory = $objectManager->create(OrderInterfaceFactory::class);
+$orderFactory = $objectManager->get(OrderInterfaceFactory::class);
 /** @var OrderItemInterfaceFactory $orderItemFactory */
-$orderItemFactory = $objectManager->create(OrderItemInterfaceFactory::class);
+$orderItemFactory = $objectManager->get(OrderItemInterfaceFactory::class);
 /** @var OrderRepositoryInterface $orderRepository */
-$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
+$orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 /** @var OrderAddressInterfaceFactory $orderAddressFactory */
-$orderAddressFactory = $objectManager->create(OrderAddressInterfaceFactory::class);
+$orderAddressFactory = $objectManager->get(OrderAddressInterfaceFactory::class);
 /** @var OrderPaymentInterfaceFactory $orderPaymentFactory */
-$orderPaymentFactory = $objectManager->create(OrderPaymentInterfaceFactory::class);
+$orderPaymentFactory = $objectManager->get(OrderPaymentInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 
 $billingAddress = $orderAddressFactory->create(['data' => $customerAddress->getData()]);
 $billingAddress->setAddressType(Address::TYPE_BILLING);

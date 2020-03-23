@@ -45,7 +45,7 @@ class TotalsTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/two_invoices_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/invoices_for_items.php
      *
      * @return void
      */

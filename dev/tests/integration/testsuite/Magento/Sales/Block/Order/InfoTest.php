@@ -95,7 +95,7 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_two_items_by_customer.php
+     * @magentoDataFixture Magento/Sales/_files/customer_order_with_two_items.php
      *
      * @return void
      */

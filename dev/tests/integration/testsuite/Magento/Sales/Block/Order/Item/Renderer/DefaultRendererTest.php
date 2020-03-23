@@ -95,7 +95,7 @@ class DefaultRendererTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/two_creditmemo_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
      *
      * @return void
      */
@@ -105,7 +105,7 @@ class DefaultRendererTest extends TestCase
         $creditmemo = $order->getCreditmemosCollection()->getFirstItem();
         $this->assertNotNull($creditmemo->getId());
         $item = $creditmemo->getItemsCollection()->getFirstItem();
-        $this->assertNotNull($item);
+        $this->assertNotNull($item->getId());
         $this->assertEquals(10.00, $this->block->getTotalAmount($item));
     }
 }

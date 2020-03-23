@@ -78,7 +78,7 @@ class ItemsTest extends TestCase
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
         $this->block = $this->layout->createBlock(Items::class);
-        $this->assertTrue(count($this->block->getItems()) > 0);
+        $this->assertCount(1, $this->block->getItems());
     }
 
     /**
@@ -118,6 +118,7 @@ class ItemsTest extends TestCase
         );
         $this->block->setLayout($this->layout);
         $this->assertFalse($this->block->isPagerDisplayed());
+        $this->assertEmpty(preg_replace('/\s+/', '', strip_tags($this->block->getPagerHtml())));
     }
 
     /**
@@ -137,7 +138,8 @@ class ItemsTest extends TestCase
             'items_block'
         );
         $this->block->setLayout($this->layout);
-        $this->assertNotEmpty($this->block->getPagerHtml());
+        $this->assertNotEmpty(preg_replace('/\s+/', '', strip_tags($this->block->getPagerHtml())));
+        $this->assertTrue($this->block->isPagerDisplayed());
     }
 
     /**
@@ -154,7 +156,7 @@ class ItemsTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_two_items_by_customer.php
+     * @magentoDataFixture Magento/Sales/_files/customer_order_with_two_items.php
      *
      * @return void
      */
@@ -194,69 +196,23 @@ class ItemsTest extends TestCase
     private function assertOrderItems(Collection $orderItems, string $blockHtml): void
     {
         $this->assertNotCount(0, $orderItems, 'Order items collection is empty');
+        $fieldsToCheck = [
+            'name' => "/td[contains(@class, 'name')]/strong[contains(text(), '%s')]",
+            'sku' => "/td[contains(@class, 'sku') and contains(text(), '%s')]",
+            'price' => "/td[contains(@class, 'price')]//span[contains(text(), '%01.2f')]",
+            'qty_ordered' => "/td[contains(@class, 'qty')]//span[contains(text(), '" . __('Ordered')
+                . "')]/following-sibling::span[contains(text(), '%d')]",
+            'row_total' => "/td[contains(@class, 'subtotal')]//span[contains(text(), '%01.2f')]",
+        ];
         foreach ($orderItems as $item) {
             $itemRowXpath = sprintf("//tr[@id='order-item-row-%s']", $item->getItemId());
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $itemRowXpath . "/td[contains(@class, 'name')]/strong[contains(text(), '%s')]",
-                        $item->getName()
-                    ),
-                    $blockHtml
-                ),
-                sprintf('Item with name %s wasn\'t found.', $item->getName())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $itemRowXpath . "/td[contains(@class, 'sku') and contains(text(), '%s')]",
-                        $item->getSku()
-                    ),
-                    $blockHtml
-                ),
-                sprintf('Item with sku %s wasn\'t found.', $item->getSku())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $itemRowXpath . "/td[contains(@class, 'price')]//span[contains(text(), '%01.2f')]",
-                        $item->getPrice()
-                    ),
-                    $blockHtml
-                ),
-                sprintf('Price for item %s wasn\'t found or not equals to %s.', $item->getName(), $item->getPrice())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $itemRowXpath . "/td[contains(@class, 'qty')]//span[contains(text(), '%s')]"
-                        . "/following-sibling::span[contains(text(), '%d')]",
-                        __('Ordered'),
-                        $item->getQtyOrdered()
-                    ),
-                    $blockHtml
-                ),
-                sprintf('Qty for item %s wasn\'t found or not equals to %s.', $item->getName(), $item->getQtyOrdered())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $itemRowXpath . "/td[contains(@class, 'subtotal')]//span[contains(text(), '%01.2f')]",
-                        $item->getRowTotal()
-                    ),
-                    $blockHtml
-                ),
-                sprintf(
-                    'Row total for item %s wasn\'t found or not equals to %s.',
-                    $item->getName(),
-                    $item->getRowTotal()
-                )
-            );
+            foreach ($fieldsToCheck as $key => $xpath) {
+                $this->assertEquals(
+                    1,
+                    Xpath::getElementsCountForXpath(sprintf($itemRowXpath . $xpath, $item->getData($key)), $blockHtml),
+                    sprintf('Item %s wasn\'t found or not equals to %s.', $key, $item->getData($key))
+                );
+            }
         }
     }
 

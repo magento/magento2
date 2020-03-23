@@ -120,7 +120,7 @@ class ItemsTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/two_creditmemo_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
      *
      * @return void
      */
@@ -193,80 +193,27 @@ class ItemsTest extends TestCase
     private function assertCreditmemoItems(CreditmemoInterface $creditmemo, string $html): void
     {
         $this->assertNotCount(0, $creditmemo->getItemsCollection(), 'Creditmemo items collection is empty');
+        $fieldsToCheck = [
+            'name' => "/td[contains(@class, 'name')]/strong[contains(text(), '%s')]",
+            'sku' => "/td[contains(@class, 'sku') and contains(text(), '%s')]",
+            'price' => "/td[contains(@class, 'price')]//span[contains(text(), '%01.2f')]",
+            'qty' => "/td[contains(@class, 'qty') and contains(text(), '%d')]",
+            'row_total' => "/td[contains(@class, 'subtotal')]//span[contains(text(), '%01.2f')]",
+            'discount_amount' => "/td[contains(@class, 'discount')]/span[contains(text(), '%01.2f')]",
+        ];
         foreach ($creditmemo->getItemsCollection() as $item) {
             $rowXpath = sprintf(
                 "//table[@id='my-refund-table-%s']//tr[@id='order-item-row-%s']",
                 $creditmemo->getId(),
                 $item->getId()
             );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $rowXpath . "/td[contains(@class, 'name')]/strong[contains(text(), '%s')]",
-                        $item->getName()
-                    ),
-                    $html
-                ),
-                sprintf('Item with name %s wasn\'t found.', $item->getName())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf($rowXpath . "/td[contains(@class, 'sku') and contains(text(), '%s')]", $item->getSku()),
-                    $html
-                ),
-                sprintf('Item with sku %s wasn\'t found.', $item->getSku())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $rowXpath . "/td[contains(@class, 'price')]//span[contains(text(), '%01.2f')]",
-                        $item->getPrice()
-                    ),
-                    $html
-                ),
-                sprintf('Price for item %s wasn\'t found or not equals to %s.', $item->getName(), $item->getPrice())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf($rowXpath . "/td[contains(@class, 'qty') and contains(text(), '%d')]", $item->getQty()),
-                    $html
-                ),
-                sprintf('Qty for item %s wasn\'t found or not equals to %s.', $item->getName(), $item->getQty())
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $rowXpath . "/td[contains(@class, 'subtotal')]//span[contains(text(), '%01.2f')]",
-                        $item->getRowTotal()
-                    ),
-                    $html
-                ),
-                sprintf(
-                    'Subtotal for item %s wasn\'t found or not equals to %s.',
-                    $item->getName(),
-                    $item->getRowTotal()
-                )
-            );
-            $this->assertEquals(
-                1,
-                Xpath::getElementsCountForXpath(
-                    sprintf(
-                        $rowXpath . "/td[contains(@class, 'discount')]/span[contains(text(), '%01.2f')]",
-                        $item->getDiscountAmount()
-                    ),
-                    $html
-                ),
-                sprintf(
-                    'Discount for item %s wasn\'t found or not equals to %s.',
-                    $item->getName(),
-                    $item->getDiscountAmount()
-                )
-            );
+            foreach ($fieldsToCheck as $key => $xpath) {
+                $this->assertEquals(
+                    1,
+                    Xpath::getElementsCountForXpath(sprintf($rowXpath . $xpath, $item->getData($key)), $html),
+                    sprintf('Item %s wasn\'t found or not equals to %s.', $key, $item->getData($key))
+                );
+            }
         }
     }
 

@@ -45,7 +45,7 @@ class TotalsTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/two_creditmemo_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
      *
      * @return void
      */
