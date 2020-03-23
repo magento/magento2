@@ -119,8 +119,6 @@ class ReorderTest extends GraphQlAbstract
     /**
      * Test reorder when simple product qty is 0, with allowed backorders configured to below 0
      *
-     * @magentoConfigFixture admin_store cataloginventory/item_options/backorders 1
-     * @magentoConfigFixture admin_store cataloginventory/item_options/use_deferred_stock_update 0
      * @magentoApiDataFixture Magento/Sales/_files/order_with_zero_qty_product.php
      * @throws \Exception
      */
@@ -148,6 +146,45 @@ class ReorderTest extends GraphQlAbstract
                 ],
             ],
         ];
+        $this->assertResponseFields($response['reorderItems'], $expectedResponse);
+    }
+
+    /**
+     * Test reorder with low stock for simple product
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_1_qty_product.php
+     * @throws \Exception
+     */
+    public function testReorderWithLowStock()
+    {
+        $response = $this->makeReorderForDefaultCustomer();
+        $expectedResponse = [
+            'userInputErrors' => [
+                [
+                    'path' => ['orderNumber'],
+                    'code' => 'INSUFFICIENT_STOCK',
+                    'message' => 'Could not add the product with SKU "simple" to the shopping cart: '
+                        . 'The requested qty is not available',
+                ],
+            ],
+            'cart' => [
+                'email' => 'customer@example.com',
+                'total_quantity' => 10,
+                'items' => [
+                    [
+                        'quantity' => 10,
+                        'product' => [
+                            'sku' => 'simple-2'
+                        ]
+                    ]
+                ],
+            ],
+        ];
+        $this->assertResponseFields($response['reorderItems'], $expectedResponse);
+        $response = $this->makeReorderForDefaultCustomer();
+        $expectedResponse['cart']['total_quantity'] = 20;
+        $expectedResponse['cart']['items'][0]['quantity'] = 20;
+
         $this->assertResponseFields($response['reorderItems'], $expectedResponse);
     }
 
