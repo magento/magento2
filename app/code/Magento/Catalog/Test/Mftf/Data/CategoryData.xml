@@ -259,4 +259,10 @@
         <data key="include_in_menu">true</data>
         <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
+    <entity name="ApiSubCategoryWithLevelZero" type="category">
+        <data key="name" unique="suffix">cat with level 1</data>
+        <data key="is_active">true</data>
+        <data key="level">0</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
 </entities>
