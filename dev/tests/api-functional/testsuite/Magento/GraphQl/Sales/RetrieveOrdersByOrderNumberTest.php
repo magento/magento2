@@ -251,6 +251,113 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_totals.php
+     */
+    public function testGetCustomerOrdersOnTotals()
+    {
+        $query =
+            <<<QUERY
+{
+  customer {
+    email
+    orders(filter:{number:{eq:"100000001"}}) {
+      total_count
+      items {
+        id
+        number
+        order_date
+        status
+        totals {
+          base_grand_total {
+            value
+            currency
+          }
+          grand_total {
+            value
+            currency
+          }
+          shipping_handling {
+            value
+            currency
+          }
+          subtotal {
+            value
+            currency
+          }
+          tax {
+            value
+            currency
+          }
+          discounts {
+            amount {
+              value
+              currency
+            }
+            label
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+
+        $this->assertEquals(
+            100,
+            $response['customer']['orders']['items'][0]['totals']['base_grand_total']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $response['customer']['orders']['items'][0]['totals']['base_grand_total']['currency']
+        );
+        $this->assertEquals(
+            100,
+            $response['customer']['orders']['items'][0]['totals']['grand_total']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $response['customer']['orders']['items'][0]['totals']['grand_total']['currency']
+        );
+        $this->assertEquals(
+            110,
+            $response['customer']['orders']['items'][0]['totals']['subtotal']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $response['customer']['orders']['items'][0]['totals']['subtotal']['currency']
+        );
+        $this->assertEquals(
+            10,
+            $response['customer']['orders']['items'][0]['totals']['shipping_handling']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $response['customer']['orders']['items'][0]['totals']['shipping_handling']['currency']
+        );
+        $this->assertEquals(
+            5,
+            $response['customer']['orders']['items'][0]['totals']['tax']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $response['customer']['orders']['items'][0]['totals']['tax']['currency']
+        );
+    }
+
+    /**
      * @param String $orderNumber
      * @dataProvider dataProviderIncorrectOrder
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
