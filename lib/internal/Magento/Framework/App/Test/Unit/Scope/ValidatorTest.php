@@ -61,6 +61,27 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->isValid($scope, $scopeCode));
     }
 
+    public function testUppercaseStoreCode()
+    {
+        $scope = 'not_default_scope';
+        $scopeCode = 'en_EU';
+
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+            ->getMockForAbstractClass();
+        $scopeObject = $this->getMockBuilder(ScopeInterface::class)
+            ->getMockForAbstractClass();
+        $scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->with($scopeCode)
+            ->willReturn($scopeObject);
+        $this->scopeResolverPoolMock->expects($this->once())
+            ->method('get')
+            ->with($scope)
+            ->willReturn($scopeResolver);
+
+        $this->assertTrue($this->model->isValid($scope, $scopeCode));
+    }
+
     public function testIsValidDefault()
     {
         $this->assertTrue($this->model->isValid(ScopeConfigInterface::SCOPE_TYPE_DEFAULT));
@@ -95,7 +116,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores
+     * @expectedExceptionMessage The scope code can include only letters (a-z), numbers (0-9) and underscores
      */
     public function testWrongScopeCodeFormat()
     {
