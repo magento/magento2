@@ -14,7 +14,7 @@
             <title value="Delete Product Attribute"/>
             <description value="Admin should able to delete a product attribute"/>
             <testCaseId value="MC-10887"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
