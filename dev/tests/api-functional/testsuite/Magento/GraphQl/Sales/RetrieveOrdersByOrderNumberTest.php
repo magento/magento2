@@ -55,7 +55,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 {
   customer
   {
-   orders(filter:{number:{eq:"100000003"}}){
+   orders(filter:{number:{eq:"100000002"}}){
     total_count
     items
     {
@@ -121,7 +121,7 @@ QUERY;
 {
   customer
   {
-   orders(filter:{number:{in:["100000002","100000003"]}}){
+   orders(filter:{number:{in:["100000005","100000006"]}}){
     total_count
     items
     {
@@ -155,7 +155,7 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
 
-        $orderNumbers = ['100000002', '100000003'];
+        $orderNumbers = ['100000005', '100000006'];
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
             ->create();
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
@@ -167,7 +167,7 @@ QUERY;
             //$orderStatus = $item->getStatus();//getStatusFrontendLabel($this->getStatus()
             $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
-            $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
+            $this->assertEquals('Complete', $customerOrderItemsInResponse[$key]['status']);
             $key++;
         }
     }
