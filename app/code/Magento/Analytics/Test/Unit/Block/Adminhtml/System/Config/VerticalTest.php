@@ -36,7 +36,7 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel', 'getHint'])
+            ->setMethods(['getComment', 'getLabel', 'getHint', 'getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

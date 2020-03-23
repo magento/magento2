@@ -9,8 +9,13 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class LinkTest extends \PHPUnit\Framework\TestCase
 {
+    private const RANDOM_STRING = '123456abcdef';
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -27,10 +32,15 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
         $escaperMock = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn(self::RANDOM_STRING);
         $this->_link = new \Magento\Framework\Data\Form\Element\Link(
             $factoryMock,
             $collectionFactoryMock,
-            $escaperMock
+            $escaperMock,
+            [],
+            $this->createMock(SecureHtmlRenderer::class),
+            $randomMock
         );
         $formMock = new \Magento\Framework\DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
@@ -58,7 +68,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->_link->setValue('Link Text');
         $html = $this->_link->getElementHtml();
         $this->assertEquals(
-            "link_before<a id=\"link_id\"  data-ui-id=\"form-element-\">Link Text</a>\nlink_after",
+            "link_before<a id=\"link_id\" formelementhookid=\"elemId" .self::RANDOM_STRING
+            ."\" data-ui-id=\"form-element-\">Link Text</a>\nlink_after",
             $html
         );
     }

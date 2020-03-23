@@ -11,6 +11,8 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
+use Magento\Framework\Math\Random;
+
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -29,13 +31,16 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Data\Form::class,
             ['getFieldNameSuffix', 'addSuffixToName', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
         );
+        $randomMock = $this->getMockBuilder(Random::class)->disableOriginalConstructor()->getMock();
+        $randomMock->method('getRandomString')->willReturn('123456abcdefg');
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
             \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
             [
                 'data' => $testData,
-                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class),
+                'random' => $randomMock
             ]
         );
         $this->_object->setForm($this->_formMock);
@@ -78,9 +83,9 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             '<input id="time_condition" type="hidden" name="test_name" value="',
             $testString
         );
-        $this->assertStringEndsWith(
+        $this->assertContains(
             '<input id="test_name_prefixtest_html_idtest_name_suffix" ' .
-            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"/>',
+            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"',
             $testString
         );
     }

@@ -5,10 +5,32 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Renderer;
 
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RegionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Simulate "serialize" method of a form element.
+     *
+     * @param string[] $keys
+     * @param array $data
+     * @return string
+     */
+    private function mockSerialize(array $keys, array $data): string
+    {
+        $attributes = [];
+        foreach ($keys as $key) {
+            if (empty($data[$key])) {
+                continue;
+            }
+            $attributes[] = $key .'="' .$data[$key] .'"';
+        }
+
+        return implode(' ', $attributes);
+    }
+
     /**
      * @param array $regionCollection
      * @dataProvider renderDataProvider
@@ -23,13 +45,24 @@ class RegionTest extends \PHPUnit\Framework\TestCase
             ['isRegionRequired']
         );
         $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        /** @var MockObject|AbstractElement $elementMock */
         $elementMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getForm', 'getHtmlAttributes']
+            ['getForm', 'getHtmlAttributes', 'serialize']
+        );
+        $elementMock->method('serialize')->willReturnCallback(
+            function (array $attributes) use ($elementMock): string {
+                return $this->mockSerialize($attributes, $elementMock->getData());
+            }
         );
         $countryMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getValue']
+            ['getValue', 'serialize']
+        );
+        $countryMock->method('serialize')->willReturnCallback(
+            function (array $attributes) use ($countryMock): string {
+                return $this->mockSerialize($attributes, $countryMock->getData());
+            }
         );
         $regionMock = $this->createMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class

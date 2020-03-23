@@ -5,14 +5,45 @@
  */
 namespace Magento\Ui\Component\Control;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Class Button
+ * Widget for standard button.
  */
 class Button extends Template implements ControlInterface
 {
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param array $data
+     * @param Random|null $random
+     * @param SecureHtmlRenderer|null $htmlRenderer
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?Random $random = null,
+        ?SecureHtmlRenderer $htmlRenderer = null
+    ) {
+        parent::__construct($context, $data);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
+        $this->secureRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+    }
+
     /**
      * Define block template
      *
@@ -80,7 +111,7 @@ class Button extends Template implements ControlInterface
     public function getOnClick()
     {
         if ($this->hasData('on_click')) {
-            return $this->getData('on_click');
+            return $this->getData('on_click');//No onclick
         } else {
             $url = $this->hasData('url') ? $this->getData('url') : $this->getUrl();
             if (!empty($url)) {
@@ -89,6 +120,18 @@ class Button extends Template implements ControlInterface
 
             return null;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _beforeToHtml()
+    {
+        parent::_beforeToHtml();
+
+        $this->setData('ui_button_widget_hook_id', 'buttonId' .$this->random->getRandomString(32));
+
+        return $this;
     }
 
     /**
@@ -107,8 +150,6 @@ class Button extends Template implements ControlInterface
             'title' => $title,
             'type' => $this->getType(),
             'class' => implode(' ', $classes),
-            'onclick' => $this->getOnClick(),
-            'style' => $this->getStyle(),
             'value' => $this->getValue(),
             'disabled' => $disabled,
         ];
@@ -116,6 +157,9 @@ class Button extends Template implements ControlInterface
             foreach ($this->getDataAttribute() as $key => $attr) {
                 $attributes['data-' . $key] = is_scalar($attr) ? $attr : json_encode($attr);
             }
+        }
+        if ($this->hasData('ui_button_widget_hook_id')) {
+            $attributes['ui-button-widget-hook-id'] = $this->getData('ui_button_widget_hook_id');
         }
 
         return $attributes;
@@ -138,5 +182,55 @@ class Button extends Template implements ControlInterface
         }
 
         return $html;
+    }
+
+    /**
+     * Return HTML to be rendered after the button.
+     *
+     * @return string|null
+     */
+    public function getAfterHtml(): ?string
+    {
+        $afterHtml = $this->getData('after_html');
+        $buttonId = $this->getData('ui_button_widget_hook_id');
+        if ($handler = $this->getOnClick()) {
+            $functionName = 'OnClickHandler' . $this->random->getRandomString(32);
+            $afterHtml .= $this->secureRenderer->renderTag(
+                'script',
+                ['type' => 'text/javascript'],
+                <<<script
+                    function {$functionName} () {
+                            {$handler};
+                    }
+                    let button{$buttonId} = document.querySelector("*[ui-button-widget-hook-id='$buttonId']");
+                    if (button{$buttonId}) {
+                        button{$buttonId}.onclick = function (e) {
+                            {$functionName}.apply(e.target);
+                        };
+                    }
+script
+                ,
+                false
+            );
+        }
+        if ($this->getStyle()) {
+            $selector = "*[ui-button-widget-hook-id='$buttonId']";
+            if ($this->getId()) {
+                $selector = "#{$this->getId()}";
+            }
+            $afterHtml .= $this->secureRenderer->renderTag(
+                'style',
+                [],
+                <<<style
+                     {$selector} {
+                         {$this->getStyle()}
+                     }
+style
+                ,
+                false
+            );
+        }
+
+        return $afterHtml;
     }
 }

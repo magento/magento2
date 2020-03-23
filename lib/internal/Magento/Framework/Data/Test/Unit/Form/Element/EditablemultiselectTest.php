@@ -5,6 +5,14 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * Test for the widget.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
 class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -12,10 +20,34 @@ class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $testHelper->getObject(\Magento\Framework\Data\Form\Element\Editablemultiselect::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    return "<$tag>$content</$tag>";
+                }
+            );
+        $this->_model = $testHelper->getObject(
+            \Magento\Framework\Data\Form\Element\Editablemultiselect::class,
+            [
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
+            ]
+        );
         $values = [
             ['value' => 1, 'label' => 'Value1'],
             ['value' => 2, 'label' => 'Value2'],

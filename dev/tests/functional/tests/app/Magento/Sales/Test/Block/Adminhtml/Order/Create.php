@@ -84,14 +84,14 @@ class Create extends Block
      *
      * @var string
      */
-    protected $updateItems = '[onclick="order.itemsUpdate()"]';
+    protected $updateItems = '[title="Update Items and Quantities"]';
 
     /**
      * 'Add Selected Product(s) to Order' button.
      *
      * @var string
      */
-    protected $addSelectedProducts = 'button[onclick="order.productGridAddSelected()"]';
+    protected $addSelectedProducts = 'button[title="Add Selected Product(s) to Order"]';
 
     /**
      * Sales order create account information block.

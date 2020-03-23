@@ -5,11 +5,16 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Tests for \Magento\Framework\Data\Form\Element\AbstractElement
  */
 class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
+    private const RANDOM_STRING = '123456abcdefg';
+
     /**
      * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -38,13 +43,18 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $this->_collectionFactoryMock =
             $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
         $this->_escaperMock = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn(self::RANDOM_STRING);
 
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [
                 $this->_factoryMock,
                 $this->_collectionFactoryMock,
-                $this->_escaperMock
+                $this->_escaperMock,
+                [],
+                $this->createMock(SecureHtmlRenderer::class),
+                $randomMock
             ]
         );
     }
@@ -325,7 +335,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $expectedHtml = '<div class="admin__field">'
             . "\n"
-            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></div>'
+            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"'
+            .' formelementhookid="elemId' .self::RANDOM_STRING .'"/></div>'
             . "\n";
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
@@ -368,7 +379,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             unset($initialData['attributes']);
         }
         $this->_model->setData($initialData);
-        $this->assertEquals($expectedValue, $this->_model->serialize($attributes));
+        $expectedValue .= ' formelementhookid="elemId' .self::RANDOM_STRING .'"';
+        $this->assertEquals(trim($expectedValue), $this->_model->serialize($attributes));
     }
 
     /**
@@ -525,7 +537,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             [
                 [],
                 '<div class="admin__field">' . "\n"
-                . '<input id="" name=""  data-ui-id="form-element-" value="" /></div>' . "\n",
+                . '<input id="" name=""  data-ui-id="form-element-" value=""'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/></div>' . "\n",
             ],
             [
                 ['default_html' => 'some default html'],
@@ -541,7 +554,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
                 '<div class="admin__field">' . "\n"
                 . '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                 . '<span>some label</span></label>' . "\n"
-                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
                 . '</div>' . "\n"
             ],
             [
@@ -554,7 +568,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
                 ],
                 '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                 . '<span>some label</span></label>' . "\n"
-                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
             ],
         ];
     }
@@ -603,7 +618,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 [],
-                '<input id="" name=""  data-ui-id="form-element-" value="" />',
+                '<input id="" name=""  data-ui-id="form-element-" value="" formelementhookid="elemId'
+                    .self::RANDOM_STRING .'"/>',
             ],
             [
                 [
@@ -611,7 +627,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
                     'name' => 'some-name',
                     'value' => 'some-value',
                 ],
-                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                    .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
             ],
             [
                 [
@@ -621,7 +638,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
                     'before_element_html' => 'some-html',
                 ],
                 '<label class="addbefore" for="html-id">some-html</label>'
-                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
             ],
             [
                 [
@@ -630,7 +648,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
                     'value' => 'some-value',
                     'after_element_js' => 'some-js',
                 ],
-                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />some-js'
+                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                    .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>some-js'
             ],
             [
                 [
@@ -639,8 +658,9 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
                     'value' => 'some-value',
                     'after_element_html' => 'some-html',
                 ],
-                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
-                . '<label class="addafter" for="html-id">some-html</label>'
+                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                    .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
+                    . '<label class="addafter" for="html-id">some-html</label>'
             ]
         ];
     }

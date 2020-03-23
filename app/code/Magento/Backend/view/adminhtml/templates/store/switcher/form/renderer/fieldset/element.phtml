@@ -21,19 +21,25 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . $block->getUiId('form-field', $element->getId());
 ?>
 
-<?php if (!$element->getNoDisplay()) : ?>
-    <?php if ($element->getType() == 'hidden') : ?>
+<?php if (!$element->getNoDisplay()): ?>
+    <?php if ($element->getType() == 'hidden'): ?>
         <?= $element->getElementHtml() ?>
-    <?php else : ?>
-    <div<?= /* @noEscape */ $fieldAttributes ?>>
-        <?php if ($elementBeforeLabel) : ?>
+    <?php else: ?>
+    <div <?= /* @noEscape */ $fieldAttributes ?>>
+        <?php if ($elementBeforeLabel): ?>
             <?= $element->getElementHtml() ?>
             <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <?= /* @noEscape */ $note ?>
-        <?php else : ?>
+        <?php else: ?>
             <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?= /* @noEscape */ ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
+                <?php if ($addOn): ?>
+                <div class="addon">
+                <?php endif; ?>
+                    <?= /* @noEscape */ $element->getElementHtml() ?>
+                <?php if ($addOn): ?>
+                </div>
+                <?php endif; ?>
                 <?= $block->getHintHtml() ?>
                 <?= /* @noEscape */ $note ?>
             </div>

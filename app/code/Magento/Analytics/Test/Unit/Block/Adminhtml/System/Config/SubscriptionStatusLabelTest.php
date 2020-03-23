@@ -48,7 +48,7 @@ class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment'])
+            ->setMethods(['getComment', 'getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

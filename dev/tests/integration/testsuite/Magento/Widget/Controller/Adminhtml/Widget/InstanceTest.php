@@ -33,7 +33,10 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testEditAction()
     {
         $this->dispatch('backend/admin/widget_instance/edit');
-        $this->assertContains('<option value="cms_page_link" selected="selected">', $this->getResponse()->getBody());
+        $this->assertRegExp(
+            '/<option value="cms_page_link".*?selected="selected"\>/is',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testBlocksAction()

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Csp\Helper;
@@ -10,13 +11,18 @@ namespace Magento\Csp\Helper;
 use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Csp\Model\Collector\DynamicCollector;
 use Magento\Csp\Model\Policy\FetchPolicy;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRender\EventHandlerData;
+use Magento\Framework\View\Helper\SecureHtmlRender\HtmlRenderer;
+use Magento\Framework\View\Helper\SecureHtmlRender\SecurityProcessorInterface;
+use Magento\Framework\View\Helper\SecureHtmlRender\TagData;
 
 /**
  * Helper for classes responsible for rendering and templates.
  *
  * Allows to whitelist dynamic sources specific to a certain page.
  */
-class InlineUtil implements InlineUtilInterface
+class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
 {
     /**
      * @var DynamicCollector
@@ -27,6 +33,11 @@ class InlineUtil implements InlineUtilInterface
      * @var bool
      */
     private $useUnsafeHashes;
+
+    /**
+     * @var HtmlRenderer
+     */
+    private $htmlRenderer;
 
     private static $tagMeta = [
         'script' => ['id' => 'script-src', 'remote' => ['src'], 'hash' => true],
@@ -48,11 +59,16 @@ class InlineUtil implements InlineUtilInterface
     /**
      * @param DynamicCollector $dynamicCollector
      * @param bool $useUnsafeHashes Use 'unsafe-hashes' policy (not supported by CSP v2).
+     * @param HtmlRenderer|null $htmlRenderer
      */
-    public function __construct(DynamicCollector $dynamicCollector, bool $useUnsafeHashes = false)
-    {
+    public function __construct(
+        DynamicCollector $dynamicCollector,
+        bool $useUnsafeHashes = false,
+        ?HtmlRenderer $htmlRenderer = null
+    ) {
         $this->dynamicCollector = $dynamicCollector;
         $this->useUnsafeHashes = $useUnsafeHashes;
+        $this->htmlRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(HtmlRenderer::class);
     }
 
     /**
@@ -130,63 +146,71 @@ class InlineUtil implements InlineUtilInterface
     }
 
     /**
-     * Render tag.
-     *
-     * @param string $tag
-     * @param string[] $attributes
-     * @param string|null $content
-     * @return string
-     */
-    private function render(string $tag, array $attributes, ?string $content): string
-    {
-        $html = '<' .$tag;
-        foreach ($attributes as $attribute => $value) {
-            $html .= ' ' .$attribute .'="' .$value .'"';
-        }
-        if ($content) {
-            $html .= '>' .$content .'</' .$tag .'>';
-        } else {
-            $html .= ' />';
-        }
-
-        return $html;
-    }
-
-    /**
      * @inheritDoc
      */
     public function renderTag(string $tagName, array $attributes, ?string $content = null): string
     {
-        //Processing tag data
         if (!array_key_exists($tagName, self::$tagMeta)) {
             throw new \InvalidArgumentException('Unknown source type - ' .$tagName);
         }
-        /** @var string $policyId */
-        $policyId = self::$tagMeta[$tagName]['id'];
-        $remotes = $this->extractRemoteHosts($tagName, $attributes, $content);
-        if (empty($remotes) && !$content) {
-            throw new \InvalidArgumentException('Either remote URL or hashable content is required to whitelist');
-        }
 
-        //Adding required policies.
-        if ($remotes) {
-            $this->dynamicCollector->add(
-                new FetchPolicy($policyId, false, $remotes)
-            );
-        }
-        if ($content && !empty(self::$tagMeta[$tagName]['hash'])) {
-            $this->dynamicCollector->add(
-                new FetchPolicy($policyId, false, [], [], false, false, false, [], $this->generateHashValue($content))
-            );
-        }
-
-        return $this->render($tagName, $attributes, $content);
+        return $this->htmlRenderer->renderTag($this->processTag(new TagData($tagName, $attributes, $content, false)));
     }
 
     /**
      * @inheritDoc
      */
     public function renderEventListener(string $eventName, string $javascript): string
+    {
+        return $this->htmlRenderer->renderEventHandler(
+            $this->processEventHandler(new EventHandlerData($eventName, $javascript))
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processTag(TagData $tagData): TagData
+    {
+        //Processing tag data
+        if (array_key_exists($tagData->getTag(), self::$tagMeta)) {
+            /** @var string $policyId */
+            $policyId = self::$tagMeta[$tagData->getTag()]['id'];
+            $remotes = $this->extractRemoteHosts($tagData->getTag(), $tagData->getAttributes(), $tagData->getContent());
+            if (empty($remotes) && !$tagData->getContent()) {
+                throw new \InvalidArgumentException('Either remote URL or hashable content is required to whitelist');
+            }
+
+            //Adding required policies.
+            if ($remotes) {
+                $this->dynamicCollector->add(
+                    new FetchPolicy($policyId, false, $remotes)
+                );
+            }
+            if ($tagData->getContent() && !empty(self::$tagMeta[$tagData->getTag()]['hash'])) {
+                $this->dynamicCollector->add(
+                    new FetchPolicy(
+                        $policyId,
+                        false,
+                        [],
+                        [],
+                        false,
+                        false,
+                        false,
+                        [],
+                        $this->generateHashValue($tagData->getContent())
+                    )
+                );
+            }
+        }
+
+        return $tagData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processEventHandler(EventHandlerData $eventHandlerData): EventHandlerData
     {
         if ($this->useUnsafeHashes) {
             $policy = new FetchPolicy(
@@ -198,7 +222,7 @@ class InlineUtil implements InlineUtilInterface
                 false,
                 false,
                 [],
-                $this->generateHashValue($javascript),
+                $this->generateHashValue($eventHandlerData->getCode()),
                 false,
                 true
             );
@@ -207,6 +231,6 @@ class InlineUtil implements InlineUtilInterface
         }
         $this->dynamicCollector->add($policy);
 
-        return $eventName .'="' .$javascript .'"';
+        return $eventHandlerData;
     }
 }

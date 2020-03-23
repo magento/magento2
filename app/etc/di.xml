@@ -1825,4 +1825,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\TemplateEngine\Php">
+        <arguments>
+            <argument name="blockVariables" xsi:type="array">
+                <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

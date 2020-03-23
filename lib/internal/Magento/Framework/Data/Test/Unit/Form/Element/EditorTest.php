@@ -10,7 +10,14 @@
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Editor;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
+/**
+ * Test for the widget.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
 class EditorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -53,9 +60,27 @@ class EditorTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    return "<$tag>$content</$tag>";
+                }
+            );
         $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
         $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
@@ -70,7 +95,9 @@ class EditorTest extends \PHPUnit\Framework\TestCase
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
                 'data' => ['config' => $this->configMock],
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
 

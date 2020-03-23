@@ -31,22 +31,22 @@ class Php implements TemplateEngineInterface
     protected $_helperFactory;
 
     /**
-     * @var Escaper
+     * @var object[]
      */
-    private $escaper;
+    private $blockVariables = [];
 
     /**
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $helperFactory
-     * @param Escaper|null $escaper
+     * @param object[] $blockVariables
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $helperFactory,
-        ?Escaper $escaper = null
+        array $blockVariables = []
     ) {
         $this->_helperFactory = $helperFactory;
-        $this->escaper = $escaper ?? $helperFactory->get(Escaper::class);
+        $this->blockVariables = $blockVariables;
     }
 
     /**
@@ -60,7 +60,6 @@ class Php implements TemplateEngineInterface
      * @param array                    $dictionary
      * @return string
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function render(BlockInterface $block, $fileName, array $dictionary = [])
     {
@@ -68,10 +67,8 @@ class Php implements TemplateEngineInterface
         try {
             $tmpBlock = $this->_currentBlock;
             $this->_currentBlock = $block;
+            $dictionary = array_merge($this->blockVariables, $dictionary);
             extract($dictionary, EXTR_SKIP);
-            //So it can be used in the template.
-            $escaper = $this->escaper;
-            // phpcs:ignore
             include $fileName;
             $this->_currentBlock = $tmpBlock;
         } catch (\Exception $exception) {
