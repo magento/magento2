@@ -63,6 +63,7 @@ class SearchQuery
         StoreInterface $store
     ): DataObject {
         $collection = $this->collectionFactory->create($userId);
+        $collection->addFilter('store_id', $store->getId());
         try {
             $this->orderFilter->applyFilter($args, $collection, $store);
             if (isset($args['currentPage'])) {

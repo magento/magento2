@@ -155,8 +155,8 @@ QUERY;
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
-      //  $this->assertArrayHasKey('order_items', $customerOrderItemsInResponse);
-     //   $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
+        //  $this->assertArrayHasKey('order_items', $customerOrderItemsInResponse);
+        //   $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
 
         $orderNumbers = ['100000002', '100000003'];
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
@@ -173,6 +173,81 @@ QUERY;
             $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
             $key++;
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
+     */
+    public function testGetCustomerOrdersUnauthorizedCustomer()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"100000001"}}){
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+    }
+   }
+ }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/two_orders_for_two_diff_customers.php
+     */
+    public function testGetCustomerOrdersWithWrongCustomer()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"100000001"}}){
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+    }
+   }
+ }
+}
+QUERY;
+        $currentEmail = 'customer_two@example.com';
+        $currentPassword = 'password';
+        $responseWithWrongCustomer = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['total_count']);
+        $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['items']);
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $responseWithCorrectCustomer = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['total_count']);
+        $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['items']);
     }
 
     /**
@@ -237,6 +312,77 @@ QUERY;
             ],
             'longerFormatNonExistingOrder' => [
                 'X0000-0033331',
+            ],
+        ];
+    }
+
+    /**
+     * @param String $orderNumber
+     * @param String $store
+     * @param String $expectedCount
+     * @dataProvider dataProviderMultiStores
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/two_orders_with_order_items_two_storeviews.php
+     */
+    public function testGetCustomerOrdersTwoStoreviewQuery(string $orderNumber, string $store, int $expectedCount)
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}){
+    items
+    {
+      number
+      order_items{
+        product_sku
+      }
+    }
+    page_info {
+        current_page
+        page_size
+        total_pages
+    }
+    total_count
+   }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            array_merge($this->getCustomerAuthHeaders($currentEmail, $currentPassword), ['Store' => $store])
+        );
+        $this->assertArrayHasKey('customer', $response);
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertCount($expectedCount, $response['customer']['orders']['items']);
+        $this->assertArrayHasKey('total_count', $response['customer']['orders']);
+        $this->assertEquals($expectedCount, (int)$response['customer']['orders']['total_count']);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderMultiStores(): array
+    {
+        return [
+            'firstStoreFirstOrder' => [
+                '100000001', 'default', 1
+            ],
+            'secondStoreSecondOrder' => [
+                '100000002', 'fixture_second_store', 1
+            ],
+            'firstStoreSecondOrder' => [
+                '100000002', 'default', 0
+            ],
+            'secondStoreFirstOrder' => [
+                '100000001', 'fixture_second_store', 0
             ],
         ];
     }
