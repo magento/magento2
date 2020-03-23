@@ -16,6 +16,6 @@
             <argument name="tabName" type="string"/>
         </arguments>
 
-        <click selector="#product_attribute_tabs a[title='{{tabName}}']" stepKey="changeProductAttributeActiveTab"/>
+        <click selector="{{AdminEditProductAttributesSection.tabButton(tabName)}}" stepKey="changeProductAttributeActiveTab"/>
     </actionGroup>
 </actionGroups>

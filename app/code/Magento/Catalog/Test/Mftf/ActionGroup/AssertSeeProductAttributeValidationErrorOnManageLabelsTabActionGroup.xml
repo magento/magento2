@@ -14,11 +14,9 @@
         </annotations>
 
         <arguments>
-            <argument name="selector" type="string" defaultValue="#attribute-labels-table .mage-error"/>
             <argument name="message" type="string"/>
         </arguments>
 
-        <seeElement selector="{{selector}}" stepKey="seeValidationDomElement"/>
-        <see userInput="{{message}}" selector="{{selector}}" stepKey="seeValidationMessage"/>
+        <see userInput="{{message}}" selector="{{AdminProductAttributeManageLabelsSection.attributeStoreLabelValidationError}}" stepKey="seeValidationMessage"/>
     </actionGroup>
 </actionGroups>
