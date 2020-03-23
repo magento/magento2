@@ -131,12 +131,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject $request
          */
-        $request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $url = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getServer'])
+            ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
-        $request->expects($this->any())
-            ->method('getServer')
+        $url->expects($this->any())
+            ->method('getBaseUrl')
             ->willReturn('/var/www/html/pub');
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator
@@ -166,7 +166,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         120,
                         'X_Forwarded_Proto: https',
                         [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
-                        $request
+                        $url
                     )
                 )
             );

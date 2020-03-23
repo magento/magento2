@@ -47,12 +47,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject $request
          */
-        $request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $url = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getServer'])
+            ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
-        $request->expects($this->any())
-            ->method('getServer')
+        $url->expects($this->any())
+            ->method('getBaseUrl')
             ->willReturn('/var/www/html/pub');
 
         /**
@@ -83,7 +83,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         1234,
                         'X-Forwarded-Proto',
                         json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
-                        $request
+                        $url
                     )
                 )
             );

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Model\Varnish;
 
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\UrlInterface;
 use Magento\PageCache\Model\VclGeneratorInterface;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
@@ -52,9 +52,9 @@ class VclGenerator implements VclGeneratorInterface
     private $designExceptions;
 
     /**
-     * @var RequestInterface|null
+     * @var Url
      */
-    private $request;
+    private $url;
 
     /**
      * VclGenerator constructor.
@@ -66,7 +66,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param int                         $gracePeriod
      * @param string                      $sslOffloadedHeader
      * @param array                       $designExceptions
-     * @param RequestInterface|null       $request
+     * @param UrlInterface|null           $url
      */
     public function __construct(
         VclTemplateLocatorInterface $vclTemplateLocator,
@@ -76,7 +76,7 @@ class VclGenerator implements VclGeneratorInterface
         $gracePeriod,
         $sslOffloadedHeader,
         $designExceptions = [],
-        ?RequestInterface $request = null
+        UrlInterface $url = null
     ) {
         $this->backendHost = $backendHost;
         $this->backendPort = $backendPort;
@@ -85,7 +85,7 @@ class VclGenerator implements VclGeneratorInterface
         $this->vclTemplateLocator = $vclTemplateLocator;
         $this->sslOffloadedHeader = $sslOffloadedHeader;
         $this->designExceptions = $designExceptions;
-        $this->request = $request ?: \Magento\Framework\App\ObjectManager::getInstance()->get(RequestInterface::class);
+        $this->url = $url ?: \Magento\Framework\App\ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
     /**
@@ -245,9 +245,9 @@ class VclGenerator implements VclGeneratorInterface
      *
      * @return string
      */
-    private function getHealthCheck()
+    private function getHealthCheck() : string
     {
-        if (strpos($this->request->getServer('DOCUMENT_ROOT'), 'pub') === false) {
+        if (strpos($this->url->getBaseUrl(), 'pub') === false) {
             return '/pub/health_check.php';
         }
 
