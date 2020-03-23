@@ -5,7 +5,6 @@
  */
 
 include __DIR__ . '/order.php';
-include __DIR__ . '/../../../Magento/Customer/_files/two_customers.php';
 
 $customerIdFromFixture = 1;
 
