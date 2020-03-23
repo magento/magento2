@@ -80,6 +80,8 @@ class CleanExpiredQuotes
     }
 
     /**
+     * Deletes all quotes in collection
+     *
      * @param QuoteCollection $quoteCollection
      */
     private function deleteQuotes(QuoteCollection $quoteCollection): void
