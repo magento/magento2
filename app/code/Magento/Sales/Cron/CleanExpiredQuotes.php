@@ -5,9 +5,12 @@
  */
 namespace Magento\Sales\Cron;
 
+use Exception;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Cron job for cleaning expired Quotes
@@ -25,15 +28,31 @@ class CleanExpiredQuotes
     private $storeManager;
 
     /**
+     * @var QuoteRepository
+     */
+    private $quoteRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ExpiredQuotesCollection $expiredQuotesCollection
+     * @param QuoteRepository $quoteRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        ExpiredQuotesCollection $expiredQuotesCollection
+        ExpiredQuotesCollection $expiredQuotesCollection,
+        QuoteRepository $quoteRepository,
+        LoggerInterface $logger
     ) {
         $this->storeManager = $storeManager;
         $this->expiredQuotesCollection = $expiredQuotesCollection;
+        $this->quoteRepository = $quoteRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -52,13 +71,32 @@ class CleanExpiredQuotes
             // Last page returns 1 even when we don't have any results
             $lastPage = $quoteCollection->getSize() ? $quoteCollection->getLastPageNumber() : 0;
 
-            for ($currentPage = 1; $currentPage <= $lastPage; $currentPage++) {
+            for ($currentPage = $lastPage; $currentPage >= 1; $currentPage--) {
                 $quoteCollection->setCurPage($currentPage);
 
-                $quoteCollection->walk('delete');
-
-                $quoteCollection->clear();
+                $this->deleteQuotes($quoteCollection);
             }
         }
+    }
+
+    /**
+     * @param QuoteCollection $quoteCollection
+     */
+    private function deleteQuotes(QuoteCollection $quoteCollection): void
+    {
+        foreach ($quoteCollection as $quote) {
+            try {
+                $this->quoteRepository->delete($quote);
+            } catch (Exception $e) {
+                $message = sprintf(
+                    'Unable to delete expired quote (ID: %s): %s',
+                    $quote->getId(),
+                    (string)$e
+                );
+                $this->logger->error($message);
+            }
+        }
+
+        $quoteCollection->clear();
     }
 }
