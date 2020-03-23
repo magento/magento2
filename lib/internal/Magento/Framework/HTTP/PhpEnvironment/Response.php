@@ -98,8 +98,13 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     {
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
-            $header = $headers->get($name);
-            $headers->removeHeader($header);
+            $headerValues = $headers->get($name);
+            if (!is_iterable($headerValues)) {
+                $headerValues = [$headerValues];
+            }
+            foreach ($headerValues as $headerValue) {
+                $headers->removeHeader($headerValue);
+            }
         }
 
         return $this;
@@ -186,5 +191,27 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     public function __sleep()
     {
         return ['content', 'isRedirect', 'statusCode'];
+    }
+
+    /**
+     * Sending provided headers.
+     *
+     * Had to be overridden because the original did not work correctly with multi-headers.
+     */
+    public function sendHeaders()
+    {
+        if ($this->headersSent()) {
+            return $this;
+        }
+
+        $status  = $this->renderStatusLine();
+        header($status);
+
+        /** @var \Zend\Http\Header\HeaderInterface $header */
+        foreach ($this->getHeaders() as $header) {
+            header($header->toString(), false);
+        }
+
+        return $this;
     }
 }
