@@ -112,7 +112,8 @@ class SynonymActionsTest extends TestCase
                                         self::STUB_SYNONYM_GROUP_ID
                                     )
                                 ],
-                                '__disableTmpl' => true
+                                '__disableTmpl' => true,
+                                'post' => true
                             ],
                             'edit' => [
                                 'href' => sprintf(
