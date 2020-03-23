@@ -95,7 +95,6 @@ QUERY;
         foreach ($items as $item) {
             $orderId = $item->getEntityId();
             $orderNumber = $item->getIncrementId();
-            //$orderStatus = $item->getStatus();//getStatusFrontendLabel($this->getStatus()
             $this->assertEquals($orderId, $customerOrderItemsInResponse['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse['status']);
@@ -155,8 +154,6 @@ QUERY;
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
-        //  $this->assertArrayHasKey('order_items', $customerOrderItemsInResponse);
-        //   $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
 
         $orderNumbers = ['100000002', '100000003'];
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
