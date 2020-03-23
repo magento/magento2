@@ -5,11 +5,12 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model\Plugin;
 
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
+use Magento\Newsletter\Model\Subscriber as SubscriberModel;
 
 class CustomerPluginTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,7 +25,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     private $subscriberFactory;
 
     /**
-     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriberModel|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subscriber;
 
@@ -59,11 +60,12 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subscriber = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
+        $this->subscriber = $this->getMockBuilder(SubscriberModel::class)
             ->setMethods(
                 [
                     'loadByEmail',
                     'getId',
+                    'getStatus',
                     'delete',
                     'updateSubscription',
                     'subscribeCustomerById',
@@ -137,13 +139,21 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->method('getIsSubscribed')
             ->willReturn($subscriptionNewValue);
 
+        $this->subscriber->expects($this->any())->method('getId')->willReturn(1);
+
+        $subscriptionStatus = $subscriptionNewValue
+            ? SubscriberModel::STATUS_SUBSCRIBED
+            : SubscriberModel::STATUS_UNSUBSCRIBED;
+
+        $this->subscriber->expects($this->any())->method('getStatus')->willReturn($subscriptionStatus);
+
         if ($subscriptionOriginalValue !== $subscriptionNewValue) {
             if ($subscriptionNewValue) {
                 $this->subscriber->expects($this->once())->method('subscribeCustomerById')->with($customerId);
             } else {
                 $this->subscriber->expects($this->once())->method('unsubscribeCustomerById')->with($customerId);
             }
-            $this->subscriber->expects($this->once())->method('isSubscribed')->willReturn($subscriptionNewValue);
+            $this->subscriber->expects($this->any())->method('isSubscribed')->willReturn($subscriptionNewValue);
             $resultExtensionAttributes->expects($this->once())->method('setIsSubscribed')->with($subscriptionNewValue);
         }
 
