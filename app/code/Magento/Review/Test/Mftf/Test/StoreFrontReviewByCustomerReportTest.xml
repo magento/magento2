@@ -12,10 +12,10 @@
         <annotations>
             <features value="Review"/>
             <stories value="Review By Customers"/>
-            <title value="StoreFront reports review by Customers"/>
+            <title value="StoreFront Reports Review By Customers"/>
             <description value="Review By Customer Grid Filters"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-31447"/>
+            <testCaseId value="MC-32336"/>
         </annotations>
         <before>
             <!--Login-->
@@ -33,11 +33,14 @@
             <!-- Delete reviews -->
             <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <!-- Delete customer -->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
             <!--delete Category and Products -->
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-
             <!--Logout-->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -49,8 +52,8 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
             <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <!-- Click on reviews and add 2 reviews with current user -->
-        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addFirstReview"/>
+        <!-- Click on reviews and add  reviews with current user -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
         <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
         <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
@@ -64,9 +67,9 @@
             <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByCustomers.dataUiId}}"/>
         </actionGroup>
         <!--Sort Review Column -->
-        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabCustomerbReviewQuantity"/>
+        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabCustomerReviewQuantity"/>
         <actionGroup ref="AdminFilterCustomerReviewActionGroup" stepKey="navigateToCustomerReportsReview">
-            <argument name="reviewCount" value="$grabCustomerbReviewQuantity" />
+            <argument name="reviewCount" value="$grabCustomerReviewQuantity"/>
         </actionGroup>
     </test>
 </tests>
