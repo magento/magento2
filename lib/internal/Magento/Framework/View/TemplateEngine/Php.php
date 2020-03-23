@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\TemplateEngine;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\TemplateEngineInterface;
 
@@ -55,11 +54,11 @@ class Php implements TemplateEngineInterface
      * Include the named PHTML template using the given block as the $this
      * reference, though only public methods will be accessible.
      *
-     * @param BlockInterface           $block
-     * @param string                   $fileName
-     * @param array                    $dictionary
+     * @param BlockInterface $block
+     * @param string $fileName
+     * @param array $dictionary
      * @return string
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function render(BlockInterface $block, $fileName, array $dictionary = [])
     {
