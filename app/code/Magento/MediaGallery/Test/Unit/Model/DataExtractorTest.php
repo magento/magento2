@@ -67,7 +67,7 @@ class DataExtractorTest extends TestCase
      * @param array $data
      * @param object $model
      */
-    protected function checkAssetValues(array $expectedData, array $data, $model)
+    private function checkAssetValues(array $expectedData, array $data, $model)
     {
         foreach ($expectedData as $expectedDataKey => $expectedDataItem) {
             $this->assertEquals($data[$expectedDataKey] ?? null, $model->{$expectedDataItem['method']}());
@@ -81,7 +81,7 @@ class DataExtractorTest extends TestCase
      * @param array $data
      * @param object $model
      */
-    protected function checkKeyWordValues(array $expectedData, array $data, $model)
+    private function checkKeyWordValues(array $expectedData, array $data, $model)
     {
         foreach ($expectedData as $expectedDataKey => $expectedDataItem) {
             $this->assertEquals($data[$expectedDataKey] ?? null, $model->{$expectedDataItem['method']}());
