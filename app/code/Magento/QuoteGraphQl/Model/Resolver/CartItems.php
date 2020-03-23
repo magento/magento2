@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
@@ -29,6 +30,12 @@ class CartItems implements ResolverInterface
         $cart = $value['model'];
 
         $itemsData = [];
+        if ($cart->getData('has_error')) {
+            $errors = $cart->getErrors();
+            foreach ($errors as $error) {
+                $itemsData[] = new GraphQlInputException(__($error->getText()));
+            }
+        }
         foreach ($cart->getAllVisibleItems() as $cartItem) {
             /**
              * @var QuoteItem $cartItem
