@@ -8,13 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertSeeProductAttributeValidationErrorOnPropertiesTabActionGroup">
+    <actionGroup name="AssertSeeProductAttributeValidationErrorOnManageLabelsTabActionGroup">
         <annotations>
-            <description>Check whenever the validation error is present for the product attribute in the "Properties" Tab</description>
+            <description>Check whenever the validation error is present for the product attribute in the "Manage Labels" Tab</description>
         </annotations>
 
         <arguments>
-            <argument name="selector" type="string" defaultValue=".field-attribute_label .mage-error"/>
+            <argument name="selector" type="string" defaultValue="#attribute-labels-table .mage-error"/>
             <argument name="message" type="string"/>
         </arguments>
 
