@@ -8,15 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Version\Controller\Index;
 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Magento Version controller
  */
-class Index extends Action implements HttpGetActionInterface
+class Index implements HttpGetActionInterface
 {
     const DEV_PREFIX = 'dev-';
 
@@ -24,15 +23,19 @@ class Index extends Action implements HttpGetActionInterface
      * @var ProductMetadataInterface
      */
     protected $productMetadata;
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
 
     /**
-     * @param Context $context
+     * @param ResponseInterface $response
      * @param ProductMetadataInterface $productMetadata
      */
-    public function __construct(Context $context, ProductMetadataInterface $productMetadata)
+    public function __construct(ResponseInterface $response, ProductMetadataInterface $productMetadata)
     {
         $this->productMetadata = $productMetadata;
-        parent::__construct($context);
+        $this->response = $response;
     }
 
     /**
@@ -48,7 +51,7 @@ class Index extends Action implements HttpGetActionInterface
             return;
         }
 
-        $this->getResponse()->setBody(
+        $this->response->setBody(
             $this->productMetadata->getName() . '/' .
             $this->getMajorMinorVersion($versionParts) .
             ' (' . $this->productMetadata->getEdition() . ')'

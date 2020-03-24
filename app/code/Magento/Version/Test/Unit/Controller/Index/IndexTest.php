@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Version\Test\Unit\Controller\Index;
 
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Version\Controller\Index\Index as VersionIndex;
 use PHPUnit\Framework\TestCase;
 
@@ -19,12 +17,7 @@ class IndexTest extends TestCase
     /**
      * @var VersionIndex
      */
-    private $model;
-
-    /**
-     * @var Context
-     */
-    private $contextMock;
+    private $versionController;
 
     /**
      * @var ProductMetadataInterface
@@ -41,10 +34,6 @@ class IndexTest extends TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEdition', 'getVersion'])
@@ -55,19 +44,7 @@ class IndexTest extends TestCase
             ->setMethods(['setBody', 'sendResponse'])
             ->getMock();
 
-        $this->contextMock->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->responseMock);
-
-        $objectManager = new ObjectManager($this);
-
-        $this->model = $objectManager->getObject(
-            VersionIndex::class,
-            [
-                'context' => $this->contextMock,
-                'productMetadata' => $this->productMetadataMock
-            ]
-        );
+        $this->versionController = new VersionIndex($this->responseMock, $this->productMetadataMock);
     }
 
     /**
@@ -82,7 +59,7 @@ class IndexTest extends TestCase
         $this->responseMock->expects($this->never())
             ->method('setBody');
 
-        $this->assertNull($this->model->execute());
+        $this->assertNull($this->versionController->execute());
     }
 
     /**
@@ -98,6 +75,6 @@ class IndexTest extends TestCase
             ->with('Magento/2.3 (Community)')
             ->will($this->returnSelf());
 
-        $this->model->execute();
+        $this->versionController->execute();
     }
 }
