@@ -4238,8 +4238,8 @@ return [
         'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
     ],
-    ['Zend_Feed', 'Zend\Feed'],
-    ['Zend_Uri', 'Zend\Uri\Uri'],
+    ['Zend_Feed', 'Laminas\Feed'],
+    ['Zend_Uri', 'Laminas\Uri\Uri'],
     ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
     ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
     ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
