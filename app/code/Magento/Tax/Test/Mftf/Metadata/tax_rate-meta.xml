@@ -17,7 +17,7 @@
             <field key="zip_is_range">integer</field>
             <field key="zip_from">integer</field>
             <field key="zip_to">integer</field>
-            <field key="rate">integer</field>
+            <field key="rate">number</field>
             <field key="code">string</field>
         </object>
     </operation>
