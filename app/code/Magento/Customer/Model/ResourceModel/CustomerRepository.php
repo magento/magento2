@@ -11,6 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
 use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\Customer\Attribute\CompositeValidator;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
@@ -27,9 +28,10 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
 
 /**
- * Customer repository.
+ * Customer repository responsible for CRUD operations.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -117,6 +119,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     private $delegatedStorage;
 
     /**
+     * @var CompositeValidator
+     */
+    private $compositeValidator;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
      * @param CustomerRegistry $customerRegistry
@@ -133,6 +140,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param NotificationStorage $notificationStorage
      * @param DelegatedStorage|null $delegatedStorage
+     * @param CompositeValidator|null $compositeValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,7 +159,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
-        DelegatedStorage $delegatedStorage = null
+        DelegatedStorage $delegatedStorage = null,
+        CompositeValidator $compositeValidator = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -169,6 +178,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
         $this->delegatedStorage = $delegatedStorage ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
+        $this->compositeValidator = $compositeValidator ?? ObjectManager::getInstance()->get(
+            CompositeValidator::class
+        );
     }
 
     /**
@@ -185,6 +197,9 @@ class CustomerRepository implements CustomerRepositoryInterface
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
+        foreach ($customer->getCustomAttributes() as $customAttribute) {
+            $this->compositeValidator->validate($customAttribute);
+        }
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = null;
@@ -224,16 +239,10 @@ class CustomerRepository implements CustomerRepositoryInterface
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-        if (!array_key_exists('addresses', $customerArr)
-            && null !== $prevCustomerDataArr
-            && array_key_exists('default_billing', $prevCustomerDataArr)
-        ) {
+        if ($this->isDefaultAddressChanged('default_billing', $customerArr, $prevCustomerDataArr)) {
             $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
         }
-        if (!array_key_exists('addresses', $customerArr)
-            && null !== $prevCustomerDataArr
-            && array_key_exists('default_shipping', $prevCustomerDataArr)
-        ) {
+        if ($this->isDefaultAddressChanged('default_shipping', $customerArr, $prevCustomerDataArr)) {
             $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
         }
         $this->setValidationFlag($customerArr, $customerModel);
@@ -281,6 +290,25 @@ class CustomerRepository implements CustomerRepositoryInterface
             ]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * Check if customer default address is changed.
+     *
+     * @param string $addressType
+     * @param array $currentCustomerData
+     * @param array|null $prevCustomerData
+     *
+     * @return bool
+     */
+    private function isDefaultAddressChanged(
+        string $addressType,
+        array $currentCustomerData,
+        ?array $prevCustomerData
+    ): bool {
+        return !array_key_exists('addresses', $currentCustomerData)
+            && null !== $prevCustomerData
+            && array_key_exists($addressType, $prevCustomerData);
     }
 
     /**
