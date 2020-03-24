@@ -11,7 +11,7 @@
     <test name="StorefrontGalleryConfigurableProductWithSeveralAttributesTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Verify functionality of updating Gallery items on 'view Product' Storefront page for Configurable Product with several attributes of different types"/>
+            <stories value="Prepend variation media on storefront"/>
             <title value="Storefront Gallery - Configurable Product with several attributes: prepend variation media"/>
             <description value="Storefront Gallery - Configurable Product with several attributes: prepend variation media"/>
             <severity value="AVERAGE"/>
@@ -20,6 +20,7 @@
             <group value="configurableProduct"/>
             <group value="swatch"/>
         </annotations>
+
         <before>
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setupYoutubeApiKey"/>
             <!--Create 1 configurable product with 2 variations-->
@@ -165,7 +166,7 @@
         </after>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
-            <argument name="productUrl" value="$$createConfigurableProduct.custom_attributes[url_key]$$"/>
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
