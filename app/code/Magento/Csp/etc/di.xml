@@ -49,11 +49,6 @@
             <argument name="fileName" xsi:type="string">csp_whitelist.xml</argument>
         </arguments>
     </type>
-    <type name="Magento\Csp\Model\Collector\CspWhitelistXml\Data">
-        <arguments>
-            <argument name="reader" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Reader\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Csp\Model\Collector\CspWhitelistXmlCollector">
         <arguments>
             <argument name="configReader" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Data</argument>
@@ -62,11 +57,6 @@
     <type name="Magento\Csp\Model\Collector\CspWhitelistXml\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Reader\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Csp\Model\Collector\CspWhitelistXmlCollector">
-        <arguments>
-            <argument name="configReader" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Data</argument>
         </arguments>
     </type>
     <preference for="Magento\Csp\Api\InlineUtilInterface" type="Magento\Csp\Helper\InlineUtil" />

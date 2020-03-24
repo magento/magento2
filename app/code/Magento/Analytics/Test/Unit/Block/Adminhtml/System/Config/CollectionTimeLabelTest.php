@@ -54,11 +54,6 @@ class CollectionTimeLabelTest extends TestCase
     private $abstractElementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    private $formMock;
-
-    /**
      * @inheritDoc
      */
     protected function setUp()
