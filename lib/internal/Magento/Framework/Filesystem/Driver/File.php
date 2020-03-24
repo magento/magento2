@@ -254,7 +254,10 @@ class File implements DriverInterface
     public function readDirectory($path)
     {
         try {
-            $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+            $flags = \FilesystemIterator::SKIP_DOTS |
+                     \FilesystemIterator::UNIX_PATHS |
+                     \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
+            
             $iterator = new \FilesystemIterator($path, $flags);
             $result = [];
             /** @var \FilesystemIterator $file */
