@@ -28,10 +28,6 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
-            // zend-http >= 2.10.11 can return \ArrayIterator instead of a single Header
-            if ($header instanceof \ArrayIterator) {
-                $header = $header->current();
-            }
         }
         return $header;
     }
