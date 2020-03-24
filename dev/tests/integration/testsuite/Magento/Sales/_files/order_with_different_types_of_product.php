@@ -39,7 +39,9 @@ $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 $customerIdFromFixture = 1;
 
-// simple product item
+/**
+ * simple product
+ */
 $simpleProductItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $requestInfo = [
     'qty' => 1
@@ -55,8 +57,9 @@ $simpleProductItem->setProductId($simpleProduct->getId())
     ->setStoreId(0)
     ->setProductOptions(['info_buyRequest' => $requestInfo]);
 
-// configurable product
-
+/**
+ * configurable product
+ */
 /** @var \Magento\Eav\Model\Config $eavConfig */
 $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
@@ -95,7 +98,9 @@ if ($configurableProduct->getExtensionAttributes()
     $orderConfigurableItem->setProductOptions(['info_buyRequest' => $requestInfo]);
 }
 
-// virtual product
+/**
+ * virtual product
+ */
 $virtualProductItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $requestInfo = [
     'qty' => 1
@@ -110,8 +115,9 @@ $virtualProductItem->setProductId($virtualProduct->getId())
     ->setSku($virtualProduct->getSku())
     ->setStoreId(0)
     ->setProductOptions(['info_buyRequest' => $requestInfo]);
-
-// downloadable product
+/**
+ * downloadable product
+ */
 /** @var $linkCollection \Magento\Downloadable\Model\ResourceModel\Link\Collection */
 $linkCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Downloadable\Model\Link::class
@@ -142,7 +148,9 @@ $downloadableProductItem->setProductId($downloadableProduct->getId())
     ->setStoreId($downloadableProduct->getStoreId())
     ->setProductOptions(['info_buyRequest' => $requestInfo]);
 
-// bundle product
+/**
+ * bundle product
+ */
 /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
 $typeInstance = $bundleProduct->getTypeInstance();
 $typeInstance->setStoreFilter($bundleProduct->getStoreId(), $bundleProduct);
