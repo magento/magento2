@@ -1,46 +1,75 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Controller\Ajax;
 
-class Index extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
+use Magento\Framework\Translate\Inline\ParserInterface;
+
+class Index implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Translate\Inline\ParserInterface
+     * @var ParserInterface
      */
     protected $inlineParser;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    /**
+     * @var JsonResultFactory
+     */
+    private $jsonResultFactory;
+
+    /**
+     * @param RequestInterface $request
+     * @param JsonResultFactory $jsonResultFactory
+     * @param ParserInterface $inlineParser
+     * @param ActionFlag $actionFlag
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
+        RequestInterface $request,
+        JsonResultFactory $jsonResultFactory,
+        ParserInterface $inlineParser,
+        ActionFlag $actionFlag
     ) {
-        parent::__construct($context);
-
         $this->inlineParser = $inlineParser;
+        $this->request = $request;
+        $this->actionFlag = $actionFlag;
+        $this->jsonResultFactory = $jsonResultFactory;
     }
 
     /**
      * Ajax action for inline translation
-     *
-     * @return void
+     * @inheritDoc
      */
     public function execute()
     {
-        $translate = (array)$this->getRequest()->getPost('translate');
+        $translate = (array)$this->request->getPost('translate');
 
+        $jsonResult = $this->jsonResultFactory->create();
         try {
-            $response = $this->inlineParser->processAjaxPost($translate);
+            $jsonResult->setData($this->inlineParser->processAjaxPost($translate));
         } catch (\Exception $e) {
-            $response = "{error:true,message:'" . $e->getMessage() . "'}";
+            $jsonResult->setData(['error' => true, 'message' => $e->getMessage()]);
         }
-        $this->getResponse()->representJson(json_encode($response));
-        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
+        $this->actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
+
+        return $jsonResult;
     }
 }
