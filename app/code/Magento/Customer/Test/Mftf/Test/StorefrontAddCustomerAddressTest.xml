@@ -14,7 +14,7 @@
             <stories value="Implement handling of large number of addresses on storefront Address book"/>
             <title value="Storefront - My account - Address Book - add new address"/>
             <description value="Storefront user should be able to create a new address via the storefront"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97364"/>
             <group value="customer"/>
             <group value="create"/>
@@ -53,7 +53,7 @@
             <stories value="Implement handling of large number of addresses on storefront Address book"/>
             <title value="Storefront - My account - Address Book - add new default billing/shipping address"/>
             <description value="Storefront user should be able to create a new default address via the storefront"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97364"/>
             <group value="customer"/>
             <group value="create"/>
@@ -91,7 +91,7 @@
             <stories value="Implement handling of large number of addresses on storefront Address book"/>
             <title value="Storefront - My account - Address Book - add new non default billing/shipping address"/>
             <description value="Storefront user should be able to create a new non default address via the storefront"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97500"/>
             <group value="customer"/>
             <group value="create"/>
