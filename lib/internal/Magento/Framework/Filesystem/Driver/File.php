@@ -949,7 +949,10 @@ class File implements DriverInterface
     public function readDirectoryRecursively($path = null)
     {
         $result = [];
-        $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+        $flags = \FilesystemIterator::SKIP_DOTS |
+                 \FilesystemIterator::UNIX_PATHS |
+                 \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
+ 
         try {
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($path, $flags),
