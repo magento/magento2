@@ -10,7 +10,7 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 /**
  * Base HTTP response object
  */
-class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
+class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
 {
     /**
      * Flag; is this response a redirect?
