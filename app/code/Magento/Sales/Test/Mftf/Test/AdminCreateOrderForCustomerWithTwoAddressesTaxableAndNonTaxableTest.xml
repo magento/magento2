@@ -14,7 +14,7 @@
             <description value="Tax should not be displayed for non taxable address when switching from taxable address"/>
             <testCaseId value="MC-21721"/>
             <features value="Sales"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <group value="Sales"/>
         </annotations>
         <before>
