@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridSelectAllCheckboxTest">
+        <annotations>
+            <stories value="Select All Rows in Grid"/>
+            <title value="Select All Rows Grid ans unselect row"/>
+            <description value="Test for check selected rows in Grid and Select All selector"/>
+            <group value="uI"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer1"/>
+            <deleteData createDataKey="createCustomer2" stepKey="deleteCustomer2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerPage"/>
+        <waitForPageLoad stepKey="waitForCustomerPage"/>
+        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectAllCustomers1"/>
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridSection.firstRowCheckbox}}" stepKey="checkFirstCheckboxIsChecked"/>
+        <click selector="{{AdminCustomerGridSection.selectFirstRow}}" stepKey="unselectFirstRow"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridSection.firstRowCheckbox}}" stepKey="checkFirstCheckboxIsUnchecked"/>
+        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectAllCustomers2"/>
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridSection.firstRowCheckbox}}" stepKey="reCheckFirstCheckboxIsChecked"/>
+    </test>
+</tests>
