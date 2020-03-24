@@ -33,6 +33,7 @@
             <!-- Delete reviews -->
             <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearNickNameReviewFilters"/>
             <!-- Delete customer -->
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>

@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFilterCustomerReviewActionGroup">
         <arguments>
-            <argument name="reviewCount" type="string"/>
+            <argument name="reviewCount" type="string" defaultValue="0"/>
         </arguments>
         <!--Sort Review Column in Grid -->
         <waitForPageLoad stepKey="waitForGridToAppear"/>
