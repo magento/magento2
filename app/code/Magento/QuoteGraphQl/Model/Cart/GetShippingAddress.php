@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Get shipping address
+ * Model for getting shipping address
  */
 class GetShippingAddress
 {
