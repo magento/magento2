@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Category;
 
 use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Catalog\Model\Category\FileInfo;
+use Magento\Catalog\Model\Category\Image;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -18,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -83,6 +85,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     private $arrayUtils;
+    /**
+     * @var Image|MockObject
+     */
+    private $categoryImage;
 
     /**
      * @inheritDoc
@@ -141,6 +147,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
             ->setMethods(['flatten'])
             ->disableOriginalConstructor()->getMock();
+
+        $this->categoryImage = $this->createPartialMock(
+            Image::class,
+            ['getUrl']
+        );
     }
 
     /**
@@ -171,7 +182,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'request' => $this->request,
                 'categoryFactory' => $this->categoryFactory,
                 'pool' => $this->modifierPool,
-                'arrayUtils' => $this->arrayUtils
+                'arrayUtils' => $this->arrayUtils,
+                'categoryImage' => $this->categoryImage,
             ]
         );
 
@@ -315,8 +327,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn(['image' => $attributeMock]);
-        $categoryMock->expects($this->once())
-            ->method('getImageUrl')
+        $this->categoryImage->expects($this->once())
+            ->method('getUrl')
             ->willReturn($categoryUrl);
 
         $this->registry->expects($this->once())
