@@ -144,6 +144,8 @@ class Reorder
             $this->addError($e->getMessage());
         }
 
+        $cart = $this->cartRepository->get($cart->getId());
+
         return $this->prepareOutput($cart);
     }
 
