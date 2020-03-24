@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
-use Magento\Backend\App\ActionInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Backend\App\BackendApp;
 use Magento\Backend\App\BackendAppList;
 use Magento\Backend\Model\Auth as BackendAuthModel;
