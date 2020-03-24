@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Api;
 
 /**
@@ -44,6 +46,8 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
     }
 
     /**
+     * Overwrite data in Object.
+     *
      * @param string $key
      * @param mixed $value
      *
@@ -60,12 +64,16 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
      *
      * @return string
      */
-    protected function _getDataObjectType()
+    protected function _getDataObjectType(): string
     {
         $currentClass = get_class($this);
-        $builderSuffix = 'Builder';
-        $dataObjectType = substr($currentClass, 0, -strlen($builderSuffix));
-        return $dataObjectType;
+        $suffix = 'Builder';
+        $interceptorSuffix = '\Interceptor';
+        if (false !== strpos($currentClass, $interceptorSuffix, -strlen($interceptorSuffix))) {
+            $suffix .= $interceptorSuffix;
+        }
+
+        return substr($currentClass, 0, -strlen($suffix));
     }
 
     /**
