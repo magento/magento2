@@ -323,9 +323,9 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      */
     public function getIdentities()
     {
-        $identities = $this->getProduct()->getIdentities();
+        $product = $this->getProduct();
 
-        return $identities;
+        return $product ? $product->getIdentities() : [];
     }
 
     /**
