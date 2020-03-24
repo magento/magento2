@@ -64,7 +64,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
      *
      * @return string
      */
-    protected function _getDataObjectType(): string
+    protected function _getDataObjectType()
     {
         $currentClass = get_class($this);
         $suffix = 'Builder';
