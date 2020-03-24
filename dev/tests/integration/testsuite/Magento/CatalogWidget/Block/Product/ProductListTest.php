@@ -256,4 +256,80 @@ class ProductListTest extends TestCase
             "Anchor root category does not contain products of it's children."
         );
     }
+
+    /**
+     * Test that price rule condition works correctly
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @param string $operator
+     * @param int $value
+     * @param array $matches
+     * @dataProvider priceFilterDataProvider
+     */
+    public function testPriceFilter(string $operator, int $value, array $matches)
+    {
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,
+        `aggregator`:`all`,`value`:`1`,`new_child`:``^],
+        `1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,
+        `attribute`:`price`,
+        `operator`:`' . $operator . '`,`value`:`' . $value . '`^]^]';
+
+        $this->block->setData('conditions_encoded', $encodedConditions);
+
+        $productCollection = $this->block->createCollection();
+        $productCollection->load();
+        $skus = array_map(
+            function ($item) {
+                return $item['sku'];
+            },
+            $productCollection->getItems()
+        );
+        $this->assertEquals($matches, $skus, '', 0.0, 10, true);
+    }
+
+    public function priceFilterDataProvider(): array
+    {
+        return [
+            [
+                '>',
+                10,
+                [
+                    'simple1001',
+                ]
+            ],
+            [
+                '>=',
+                10,
+                [
+                    'simple1000',
+                    'simple1001',
+                    'configurable',
+                ]
+            ],
+            [
+                '<',
+                10,
+                []
+            ],
+            [
+                '<',
+                20,
+                [
+                    'simple1000',
+                    'configurable',
+                ]
+            ],
+            [
+                '<=',
+                20,
+                [
+                    'simple1000',
+                    'simple1001',
+                    'configurable',
+                ]
+            ],
+        ];
+    }
 }
