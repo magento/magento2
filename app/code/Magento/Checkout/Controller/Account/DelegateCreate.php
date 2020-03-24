@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Controller\Account;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
-use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Sales\Api\OrderCustomerDelegateInterface;
 
 /**
  * Redirect guest customer for registration.
  */
-class DelegateCreate extends Action implements HttpGetActionInterface
+class DelegateCreate implements HttpGetActionInterface
 {
     /**
      * @var OrderCustomerDelegateInterface
@@ -24,23 +23,28 @@ class DelegateCreate extends Action implements HttpGetActionInterface
     private $delegateService;
 
     /**
-     * @var Session
+     * @var CheckoutSession
      */
     private $session;
 
     /**
-     * @param Context $context
+     * @var RedirectFactory
+     */
+    private $resultRedirectFactory;
+
+    /**
      * @param OrderCustomerDelegateInterface $customerDelegation
-     * @param Session $session
+     * @param CheckoutSession $session
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
-        Context $context,
         OrderCustomerDelegateInterface $customerDelegation,
-        Session $session
+        CheckoutSession $session,
+        RedirectFactory $resultRedirectFactory
     ) {
-        parent::__construct($context);
         $this->delegateService = $customerDelegation;
         $this->session = $session;
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
