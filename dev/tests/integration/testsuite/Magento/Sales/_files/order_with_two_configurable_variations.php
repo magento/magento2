@@ -52,9 +52,8 @@ $orderConfigurableItem->setRowTotal($configurableProduct->getPrice());
 $orderConfigurableItem->setParentItemId(null);
 $orderConfigurableItem->setProductType('configurable');
 $configurableVariations = [];
-foreach (array_values($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks())
-         as $key => $variationId
-) {
+$producLinks = array_values($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
+foreach ($producLinks as $key => $variationId) {
     $simpleProductId = current($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
 
     /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */

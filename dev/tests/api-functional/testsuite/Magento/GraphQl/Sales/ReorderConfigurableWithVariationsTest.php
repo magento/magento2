@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * Test Reorder with and without products overlay in shopping cart.
  */
 class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
