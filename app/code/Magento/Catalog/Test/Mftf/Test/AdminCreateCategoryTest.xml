@@ -14,7 +14,7 @@
             <stories value="Create a Category via the Admin"/>
             <title value="Admin should be able to create a Category"/>
             <description value="Admin should be able to create a Category"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-72102"/>
             <group value="category"/>
         </annotations>
@@ -43,7 +43,7 @@
             <stories value="Default layout configuration MAGETWO-88793"/>
             <title value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
             <description value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-89024"/>
             <group value="category"/>
         </annotations>
@@ -75,7 +75,7 @@
         <stories value="Default layout configuration MAGETWO-88793"/>
         <title value="Category should not be saved once layered navigation price step field is left empty"/>
         <description value="Once the Config setting is unchecked Category should not be saved with layered navigation price field left empty"/>
-        <severity value="AVERAGE"/>
+        <severity value="BLOCKER"/>
         <testCaseId value="MAGETWO-95797"/>
         <group value="category"/>
     </annotations>

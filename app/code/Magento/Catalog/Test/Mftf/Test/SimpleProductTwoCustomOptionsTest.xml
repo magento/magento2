@@ -14,7 +14,7 @@
             <stories value="Create simple product with two custom options" />
             <title value="Admin should be able to create simple product with two custom options"/>
             <description value="Admin should be able to create simple product with two custom options"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-248"/>
             <group value="Catalog"/>
         </annotations>

@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGoToDetailsPageWhenAddingToCart">
+    <test name="StorefrontGoToDetailsPageWhenAddingToCartTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Bundle products list on Storefront"/>

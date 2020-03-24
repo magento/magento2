@@ -14,7 +14,7 @@
             <title value="Update Simple Product with Regular Price (In Stock) Visible in Catalog Only"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Visible in Catalog Only"/>
             <testCaseId value="MC-10804"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>

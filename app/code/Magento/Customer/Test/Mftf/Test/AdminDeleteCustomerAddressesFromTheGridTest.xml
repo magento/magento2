@@ -12,7 +12,7 @@
             <title value="Admin delete customer addresses from the grid"/>
             <description value="Admin delete customer addresses from the grid"/>
             <features value="Module/ Customer"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94850"/>
             <stories value="MAGETWO-94346: Implement handling of large number of addresses on admin edit customer page"/>
             <group value="customer"/>

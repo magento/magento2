@@ -15,7 +15,7 @@
             <title value="Admin should be able to associate bundle product to websites"/>
             <description value="Admin should be able to associate bundle product to websites"/>
             <testCaseId value="MC-3344"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="bundle"/>
             <group value="catalog"/>
         </annotations>

@@ -13,7 +13,7 @@
             <stories value="Products list widget"/>
             <title value="Admin should be able to set Products List Widget"/>
             <description value="Admin should be able to set Products List Widget"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97041"/>
             <group value="Widget"/>
             <group value="WYSIWYGDisabled"/>

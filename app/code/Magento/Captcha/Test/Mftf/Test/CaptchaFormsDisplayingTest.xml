@@ -65,7 +65,7 @@
         <scrollToTopOfPage stepKey="ScrollToTop"/>
         <click selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="ClickToCloseCaptcha"/>
     </test>
-    <test name="CaptchaWithDisabledGuestCheckout">
+    <test name="CaptchaWithDisabledGuestCheckoutTest">
         <annotations>
             <features value="Captcha"/>
             <stories value="MC-5602 - CAPTCHA doesn't appear in login popup after refreshing page."/>

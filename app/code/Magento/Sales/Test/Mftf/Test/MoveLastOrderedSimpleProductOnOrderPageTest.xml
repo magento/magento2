@@ -14,7 +14,7 @@
             <stories value="Add Products to Order from Last Ordered Products Section"/>
             <title value="Move last ordered simple product on order page test"/>
             <description value="Move last ordered simple product on order page"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16154"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>

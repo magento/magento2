@@ -14,7 +14,7 @@
             <title value="Update Simple Product with Regular Price (In Stock) with Custom Options"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) with Custom Options"/>
             <testCaseId value="MC-10819"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>

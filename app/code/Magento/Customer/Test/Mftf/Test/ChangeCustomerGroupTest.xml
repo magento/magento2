@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ChangingSingleCustomerGroupViaGrid">
+    <test name="ChangingSingleCustomerGroupViaGridTest">
         <annotations>
             <title value="DEPRECATED Change a single customer group via grid"/>
             <description value="From the selection of All Customers select a single customer to change their group"/>
@@ -61,7 +61,7 @@
         </actionGroup>
     </test>
 
-    <test name="ChangingAllCustomerGroupViaGrid" extends="ChangingSingleCustomerGroupViaGrid">
+    <test name="ChangingAllCustomerGroupViaGridTest" extends="ChangingSingleCustomerGroupViaGridTest">
         <annotations>
             <title value="DEPRECATED Change all customers' group via grid"/>
             <description value="Select All customers to change their group"/>

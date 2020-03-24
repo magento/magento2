@@ -14,7 +14,7 @@
             <title value="Delete System Product Attribute"/>
             <description value="Admin should not be able to see Delete Attribute button"/>
             <testCaseId value="MC-10893"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
