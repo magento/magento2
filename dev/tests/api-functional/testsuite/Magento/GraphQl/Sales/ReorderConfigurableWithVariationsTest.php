@@ -75,7 +75,6 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
 
         $this->assertValidVariations();
         $this->assertWithOutOfStockVariation($productRepository, $product);
-        $this->assertWithDeletedVariation($productRepository, $product);
     }
 
     /**
@@ -158,16 +157,18 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
     /**
      * Assert reorder with "out of stock" variation.
      *
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_two_configurable_variations.php
      * @return void
      * @throws \Magento\Framework\Exception\StateException
      * @throws NoSuchEntityException
      */
-    private function assertWithDeletedVariation(
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductInterface $product
-    ): void {
+    public function testWithDeletedVariation(): void {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $repository */
+        $productRepository = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productSku = 'simple_20';
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get($productSku);
         // delete a product and make reorder
         /** @var \Magento\Framework\Registry $registry */
         $registry = Bootstrap::getObjectManager()
