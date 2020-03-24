@@ -48,7 +48,7 @@ class Button extends AbstractRenderer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render(DataObject $row)
     {
@@ -113,6 +113,8 @@ class Button extends AbstractRenderer
     }
 
     /**
+     * Retrieve "disabled" attribute value for the row.
+     *
      * @param DataObject $row
      * @return string
      */
@@ -218,7 +220,7 @@ class Button extends AbstractRenderer
     /**
      * Render special attributes as separate tags.
      *
-     * @param string[]
+     * @param string[] $attributes
      * @return string
      */
     private function renderSpecialAttributes(array $attributes): string

@@ -28,6 +28,9 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
+            if (is_iterable($header)) {
+                $header = $header[0];
+            }
         }
         return $header;
     }

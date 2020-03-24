@@ -6,14 +6,16 @@
 
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class LinkTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     private $objectManager;
-
-    protected function setUp()
-    {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-    }
 
     /**
      * @var array
@@ -32,18 +34,18 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $link;
 
-    public function testGetLinkAttributes()
+    protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->setMethods(['escapeHtml'])->disableOriginalConstructor()->getMock();
-
         $escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->will($this->returnArgument(0));
 
         $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->setMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();
-
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturn('http://site.com/link.html');
@@ -55,7 +57,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
-            ->setMethods(['isSetFlag'])->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->willReturn(true);
@@ -64,54 +67,82 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])->disableOriginalConstructor()->getMock();
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
-            ->setMethods(['getEscaper', 'getUrlBuilder', 'getValidator', 'getResolver', 'getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $contextMock->expects($this->any())
             ->method('getValidator')
             ->willReturn($validtorMock);
-
         $contextMock->expects($this->any())
             ->method('getResolver')
             ->willReturn($resolverMock);
-
         $contextMock->expects($this->any())
             ->method('getEscaper')
             ->willReturn($escaperMock);
-
         $contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($urlBuilderMock);
-
         $contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($scopeConfigMock);
+        $contextMock->method('getEventManager')
+            ->willReturn($this->createMock(\Magento\Framework\Event\ManagerInterface::class));
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('random');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attributes, string $content): string {
+                    $attributes = new DataObject($attributes);
+
+                    return "<$tag {$attributes->serialize()}>$content</$tag>";
+                }
+            );
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
 
         /** @var \Magento\Framework\View\Element\Html\Link $linkWithAttributes */
-        $linkWithAttributes = $this->objectManager->getObject(
+        $this->link = $this->objectManager->getObject(
             \Magento\Framework\View\Element\Html\Link::class,
-            ['context' => $contextMock]
+            ['context' => $contextMock, 'random' => $randomMock, 'secureRenderer' => $secureRendererMock]
         );
+    }
 
+    public function testGetLinkAttributes()
+    {
+        $linkWithAttributes = clone $this->link;
         $this->assertEquals(
             'href="http://site.com/link.html"',
             $linkWithAttributes->getLinkAttributes()
         );
 
         /** @var \Magento\Framework\View\Element\Html\Link $linkWithoutAttributes */
-        $linkWithoutAttributes = $this->objectManager->getObject(
-            \Magento\Framework\View\Element\Html\Link::class,
-            ['context' => $contextMock]
-        );
+        $linkWithoutAttributes = clone $this->link;
         foreach ($this->allowedAttributes as $attribute) {
             $linkWithoutAttributes->setDataUsingMethod($attribute, $attribute);
         }
 
         $this->assertEquals(
             'href="http://site.com/link.html" shape="shape" tabindex="tabindex"'
-            . ' onfocus="onfocus" onblur="onblur" id="id"',
+            . ' id="id"',
             $linkWithoutAttributes->getLinkAttributes()
+        );
+    }
+
+    public function testLinkHtml(): void
+    {
+        $this->link->setDataUsingMethod('style', 'display: block;');
+        $this->link->setDataUsingMethod('onclick', 'alert("clicked");');
+
+        $html = $this->link->toHtml();
+        $this->assertEquals(
+            '<li><a href="http://site.com/link.html" id="idrandom" ></a></li>'
+            .'<style >#idrandom { display: block; }</style>'
+            .'<script>document.querySelector(\'#idrandom\').onclick = function () { alert("clicked"); };</script>',
+            $html
         );
     }
 }

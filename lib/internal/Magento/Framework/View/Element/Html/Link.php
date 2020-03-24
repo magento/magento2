@@ -174,7 +174,7 @@ class Link extends \Magento\Framework\View\Element\Template
         if ($style) {
             $html .= $this->secureRenderer->renderTag('style', [], "#$id { $style }", false);
         }
-        foreach ($this->allowedAttributes as  $attribute) {
+        foreach ($this->allowedAttributes as $attribute) {
             if (mb_strpos($attribute, 'on') === 0 && $value = $this->getDataUsingMethod($attribute)) {
                 $html .= $this->secureRenderer->renderEventListenerAsTag(
                     $attribute,

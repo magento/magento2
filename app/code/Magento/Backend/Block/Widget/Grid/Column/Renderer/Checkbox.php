@@ -132,6 +132,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     }
 
     /**
+     * Render checkbox HTML.
+     *
      * @param string $value   Value of the element
      * @param bool   $checked Whether it is checked
      * @return string
