@@ -25,6 +25,7 @@ use Magento\Backend\Model\Auth\Session;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 101.0.0
  */
 class Categories extends AbstractModifier
