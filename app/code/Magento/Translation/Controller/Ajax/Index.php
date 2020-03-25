@@ -14,6 +14,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Translate\Inline\ParserInterface;
 
+/**
+ * Ajax action for inline translation
+ */
 class Index implements HttpPostActionInterface
 {
     /**
@@ -55,7 +58,6 @@ class Index implements HttpPostActionInterface
     }
 
     /**
-     * Ajax action for inline translation
      * @inheritDoc
      */
     public function execute()
