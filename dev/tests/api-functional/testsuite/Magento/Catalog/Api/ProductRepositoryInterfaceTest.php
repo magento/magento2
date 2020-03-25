@@ -389,62 +389,62 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function externalVideoDataProvider(): array
     {
         return [
-            [
+            'youtube-external-video' => [
                 [
-                    [
-                        'media_type' => 'external-video',
-                        'disabled' => false,
-                        'label' => 'Test Video Created',
-                        'types' => [],
-                        'position' => 1,
-                        'content' => [
-                            'type' => 'image/png',
-                            'name' => 'thumbnail.png',
-                            'base64_encoded_data' => 'iVBORw0KGgoAAAANSUhEUgAAAP8AAADGCAMAAAAqo6adAAAAA1BMVEUAAP79f'
-                                . '+LBAAAASElEQVR4nO3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-                                . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA+BsYAAAF7hZJ0AAAAAElFTkSuQmCC',
+                    'media_type' => 'external-video',
+                    'disabled' => false,
+                    'label' => 'Test Video Created',
+                    'types' => [],
+                    'position' => 1,
+                    'content' => $this->getVideoThumbnailStub(),
+                    'extension_attributes' => [
+                        'video_content' => [
+                            'media_type' => 'external-video',
+                            'video_provider' => 'youtube',
+                            'video_url' => 'https://www.youtube.com/',
+                            'video_title' => 'Video title',
+                            'video_description' => 'Video description',
+                            'video_metadata' => 'Video meta',
                         ],
-                        'extension_attributes' => [
-                            'video_content' => [
-                                'media_type' => 'external-video',
-                                'video_provider' => 'youtube',
-                                'video_url' => 'https://www.youtube.com/',
-                                'video_title' => 'Video title',
-                                'video_description' => 'Video description',
-                                'video_metadata' => 'Video meta',
-                            ],
-                        ],
-                    ]
+                    ],
                 ]
             ],
-            [
+            'vimeo-external-video' => [
                 [
-                    [
-                        'media_type' => 'external-video',
-                        'disabled' => false,
-                        'label' => 'Test Video Updated',
-                        'types' => [],
-                        'position' => 1,
-                        'content' => [
-                            'type' => 'image/png',
-                            'name' => 'thumbnail.png',
-                            'base64_encoded_data' => 'iVBORw0KGgoAAAANSUhEUgAAAP8AAADGCAMAAAAqo6adAAAAA1BMVEUAAP79f'
-                                . '+LBAAAASElEQVR4nO3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-                                . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA+BsYAAAF7hZJ0AAAAAElFTkSuQmCC',
+                    'media_type' => 'external-video',
+                    'disabled' => false,
+                    'label' => 'Test Video Updated',
+                    'types' => [],
+                    'position' => 1,
+                    'content' => $this->getVideoThumbnailStub(),
+                    'extension_attributes' => [
+                        'video_content' => [
+                            'media_type' => 'external-video',
+                            'video_provider' => 'vimeo',
+                            'video_url' => 'https://www.vimeo.com/',
+                            'video_title' => 'Video title',
+                            'video_description' => 'Video description',
+                            'video_metadata' => 'Video meta',
                         ],
-                        'extension_attributes' => [
-                            'video_content' => [
-                                'media_type' => 'external-video',
-                                'video_provider' => 'vimeo',
-                                'video_url' => 'https://www.vimeo.com/',
-                                'video_title' => 'Video title',
-                                'video_description' => 'Video description',
-                                'video_metadata' => 'Video meta',
-                            ],
-                        ],
-                    ]
+                    ],
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Returns the array of data for Video thumbnail
+     *
+     * @return array|string[]
+     */
+    private function getVideoThumbnailStub(): array
+    {
+        return [
+            'type' => 'image/png',
+            'name' => 'thumbnail.png',
+            'base64_encoded_data' => 'iVBORw0KGgoAAAANSUhEUgAAAP8AAADGCAMAAAAqo6adAAAAA1BMVEUAAP79f'
+                . '+LBAAAASElEQVR4nO3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+                . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA+BsYAAAF7hZJ0AAAAAElFTkSuQmCC',
         ];
     }
 
@@ -463,7 +463,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ]
         );
 
-        $simpleProductBaseData['media_gallery_entries'] = $mediaGalleryData;
+        $simpleProductBaseData['media_gallery_entries'] = [$mediaGalleryData];
 
         $response = $this->saveProduct($simpleProductBaseData);
         $this->assertEquals(
