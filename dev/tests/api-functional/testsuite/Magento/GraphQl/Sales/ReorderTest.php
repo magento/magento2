@@ -254,10 +254,7 @@ class ReorderTest extends GraphQlAbstract
             ->get(\Magento\Framework\Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
-
-        $productId = $product->getId();
         $productRepository->delete($product);
-
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
 

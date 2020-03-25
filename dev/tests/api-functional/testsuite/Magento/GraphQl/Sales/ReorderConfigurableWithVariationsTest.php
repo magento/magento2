@@ -164,7 +164,8 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
      * @throws \Magento\Framework\Exception\StateException
      * @throws NoSuchEntityException
      */
-    public function testWithDeletedVariation(): void {
+    public function testWithDeletedVariation(): void
+    {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $repository */
         $productRepository = Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
