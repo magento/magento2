@@ -23,7 +23,6 @@ define([
 
         afterEach(function () {
             $('element').remove();
-
         });
 
         it('Check for modal definition', function () {
