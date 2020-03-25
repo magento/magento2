@@ -9,17 +9,13 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\Reflection\ExtensionAttributesProcessor;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\AddressExtensionInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
@@ -88,16 +84,6 @@ class ShippingMethodManagement implements
     private $customerSession;
 
     /**
-     * @var ExtensionAttributesProcessor
-     */
-    private $extensionAttributesProcessor;
-
-    /**
-     * @var ExtensionAttributesFactory
-     */
-    private $extensionAttributesFactory;
-
-    /**
      * Constructor
      *
      * @param CartRepositoryInterface $quoteRepository
@@ -107,8 +93,6 @@ class ShippingMethodManagement implements
      * @param AddressInterfaceFactory|null $addressFactory
      * @param QuoteAddressResource|null $quoteAddressResource
      * @param CustomerSession|null $customerSession
-     * @param ExtensionAttributesProcessor|null $extensionAttributesProcessor
-     * @param ExtensionAttributesFactory|null $extensionAttributesFactory
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
@@ -117,9 +101,7 @@ class ShippingMethodManagement implements
         TotalsCollector $totalsCollector,
         AddressInterfaceFactory $addressFactory = null,
         QuoteAddressResource $quoteAddressResource = null,
-        CustomerSession $customerSession = null,
-        ExtensionAttributesProcessor $extensionAttributesProcessor = null,
-        ExtensionAttributesFactory $extensionAttributesFactory = null
+        CustomerSession $customerSession = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
@@ -130,10 +112,6 @@ class ShippingMethodManagement implements
         $this->quoteAddressResource = $quoteAddressResource ?: ObjectManager::getInstance()
             ->get(QuoteAddressResource::class);
         $this->customerSession = $customerSession ?? ObjectManager::getInstance()->get(CustomerSession::class);
-        $this->extensionAttributesProcessor = $extensionAttributesProcessor ??
-            ObjectManager::getInstance()->get(ExtensionAttributesProcessor::class);
-        $this->extensionAttributesFactory = $extensionAttributesFactory ??
-            ObjectManager::getInstance()->get(ExtensionAttributesFactory::class);
     }
 
     /**
@@ -338,7 +316,7 @@ class ShippingMethodManagement implements
     {
         $output = [];
         $shippingAddress = $quote->getShippingAddress();
-        $this->copyAddressData($address, $shippingAddress);
+        $shippingAddress->addData($this->extractAddressData($address));
         $shippingAddress->setCollectShippingRates(true);
 
         $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
@@ -361,23 +339,6 @@ class ShippingMethodManagement implements
     }
 
     /**
-     * @param ExtensibleDataInterface $address
-     * @param Address $quoteAddress
-     */
-    private function copyAddressData($address, $quoteAddress)
-    {
-        $addressData = $this->extractAddressData($address);
-        $addressExtAttr = $addressData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? [];
-        unset($addressData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
-        $quoteAddress->addData($addressData);
-        $extensionAttributes = $this->extractExtensionAttributesForQuoteAddress(
-            $quoteAddress->getExtensionAttributes(),
-            $addressExtAttr
-        );
-        $quoteAddress->setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
      * Get transform address interface into Array
      *
      * @param ExtensibleDataInterface  $address
@@ -391,30 +352,13 @@ class ShippingMethodManagement implements
         } elseif ($address instanceof EstimateAddressInterface) {
             $className = EstimateAddressInterface::class;
         }
-        return $this->getDataObjectProcessor()->buildOutputDataArray(
+        $addressData = $this->getDataObjectProcessor()->buildOutputDataArray(
             $address,
             $className
         );
-    }
+        unset($addressData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
 
-    /**
-     * Extract extension attributes for quote address
-     *
-     * @param ExtensionAttributesInterface $origExtAttr
-     * @param array $addrExtAttr
-     * @return AddressExtensionInterface
-     */
-    private function extractExtensionAttributesForQuoteAddress(
-        ExtensionAttributesInterface $origExtAttr,
-        array $extAttrData
-    ) {
-        $origExtensionAttr = $this->extensionAttributesProcessor->buildOutputDataArray(
-            $origExtAttr,
-            get_class($origExtAttr)
-        );
-        $params = ['data' => $origExtensionAttr + $extAttrData];
-
-        return $this->extensionAttributesFactory->create(Address::class, $params);
+        return $addressData;
     }
 
     /**
