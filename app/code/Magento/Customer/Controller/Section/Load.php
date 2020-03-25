@@ -13,8 +13,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use Zend\Http\AbstractMessage;
-use Zend\Http\Response;
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 
 /**
  * Endpoint `customer/section/load` responsible for reloading sections of Customer's Local Storage

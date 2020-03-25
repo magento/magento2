@@ -15,8 +15,8 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend\Http\AbstractMessage;
-use Zend\Http\Response;
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 
 class LoadTest extends TestCase
 {
