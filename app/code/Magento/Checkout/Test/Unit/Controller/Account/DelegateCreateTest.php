@@ -9,7 +9,7 @@ namespace Magento\Checkout\Test\Unit\Controller\Account;
 
 use Magento\Checkout\Controller\Account\DelegateCreate;
 use Magento\Checkout\Model\Session;
-use Magento\Framework\App\Action\Redirect;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Sales\Api\OrderCustomerDelegateInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -39,10 +39,12 @@ class DelegateCreateTest extends TestCase
         $this->sessionMock = $this->createPartialMock(Session::class, ['getLastOrderId']);
         $this->redirectFactoryMock = $this->createPartialMock(RedirectFactory::class, ['create']);
         $this->redirectMock = $this->createPartialMock(Redirect::class, ['setPath']);
+        $this->redirectMock->method('setPath')->willReturnSelf();
         $this->redirectFactoryMock->method('create')->willReturn($this->redirectMock);
         $this->delegateServiceMock = $this->getMockBuilder(OrderCustomerDelegateInterface::class)
             ->setMethods(['delegateNew'])
             ->getMockForAbstractClass();
+        $this->delegateServiceMock->method('delegateNew')->willReturn($this->redirectMock);
 
         $this->delegateCreate = new DelegateCreate(
             $this->delegateServiceMock,
@@ -63,7 +65,16 @@ class DelegateCreateTest extends TestCase
             ->with(self::STUB_ORDER_ID);
 
         // When
-        $this->delegateCreate->execute();
+        return $this->delegateCreate->execute();
+    }
+
+    /**
+     * @param $actualResponse
+     * @depends testWhenOrderPlacedDelegateRequest
+     */
+    public function testOrderPlacedDelegateRequestReturnTypeIsRedirect($actualResponse)
+    {
+        $this->assertInstanceOf(Redirect::class, $actualResponse);
     }
 
     public function testWhenOrderMissingRedirectHome()
@@ -80,6 +91,15 @@ class DelegateCreateTest extends TestCase
             ->with('/');
 
         // When
-        $this->delegateCreate->execute();
+        return $this->delegateCreate->execute();
+    }
+
+    /**
+     * @param $actualResponse
+     * @depends testWhenOrderMissingRedirectHome
+     */
+    public function testOrderMissingRedirectReturnTypeIsRedirect($actualResponse)
+    {
+        $this->assertInstanceOf(Redirect::class, $actualResponse);
     }
 }
