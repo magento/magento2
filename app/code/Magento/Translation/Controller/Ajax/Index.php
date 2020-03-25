@@ -17,7 +17,7 @@ use Magento\Framework\Translate\Inline\ParserInterface;
 /**
  * Ajax action for inline translation
  */
-class Index implements HttpPostActionInterface
+class Index implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var ParserInterface
