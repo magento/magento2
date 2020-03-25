@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Controller\Hostedpro;
 
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -16,7 +17,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * PayPal Hostedpro return controller.
  */
-class ReturnAction extends Action implements CsrfAwareActionInterface, HttpPostActionInterface
+class ReturnAction extends Action implements CsrfAwareActionInterface, HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * When a customer return to website from gateway.
