@@ -134,7 +134,8 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\StateException *@throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws NoSuchEntityException
      */
     private function assertWithOutOfStockVariation(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -200,8 +201,6 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
                         'orderNumber',
                     ],
                     'code' => 'NOT_SALABLE',
-                    'message' => 'Could not add the product with SKU "configurable" to the shopping cart:' .
-                        ' This product is out of stock.',
                 ],
             ],
             'cart' => [
@@ -241,8 +240,6 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
                         'orderNumber',
                     ],
                     'code' => 'UNDEFINED',
-                    'message' => 'Could not add the product with SKU "configurable" to the shopping cart: ' .
-                        'You need to choose options for your item.',
                 ],
             ],
             'cart' => [
@@ -311,7 +308,6 @@ mutation {
     userInputErrors {
       path
       code
-      message
     }
     cart {
       email

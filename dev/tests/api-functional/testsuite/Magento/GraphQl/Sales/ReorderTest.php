@@ -163,8 +163,6 @@ class ReorderTest extends GraphQlAbstract
                 [
                     'path' => ['orderNumber'],
                     'code' => 'INSUFFICIENT_STOCK',
-                    'message' => 'Could not add the product with SKU "simple" to the shopping cart: '
-                        . 'The requested qty is not available',
                 ],
             ],
             'cart' => [
@@ -199,8 +197,6 @@ class ReorderTest extends GraphQlAbstract
                 [
                     'path' => ['orderNumber'],
                     'code' => 'NOT_SALABLE',
-                    'message' => 'Could not add the product with SKU "simple" to the shopping cart: '
-                        . 'Product that you are trying to add is not available.',
                 ],
             ],
             'cart' => [
@@ -270,7 +266,6 @@ class ReorderTest extends GraphQlAbstract
                 [
                     'path' => ['orderNumber'],
                     'code' => 'PRODUCT_NOT_FOUND',
-                    'message' => 'Could not find a product with ID "' . $productId . '"',
                 ],
             ],
             'cart' => [
@@ -327,7 +322,6 @@ mutation {
     userInputErrors {
       path
       code
-      message
     }
     cart {
         email

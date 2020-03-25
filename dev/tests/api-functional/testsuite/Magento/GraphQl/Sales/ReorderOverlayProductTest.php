@@ -190,7 +190,6 @@ mutation {
     userInputErrors {
       path
       code
-      message
     }
     cart {
         email
