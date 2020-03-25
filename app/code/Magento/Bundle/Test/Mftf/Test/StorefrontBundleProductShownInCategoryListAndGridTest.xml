@@ -14,7 +14,7 @@
             <stories value="Bundle products list on Storefront"/>
             <title value="Customer should be able to see bundle products in the category products list and grid views"/>
             <description value="Customer should be able to see bundle products in the category products list and grid views"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-226"/>
             <group value="Bundle"/>
         </annotations>

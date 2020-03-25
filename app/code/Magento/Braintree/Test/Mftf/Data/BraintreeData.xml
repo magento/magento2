@@ -53,13 +53,13 @@
         <data key="value">sandbox</data>
     </entity>
     <entity name="MerchantId" type="merchant_id">
-        <data key="value">MERCH_ID</data>
+        <data key="value">{{_CREDS.magento/braintree_enabled_fraud_merchant_id}}</data>
     </entity>
     <entity name="PublicKey" type="public_key">
-        <data key="value">PUBLIC_KEY</data>
+        <data key="value">{{_CREDS.magento/braintree_enabled_fraud_public_key}}</data>
     </entity>
     <entity name="PrivateKey" type="private_key">
-        <data key="value">PRIVATE_KEY</data>
+        <data key="value">{{_CREDS.magento/braintree_enabled_fraud_private_key}}</data>
     </entity>
 
     <!-- default configuration used to restore Magento config -->
@@ -140,6 +140,16 @@
     <entity name="StoredPaymentMethods">
         <data key="cardNumberEnding">5100</data>
         <data key="cardExpire">12/2020</data>
+    </entity>
+    <entity name="VisaDefaultCard" type="data">
+        <data key="cardNumber">4111111111111111</data>
+        <data key="month">01</data>
+        <data key="year">30</data>
+        <data key="cvv">123</data>
+    </entity>
+    <entity name="VisaDefaultCardInfo">
+        <data key="cardNumberEnding">1111</data>
+        <data key="cardExpire">01/2030</data>
     </entity>
 
     <entity name="BraintreeConfigurationData" type="data">
