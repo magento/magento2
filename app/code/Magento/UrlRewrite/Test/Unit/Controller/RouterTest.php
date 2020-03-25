@@ -17,9 +17,9 @@ use Magento\UrlRewrite\Controller\Router;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Store\Model\Store;
+use Laminas\Stdlib\ParametersInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend\Stdlib\ParametersInterface;
 
 /**
  * Test class for UrlRewrite Controller Router
