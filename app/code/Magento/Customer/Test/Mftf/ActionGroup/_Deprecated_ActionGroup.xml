@@ -12,6 +12,7 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToCustomerGroupPage" extends="AdminNavigateToCustomerGroupPageActionGroup" deprecated="Use AdminNavigateToCustomerGroupPageActionGroup"/>
     <actionGroup name="AdminCreateCustomerWithWebSiteAndGroup" deprecated="Use `AdminCreateCustomerWithWebSiteAndGroupActionGroup` instead">
         <annotations>
             <description>Goes to the Customer grid page. Click on 'Add New Customer'. Fills provided Customer Data. Fill provided Customer Address data. Assigns Product to Website and Store View. Clicks on Save.</description>
