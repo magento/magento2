@@ -66,7 +66,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $storeMock;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $clientMock;
 
@@ -145,8 +145,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
-        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
-            ->setMethods(['query'])
+        $this->clientMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
+            ->setMethods(['query', 'testConnection', ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionManager->expects($this->any())
