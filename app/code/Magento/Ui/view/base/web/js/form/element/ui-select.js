@@ -292,13 +292,13 @@ define([
         },
 
         /**
-         * Check options length and set to cache
-         * if some options is added
+         * Compare options and set to cache
+         * if something changed
          *
          * @param {Array} options - ui select options
          */
         checkOptionsList: function (options) {
-            if (options.length > this.cacheOptions.plain.length) {
+            if (!_.isEqual(_.keys(options), _.keys(this.cacheOptions.plain))) {
                 this.cacheOptions.plain = options;
                 this.setCaption();
             }
