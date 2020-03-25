@@ -7,7 +7,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Setup\Validator\DbValidator;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
 {
