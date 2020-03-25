@@ -41,7 +41,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $deleteLink = 'a[text()="Delete"]';
+    protected $deleteLink = 'a.wishlist-remove-button';
 
     /**
      * Configure link selector
