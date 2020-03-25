@@ -358,6 +358,8 @@
 
     .cart-products-toolbar-top {
         border-bottom: @border-width__base solid @border-color__base;
+        margin: 0 0 @indent__m 0;
+        padding: 0 0 @indent__m 0;
     }
 
     //  Discount
@@ -674,6 +676,7 @@
 
         .pages {
             float: right;
+            margin-bottom: 0;
 
             .item {
                 &:last-child {
@@ -681,6 +684,10 @@
                 }
             }
         }
+    }
+
+    .cart-products-toolbar-top {
+        margin: 0 0 @indent__m 0;
     }
 
     .cart.table-wrapper {
