@@ -255,4 +255,7 @@
     <type name="Magento\Framework\Session\SessionStartChecker">
         <plugin name="transparent_session_checker" type="Magento\Paypal\Plugin\TransparentSessionChecker"/>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="paypal_transparent" type="Magento\Paypal\Plugin\TransparentOrderPayment"/>
+    </type>
 </config>

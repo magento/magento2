@@ -6,17 +6,16 @@
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Websites;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\Store as StoreView;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\Store as StoreView;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 
 /**
- * Class WebsitesTest
+ * Class WebsitesTest test the meta data and website data for different websites
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -111,7 +110,7 @@ class WebsitesTest extends AbstractModifierTest
             ->method('getWebsiteIds')
             ->willReturn($this->assignedWebsites);
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->setMethods(['isSingleStoreMode', 'getWesites'])
+            ->setMethods(['isSingleStoreMode', 'getWebsites'])
             ->getMockForAbstractClass();
         $this->storeManagerMock->method('getWebsites')
             ->willReturn([$this->websiteMock, $this->secondWebsiteMock]);
@@ -182,6 +181,14 @@ class WebsitesTest extends AbstractModifierTest
         $this->assertTrue(isset($meta['websites']['children'][self::SECOND_WEBSITE_ID]));
         $this->assertTrue(isset($meta['websites']['children'][self::WEBSITE_ID]));
         $this->assertTrue(isset($meta['websites']['children']['copy_to_stores.' . self::WEBSITE_ID]));
+        $this->assertEquals(
+            $meta['websites']['children'][self::SECOND_WEBSITE_ID]['arguments']['data']['config']['value'],
+            (string) self::SECOND_WEBSITE_ID
+        );
+        $this->assertEquals(
+            $meta['websites']['children'][self::WEBSITE_ID]['arguments']['data']['config']['value'],
+            "0"
+        );
     }
 
     /**
