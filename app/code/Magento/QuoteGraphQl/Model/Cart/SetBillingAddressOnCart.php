@@ -56,6 +56,12 @@ class SetBillingAddressOnCart
     {
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
+
+        if ($addressInput) {
+            $addressInput['save_in_address_book'] = isset($billingAddressInput['address']['save_in_address_book'])
+                ? (bool) $billingAddressInput['address']['save_in_address_book'] : true;
+        }
+
         // Need to keep this for BC of `use_for_shipping` field
         $sameAsShipping = isset($billingAddressInput['use_for_shipping'])
             ? (bool)$billingAddressInput['use_for_shipping'] : false;

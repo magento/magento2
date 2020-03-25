@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Model\Quote\Address;
 
 /**
@@ -49,6 +49,8 @@ class GetShippingAddress
 
         if ($addressInput) {
             $addressInput['customer_notes'] = $shippingAddressInput['customer_notes'] ?? '';
+            $addressInput['save_in_address_book'] = isset($shippingAddressInput['address']['save_in_address_book'])
+                ? (bool) $shippingAddressInput['address']['save_in_address_book'] : true;
         }
 
         if (null === $customerAddressId && null === $addressInput) {
@@ -62,6 +64,7 @@ class GetShippingAddress
                 __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
             );
         }
+
 
         $shippingAddress = $this->createShippingAddress($context, $customerAddressId, $addressInput);
 
