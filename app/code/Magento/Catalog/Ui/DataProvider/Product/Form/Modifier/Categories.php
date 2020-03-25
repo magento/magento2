@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Backend\Model\Auth\Session;
 
 /**
  * Data provider for categories field of product page
@@ -87,11 +88,17 @@ class Categories extends AbstractModifier
     private $authorization;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param Session $session
      * @param SerializerInterface $serializer
      * @param AuthorizationInterface $authorization
      */
@@ -101,6 +108,7 @@ class Categories extends AbstractModifier
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
         ArrayManager $arrayManager,
+        Session $session,
         SerializerInterface $serializer = null,
         AuthorizationInterface $authorization = null
     ) {
@@ -111,6 +119,7 @@ class Categories extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->session = $session;
     }
 
     /**
@@ -373,6 +382,7 @@ class Categories extends AbstractModifier
     {
         return self::CATEGORY_TREE_ID
             . '_' . (string) $storeId
+            . '_' . $this->session->getUser()->getAclRole()
             . '_' . $filter;
     }
 
