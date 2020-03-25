@@ -6,9 +6,12 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\DeploymentConfig;
 
+/**
+ * Navigation model
+ */
 class Navigation
 {
     /**#@+
@@ -34,6 +37,8 @@ class Navigation
     /**
      * @param ServiceLocatorInterface $serviceLocator
      * @param DeploymentConfig $deploymentConfig
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(ServiceLocatorInterface $serviceLocator, DeploymentConfig $deploymentConfig)
     {
@@ -49,6 +54,8 @@ class Navigation
     }
 
     /**
+     * Get type
+     *
      * @return string
      */
     public function getType()
@@ -57,6 +64,8 @@ class Navigation
     }
 
     /**
+     * Get data
+     *
      * @return array
      */
     public function getData()
