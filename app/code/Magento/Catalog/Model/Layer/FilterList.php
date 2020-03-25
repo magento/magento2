@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Layer;
 
+use Magento\Catalog\Model\Config\LayerCategoryConfig;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Layer navigation filters
  */
@@ -45,17 +48,25 @@ class FilterList
     protected $filters = [];
 
     /**
+     * @var LayerCategoryConfig
+     */
+    private $layerCategoryConfig;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param FilterableAttributeListInterface $filterableAttributes
+     * @param LayerCategoryConfig $layerCategoryConfig
      * @param array $filters
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         FilterableAttributeListInterface $filterableAttributes,
+        LayerCategoryConfig $layerCategoryConfig,
         array $filters = []
     ) {
         $this->objectManager = $objectManager;
         $this->filterableAttributes = $filterableAttributes;
+        $this->layerCategoryConfig = $layerCategoryConfig;
 
         /** Override default filter type models */
         $this->filterTypes = array_merge($this->filterTypes, $filters);
@@ -70,9 +81,11 @@ class FilterList
     public function getFilters(\Magento\Catalog\Model\Layer $layer)
     {
         if (!count($this->filters)) {
-            $this->filters = [
-                $this->objectManager->create($this->filterTypes[self::CATEGORY_FILTER], ['layer' => $layer]),
-            ];
+            if ($this->layerCategoryConfig->isCategoryFilterVisibleInLayerNavigation()) {
+                $this->filters = [
+                    $this->objectManager->create($this->filterTypes[self::CATEGORY_FILTER], ['layer' => $layer]),
+                ];
+            }
             foreach ($this->filterableAttributes->getList() as $attribute) {
                 $this->filters[] = $this->createAttributeFilter($attribute, $layer);
             }
