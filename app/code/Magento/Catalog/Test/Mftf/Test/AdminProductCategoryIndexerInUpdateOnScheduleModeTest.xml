@@ -14,7 +14,7 @@
             <title value="Product Categories Indexer in Update on Schedule mode"/>
             <description value="The test verifies that in Update on Schedule mode if displaying of category products on Storefront changes due to product properties change,
             the changes are NOT applied immediately, but applied only after cron runs (twice)."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-11146"/>
             <group value="catalog"/>
             <group value="indexer"/>
@@ -69,7 +69,7 @@
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
             <deleteData createDataKey="createCategoryC" stepKey="deleteCategoryC"/>
             <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Case: change product category from product page -->

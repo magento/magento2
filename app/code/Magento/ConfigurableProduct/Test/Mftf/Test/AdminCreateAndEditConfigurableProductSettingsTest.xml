@@ -24,7 +24,7 @@
         </before>
         <after>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product -->
@@ -91,7 +91,7 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiConfigurableProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiConfigurableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->

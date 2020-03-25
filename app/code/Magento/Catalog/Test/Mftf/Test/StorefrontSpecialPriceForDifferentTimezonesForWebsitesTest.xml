@@ -14,7 +14,7 @@
             <stories value="Special price"/>
             <title value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
             <description value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97508"/>
             <useCaseId value="MAGETWO-96847"/>
             <group value="Catalog"/>
@@ -33,7 +33,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Set timezone for default config-->

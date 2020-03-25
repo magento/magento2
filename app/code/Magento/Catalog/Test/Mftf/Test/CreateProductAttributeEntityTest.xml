@@ -14,7 +14,7 @@
             <stories value="Create Product Attributes"/>
             <title value="Admin should be able to create a TextField product attribute"/>
             <description value="Admin should be able to create a TextField product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10894"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
@@ -30,7 +30,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -70,7 +70,7 @@
             <stories value="Create Product Attributes"/>
             <title value="Admin should be able to create a Date product attribute"/>
             <description value="Admin should be able to create a Date product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10895"/>
             <group value="Catalog"/>
             <skip>
@@ -89,7 +89,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Generate date for use as default value, needs to be MM/d/YYYY -->
@@ -133,7 +133,7 @@
             <stories value="Create Product Attributes"/>
             <title value="Admin should be able to create a Price product attribute"/>
             <description value="Admin should be able to create a Price product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10897"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
@@ -149,7 +149,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -187,7 +187,7 @@
             <stories value="Create Product Attributes"/>
             <title value="Admin should be able to create a Dropdown product attribute"/>
             <description value="Admin should be able to create a Dropdown product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10896"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
@@ -203,7 +203,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -274,7 +274,7 @@
             <stories value="Create Product Attributes"/>
             <title value="Admin should be able to create a Dropdown product attribute containing a single quote"/>
             <description value="Admin should be able to create a Dropdown product attribute containing a single quote"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10898"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
@@ -290,7 +290,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
@@ -343,7 +343,7 @@
             <stories value="Create Product Attributes"/>
             <title value="Admin should be able to create a MultiSelect product attribute"/>
             <description value="Admin should be able to create a MultiSelect product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10888"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
@@ -358,7 +358,7 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
