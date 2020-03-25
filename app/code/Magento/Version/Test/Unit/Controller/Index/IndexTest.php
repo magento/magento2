@@ -9,25 +9,25 @@ namespace Magento\Version\Test\Unit\Controller\Index;
 
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Version\Controller\Index\Index as VersionIndex;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
-    /**
-     * @var VersionIndex
-     */
+    /** @var VersionIndex */
     private $versionController;
 
-    /**
-     * @var ProductMetadataInterface
-     */
+    /** @var MockObject|ProductMetadataInterface */
     private $productMetadataMock;
 
-    /**
-     * @var ResponseInterface
-     */
-    private $responseMock;
+    /** @var MockObject|RawFactory */
+    private $rawResponseFactoryMock;
+
+    /** @var MockObject|Raw */
+    private $rawResponseMock;
 
     /**
      * Prepare test preconditions
@@ -39,12 +39,11 @@ class IndexTest extends TestCase
             ->setMethods(['getName', 'getEdition', 'getVersion'])
             ->getMock();
 
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setBody', 'sendResponse'])
-            ->getMock();
+        $this->rawResponseFactoryMock = $this->createPartialMock(RawFactory::class, ['create']);
+        $this->rawResponseMock = $this->createPartialMock(Raw::class, ['setContents']);
+        $this->rawResponseFactoryMock->method('create')->willReturn($this->rawResponseMock);
 
-        $this->versionController = new VersionIndex($this->responseMock, $this->productMetadataMock);
+        $this->versionController = new VersionIndex($this->rawResponseFactoryMock, $this->productMetadataMock);
     }
 
     /**
@@ -56,10 +55,10 @@ class IndexTest extends TestCase
             ->method('getVersion')
             ->willReturn('dev-2.3');
 
-        $this->responseMock->expects($this->never())
-            ->method('setBody');
+        $this->rawResponseMock->expects($this->never())
+            ->method('setContents');
 
-        $this->assertNull($this->versionController->execute());
+        $this->versionController->execute();
     }
 
     /**
@@ -71,7 +70,7 @@ class IndexTest extends TestCase
         $this->productMetadataMock->expects($this->any())->method('getEdition')->willReturn('Community');
         $this->productMetadataMock->expects($this->any())->method('getName')->willReturn('Magento');
 
-        $this->responseMock->expects($this->once())->method('setBody')
+        $this->rawResponseMock->expects($this->once())->method('setContents')
             ->with('Magento/2.3 (Community)')
             ->will($this->returnSelf());
 

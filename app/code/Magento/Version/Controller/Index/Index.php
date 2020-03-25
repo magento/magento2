@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Version\Controller\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\RawFactory as RawResponseFactory;
 
 /**
- * Magento Version controller
+ * Magento Version controller: Sets the response body to ProductName/Major.MinorVersion (Edition).
  */
 class Index implements HttpGetActionInterface
 {
@@ -22,40 +21,41 @@ class Index implements HttpGetActionInterface
     /**
      * @var ProductMetadataInterface
      */
-    protected $productMetadata;
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
+    private $productMetadata;
 
     /**
-     * @param ResponseInterface $response
+     * @var RawResponseFactory
+     */
+    private $rawFactory;
+
+    /**
+     * @param RawResponseFactory $rawFactory
      * @param ProductMetadataInterface $productMetadata
      */
-    public function __construct(ResponseInterface $response, ProductMetadataInterface $productMetadata)
+    public function __construct(RawResponseFactory $rawFactory, ProductMetadataInterface $productMetadata)
     {
+        $this->rawFactory = $rawFactory;
         $this->productMetadata = $productMetadata;
-        $this->response = $response;
     }
 
     /**
-     * Sets the response body to ProductName/Major.MinorVersion (Edition).
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function execute(): void
+    public function execute()
     {
+        $rawResponse = $this->rawFactory->create();
+
         $version = $this->productMetadata->getVersion();
         $versionParts = explode('.', $version);
-        if ($this->isGitBasedInstallation($version) || !$this->isCorrectVersion($versionParts)) {
-            return;
+        if (!$this->isGitBasedInstallation($version) && $this->isCorrectVersion($versionParts)) {
+            $rawResponse->setContents(
+                $this->productMetadata->getName() . '/' .
+                $this->getMajorMinorVersion($versionParts) .
+                ' (' . $this->productMetadata->getEdition() . ')'
+            );
         }
 
-        $this->response->setBody(
-            $this->productMetadata->getName() . '/' .
-            $this->getMajorMinorVersion($versionParts) .
-            ' (' . $this->productMetadata->getEdition() . ')'
-        );
+        return $rawResponse;
     }
 
     /**
