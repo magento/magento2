@@ -6,18 +6,18 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Setup\Model\Bootstrap;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Console\CommandListInterface;
-use Symfony\Component\Console\Command\Command;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\Bootstrap;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 
 /**
- * Class ObjectManagerProviderTest
+ * Test for \Magento\Setup\Model\ObjectManagerProvider
  */
 class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
 {
