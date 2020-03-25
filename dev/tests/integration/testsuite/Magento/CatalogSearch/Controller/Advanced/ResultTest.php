@@ -10,7 +10,7 @@ namespace Magento\CatalogSearch\Controller\Advanced;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\TestFramework\TestCase\AbstractController;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Test cases for catalog advanced search using mysql search engine.
