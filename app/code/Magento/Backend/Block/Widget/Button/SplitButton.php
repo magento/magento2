@@ -307,17 +307,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
                 $afterHtml .= $this->secureRenderer->renderEventListenerAsTag('onclick', $option['onclick'], "#$id");
             }
             if (!empty($option['style'])) {
-                $afterHtml .= $this->secureRenderer->renderTag(
-                    'style',
-                    [],
-                    <<<style
-                    #$id {
-                        {$option['style']}
-                    }
-style
-                    ,
-                    false
-                );
+                $afterHtml .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$id");
             }
         }
         $this->setOptions($options);

@@ -88,4 +88,54 @@ class SecureHtmlRendererTest extends TestCase
             $this->helper->renderEventListener('onclick', 'alert(this.parent.getAttribute("data-title"))')
         );
     }
+
+    /**
+     * Test rendering JS listeners as separate tags.
+     *
+     * @return void
+     */
+    public function testRenderEventListenerAsTag(): void
+    {
+        $html = $this->helper->renderEventListenerAsTag('onclick', 'alert(1)', '#id');
+        $this->assertContains('alert(1)', $html);
+        $this->assertContains('#id', $html);
+        $this->assertContains('click', $html);
+    }
+
+    /**
+     * Check handler validation
+     *
+     * @return void
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidEventListener(): void
+    {
+        $this->helper->renderEventListenerAsTag('nonevent', '', '');
+    }
+
+    /**
+     * Test rendering "style" attribute as separate tag.
+     *
+     * @return void
+     */
+    public function testRenderStyleAsTag(): void
+    {
+        $html = $this->helper->renderStyleAsTag('display: none; font-size: 3em;', '#id');
+        $this->assertContains('#id', $html);
+        $this->assertContains('display', $html);
+        $this->assertContains('none', $html);
+        $this->assertContains('fontSize', $html);
+        $this->assertContains('3em', $html);
+    }
+
+    /**
+     * Check style validation
+     *
+     * @return void
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidStyle(): void
+    {
+        $this->helper->renderStyleAsTag('display;', '');
+    }
 }

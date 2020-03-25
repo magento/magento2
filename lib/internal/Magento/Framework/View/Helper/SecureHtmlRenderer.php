@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Helper;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRender\EventHandlerData;
 use Magento\Framework\View\Helper\SecureHtmlRender\HtmlRenderer;
@@ -99,6 +100,9 @@ class SecureHtmlRenderer
         string $attributeJavascript,
         string $elementSelector
     ): string {
+        if (!$eventName || !$attributeJavascript || !$elementSelector || mb_strpos($eventName, 'on') !== 0) {
+            throw new \InvalidArgumentException('Invalid JS event handler data provided');
+        }
         $eventName = mb_strtolower(mb_substr($eventName, 2));
         $listenerFunction = 'eventListener' .$this->random->getRandomString(32);
         $elementName = 'listenedElement' .$this->random->getRandomString(32);
@@ -113,5 +117,46 @@ class SecureHtmlRenderer
 script;
 
         return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
+    }
+
+    /**
+     * Render "style" attribute as a separate tag instead.
+     *
+     * @param string $style
+     * @param string $selector Must resolve to a single node.
+     * @return string
+     */
+    public function renderStyleAsTag(string $style, string $selector): string
+    {
+        $stylePairs = array_filter(explode(';', $style));
+        if (!$stylePairs || !$selector) {
+            throw new \InvalidArgumentException('Invalid style data given');
+        }
+
+        $elementVariable = 'elem' .$this->random->getRandomString(32);
+        /** @var string[] $styles */
+        $stylesAssignments = [];
+        foreach ($stylePairs as $stylePair) {
+            $exploded = explode(':', $stylePair);
+            if (count($exploded) < 2) {
+                throw new \InvalidArgumentException('Invalid CSS given');
+            }
+            $styleAttribute = SimpleDataObjectConverter::snakeCaseToCamelCase(
+                str_replace('-', '_', trim($exploded[0]))
+            );
+            if (count($exploded) > 2) {
+                //For cases when ":" is encountered in the style's value.
+                $exploded[1] = join('', array_slice($exploded, 1));
+            }
+            $styleValue = trim($exploded[1]);
+            $stylesAssignments[] = "$elementVariable.style.$styleAttribute = '$styleValue';";
+        }
+
+        return $this->renderTag(
+            'script',
+            ['type' => 'text/javascript'],
+            "let $elementVariable = document.querySelector('$selector');\n" .join("\n", $stylesAssignments),
+            false
+        );
     }
 }

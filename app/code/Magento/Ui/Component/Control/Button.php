@@ -194,23 +194,10 @@ class Button extends Template implements ControlInterface
         $afterHtml = $this->getData('after_html');
         $buttonId = $this->getData('ui_button_widget_hook_id');
         if ($handler = $this->getOnClick()) {
-            $functionName = 'OnClickHandler' . $this->random->getRandomString(32);
-            $afterHtml .= $this->secureRenderer->renderTag(
-                'script',
-                ['type' => 'text/javascript'],
-                <<<script
-                    function {$functionName} () {
-                            {$handler};
-                    }
-                    let button{$buttonId} = document.querySelector("*[ui-button-widget-hook-id='$buttonId']");
-                    if (button{$buttonId}) {
-                        button{$buttonId}.onclick = function (e) {
-                            {$functionName}.apply(e.target);
-                        };
-                    }
-script
-                ,
-                false
+            $afterHtml .= $this->secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                $handler,
+                "*[ui-button-widget-hook-id='$buttonId']"
             );
         }
         if ($this->getStyle()) {
@@ -218,17 +205,7 @@ script
             if ($this->getId()) {
                 $selector = "#{$this->getId()}";
             }
-            $afterHtml .= $this->secureRenderer->renderTag(
-                'style',
-                [],
-                <<<style
-                     {$selector} {
-                         {$this->getStyle()}
-                     }
-style
-                ,
-                false
-            );
+            $afterHtml .= $this->secureRenderer->renderStyleAsTag($this->getStyle(), $selector);
         }
 
         return $afterHtml;

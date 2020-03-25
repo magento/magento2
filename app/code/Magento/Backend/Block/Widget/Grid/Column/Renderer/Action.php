@@ -143,7 +143,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             $html .= $this->secureHtmlRenderer->renderEventListenerAsTag('onclick', $onclick, "#{$action['id']}");
         }
         if ($style) {
-            $html .= $this->secureHtmlRenderer->renderTag('style', [], "#{$action['id']} { {$style} }", false);
+            $html .= $this->secureHtmlRenderer->renderStyleAsTag($style, "#{$action['id']}");
         }
 
         return $html;

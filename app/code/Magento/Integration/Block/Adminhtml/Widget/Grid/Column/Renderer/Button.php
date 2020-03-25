@@ -231,11 +231,9 @@ class Button extends AbstractRenderer
 
         $html = '';
         if (isset($attributes['style'])) {
-            $html = $this->secureRenderer->renderTag(
-                'style',
-                [],
-                "[button-renderer-hook-id='$hookId'] { {$attributes['style']} }",
-                false
+            $html .= $this->secureRenderer->renderStyleAsTag(
+                $attributes['style'],
+                "[button-renderer-hook-id='$hookId']"
             );
         }
         foreach ($this->_getValidAttributes() as $attr) {

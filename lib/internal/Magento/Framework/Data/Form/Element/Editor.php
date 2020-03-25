@@ -428,17 +428,7 @@ script
             $html .= $this->secureRenderer->renderEventListenerAsTag('onclick', $data['onclick'], "#$id");
         }
         if (isset($data['style'])) {
-            $html .= $this->secureRenderer->renderTag(
-                'style',
-                [],
-                <<<style
-                    #{$id} {
-                        {$data['style']}
-                    }
-style
-                ,
-                false
-            );
+            $html .= $this->secureRenderer->renderStyleAsTag($data['style'], "#$id");
         }
 
         return $html;
@@ -464,17 +454,7 @@ style
                 . $this->getConfig('container_class') . '"' : '')
             . '>' . $html . '</div>';
         if ($this->getConfig('no_display')) {
-            $html .= $this->secureRenderer->renderTag(
-                'style',
-                [],
-                <<<style
-                    #{$id} {
-                        display: none;
-                    }
-style
-                ,
-                false
-            );
+            $html .= $this->secureRenderer->renderStyleAsTag('display: none;', "#$id");
         }
 
         return $html;

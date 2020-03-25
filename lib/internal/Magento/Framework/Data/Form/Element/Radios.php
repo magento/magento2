@@ -107,17 +107,7 @@ class Radios extends AbstractElement
         }
 
         if ($option->getStyle()) {
-            $html .= $html .= $this->secureRenderer->renderTag(
-                'style',
-                [],
-                <<<style
-                    #$optionId {
-                        {$option->getStyle()}
-                    }
-style
-                ,
-                false
-            );
+            $html .= $this->secureRenderer->renderStyleAsTag($option->getStyle(), "#$optionId");
         }
         if ($option->getOnclick()) {
             $this->secureRenderer->renderEventListenerAsTag('onclick', $option->getOnclick(), "#$optionId");

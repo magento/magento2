@@ -189,12 +189,7 @@ style;
             );
         }
         if ($this->getStyle()) {
-            $afterHtml .= $this->secureRenderer->renderTag(
-                'style',
-                [],
-                $this->generateStyle(),
-                false
-            );
+            $afterHtml .= $this->secureRenderer->renderStyleAsTag($this->getStyle(), "#{$this->getId()}");
         }
         $this->setAfterHtml($afterHtml);
 

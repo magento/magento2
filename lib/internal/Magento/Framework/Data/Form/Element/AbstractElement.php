@@ -442,17 +442,7 @@ abstract class AbstractElement extends AbstractForm
             if ($id = $this->getHtmlId()) {
                 $selector = "#{$id}";
             }
-            $html .= $this->secureRenderer->renderTag(
-                'style',
-                [],
-                <<<style
-                    {$selector} {
-                        {$this->getStyle()}
-                    }
-style
-                ,
-                false
-            );
+            $html .= $this->secureRenderer->renderStyleAsTag($this->getStyle(), $selector);
         }
 
         //Rendering each event listener as a separate script tag.
