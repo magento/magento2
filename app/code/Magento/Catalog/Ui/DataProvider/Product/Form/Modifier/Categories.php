@@ -98,9 +98,9 @@ class Categories extends AbstractModifier
      * @param DbHelper $dbHelper
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
-     * @param Session $session
      * @param SerializerInterface $serializer
      * @param AuthorizationInterface $authorization
+     * @param Session $session
      */
     public function __construct(
         LocatorInterface $locator,
@@ -108,9 +108,9 @@ class Categories extends AbstractModifier
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
         ArrayManager $arrayManager,
-        Session $session,
         SerializerInterface $serializer = null,
-        AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization = null,
+        Session $session = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -119,7 +119,7 @@ class Categories extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        $this->session = $session;
+        $this->session = $session ?: ObjectManager::getInstance()->get(Session::class);
     }
 
     /**
