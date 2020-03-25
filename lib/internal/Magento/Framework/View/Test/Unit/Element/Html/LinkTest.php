@@ -10,6 +10,11 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
+/**
+ * Test Link widget.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**

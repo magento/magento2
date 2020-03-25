@@ -10,6 +10,7 @@
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Editor;
+use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
@@ -78,13 +79,15 @@ class EditorTest extends \PHPUnit\Framework\TestCase
         $secureRendererMock->method('renderTag')
             ->willReturnCallback(
                 function (string $tag, array $attrs, ?string $content): string {
-                    return "<$tag>$content</$tag>";
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
                 }
             );
         $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
         $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-        $this->configMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+        $this->configMock = $this->createPartialMock(DataObject::class, ['getData']);
 
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
@@ -213,7 +216,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConfig()
     {
-        $config = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+        $config = $this->createPartialMock(DataObject::class, ['getData']);
         $this->assertEquals($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');

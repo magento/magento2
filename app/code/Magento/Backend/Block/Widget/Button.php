@@ -162,7 +162,6 @@ class Button extends \Magento\Backend\Block\Widget
      */
     private function generateStyle(): string
     {
-        $buttonId = $this->getData('backend_button_widget_hook_id');
         $style = $this->getStyle();
 
         return <<<style

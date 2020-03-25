@@ -9,6 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -49,7 +50,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $secureRendererMock->method('renderTag')
             ->willReturnCallback(
                 function (string $tag, array $attrs, ?string $content): string {
-                    return "<$tag>$content</$tag>";
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
                 }
             );
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
@@ -65,7 +68,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             $secureRendererMock,
             $randomMock
         );
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_image->setForm($formMock);

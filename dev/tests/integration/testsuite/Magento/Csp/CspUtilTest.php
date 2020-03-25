@@ -21,6 +21,7 @@ class CspUtilTest extends AbstractController
      *
      * @return void
      * @magentoConfigFixture default_store csp/mode/storefront/report_only 0
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/inline 0
      */
     public function testPhtmlHelper(): void
     {

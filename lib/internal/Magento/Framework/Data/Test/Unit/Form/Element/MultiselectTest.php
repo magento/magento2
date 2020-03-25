@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -39,7 +40,9 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $secureRendererMock->method('renderTag')
             ->willReturnCallback(
                 function (string $tag, array $attrs, ?string $content): string {
-                    return "<$tag>$content</$tag>";
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
                 }
             );
         $escaper = new Escaper();
@@ -51,7 +54,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
                 'secureRenderer' => $secureRendererMock
             ]
         );
-        $this->_model->setForm(new \Magento\Framework\DataObject());
+        $this->_model->setForm(new DataObject());
     }
 
     /**

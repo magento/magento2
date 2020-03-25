@@ -440,7 +440,7 @@ abstract class AbstractElement extends AbstractForm
         if ($this->getStyle()) {
             $selector = "*[formelementhookid='{$this->generateElementId()}']";
             if ($id = $this->getHtmlId()) {
-                $selector = "#{$this->getHtmlId()}";
+                $selector = "#{$id}";
             }
             $html .= $this->secureRenderer->renderTag(
                 'style',

@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
@@ -38,7 +39,9 @@ class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
         $secureRendererMock->method('renderTag')
             ->willReturnCallback(
                 function (string $tag, array $attrs, ?string $content): string {
-                    return "<$tag>$content</$tag>";
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
                 }
             );
         $this->_model = $testHelper->getObject(
@@ -54,7 +57,7 @@ class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
             ['value' => 3, 'label' => 'Value3'],
         ];
         $value = [1, 3];
-        $this->_model->setForm(new \Magento\Framework\DataObject());
+        $this->_model->setForm(new DataObject());
         $this->_model->setData(['values' => $values, 'value' => $value]);
     }
 
