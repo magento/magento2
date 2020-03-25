@@ -36,7 +36,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
             'text' => 'Template Content',
             'form_key' => $this->formKey,
         ];
-        $this->getRequest()->setPostValue($post)->setMethod(\Zend\Http\Request::METHOD_POST);
+        $this->getRequest()->setPostValue($post)->setMethod(\Laminas\Http\Request::METHOD_POST);
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Newsletter\Model\Template::class
         );
@@ -141,7 +141,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
         $this->model->load('some_unique_code', 'template_code');
 
-        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
+        $this->getRequest()->setMethod(\Laminas\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
         $this->assertEquals(404, $this->getResponse()->getStatusCode());
