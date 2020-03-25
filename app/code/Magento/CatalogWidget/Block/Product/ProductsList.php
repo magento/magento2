@@ -10,6 +10,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
+use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -31,6 +32,7 @@ use Magento\Rule\Model\Condition\Combine;
 use Magento\Rule\Model\Condition\Sql\Builder as SqlBuilder;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
+use Magento\Wishlist\Helper\Data;
 
 /**
  * Catalog Products List widget block
@@ -104,6 +106,16 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $conditionsHelper;
 
     /**
+     * @var Data
+     */
+    protected $wishlistDataHelper;
+
+    /**
+     * @var Compare
+     */
+    protected $productCompareHelper;
+
+    /**
      * @var PriceCurrencyInterface
      */
     private $priceCurrency;
@@ -143,6 +155,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param SqlBuilder $sqlBuilder
      * @param Rule $rule
      * @param Conditions $conditionsHelper
+     * @param Data $wishlistDataHelper
+     * @param Compare $productCompareHelper
      * @param array $data
      * @param Json|null $json
      * @param LayoutFactory|null $layoutFactory
@@ -159,6 +173,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         SqlBuilder $sqlBuilder,
         Rule $rule,
         Conditions $conditionsHelper,
+        Data $wishlistDataHelper,
+        Compare $productCompareHelper,
         array $data = [],
         Json $json = null,
         LayoutFactory $layoutFactory = null,
@@ -171,6 +187,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->sqlBuilder = $sqlBuilder;
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
+        $this->wishlistDataHelper = $wishlistDataHelper;
+        $this->productCompareHelper = $productCompareHelper;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
@@ -575,5 +593,27 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         }
 
         return $pagerBlockName . '.' . $pageName;
+    }
+
+    /**
+     * Check is allow wishlist module
+     *
+     * @return bool
+     */
+    public function isWishlistAllow()
+    {
+        return $this->wishlistDataHelper->isAllow();
+    }
+
+    /**
+     * Get parameters used for build add product to compare list urls
+     *
+     * @param Product $product
+     *
+     * @return string
+     */
+    public function getComparePostData($product)
+    {
+        return $this->productCompareHelper->getPostDataParams($product);
     }
 }
