@@ -379,11 +379,16 @@ class Categories extends AbstractModifier
      * @param string $filter
      * @return string
      */
-    private function getCategoriesTreeCacheId(int $storeId, string $filter = '') : string
+    private function getCategoriesTreeCacheId(int $storeId, string $filter = ''): string
     {
+        if ($this->session->getUser() !== null) {
+            return self::CATEGORY_TREE_ID
+                . '_' . (string)$storeId
+                . '_' . $this->session->getUser()->getAclRole()
+                . '_' . $filter;
+        }
         return self::CATEGORY_TREE_ID
-            . '_' . (string) $storeId
-            . '_' . $this->session->getUser()->getAclRole()
+            . '_' . (string)$storeId
             . '_' . $filter;
     }
 
