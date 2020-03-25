@@ -17,6 +17,6 @@
 
         <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitGallerySpinnerDisappear"/>
         <seeElement selector="{{StorefrontProductMediaSection.gallery}}" stepKey="seeProductGallery"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(productImage)}}" stepKey="seeCorrectProductImage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageActive(productImage)}}" stepKey="seeCorrectProductImage"/>
     </actionGroup>
 </actionGroups>

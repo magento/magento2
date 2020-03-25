@@ -51,24 +51,11 @@
             <!-- Open configurable product edit page -->
             <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToProductIndex"/>
 
-            <!-- Add attributes to configurable product-->
+            <!-- Add attribute to configurable product-->
             <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
-            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
-
-            <!-- Find Swatch attribute in grid and select it -->
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindSwatchAttribute"/>
-            <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForSwatchAttribute"/>
-            <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForSwatchAttribute"/>
-            <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
-            <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="selectSwatchAttribute"/>
-
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSelectOptions"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createVisualSwatchAttribute.frontend_label[0]$)}}" stepKey="selectAllSwatchAttributeOptions"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToApplyQuantity"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
-            <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextToProceedToSummary"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProductsButton"/>
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurations">
+                <argument name="attributeCode" value="$createVisualSwatchAttribute.attribute_code$"/>
+            </actionGroup>
 
             <!-- Load media for configurable product -->
             <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToConfigurableProduct">
