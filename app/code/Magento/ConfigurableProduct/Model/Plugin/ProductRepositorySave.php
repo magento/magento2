@@ -14,6 +14,9 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Validating product links of configurable product and reset configurable attributes after save configurable product
+ */
 class ProductRepositorySave
 {
     /**
@@ -55,6 +58,9 @@ class ProductRepositorySave
         ProductInterface $product,
         $saveOptions = false
     ) {
+        if ($product->getTypeId() !== Configurable::TYPE_CODE) {
+            return $result;
+        }
         $result->getTypeInstance()->resetConfigurableAttributes($product);
 
         return $result;
@@ -66,9 +72,11 @@ class ProductRepositorySave
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface $product
      * @param bool $saveOptions
-     * @return ProductInterface
+     * @return array
      * @throws InputException
      * @throws NoSuchEntityException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         ProductRepositoryInterface $subject,
@@ -76,19 +84,19 @@ class ProductRepositorySave
         $saveOptions = false
     ) {
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
-            return $product;
+            return [$product];
         }
 
         $extensionAttributes = $product->getExtensionAttributes();
         if ($extensionAttributes === null) {
-            return $product;
+            return [$product];
         }
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
         if (empty($configurableLinks) && empty($configurableOptions)) {
-            return $product;
+            return [$product];
         }
 
         $attributeCodes = [];
@@ -99,6 +107,7 @@ class ProductRepositorySave
             $attributeCodes[] = $attributeCode;
         }
         $this->validateProductLinks($attributeCodes, $configurableLinks);
+        return [$product];
     }
 
     /**
