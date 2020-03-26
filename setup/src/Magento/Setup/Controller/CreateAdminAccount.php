@@ -5,12 +5,17 @@
  */
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
+/**
+ * CreateAdminAccount controller
+ */
 class CreateAdminAccount extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return ViewModel
      */
     public function indexAction()

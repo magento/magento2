@@ -34,7 +34,7 @@ class DataMapperResolver implements BatchDataMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function map(array $documentData, $storeId, array $context = [])
     {
