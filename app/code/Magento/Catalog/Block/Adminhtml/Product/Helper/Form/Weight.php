@@ -84,6 +84,10 @@ class Weight extends Text
      */
     public function getElementHtml()
     {
+        if ($this->getForm()->getDataObject()->getTypeInstance()->hasWeight()) {
+            $this->weightSwitcher->setValue(WeightResolver::HAS_WEIGHT);
+        }
+
         if ($this->getDisabled()) {
             $this->weightSwitcher->setDisabled($this->getDisabled());
         }
