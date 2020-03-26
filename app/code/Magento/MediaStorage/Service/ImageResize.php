@@ -250,7 +250,7 @@ class ImageResize
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
                 foreach ($stores as $store) {
-                    $data = $this->paramsBuilder->build($imageData, (int) $store->getId());
+                    $data = $this->paramsBuilder->build($imageData, (int) $store->getId(), $theme);
                     $uniqIndex = $this->getUniqueImageIndex($data);
                     $data['id'] = $imageId;
                     $viewImages[$uniqIndex] = $data;

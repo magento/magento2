@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Theme\Model\ThemeInterface;
 use Magento\Catalog\Model\Product\Image;
 
 /**
@@ -53,6 +54,11 @@ class ParamsBuilder
     private $viewConfig;
 
     /**
+     * @var ThemeInterface
+     */
+    private $themeModel;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $viewConfig
      */
@@ -69,17 +75,22 @@ class ParamsBuilder
      *
      * @param array $imageArguments
      * @param int $scopeId
+     * @param ThemeInterface $theme
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments, int $scopeId = null): array
+    public function build(array $imageArguments, int $scopeId = null, $theme = null): array
     {
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
             'image_height' => $imageArguments['height'] ?? null,
             'image_width' => $imageArguments['width'] ?? null,
         ];
+
+        if ($theme) {
+            $this->themeModel = $theme;
+        }
 
         $overwritten = $this->overwriteDefaultValues($imageArguments);
         $watermark = isset($miscParams['image_type']) ? $this->getWatermark($miscParams['image_type'], $scopeId) : [];
@@ -170,7 +181,7 @@ class ParamsBuilder
      */
     private function hasDefaultFrame(): bool
     {
-        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'themeModel' => $this->themeModel])
             ->getVarValue('Magento_Catalog', 'product_image_white_borders');
     }
 }
