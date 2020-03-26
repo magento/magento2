@@ -926,6 +926,23 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Tests importing product images with "no_selection" attribute.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testSaveImagesNoSelection()
+    {
+        $this->importDataForMediaTest('import_media_with_no_selection.csv');
+        $product = $this->getProductBySku('simple_new');
+
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals(null, $product->getData('small_image'));
+        $this->assertEquals(null, $product->getData('thumbnail'));
+        $this->assertEquals(null, $product->getData('swatch_image'));
+    }
+
+    /**
      * Test that new images should be added after the existing ones.
      *
      * @magentoDataFixture mediaImportImageFixture
@@ -2415,6 +2432,16 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 ],
                 'behavior' => Import::BEHAVIOR_REPLACE,
                 'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => 'sku with whitespace ',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => false,
             ],
         ];
     }

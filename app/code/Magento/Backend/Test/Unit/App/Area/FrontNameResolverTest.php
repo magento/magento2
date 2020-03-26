@@ -29,7 +29,7 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Uri\Uri
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\Uri\Uri
      */
     protected $uri;
 
@@ -51,7 +51,7 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             ->will($this->returnValue($this->_defaultFrontName));
-        $this->uri = $this->createMock(\Zend\Uri\Uri::class);
+        $this->uri = $this->createMock(\Laminas\Uri\Uri::class);
 
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 

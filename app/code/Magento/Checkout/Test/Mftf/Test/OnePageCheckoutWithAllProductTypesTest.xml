@@ -14,7 +14,7 @@
             <stories value="OnePageCheckout within Offline Payment Methods"/>
             <title value="OnePageCheckout with all product types test"/>
             <description value="Checkout with all product types"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-14742"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
@@ -113,7 +113,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Add Simple Product to cart -->

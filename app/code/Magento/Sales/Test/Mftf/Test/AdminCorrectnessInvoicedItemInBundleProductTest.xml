@@ -52,7 +52,9 @@
         </after>
 
         <!--Complete Bundle product creation-->
-        <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createBundleProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Run re-index task-->
@@ -83,7 +85,7 @@
         <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
         <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="5" stepKey="ChangeQtyToInvoice"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 

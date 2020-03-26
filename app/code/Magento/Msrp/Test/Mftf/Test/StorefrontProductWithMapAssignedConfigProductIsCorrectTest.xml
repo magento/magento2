@@ -107,11 +107,13 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToFirstChildProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp"/>
@@ -119,7 +121,9 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToSecondChildProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton1"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp1"/>

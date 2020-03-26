@@ -14,7 +14,7 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to create a configurable product with attributes"/>
             <description value="admin should be able to create a configurable product with attributes"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-84"/>
             <group value="ConfigurableProduct"/>
         </annotations>
@@ -76,7 +76,7 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to create a configurable product after incorrect sku"/>
             <description value="admin should be able to create a configurable product after incorrect sku"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-96365"/>
             <useCaseId value="MAGETWO-94556"/>
             <group value="ConfigurableProduct"/>
@@ -95,7 +95,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPane"/>
