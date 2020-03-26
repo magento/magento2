@@ -103,7 +103,6 @@ class SecureHtmlRenderer
         if (!$eventName || !$attributeJavascript || !$elementSelector || mb_strpos($eventName, 'on') !== 0) {
             throw new \InvalidArgumentException('Invalid JS event handler data provided');
         }
-        $eventName = mb_strtolower(mb_substr($eventName, 2));
         $listenerFunction = 'eventListener' .$this->random->getRandomString(32);
         $elementName = 'listenedElement' .$this->random->getRandomString(32);
         $script = <<<script
@@ -112,7 +111,7 @@ class SecureHtmlRenderer
             }
             let {$elementName} = document.querySelector("{$elementSelector}");
             if ({$elementName}) {
-                {$elementName}.addEventListener("{$eventName}", (event) => {$listenerFunction}.apply(event.target));
+                {$elementName}.{$eventName} = (event) => {$listenerFunction}.apply(event.target);
             }
 script;
 
@@ -128,7 +127,7 @@ script;
      */
     public function renderStyleAsTag(string $style, string $selector): string
     {
-        $stylePairs = array_filter(explode(';', $style));
+        $stylePairs = array_filter(array_map('trim', explode(';', $style)));
         if (!$stylePairs || !$selector) {
             throw new \InvalidArgumentException('Invalid style data given');
         }
@@ -137,7 +136,7 @@ script;
         /** @var string[] $styles */
         $stylesAssignments = [];
         foreach ($stylePairs as $stylePair) {
-            $exploded = explode(':', $stylePair);
+            $exploded = array_map('trim', explode(':', $stylePair));
             if (count($exploded) < 2) {
                 throw new \InvalidArgumentException('Invalid CSS given');
             }

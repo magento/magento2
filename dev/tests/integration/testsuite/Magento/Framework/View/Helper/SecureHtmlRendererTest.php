@@ -120,7 +120,7 @@ class SecureHtmlRendererTest extends TestCase
      */
     public function testRenderStyleAsTag(): void
     {
-        $html = $this->helper->renderStyleAsTag('display: none; font-size: 3em;', '#id');
+        $html = $this->helper->renderStyleAsTag('display: none; font-size: 3em;  ', '#id');
         $this->assertContains('#id', $html);
         $this->assertContains('display', $html);
         $this->assertContains('none', $html);
