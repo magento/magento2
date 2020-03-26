@@ -14,13 +14,6 @@ namespace Magento\Framework\Stdlib\DateTime;
 class DateTime
 {
     /**
-     * Current config offset in seconds
-     *
-     * @var int
-     */
-    private $_offset = 0;
-
-    /**
      * @var TimezoneInterface
      */
     protected $_localeDate;
@@ -31,7 +24,6 @@ class DateTime
     public function __construct(TimezoneInterface $localeDate)
     {
         $this->_localeDate = $localeDate;
-        $this->_offset = $this->calculateOffset($this->_localeDate->getConfigTimezone());
     }
 
     /**
@@ -78,8 +70,7 @@ class DateTime
     }
 
     /**
-     * Converts input date into date with timezone offset
-     * Input date must be in GMT timezone
+     * Converts input date into date with timezone offset. Input date must be in GMT timezone.
      *
      * @param  string $format
      * @param  int|string $input date in GMT timezone
@@ -122,8 +113,7 @@ class DateTime
     }
 
     /**
-     * Converts input date into timestamp with timezone offset
-     * Input date must be in GMT timezone
+     * Converts input date into timestamp with timezone offset. Input date must be in GMT timezone.
      *
      * @param  int|string $input date in GMT timezone
      * @return int
@@ -157,18 +147,18 @@ class DateTime
      */
     public function getGmtOffset($type = 'seconds')
     {
-        $result = $this->_offset;
+        $offset = $this->calculateOffset($this->_localeDate->getConfigTimezone());
         switch ($type) {
             case 'seconds':
             default:
                 break;
             case 'minutes':
-                $result = $result / 60;
+                $offset = $offset / 60;
                 break;
             case 'hours':
-                $result = $result / 60 / 60;
+                $offset = $offset / 60 / 60;
                 break;
         }
-        return $result;
+        return $offset;
     }
 }
