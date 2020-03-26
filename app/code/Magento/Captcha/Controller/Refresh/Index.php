@@ -45,8 +45,7 @@ class Index extends Action implements HttpPostActionInterface
     }
 
     /**
-     * @inheritDoc
-     * @return void
+     * Execute action based on request and return result
      */
     public function execute()
     {
