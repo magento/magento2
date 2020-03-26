@@ -39,9 +39,11 @@
                 <argument name="perPage" value="100"/>
             </actionGroup>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToConfigProductPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!--Create visual swatch attribute-->
         <actionGroup ref="AddVisualSwatchWithProductWithStorefrontPreviewImageConfigActionGroup" stepKey="addSwatchToProduct">

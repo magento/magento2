@@ -43,11 +43,16 @@
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToSimpleProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToSimpleProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
@@ -86,7 +91,9 @@
         </annotations>
         <!--Delete product configurations-->
         <comment userInput="Delete product configuration" stepKey="commentDeleteConfigs"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToConfigProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToConfigProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
         <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption1Actions"/>
@@ -147,11 +154,16 @@
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigurations"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToConfigProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToConfigProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForConfigurableProduct"/>
         <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurationsForProduct">

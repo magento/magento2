@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckCheckoutSuccessPageAsRegisterCustomer">
+    <test name="CheckCheckoutSuccessPageAsRegisterCustomerTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Success page elements are presented for placed order as Customer"/>
@@ -28,9 +28,9 @@
 
         <after>
             <!--Logout from customer account-->
-            <amOnPage url="customer/account/logout/" stepKey="logoutCustomerOne"/>
+            <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>
@@ -131,7 +131,7 @@
         <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
         <switchToWindow stepKey="switchToWindow2"/>
     </test>
-    <test name="CheckCheckoutSuccessPageAsGuest">
+    <test name="CheckCheckoutSuccessPageAsGuestTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Success page elements are presented for placed order as Guest"/>
@@ -147,7 +147,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
         </after>
 

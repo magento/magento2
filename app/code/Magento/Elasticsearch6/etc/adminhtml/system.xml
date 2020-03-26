@@ -11,32 +11,28 @@
         <section id="catalog">
             <group id="search">
                 <!-- Elasticsearch 6.x -->
-                <field id="elasticsearch6_server_hostname" translate="label" type="text" sortOrder="71"
-                       showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_server_hostname" translate="label" type="text" sortOrder="71" showInDefault="1">
                     <label>Elasticsearch Server Hostname</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_server_port" translate="label" type="text" sortOrder="72" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_server_port" translate="label" type="text" sortOrder="72" showInDefault="1">
                     <label>Elasticsearch Server Port</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_index_prefix" translate="label" type="text" sortOrder="73" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_index_prefix" translate="label" type="text" sortOrder="73" showInDefault="1">
                     <label>Elasticsearch Index Prefix</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_enable_auth" translate="label" type="select" sortOrder="74" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_enable_auth" translate="label" type="select" sortOrder="74" showInDefault="1">
                     <label>Enable Elasticsearch HTTP Auth</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
@@ -44,8 +40,7 @@
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_username" translate="label" type="text" sortOrder="75" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_username" translate="label" type="text" sortOrder="75" showInDefault="1">
                     <label>Elasticsearch HTTP Username</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>
@@ -53,8 +48,7 @@
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_password" translate="label" type="text" sortOrder="76" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_password" translate="label" type="text" sortOrder="76" showInDefault="1">
                     <label>Elasticsearch HTTP Password</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>
@@ -62,16 +56,14 @@
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_server_timeout" translate="label" type="text" sortOrder="77" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_server_timeout" translate="label" type="text" sortOrder="77" showInDefault="1">
                     <label>Elasticsearch Server Timeout</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_test_connect_wizard" translate="button_label" sortOrder="78" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_test_connect_wizard" translate="button_label" sortOrder="78" showInDefault="1">
                     <label/>
                     <button_label>Test Connection</button_label>
                     <frontend_model>Magento\Elasticsearch6\Block\Adminhtml\System\Config\TestConnection</frontend_model>
@@ -79,8 +71,7 @@
                         <field id="engine">elasticsearch6</field>
                     </depends>
                 </field>
-                <field id="elasticsearch6_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
+                <field id="elasticsearch6_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1">
                     <label>Minimum Terms to Match</label>
                     <depends>
                         <field id="engine">elasticsearch6</field>

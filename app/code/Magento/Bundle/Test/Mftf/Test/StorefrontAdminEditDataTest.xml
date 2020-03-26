@@ -79,7 +79,7 @@
         <waitForPageLoad stepKey="waitForElementAdded"/>
 
         <!-- Go to the shopping cart page and grab the value of the option title -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalBefore"/>
 
@@ -100,7 +100,7 @@
         <see stepKey="assertSuccess2" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
         <!-- Go to the shopping cart page and make sure the title has changed -->
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart1"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart1"/>
         <waitForPageLoad stepKey="waitForCartPageLoad1"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalAfter"/>
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>

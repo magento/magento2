@@ -14,7 +14,7 @@
             <stories value="Checkout via Guest Checkout"/>
             <title value="Guest Checkout - guest should be able to place an order"/>
             <description value="Should be able to place an order as a Guest"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-12825"/>
             <group value="checkout"/>
         </annotations>
@@ -29,7 +29,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
@@ -93,7 +93,7 @@
         <remove keyForRemoval="guestGoToCheckoutFromMinicart" />
         <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity" />
     </test>
-    <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPayment">
+    <test name="StorefrontGuestCheckoutTestWithRestrictedCountriesForPaymentTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout flow if payment solutions are not available"/>
@@ -114,7 +114,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0" />

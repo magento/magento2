@@ -29,7 +29,7 @@
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Customers > All Customers.-->
@@ -52,7 +52,7 @@
         <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesSection.regionId(US_Address_NY.state)}}" stepKey="seeOnlyOneRegionInSelectStateForFirstCustomer"/>
 
         <!--Go to Customers > All customers, Click Add new Customers, fill all necessary fields, Save-->
-        <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroup" stepKey="createSimpleUSCustomerWithoutAddress"/>
+        <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroupActionGroup" stepKey="createSimpleUSCustomerWithoutAddress"/>
 
         <!--Select new created customer, Click Edit mode-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithoutAddresses">

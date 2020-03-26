@@ -85,6 +85,7 @@ class SortingTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -100,6 +101,7 @@ class SortingTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -172,6 +174,7 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListSortOrderDataProviderOnStoreView
      * @param string $sortBy
      * @param string $direction
@@ -195,6 +198,7 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListSortOrderDataProviderOnStoreView
      * @param string $sortBy
      * @param string $direction

@@ -13,7 +13,7 @@
             <stories value="Url-rewrites for product in anchor categories"/>
             <title value="Url-rewrites for product in anchor categories"/>
             <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16568"/>
             <group value="urlRewrite"/>
         </annotations>
@@ -46,12 +46,14 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
 
         <!-- 3. Edit Category 1 for DEFAULT Store View: -->
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
@@ -68,18 +70,20 @@
 
         <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue4"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue4"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories"/>
@@ -129,12 +133,14 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
 
         <!-- 3. Edit Category 1 for DEFAULT Store View: -->
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
@@ -151,15 +157,17 @@
 
         <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue2"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue3"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue4"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName1"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue2"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue3"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue4"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
 
         <amOnPage url="/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName"/>
@@ -179,7 +187,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName7"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreView" extends="AdminUrlRewritesForProductInAnchorCategoriesTest">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewTest" extends="AdminUrlRewritesForProductInAnchorCategoriesTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories for all store views"/>
@@ -206,7 +214,7 @@
         <remove keyForRemoval="uncheckRedirect2"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewWithConfigurationTurnedOff" extends="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewWithConfigurationTurnedOffTest" extends="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url-rewrites for product in anchor categories for all store views"/>
@@ -233,7 +241,7 @@
         <remove keyForRemoval="uncheckRedirect2"/>
     </test>
 
-    <test name="AdminUrlRewritesForProductsWithConfigurationTurnedOff">
+    <test name="AdminUrlRewritesForProductsWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="No Url-rewrites for product if configuration to generate url rewrite for Generate 'category/product' URL Rewrites is enabled "/>
@@ -271,10 +279,12 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName5"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton5"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeProducturl"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="dontSeeCategoryProducturlKey"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeProducturl"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="dontSeeCategoryProducturlKey"/>
         <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName"/>
     </test>

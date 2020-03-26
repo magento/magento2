@@ -40,12 +40,16 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="SubCategory" stepKey="createSubCategory"/>
             <createData entity="NewRootCategory" stepKey="createRootCategory"/>
-            <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
             <waitForPageLoad stepKey="waitForProductPageLoad0"/>
             <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['Default Category', $$createRootCategory.name$$, $$createSubCategory.name$$]" stepKey="fillCategory"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
             <!--Add images to the product-->
-            <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="visitAdminProductPage2"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage2">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
             <waitForPageLoad stepKey="waitForProductPageLoad1"/>
             <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
                 <argument name="image" value="ProductImage"/>
@@ -67,7 +71,7 @@
             <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DefaultWebUrlOptionsConfig" stepKey="defaultWebUrlOptionsConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Grab new store view code-->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToNewWebsitePage"/>
@@ -80,7 +84,9 @@
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickResetButton"/>
         <waitForPageLoad stepKey="waitForStorePageLoad"/>
         <!--Open product page on admin-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <!--Enable the newly created website and save the product-->
         <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct2">
