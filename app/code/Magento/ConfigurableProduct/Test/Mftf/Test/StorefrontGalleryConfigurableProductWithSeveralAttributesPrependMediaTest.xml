@@ -22,7 +22,6 @@
         </annotations>
 
         <before>
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setupYoutubeApiKey"/>
             <!--Create 1 configurable product with 2 variations-->
             <createData entity="ApiConfigurableProductWithDescription" stepKey="createConfigurableProduct"/>
             <!--Create product drop down attribute-->
@@ -158,7 +157,6 @@
         </before>
 
         <after>
-            <createData entity="DefaultProductVideoConfig" stepKey="resetStoreDefaultVideoConfig"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
                 <argument name="product" value="$createConfigurableProduct$"/>
             </actionGroup>
