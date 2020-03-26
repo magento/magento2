@@ -247,7 +247,7 @@ class VclGenerator implements VclGeneratorInterface
      */
     private function getHealthCheck() : string
     {
-        if (strpos($this->url->getBaseUrl(), 'pub') === false) {
+        if (strpos($this->url->getBaseUrl(), 'pub') !== false) {
             return '/pub/health_check.php';
         }
 
