@@ -7,13 +7,14 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
 use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MethodsMap
 {
@@ -50,6 +51,11 @@ class MethodsMap
      * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
+
+    /**
+     * @var \Magento\Framework\Api\AttributeTypeResolverInterface
+     */
+    private $attributeTypeResolver;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -99,6 +105,7 @@ class MethodsMap
      */
     public function getMethodsMap($interfaceName)
     {
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $key = self::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . "-" . md5($interfaceName);
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);

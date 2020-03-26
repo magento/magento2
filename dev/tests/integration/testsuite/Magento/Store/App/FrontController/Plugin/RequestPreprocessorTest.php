@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Response;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Tests \Magento\Store\App\FrontController\Plugin\RequestPreprocessor.
