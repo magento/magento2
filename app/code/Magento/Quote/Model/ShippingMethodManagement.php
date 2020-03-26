@@ -34,7 +34,7 @@ use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
  */
 class ShippingMethodManagement implements
     \Magento\Quote\Api\ShippingMethodManagementInterface,
-    ShippingMethodManagementInterface,
+    \Magento\Quote\Model\ShippingMethodManagementInterface,
     ShipmentEstimationInterface
 {
     /**
