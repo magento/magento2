@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\Action;
 /**
  * Template for displaying new products widget
  *
- * @var $block NewWidget
+ * @var NewWidget $block
  */
 if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())) {
     $type = 'widget-new-list';
@@ -109,7 +109,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                             <?php endif; ?>
                                             <?php if ($showWishlist || $showCompare): ?>
                                                 <div class="actions-secondary" data-role="add-to-links">
-                                                    <?php if ($block->isWishlistAllow() && $showWishlist): ?>
+                                                    <?php if ($block->getAllowedWishList() && $showWishlist): ?>
                                                         <a href="#"
                                                            data-post='<?=
                                                            /* @noEscape */$block->getAddToWishlistParams($_item) ?>'
