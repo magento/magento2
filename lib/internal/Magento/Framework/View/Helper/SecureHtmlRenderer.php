@@ -154,7 +154,8 @@ script;
         return $this->renderTag(
             'script',
             ['type' => 'text/javascript'],
-            "let $elementVariable = document.querySelector('$selector');\n" .join("\n", $stylesAssignments),
+            "let $elementVariable = document.querySelector('$selector');\n"
+            ."if ($elementVariable) {\n" .join("\n", $stylesAssignments) ." }",
             false
         );
     }
