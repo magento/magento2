@@ -65,13 +65,15 @@ class ProductRepositorySave
      *
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface $product
+     * @param bool $saveOptions
      * @return ProductInterface
      * @throws InputException
      * @throws NoSuchEntityException
      */
     public function beforeSave(
         ProductRepositoryInterface $subject,
-        ProductInterface $product
+        ProductInterface $product,
+        $saveOptions = false
     ) {
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
             return $product;
