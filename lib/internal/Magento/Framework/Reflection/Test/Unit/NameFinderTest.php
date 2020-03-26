@@ -6,7 +6,7 @@
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Zend\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\ClassReflection;
 
 /**
  * NameFinder Unit Test
@@ -64,7 +64,7 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
      */
     public function testFindAccessorMethodName()
     {
-        $reflectionClass = $this->createMock(\Zend\Code\Reflection\ClassReflection::class);
+        $reflectionClass = $this->createMock(\Laminas\Code\Reflection\ClassReflection::class);
         $reflectionClass->expects($this->atLeastOnce())->method('hasMethod')->willReturn(false);
         $reflectionClass->expects($this->atLeastOnce())->method('getName')->willReturn('className');
 

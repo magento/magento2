@@ -3,57 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Controller;
 
+use Laminas\Http\Response;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Filesystem;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Setup\BackupRollback;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\WebLogger;
 
+/**
+ * BackupActionItems controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BackupActionItems extends AbstractActionController
 {
-
     /**
      * Handler for BackupRollback
      *
-     * @var \Magento\Framework\Setup\BackupRollback
+     * @var BackupRollback
      */
     private $backupHandler;
 
     /**
      * Filesystem
      *
-     * @var \Magento\Framework\Backup\Filesystem
+     * @var Filesystem
      */
     private $fileSystem;
 
     /**
      * Filesystem Directory List
      *
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     * @var DirectoryList
      */
     private $directoryList;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Setup\Model\WebLogger $logger
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
-     * @param \Magento\Framework\Backup\Filesystem $fileSystem
+     * @param ObjectManagerProvider $objectManagerProvider
+     * @param WebLogger $logger
+     * @param DirectoryList $directoryList
+     * @param Filesystem $fileSystem
+     * @throws \Magento\Setup\Exception
      */
     public function __construct(
-        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
-        \Magento\Setup\Model\WebLogger $logger,
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        \Magento\Framework\Backup\Filesystem $fileSystem
+        ObjectManagerProvider $objectManagerProvider,
+        WebLogger $logger,
+        DirectoryList $directoryList,
+        Filesystem $fileSystem
     ) {
         $objectManager = $objectManagerProvider->get();
         $this->backupHandler = $objectManager->create(
-            \Magento\Framework\Setup\BackupRollback::class,
+            BackupRollback::class,
             ['log' => $logger]
         );
         $this->directoryList = $directoryList;
@@ -63,20 +71,22 @@ class BackupActionItems extends AbstractActionController
     /**
      * No index action, return 404 error page
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new ViewModel();
         $view->setTemplate('/error/404.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(Response::STATUS_CODE_404);
+
         return $view;
     }
 
     /**
      * Checks disk space availability
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return JsonModel
+     * @throws FileSystemException
      */
     public function checkAction()
     {
@@ -95,6 +105,7 @@ class BackupActionItems extends AbstractActionController
                 $totalSize += $this->backupHandler->getDBDiskSpace();
             }
             $this->fileSystem->validateAvailableDiscSpace($backupDir, $totalSize);
+
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
@@ -114,7 +125,7 @@ class BackupActionItems extends AbstractActionController
     /**
      * Takes backup for code, media or DB
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return JsonModel
      */
     public function createAction()
     {
@@ -131,6 +142,7 @@ class BackupActionItems extends AbstractActionController
             if (isset($params['options']['db']) && $params['options']['db']) {
                 $backupFiles[] = $this->backupHandler->dbBackup($time);
             }
+
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
