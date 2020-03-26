@@ -14,7 +14,7 @@
             <stories value="Create products"/>
             <title value="Product with double quote in name"/>
             <description value="Product with a double quote in the name should appear correctly on the storefront"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="product"/>
             <testCaseId value="MAGETWO-92384"/>
         </annotations>
