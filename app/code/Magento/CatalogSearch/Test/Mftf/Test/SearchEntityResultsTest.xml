@@ -203,7 +203,7 @@
 
 
             <!-- Create and Assign Attribute to product1-->
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct1">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
                 <argument name="productId" value="$product1.id$"/>
             </actionGroup>
             <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct1Attribute">
@@ -224,7 +224,7 @@
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1b"/>
             <!-- Create and Assign Attribute to product2-->
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct2">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct2">
                 <argument name="productId" value="$product2.id$"/>
             </actionGroup>
             <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct2Attribute">
@@ -506,7 +506,9 @@
             </createData>
             <!--Finish bundle creation-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createBundleProduct.id$$"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
             <!-- Perform reindex and flush cache -->
@@ -573,7 +575,9 @@
 
             <!--Finish bundle creation-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createBundleProduct.id$$"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
             <!-- Perform reindex and flush cache -->

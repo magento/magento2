@@ -19,7 +19,7 @@ class ProductItem extends CatalogProductItem
      *
      * @var string
      */
-    protected $swatchSelector = 'div[option-id="%s"]';
+    protected $swatchSelector = 'div[data-option-id="%s"]';
 
     /**
      * Selector for the swatches of the product.
