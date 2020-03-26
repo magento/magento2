@@ -188,7 +188,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
         $this->dispatch('backend/customer/index/cart');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="customer_cart_grid1"', $body);
+        $this->assertContains('<div id="customer_cart_grid"', $body);
     }
 
     /**
