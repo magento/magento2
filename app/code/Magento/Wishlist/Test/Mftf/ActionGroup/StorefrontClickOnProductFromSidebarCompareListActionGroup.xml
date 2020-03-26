@@ -17,6 +17,7 @@
             <argument name="product" type="entity"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.ProductTitleByName((product.name)}}" stepKey="waitForAddedCompareProduct"/>
         <click selector="{{StorefrontComparisonSidebarSection.ProductTitleByName((product.name))}}" stepKey="clickOnProductLink"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
     </actionGroup>
