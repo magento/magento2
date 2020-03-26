@@ -33,7 +33,7 @@
             <!-- Delete reviews -->
             <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearNickNameReviewFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
             <!-- Delete customer -->
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
@@ -57,7 +57,7 @@
         <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
         <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
         <!-- Moderate first product reviews: change review status from pending to approved, save -->
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
