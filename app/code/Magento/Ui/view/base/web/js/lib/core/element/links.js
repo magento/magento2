@@ -78,6 +78,7 @@ define([
         }
 
         component.set(property, value, owner);
+
         if (property === 'disabled' && value) {
             component.set('validate', value, owner);
         }
