@@ -64,18 +64,19 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(
+            \Magento\Framework\ObjectManagerInterface::class
+        );
+        $this->scopeConfigMock = $this->createMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        );
         $this->collectionFactoryMock = $this->getMockBuilder(
             \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->sitemapCollectionMock = $this->createPartialMock(
-            \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class,
-            ['getIterator']
+        $this->sitemapCollectionMock = $this->createMock(
+            \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class
         );
         $this->sitemapMock = $this->createPartialMock(
             \Magento\Sitemap\Model\Sitemap::class,
@@ -129,6 +130,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->willReturn('error-recipient@example.com');
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('sendErrors')
+            ->with(['Sitemap Exception']);
 
         $this->observer->scheduledGenerateSitemaps();
     }
