@@ -52,7 +52,9 @@
         </after>
 
         <!--Complete Bundle product creation-->
-        <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createBundleProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Run re-index task-->
