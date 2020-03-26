@@ -249,6 +249,11 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
+        $this->orderMock->method('getCustomerName')->willReturn('Customer name');
+        $this->orderMock->method('getIsNotVirtual')->willReturn(true);
+        $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
+        $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
+
         if (!$configValue || $forceSyncMode) {
             $transport = [
                 'order' => $this->orderMock,
@@ -259,6 +264,12 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
                 'store' => $this->storeMock,
                 'formattedShippingAddress' => 'Formatted address',
                 'formattedBillingAddress' => 'Formatted address',
+                'order_data' => [
+                    'customer_name' => 'Customer name',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => null,
+                    'frontend_status_label' => 'Pending',
+                ],
             ];
             $transport = new \Magento\Framework\DataObject($transport);
 
