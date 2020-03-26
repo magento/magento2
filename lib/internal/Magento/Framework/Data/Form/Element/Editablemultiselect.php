@@ -159,7 +159,7 @@ script
         }
 
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";
-        if (isset($option['style'])) {
+        if (!empty($option['style'])) {
             $html .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$optionId");
         }
 

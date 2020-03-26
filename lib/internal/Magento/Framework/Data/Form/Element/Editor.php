@@ -424,10 +424,10 @@ script
         $html .= '>';
         $html .= isset($data['title']) ? '<span><span><span>' . $data['title'] . '</span></span></span>' : '';
         $html .= '</button>';
-        if (isset($data['onclick'])) {
+        if (!empty($data['onclick'])) {
             $html .= $this->secureRenderer->renderEventListenerAsTag('onclick', $data['onclick'], "#$id");
         }
-        if (isset($data['style'])) {
+        if (!empty($data['style'])) {
             $html .= $this->secureRenderer->renderStyleAsTag($data['style'], "#$id");
         }
 
