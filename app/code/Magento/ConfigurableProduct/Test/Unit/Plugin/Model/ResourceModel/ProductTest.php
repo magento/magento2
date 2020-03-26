@@ -11,7 +11,12 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
+use Magento\Catalog\Model\ProductAttributeSearchResults;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,31 +42,30 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $prdAttributeRepository;
+    private $prdAttributeRepositoryMock;
     /**
      * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $searchCriteriaBuilder;
+    private $searchCriteriaBuilderMock;
     /**
      * @var FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $filterBuilder;
+    private $filterBuilderMock;
 
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configurableMock = $this->createMock(Configurable::class);
         $this->actionMock = $this->createMock(ActionInterface::class);
-//        $this->prdAttributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
-        $this->prdAttributeRepository = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
+        $this->prdAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
-        $this->searchCriteriaBuilder = $this->createPartialMock(
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
             SearchCriteriaBuilder::class,
             ['addFilters', 'create']
         );
-        $this->filterBuilder = $this->createPartialMock(
+        $this->filterBuilderMock = $this->createPartialMock(
             FilterBuilder::class,
             ['setField', 'setConditionType', 'setValue', 'create']
         );
@@ -71,9 +75,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             [
                 'configurable' => $this->configurableMock,
                 'productIndexer' => $this->actionMock,
-                'productAttributeRepository' => $this->prdAttributeRepository,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
-                'filterBuilder' => $this->filterBuilder
+                'productAttributeRepository' => $this->prdAttributeRepositoryMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+                'filterBuilder' => $this->filterBuilderMock
             ]
         );
     }
@@ -98,11 +102,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
 
         $extensionAttributes = $this->createPartialMock(
-            \Magento\Framework\Api\ExtensionAttributesInterface::class,
+            ExtensionAttributesInterface::class,
             ['getConfigurableProductOptions']
         );
         $option = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class,
+            ConfigurableAttribute::class,
             ['getAttributeId']
         );
         $extensionAttributes->expects($this->exactly(2))->method('getConfigurableProductOptions')
@@ -110,21 +114,21 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $object->expects($this->once())->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $this->filterBuilder->expects($this->atLeastOnce())->method('setField')->willReturnSelf();
-        $this->filterBuilder->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
-        $this->filterBuilder->expects($this->atLeastOnce())->method('setConditionType')->willReturnSelf();
-        $this->filterBuilder->expects($this->atLeastOnce())->method('create')->willReturnSelf();
-        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
+        $this->filterBuilderMock->expects($this->atLeastOnce())->method('setField')->willReturnSelf();
+        $this->filterBuilderMock->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
+        $this->filterBuilderMock->expects($this->atLeastOnce())->method('setConditionType')->willReturnSelf();
+        $this->filterBuilderMock->expects($this->atLeastOnce())->method('create')->willReturnSelf();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteria);
 
         $searchResultMockClass = $this->createPartialMock(
-            \Magento\Catalog\Model\ProductAttributeSearchResults::class,
+            ProductAttributeSearchResults::class,
             ['getItems']
         );
-        $this->prdAttributeRepository->expects($this->once())
+        $this->prdAttributeRepositoryMock->expects($this->once())
             ->method('getList')->with($searchCriteria)->willReturn($searchResultMockClass);
         $optionAttribute = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            EavAttribute::class,
             ['getAttributeCode']
         );
         $searchResultMockClass->expects($this->once())->method('getItems')->willReturn([$optionAttribute]);

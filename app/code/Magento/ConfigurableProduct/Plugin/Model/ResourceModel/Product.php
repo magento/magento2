@@ -13,6 +13,8 @@ use Magento\Framework\Indexer\ActionInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
 
 /**
  * Plugin product resource model
@@ -35,12 +37,12 @@ class Product
     private $productAttributeRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     private $filterBuilder;
 
@@ -50,24 +52,24 @@ class Product
      * @param Configurable $configurable
      * @param ActionInterface $productIndexer
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         Configurable $configurable,
         ActionInterface $productIndexer,
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder = null
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        FilterBuilder $filterBuilder = null
     ) {
         $this->configurable = $configurable;
         $this->productIndexer = $productIndexer;
         $this->productAttributeRepository = $productAttributeRepository ?: ObjectManager::getInstance()
             ->get(ProductAttributeRepositoryInterface::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+            ->get(SearchCriteriaBuilder::class);
         $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Api\FilterBuilder::class);
+            ->get(FilterBuilder::class);
     }
 
     /**
