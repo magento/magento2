@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMassDeleteWidgetActionGroup">
+        <annotations>
+            <description>Goes to the Admin Widgets list page. Mass delete widgets.</description>
+        </annotations>
+        <arguments>
+            <argument name="row" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="visitAdminWidetPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          visible="true" stepKey="clickClearFilters"/>
+
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminWidgetsSection.massActionSelect}}" stepKey="massActionSelectClick"/>
+        <click selector="{{AdminWidgetsSection.massActionSelectOptionAll}}" stepKey="massActionSelectOptionAllClick"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+        <click selector="{{AdminWidgetsSection.massActionSelectAction}}" stepKey="massActionSelectActionClick"/>
+        <click selector="{{AdminWidgetsSection.massActionSelectActionDelete}}" stepKey="massActionSelectActionDeleteClick"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear3"/>
+        <click selector="{{AdminWidgetsSection.massActionSelectActionDeleteSubmit}}" stepKey="massActionSelectActionDeleteSubmitClick1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear4"/>
+        <seeElement selector="{{AdminWidgetsSection.WidgetViewModalDismiss}}" stepKey="widgetViewModalDismissSeeElement"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <seeElement selector="{{AdminWidgetsSection.WidgetViewModalClose}}" stepKey="widgetViewModalCloseSeeElement"/>
+        <click selector="{{AdminWidgetsSection.WidgetViewModalDismiss}}" stepKey="widgetViewModalDismissClick"/>
+        <waitForElementNotVisible selector="{{AdminWidgetsSection.WidgetViewModalDismiss}}" stepKey="waitForModalClosed"/>
+        <seeElement selector="{{AdminWidgetsSection.WidgetViewGridInstanceId(row)}}" stepKey="widgetViewGridRowSeeElement"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <waitForElementVisible selector="{{AdminWidgetsSection.WidgetViewGridInstanceId(row)}}" stepKey="widgetViewGridInstanceIdWaitForElementVisible"/>
+        <click selector="{{AdminWidgetsSection.massActionSelectActionDeleteSubmit}}" stepKey="massActionSelectActionDeleteSubmitClick2"/>
+        <waitForElementVisible selector="{{AdminWidgetsSection.WidgetViewModalAccept}}" stepKey="waitForModalVisible"/>
+        <click selector="{{AdminWidgetsSection.WidgetViewModalAccept}}" stepKey="widgetViewModalAcceptClick"/>
+        <waitForPageLoad stepKey="waitForPageLoad5" />
+        <waitForElementVisible selector="{{AdminWidgetsSection.WidgetViewGridInstanceRow(row)}}" stepKey="widgetViewGridInstanceRowWaitForElementVisible"/>
+        <dontSeeElement selector="{{AdminWidgetsSection.WidgetViewGridInstanceId(row)}}"  stepKey="widgetViewGridRowDontSeeElement"/>
+    </actionGroup>
+</actionGroups>

@@ -22,12 +22,6 @@
                 <field key="name">category-admin</field>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
-                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
-                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
-            </actionGroup>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -39,11 +33,11 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
             <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
@@ -133,7 +127,7 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
     </test>
-    <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTestWithConfigurationTurnedOff">
+    <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTestWithConfigurationTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url Rewrites for Multiple Storeviews"/>
@@ -153,12 +147,6 @@
                 <field key="name">category-admin</field>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
-                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
-                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
-            </actionGroup>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -175,11 +163,11 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreGridFilters"/>
             <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
