@@ -292,13 +292,13 @@ define([
         },
 
         /**
-         * Compare options and set to cache
-         * if something changed
+         * Check options length and set to cache
+         * if some options is added
          *
          * @param {Array} options - ui select options
          */
         checkOptionsList: function (options) {
-            if (!_.isEqual(_.keys(options), _.keys(this.cacheOptions.plain))) {
+            if (options.length > this.cacheOptions.plain.length) {
                 this.cacheOptions.plain = options;
                 this.setCaption();
             }
@@ -1160,6 +1160,7 @@ define([
 
             if (this.isSearchKeyCached(searchKey)) {
                 cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.cacheOptions.plain = cachedSearchResult.options;
                 this.options(cachedSearchResult.options);
                 this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
 
@@ -1274,6 +1275,7 @@ define([
             });
 
             this.total = response.total;
+            this.cacheOptions.plain = existingOptions;
             this.options(existingOptions);
         },
 
