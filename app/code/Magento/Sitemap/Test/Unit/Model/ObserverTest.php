@@ -11,7 +11,7 @@ use Magento\Sitemap\Model\EmailNotification;
 use Magento\Store\Model\App\Emulation;
 
 /**
- * Class ObserverTest
+ * Class for ObserverTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
