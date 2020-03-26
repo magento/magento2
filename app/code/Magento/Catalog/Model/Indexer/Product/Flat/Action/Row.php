@@ -107,7 +107,7 @@ class Row extends AbstractAction
      */
     public function execute($id = null)
     {
-        if (!isset($id) || $id === null) {
+        if (!isset($id)) {
             throw new LocalizedException(__('We can\'t rebuild the index for an undefined product.'));
         }
         $ids = [$id];
