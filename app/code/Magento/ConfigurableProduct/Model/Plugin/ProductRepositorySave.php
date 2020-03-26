@@ -5,14 +5,14 @@
  */
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\InputException;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class ProductRepositorySave
 {
@@ -39,15 +39,13 @@ class ProductRepositorySave
     }
 
     /**
-     * Validate product links and reset configurable attributes to configurable product
+     * Reset configurable attributes to configurable product
      *
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface $result
      * @param ProductInterface $product
      * @param bool $saveOptions
      * @return ProductInterface
-     * @throws CouldNotSaveException
-     * @throws InputException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -57,20 +55,38 @@ class ProductRepositorySave
         ProductInterface $product,
         $saveOptions = false
     ) {
+        $result->getTypeInstance()->resetConfigurableAttributes($product);
+
+        return $result;
+    }
+
+    /**
+     * Validate product links of configurable product
+     *
+     * @param ProductRepositoryInterface $subject
+     * @param ProductInterface $product
+     * @return ProductInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function beforeSave(
+        ProductRepositoryInterface $subject,
+        ProductInterface $product
+    ) {
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
-            return $result;
+            return $product;
         }
 
-        $extensionAttributes = $result->getExtensionAttributes();
+        $extensionAttributes = $product->getExtensionAttributes();
         if ($extensionAttributes === null) {
-            return $result;
+            return $product;
         }
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
         if (empty($configurableLinks) && empty($configurableOptions)) {
-            return $result;
+            return $product;
         }
 
         $attributeCodes = [];
@@ -81,15 +97,14 @@ class ProductRepositorySave
             $attributeCodes[] = $attributeCode;
         }
         $this->validateProductLinks($attributeCodes, $configurableLinks);
-        $result->getTypeInstance()->resetConfigurableAttributes($product);
-
-        return $result;
     }
 
     /**
+     * Validate required attributes and validate the same set of attribute values
+     *
      * @param array $attributeCodes
      * @param array $linkIds
-     * @return $this
+     * @return void
      * @throws InputException
      */
     private function validateProductLinks(array $attributeCodes, array $linkIds)
