@@ -22,7 +22,6 @@
         </annotations>
 
         <before>
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setupYoutubeApiKey"/>
             <!--Create 1 configurable product -->
             <createData entity="ApiConfigurableProductWithDescription" stepKey="createConfigurableProduct"/>
             <!-- Create product swatch attribute with 2 variations -->
@@ -65,9 +64,12 @@
                 <argument name="image" value="Magento3"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{TestImageNew.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProduct"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
 
             <!-- Load media for configurable product variation option1 -->
@@ -81,9 +83,12 @@
                 <argument name="image" value="TestImageNew"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProductVariationOption1">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{placeholderSmallImage.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption1"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption1">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption1"/>
 
             <!-- Load media for configurable product variation option3 -->
@@ -91,16 +96,22 @@
                 <argument name="productSku" value="$createConfigurableProduct.sku$-$swatchAttributeThirdOption.option[store_labels][0][label]$"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{Magento3.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption3"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToConfigurableProductVariationOption3">
                 <argument name="image" value="TestImageAdobe"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addSecondVideoToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{MagentoLogo.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption3"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption3">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption3"/>
 
             <!-- Reindex invalidated indices after product attribute has been created -->
@@ -108,7 +119,6 @@
         </before>
 
         <after>
-            <createData entity="DefaultProductVideoConfig" stepKey="resetStoreDefaultVideoConfig"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
                 <argument name="product" value="$createConfigurableProduct$"/>
             </actionGroup>

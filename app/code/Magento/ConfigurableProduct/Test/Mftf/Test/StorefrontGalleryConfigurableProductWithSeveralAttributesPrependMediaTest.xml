@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGalleryConfigurableProductWithSeveralAttributesTest">
+    <test name="StorefrontGalleryConfigurableProductWithSeveralAttributesPrependMediaTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Prepend variation media on storefront"/>
@@ -94,9 +94,12 @@
                 <argument name="image" value="Magento3"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{TestImageNew.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProduct"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
 
             <!-- Load media for configurable product variation option1-option1-->
@@ -110,9 +113,12 @@
                 <argument name="image" value="TestImageNew"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProductVariationOption1Option1">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{placeholderSmallImage.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption1Option1"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertVideoAddedToConfigurableProductVariationOption1Option1">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption1Option1"/>
 
             <!-- Load media for configurable product variation option1-option2-->
@@ -120,16 +126,22 @@
                 <argument name="productSku" value="$createConfigurableProduct.sku$-$dropdownAttributeFirstOption.option[store_labels][0][label]$-$swatchAttributeSecondOption.option[store_labels][0][label]$"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addFirstVideoToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{Magento3.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertFirstVideoAddedToConfigurableProductVariationOption1Option2"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertFirstVideoAddedToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToConfigurableProductVariationOption1Option2">
                 <argument name="image" value="MagentoLogo"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addSecondVideoToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{placeholderThumbnailImage.file}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption1Option2"/>
+            <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption1Option2"/>
 
             <!-- Load media for configurable product variation option2-option2-->
