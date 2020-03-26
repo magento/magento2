@@ -131,6 +131,8 @@ class AttributeTest extends TestCase
      */
     public function testCheckIndexStatusAfterUpdateSearchableAttributeToNonSearchable(): void
     {
+        $this->indexerProcessor->reindexAll();
+        $this->assertTrue($this->indexerProcessor->getIndexer()->isValid());
         $this->attribute->loadByCode(Product::ENTITY, 'test_catalog_view');
         $this->assertFalse($this->attribute->isObjectNew());
         $this->attribute->setIsFilterable(false)->save();
