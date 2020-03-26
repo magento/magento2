@@ -57,7 +57,7 @@ class SetBillingAddressOnCart
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
 
-        if ($addressInput) {
+        if (!$customerAddressId && $addressInput) {
             $addressInput['save_in_address_book'] = isset($billingAddressInput['address']['save_in_address_book'])
                 ? (bool) $billingAddressInput['address']['save_in_address_book'] : true;
         }
