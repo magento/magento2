@@ -302,7 +302,7 @@ class SplitButton extends Button
                 $afterHtml .= $this->secureRenderer->renderEventListenerAsTag('onclick', $option['onclick'], "#$id");
             }
             if (!empty($option['style'])) {
-                $this->secureRenderer->renderStyleAsTag($option['style'], "#$id");
+                $afterHtml .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$id");
             }
         }
 

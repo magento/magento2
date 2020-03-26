@@ -72,7 +72,7 @@ class SplitButtonTest extends TestCase
                         'title' => 'An option',
                         'label' => 'An option',
                         'onclick' => $onclick = 'console.log("option")',
-                        'style' => $style = 'width: 100px'
+                        'style' => 'width: 100px'
                     ]
                 ]
             ]
@@ -84,6 +84,7 @@ class SplitButtonTest extends TestCase
         $this->assertNotContains('onclick=', $html);
         $this->assertNotContains('style=', $html);
         $this->assertRegExp('/\<script.*?\>.*?' . preg_quote($onclick) . '.*?\<\/script\>/ims', $html);
-        $this->assertRegExp('/\<style.*?\>.*?' . preg_quote($style) . '.*?\<\/style\>/ims', $html);
+        $this->assertContains('width', $html);
+        $this->assertContains('100px', $html);
     }
 }

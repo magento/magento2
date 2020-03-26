@@ -67,7 +67,7 @@ class ButtonTest extends TestCase
                 'element_name' => 'some-name',
                 'value' => 'Press a button',
                 'data-style' => 'width: 100px',
-                'style' => $style = 'height: 200px'
+                'style' => 'height: 200px'
             ]
         );
 
@@ -77,6 +77,7 @@ class ButtonTest extends TestCase
         $this->assertNotContains('onclick=', $html);
         $this->assertNotContains('style=', $html);
         $this->assertRegExp('/\<script.*?\>.*?' .preg_quote($onclick) .'.*?\<\/script\>/ims', $html);
-        $this->assertRegExp('/\<style.*?\>.*?' .preg_quote($style) .'.*?\<\/style\>/ims', $html);
+        $this->assertContains('height', $html);
+        $this->assertContains('200px', $html);
     }
 }

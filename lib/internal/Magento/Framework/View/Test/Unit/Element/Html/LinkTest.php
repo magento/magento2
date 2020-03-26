@@ -108,6 +108,12 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                     return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
                 }
             );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
 
         /** @var \Magento\Framework\View\Element\Html\Link $linkWithAttributes */
         $this->link = $this->objectManager->getObject(
@@ -145,7 +151,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $html = $this->link->toHtml();
         $this->assertEquals(
             '<li><a href="http://site.com/link.html" id="idrandom" ></a></li>'
-            .'<style >#idrandom { display: block; }</style>'
+            .'<style>#idrandom { display: block; }</style>'
             .'<script>document.querySelector(\'#idrandom\').onclick = function () { alert("clicked"); };</script>',
             $html
         );

@@ -77,6 +77,7 @@ class ButtonTest extends TestCase
         $this->assertNotContains('onclick=', $html);
         $this->assertNotContains('style=', $html);
         $this->assertRegExp('/\<script.*?\>.*?' .preg_quote($block->getOnClick()) .'.*?\<\/script\>/ims', $html);
-        $this->assertRegExp('/\<style.*?\>.*?' .preg_quote($block->getStyle()) .'.*?\<\/style\>/ims', $html);
+        $this->assertContains('height', $html);
+        $this->assertContains('200px', $html);
     }
 }

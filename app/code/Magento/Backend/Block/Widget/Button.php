@@ -156,22 +156,6 @@ class Button extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Generate "style" tag aimed to replace "style" attribute of the button.
-     *
-     * @return string
-     */
-    private function generateStyle(): string
-    {
-        $style = $this->getStyle();
-
-        return <<<style
-            #{$this->getId()} {
-                $style
-            }
-style;
-    }
-
-    /**
      * @inheritDoc
      */
     protected function _beforeToHtml()

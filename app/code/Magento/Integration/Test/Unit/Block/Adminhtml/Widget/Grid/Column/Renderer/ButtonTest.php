@@ -56,6 +56,12 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
                     return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
                 }
             );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->buttonRenderer = $this->objectManagerHelper->getObject(
@@ -94,7 +100,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
         $actualResult = $this->buttonRenderer->render($object);
         $this->assertEquals(
             '<button id="1" type="bigButton" button-renderer-hook-id="hookrandom">my button</button>'
-            .'<style >[button-renderer-hook-id=\'hookrandom\'] { display: block; }</style>'
+            .'<style>[button-renderer-hook-id=\'hookrandom\'] { display: block; }</style>'
             .'<script>document.querySelector(\'*[button-renderer-hook-id=\'hookrandom\']\').onclick = '
             .'function () { alert(1); };</script>',
             $actualResult
