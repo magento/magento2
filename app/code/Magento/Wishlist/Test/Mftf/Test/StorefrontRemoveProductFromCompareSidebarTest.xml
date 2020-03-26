@@ -24,7 +24,7 @@
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">
             <argument name="category" value="$$defaultCategory$$"/>
