@@ -34,7 +34,6 @@
         <observer name="persistent_session" instance="Magento\Persistent\Observer\RenewCookieObserver" />
         <observer name="persistent_quote" instance="Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver" />
         <observer name="persistent_customer" instance="Magento\Persistent\Observer\EmulateCustomerObserver" />
-        <observer name="persistent_checkout" instance="Magento\Persistent\Observer\PreventExpressCheckoutObserver" />
     </event>
     <event name="customer_customer_authenticated">
         <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
