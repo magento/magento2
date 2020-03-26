@@ -83,20 +83,21 @@ class ProductRepositorySave
         ProductInterface $product,
         $saveOptions = false
     ) {
+        $result[] = $product;
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
-            return [$product];
+            return $result;
         }
 
         $extensionAttributes = $product->getExtensionAttributes();
         if ($extensionAttributes === null) {
-            return [$product];
+            return $result;
         }
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
         if (empty($configurableLinks) && empty($configurableOptions)) {
-            return [$product];
+            return $result;
         }
 
         $attributeCodes = [];
@@ -107,7 +108,7 @@ class ProductRepositorySave
             $attributeCodes[] = $attributeCode;
         }
         $this->validateProductLinks($attributeCodes, $configurableLinks);
-        return [$product];
+        return $result;
     }
 
     /**
