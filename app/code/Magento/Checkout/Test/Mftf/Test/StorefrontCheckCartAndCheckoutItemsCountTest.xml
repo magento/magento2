@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCartItemsCountDisplayItemsQuantities">
+    <test name="StorefrontCartItemsCountDisplayItemsQuantitiesTest">
         <annotations>
             <stories value="Checkout order summary has wrong item count"/>
             <title value="Checkout order summary has wrong item count - display items quantities"/>
@@ -33,13 +33,13 @@
 
         <!--  Add simpleProduct1 to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct1.custom_attributes[url_key]$)}}" stepKey="amOnProduct1Page"/>
-        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPage" stepKey="addProduct1ToCart">
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
             <argument name="productQty" value="2"/>
         </actionGroup>
         <!--  Add simpleProduct2 to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct2.custom_attributes[url_key]$)}}" stepKey="amOnProduct2Page"/>
-        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPage" stepKey="addProduct2ToCart">
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProduct2ToCart">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
             <argument name="productQty" value="1"/>
         </actionGroup>
@@ -57,7 +57,7 @@
             <argument name="itemsText" value="3 Items in Cart"/>
         </actionGroup>
     </test>
-    <test name="StorefrontCartItemsCountDisplayUniqueItems" extends="StorefrontCartItemsCountDisplayItemsQuantities">
+    <test name="StorefrontCartItemsCountDisplayUniqueItemsTest" extends="StorefrontCartItemsCountDisplayItemsQuantitiesTest">
         <annotations>
             <stories value="Checkout order summary has wrong item count"/>
             <title value="Checkout order summary has wrong item count - display unique items"/>

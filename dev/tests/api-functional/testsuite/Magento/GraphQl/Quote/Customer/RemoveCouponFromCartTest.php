@@ -73,29 +73,6 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
-    public function testRemoveCouponFromCartIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  removeCouponFromCart(input: {}) {
-    cart {
-      applied_coupon {
-        code
-      }
-    }
-  }
-}
-
-QUERY;
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testRemoveCouponFromNonExistentCart()

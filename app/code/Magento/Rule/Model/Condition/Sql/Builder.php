@@ -270,25 +270,22 @@ class Builder
             $conditions = '';
             $attributeField = '';
             foreach ($combine->getConditions() as $condition) {
-                if ($condition->getData('attribute') === \Magento\Catalog\Api\Data\ProductInterface::SKU) {
+                if ($condition->getData('attribute') === \Magento\Catalog\Api\Data\ProductInterface::SKU
+                    && $condition->getData('operator') === '()'
+                ) {
                     $conditions = $condition->getData('value');
-                    $attributeField = $condition->getMappedSqlField();
+                    $attributeField = $this->_connection->quoteIdentifier($condition->getMappedSqlField());
                 }
             }
 
             if (!empty($conditions) && !empty($attributeField)) {
-                $conditions = explode(',', $conditions);
-                foreach ($conditions as &$condition) {
-                    $condition = trim($condition);
-                }
-                $conditions = implode(', ', $conditions);
+                $conditions = $this->_connection->quote(
+                    array_map('trim', explode(',', $conditions))
+                );
+                $collection->getSelect()->reset(Select::ORDER);
                 $collection->getSelect()->order(
-                    $this->_connection->quoteInto(
-                        "FIELD(?, ?)",
-                        [
-                            $attributeField,
-                            $conditions
-                        ]
+                    $this->_expressionFactory->create(
+                        ['expression' => "FIELD($attributeField, $conditions)"]
                     )
                 );
             }

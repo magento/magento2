@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <actionGroup name="AssertStorefrontSalesOrderMatchesGrandTotalActionGroup">
+        <arguments>
+            <argument name="dataHref" type="string"/>
+        </arguments>
+        <!--Click on View Order Link-->
+        <click selector="{{StorefrontSalesOrderSection.viewOrderLink(dataHref)}}" stepKey="viewOrderAction"/>
+        <waitForPageLoad stepKey="waitForViewOrderPageToLoad"/>
+        <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('subtotal')}}" stepKey="grabValueForSubtotal"/>
+        <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('shipping')}}" stepKey="grabValueForShippingHandling"/>
+        <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('grand_total')}}" stepKey="grabValueForGrandTotal"/>
+        <executeJS function="
+        var grandTotal = '{$grabValueForGrandTotal}'.substr(1);
+        return (grandTotal);" stepKey="grandTotalValue"/>
+        <executeJS function="
+               var subtotal = '{$grabValueForSubtotal}'.substr(1);
+               var handling = '{$grabValueForShippingHandling}'.substr(1);
+               var subtotalHandling = (parseFloat(subtotal) + parseFloat(handling)).toFixed(2);
+               return (subtotalHandling);" stepKey="sumTotalValue"/>
+        <assertEquals stepKey="assertSubTotalPrice">
+            <expectedResult type="variable">$sumTotalValue</expectedResult>
+            <actualResult type="variable">$grandTotalValue</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

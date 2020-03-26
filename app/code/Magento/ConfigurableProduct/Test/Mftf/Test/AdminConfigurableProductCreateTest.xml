@@ -14,7 +14,7 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to create a configurable product with attributes"/>
             <description value="admin should be able to create a configurable product with attributes"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-84"/>
             <group value="ConfigurableProduct"/>
         </annotations>
@@ -26,11 +26,11 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
@@ -76,7 +76,7 @@
             <stories value="Create, Read, Update, Delete"/>
             <title value="admin should be able to create a configurable product after incorrect sku"/>
             <description value="admin should be able to create a configurable product after incorrect sku"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-96365"/>
             <useCaseId value="MAGETWO-94556"/>
             <group value="ConfigurableProduct"/>
@@ -92,10 +92,12 @@
         <after>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPane"/>
@@ -130,7 +132,7 @@
         <click selector="{{DropdownAttributeOptionsSection.deleteButton(1)}}" stepKey="deleteOption"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid2"/>
-        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+        <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="$grabTextFromContent"/>
         </actionGroup>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>

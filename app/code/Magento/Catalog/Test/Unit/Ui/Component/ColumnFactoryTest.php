@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\Component;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Ui\Component\ColumnFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * ColumnFactory test.
+ * Test to Create columns factory on product grid page
  */
 class ColumnFactoryTest extends TestCase
 {
@@ -32,24 +34,29 @@ class ColumnFactoryTest extends TestCase
     private $objectManager;
 
     /**
-     * @var ProductAttributeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     private $attribute;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
     /**
-     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentFactory|MockObject
      */
     private $uiComponentFactory;
 
     /**
-     * @var ColumnInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ColumnInterface|MockObject
      */
     private $column;
+
+    /**
+     * @var TimezoneInterface|MockObject
+     */
+    private $timezone;
 
     /**
      * @inheritdoc
@@ -58,18 +65,29 @@ class ColumnFactoryTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->attribute = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->setMethods(['usesSource'])
-            ->getMockForAbstractClass();
+        $this->attribute = $this->createPartialMock(
+            Attribute::class,
+            [
+                'getAttributeCode',
+                'getIsFilterableInGrid',
+                'getFrontendInput',
+                'getDefaultFrontendLabel',
+                'getIsVisibleInGrid',
+            ]
+        );
         $this->context = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->column = $this->getMockForAbstractClass(ColumnInterface::class);
         $this->uiComponentFactory->method('create')
             ->willReturn($this->column);
+        $this->timezone = $this->createMock(TimezoneInterface::class);
 
         $this->columnFactory = $this->objectManager->getObject(
             ColumnFactory::class,
-            ['componentFactory' => $this->uiComponentFactory]
+            [
+                'componentFactory' => $this->uiComponentFactory,
+                'timezone' => $this->timezone,
+            ]
         );
     }
 
@@ -97,7 +115,6 @@ class ColumnFactoryTest extends TestCase
      *
      * @param array $filterModifiers
      * @param null|string $filter
-     *
      * @return void
      * @dataProvider filterModifiersProvider
      */
@@ -134,7 +151,7 @@ class ColumnFactoryTest extends TestCase
     }
 
     /**
-     * Filter modifiers data provider.
+     * Filter modifiers data provider
      *
      * @return array
      */
@@ -152,6 +169,104 @@ class ColumnFactoryTest extends TestCase
                     ],
                 ],
                 'filter' => 'text',
+            ],
+        ];
+    }
+
+    /**
+     * Test to create date column
+     *
+     * @param string $frontendInput
+     * @param bool $showsTime
+     * @param string $expectedDateFormat
+     * @param string $expectedTimezone
+     * @dataProvider createDateColumnDataProvider
+     */
+    public function testCreateDateColumn(
+        string $frontendInput,
+        bool $showsTime,
+        string $expectedDateFormat,
+        string $expectedTimezone
+    ) {
+        $attributeCode = 'attribute_code';
+        $dateFormat = 'date_format';
+        $dateTimeFormat = 'datetime_format';
+        $defaultTimezone = 'default_timezone';
+        $configTimezone = 'config_timezone';
+        $label = 'Date label';
+
+        $expectedConfig = [
+            'data' => [
+                'config' => [
+                    'label' => __($label),
+                    'dataType' => 'date',
+                    'add_field' => true,
+                    'visible' => true,
+                    'filter' => 'dateRange',
+                    'component' => 'Magento_Ui/js/grid/columns/date',
+                    'timezone' => $expectedTimezone,
+                    'dateFormat' => $expectedDateFormat,
+                    '__disableTmpl' => ['label' => true],
+                    'options' => [
+                        'showsTime' => $showsTime
+                    ]
+                ],
+            ],
+            'context' => $this->context,
+        ];
+
+        $this->attribute->method('getAttributeCode')
+            ->willReturn($attributeCode);
+        $this->attribute->method('getDefaultFrontendLabel')
+            ->willReturn($label);
+        $this->attribute->method('getIsFilterableInGrid')
+            ->willReturn(true);
+        $this->attribute->method('getIsVisibleInGrid')
+            ->willReturn(true);
+        $this->attribute->method('getFrontendInput')
+            ->willReturn($frontendInput);
+
+        $this->timezone->method('getDateFormat')
+            ->with(\IntlDateFormatter::MEDIUM)
+            ->willReturn($dateFormat);
+        $this->timezone->method('getDateTimeFormat')
+            ->with(\IntlDateFormatter::MEDIUM)
+            ->willReturn($dateTimeFormat);
+        $this->timezone->method('getDefaultTimezone')
+            ->willReturn($defaultTimezone);
+        $this->timezone->method('getConfigTimezone')
+            ->willReturn($configTimezone);
+
+        $this->uiComponentFactory->expects($this->once())
+            ->method('create')
+            ->with($attributeCode, 'column', $expectedConfig)
+            ->willReturn($this->column);
+
+        $this->assertEquals(
+            $this->column,
+            $this->columnFactory->create($this->attribute, $this->context)
+        );
+    }
+
+    /**
+     * Data provider to create date column test
+     *
+     * @return array
+     */
+    public function createDateColumnDataProvider(): array
+    {
+        return [
+            [
+                'frontendInput' => 'date',
+                'showsTime' => false,
+                'dateFormat' => 'date_format',
+                'expectedTimezone' => 'default_timezone',
+            ],
+            [
+                'frontendInput' => 'datetime',
+                'showsTime' => true,
+                'expectedDateFormat' => 'datetime_format',
+                'expectedTimezone' => 'config_timezone',
             ],
         ];
     }

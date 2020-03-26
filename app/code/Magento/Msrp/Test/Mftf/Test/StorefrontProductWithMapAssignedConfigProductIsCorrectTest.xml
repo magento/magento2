@@ -104,25 +104,32 @@
             <!--Disable Minimum advertised Price-->
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToFirstChildProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="55" stepKey="setMsrpForFirstChildProduct"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToSecondChildProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton1"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp1"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="66" stepKey="setMsrpForSecondChildProduct"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Clear cache-->
         <magentoCLI command="cache:flush" stepKey="flushCache"/>

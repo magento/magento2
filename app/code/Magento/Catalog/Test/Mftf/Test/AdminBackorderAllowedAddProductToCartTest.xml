@@ -31,11 +31,12 @@
             <!-- Set Magento back to default configuration -->
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersDisable.path}} {{CatalogInventoryItemOptionsBackordersDisable.value}}" stepKey="setConfigAllowBackordersFalse"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCache"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
         <!-- Go to the storefront and add the product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="gotoAndAddProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="gotoAndAddProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

@@ -19,6 +19,7 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDbIsolation enabled
+     * @magentoAppArea frontend
      */
     public function testReturnWizardAction()
     {

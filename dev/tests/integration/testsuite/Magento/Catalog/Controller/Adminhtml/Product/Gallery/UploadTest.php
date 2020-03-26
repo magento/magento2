@@ -154,8 +154,6 @@ class UploadTest extends AbstractBackendController
      */
     public function testUploadActionWithErrors(array $file, array $expectation): void
     {
-        $this->markTestSkipped('MC-21994');
-
         if (!empty($file['create_file'])) {
             $this->createFileInSysTmpDir($file['name']);
         } elseif (!empty($file['copy_file'])) {
@@ -165,8 +163,8 @@ class UploadTest extends AbstractBackendController
         $this->getRequest()->setMethod($this->httpMethod);
         $this->dispatch($this->uri);
         $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
-        $this->assertEquals($jsonBody['error'], $expectation['message']);
-        $this->assertEquals($jsonBody['errorcode'], $expectation['errorcode']);
+        $this->assertEquals($expectation['message'], $jsonBody['error']);
+        $this->assertEquals($expectation['errorcode'], $jsonBody['errorcode']);
 
         if (!empty($expectation['tmp_media_path'])) {
             $this->assertFileNotExists(

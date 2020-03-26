@@ -34,22 +34,24 @@
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change product type to Downloadable-->
         <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToDownloadableProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToDownloadableProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveDownloadableProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadableProductForm"/>
         <!--Assert downloadable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertDownloadableProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeDownloadableProductNameInGrid"/>
@@ -76,15 +78,17 @@
         </annotations>
         <!--Change product type to Simple-->
         <comment userInput="Change product type to Simple Product" stepKey="commentCreateSimple"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <!--Assert simple product on Admin product page grid-->
         <comment userInput="Assert simple product in Admin product page grid" stepKey="commentAssertProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogSimpleProductPage"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterSimpleProductGridBySku">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterSimpleProductGridBySku">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeSimpleProductNameInGrid"/>

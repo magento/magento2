@@ -30,6 +30,11 @@
                                 <item name="label" xsi:type="string" translate="true">Update by Schedule</item>
                                 <item name="url" xsi:type="string">*/indexer/massChangelog</item>
                             </item>
+                            <item name="invalidate_index" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Invalidate index</item>
+                                <item name="url" xsi:type="string">*/indexer/massInvalidate</item>
+                                <item name="confirm" xsi:type="string" translate="true">Are you sure you want to invalidate the selected index(es)?</item>
+                            </item>
                         </argument>
                     </arguments>
                 </block>
@@ -74,6 +79,15 @@
                             <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="column_css_class" xsi:type="string">indexer-status</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_schedule_status" as="indexer_schedule_status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Schedule Status</argument>
+                            <argument name="index" xsi:type="string">schedule_status</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\ScheduleStatus</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">indexer-schedule-status</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_updated" as="indexer_updated">

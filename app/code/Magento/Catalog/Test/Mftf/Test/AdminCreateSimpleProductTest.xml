@@ -14,7 +14,7 @@
             <stories value="Create a Simple Product via Admin"/>
             <title value="Admin should be able to create a Simple Product"/>
             <description value="Admin should be able to create a Simple Product"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-23414"/>
             <group value="product"/>
         </annotations>
@@ -26,15 +26,16 @@
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
+        <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront2">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefront2">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
     </test>
@@ -45,7 +46,7 @@
             <stories value="Default layout configuration MAGETWO-88793"/>
             <title value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
             <description value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-89023"/>
             <group value="product"/>
         </annotations>
@@ -54,7 +55,7 @@
         </before>
         <after>
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -75,7 +76,7 @@
             <stories value="Create a Simple Product via Admin"/>
             <title value="Admin should be able to create a product with zero price"/>
             <description value="Admin should be able to create a product with zero price"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
         </annotations>
@@ -96,7 +97,7 @@
             <stories value="Create a Simple Product via Admin"/>
             <title value="Admin should not be able to create a product with a negative price"/>
             <description value="Admin should not be able to create a product with a negative price"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-89912"/>
             <group value="product"/>
         </annotations>

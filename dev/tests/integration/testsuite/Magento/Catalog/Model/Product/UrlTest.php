@@ -53,8 +53,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
-     * @magentoDbIsolation disabled
      * @dataProvider getUrlsWithSecondStoreProvider
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testGetUrlInStoreWithSecondStore($storeCode, $expectedProductUrl)
@@ -87,6 +87,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testGetProductUrl()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -121,6 +124,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoAppArea frontend
      */
     public function testGetUrl()
@@ -142,6 +146,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Check that rearranging product url rewrites do not influence on whether to use category in product links
      *
      * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
+     * @magentoDbIsolation disabled
      */
     public function testGetProductUrlWithRearrangedUrlRewrites()
     {
