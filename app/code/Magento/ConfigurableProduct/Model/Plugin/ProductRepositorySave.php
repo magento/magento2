@@ -13,6 +13,7 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Validating product links of configurable product and reset configurable attributes after save configurable product
@@ -118,6 +119,7 @@ class ProductRepositorySave
      * @param array $linkIds
      * @return void
      * @throws InputException
+     * @throws LocalizedException
      */
     private function validateProductLinks(array $attributeCodes, array $linkIds)
     {
@@ -126,6 +128,11 @@ class ProductRepositorySave
         foreach ($linkIds as $productId) {
             $variation = $this->productFactory->create()->load($productId);
             $valueKey = '';
+            if ($variation->getId() === null) {
+                throw new LocalizedException(
+                    __('Product with id "%1" does not exist.', $productId)
+                );
+            }
             foreach ($attributeCodes as $attributeCode) {
                 if (!$variation->getData($attributeCode)) {
                     throw new InputException(
