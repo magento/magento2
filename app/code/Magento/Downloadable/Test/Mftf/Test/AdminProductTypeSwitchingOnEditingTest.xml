@@ -50,11 +50,13 @@
             <!--Delete product-->
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change product type to Downloadable-->
         <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToDownloadableProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToDownloadableProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeightForProduct"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>

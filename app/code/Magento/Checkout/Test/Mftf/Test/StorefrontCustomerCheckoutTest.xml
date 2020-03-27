@@ -14,7 +14,7 @@
             <stories value="Checkout via Storefront"/>
             <title value="Customer Checkout via Storefront"/>
             <description value="Should be able to place an order as a customer."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-30274"/>
             <group value="checkout"/>
         </annotations>
@@ -31,7 +31,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteUsCustomer"/>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         </after>
 
@@ -82,7 +82,7 @@
         <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderGrid}}" stepKey="waitForOrdersGridVisible"/>
         <see selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$createCustomer.firstname$$ $$createCustomer.lastname$$" stepKey="verifyOrder"/>
     </test>
-    <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
+    <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRatesTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Customer checkout"/>
@@ -144,7 +144,7 @@
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="multiple_address_customer" stepKey="deleteCustomer"/>
@@ -198,7 +198,7 @@
         <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="seeSuccessMessage2"/>
     </test>
-    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPayment">
+    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPaymentTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout flow if payment solutions are not available"/>

@@ -11,7 +11,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
-use Zend\Code\Reflection\FileReflection;
+use Laminas\Code\Reflection\FileReflection;
 
 /**
  * Test check if Magento library components contain incorrect dependencies to application layer
