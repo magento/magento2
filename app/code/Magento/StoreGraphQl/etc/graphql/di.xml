@@ -27,6 +27,7 @@
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
                 <item name="store_name" xsi:type="string">store/information/name</item>
+                <item name="oauth_access_token_lifetime_customer" xsi:type="string">oauth/access_token_lifetime/customer</item>
             </argument>
         </arguments>
     </type>
