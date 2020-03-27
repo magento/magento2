@@ -62,10 +62,6 @@
             <magento_code>authorizenet_directpost</magento_code>
             <signifyd_code>PAYMENT_CARD</signifyd_code>
         </payment_method>
-        <payment_method name="worldpay">
-            <magento_code>worldpay</magento_code>
-            <signifyd_code>PAYMENT_CARD</signifyd_code>
-        </payment_method>
         <payment_method name="free">
             <magento_code>free</magento_code>
             <signifyd_code>FREE</signifyd_code>
