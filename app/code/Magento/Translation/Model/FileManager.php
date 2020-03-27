@@ -53,20 +53,20 @@ class FileManager
      * @param DirectoryList $directoryList
      * @param File $driverFile
      * @param TranslationFile $translationFile
-     * @param Json|null $serializer
+     * @param Json $serializer
      */
     public function __construct(
         Repository $assetRepo,
         DirectoryList $directoryList,
         File $driverFile,
-        TranslationFile $translationFile = null,
-        Json $serializer = null
+        TranslationFile $translationFile,
+        Json $serializer
     ) {
         $this->assetRepo = $assetRepo;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
-        $this->translationFile = $translationFile ?: ObjectManager::getInstance()->get(TranslationFile::class);
-        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
+        $this->translationFile = $translationFile;
+        $this->serializer = $serializer;
     }
 
     /**
