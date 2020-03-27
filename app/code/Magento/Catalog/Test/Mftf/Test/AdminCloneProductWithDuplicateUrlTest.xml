@@ -34,7 +34,9 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <!--Save and duplicated the product once-->
         <comment userInput="Save and duplicated the product once" stepKey="commentSaveAndDuplicateProduct"/>
@@ -45,7 +47,9 @@
         <assertContains expectedType="string" expected="-1" actual="$grabDuplicatedProductUrlKey" stepKey="assertDuplicatedProductUrlKey1"/>
         <!--Add duplicated product to the simple product-->
         <comment userInput="Add duplicated product to the simple product" stepKey="commentAddProduct"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToSimpleProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSimpleProductPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad1"/>
         <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addCrossSellProduct">
             <argument name="sku" value="$$createSimpleProduct.sku$$"/>
@@ -63,7 +67,9 @@
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('crosssell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeCrossSellProduct"/>
         <!--Save and duplicated the product second time-->
         <comment userInput="Save and duplicated the product second time" stepKey="commentSaveAndDuplicateProduct1"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage1">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad2"/>
         <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductFormSecondTime"/>
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openProductSEOSection"/>

@@ -9,13 +9,13 @@ namespace Magento\Setup\Model;
 use Symfony\Component\Console\Application;
 use Magento\Framework\Console\CommandListInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 /**
  * Object manager provider
  *
- * Links Zend Framework's service locator and Magento object manager.
+ * Links Laminas Framework's service locator and Magento object manager.
  * Guaranties single object manager per application run.
  * Hides complexity of creating Magento object manager
  */
