@@ -15,9 +15,6 @@
             <testCaseId value="MC-14714"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-30409"/>
-            </skip>
         </annotations>
 
         <before>
@@ -25,6 +22,7 @@
             <createData entity="Two_nested_categories" stepKey="subCategory">
                 <requiredEntity createDataKey="category"/>
             </createData>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
 
