@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductToCartThroughAjaxTest">
+        <annotations>
+            <features value="Product List Widget"/>
+            <stories value="Add product to cart through ajax in Product List widget"/>
+            <title value="Add product through ajax"/>
+            <description value="Add product to cart through ajax in Product List widget on Cms page"/>
+        </annotations>
+        <before>
+            <!-- 1. Create multiple products and assign to a category. -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- 2. Login as Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <!-- 3. Go to Home CMS Page in Admin -->
+            <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="onAdminCmsHomePage">
+                <argument name="page_id" value="2" />
+            </actionGroup>
+            <!-- 4. Add Catalog Products List to CMS Home Page-->
+            <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
+            <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContentActionGroup">
+                <argument name="widgetType" value="Catalog Products List"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton"/>
+            <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveButton"/>
+        </before>
+        <after>
+            <!-- 5. Remove Data -->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- 6. Go to Home Page -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <waitForPageLoad stepKey="waitForHomePageToload"/>
+        <!-- 7. Add Product to Cart -->
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addProductToCart"/>
+        <!-- 8. Check if Product was added to cart -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createFirstSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+    </test>
+</tests>
