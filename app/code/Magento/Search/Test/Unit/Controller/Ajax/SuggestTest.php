@@ -107,7 +107,7 @@ class SuggestTest extends TestCase
             ->method('create')
             ->willReturn($resultJsonMock);
 
-        $this->action->execute();
+        $this->assertEquals($resultJsonMock, $this->action->execute());
     }
 
     public function testResultWithoutQuery()
@@ -125,7 +125,11 @@ class SuggestTest extends TestCase
         $this->urlMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn(static::BASE_URL);
+        $resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with(static::BASE_URL)
+            ->willReturnSelf();
 
-        $this->action->execute();
+        $this->assertEquals($resultRedirectMock, $this->action->execute());
     }
 }
