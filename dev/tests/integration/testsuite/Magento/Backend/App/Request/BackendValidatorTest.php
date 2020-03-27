@@ -27,7 +27,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use Magento\Backend\Model\UrlInterface as BackendUrl;
 use Magento\Framework\App\Response\HttpFactory as HttpResponseFactory;
 
