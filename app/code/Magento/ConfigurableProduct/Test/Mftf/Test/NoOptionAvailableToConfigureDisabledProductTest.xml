@@ -157,7 +157,12 @@
         <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
-        <waitForPageLoad stepKey="waitForSuccess"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForError"/>
+        <!-- Check that error remains -->
+        <actionGroup ref="AssertAdminItemOrderedErrorActionGroup" stepKey="assertProductErrorRemains">
+            <argument name="productName" value="$createConfigChildProduct2.name$"/>
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="This product is out of stock."/>
+        </actionGroup>
     </test>
 </tests>
