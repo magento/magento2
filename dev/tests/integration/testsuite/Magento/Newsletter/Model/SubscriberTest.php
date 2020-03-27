@@ -88,7 +88,7 @@ class SubscriberTest extends TestCase
         $this->assertSame($subscriber, $subscriber->loadByCustomerId(1));
         $this->assertEquals($subscriber, $subscriber->unsubscribe());
         $this->assertContains(
-            'You have been unsubscribed from the newsletter.',
+            '<p>You have been unsubscribed from the newsletter.</p>',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
         $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $subscriber->getSubscriberStatus());
@@ -96,7 +96,7 @@ class SubscriberTest extends TestCase
         $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $subscriber->subscribe('customer@example.com'));
         $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $subscriber->getSubscriberStatus());
         $this->assertContains(
-            'You have been successfully subscribed to our newsletter.',
+            '<p>You have been successfully subscribed to our newsletter.</p>',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
     }
@@ -115,14 +115,14 @@ class SubscriberTest extends TestCase
         $this->assertSame($subscriber, $subscriber->unsubscribeCustomerById(1));
         $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $subscriber->getSubscriberStatus());
         $this->assertContains(
-            'You have been unsubscribed from the newsletter.',
+            '<p>You have been unsubscribed from the newsletter.</p>',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
         // Subscribe and verify
         $this->assertSame($subscriber, $subscriber->subscribeCustomerById(1));
         $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $subscriber->getSubscriberStatus());
         $this->assertContains(
-            'You have been successfully subscribed to our newsletter.',
+            '<p>You have been successfully subscribed to our newsletter.</p>',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
     }
@@ -142,7 +142,7 @@ class SubscriberTest extends TestCase
         $subscriber->loadByEmail($customerEmail);
         $subscriber->confirm($subscriber->getSubscriberConfirmCode());
         $this->assertContains(
-            'You have been successfully subscribed to our newsletter.',
+            '<p>You have been successfully subscribed to our newsletter.</p>',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
     }
