@@ -16,7 +16,7 @@
             <description value="admin should be able to bulk update attributes of configurable products"/>
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
         </annotations>
 
         <before>
@@ -91,7 +91,7 @@
             <description value="Admin should be able to remove a product configuration"/>
             <testCaseId value="MC-63"/>
             <group value="ConfigurableProduct"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
         </annotations>
 
         <before>
@@ -158,7 +158,9 @@
 
         <!--check admin for both options-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="seeOption1Admin"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct2.name$$" stepKey="seeOption2Admin"/>
@@ -187,7 +189,7 @@
             <description value="Admin should be able to disable a product configuration"/>
             <testCaseId value="MC-119"/>
             <group value="ConfigurableProduct"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
         </annotations>
 
         <before>
@@ -254,7 +256,9 @@
 
         <!--go to admin and disable an option-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
         <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisable"/>
@@ -274,7 +278,7 @@
             <stories value="Edit a configurable product in admin"/>
             <title value="Admin should be able to remove a configuration from a Configurable Product"/>
             <description value="Admin should be able to remove a configuration from a Configurable Product"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-86"/>
             <group value="ConfigurableProduct"/>
         </annotations>
@@ -323,7 +327,7 @@
             <stories value="Edit a configurable product in admin"/>
             <title value="Admin should be able to edit configuration to add a value to an existing attribute"/>
             <description value="Admin should be able to edit configuration to add a value to an existing attribute"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-95"/>
             <group value="ConfigurableProduct"/>
         </annotations>
