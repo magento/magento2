@@ -47,7 +47,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testSendResponse(): void
     {
         $filePath = 'file_path';
-        $headers = $this->getMockBuilder(\Zend\Http\Headers::class)->getMock();
+        $headers = $this->getMockBuilder(\Laminas\Http\Headers::class)->getMock();
         $this->response->setFilePath($filePath);
         $this->response->setHeaders($headers);
         $this->transferAdapter

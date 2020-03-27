@@ -3,18 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
-use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
-use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
  * Builder for match query.
@@ -30,13 +28,6 @@ class Match implements QueryInterface
      * @var FieldMapperInterface
      */
     private $fieldMapper;
-
-    /**
-     * @deprecated
-     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
-     * @var PreprocessorInterface[]
-     */
-    protected $preprocessorContainer;
 
     /**
      * @var AttributeProvider
@@ -59,7 +50,6 @@ class Match implements QueryInterface
 
     /**
      * @param FieldMapperInterface $fieldMapper
-     * @param PreprocessorInterface[] $preprocessorContainer
      * @param AttributeProvider $attributeProvider
      * @param TypeResolver $fieldTypeResolver
      * @param ValueTransformerPool $valueTransformerPool
@@ -67,14 +57,12 @@ class Match implements QueryInterface
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
-        array $preprocessorContainer,
         AttributeProvider $attributeProvider,
         TypeResolver $fieldTypeResolver,
         ValueTransformerPool $valueTransformerPool,
         Config $config
     ) {
         $this->fieldMapper = $fieldMapper;
-        $this->preprocessorContainer = $preprocessorContainer;
         $this->attributeProvider = $attributeProvider;
         $this->fieldTypeResolver = $fieldTypeResolver;
         $this->valueTransformerPool = $valueTransformerPool;
@@ -180,21 +168,5 @@ class Match implements QueryInterface
         }
 
         return $conditions;
-    }
-
-    /**
-     * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
-     *
-     * @deprecated
-     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
-     * @param string $value
-     * @return string
-     */
-    protected function escape($value)
-    {
-        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\\\)/';
-        $replace = '\\\$1';
-
-        return preg_replace($pattern, $replace, $value);
     }
 }
