@@ -13,7 +13,7 @@
             <title value="Update category, URL key with custom store view"/>
             <description value="Login as admin and update category URL Key with store view"/>
             <testCaseId value="MC-6062"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -29,7 +29,7 @@
                 <argument name="storeGroupName" value="customStore.name"/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Store Page -->

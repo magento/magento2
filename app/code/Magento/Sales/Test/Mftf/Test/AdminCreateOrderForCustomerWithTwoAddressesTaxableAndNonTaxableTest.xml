@@ -14,7 +14,7 @@
             <description value="Tax should not be displayed for non taxable address when switching from taxable address"/>
             <testCaseId value="MC-21721"/>
             <features value="Sales"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <group value="Sales"/>
         </annotations>
         <before>
@@ -71,7 +71,7 @@
             <!--Delete tax rule-->
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!--Disable free shipping method -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
         </after>

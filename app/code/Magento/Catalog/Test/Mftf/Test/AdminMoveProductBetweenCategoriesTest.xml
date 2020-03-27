@@ -53,7 +53,7 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
             <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create the anchored category <Cat1_anchored> -->
         <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
@@ -68,7 +68,9 @@
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
 
         <!-- Assign <product1> to the <Sub1> -->
-        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="goToProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDownCategory"/>
         <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
@@ -129,7 +131,7 @@
         <waitForPageLoad stepKey="waitForRefresh"/>
 
         <see userInput="2 cache type(s) refreshed." stepKey="seeCacheRefreshedMessage"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         <!-- Open frontend -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="onFrontend"/>

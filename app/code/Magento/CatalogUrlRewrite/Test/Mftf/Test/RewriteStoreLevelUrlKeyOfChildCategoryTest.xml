@@ -12,7 +12,7 @@
             <stories value="MAGETWO-91649: #13513: Magento ignore store-level url_key of child category in URL rewrite process for global scope"/>
             <description value="Rewriting Store-level URL key of child category"/>
             <features value="CatalogUrlRewrite"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94934"/>
             <group value="CatalogUrlRewrite"/>
         </annotations>
@@ -58,7 +58,7 @@
 
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>

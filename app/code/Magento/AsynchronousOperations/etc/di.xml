@@ -18,6 +18,7 @@
     <preference for="Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Short" />
     <preference for="Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterface" type="Magento\AsynchronousOperations\Model\OperationSearchResults" />
     <preference for="Magento\AsynchronousOperations\Api\OperationRepositoryInterface" type="Magento\AsynchronousOperations\Model\OperationRepository" />
+    <preference for="Magento\AsynchronousOperations\Model\OperationRepositoryInterface" type="Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository" />
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
