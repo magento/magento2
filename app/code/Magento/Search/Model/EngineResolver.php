@@ -61,12 +61,18 @@ class EngineResolver implements EngineResolverInterface
     private $logger;
 
     /**
+     * @var string
+     */
+    private $defaultEngine;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param array $engines
      * @param LoggerInterface $logger
      * @param string $path
      * @param string $scopeType
-     * @param string $scopeCode
+     * @param string|null $scopeCode
+     * @param string|null $defaultEngine
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -74,7 +80,8 @@ class EngineResolver implements EngineResolverInterface
         LoggerInterface $logger,
         $path,
         $scopeType,
-        $scopeCode = null
+        $scopeCode = null,
+        $defaultEngine = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->path = $path;
@@ -82,6 +89,7 @@ class EngineResolver implements EngineResolverInterface
         $this->scopeCode = $scopeCode;
         $this->engines = $engines;
         $this->logger = $logger;
+        $this->defaultEngine = $defaultEngine ?? self::CATALOG_SEARCH_MYSQL_ENGINE;
     }
 
     /**
@@ -104,9 +112,9 @@ class EngineResolver implements EngineResolverInterface
             return $engine;
         } else {
             $this->logger->error(
-                $engine . ' search engine doesn\'t exists. Falling back to ' . self::CATALOG_SEARCH_MYSQL_ENGINE
+                $engine . ' search engine doesn\'t exists. Falling back to ' . $this->defaultEngine
             );
-            return self::CATALOG_SEARCH_MYSQL_ENGINE;
+            return $this->defaultEngine;
         }
     }
 }
