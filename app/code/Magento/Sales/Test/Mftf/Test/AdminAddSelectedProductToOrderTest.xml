@@ -72,7 +72,7 @@
         <!-- Check that error remains -->
         <actionGroup ref="AssertAdminItemOrderedErrorActionGroup" stepKey="assertProductErrorRemains">
             <argument name="productName" value="$simpleProduct.name$"/>
-            <argument name="messageType" value="notice"/>
+            <argument name="messageType" value="error"/>
         </actionGroup>
     </test>
 </tests>
