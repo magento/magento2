@@ -19,9 +19,6 @@
             <group value="catalog"/>
             <group value="configurableProduct"/>
             <group value="swatch"/>
-            <skip>
-                <issueId value="MC-32197"/>
-            </skip>
         </annotations>
 
         <before>
