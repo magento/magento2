@@ -57,7 +57,9 @@
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig1"/>
 
         <!--Set special price to created product-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setSpecialPriceToCreatedProduct">
             <argument name="price" value="15"/>
         </actionGroup>
