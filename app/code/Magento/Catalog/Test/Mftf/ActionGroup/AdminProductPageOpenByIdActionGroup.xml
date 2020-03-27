@@ -8,10 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="GoToProductPageViaIDActionGroup">
-        <annotations>
-            <description>Goes to the Product edit page for the provided Product ID.</description>
-        </annotations>
+    <actionGroup name="AdminProductPageOpenByIdActionGroup">
         <arguments>
             <argument name="productId" type="string"/>
         </arguments>
