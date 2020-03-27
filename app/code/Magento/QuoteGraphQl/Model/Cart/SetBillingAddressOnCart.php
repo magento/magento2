@@ -57,9 +57,8 @@ class SetBillingAddressOnCart
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
 
-        if (!$customerAddressId && $addressInput) {
-            $addressInput['save_in_address_book'] = isset($billingAddressInput['address']['save_in_address_book'])
-                ? (bool) $billingAddressInput['address']['save_in_address_book'] : true;
+        if (!$customerAddressId && !isset($billingAddressInput['address']['save_in_address_book']) && $addressInput) {
+            $addressInput['save_in_address_book'] = true;
         }
 
         // Need to keep this for BC of `use_for_shipping` field
@@ -67,6 +66,7 @@ class SetBillingAddressOnCart
             ? (bool)$billingAddressInput['use_for_shipping'] : false;
         $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
             ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
+
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
