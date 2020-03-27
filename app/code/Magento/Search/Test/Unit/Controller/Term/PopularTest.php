@@ -79,7 +79,7 @@ class PopularTest extends TestCase
             ->method('create')
             ->willReturn($resultPageMock);
 
-        $this->assertEquals($resultPageMock, $this->action->execute());
+        $this->assertSame($resultPageMock, $this->action->execute());
     }
 
     public function testResultWithDisabledPage()
@@ -98,6 +98,6 @@ class PopularTest extends TestCase
             ->method('forward')
             ->with('noroute');
 
-        $this->assertEquals($resultForwardMock, $this->action->execute());
+        $this->assertSame($resultForwardMock, $this->action->execute());
     }
 }
