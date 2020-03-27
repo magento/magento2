@@ -49,10 +49,9 @@ class Details extends \Magento\Backend\App\Action implements \Magento\Framework\
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')
-            && $this->accessValidator->isAllowed($this->getRequest()->getParam('uuid'));
+        return $this->accessValidator->isAllowed($this->getRequest()->getParam('uuid'));
     }
-    
+
     /**
      * Bulk details action
      *

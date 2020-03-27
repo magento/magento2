@@ -9,7 +9,6 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
@@ -19,11 +18,6 @@ use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
  */
 class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
     /**
      * @var StatusMapper
      */
@@ -45,27 +39,25 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param UserContextInterface $userContextInterface
      * @param StatusMapper $statusMapper
      * @param CalculatedStatusSql $calculatedStatusSql
      * @param string $mainTable
      * @param null $resourceModel
      * @param string $identifierName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         EntityFactory $entityFactory,
         Logger $logger,
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
-        UserContextInterface $userContextInterface,
         StatusMapper $statusMapper,
         CalculatedStatusSql $calculatedStatusSql,
         $mainTable = 'magento_bulk',
         $resourceModel = null,
         $identifierName = 'uuid'
     ) {
-        $this->userContext = $userContextInterface;
         $this->statusMapper = $statusMapper;
         $this->calculatedStatusSql = $calculatedStatusSql;
         parent::__construct(
@@ -90,9 +82,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
                 '*',
                 'status' => $this->calculatedStatusSql->get($this->getTable('magento_operation'))
             ]
-        )->where(
-            'user_id=?',
-            $this->userContext->getUserId()
         );
         return $this;
     }

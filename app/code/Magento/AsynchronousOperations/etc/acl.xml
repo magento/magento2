@@ -12,7 +12,14 @@
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Logging::magento_logging" title="Action Log" translate="title" sortOrder="70">
                         <resource id="Magento_Logging::magento_logging_events" title="Report" translate="title" sortOrder="10"/>
-                        <resource id="Magento_Logging::system_magento_logging_bulk_operations" title="Bulk Actions" translate="title" sortOrder="15"/>
+                        <resource id="Magento_Logging::system_magento_logging_bulk_operations" title="All Bulk Actions" translate="title" sortOrder="15">
+                            <resource id="Magento_Logging::system_magento_logging_bulk_operations_guests" title="Guests Bulk Actions" translate="title" sortOrder="15"/>
+                            <resource id="Magento_Logging::system_magento_logging_bulk_operations_integrations" title="Integrations Bulk Actions" translate="title" sortOrder="20"/>
+                            <resource id="Magento_Logging::system_magento_logging_bulk_operations_admin" title="Admin Bulk Actions" translate="title" sortOrder="25">
+                                <resource id="Magento_Logging::system_magento_logging_bulk_operations_admin_own" title="Own Bulk Actions" translate="title" sortOrder="15"/>
+                            </resource>
+                            <resource id="Magento_Logging::system_magento_logging_bulk_operations_customers" title="Customers Bulk Actions" translate="title" sortOrder="30"/>
+                        </resource>
                     </resource>
                 </resource>
             </resource>

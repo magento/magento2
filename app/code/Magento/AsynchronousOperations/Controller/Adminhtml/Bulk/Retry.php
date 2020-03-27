@@ -35,6 +35,7 @@ class Retry extends Action
 
     /**
      * Retry constructor.
+     *
      * @param Context $context
      * @param BulkManagement $bulkManagement
      * @param BulkNotificationManagement $notificationManagement
