@@ -19,6 +19,7 @@ class EngineResolver implements EngineResolverInterface
 {
     /**
      * MySQL search engine
+     * @deprecated
      */
     const CATALOG_SEARCH_MYSQL_ENGINE = 'mysql';
 
