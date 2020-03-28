@@ -18,6 +18,11 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Indexer\ActionInterface;
 
+/**
+ * Unit test and integration test for plugin
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
