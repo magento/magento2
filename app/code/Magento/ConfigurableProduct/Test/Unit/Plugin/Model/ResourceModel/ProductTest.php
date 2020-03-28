@@ -6,17 +6,17 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel;
 
-use Magento\Catalog\Model\Product\Type;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Indexer\ActionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\ExtensionAttributesInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductAttributeSearchResults;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
+use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Indexer\ActionInterface;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,14 +39,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product
      */
     private $model;
+
     /**
      * @var ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $prdAttributeRepositoryMock;
+    private $productAttributeRepositoryMock;
+
     /**
      * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
+
     /**
      * @var FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
@@ -57,7 +60,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configurableMock = $this->createMock(Configurable::class);
         $this->actionMock = $this->createMock(ActionInterface::class);
-        $this->prdAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
+        $this->productAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
@@ -75,7 +78,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             [
                 'configurable' => $this->configurableMock,
                 'productIndexer' => $this->actionMock,
-                'productAttributeRepository' => $this->prdAttributeRepositoryMock,
+                'productAttributeRepository' => $this->productAttributeRepositoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock
             ]
@@ -125,7 +128,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ProductAttributeSearchResults::class,
             ['getItems']
         );
-        $this->prdAttributeRepositoryMock->expects($this->once())
+        $this->productAttributeRepositoryMock->expects($this->once())
             ->method('getList')->with($searchCriteria)->willReturn($searchResultMockClass);
         $optionAttribute = $this->createPartialMock(
             EavAttribute::class,
