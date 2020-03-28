@@ -215,6 +215,6 @@ class TranslatedLists implements ListsInterface
 
         $translation = (new RegionBundle())->get($locale)['Countries'][$value];
 
-        return $translation ? (string)__($translation) : $translation;
+        return $translation ? (string) $translation : $translation;
     }
 }
