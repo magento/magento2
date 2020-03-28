@@ -9,7 +9,7 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
- * @inheritdoc
+ * Class AddressAdapter
  */
 class AddressAdapter implements AddressAdapterInterface
 {
@@ -54,7 +54,7 @@ class AddressAdapter implements AddressAdapterInterface
     public function getStreetLine1()
     {
         $street = $this->address->getStreet();
-        return $street[0] ?? '';
+        return isset($street[0]) ? $street[0]: '';
     }
 
     /**
@@ -65,7 +65,29 @@ class AddressAdapter implements AddressAdapterInterface
     public function getStreetLine2()
     {
         $street = $this->address->getStreet();
-        return $street[1] ?? '';
+        return isset($street[1]) ? $street[1]: '';
+    }
+
+    /**
+     * Get street line 3
+     *
+     * @return string
+     */
+    public function getStreetLine3()
+    {
+        $street = $this->address->getStreet();
+        return isset($street[2]) ? $street[2]: '';
+    }
+
+    /**
+     * Get street line 4
+     *
+     * @return string
+     */
+    public function getStreetLine4()
+    {
+        $street = $this->address->getStreet();
+        return isset($street[3]) ? $street[3]: '';
     }
 
     /**
@@ -176,5 +198,16 @@ class AddressAdapter implements AddressAdapterInterface
     public function getCompany()
     {
         return $this->address->getCompany();
+    }
+
+
+    /**
+     * Get Vat Id
+     *
+     * @return string
+     */
+    public function getVatId() 
+    {
+        return $this->address->getVatId();
     }
 }
