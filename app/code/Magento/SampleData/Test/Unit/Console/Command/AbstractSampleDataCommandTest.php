@@ -26,6 +26,16 @@ use Symfony\Component\Console\Input\ArrayInputFactory;
  */
 abstract class AbstractSampleDataCommandTest extends TestCase
 {
+    /*
+     * Expected arguments for `composer config` to set missing field "version"
+     */
+    private const STUB_EXPECTED_COMPOSER_CONFIG = [
+        'command' => 'config',
+        'setting-key' => 'version',
+        'setting-value' => ['0.0.1'],
+        '--quiet' => 1
+    ];
+
     /**
      * @var ReadInterface|MockObject
      */
@@ -121,7 +131,7 @@ abstract class AbstractSampleDataCommandTest extends TestCase
                 ->withConsecutive(
                     [
                         'input' => new ArrayInput(
-                            $this->expectedComposerArgumentsCommandConfig()
+                            self::STUB_EXPECTED_COMPOSER_CONFIG
                         ),
                         'output' => $this->anything()
                     ],

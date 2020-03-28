@@ -9,8 +9,10 @@ namespace Magento\SampleData\Test\Unit\Console\Command;
 
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Magento\Setup\Model\PackagesAuth;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -18,6 +20,35 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
 {
+    /**
+     * @var Json|MockObject
+     */
+    private $serializerMock;
+
+    /**
+     * Creates mocks
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->serializerMock = $this->createMock(Json::class);
+    }
+
+    /**
+     * Sets mock for unserialization composer content
+     * @param array $composerJsonContent
+     * @return void
+     */
+    protected function setupMockForSerializer(array $composerJsonContent): void
+    {
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will($this->returnValue($composerJsonContent));
+    }
+
     /**
      * Sets mocks for auth file
      *
@@ -63,6 +94,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             $composerJsonContent
         );
         $this->setupMocksForAuthFile($authExist);
+        $this->setupMockForSerializer($composerJsonContent);
         $commandTester = $this->createCommandTester();
         $commandTester->execute([]);
 
@@ -94,6 +126,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             ['--no-update' => 1]
         );
         $this->setupMocksForAuthFile($authExist);
+        $this->setupMockForSerializer($composerJsonContent);
         $commandInput = ['--no-update' => 1];
 
         $commandTester = $this->createCommandTester();
@@ -172,6 +205,12 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             ->method('readFile')
             ->with('composer.json')
             ->willReturn('{"require": {"magento/product-community-edition": "0.0.1"}, "version": "0.0.1"}');
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will($this->returnValue([
+                'require' => ["magento/product-community-edition" => "0.0.1"],
+                'version' => '0.0.1'
+            ]));
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
@@ -208,24 +247,10 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
                 $this->filesystemMock,
                 $this->sampleDataDependencyMock,
                 $this->arrayInputFactoryMock,
-                $this->applicationFactoryMock
+                $this->applicationFactoryMock,
+                $this->serializerMock
             )
         );
-    }
-
-    /**
-     * Expected arguments for `composer config` to set missing field "version"
-     *
-     * @return array
-     */
-    protected function expectedComposerArgumentsCommandConfig(): array
-    {
-        return [
-            'command' => 'config',
-            'setting-key' => 'version',
-            'setting-value' => ['0.0.1'],
-            '--quiet' => 1
-        ];
     }
 
     /**

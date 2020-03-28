@@ -10,9 +10,12 @@ use Composer\Console\Application;
 use Composer\Console\ApplicationFactory;
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SampleData\Model\Dependency;
 use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Command\Command;
@@ -24,6 +27,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for deployment of Sample Data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SampleDataDeployCommand extends Command
 {
@@ -51,21 +56,29 @@ class SampleDataDeployCommand extends Command
     private $applicationFactory;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param Filesystem $filesystem
      * @param Dependency $sampleDataDependency
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
+     * @param Json $serializer
      */
     public function __construct(
         Filesystem $filesystem,
         Dependency $sampleDataDependency,
         ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory
+        ApplicationFactory $applicationFactory,
+        Json $serializer
     ) {
         $this->filesystem = $filesystem;
         $this->sampleDataDependency = $sampleDataDependency;
         $this->arrayInputFactory = $arrayInputFactory;
         $this->applicationFactory = $applicationFactory;
+        $this->serializer = $serializer;
         parent::__construct();
     }
 
@@ -90,20 +103,20 @@ class SampleDataDeployCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|void
+     * @return int
      * @throws FileSystemException
      * @throws LocalizedException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $rootJson = json_decode(
+        $rootJson = $this->serializer->unserialize(
             $this->filesystem->getDirectoryRead(
                 DirectoryList::ROOT
             )->readFile("composer.json")
         );
-        if (!isset($rootJson->version)) {
+        if (!isset($rootJson['version'])) {
             $magentoProductPackage = array_filter(
-                (array) $rootJson->require,
+                $rootJson['require'],
                 function ($package) {
                     return false !== strpos($package, 'magento/product-');
                 },
@@ -156,9 +169,15 @@ class SampleDataDeployCommand extends Command
                     . '</info>'
                 );
                 $application->resetComposer();
+
+                return Cli::RETURN_FAILURE;
             }
+
+            return Cli::RETURN_SUCCESS;
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
+
+            return Cli::RETURN_FAILURE;
         }
     }
 
@@ -189,15 +208,30 @@ class SampleDataDeployCommand extends Command
     /**
      * Updates PHP memory limit
      *
+     * @throws InvalidArgumentException
      * @return void
      */
     private function updateMemoryLimit()
     {
         if (function_exists('ini_set')) {
-            @ini_set('display_errors', 1);
+            $result = ini_alter('display_errors', 1);
+            if ($result === false) {
+                $error = error_get_last();
+                throw new InvalidArgumentException(__(
+                    'Failed to set ini option display_errors to value 1. %1',
+                    $error['message']
+                ));
+            }
             $memoryLimit = trim(ini_get('memory_limit'));
             if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 756 * 1024 * 1024) {
-                @ini_set('memory_limit', '756M');
+                $result = ini_alter('memory_limit', '756M');
+                if ($result === false) {
+                    $error = error_get_last();
+                    throw new InvalidArgumentException(__(
+                        'Failed to set ini option memory_limit to 756M. %1',
+                        $error['message']
+                    ));
+                }
             }
         }
     }
