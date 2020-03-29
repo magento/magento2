@@ -14,7 +14,7 @@
             <stories value="Checkout via the Storefront"/>
             <title value="Update price in shopping cart after product save"/>
             <description value="Price in shopping cart should be updated after product save with changed price"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-58179"/>
             <group value="checkout"/>
         </annotations>
@@ -52,7 +52,9 @@
 
         <!--Edit product price via admin panel-->
         <openNewTab stepKey="openNewTab"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
         <fillField userInput="120" selector="{{AdminProductFormSection.productPrice}}"  stepKey="setNewPrice"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeTab"/>

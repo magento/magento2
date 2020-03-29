@@ -13,7 +13,7 @@
             <stories value="MC-17838: Shopping cart items added to the order created in the admin"/>
             <description value="Shopping cart items must not be added to the order unless they were moved manually"/>
             <features value="Sales"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <group value="Sales"/>
         </annotations>
         <before>

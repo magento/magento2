@@ -9,6 +9,9 @@ namespace Magento\Checkout\Model\Cart;
 
 use Magento\Framework\Locale\ResolverInterface;
 
+/**
+ * Cart request quantity processor
+ */
 class RequestQuantityProcessor
 {
     /**
@@ -34,7 +37,7 @@ class RequestQuantityProcessor
      */
     public function process(array $cartData): array
     {
-        $filter = new \Zend\I18n\Filter\NumberParse($this->localeResolver->getLocale());
+        $filter = new \Laminas\I18n\Filter\NumberParse($this->localeResolver->getLocale());
 
         foreach ($cartData as $index => $data) {
             if (isset($data['qty'])) {
