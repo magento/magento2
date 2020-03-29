@@ -42,7 +42,9 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getFirstOrderId"/>
-        <assertNotEmpty actual="$getFirstOrderId" stepKey="assertOrderIdIsNotEmpty" after="getFirstOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getFirstOrderId">
+			<actualResult type="const">$getFirstOrderId</actualResult>
+        </assertNotEmpty>
 
         <!-- Create Shipment for first Order -->
         <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createShipmentForFirstOrder"/>
@@ -53,7 +55,9 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getSecondOrderId"/>
-        <assertNotEmpty actual="$getSecondOrderId" stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId"/>
+        <assertNotEmpty stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId">
+			<actualResult type="const">$getSecondOrderId</actualResult>
+        </assertNotEmpty>
 
         <!-- Create CreditMemo for second Order -->
         <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>

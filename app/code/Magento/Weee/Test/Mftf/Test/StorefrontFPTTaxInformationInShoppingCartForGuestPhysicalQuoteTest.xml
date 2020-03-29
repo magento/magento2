@@ -40,7 +40,7 @@
                 <field key="price">10.00</field>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
                 <argument name="productId" value="$createSimpleProduct.id$"/>
             </actionGroup>
             <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">

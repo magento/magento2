@@ -92,7 +92,7 @@
         </actionGroup>
 
         <!-- Disable Child Product -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openSimpleProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct">
             <argument name="productId" value="$createSimpleProduct.id$"/>
         </actionGroup>
         <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>

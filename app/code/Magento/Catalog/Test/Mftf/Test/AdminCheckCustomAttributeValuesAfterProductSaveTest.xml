@@ -49,7 +49,9 @@
         </after>
 
         <!-- Open created product for edit -->
-        <amOnPage url="{{AdminProductEditPage.url($createSimpleProduct.id$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Add created attribute to the product -->

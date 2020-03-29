@@ -34,7 +34,7 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openAdminProductEditPage">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
             <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
 

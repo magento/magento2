@@ -108,7 +108,10 @@
 
         <!--Assert Bundle Product Price-->
         <grabTextFrom selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="grabProductsPrice"/>
-        <assertEquals expected='$123.00' expectedType="string" actual="$grabProductsPrice" message="ExpectedPrice" stepKey="assertBundleProductPrice"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
+			<actualResult type="const">$grabProductsPrice</actualResult>
+			<expectedResult type="string">$123.00</expectedResult>
+        </assertEquals>
 
         <!--Chose all products from 1st & 3rd options -->
         <click stepKey="selectProduct1" selector="{{StorefrontBundledSection.productCheckbox('1','1')}}"/>

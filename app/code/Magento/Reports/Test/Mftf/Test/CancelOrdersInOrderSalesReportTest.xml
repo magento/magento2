@@ -89,6 +89,9 @@
         <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersAny"/>
 
         <!-- Compare canceled orders price -->
-        <assertEquals expected="{$grabCanceledOrdersSpecified}" expectedType="string" actual="{$grabCanceledOrdersAny}" actualType="string"  stepKey="assertEquals"/>
+        <assertEquals stepKey="assertEquals">
+			<actualResult type="string">{$grabCanceledOrdersAny}</actualResult>
+			<expectedResult type="string">{$grabCanceledOrdersSpecified}</expectedResult>
+        </assertEquals>
     </test>
 </tests>

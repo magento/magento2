@@ -42,7 +42,7 @@
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
                 <argument name="productId" value="$createSimpleProduct.id$"/>
             </actionGroup>
             <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
