@@ -24,7 +24,7 @@
             <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="setIndexerModeSchedule"/>
             <magentoCLI command="indexer:reindex" stepKey="indexerReindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/></before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/></before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

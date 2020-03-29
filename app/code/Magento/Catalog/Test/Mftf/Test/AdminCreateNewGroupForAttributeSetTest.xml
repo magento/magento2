@@ -23,7 +23,7 @@
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
 
             <!-- Login to Admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>

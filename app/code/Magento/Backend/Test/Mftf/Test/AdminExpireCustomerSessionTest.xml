@@ -27,7 +27,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Login to Admin. -->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- 2. Create customer if needed. -->
         <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
