@@ -14,6 +14,7 @@
         <column xsi:type="varchar" name="content_type" length="255" nullable="true" comment="Content Type"/>
         <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="int" name="size" padding="10" unsigned="true" nullable="false" identity="false" comment="Asset file size in bytes"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

@@ -57,10 +57,12 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $this->objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $this->objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
         );
@@ -183,7 +185,7 @@ QUERY;
         $request->setPathInfo('/graphql');
         $request->setMethod('POST');
         $request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
 

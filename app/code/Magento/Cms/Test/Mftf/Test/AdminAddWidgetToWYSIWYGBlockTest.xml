@@ -14,7 +14,7 @@
             <group value="Cms"/>
             <title value="Admin should be able to add widget to WYSIWYG content of Block"/>
             <description value="Admin should be able to add widget to WYSIWYG content Block"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-84654"/>
         </annotations>
         <before>

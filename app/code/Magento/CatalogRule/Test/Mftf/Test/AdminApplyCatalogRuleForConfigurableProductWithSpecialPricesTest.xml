@@ -99,7 +99,7 @@
         </after>
 
         <!-- Add special prices for products -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToFirstChildProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProduct">
             <argument name="productId" value="$$createFirstConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForFirstProduct">
@@ -107,7 +107,7 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
 
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToSecondChildProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProduct">
             <argument name="productId" value="$$createSecondConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForSecondProduct">
