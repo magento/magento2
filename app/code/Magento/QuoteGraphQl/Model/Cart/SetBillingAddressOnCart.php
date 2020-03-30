@@ -81,7 +81,6 @@ class SetBillingAddressOnCart
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
     }
 
-
     /**
      * Check for the input exceptions
      *
