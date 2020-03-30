@@ -46,6 +46,6 @@ class DriverOptions
      */
     private function optionExists($options, $driverOptionKey): bool
     {
-        return $options[$driverOptionKey] === false || !empty($options[$driverOptionKey]);
+        return isset($options[$driverOptionKey]) && ($options[$driverOptionKey] === false || !empty($options[$driverOptionKey]));
     }
 }
