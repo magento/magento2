@@ -42,7 +42,9 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" after="getOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
+			<actualResult type="const">$getOrderId</actualResult>
+        </assertNotEmpty>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrderPage"/>
