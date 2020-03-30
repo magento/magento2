@@ -8,10 +8,10 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGalleryConfigurableProductWithSeveralAttributesTest">
+    <test name="StorefrontGalleryConfigurableProductWithSeveralAttributesPrependMediaTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="Verify functionality of updating Gallery items on 'view Product' Storefront page for Configurable Product with several attributes of different types"/>
+            <stories value="Prepend variation media on storefront"/>
             <title value="Storefront Gallery - Configurable Product with several attributes: prepend variation media"/>
             <description value="Storefront Gallery - Configurable Product with several attributes: prepend variation media"/>
             <severity value="AVERAGE"/>
@@ -20,8 +20,8 @@
             <group value="configurableProduct"/>
             <group value="swatch"/>
         </annotations>
+
         <before>
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setupYoutubeApiKey"/>
             <!--Create 1 configurable product with 2 variations-->
             <createData entity="ApiConfigurableProductWithDescription" stepKey="createConfigurableProduct"/>
             <!--Create product drop down attribute-->
@@ -93,9 +93,12 @@
                 <argument name="image" value="Magento3Image"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{TestImageNew.file}}"/>
             </actionGroup>
-            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertVideoAddedToConfigurableProduct"/>
+            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertVideoAddedToConfigurableProduct">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
 
             <!-- Load media for configurable product variation option1-option1-->
@@ -109,9 +112,12 @@
                 <argument name="image" value="TestImageNew"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addVideoToConfigurableProductVariationOption1Option1">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{placeholderSmallImage.file}}"/>
             </actionGroup>
-            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertVideoAddedToConfigurableProductVariationOption1Option1"/>
+            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertVideoAddedToConfigurableProductVariationOption1Option1">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption1Option1"/>
 
             <!-- Load media for configurable product variation option1-option2-->
@@ -119,16 +125,22 @@
                 <argument name="productSku" value="$createConfigurableProduct.sku$-$dropdownAttributeFirstOption.option[store_labels][0][label]$-$swatchAttributeSecondOption.option[store_labels][0][label]$"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addFirstVideoToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{Magento3Image.file}}"/>
             </actionGroup>
-            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertFirstVideoAddedToConfigurableProductVariationOption1Option2"/>
+            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertFirstVideoAddedToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="addProductImage" stepKey="addFirstImageToConfigurableProductVariationOption1Option2">
                 <argument name="image" value="MagentoLogo"/>
             </actionGroup>
             <actionGroup ref="AdminAddProductVideoWithPreviewActionGroup" stepKey="addSecondVideoToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
                 <argument name="image" value="{{placeholderThumbnailImage.file}}"/>
             </actionGroup>
-            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption1Option2"/>
+            <actionGroup ref="assertProductVideoAdminProductPage" stepKey="assertSecondVideoAddedToConfigurableProductVariationOption1Option2">
+                <argument name="video" value="VimeoProductVideo"/>
+            </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption1Option2"/>
 
             <!-- Load media for configurable product variation option2-option2-->
@@ -145,7 +157,6 @@
         </before>
 
         <after>
-            <createData entity="DefaultProductVideoConfig" stepKey="resetStoreDefaultVideoConfig"/>
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProductsWithAllVariations">
                 <argument name="product" value="$createConfigurableProduct$"/>
             </actionGroup>
@@ -165,7 +176,7 @@
         </after>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
-            <argument name="productUrl" value="$$createConfigurableProduct.custom_attributes[url_key]$$"/>
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
