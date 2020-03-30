@@ -108,12 +108,12 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     /**
      * @var Data
      */
-    protected $wishlistDataHelper;
+    private $wishlistDataHelper;
 
     /**
      * @var Compare
      */
-    protected $productCompareHelper;
+    private $productCompareHelper;
 
     /**
      * @var PriceCurrencyInterface

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddToCartFromCmsPageUsingAjaxActionGroup">
+        <annotations>
+            <description>Click on the Add to Cart button on Cms Page. Validates that the Success Message is present and qty in cart was increased.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+    </actionGroup>
+</actionGroups>
