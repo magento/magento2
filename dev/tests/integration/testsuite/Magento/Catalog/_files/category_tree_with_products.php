@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
@@ -25,12 +26,12 @@ $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
 $categoryA = $categoryFactory->create(
     [
         'data' => [
-            'name' => 'Category A',
-            'parent_id' => 2,
-            'level' => 2,
-            'position' => 1,
-            'is_active' => true,
-            'available_sort_by' =>['position', 'name'],
+            CategoryInterface::KEY_NAME => 'Category A',
+            CategoryInterface::KEY_PARENT_ID => 2,
+            CategoryInterface::KEY_LEVEL => 2,
+            CategoryInterface::KEY_POSITION => 1,
+            CategoryInterface::KEY_IS_ACTIVE => true,
+            CategoryInterface::KEY_AVAILABLE_SORT_BY =>['position', 'name'],
             'default_sort_by' => 'name',
         ],
     ]
@@ -41,12 +42,12 @@ $categoryA = $categoryRepository->save($categoryA);
 $categoryB = $categoryFactory->create(
     [
         'data' => [
-            'name' => 'Category B',
-            'parent_id' => 2,
-            'level' => 2,
-            'position' => 1,
-            'is_active' => true,
-            'available_sort_by' =>['position', 'name'],
+            CategoryInterface::KEY_NAME => 'Category B',
+            CategoryInterface::KEY_PARENT_ID => 2,
+            CategoryInterface::KEY_LEVEL => 2,
+            CategoryInterface::KEY_POSITION => 1,
+            CategoryInterface::KEY_IS_ACTIVE => true,
+            CategoryInterface::KEY_AVAILABLE_SORT_BY =>['position', 'name'],
             'default_sort_by' => 'name',
         ],
     ]
@@ -57,12 +58,12 @@ $categoryB = $categoryRepository->save($categoryB);
 $categoryC = $categoryFactory->create(
     [
         'data' => [
-            'name' => 'Category C',
-            'parent_id' => $categoryB->getId(),
-            'level' => 2,
-            'position' => 1,
-            'is_active' => true,
-            'available_sort_by' =>['position', 'name'],
+            CategoryInterface::KEY_NAME => 'Category C',
+            CategoryInterface::KEY_PARENT_ID => $categoryB->getId(),
+            CategoryInterface::KEY_LEVEL => 2,
+            CategoryInterface::KEY_POSITION => 1,
+            CategoryInterface::KEY_IS_ACTIVE => true,
+            CategoryInterface::KEY_AVAILABLE_SORT_BY =>['position', 'name'],
             'default_sort_by' => 'name',
         ],
     ]

@@ -93,7 +93,6 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_tree_with_products.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
      * @return void
