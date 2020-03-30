@@ -133,8 +133,8 @@ class SynchronizeTest extends \PHPUnit\Framework\TestCase
         $jsonObject->expects($this->once())
             ->method('setStatusHeader')
             ->with(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
         $jsonObject->expects($this->once())

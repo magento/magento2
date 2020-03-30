@@ -30,7 +30,7 @@
             <waitForPageLoad stepKey="waitForCustomersGrid"/>
             <actionGroup ref="AdminResetFilterInCustomerGrid" stepKey="resetFilter"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Open customers grid page, filter by created customer-->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGridByEmail">

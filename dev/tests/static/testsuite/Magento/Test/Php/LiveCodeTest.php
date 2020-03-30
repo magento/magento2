@@ -142,7 +142,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             function () {
                 // if no list files, probably, this is the dev environment
                 // phpcs:ignore Generic.PHP.NoSilencedErrors,Magento2.Security.InsecureFunction
-                @exec('git diff --cached --name-only', $addedFiles);
+                @exec('git diff --cached --name-only --diff-filter=A', $addedFiles);
                 return $addedFiles;
             }
         );

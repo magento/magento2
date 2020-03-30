@@ -17,7 +17,7 @@ Run this script after upgrading to PHP 7.1/7.2 and before running `composer upda
 Steps included:
  - Require new version of the metapackage
  - Update "require-dev" section
- - Add "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/" to composer.json "autoload":"psr-4" section
+ - Add "Laminas\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/" to composer.json "autoload":"psr-4" section
  - Update Magento/Updater if it's installed
  - Update name, version, and description fields in the root composer.json 
 
@@ -248,7 +248,7 @@ try {
     runComposer('remove --dev sjparkinson/static-review fabpot/php-cs-fixer --no-update');
 
     output('\nAdding "Zend\\\\Mvc\\\\Controller\\\\": "setup/src/Zend/Mvc/Controller/" to "autoload": "psr-4"');
-    $composerData['autoload']['psr-4']['Zend\\Mvc\\Controller\\'] = 'setup/src/Zend/Mvc/Controller/';
+    $composerData['autoload']['psr-4']['Laminas\\Mvc\\Controller\\'] = 'setup/src/Zend/Mvc/Controller/';
 
     if (preg_match('/^magento\/project\-(community|enterprise)\-edition$/', $composerData['name'])) {
         output('\nUpdating project name, version, and description');

@@ -30,55 +30,55 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollect
  */
 class CartTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  SharedCart |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SharedCart|\PHPUnit\Framework\MockObject\MockObject */
     protected $model;
 
-    /** @var  RequestInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var  ManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
-    /** @var  ActionContext |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ActionContext|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var  Cart |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Cart|\PHPUnit\Framework\MockObject\MockObject */
     protected $cart;
 
-    /** @var  CartHelper |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CartHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $cartHelper;
 
-    /** @var  Quote | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Quote|\PHPUnit\Framework\MockObject\MockObject */
     protected $quote;
 
-    /** @var  OptionCollection |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  OptionCollection|\PHPUnit\Framework\MockObject\MockObject */
     protected $optionCollection;
 
-    /** @var  OptionFactory |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  OptionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $optionFactory;
 
-    /** @var  Option |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Option|\PHPUnit\Framework\MockObject\MockObject */
     protected $option;
 
-    /** @var  ItemFactory |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ItemFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $itemFactory;
 
-    /** @var  Item |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Item|\PHPUnit\Framework\MockObject\MockObject */
     protected $item;
 
-    /** @var  Escaper |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Escaper|\PHPUnit\Framework\MockObject\MockObject */
     protected $escaper;
 
-    /** @var  RedirectInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirect;
 
-    /** @var  ResultFactory |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultFactory;
 
-    /** @var  Redirect |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    /** @var  Product |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
     protected function setUp()

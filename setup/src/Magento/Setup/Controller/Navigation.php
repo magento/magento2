@@ -5,17 +5,17 @@
  */
 namespace Magento\Setup\Controller;
 
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Setup\Exception;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Cron\Status;
 use Magento\Setup\Model\Navigation as NavModel;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
 
 /**
- *  Controller Navigation class
+ * Navigation controller
  */
 class Navigation extends AbstractActionController
 {
@@ -33,52 +33,43 @@ class Navigation extends AbstractActionController
      * @var ViewModel
      */
     protected $view;
-
     /**
-     * @var JsonModel
+     * @var ObjectManagerInterface
      */
-    protected $json;
+    private $objectManagerProvider;
 
     /**
-     * @var ObjectManagerProvider $objectManagerProvider
-     */
-    protected $objectManagerProvider;
-
-    /**
-     * @param NavModel $navigation
-     * @param Status $status
+     * @param NavModel              $navigation
+     * @param Status                $status
      * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(
-        NavModel $navigation,
-        Status $status,
-        ObjectManagerProvider $objectManagerProvider
-    ) {
+    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
+    {
         $this->navigation = $navigation;
         $this->status = $status;
         $this->objectManagerProvider = $objectManagerProvider->get();
-        $this->json = new JsonModel();
         $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
 
     /**
-     * Index Action
+     * Index action
      *
      * @return JsonModel
      */
     public function indexAction()
     {
-        $this->json->setVariable('nav', $this->navigation->getData());
-        $this->json->setVariable('menu', $this->navigation->getMenuItems());
-        $this->json->setVariable('main', $this->navigation->getMainItems());
-        $this->json->setVariable('titles', $this->navigation->getTitles());
-        return $this->json;
+        $json = new JsonModel();
+        $json->setVariable('nav', $this->navigation->getData());
+        $json->setVariable('menu', $this->navigation->getMenuItems());
+        $json->setVariable('main', $this->navigation->getMainItems());
+        $json->setVariable('titles', $this->navigation->getTitles());
+        return $json;
     }
 
     /**
-     * Menu Action
+     * Menu action
      *
      * @return array|ViewModel
      */
@@ -92,17 +83,14 @@ class Navigation extends AbstractActionController
     }
 
     /**
-     * SideMenu Action
+     * Side menu action
      *
      * @return array|ViewModel
-     *
-     * @throws Exception
      */
     public function sideMenuAction()
     {
         /** @var UrlInterface $backendUrl */
         $backendUrl = $this->objectManagerProvider->get(UrlInterface::class);
-
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
         $this->view->setVariable('backendUrl', $backendUrl->getRouteUrl('adminhtml'));
@@ -111,7 +99,7 @@ class Navigation extends AbstractActionController
     }
 
     /**
-     * HeaderBar Action
+     * Head bar action
      *
      * @return array|ViewModel
      */

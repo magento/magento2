@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\SearchAdapter\Filter\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Filter\Term as TermFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
@@ -21,7 +22,7 @@ class Term implements FilterInterface
     /**
      * @var FieldMapperInterface
      */
-    protected $fieldMapper;
+    private $fieldMapper;
 
     /**
      * @var AttributeProvider
@@ -41,12 +42,11 @@ class Term implements FilterInterface
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
-        AttributeProvider $attributeAdapterProvider = null,
+        AttributeProvider $attributeAdapterProvider,
         array $integerTypeAttributes = []
     ) {
         $this->fieldMapper = $fieldMapper;
-        $this->attributeAdapterProvider = $attributeAdapterProvider
-            ?? ObjectManager::getInstance()->get(AttributeProvider::class);
+        $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->integerTypeAttributes = array_merge($this->integerTypeAttributes, $integerTypeAttributes);
     }
 

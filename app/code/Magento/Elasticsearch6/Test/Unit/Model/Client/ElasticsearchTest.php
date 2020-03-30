@@ -6,8 +6,8 @@
 
 namespace Magento\Elasticsearch6\Test\Unit\Model\Client;
 
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
-use Magento\Elasticsearch6\Model\Adapter\FieldMapper\AddDefaultSearchField;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 
@@ -445,7 +445,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -455,7 +455,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                             'copy_to' => '_search'
                                         ],
                                     ],
@@ -515,7 +515,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -525,7 +525,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                             'copy_to' => '_search'
                                         ],
                                     ],
@@ -593,7 +593,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testQuery()
     {
-        $query = 'test phrase query';
+        $query = ['test phrase query'];
         $this->elasticsearchClientMock->expects($this->once())
             ->method('search')
             ->with($query)

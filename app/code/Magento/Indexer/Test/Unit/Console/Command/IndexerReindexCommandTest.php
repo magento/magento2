@@ -22,6 +22,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
+    const STUB_INDEXER_NAME = 'Indexer Name';
     /**
      * Command being tested
      *
@@ -107,7 +108,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             [
                 $this->getIndexerMock(
                     ['reindexAll', 'getStatus'],
-                    ['indexer_id' => 'id_indexerOne', 'title' => 'Title_indexerOne']
+                    ['indexer_id' => 'id_indexerOne', 'title' => self::STUB_INDEXER_NAME]
                 )
             ]
         );
@@ -117,7 +118,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertStringStartsWith('Title_indexerOne index has been rebuilt successfully in', $actualValue);
+        $this->assertStringStartsWith(
+            self::STUB_INDEXER_NAME . ' index has been rebuilt successfully in',
+            $actualValue
+        );
     }
 
     /**
@@ -174,6 +178,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             $this->objectManagerFactory,
             $this->indexerRegistryMock
         );
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => $inputIndexers]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
@@ -344,7 +349,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ],
             'With dependencies and multiple indexers in request' => [
                 'inputIndexers' => [
-                    'indexer_1', 'indexer_3'
+                    'indexer_1',
+                    'indexer_3'
                 ],
                 'indexers' => [
                     'indexer_2' => [
@@ -405,7 +411,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithLocalizedException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getIndexerMock(['reindexAll', 'getStatus'], ['indexer_id' => 'indexer_1']);
+        $indexerOne = $this->getIndexerMock(
+            ['reindexAll', 'getStatus'],
+            ['indexer_id' => 'indexer_1', 'title' => self::STUB_INDEXER_NAME]
+        );
         $localizedException = new LocalizedException(new Phrase('Some Exception Message'));
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
         $this->initIndexerCollectionByItems([$indexerOne]);
@@ -414,7 +423,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $commandTester->execute(['index' => ['indexer_1']]);
         $actualValue = $commandTester->getDisplay();
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
-        $this->assertStringStartsWith('Some Exception Message', $actualValue);
+        $this->assertStringStartsWith(
+            self::STUB_INDEXER_NAME . ' index exception: Some Exception Message',
+            $actualValue
+        );
     }
 
     public function testExecuteWithException()
@@ -433,7 +445,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $commandTester->execute(['index' => ['indexer_1']]);
         $actualValue = $commandTester->getDisplay();
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
-        $this->assertStringStartsWith('Title_indexer_1' . ' indexer process unknown error:', $actualValue);
+        $this->assertStringStartsWith('Title_indexer_1' . ' index process unknown error:', $actualValue);
     }
 
     public function testExecuteWithExceptionInGetIndexers()

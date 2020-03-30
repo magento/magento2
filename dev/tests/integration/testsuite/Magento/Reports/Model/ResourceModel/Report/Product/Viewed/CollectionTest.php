@@ -72,20 +72,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('tableName', $from[$dbTableName]);
         } else {
             $union = $this->_collection->getSelect()->getPart('union');
+            $count = count($union);
             if ($period !== null && $dateFrom !== null && $dateTo !== null && $period != 'month') {
-                $count = count($union);
                 if ($period == 'year') {
                     if ($dbTableName == "report_viewed_product_aggregated_daily") {
-                        $this->assertEquals($count, 2);
+                        $this->assertEquals(2, $count);
                     }
                     if ($dbTableName == "report_viewed_product_aggregated_yearly") {
-                        $this->assertEquals($count, 3);
+                        $this->assertEquals(3, $count);
                     }
                 } else {
-                    $this->assertEquals($count, 3);
+                    $this->assertEquals(3, $count);
                 }
             } else {
-                $this->assertEquals(count($union), 2);
+                $this->assertEquals(2, $count);
             }
         }
     }
@@ -98,8 +98,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function tableForPeriodDataProvider()
     {
-        $dateNow = date('Y-m-d', time());
-        $dateYearAgo = date('Y-m-d', strtotime($dateNow . ' -1 year'));
+        $dateFrom = '2019-10-15';
+        $dateYearBefore = date('Y-m-d', strtotime($dateFrom . ' -1 year'));
         return [
             [
                 'period'    => 'year',
@@ -111,32 +111,32 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             [
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_yearly',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateNow,
+                'date_from' => $dateYearBefore,
+                'date_to'   => $dateFrom,
             ],
             [
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_yearly',
-                'date_from' => $dateYearAgo,
+                'date_from' => $dateYearBefore,
                 'date_to'   => null,
             ],
             [
                 'period'    => 'month',
                 'table'     => 'report_viewed_product_aggregated_monthly',
                 'date_from' => null,
-                'date_to'   => $dateNow,
+                'date_to'   => $dateFrom,
             ],
             [
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_yearly',
-                'date_from' => $dateYearAgo,
+                'date_from' => $dateYearBefore,
                 'date_to'   => null,
             ],
             [
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_yearly',
                 'date_from' => null,
-                'date_to'   => $dateNow,
+                'date_to'   => $dateFrom,
             ],
             [
                 'period'    => 'month',
@@ -147,19 +147,19 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             [
                 'period'    => 'month',
                 'table'     => 'report_viewed_product_aggregated_monthly',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateYearAgo,
+                'date_from' => $dateYearBefore,
+                'date_to'   => $dateYearBefore,
             ],
             [
                 'period'    => 'month',
                 'table'     => 'report_viewed_product_aggregated_monthly',
                 'date_from' => null,
-                'date_to'   => $dateYearAgo,
+                'date_to'   => $dateYearBefore,
             ],
             [
                 'period'    => 'month',
                 'table'     => 'report_viewed_product_aggregated_monthly',
-                'date_from' => $dateYearAgo,
+                'date_from' => $dateYearBefore,
                 'date_to'   => null,
             ],
             [
@@ -177,32 +177,32 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             [
                 'period'    => null,
                 'table'     => 'report_viewed_product_aggregated_daily',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateNow,
+                'date_from' => $dateYearBefore,
+                'date_to'   => $dateFrom,
             ],
             [
                 'period'    => null,
                 'table'     => 'report_viewed_product_aggregated_daily',
-                'date_from' => $dateNow,
-                'date_to'   => $dateNow,
+                'date_from' => $dateFrom,
+                'date_to'   => $dateFrom,
             ],
             [
                 'period'    => 'day',
                 'table'     => 'report_viewed_product_aggregated_daily',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateYearAgo,
+                'date_from' => $dateYearBefore,
+                'date_to'   => $dateYearBefore,
             ],
             [
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_daily',
-                'date_from' => $dateYearAgo,
-                'date_to'   => $dateYearAgo,
+                'date_from' => $dateYearBefore,
+                'date_to'   => $dateYearBefore,
             ],
             [
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_daily',
                 'date_from' => null,
-                'date_to'   => $dateYearAgo,
+                'date_to'   => $dateYearBefore,
             ],
             [
                 'period'    => null,
