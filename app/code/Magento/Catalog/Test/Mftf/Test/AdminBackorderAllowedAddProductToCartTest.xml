@@ -31,6 +31,7 @@
             <!-- Set Magento back to default configuration -->
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersDisable.path}} {{CatalogInventoryItemOptionsBackordersDisable.value}}" stepKey="setConfigAllowBackordersFalse"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCache"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
