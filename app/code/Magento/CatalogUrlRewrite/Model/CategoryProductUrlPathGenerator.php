@@ -44,6 +44,7 @@ class CategoryProductUrlPathGenerator
         $storeId = $product->getStoreId();
 
         $productCategories = $product->getCategoryCollection()
+            ->setStoreId($storeId)
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
 
