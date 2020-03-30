@@ -30,7 +30,7 @@
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToSimpleProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSimpleProduct">
             <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="openProductImagesSection"/>

@@ -51,7 +51,9 @@
         </after>
 
         <!-- Open product -->
-        <amOnPage url="{{AdminProductEditPage.url($createSimpleProductSecond.id$)}}" stepKey="openProductSecondEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductSecondEditPage">
+            <argument name="productId" value="$createSimpleProductSecond.id$"/>
+        </actionGroup>
         <!-- switch store view -->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToStoreView">
             <argument name="storeView" value="storeViewData.name"/>
