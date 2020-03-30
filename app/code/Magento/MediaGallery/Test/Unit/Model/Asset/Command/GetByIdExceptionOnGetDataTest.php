@@ -16,7 +16,7 @@ use Magento\MediaGallery\Model\Asset\Command\GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-use Zend\Db\Adapter\Driver\Pdo\Statement;
+use Laminas\Db\Adapter\Driver\Pdo\Statement;
 
 /**
  * Test the GetById command with exception during get media data

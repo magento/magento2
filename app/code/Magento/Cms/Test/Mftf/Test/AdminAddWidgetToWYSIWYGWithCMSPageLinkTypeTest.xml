@@ -15,7 +15,7 @@
             <group value="Cms"/>
             <title value="Admin should be able to create a CMS page with widget type: CMS page link"/>
             <description value="Admin should be able to create a CMS page with widget type: CMS page link"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-83781"/>
         </annotations>
         <before>
