@@ -58,7 +58,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
             ->setMethods(null)
             ->getMock();
 
-        $this->assertEquals(3600, $dateTime->getGmtOffset());
+        $this->assertEquals(7200, $dateTime->getGmtOffset());
     }
 
     /**
