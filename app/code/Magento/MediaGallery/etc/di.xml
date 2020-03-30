@@ -29,4 +29,18 @@
         <plugin name="media_gallery_image_remove_metadata_after_wysiwyg" type="Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage"
                 sortOrder="10" disabled="false"/>
     </type>
+    <type name="Magento\MediaGalleryUi\Model\Directory\Excluded">
+        <arguments>
+            <argument name="patterns" xsi:type="array">
+                <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
+                <item name="catalog" xsi:type="string">/pub\/media\/catalog\/product/</item>
+                <item name="customer" xsi:type="string">/pub\/media\/customer/</item>
+                <item name="downloadable" xsi:type="string">/pub\/media\/downloadable/</item>
+                <item name="import" xsi:type="string">/pub\/media\/import/</item>
+                <item name="theme" xsi:type="string">/pub\/media\/theme/</item>
+                <item name="theme_customization" xsi:type="string">/pub\/media\/theme_customization/</item>
+                <item name="tmp" xsi:type="string">/pub\/media\/tmp/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

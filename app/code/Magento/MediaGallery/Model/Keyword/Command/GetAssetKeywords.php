@@ -59,7 +59,7 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
      *
      * @param int $assetId
      *
-     * @return KeywordInterface[]|[]
+     * @return KeywordInterface[]
      * @throws IntegrationException
      */
     public function execute(int $assetId): array

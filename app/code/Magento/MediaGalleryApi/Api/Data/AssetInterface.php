@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Represents a media gallery asset which contains information about a media asset entity such
  * as path to the media storage, media asset title and its content type, etc.
+ * @api
  */
 interface AssetInterface extends ExtensibleDataInterface
 {

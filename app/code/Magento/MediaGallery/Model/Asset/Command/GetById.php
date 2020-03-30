@@ -28,7 +28,7 @@ class GetById implements GetByIdInterface
     private $resourceConnection;
 
     /**
-     * @var AssetInterface
+     * @var AssetInterfaceFactory
      */
     private $assetFactory;
 

@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryApi\Model\Asset\Command;
 
 /**
  * A command represents the get media gallery asset by using media gallery asset id as a filter parameter.
+ * @api
  */
 interface GetByIdInterface
 {
@@ -17,7 +18,6 @@ interface GetByIdInterface
      * Get media asset by id
      *
      * @param int $mediaAssetId
-     *
      * @return \Magento\MediaGalleryApi\Api\Data\AssetInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\IntegrationException

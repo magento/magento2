@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryApi\Model;
 
 /**
  * Extract data from an object using available getters
+ * @api
  */
 interface DataExtractorInterface
 {

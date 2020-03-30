@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Represents a media gallery keyword. This object contains information about a media asset keyword entity.
+ * @api
  */
 interface KeywordInterface extends ExtensibleDataInterface
 {

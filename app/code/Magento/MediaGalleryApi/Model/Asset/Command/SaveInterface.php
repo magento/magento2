@@ -12,6 +12,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
  * A command which executes the media gallery asset save operation.
+ * @api
  */
 interface SaveInterface
 {
@@ -19,7 +20,6 @@ interface SaveInterface
      * Save media asset
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface $mediaAsset
-     *
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */

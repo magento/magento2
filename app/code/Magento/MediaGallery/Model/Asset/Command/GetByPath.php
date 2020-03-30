@@ -30,7 +30,7 @@ class GetByPath implements GetByPathInterface
     private $resourceConnection;
 
     /**
-     * @var AssetInterface
+     * @var AssetInterfaceFactory
      */
     private $mediaAssetFactory;
 
@@ -78,9 +78,7 @@ class GetByPath implements GetByPathInterface
                 throw new NoSuchEntityException($message);
             }
 
-            $mediaAssets = $this->mediaAssetFactory->create(['data' => $data]);
-
-            return $mediaAssets;
+            return $this->mediaAssetFactory->create(['data' => $data]);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
