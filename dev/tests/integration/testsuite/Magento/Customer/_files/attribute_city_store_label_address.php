@@ -10,10 +10,10 @@ $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Ma
 $storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
 $model->loadByCode('customer_address', 'city');
 $storeLabels = $model->getStoreLabels();
-$websites = $storeManager->getWebsites();
+$stores = $storeManager->getStores();
 /** @var \Magento\Store\Api\Data\WebsiteInterface $website */
-foreach ($websites as $website) {
-    $storeLabels[$website->getId()] = 'Suburb';
+foreach ($stores as $store) {
+    $storeLabels[$store->getId()] = 'Suburb';
 }
 $model->setStoreLabels($storeLabels);
 $model->save();
