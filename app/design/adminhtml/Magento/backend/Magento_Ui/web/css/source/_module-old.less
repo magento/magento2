@@ -340,11 +340,24 @@
     }
 
     .weight-switcher {
-        margin-bottom: 18px;
+        .lib-vendor-prefix-flex-grow(1);
+        margin-top: 18px;
 
-        .addafter {
-            margin-top: 30px;
-            position: absolute;
+        .admin__control-switcher {
+            .label {
+                display: block;
+                float: none;
+                text-align: left;
+                width: auto;
+            }
+
+            .admin__field-option {
+                position: relative;
+            }
+
+            .admin__control-radio {
+                position: absolute;
+            }
         }
 
         .mage-error {
