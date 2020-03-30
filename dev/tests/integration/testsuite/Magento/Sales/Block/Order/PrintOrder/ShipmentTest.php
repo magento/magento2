@@ -10,26 +10,23 @@ namespace Magento\Sales\Block\Order\PrintOrder;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Sales\Api\Data\CreditmemoInterfaceFactory;
-use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
-use Magento\Sales\Model\Order\Payment;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for print creditmemo block.
+ * Tests for print shipment block.
  *
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoTest extends TestCase
+class ShipmentTest extends TestCase
 {
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -42,9 +39,6 @@ class CreditmemoTest extends TestCase
 
     /** @var OrderInterfaceFactory */
     private $orderFactory;
-
-    /** @var CreditmemoInterfaceFactory */
-    private $creditmemoFactory;
 
     /** @var PageFactory */
     private $pageFactory;
@@ -63,7 +57,6 @@ class CreditmemoTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
-        $this->creditmemoFactory = $this->objectManager->get(CreditmemoInterfaceFactory::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->countryFactory = $this->objectManager->get(CountryFactory::class);
     }
@@ -74,85 +67,62 @@ class CreditmemoTest extends TestCase
     protected function tearDown()
     {
         $this->registry->unregister('current_order');
-        $this->registry->unregister('current_creditmemo');
+        $this->registry->unregister('current_shipment');
 
         parent::tearDown();
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/shipment_for_two_items.php
      *
      * @return void
      */
-    public function testGetTotalsHtml(): void
-    {
-        $order = $this->orderFactory->create();
-        $this->registerOrder($order);
-        $payment = $this->objectManager->create(Payment::class);
-        $payment->setMethod('checkmo');
-        $order->setPayment($payment);
-        $block = $this->layout->createBlock(Creditmemo::class, 'block');
-        $childBlock = $this->layout->addBlock(Text::class, 'creditmemo_totals', 'block');
-        $expectedHtml = '<b>Any html</b>';
-        $creditmemo = $this->creditmemoFactory->create();
-        $this->assertEmpty($childBlock->getCreditmemo());
-        $this->assertNotEquals($expectedHtml, $block->getTotalsHtml($creditmemo));
-        $childBlock->setText($expectedHtml);
-        $actualHtml = $block->getTotalsHtml($creditmemo);
-        $this->assertSame($creditmemo, $childBlock->getCreditmemo());
-        $this->assertEquals($expectedHtml, $actualHtml);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
-     *
-     * @return void
-     */
-    public function testPrintCreditmemo(): void
+    public function testPrintShipment(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000555');
-        $creditmemo = $order->getCreditmemosCollection()->getFirstItem();
-        $this->assertNotNull($creditmemo->getId());
         $this->registerOrder($order);
-        $this->registerCreditmemo($creditmemo);
-        $blockHtml = $this->renderPrintCreditmemoBlock();
+        $shipment = $order->getShipmentsCollection()->getFirstItem();
+        $this->assertNotNull($shipment->getId());
+        $this->registerOrder($order);
+        $this->registerShipment($shipment);
+        $blockHtml = $this->renderPrintShipmentBlock();
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Refund #') . $creditmemo->getIncrementId()
+                    __('Shipment #') . $shipment->getIncrementId()
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Refund #') . $creditmemo->getIncrementId())
+            sprintf('Title for %s was not found.', __('Shipment #') . $shipment->getIncrementId())
         );
         $this->assertOrderInformation($order, $blockHtml);
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/shipment_for_order_with_customer.php
      *
      * @return void
      */
     public function testOrderStatus(): void
     {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000555');
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(Creditmemo::class)->setTemplate('Magento_Sales::order/order_status.phtml');
+        $block = $this->layout->createBlock(Shipment::class)->setTemplate('Magento_Sales::order/order_status.phtml');
         $this->assertContains((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/shipment_for_order_with_customer.php
      *
      * @return void
      */
     public function testOrderDate(): void
     {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000555');
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(Creditmemo::class)->setTemplate('Magento_Sales::order/order_date.phtml');
+        $block = $this->layout->createBlock(Shipment::class)->setTemplate('Magento_Sales::order/order_date.phtml');
         $this->assertContains(
             (string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)),
             strip_tags($block->toHtml())
@@ -178,8 +148,9 @@ class CreditmemoTest extends TestCase
             __('Order Information') . 'title wasn\'t found.'
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
-            $addressBoxXpath = sprintf("//div[contains(@class, 'box-order-%s-address')]", $address->getAddressType())
-                . "//address[contains(., '%s')]";
+            $addressBoxXpath = ($address->getAddressType() == 'shipping')
+                ? "//div[contains(@class, 'box-order-shipping-address')]//address[contains(., '%s')]"
+                : "//div[contains(@class, 'box-order-billing-method')]//address[contains(., '%s')]";
             $this->assertEquals(
                 1,
                 Xpath::getElementsCountForXpath(sprintf($addressBoxXpath, $address->getName()), $html),
@@ -233,32 +204,32 @@ class CreditmemoTest extends TestCase
     }
 
     /**
-     * Register creditmemo in registry.
+     * Register shipment in registry.
      *
-     * @param CreditmemoInterface $creditmemo
+     * @param ShipmentInterface $shipment
      * @return void
      */
-    private function registerCreditmemo(CreditmemoInterface $creditmemo): void
+    private function registerShipment(ShipmentInterface $shipment): void
     {
-        $this->registry->unregister('current_creditmemo');
-        $this->registry->register('current_creditmemo', $creditmemo);
+        $this->registry->unregister('current_shipment');
+        $this->registry->register('current_shipment', $shipment);
     }
 
     /**
-     * Render print creditmemo block.
+     * Render print shipment block.
      *
      * @return string
      */
-    private function renderPrintCreditmemoBlock(): string
+    private function renderPrintShipmentBlock(): string
     {
         $page = $this->pageFactory->create();
         $page->addHandle([
             'default',
-            'sales_order_printcreditmemo',
+            'sales_order_printshipment',
         ]);
         $page->getLayout()->generateXml();
-        $printCreditmemoBlock = $page->getLayout()->getBlock('sales.order.print.creditmemo');
+        $printShipmentBlock = $page->getLayout()->getBlock('sales.order.print.shipment');
 
-        return $printCreditmemoBlock->toHtml();
+        return $printShipmentBlock->toHtml();
     }
 }
