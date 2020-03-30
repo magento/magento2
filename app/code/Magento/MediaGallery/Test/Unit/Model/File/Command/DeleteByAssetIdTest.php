@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\File\Command;
 
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGallery\Model\File\Command\DeleteByAssetId;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the DeleteByAssetIdTest command model

@@ -15,7 +15,7 @@ use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 
 /**
- * ClassGetAssetKeywords
+ * Retrieve keywords for the media asset
  */
 class GetAssetKeywords implements GetAssetKeywordsInterface
 {

@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Test\Unit\Model\File\Command;
+namespace Magento\MediaGallery\Test\Unit\Model\Directory;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Magento\MediaGallery\Model\Directory\Excluded;
 
 /**
- * Test the DeleteByAssetIdTest command model
+ * Test the Excluded model
  */
 class ExcludedTest extends TestCase
 {

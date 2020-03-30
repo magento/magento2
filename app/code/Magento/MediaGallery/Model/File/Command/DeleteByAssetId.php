@@ -55,9 +55,7 @@ class DeleteByAssetId implements DeleteByAssetIdInterface
      * Delete image by asset ID
      *
      * @param int $assetId
-     *
      * @return void
-     *
      * @throws LocalizedException
      */
     public function execute(int $assetId): void

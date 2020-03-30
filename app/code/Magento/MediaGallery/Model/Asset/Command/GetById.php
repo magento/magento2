@@ -16,7 +16,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetById
+ * Get media asset by id
  */
 class GetById implements GetByIdInterface
 {
