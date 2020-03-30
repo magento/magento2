@@ -3,16 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Controller\Shared;
 
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
@@ -23,55 +29,73 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollect
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+class Cart implements HttpGetActionInterface
 {
     /**
      * @var CustomerCart
      */
-    protected $cart;
+    private $cart;
 
     /**
      * @var OptionFactory
      */
-    protected $optionFactory;
+    private $optionFactory;
 
     /**
      * @var ItemFactory
      */
-    protected $itemFactory;
+    private $itemFactory;
 
     /**
      * @var CartHelper
      */
-    protected $cartHelper;
+    private $cartHelper;
 
     /**
      * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
 
     /**
-     * @param ActionContext $context
-     * @param CustomerCart $cart
-     * @param OptionFactory $optionFactory
-     * @param ItemFactory $itemFactory
-     * @param CartHelper $cartHelper
-     * @param Escaper $escaper
+     * @var RequestInterface
      */
+    private $request;
+
+    /**
+     * @var RedirectInterface
+     */
+    private $redirect;
+
+    /**
+     * @var MessageManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var ResultFactory
+     */
+    private $resultFactory;
+
     public function __construct(
-        ActionContext $context,
         CustomerCart $cart,
         OptionFactory $optionFactory,
         ItemFactory $itemFactory,
         CartHelper $cartHelper,
-        Escaper $escaper
+        Escaper $escaper,
+        RequestInterface $request,
+        RedirectInterface $redirect,
+        MessageManagerInterface $messageManager,
+        ResultFactory $resultFactory
     ) {
         $this->cart = $cart;
         $this->optionFactory = $optionFactory;
         $this->itemFactory = $itemFactory;
         $this->cartHelper = $cartHelper;
         $this->escaper = $escaper;
-        parent::__construct($context);
+        $this->request = $request;
+        $this->redirect = $redirect;
+        $this->messageManager = $messageManager;
+        $this->resultFactory = $resultFactory;
     }
 
     /**
@@ -80,17 +104,17 @@ class Cart extends \Magento\Framework\App\Action\Action implements HttpGetAction
      * If Product has required options - redirect
      * to product view page with message about needed defined required options
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @inheritDoc
      */
     public function execute()
     {
-        $itemId = (int)$this->getRequest()->getParam('item');
+        $itemId = (int)$this->request->getParam('item');
 
         /* @var $item Item */
         $item = $this->itemFactory->create()
             ->load($itemId);
 
-        $redirectUrl = $this->_redirect->getRefererUrl();
+        $redirectUrl = $this->redirect->getRefererUrl();
 
         try {
             /** @var OptionCollection $options */
@@ -120,7 +144,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements HttpGetAction
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
