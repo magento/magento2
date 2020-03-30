@@ -66,6 +66,13 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getWidth(): int;
 
     /**
+     * Retrieve asset file size in bytes
+     *
+     * @return int
+     */
+    public function getSize(): int;
+
+    /**
      * Get created at
      *
      * @return string

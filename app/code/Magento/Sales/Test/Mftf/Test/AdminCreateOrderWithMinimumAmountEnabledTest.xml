@@ -71,7 +71,9 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
-        <assertNotEmpty actual="$orderId" stepKey="assertOrderIdIsNotEmpty"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+			<actualResult type="const">$orderId</actualResult>
+        </assertNotEmpty>
         <actionGroup ref="VerifyBasicOrderInformationActionGroup" stepKey="verifyOrderInformation">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
