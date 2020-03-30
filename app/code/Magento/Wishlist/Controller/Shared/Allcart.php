@@ -15,7 +15,7 @@ use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Wishlist\Model\ItemCarrier;
 
-class Allcart  implements HttpGetActionInterface
+class Allcart implements HttpGetActionInterface
 {
     /**
      * @var ItemCarrier

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
 
 use Magento\Framework\App\Action\Context;
