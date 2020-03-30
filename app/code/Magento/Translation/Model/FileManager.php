@@ -139,7 +139,7 @@ class FileManager
         } else {
             $originalFileContent = $this->driverFile->fileGetContents($this->getTranslationFileFullPath());
         }
-        $originalFileTranslationPhrases = $originalFileContent !== ''
+        $originalFileTranslationPhrases = !empty($originalFileContent)
             ? $this->serializer->unserialize($originalFileContent)
             : [];
         $updatedTranslationPhrases = array_merge($originalFileTranslationPhrases, $content);
