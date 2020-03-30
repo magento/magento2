@@ -67,18 +67,7 @@ class SetBillingAddressOnCart
         $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
             ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
 
-
-        if (null === $customerAddressId && null === $addressInput) {
-            throw new GraphQlInputException(
-                __('The billing address must contain either "customer_address_id" or "address".')
-            );
-        }
-
-        if ($customerAddressId && $addressInput) {
-            throw new GraphQlInputException(
-                __('The billing address cannot contain "customer_address_id" and "address" at the same time.')
-            );
-        }
+        $this->checkForInputExceptions($customerAddressId, $addressInput);
 
         $addresses = $cart->getAllShippingAddresses();
         if ($sameAsShipping && count($addresses) > 1) {
@@ -90,6 +79,31 @@ class SetBillingAddressOnCart
         $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
 
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
+    }
+
+
+    /**
+     * Check for the input exceptions
+     *
+     * @param int|null $customerAddressId
+     * @param array|null $addressInput
+     * @throws GraphQlInputException
+     */
+    private function checkForInputExceptions(
+        ?int $customerAddressId,
+        ?array $addressInput
+    ) {
+        if (null === $customerAddressId && null === $addressInput) {
+            throw new GraphQlInputException(
+                __('The billing address must contain either "customer_address_id" or "address".')
+            );
+        }
+
+        if ($customerAddressId && $addressInput) {
+            throw new GraphQlInputException(
+                __('The billing address cannot contain "customer_address_id" and "address" at the same time.')
+            );
+        }
     }
 
     /**
