@@ -154,6 +154,21 @@
         }
     }
 
+    &.opened {
+     > .fieldset-wrapper-title {
+            .admin__collapsible-title {
+                &:before {
+                    content: @icon-expand-open__content;
+                }
+                &.active {
+                    &:before {
+                        content: @icon-expand-close__content;
+                    }
+                }
+            }
+        }
+    }
+
     &.fieldset-wrapper {
         border-bottom: 1px solid @collapsible__border-color;
         padding: 0;
