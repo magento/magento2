@@ -114,6 +114,9 @@
         <waitForPageLoad stepKey="waitForCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
         <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="countriesAmount2"/>
-        <assertEquals expected="($countriesAmount)" actual="($countriesAmount2)" stepKey="assertCountryAmounts"/>
+        <assertEquals stepKey="assertCountryAmounts">
+			<actualResult type="const">($countriesAmount2)</actualResult>
+			<expectedResult type="const">($countriesAmount)</expectedResult>
+        </assertEquals>
     </test>
 </tests>

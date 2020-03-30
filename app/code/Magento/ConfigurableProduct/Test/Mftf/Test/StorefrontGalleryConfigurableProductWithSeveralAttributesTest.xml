@@ -174,12 +174,18 @@
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase0"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase0"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|" actual="$getListOfThumbnailsCase0[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case0"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase0[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case0"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase0[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case0"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case0">
+			<actualResult type="string">$getListOfThumbnailsCase0[0]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case0">
+			<actualResult type="string">$getListOfThumbnailsCase0[1]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case0">
+			<actualResult type="string">$getListOfThumbnailsCase0[2]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase0"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase0"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase0">
@@ -192,18 +198,30 @@
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case1"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase1"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase1"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase1[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case1"/>
-        <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|" actual="$getListOfThumbnailsCase1[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case1"/>
-        <assertRegExp expected="|{{placeholderThumbnailImage.name}}.*.jpg|" actual="$getListOfThumbnailsCase1[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case1"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase1[3]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage4Case1"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase1[4]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage5Case1"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase1[5]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage6Case1"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case1">
+			<actualResult type="string">$getListOfThumbnailsCase1[0]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case1">
+			<actualResult type="string">$getListOfThumbnailsCase1[1]</actualResult>
+			<expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case1">
+			<actualResult type="string">$getListOfThumbnailsCase1[2]</actualResult>
+			<expectedResult type="string">|{{placeholderThumbnailImage.name}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case1">
+			<actualResult type="string">$getListOfThumbnailsCase1[3]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case1">
+			<actualResult type="string">$getListOfThumbnailsCase1[4]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case1">
+			<actualResult type="string">$getListOfThumbnailsCase1[5]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase1"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase1"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase1">
@@ -216,18 +234,30 @@
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case2"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase2"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase2"/>
-        <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|"  actual="$getListOfThumbnailsCase2[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case2"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase2[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case2"/>
-        <assertRegExp expected="|{{placeholderSmallImage.name}}.*.jpg|" actual="$getListOfThumbnailsCase2[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case2"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase2[3]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage4Case2"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase2[4]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage5Case2"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase2[5]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage6Case2"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case2">
+			<actualResult type="string">$getListOfThumbnailsCase2[0]</actualResult>
+			<expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case2">
+			<actualResult type="string">$getListOfThumbnailsCase2[1]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case2">
+			<actualResult type="string">$getListOfThumbnailsCase2[2]</actualResult>
+			<expectedResult type="string">|{{placeholderSmallImage.name}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case2">
+			<actualResult type="string">$getListOfThumbnailsCase2[3]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case2">
+			<actualResult type="string">$getListOfThumbnailsCase2[4]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case2">
+			<actualResult type="string">$getListOfThumbnailsCase2[5]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase2"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase2"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase2">
@@ -240,12 +270,18 @@
         <selectOption userInput="$dropdownAttributeSecondOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB2Case3"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase3"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase3"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase3[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case3"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase3[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case3"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase3[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case3"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case3">
+			<actualResult type="string">$getListOfThumbnailsCase3[0]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case3">
+			<actualResult type="string">$getListOfThumbnailsCase3[1]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case3">
+			<actualResult type="string">$getListOfThumbnailsCase3[2]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase3"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase3"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase3">
@@ -258,14 +294,22 @@
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case4"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase4"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase4"/>
-        <assertRegExp expected="|{{ProductImage.filename}}.*.png|"  actual="$getListOfThumbnailsCase4[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case4"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|" actual="$getListOfThumbnailsCase4[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case4"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase4[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case4"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase4[3]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage4Case4"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case4">
+			<actualResult type="string">$getListOfThumbnailsCase4[0]</actualResult>
+			<expectedResult type="string">|{{ProductImage.filename}}.*.png|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case4">
+			<actualResult type="string">$getListOfThumbnailsCase4[1]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case4">
+			<actualResult type="string">$getListOfThumbnailsCase4[2]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case4">
+			<actualResult type="string">$getListOfThumbnailsCase4[3]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase4"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase4"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase4">
@@ -278,12 +322,18 @@
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF2Case5"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase5"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase5"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase5[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case5"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase5[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case5"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase5[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case5"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case5">
+			<actualResult type="string">$getListOfThumbnailsCase5[0]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case5">
+			<actualResult type="string">$getListOfThumbnailsCase5[1]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case5">
+			<actualResult type="string">$getListOfThumbnailsCase5[2]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase5"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase5"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase5">
@@ -296,18 +346,30 @@
         <selectOption userInput="$dropdownAttributeFirstOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB1Case6"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase6"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase6"/>
-        <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|"  actual="$getListOfThumbnailsCase6[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case6"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase6[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case6"/>
-        <assertRegExp expected="|{{placeholderSmallImage.name}}.*.jpg|" actual="$getListOfThumbnailsCase6[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case6"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase6[3]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage4Case6"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase6[4]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage5Case6"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase6[5]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage6Case6"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case6">
+			<actualResult type="string">$getListOfThumbnailsCase6[0]</actualResult>
+			<expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case6">
+			<actualResult type="string">$getListOfThumbnailsCase6[1]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case6">
+			<actualResult type="string">$getListOfThumbnailsCase6[2]</actualResult>
+			<expectedResult type="string">|{{placeholderSmallImage.name}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case6">
+			<actualResult type="string">$getListOfThumbnailsCase6[3]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case6">
+			<actualResult type="string">$getListOfThumbnailsCase6[4]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case6">
+			<actualResult type="string">$getListOfThumbnailsCase6[5]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase6"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase6"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase6">
@@ -320,18 +382,30 @@
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case7"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase7"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase7"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase7[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case7"/>
-        <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|" actual="$getListOfThumbnailsCase7[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case7"/>
-        <assertRegExp expected="|{{placeholderThumbnailImage.name}}.*.jpg|" actual="$getListOfThumbnailsCase7[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case7"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase7[3]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage4Case7"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase7[4]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage5Case7"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase7[5]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage6Case7"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case7">
+			<actualResult type="string">$getListOfThumbnailsCase7[0]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case7">
+			<actualResult type="string">$getListOfThumbnailsCase7[1]</actualResult>
+			<expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case7">
+			<actualResult type="string">$getListOfThumbnailsCase7[2]</actualResult>
+			<expectedResult type="string">|{{placeholderThumbnailImage.name}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case7">
+			<actualResult type="string">$getListOfThumbnailsCase7[3]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case7">
+			<actualResult type="string">$getListOfThumbnailsCase7[4]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case7">
+			<actualResult type="string">$getListOfThumbnailsCase7[5]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase7"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase7"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase7">
@@ -344,18 +418,30 @@
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case8"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase8"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase8"/>
-        <assertRegExp expected="|{{MagentoLogo.filename}}.*.png|"  actual="$getListOfThumbnailsCase8[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case8"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase8[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case8"/>
-        <assertRegExp expected="|{{placeholderSmallImage.name}}.*.jpg|" actual="$getListOfThumbnailsCase8[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case8"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase8[3]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage4Case8"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase8[4]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage5Case8"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase8[5]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage6Case8"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case8">
+			<actualResult type="string">$getListOfThumbnailsCase8[0]</actualResult>
+			<expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case8">
+			<actualResult type="string">$getListOfThumbnailsCase8[1]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case8">
+			<actualResult type="string">$getListOfThumbnailsCase8[2]</actualResult>
+			<expectedResult type="string">|{{placeholderSmallImage.name}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage4Case8">
+			<actualResult type="string">$getListOfThumbnailsCase8[3]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage5Case8">
+			<actualResult type="string">$getListOfThumbnailsCase8[4]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage6Case8">
+			<actualResult type="string">$getListOfThumbnailsCase8[5]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase8"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase8"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase8">
@@ -369,12 +455,18 @@
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF1Case9"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase9"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase9"/>
-        <assertRegExp expected="|{{Magento2.filename}}.*.jpg|"  actual="$getListOfThumbnailsCase9[0]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage1Case9"/>
-        <assertRegExp expected="|{{Magento3.filename}}.*.jpg|" actual="$getListOfThumbnailsCase9[1]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage2Case9"/>
-        <assertRegExp expected="|{{TestImageNew.filename}}.*.jpg|" actual="$getListOfThumbnailsCase9[2]"
-                      expectedType="string" actualType="string" stepKey="checkPositionInThumbnailForImage3Case9"/>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage1Case9">
+			<actualResult type="string">$getListOfThumbnailsCase9[0]</actualResult>
+			<expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage2Case9">
+			<actualResult type="string">$getListOfThumbnailsCase9[1]</actualResult>
+			<expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="checkPositionInThumbnailForImage3Case9">
+			<actualResult type="string">$getListOfThumbnailsCase9[2]</actualResult>
+			<expectedResult type="string">|{{TestImageNew.filename}}.*.jpg|</expectedResult>
+        </assertRegExp>
         <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openFullScreenPageCase9"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsFullScreenPageCase9"/>
         <assertEquals stepKey="checkPositionInThumbnailForImagesFromFullScreenPageCase9">
