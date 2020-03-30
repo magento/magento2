@@ -111,36 +111,36 @@
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         <!-- 2. Browse all product pages and verify that the "Instant Purchase" button does not appear -->
         <!-- Simple product -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPage"/>
         <!-- Virtual product -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openVirtualProductPage">
-            <argument name="product" value="$createVirtualProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openVirtualProductPage">
+            <argument name="product" value="$createVirtualProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnVirtualProductPage"/>
         <!-- Downloadable Product -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openDownloadableProductPage">
-            <argument name="product" value="$createDownloadableProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openDownloadableProductPage">
+            <argument name="product" value="$createDownloadableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnDownloadableProductPage"/>
         <!-- Bundle Product -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
-            <argument name="product" value="$createBundleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$createBundleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
         <waitForPageLoad stepKey="waitForBundleProductPageLoad"/>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnBundleProductPage"/>
         <!-- Grouped product -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openGroupedProductPage">
-            <argument name="product" value="$createGroupedProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openGroupedProductPage">
+            <argument name="product" value="$createGroupedProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnGroupedProductPage"/>
         <!-- Configurable Product -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openConfigurableProductPage">
-            <argument name="product" value="$createConfigProductCreateConfigurableProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="product" value="$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnConfigurableProductPage"/>
         <!-- 3. Log in as a customer without address -->
@@ -148,8 +148,8 @@
             <argument name="Customer" value="$customerWithoutAddress$"/>
         </actionGroup>
         <!-- 4. Browse simple product page and check that Instant Purchase button does not show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithoutAddress">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithoutAddress">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductAsCustomerWithoutAddress"/>
         <!-- 5. Log in as a customer with address -->
@@ -158,8 +158,8 @@
             <argument name="Customer" value="$customerWithAddress$"/>
         </actionGroup>
         <!-- 6. Browse simple product page and check that Instant Purchase button does not show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithAddress">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithAddress">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPageAsCustomerWithAddress"/>
         <!-- 7. Log in as a customer with default address -->
@@ -168,8 +168,8 @@
             <argument name="Customer" value="$customerWithDefaultAddress$"/>
         </actionGroup>
         <!-- 8. Browse simple product page and check that Instant Purchase button show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithDefaultAddress">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithDefaultAddress">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForInstantPurchaseButton"/>
         <!-- 9-10. Configure Braintree Payment Method(without Vault). Configure 3d Secure Verification -->
@@ -181,8 +181,8 @@
             <argument name="Customer" value="$customerWithDefaultAddress$"/>
         </actionGroup>
         <!-- 11. Browse simple product page and check that Instant Purchase button does not show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWith3dSecureEnabled">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWith3dSecureEnabled">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPageWith3dSecureEnabled"/>
         <!-- 12. Disable all supported payment methods -->
@@ -194,8 +194,8 @@
             <argument name="Customer" value="$customerWithDefaultAddress$"/>
         </actionGroup>
         <!-- 13. Browse simple product page and check that Instant Purchase button does not show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWhilePaymentMethodDisabled">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWhilePaymentMethodDisabled">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductWhilePaymentMethodDisabled"/>
         <!-- 14. Reenable supported payment method (without 3d secure for Braintree) -->
@@ -208,8 +208,8 @@
             <argument name="Customer" value="$customerWithDefaultAddress$"/>
         </actionGroup>
         <!-- 15. Browse simple product page and check that Instant Purchase button show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWithReenabledPaymentMethod">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithReenabledPaymentMethod">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForInstantPurchaseButtonWithReenabledPaymentMethod"/>
         <!-- 16. Disable shipping method for customer with default address -->
@@ -220,8 +220,8 @@
             <argument name="Customer" value="$customerWithDefaultAddress$"/>
         </actionGroup>
         <!-- 17. Browse simple product page and check that Instant Purchase button does not show up -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageWhileFlatRateDisabled">
-            <argument name="product" value="$createSimpleProduct$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWhileFlatRateDisabled">
+            <argument name="product" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPageWhileFlatRateDisabled"/>
     </test>
