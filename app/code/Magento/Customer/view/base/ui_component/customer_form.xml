@@ -117,7 +117,7 @@
                 <visible>false</visible>
             </settings>
         </field>
-        <field name="website_id" component="Magento_Ui/js/form/element/website" formElement="select">
+        <field name="website_id" component="Magento_Customer/js/form/element/website" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -136,6 +136,13 @@
                     <link name="customerId">${ $.provider }:data.customer.entity_id</link>
                 </imports>
             </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Customer\ViewModel\Customer\Website"/>
+                    </settings>
+                </select>
+            </formElements>
         </field>
         <field name="prefix" formElement="input">
             <argument name="data" xsi:type="array">
