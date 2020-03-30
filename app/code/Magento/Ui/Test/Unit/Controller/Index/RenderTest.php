@@ -216,9 +216,9 @@ class RenderTest extends TestCase
             $this->redirectMock,
             $this->responseMock,
             $this->uiComponentTypeResolverMock,
-            $this->uiComponentTypeResolverMock,
-            $this->uiComponentTypeResolverMock,
-            $this->escaperMock
+            $this->resultJsonFactoryMock,
+            $this->escaperMock,
+            $this->loggerMock
         );
     }
 
