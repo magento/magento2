@@ -67,7 +67,7 @@ class SetBillingAddressOnCart
         $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
             ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
 
-        $this->checkForInputExceptions($customerAddressId, $addressInput);
+        $this->checkForInputExceptions($billingAddressInput);
 
         $addresses = $cart->getAllShippingAddresses();
         if ($sameAsShipping && count($addresses) > 1) {
@@ -84,14 +84,15 @@ class SetBillingAddressOnCart
     /**
      * Check for the input exceptions
      *
-     * @param int|null $customerAddressId
-     * @param array|null $addressInput
+     * @param array $billingAddressInput
      * @throws GraphQlInputException
      */
     private function checkForInputExceptions(
-        ?int $customerAddressId,
-        ?array $addressInput
+        ?array $billingAddressInput
     ) {
+        $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
+        $addressInput = $billingAddressInput['address'] ?? null;
+
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
                 __('The billing address must contain either "customer_address_id" or "address".')
