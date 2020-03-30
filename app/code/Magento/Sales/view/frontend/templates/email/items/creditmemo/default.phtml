@@ -11,9 +11,9 @@
     <td class="item-info<?= ($block->getItemOptions() ? ' has-extra' : '') ?>">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
-        <?php if ($block->getItemOptions()) : ?>
+        <?php if ($block->getItemOptions()): ?>
             <dl>
-                <?php foreach ($block->getItemOptions() as $option) : ?>
+                <?php foreach ($block->getItemOptions() as $option): ?>
                     <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
                     <dd>
                         <?= /* @noEscape */  nl2br($block->escapeHtml($option['value'])) ?>
@@ -22,13 +22,18 @@
             </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
-        <?php if ($addInfoBlock) :?>
+        <?php if ($addInfoBlock):?>
             <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
     <td class="item-qty"><?= (float) $_item->getQty() ?></td>
+    <?php $itemPriceRender = $block->getItemPriceRender(); ?>
     <td class="item-price">
-        <?= /* @noEscape */  $block->getItemPrice($_item) ?>
+        <?php if ($itemPriceRender):?>
+            <?= /* @noEscape */ $itemPriceRender->render($block, $_item) ?>
+        <?php else: ?>
+            <?= /* @noEscape */ $block->getItemPrice($_item) ?>
+        <?php endif; ?>
     </td>
 </tr>

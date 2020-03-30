@@ -47,6 +47,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             'getId',
             'getPayment',
             'getMethod',
+            'setState',
             'getStoreId',
             'update',
             'getAdditionalInformation',
@@ -149,7 +150,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
         $this->_orderMock->expects($this->any())->method('getPayment')->will($this->returnValue($paymentMock));
         $this->_orderMock->expects($this->any())->method('canFetchPaymentReviewUpdate')->will($this->returnValue(true));
-        $this->_orderMock->expects($this->once())->method('getState')->will(
+        $this->_orderMock->method('getState')->will(
             $this->returnValue(Order::STATE_PENDING_PAYMENT)
         );
         $this->_paypalInfo->expects($this->once())
