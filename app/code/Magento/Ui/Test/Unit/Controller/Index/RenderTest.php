@@ -19,7 +19,6 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -42,11 +41,6 @@ class RenderTest extends TestCase
      * @var Render
      */
     private $render;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
 
     /**
      * @var RequestInterface|MockObject
