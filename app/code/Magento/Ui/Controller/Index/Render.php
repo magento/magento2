@@ -39,46 +39,38 @@ class Render implements HttpGetActionInterface
      * @var UiComponentFactory
      */
     private $uiComponentFactory;
-
     /**
      * @var UiComponentTypeResolver
      */
     private $contentTypeResolver;
-
     /**
      * @var JsonFactory
      */
     private $resultJsonFactory;
-
     /**
      * @var Escaper
      */
     private $escaper;
-
     /**
      * @var LoggerInterface
      */
     private $logger;
-
     /**
      * @var AuthorizationInterface
      */
     private $authorization;
-
     /**
      * @var RequestInterface
      */
     private $request;
-
     /**
      * @var RedirectInterface
      */
-    protected $redirect;
-
+    private $redirect;
     /**
      * @var ResponseInterface
      */
-    protected $response;
+    private $response;
 
     public function __construct(
         Context $context,
@@ -173,17 +165,16 @@ class Render implements HttpGetActionInterface
     }
 
     /**
-     * Call prepare method in the component UI
+     * Set redirect into response
      *
-     * @param UiComponentInterface $component
-     * @return void
+     * @param string $path
+     * @param array $arguments
+     * @return ResponseInterface
      */
-    private function prepareComponent(UiComponentInterface $component): void
+    private function redirect($path, $arguments = []): ResponseInterface
     {
-        foreach ($component->getChildComponents() as $child) {
-            $this->prepareComponent($child);
-        }
-        $component->prepare();
+        $this->redirect->redirect($this->response, $path, $arguments);
+        return $this->response;
     }
 
     /**
@@ -208,15 +199,16 @@ class Render implements HttpGetActionInterface
     }
 
     /**
-     * Set redirect into response
+     * Call prepare method in the component UI
      *
-     * @param string $path
-     * @param array $arguments
-     * @return ResponseInterface
+     * @param UiComponentInterface $component
+     * @return void
      */
-    private function redirect($path, $arguments = []): ResponseInterface
+    private function prepareComponent(UiComponentInterface $component): void
     {
-        $this->redirect->redirect($this->response, $path, $arguments);
-        return $this->response;
+        foreach ($component->getChildComponents() as $child) {
+            $this->prepareComponent($child);
+        }
+        $component->prepare();
     }
 }
