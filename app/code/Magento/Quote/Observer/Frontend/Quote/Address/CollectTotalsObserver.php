@@ -14,6 +14,7 @@ use Magento\Framework\Event\ObserverInterface;
  * Handle customer VAT number on collect_totals_before event of quote address.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CollectTotalsObserver implements ObserverInterface
 {
