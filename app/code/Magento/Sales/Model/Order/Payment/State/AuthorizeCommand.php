@@ -11,6 +11,9 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\StatusResolver;
 
+/**
+ * Process order state and status after authorize operation.
+ */
 class AuthorizeCommand implements CommandInterface
 {
     /**
@@ -28,6 +31,8 @@ class AuthorizeCommand implements CommandInterface
     }
 
     /**
+     * Run command.
+     *
      * @param OrderPaymentInterface $payment
      * @param string|float $amount
      * @param OrderInterface $order
@@ -50,6 +55,8 @@ class AuthorizeCommand implements CommandInterface
             $message .= ' Order is suspended as its authorizing amount %1 is suspected to be fraudulent.';
         }
 
+        $message = $this->getNotificationMessage($payment) ?? $message;
+
         if (!isset($status)) {
             $status = $this->statusResolver->getOrderStatusByState($order, $state);
         }
@@ -61,12 +68,29 @@ class AuthorizeCommand implements CommandInterface
     }
 
     /**
-     * @deprecated 100.1.9 Replaced by a StatusResolver class call.
+     * Returns payment notification message.
+     *
+     * @param OrderPaymentInterface $payment
+     * @return string|null
+     */
+    private function getNotificationMessage(OrderPaymentInterface $payment): ?string
+    {
+        $extensionAttributes = $payment->getExtensionAttributes();
+        if ($extensionAttributes && $extensionAttributes->getNotificationMessage()) {
+            return $extensionAttributes->getNotificationMessage();
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets order state and status.
      *
      * @param Order $order
      * @param string $status
      * @param string $state
      * @return void
+     * @deprecated 100.1.9 Replaced by a StatusResolver class call.
      */
     protected function setOrderStateAndStatus(Order $order, $status, $state)
     {
