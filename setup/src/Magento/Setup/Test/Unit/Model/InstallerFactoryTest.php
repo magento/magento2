@@ -12,7 +12,7 @@ use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Setup\Model\DeclarationInstaller;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Module\ResourceFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
