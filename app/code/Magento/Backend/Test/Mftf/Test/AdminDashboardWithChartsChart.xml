@@ -121,6 +121,9 @@
         <seeElement selector="{{AdminDashboardSection.dashboardDiagramAmountsContentTab}}" stepKey="seeDiagramAmountContent"/>
         <seeElement selector="{{AdminDashboardSection.dashboardDiagramTotals}}" stepKey="seeAmountTotals"/>
         <dontSeeJsError stepKey="dontSeeJsError"/>
-        <assertGreaterThan expected="$grabStartQuantity" actual="$grabEndQuantity" stepKey="checkQuantityWasChanged"/>
+        <assertGreaterThan stepKey="checkQuantityWasChanged">
+			<actualResult type="const">$grabEndQuantity</actualResult>
+			<expectedResult type="const">$grabStartQuantity</expectedResult>
+        </assertGreaterThan>
     </test>
 </tests>

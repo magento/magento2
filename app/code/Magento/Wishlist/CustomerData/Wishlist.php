@@ -68,7 +68,7 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSectionData()
     {
@@ -80,8 +80,6 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
-     * Get counter
-     *
      * @return string
      */
     protected function getCounter()
@@ -158,6 +156,7 @@ class Wishlist implements SectionSourceInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getImageData($product)
     {
@@ -165,11 +164,27 @@ class Wishlist implements SectionSourceInterface
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 
+        $template = 'Magento_Catalog/product/image_with_borders';
+
+        try {
+            $imagesize = $helper->getResizedImageInfo();
+        } catch (NotLoadInfoImageException $exception) {
+            $imagesize = [$helper->getWidth(), $helper->getHeight()];
+        }
+
+        $width = $helper->getFrame()
+            ? $helper->getWidth()
+            : $imagesize[0];
+
+        $height = $helper->getFrame()
+            ? $helper->getHeight()
+            : $imagesize[1];
+
         return [
-            'template' => 'Magento_Catalog/product/image_with_borders',
+            'template' => $template,
             'src' => $helper->getUrl(),
-            'width' => $helper->getWidth(),
-            'height' => $helper->getHeight(),
+            'width' => $width,
+            'height' => $height,
             'alt' => $helper->getLabel(),
         ];
     }

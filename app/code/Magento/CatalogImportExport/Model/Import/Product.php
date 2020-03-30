@@ -1726,6 +1726,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 $rowData[self::COL_MEDIA_IMAGE] = [];
+                list($rowImages, $rowData) = $this->clearNoSelectionImages($rowImages, $rowData);
 
                 /*
                  * Note: to avoid problems with undefined sorting, the value of media gallery items positions
@@ -1933,6 +1934,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     //phpcs:enable Generic.Metrics.NestingLevel
 
     // phpcs:enable
+
+    /**
+     * Clears entries from Image Set and Row Data marked as no_selection
+     *
+     * @param array $rowImages
+     * @param array $rowData
+     * @return array
+     */
+    private function clearNoSelectionImages($rowImages, $rowData)
+    {
+        foreach ($rowImages as $column => $columnImages) {
+            foreach ($columnImages as $key => $image) {
+                if ($image == 'no_selection') {
+                    unset($rowImages[$column][$key]);
+                    unset($rowData[$column]);
+                }
+            }
+        }
+
+        return [$rowImages, $rowData];
+    }
 
     /**
      * Prepare array with image states (visible or hidden from product page)
