@@ -6,7 +6,8 @@
 namespace Magento\Review\Test\Unit\Controller\Product;
 
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Review\Model\Review;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Review\Helper\Data as ReviewHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -100,6 +101,34 @@ class PostTest extends \PHPUnit\Framework\TestCase
     protected $resultRedirectMock;
 
     /**
+     * @var \Magento\Review\Model\ReviewFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $reviewFactory;
+
+    /**
+     * @var \Magento\Review\Model\RatingFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $ratingFactory;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManager;
+
+    /**
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManager;
+
+    /**
+     * @var ReviewHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $helperMock;
+
+    /**
+     * Setup environment
+     *
+     * @throws \ReflectionException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -136,15 +165,13 @@ class PostTest extends \PHPUnit\Framework\TestCase
                 'unsetData'
             ]
         );
-        $reviewFactory = $this->createPartialMock(\Magento\Review\Model\ReviewFactory::class, ['create']);
-        $reviewFactory->expects($this->once())->method('create')->willReturn($this->review);
+        $this->reviewFactory = $this->createPartialMock(\Magento\Review\Model\ReviewFactory::class, ['create']);
         $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getCustomerId']);
         $this->rating = $this->createPartialMock(
             \Magento\Review\Model\Rating::class,
             ['setRatingId', 'setReviewId', 'setCustomerId', 'addOptionVote']
         );
-        $ratingFactory = $this->createPartialMock(\Magento\Review\Model\RatingFactory::class, ['create']);
-        $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
+        $this->ratingFactory = $this->createPartialMock(\Magento\Review\Model\RatingFactory::class, ['create']);
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $this->store = $this->createPartialMock(
@@ -152,8 +179,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getWebsiteId']
         );
 
-        $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
+        $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
@@ -186,20 +212,64 @@ class PostTest extends \PHPUnit\Framework\TestCase
                 'eventManager' => $this->eventManager,
                 'productRepository' => $this->productRepository,
                 'coreRegistry' => $this->coreRegistry,
-                'reviewFactory' => $reviewFactory,
+                'reviewFactory' => $this->reviewFactory,
                 'customerSession' => $this->customerSession,
-                'ratingFactory' => $ratingFactory,
-                'storeManager' => $storeManager,
+                'ratingFactory' => $this->ratingFactory,
+                'storeManager' => $this->storeManager,
                 'context' => $this->context
             ]
         );
+
+        $this->initObjectManager();
+
+        $this->helperMock = $this->createPartialMock(
+            ReviewHelper::class,
+            ['isEnableReview']
+        );
+        $this->objectManager->expects($this->once())->method('get')
+            ->with(ReviewHelper::class)
+            ->will($this->returnValue($this->helperMock));
     }
 
     /**
+     * Init object manager
+     *
+     * @throws \ReflectionException
+     */
+    private function initObjectManager()
+    {
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $postController = new \ReflectionClass($this->model);
+        $objectManagerProp = $postController->getProperty('_objectManager');
+        $objectManagerProp->setAccessible(true);
+        $objectManagerProp->setValue($this->model, $this->objectManager);
+    }
+
+    /**
+     * Test execute function when review product is disabled
+     */
+    public function testExecuteWhenDisableReview()
+    {
+        $this->formKeyValidator->expects($this->any())->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())
+            ->method('isEnableReview')
+            ->willReturn(false);
+        $this->reviewSession->expects($this->never())->method('getFormData');
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
+    }
+
+    /**
+     * Test execute full function
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute()
     {
+        $this->reviewFactory->expects($this->once())->method('create')->willReturn($this->review);
+        $this->ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
         $reviewData = [
             'ratings' => [1 => 1],
             'review_id' => 2
@@ -211,6 +281,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $redirectUrl = 'url';
         $this->formKeyValidator->expects($this->any())->method('validate')
             ->with($this->request)
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())
+            ->method('isEnableReview')
             ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)

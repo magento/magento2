@@ -14,7 +14,8 @@ namespace Magento\Review\Helper;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_REVIEW_GUETS_ALLOW = 'catalog/review/allow_guest';
+    const XML_PATH_REVIEW_ACTIVE = 'catalog/review/active';
+    const XML_REVIEW_GUEST_ALLOW = 'catalog/review/allow_guest';
 
     /**
      * Filter manager
@@ -31,6 +32,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
+     * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Filter\FilterManager $filter
@@ -68,6 +71,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Return an indicator of whether or not review is enable
+     *
+     * @return bool
+     */
+    public function isEnableReview()
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_REVIEW_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
      * Return an indicator of whether or not guest is allowed to write
      *
      * @return bool
@@ -76,7 +92,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getIsGuestAllowToWrite()
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_REVIEW_GUETS_ALLOW,
+            self::XML_REVIEW_GUEST_ALLOW,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
