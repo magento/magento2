@@ -29,13 +29,13 @@ class Email extends UnsubscribeController implements HttpGetActionInterface
 
     /**
      * @param Context $context
-     * @param CustomerSession $customerSession
      * @param PageFactory $resultPageFactory
+     * @param CustomerSession $customerSession
      */
     public function __construct(
         Context $context,
-        CustomerSession $customerSession,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        CustomerSession $customerSession
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context, $customerSession);
