@@ -14,9 +14,6 @@ use Magento\Framework\App\CacheInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class CanViewNotificationTest
- */
 class CanViewNotificationTest extends TestCase
 {
     /** @var CanViewNotification */
