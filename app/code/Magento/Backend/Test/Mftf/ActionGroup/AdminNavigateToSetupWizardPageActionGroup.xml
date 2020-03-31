@@ -8,8 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminClickLogoActionGroup">
-        <click selector="{{AdminMenuSection.logo}}" stepKey="clickLogoInAdmin"/>
-        <waitForPageLoad stepKey="waitForAdminDashboardPageLoaded"/>
+    <actionGroup name="AdminNavigateToSetupWizardPageActionGroup">
+        <annotations>
+            <description>Open Setup Wizard Page.</description>
+        </annotations>
+        <amOnPage url="{{AdminSetupWizardPage.url}}" stepKey="navigateToSetupWizardPage"/>
+        <waitForPageLoad stepKey="waitForSetupWizardPageLoaded"/>
     </actionGroup>
 </actionGroups>
