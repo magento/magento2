@@ -50,7 +50,8 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
     {
         /** @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject $timezone */
         $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
-        $timezone->method('getConfigTimezone')->willReturn('Europe/Amsterdam');
+        // Asia/Tbilisi timezone have no DST
+        $timezone->method('getConfigTimezone')->willReturn('Asia/Tbilisi');
 
         /** @var DateTime|\PHPUnit_Framework_MockObject_MockObject $dateTime */
         $dateTime = $this->getMockBuilder(DateTime::class)
@@ -58,7 +59,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
             ->setMethods(null)
             ->getMock();
 
-        $this->assertEquals(7200, $dateTime->getGmtOffset());
+        $this->assertEquals(14400, $dateTime->getGmtOffset());
     }
 
     /**
