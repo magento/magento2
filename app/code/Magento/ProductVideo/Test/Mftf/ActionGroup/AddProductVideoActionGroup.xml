@@ -14,7 +14,7 @@
             <description>Expands the 'Images And Videos' section on the Admin Product creation/edit page. Adds the provided Video to the Product. Clicks on Save.</description>
         </annotations>
         <arguments>
-            <argument name="video" defaultValue="mftfTestProductVideo"/>
+            <argument name="video" defaultValue="YoutubeProductVideo"/>
         </arguments>
 
         <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
