@@ -13,7 +13,7 @@
             <title value="Can delete a root category not assigned to any store"/>
             <description value="Login as admin and delete a root category not assigned to any store"/>
             <testCaseId value="MC-6048"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -22,7 +22,7 @@
             <createData entity="NewRootCategory" stepKey="rootCategory" />
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Verify Created root Category-->

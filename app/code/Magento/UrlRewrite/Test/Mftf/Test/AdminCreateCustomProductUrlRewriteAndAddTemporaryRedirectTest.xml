@@ -15,6 +15,7 @@
             <testCaseId value="MC-5344"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <group value="urlRewrite"/>
         </annotations>
 
         <before>
@@ -26,7 +27,7 @@
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{_defaultProduct.name}}.html"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter Product in product page and get the Product ID -->

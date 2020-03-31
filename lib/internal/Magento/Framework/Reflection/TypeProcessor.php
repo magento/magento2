@@ -8,12 +8,12 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\DocBlock\Tag\ParamTag;
-use Zend\Code\Reflection\DocBlock\Tag\ReturnTag;
-use Zend\Code\Reflection\DocBlockReflection;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\DocBlock\Tag\ParamTag;
+use Laminas\Code\Reflection\DocBlock\Tag\ReturnTag;
+use Laminas\Code\Reflection\DocBlockReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * Type processor of config reader properties
@@ -286,7 +286,14 @@ class TypeProcessor
     {
         $returnAnnotation = $this->getMethodReturnAnnotation($methodReflection);
         $types = $returnAnnotation->getTypes();
-        $returnType = current($types);
+        $returnType = null;
+        foreach ($types as $type) {
+            if ($type !== 'null') {
+                $returnType = $type;
+                break;
+            }
+        }
+
         $nullable = in_array('null', $types);
 
         return [
@@ -310,8 +317,9 @@ class TypeProcessor
         if ($methodDocBlock->hasTag('throws')) {
             $throwsTypes = $methodDocBlock->getTags('throws');
             if (is_array($throwsTypes)) {
-                /** @var $throwsType \Zend\Code\Reflection\DocBlock\Tag\ThrowsTag */
+                /** @var $throwsType \Laminas\Code\Reflection\DocBlock\Tag\ThrowsTag */
                 foreach ($throwsTypes as $throwsType) {
+                    // phpcs:ignore
                     $exceptions = array_merge($exceptions, $throwsType->getTypes());
                 }
             }
@@ -513,13 +521,15 @@ class TypeProcessor
     {
         $type = $param->detectType();
         if ($type === 'null') {
-            throw new \LogicException(sprintf(
-                '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
-                . ' First declared type should not be null. E.g. string|null',
-                $param->getName(),
-                $param->getDeclaringClass()->getName(),
-                $param->getDeclaringFunction()->name
-            ));
+            throw new \LogicException(
+                sprintf(
+                    '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
+                    . ' First declared type should not be null. E.g. string|null',
+                    $param->getName(),
+                    $param->getDeclaringClass()->getName(),
+                    $param->getDeclaringFunction()->name
+                )
+            );
         }
         if ($type === 'array') {
             // try to determine class, if it's array of objects

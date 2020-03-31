@@ -15,6 +15,7 @@
             <testCaseId value="MC-5338"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <group value="urlRewrite"/>
         </annotations>
 
         <before>
@@ -27,7 +28,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter and Select the created Product -->

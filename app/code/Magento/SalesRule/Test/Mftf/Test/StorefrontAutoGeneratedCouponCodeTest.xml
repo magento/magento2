@@ -15,7 +15,7 @@
             <title value="[Cart Price Rule] Auto generated coupon code considers 'Uses per Coupon' and 'Uses per Customer' options"/>
             <description
                     value="[Cart Price Rule] Auto generated coupon code considers 'Uses per Coupon' and 'Uses per Customer' options"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-59323"/>
             <group value="salesRule"/>
         </annotations>
@@ -34,7 +34,7 @@
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as Admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
