@@ -115,7 +115,7 @@
 
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
             <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindex"/>
-            <magentoCLI command="cache:clear" arguments="full_page" stepKey="cleanFullPageCache"/>
+            <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
         </before>
 
         <after>
