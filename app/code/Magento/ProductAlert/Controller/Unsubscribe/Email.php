@@ -8,18 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 
 /**
  * Unsubscribing from 'Back in stock Alert'.
  *
  * Is used to transform a Get request that triggered in the email into the Post request endpoint
  */
-class Email extends Action implements HttpGetActionInterface
+class Email extends UnsubscribeController implements HttpGetActionInterface
 {
     /**
      * @var PageFactory
@@ -28,14 +29,16 @@ class Email extends Action implements HttpGetActionInterface
 
     /**
      * @param Context $context
+     * @param CustomerSession $customerSession
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
+        CustomerSession $customerSession,
         PageFactory $resultPageFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
+        parent::__construct($context, $customerSession);
     }
 
     /**

@@ -39,8 +39,8 @@ abstract class Add extends Action
     {
         if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
-            if (!$this->customerSession->getBeforeUrl()) {
-                $this->customerSession->setBeforeUrl($this->_redirect->getRefererUrl());
+            if (!$this->customerSession->getBeforeAuthUrl()) {
+                $this->customerSession->setBeforeAuthUrl($this->_redirect->getRefererUrl());
             }
         }
         return parent::dispatch($request);
