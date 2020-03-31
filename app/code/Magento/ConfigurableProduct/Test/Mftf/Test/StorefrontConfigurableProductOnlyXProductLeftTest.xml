@@ -14,29 +14,28 @@
             <stories value="View configurable product only X product left block in storefront"/>
             <title value="Guest customer should see only X product left block"/>
             <description value="Guest customer should see only X product left block"/>
-            <severity value="AVERAGE"/>
-            <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 10000" stepKey="setStockThresholdQty"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 10000" stepKey="setStockThresholdQty"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="removeStockThresholdQty"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
-        <waitForPageLoad stepKey="wait"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.onlyXProductsLeft}}" stepKey="seeBlockLeftXProductOnly"/>
+        <waitForPageLoad stepKey="waitConfigurableProductPageLoad"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.onlyXProductsLeftLink}}" stepKey="seeLinkLeftXProductOnly"/>
     </test>
 </tests>

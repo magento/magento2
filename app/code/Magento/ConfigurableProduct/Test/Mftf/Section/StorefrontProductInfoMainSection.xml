@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="optionByAttributeId" type="input" selector="#attribute{{var1}}" parameterized="true"/>
+        <element name="selectableProductOptions" type="select" selector="#attribute{{var1}} option:not([disabled])" parameterized="true"/>
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
@@ -21,7 +22,6 @@
         <element name="stockIndication" type="block" selector=".stock" />
         <element name="attributeSelectByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//select" parameterized="true"/>
         <element name="attributeOptionByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//option[text()='{{optionName}}']" parameterized="true"/>
-        <element name="onlyXProductsLeft" type="block" selector=".availability.only > a.action" />
-        <element name="onlyXProductsLeftDetailed" type="block" selector=".availability.only.detailed" />
+        <element name="onlyXProductsLeftLink" type="block" selector="//a[contains(@class, 'action')]/ancestor::div[contains(@class, 'availability')]" />
     </section>
 </sections>
