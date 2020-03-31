@@ -7,9 +7,11 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Class ProductUrlRewriteGenerator
+ *
  * @package Magento\CatalogUrlRewrite\Model
  */
 class CategoryProductUrlPathGenerator
@@ -31,9 +33,9 @@ class CategoryProductUrlPathGenerator
     /**
      * Generate product url rewrites based on all product categories
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param int|null $rootCategoryId
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @return UrlRewrite[]
      */
     public function generate(Product $product, $rootCategoryId = null)
     {
