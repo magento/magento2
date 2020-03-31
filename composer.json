@@ -242,7 +242,6 @@
         "magento/module-send-friend": "*",
         "magento/module-send-friend-graph-ql": "*",
         "magento/module-shipping": "*",
-        "magento/module-signifyd": "*",
         "magento/module-sitemap": "*",
         "magento/module-store": "*",
         "magento/module-store-graph-ql": "*",
