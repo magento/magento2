@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class tests for customer wish list tab.
+ * Tests for customer wish list tab.
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
